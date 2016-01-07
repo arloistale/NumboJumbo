@@ -1,2 +1,13 @@
-# Google App Engine generated folder
-appengine-generated/
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
