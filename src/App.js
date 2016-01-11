@@ -114,7 +114,21 @@ var MainGameLayer = cc.Layer.extend({
     },
 
     initLevel: function() {
+        _numboLevel = new NumboLevel();
+        _numboLevel.init();
 
+        console.log("hi");
+
+        var size = cc.winSize;
+        var padding = 4;
+        var levelOrigin = new cc.Vec2(levelPadding, levelPadding);
+        var levelDims = new cc.Size(size.width - padding * 2, size.height - padding * 2);
+        levelCellSize = new cc.Size(levelDims.width / NJ.NUM_COLS, levelDims.height / NJ.NUM_ROWS);
+        levelBounds = new cc.Rect(levelOrigin, levelDims);
+
+        var levelNode = cc.DrawNode.create();
+        levelNode.drawRect(levelBounds.origin, levelBounds.origin + levelDims, C4B(255, 255, 255, 255));
+        this.addChild(levelNode);
     },
 
     initComboManager: function() {
@@ -122,6 +136,30 @@ var MainGameLayer = cc.Layer.extend({
     },
 
     dropBlock: function() {
+
+    },
+
+    selectBlock: function() {
+
+    },
+
+    deselectBlock: function() {
+
+    },
+
+    deselectAllBlocks: function() {
+
+    },
+
+    activateSelectedBlocks: function() {
+
+    },
+
+    isSelectedClearable: function() {
+
+    },
+
+    convertPointToLevelCoords: function() {
 
     }
 });
