@@ -18,13 +18,24 @@ var NumboBlock = cc.Sprite.extend({
     bHasDropped: false,
 
     ctor: function() {
-        this.highlightSprite = cc.Sprite.createWithTexture(cc.textureCache.addImage(res.blockImage));
-        this.highlightSprite.setVisible(false);
-        console.log(this.highlightSprite);
-        //this.addChild(this.highlightSprite, -1);
+        this._super(res.blockImage);
 
-        this.valueLabel = new cc.LabelTTF("label test", "Arial", 10);
-        //this.addChild(this.valueLabel);
+        this.highlightSprite = cc.Sprite.createWithTexture(cc.textureCache.addImage(res.glowImage));
+        this.highlightSprite.attr({
+            visible: false
+        });
+        this.addChild(this.highlightSprite, -1);
+
+        this.valueLabel = new cc.LabelTTF("label test", res.markerFontTTF, 32);
+        this.valueLabel.attr({
+            scale: 1.0,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: this.getContentSize().width / 2,
+            y: this.getContentSize().height / 2
+        });
+
+        this.addChild(this.valueLabel);
     },
 
     // initialize block values

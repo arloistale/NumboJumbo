@@ -81,9 +81,11 @@ var MainGameLayer = cc.Layer.extend({
         this._numboLevel.init();
 
         var size = cc.winSize;
-        var levelPadding = Math.min(size.width, size.height) * 0.1;
-        var levelOrigin = cc.p(levelPadding, levelPadding);
-        var levelDims = cc.size(size.width - levelPadding * 2, size.height - levelPadding * 2);
+        var refDim = Math.min(size.width, size.height);
+        var levelPadding = refDim * 0.02;
+        var levelDims = cc.size(refDim - levelPadding * 2, refDim - levelPadding * 2);
+        var levelOrigin = cc.p(size.width / 2 - levelDims.width / 2, size.height / 2 - levelDims.height / 2);
+        var cellPadding = refDim * 0.02;
         this._levelCellSize = cc.size(levelDims.width / NJ.NUM_COLS, levelDims.height / NJ.NUM_ROWS);
         this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
 
@@ -106,7 +108,6 @@ var MainGameLayer = cc.Layer.extend({
         var moveAction = cc.MoveTo.create(duration, cc.p(block.x, blockTargetY));
         var dropAction = cc.CallFunc.create(function() {
             block.bHasDropped = true;
-            console.log(block.bHasDropped);
         });
         block.stopAllActions();
         block.runAction(cc.sequence(moveAction, dropAction));
@@ -124,7 +125,7 @@ var MainGameLayer = cc.Layer.extend({
         block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
         this.addChild(block);
 
-        dropBlock(block);
+        this.dropBlock(block);
     },
 
     selectBlock: function() {
@@ -147,8 +148,18 @@ var MainGameLayer = cc.Layer.extend({
 
     },
 
-    convertPointToLevelCoords: function() {
+    // attempt to convert point to location on grid
 
+    convertPointToLevelCoords: function(point) {
+        if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
+            point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
+
+            var col = (point.x - this._levelBounds.x) / this._levelCellSize.width;
+            var row = (point.y - this._levelBounds.y) / this._levelCellSize.height;
+            return { col: col, row: row };
+        }
+
+        return null;
     }
 });
 

@@ -1,4 +1,7 @@
 var res = {
+    // Fonts
+    markerFontTTF: "Marker Felt",
+
 	// images
     backgroundImage: "res/Images/Background.png",
     glowImage: "res/Images/Glow.png",
