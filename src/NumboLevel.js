@@ -16,6 +16,8 @@ var NumboLevel = cc.Class.extend({
 
     // initialize the level to empty
     init: function() {
+        while(this.blocks.push([]) < NJ.ROWS);
+
         this.reset();
     },
 

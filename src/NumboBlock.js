@@ -39,7 +39,7 @@ var NumboBlock = cc.Sprite.extend({
         this.bHasDropped = false;
 
         valueLabel.setString(val + "");
-    }
+    },
 
     kill: function() {
         this.runAction(
@@ -47,7 +47,7 @@ var NumboBlock = cc.Sprite.extend({
                 cc.fade(0.2),
                 cc.callFunc(function() {
                     this.removeFromParentAndCleanup(true);
-                }
+                })
             )
         );
     },

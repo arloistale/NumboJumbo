@@ -91,6 +91,7 @@ var MainGameLayer = cc.Layer.extend({
             rotation: 0
         });
         this.addChild(this._backgroundSprite, 0);
+
 /*
         this._backgroundSprite.runAction(
             cc.sequence(
