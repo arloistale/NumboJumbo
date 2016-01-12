@@ -16,7 +16,15 @@ var NumboLevel = cc.Class.extend({
 
     // initialize the level to empty
     init: function() {
-        this.reset();
+        // initialize to all blocks null in level
+        var i;
+        for(i = 0; i < NJ.NUM_COLS; ++i)
+            this.blocks.push([]);
+
+        for(i = 0; i < NJ.NUM_ROWS; ++i) {
+            this.blocks[i].push(null);
+            this.numBlocks.push(0);
+        }
     },
 
     // reset the level, removing all blocks
@@ -35,7 +43,7 @@ var NumboLevel = cc.Class.extend({
         for(var i = 0; i < NJ.NUM_ROWS; ++i) {
             for(var j = 0; j < NJ.NUM_COLS; ++j) {
                 var blockVal = Math.floor(Math.random() * (NJ.BLOCK_MAX_VALUE) + 1);
-                this.spawnBlock(j, i, blockVal).hasDropped = true;
+                this.spawnBlock(j, i, blockVal).bHasDropped = true;
             }
         }
     },
@@ -57,18 +65,18 @@ var NumboLevel = cc.Class.extend({
     // drop block into the given column with given value
     // returns dropped block
     dropBlock: function(col, val) {
-        cc.assert(numBlocks[col] < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
+        cc.assert(this.numBlocks[col] < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
 
         var row = this.numBlocks[col];
         var block = this.spawnBlock(col, row, val);
-        block.hasDropped = false;
+        block.bHasDropped = false;
         return block;
     },
 
     // drop block into random column with random value
     // returns dropped block
     dropRandomBlock: function() {
-        cc.assert(!isFull(), "Can't drop any more blocks");
+        cc.assert(!this.isFull(), "Can't drop any more blocks");
 
         var val = Math.floor(Math.random() * (NJ.BLOCK_MAX_VALUE) + 1);
 
@@ -116,7 +124,7 @@ var NumboLevel = cc.Class.extend({
                 if(this.blocks[i][j]) {
                     if(shiftRow >= 0) {
                         this.blocks[i][shiftRow] = this.blocks[i][j];
-                        this.blocks[i][shiftRow].hasDropped = false;
+                        this.blocks[i][shiftRow].bHasDropped = false;
                         this.blocks[i][shiftRow].row = shiftRow;
                         result.push(this.blocks[i][shiftRow]);
                         shiftRow++;
@@ -131,7 +139,7 @@ var NumboLevel = cc.Class.extend({
 
     // returns whether level is currently full of blocks
     isFull: function() {
-        return totalNumBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
+        return this.totalNumBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
     },
 
     // returns whether two coordinates are adjacent (diagonal allowed)

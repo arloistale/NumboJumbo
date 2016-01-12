@@ -43,41 +43,6 @@ var MainGameLayer = cc.Layer.extend({
         menu.x = 0;
         menu.y = 0;
         this.addChild(menu, 1);
-
-        /////////////////////////////
-        // 3. add your codes below...
-        // add a label shows "Hello World"
-        // create and initialize a label
-        /*
-        var helloLabel = new cc.LabelTTF("Yep", "Arial", 38);
-        // position the label on the center of the screen
-        helloLabel.x = size.width / 2;
-        helloLabel.y = 0;
-        // add the label as a child to this layer
-        this.addChild(helloLabel, 5);
-
-        // add "HelloWorld" splash screen"
-        this.sprite = new cc.Sprite(res.HelloWorld_png);
-        this.sprite.attr({
-            x: size.width / 2,
-            y: size.height / 2,
-            scale: 0.5,
-            rotation: 180
-        });
-        this.addChild(this.sprite, 0);
-
-        this.sprite.runAction(
-            cc.sequence(
-                cc.rotateTo(2, 0),
-                cc.scaleTo(2, 1, 1)
-            )
-        );
-        helloLabel.runAction(
-            cc.spawn(
-                cc.moveBy(2.5, cc.p(0, size.height - 40)),
-                cc.tintTo(2.5,255,125,0)
-            )
-        );*/
         
         // add the background
         // TODO: Move this to a separate layer to be more organized
@@ -91,14 +56,7 @@ var MainGameLayer = cc.Layer.extend({
             rotation: 0
         });
         this.addChild(this._backgroundSprite, 0);
-/*
-        this._backgroundSprite.runAction(
-            cc.sequence(
-                cc.repeatForever(0),
-                cc.rotateTo(2, 0)
-            )
-        );
-*/
+
         // start the music
         cc.audioEngine.playMusic(res.backgroundTrack);
 
@@ -106,23 +64,102 @@ var MainGameLayer = cc.Layer.extend({
         this.initLevel();
         this.initComboManager();
 
+        // begin scheduling block drops
+        this.schedule(this.spawnDropRandomBlock, 1.5);
+
         return true;
     },
 
+    // initialize UI elements into the scene
     initUI: function() {
 
     },
 
+    // initialize the empty level into the scene
     initLevel: function() {
+        this._numboLevel = new NumboLevel();
+        this._numboLevel.init();
 
+        var size = cc.winSize;
+        var refDim = Math.min(size.width, size.height);
+        var levelPadding = refDim * 0.02;
+        var levelDims = cc.size(refDim - levelPadding * 2, refDim - levelPadding * 2);
+        var levelOrigin = cc.p(size.width / 2 - levelDims.width / 2, size.height / 2 - levelDims.height / 2);
+        var cellPadding = refDim * 0.02;
+        this._levelCellSize = cc.size(levelDims.width / NJ.NUM_COLS, levelDims.height / NJ.NUM_ROWS);
+        this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
+
+        var levelNode = cc.DrawNode.create();
+        levelNode.drawRect(levelOrigin, cc.p(levelOrigin.x + levelDims.width, levelOrigin.y + levelDims.height), cc.color.white);
+        this.addChild(levelNode);
     },
 
+    // initialize combo manager into the scene
     initComboManager: function() {
 
     },
 
-    dropBlock: function() {
+    // make a block start falling into place
+    // NOTE: only call directly to drop a shifted block (this function is not for to spawn blocks, use spawnDropRandomBlock instead)
+    dropBlock: function(block) {
+        var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (block.row + 0.5);
 
+        var duration = 0.5;
+        var moveAction = cc.MoveTo.create(duration, cc.p(block.x, blockTargetY));
+        var dropAction = cc.CallFunc.create(function() {
+            block.bHasDropped = true;
+        });
+        block.stopAllActions();
+        block.runAction(cc.sequence(moveAction, dropAction));
+    },
+
+    // spawns a block at a random column in the level
+    // drops the spawned block into place
+    // NOTE: This is the function you should be using to put new blocks into the game
+    spawnDropRandomBlock: function() {
+        if(this._numboLevel.isFull())
+            return;
+
+        var block = this._numboLevel.dropRandomBlock();
+        var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
+        block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
+        this.addChild(block);
+
+        this.dropBlock(block);
+    },
+
+    selectBlock: function() {
+
+    },
+
+    deselectBlock: function() {
+
+    },
+
+    deselectAllBlocks: function() {
+
+    },
+
+    activateSelectedBlocks: function() {
+
+    },
+
+    isSelectedClearable: function() {
+
+    },
+
+    // attempt to convert point to location on grid
+
+    convertPointToLevelCoords: function(point) {
+        if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
+            point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
+
+            var col = (point.x - this._levelBounds.x) / this._levelCellSize.width;
+            var row = (point.y - this._levelBounds.y) / this._levelCellSize.height;
+            return { col: col, row: row };
+        }
+
+        return null;
     }
 });
 
