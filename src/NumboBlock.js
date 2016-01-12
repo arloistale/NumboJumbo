@@ -18,19 +18,16 @@ var NumboBlock = cc.Sprite.extend({
     bHasDropped: false,
 
     ctor: function() {
-        this.highlightSprite = new cc.Sprite(res.blockImage);
-        this.highlightSprite.attr({
-            visible: false
-        });
-        this.addChild(highlightSprite, -1);
+        this.highlightSprite = cc.Sprite.createWithTexture(cc.textureCache.addImage(res.blockImage));
+        this.highlightSprite.setVisible(false);
+        console.log(this.highlightSprite);
+        //this.addChild(this.highlightSprite, -1);
 
         this.valueLabel = new cc.LabelTTF("label test", "Arial", 10);
-        this.valueLabel.attr({
-
-        });
-        this.addChild(valueLabel);
+        //this.addChild(this.valueLabel);
     },
 
+    // initialize block values
     init: function(col, row, val) {
         this.col = col;
         this.row = row;
@@ -38,9 +35,11 @@ var NumboBlock = cc.Sprite.extend({
 
         this.bHasDropped = false;
 
-        valueLabel.setString(val + "");
+        this.valueLabel.setString(val + "");
     },
 
+    // kill the block
+    // NOTE: DO NOT call directly, call kill block in NumboLevel instead
     kill: function() {
         this.runAction(
             cc.sequence(
@@ -52,12 +51,14 @@ var NumboBlock = cc.Sprite.extend({
         );
     },
 
+    // highlight the sprite indicating selection
     highlight: function(color) {
         highlightSprite.setColor(color);
         if(!highlightSprite.isVisible())
             highlightSprite.setVisible(true);
     },
 
+    // clear sprite highlight
     clearHighlight: function() {
         highlightSprite.setVisible(false);
     }
