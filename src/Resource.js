@@ -1,6 +1,10 @@
 var res = {
     // Fonts
-    markerFontTTF: "Marker Felt",
+    markerFontTTF: {
+        type: "font",
+        name: "IndieFlower",
+        srcs: ["res/Fonts/MarkerFelt.ttf"]
+    },
 
 	// images
     backgroundImage: "res/Images/Background.png",
@@ -11,6 +15,14 @@ var res = {
     backgroundTrack: "res/Sounds/Track1.mp3",
     successTrack: "res/Sounds/Ka-Ching.wav",
 };
+
+var b_getFontName = function(fontRes) {
+    if (cc.sys.isNative) {
+        return fontRes.srcs[0];
+    } else {
+        return fontRes.name;
+    }
+}
 
 var g_resources = [];
 for (var i in res) {
