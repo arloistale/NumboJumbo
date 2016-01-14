@@ -19,6 +19,7 @@ var MainGameLayer = cc.Layer.extend({
     ctor: function () {
         this._super();
 
+        /*
         /////////////////////////////
         // 2. add a menu item with "X" image, which is clicked to quit the program
         //    you may modify it.
@@ -43,7 +44,25 @@ var MainGameLayer = cc.Layer.extend({
         menu.x = 0;
         menu.y = 0;
         this.addChild(menu, 1);
-        
+        */
+
+        this.initBackground();
+        this.initInput();
+        this.initUI();
+        this.initLevel();
+        this.initComboManager();
+        this.initAudio();
+
+        // begin scheduling block drops
+        this.schedule(this.spawnDropRandomBlock, 1.0);
+
+        return true;
+    },
+
+    // initialize background for game
+    initBackground: function() {
+        var size = cc.winSize;
+
         // add the background
         // TODO: Move this to a separate layer to be more organized
         this._backgroundSprite = new cc.Sprite(res.backgroundImage);
@@ -56,19 +75,6 @@ var MainGameLayer = cc.Layer.extend({
             rotation: 0
         });
         this.addChild(this._backgroundSprite, 0);
-
-        // start the music
-        cc.audioEngine.playMusic(res.backgroundTrack);
-
-        this.initInput();
-        this.initUI();
-        this.initLevel();
-        this.initComboManager();
-
-        // begin scheduling block drops
-        this.schedule(this.spawnDropRandomBlock, 1.0);
-
-        return true;
     },
 
     // initialize input for the game
@@ -157,6 +163,12 @@ var MainGameLayer = cc.Layer.extend({
     // initialize combo manager into the scene
     initComboManager: function() {
 
+    },
+
+    // initialize game audio
+    initAudio: function() {
+        // start the music
+        cc.audioEngine.playMusic(res.backgroundTrack);
     },
 
     // make a block start falling into place
