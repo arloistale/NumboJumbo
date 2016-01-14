@@ -1,7 +1,7 @@
 
 var MainGameLayer = cc.Layer.extend({
     // UI Data
-    _uiHeader: null,
+    _numboHeader: null,
 
     // Sprite Data
     _backgroundSprite: null,
@@ -132,7 +132,8 @@ var MainGameLayer = cc.Layer.extend({
 
     // initialize UI elements into the scene
     initUI: function() {
-
+        this._numboHeader = new NumboHeader();
+        this.addChild(this._numboHeader, 999);
     },
 
     // initialize the empty level into the scene
@@ -156,7 +157,8 @@ var MainGameLayer = cc.Layer.extend({
 
     // initialize combo manager into the scene
     initComboManager: function() {
-
+        this._comboManager = new ComboManager();
+        this._comboManager.init();
     },
 
     // make a block start falling into place
@@ -244,8 +246,8 @@ var MainGameLayer = cc.Layer.extend({
         if(this.isSelectedClearable()) {
             var selectedBlockCount = this._selectedBlocks.length;
 
-            //comboManager->addScoreForCombo(selectedBlockCount);
-            //mHeader->writePrimaryValue(comboManager->getScore());
+            this._comboManager.addScoreForCombo(selectedBlockCount);
+            this._numboHeader.writePrimaryValue(this._comboManager.getScore());
 
             var i = 0;
             for(; i < this._selectedBlocks.length; ++i)
