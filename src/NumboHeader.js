@@ -39,8 +39,5 @@ var NumboHeader = cc.LayerColor.extend({
 
     writePrimaryValue: function(val) {
       this.scoreValueLabel.setString("NUMBO JUMBO score:\t" + Math.floor(val));
-    },
-
-
-
+    }
 });
