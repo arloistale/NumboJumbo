@@ -22,6 +22,11 @@ var NumboBlock = cc.Sprite.extend({
 
         this.highlightSprite = cc.Sprite.createWithTexture(cc.textureCache.addImage(res.glowImage));
         this.highlightSprite.attr({
+            scale: 1.8,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: this.getContentSize().width / 2,
+            y: this.getContentSize().height / 2,
             visible: false
         });
         this.addChild(this.highlightSprite, -1);
@@ -52,25 +57,24 @@ var NumboBlock = cc.Sprite.extend({
     // kill the block
     // NOTE: DO NOT call directly, call kill block in NumboLevel instead
     kill: function() {
-        this.runAction(
-            cc.sequence(
-                cc.fade(0.2),
-                cc.callFunc(function() {
-                    this.removeFromParentAndCleanup(true);
-                })
-            )
-        );
+        var block = this;
+        var fadeAction = cc.FadeTo.create(0.2);
+        var removeAction = cc.CallFunc.create(function() {
+            block.removeFromParent(true);
+        });
+        this.stopAllActions();
+        this.runAction(cc.sequence(fadeAction, removeAction));
     },
 
     // highlight the sprite indicating selection
     highlight: function(color) {
-        highlightSprite.setColor(color);
-        if(!highlightSprite.isVisible())
-            highlightSprite.setVisible(true);
+        this.highlightSprite.setColor(color);
+        if(!this.highlightSprite.isVisible())
+            this.highlightSprite.setVisible(true);
     },
 
     // clear sprite highlight
     clearHighlight: function() {
-        highlightSprite.setVisible(false);
+        this.highlightSprite.setVisible(false);
     }
 });

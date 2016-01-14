@@ -8,7 +8,7 @@ var MainGameLayer = cc.Layer.extend({
 
     // Level Data
     _numboLevel: null,
-    _selectedBlocks: null,
+    _selectedBlocks: [],
 
     _levelBounds: null,
     _levelCellSize: null,
@@ -60,14 +60,74 @@ var MainGameLayer = cc.Layer.extend({
         // start the music
         cc.audioEngine.playMusic(res.backgroundTrack);
 
+        this.initInput();
         this.initUI();
         this.initLevel();
         this.initComboManager();
 
         // begin scheduling block drops
-        this.schedule(this.spawnDropRandomBlock, 1.5);
+        this.schedule(this.spawnDropRandomBlock, 1.0);
 
         return true;
+    },
+
+    // initialize input for the game
+    initInput: function() {
+        /*
+        if (cc.sys.capabilities.hasOwnProperty('keyboard'))
+            cc.eventManager.addListener({
+                event: cc.EventListener.KEYBOARD,
+                onKeyPressed:function (key, event) {
+                    MW.KEYS[key] = true;
+                },
+                onKeyReleased:function (key, event) {
+                    MW.KEYS[key] = false;
+                }
+            }, this);
+        */
+
+        if ('mouse' in cc.sys.capabilities) {
+            cc.eventManager.addListener({
+                event: cc.EventListener.MOUSE,
+                onMouseDown: function (event) {
+                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+                        return;
+
+                    //console.log(event.getLocation());
+                    //console.log(event.getCurrentTarget());
+                    event.getCurrentTarget().onTouchBegan(event.getLocation());
+                },
+                onMouseMove: function (event) {
+                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+                        return;
+
+                    event.getCurrentTarget().onTouchMoved(event.getLocation());
+                },
+                onMouseUp: function (event) {
+                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+                        return;
+
+                    event.getCurrentTarget().onTouchEnded(event.getLocation());
+                }
+            }, this);
+        }
+
+        if (cc.sys.capabilities.hasOwnProperty('touches')) {
+            cc.eventManager.addListener({
+                prevTouchId: -1,
+                event: cc.EventListener.TOUCH_ONE_BY_ONE,
+                swallowTouches: true,
+                onTouchBegan: function(touch, event) {
+
+                },
+                onTouchMoved: function(touch, event) {
+
+                },
+                onTouchEnded: function(touch, event) {
+
+                }
+            }, this);
+        }
     },
 
     // initialize UI elements into the scene
@@ -128,34 +188,129 @@ var MainGameLayer = cc.Layer.extend({
         this.dropBlock(block);
     },
 
-    selectBlock: function() {
+    // select a block, giving it a highlight
+    selectBlock: function(col, row) {
+        cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
 
+        var block = this._numboLevel.getBlock(col, row);
+
+        if(!block)
+            return;
+
+        // TODO: possible optimization
+        if(!block.bHasDropped || this._selectedBlocks.indexOf(block) >= 0)
+            return;
+
+        // we make this block green, make the last selected block red
+        if(this._selectedBlocks.length > 0) {
+            var lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
+            lastBlock.highlight(cc.color(255, 0, 0, 255));
+        }
+
+        block.highlight(cc.color(0, 255, 0, 255));
+        this._selectedBlocks.push(block);
+
+        cc.audioEngine.playEffect(res.successTrack);
     },
 
-    deselectBlock: function() {
+    // deselect a single block, removing its highlight
+    deselectBlock: function(col, row) {
+        cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
 
+        var block = this._numboLevel.getBlock(col, row);
+
+        if(!block || !block.bHasDropped)
+            return;
+
+        block.clearHighlight();
+
+        var index = this._selectedBlocks.indexOf(block);
+        if(index >= 0)
+            this._selectedBlocks.splice(index, 1);
     },
 
+    // deselect all currently selected blocks, removing their highlights
     deselectAllBlocks: function() {
+        for (var i = 0; i < this._selectedBlocks.length; ++i)
+            this._selectedBlocks[i].clearHighlight();
 
+        this._selectedBlocks = [];
     },
 
+    // activate currently selected blocks
+    // awards player score depending on blocks selected
+    // shifts all blocks down to remove gaps and drops them accordingly
     activateSelectedBlocks: function() {
+        if(this.isSelectedClearable()) {
+            var selectedBlockCount = this._selectedBlocks.length;
 
+            //comboManager->addScoreForCombo(selectedBlockCount);
+            //mHeader->writePrimaryValue(comboManager->getScore());
+
+            var i = 0;
+            for(; i < this._selectedBlocks.length; ++i)
+                this._numboLevel.killBlock(this._selectedBlocks[i]);
+
+
+            var shiftedBlocks = this._numboLevel.shiftBlocks();
+            for(i = 0; i < shiftedBlocks.length; ++i)
+                this.dropBlock(shiftedBlocks[i]);
+        }
+
+        this.deselectAllBlocks();
     },
 
-    isSelectedClearable: function() {
+    // touch events
 
+    // on touch began, tries to find level coordinates for the touch and selects block accordingly
+    onTouchBegan: function(touchPosition) {
+        var touchCoords = this.convertPointToLevelCoords(touchPosition);
+
+        if(touchCoords)
+            this.selectBlock(touchCoords.col, touchCoords.row);
+    },
+
+    // on touch moved, selects additional blocks as the touch is held and moved
+    onTouchMoved: function(touchPosition) {
+        var touchCoords = this.convertPointToLevelCoords(touchPosition);
+
+        if(touchCoords)
+            this.selectBlock(touchCoords.col, touchCoords.row);
+    },
+
+    // on touch ended, activates all selected blocks once touch is released
+    onTouchEnded: function(touchPosition) {
+        this.activateSelectedBlocks();
+    },
+
+    // checks if the current selected blocks can be activated (their equation is valid)
+    isSelectedClearable: function() {
+        if(!this._selectedBlocks.length)
+            return false;
+
+        var selectedBlocksLength = this._selectedBlocks.length;
+
+        // all blocks must be sequentially adjacent
+
+        var sum = 0;
+
+        for(var i = 0; i < selectedBlocksLength - 1; ++i) {
+            if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
+                return false;
+
+            sum += this._selectedBlocks[i].val;
+        }
+
+        return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
     },
 
     // attempt to convert point to location on grid
-
     convertPointToLevelCoords: function(point) {
         if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
             point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
 
-            var col = (point.x - this._levelBounds.x) / this._levelCellSize.width;
-            var row = (point.y - this._levelBounds.y) / this._levelCellSize.height;
+            var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
+            var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
             return { col: col, row: row };
         }
 

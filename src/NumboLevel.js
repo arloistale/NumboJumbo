@@ -116,7 +116,7 @@ var NumboLevel = cc.Class.extend({
         var result = [];
 
         for(var i = 0; i < NJ.NUM_COLS; i++) {
-            if(!numBlocks[i])
+            if(!this.numBlocks[i])
                 continue;
 
             var shiftRow = !this.blocks[i][0] ? 0 : -1;
@@ -128,13 +128,15 @@ var NumboLevel = cc.Class.extend({
                         this.blocks[i][shiftRow].row = shiftRow;
                         result.push(this.blocks[i][shiftRow]);
                         shiftRow++;
-                        this.blocks[i][j] = nullptr;
+                        this.blocks[i][j] = null;
                     }
                 } else if(this.blocks[i][j - 1]) {
                     shiftRow = j;
                 }
             }
         }
+
+        return result;
     },
 
     // returns whether level is currently full of blocks
@@ -149,11 +151,11 @@ var NumboLevel = cc.Class.extend({
 
     // returns whether two blocks are adjacent (diagonal allowed)
     isAdjBlocks: function(block1, block2) {
-        return Math.abs(block1.col, block1.row, block2.col, block2.row);
+        return this.isAdjCoords(block1.col, block1.row, block2.col, block2.row);
     },
 
     // returns whether a block exists at given coords
-    blockExistsAtCoords: function(col, row) {
+    getBlock: function(col, row) {
         return this.blocks[col][row];
-    }
+    },
 });
