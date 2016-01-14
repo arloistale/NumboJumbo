@@ -150,7 +150,7 @@ var MainGameLayer = cc.Layer.extend({
         this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
 
         var levelNode = cc.DrawNode.create();
-        levelNode.drawRect(levelOrigin, cc.p(levelOrigin.x + levelDims.width, levelOrigin.y + levelDims.height), cc.color(255, 255, 255, 255));
+        levelNode.drawRect(levelOrigin, cc.p(levelOrigin.x + levelDims.width, levelOrigin.y + levelDims.height), cc.color.white);
         this.addChild(levelNode);
     },
 
@@ -289,9 +289,15 @@ var MainGameLayer = cc.Layer.extend({
             return false;
 
         var selectedBlocksLength = this._selectedBlocks.length;
+
+        // all blocks must be sequentially adjacent
+
         var sum = 0;
 
         for(var i = 0; i < selectedBlocksLength - 1; ++i) {
+            if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
+                return false;
+
             sum += this._selectedBlocks[i].val;
         }
 

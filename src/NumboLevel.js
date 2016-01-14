@@ -151,7 +151,7 @@ var NumboLevel = cc.Class.extend({
 
     // returns whether two blocks are adjacent (diagonal allowed)
     isAdjBlocks: function(block1, block2) {
-        return Math.abs(block1.col, block1.row, block2.col, block2.row);
+        return this.isAdjCoords(block1.col, block1.row, block2.col, block2.row);
     },
 
     // returns whether a block exists at given coords
