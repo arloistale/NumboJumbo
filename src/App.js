@@ -325,7 +325,14 @@ var MainGameLayer = cc.Layer.extend({
 
             var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
             var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
-            return { col: col, row: row };
+
+            // return only if coordinates in certain radius of the block.
+            var radius = .7;
+            if(Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
+                        point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2)
+                return {col: col, row: row};
+
+            return null;
         }
 
         return null;
