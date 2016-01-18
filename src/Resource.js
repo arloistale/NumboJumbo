@@ -12,6 +12,7 @@ var res = {
     blockImage: "res/Images/Projectile.png",
 
     // sound
+    menuTrack: "res/Sounds/Track1.mp3",
     backgroundTrack: "res/Sounds/Track1.mp3",
     successTrack: "res/Sounds/Ka-Ching.wav",
 };
@@ -28,3 +29,27 @@ var g_resources = [];
 for (var i in res) {
     g_resources.push(res[i]);
 }
+
+var g_mainMenu = [
+    // images
+    res.backgroundImage,
+
+    // sounds
+    res.menuTrack
+
+    // other
+];
+
+var g_mainGame = [
+    // images
+    res.backgroundImage,
+    res.glowImage,
+    res.blockImage,
+
+    // sounds
+    res.backgroundTrack,
+    res.successTrack,
+
+    // fonts
+    b_getFontName(res.markerFontTTF)
+];
