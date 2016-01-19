@@ -4,6 +4,11 @@
 
 var NJ = NJ || {};
 
+/** CONSTANTS **/
+
+// dims
+NJ.SCALE = 1;
+
 // game state
 NJ.GAME_STATE = {
     HOME: 0,
@@ -12,17 +17,14 @@ NJ.GAME_STATE = {
 };
 
 // level
-NJ.NUM_COLS = 9;
-NJ.NUM_ROWS = 9;
+NJ.NUM_COLS = 7;
+NJ.NUM_ROWS = 7;
 
 // UI
 NJ.HEADER_HEIGHT = 56;
 
 // lives
 NJ.START_LIVES = 4;
-
-// sound
-NJ.SOUND = true;
 
 // units
 NJ.UNIT_TAG = {
@@ -38,3 +40,9 @@ NJ.BLOCK_TYPE = {
 };
 
 NJ.BLOCK_MAX_VALUE = 9;
+
+/** CONFIG DATA **/
+
+// audio
+NJ.MUSIC = true;
+NJ.SOUNDS = true;

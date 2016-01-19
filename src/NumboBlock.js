@@ -20,6 +20,10 @@ var NumboBlock = cc.Sprite.extend({
     ctor: function() {
         this._super(res.blockImage);
 
+        this.attr({
+            scale: 1.2
+        });
+
         this.highlightSprite = cc.Sprite.createWithTexture(cc.textureCache.addImage(res.glowImage));
         this.highlightSprite.attr({
             scale: 1.8,
