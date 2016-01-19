@@ -57,8 +57,8 @@ cc.game.onStart = function() {
         document.body.removeChild(document.getElementById("cocosLoading"));
 
     //load resources
-    cc.LoaderScene.preload(g_resources, function () {
-        cc.director.runScene(new MainGameScene());
+    cc.LoaderScene.preload(g_menu, function () {
+        cc.director.runScene(NumboMenu.scene());
     }, this);
 };
 cc.game.run();

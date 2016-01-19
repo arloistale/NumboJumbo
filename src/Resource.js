@@ -1,20 +1,27 @@
+/**
+ *
+ * All resource files go here.
+ *
+ */
+
 var res = {
     // Fonts
     markerFontTTF: {
         type: "font",
-        name: "IndieFlower",
+        name: "Marker Felt",
         srcs: ["res/Fonts/MarkerFelt.ttf"]
     },
 
 	// images
+    buttonImage: "res/Images/Button.png",
     backgroundImage: "res/Images/Background.png",
     glowImage: "res/Images/Glow.png",
     blockImage: "res/Images/Projectile.png",
 
     // sound
-    menuTrack: "res/Sounds/Track1.mp3",
+    menuTrack: "res/Sounds/Track2.mp3",
     backgroundTrack: "res/Sounds/Track1.mp3",
-    successTrack: "res/Sounds/Ka-Ching.wav",
+    successTrack: "res/Sounds/Ka-Ching.wav"
 };
 
 var b_getFontName = function(fontRes) {
@@ -30,17 +37,19 @@ for (var i in res) {
     g_resources.push(res[i]);
 }
 
-var g_mainMenu = [
+var g_menu = [
     // images
     res.backgroundImage,
+    res.buttonImage,
 
     // sounds
-    res.menuTrack
+    res.menuTrack,
 
-    // other
+    // fonts
+    b_getFontName(res.markerFontTTF)
 ];
 
-var g_mainGame = [
+var g_game = [
     // images
     res.backgroundImage,
     res.glowImage,

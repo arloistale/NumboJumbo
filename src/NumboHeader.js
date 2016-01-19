@@ -19,7 +19,7 @@ var NumboHeader = cc.LayerColor.extend({
     initLabels: function() {
         contentSize = this.getContentSize();
 
-        this.scoreValueLabel = new cc.LabelTTF("Score: 0", res.markerFontTTF, 32);
+        this.scoreValueLabel = new cc.LabelTTF("Score: 0", b_getFontName(res.markerFontTTF), 32);
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
