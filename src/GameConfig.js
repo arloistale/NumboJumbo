@@ -41,8 +41,29 @@ NJ.BLOCK_TYPE = {
 
 NJ.BLOCK_MAX_VALUE = 9;
 
-/** CONFIG DATA **/
+/** State Data **/
+NJ.gameState = NJ.GAME_STATE.HOME;
 
-// audio
-NJ.MUSIC = true;
-NJ.SOUNDS = true;
+/** Settings Data **/
+
+NJ.settings = {
+    music: true,
+    sounds: true
+};
+
+// load settings from local store
+NJ.loadSettings = function() {
+    // here we compensate for loose typing of javascript by converting to a true boolean
+    // TODO: change this if we ever get to the point where we aren't using only just booleans for settings
+    for(var key in NJ.settings) {
+        NJ.settings[key] = (cc.sys.localStorage.getItem(key) == 'true');
+    }
+};
+
+// save settings to local store
+// NOTE: Must be called to persist changes in settings
+NJ.saveSettings = function() {
+    for(var key in NJ.settings) {
+        cc.sys.localStorage.setItem(key, NJ.settings[key]);
+    }
+};

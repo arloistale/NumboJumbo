@@ -62,8 +62,6 @@ var NumboGameLayer = cc.Layer.extend({
                     if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
                         return;
 
-                    //console.log(event.getLocation());
-                    //console.log(event.getCurrentTarget());
                     event.getCurrentTarget().onTouchBegan(event.getLocation());
                 },
                 onMouseMove: function (event) {
@@ -87,13 +85,13 @@ var NumboGameLayer = cc.Layer.extend({
                 event: cc.EventListener.TOUCH_ONE_BY_ONE,
                 swallowTouches: true,
                 onTouchBegan: function(touch, event) {
-
+                    event.getCurrentTarget().onTouchBegan(event.getLocation());
                 },
                 onTouchMoved: function(touch, event) {
-
+                    event.getCurrentTarget().onTouchMoved(event.getLocation());
                 },
                 onTouchEnded: function(touch, event) {
-
+                    event.getCurrentTarget().onTouchEnded(event.getLocation());
                 }
             }, this);
         }
@@ -132,6 +130,9 @@ var NumboGameLayer = cc.Layer.extend({
 
     // initialize game audio
     initAudio: function() {
+        if(!NJ.settings.music)
+            return;
+
         // start the music
         cc.audioEngine.playMusic(res.backgroundTrack, true);
     },
@@ -187,7 +188,8 @@ var NumboGameLayer = cc.Layer.extend({
         block.highlight(cc.color(0, 255, 0, 255));
         this._selectedBlocks.push(block);
 
-        cc.audioEngine.playEffect(res.successTrack);
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.successTrack);
     },
 
     // deselect a single block, removing its highlight

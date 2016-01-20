@@ -51,14 +51,16 @@ var NumboMenu = cc.Layer.extend({
 
     // initialize game audio
     initAudio: function() {
-        //if (MW.SOUND) {
-            cc.audioEngine.setMusicVolume(0.7);
-            cc.audioEngine.playMusic(res.menuTrack, true);
-        //}
+        if(!NJ.settings.music)
+            return;
+
+        cc.audioEngine.setMusicVolume(0.7);
+        cc.audioEngine.playMusic(res.menuTrack, true);
     },
 
     onPlay: function(sender) {
-        cc.audioEngine.playEffect(res.successTrack, false);
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.successTrack, false);
 
         //load resources
         cc.LoaderScene.preload(g_game, function () {
@@ -67,16 +69,17 @@ var NumboMenu = cc.Layer.extend({
             var scene = new cc.Scene();
             scene.addChild(new NumboGameLayer());
             //scene.addChild(new GameControlMenu());
-            cc.director.runScene(new cc.TransitionFade(1.2, scene));
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
         }, this);
     },
 
     onSettings: function(sender) {
-        cc.audioEngine.playEffect(res.successTrack, false);
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.successTrack, false);
 
         var scene = new cc.Scene();
         scene.addChild(new SettingsMenu());
-        cc.director.runScene(new cc.TransitionFade(1.2, scene));
+        cc.director.runScene(new cc.TransitionFade(0.5, scene));
     },
 
     generateTitleButton: function(title, callback) {

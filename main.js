@@ -56,9 +56,13 @@ cc.game.onStart = function() {
     if(!cc.sys.isNative && document.getElementById("cocosLoading")) //If referenced loading.js, please remove it
         document.body.removeChild(document.getElementById("cocosLoading"));
 
-    //load resources
+    // load settings
+    NJ.loadSettings();
+
+    // load resources
     cc.LoaderScene.preload(g_menu, function () {
         cc.director.runScene(NumboMenu.scene());
     }, this);
 };
+
 cc.game.run();

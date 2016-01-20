@@ -32,11 +32,6 @@ var b_getFontName = function(fontRes) {
     }
 }
 
-var g_resources = [];
-for (var i in res) {
-    g_resources.push(res[i]);
-}
-
 var g_menu = [
     // images
     res.backgroundImage,
@@ -54,6 +49,7 @@ var g_game = [
     res.backgroundImage,
     res.glowImage,
     res.blockImage,
+    res.buttonImage,
 
     // sounds
     res.backgroundTrack,
