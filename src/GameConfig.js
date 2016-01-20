@@ -53,6 +53,13 @@ NJ.settings = {
 
 // load settings from local store
 NJ.loadSettings = function() {
+    // if this is our first time then save defaults
+    if(!(cc.sys.localStorage.getItem('hasLoaded') == 'true')) {
+        cc.sys.localStorage.setItem('hasLoaded', true);
+        NJ.saveSettings();
+        return;
+    }
+
     // here we compensate for loose typing of javascript by converting to a true boolean
     // TODO: change this if we ever get to the point where we aren't using only just booleans for settings
     for(var key in NJ.settings) {
