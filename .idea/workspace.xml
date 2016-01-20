@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d13e4eaf-0db8-4331-9c5a-9d51a1612666" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameConfig.js" afterPath="$PROJECT_DIR$/src/GameConfig.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NumboGameLayer.js" afterPath="$PROJECT_DIR$/src/NumboGameLayer.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NumboHeader.js" afterPath="$PROJECT_DIR$/src/NumboHeader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NumboLevel.js" afterPath="$PROJECT_DIR$/src/NumboLevel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NumboMenu.js" afterPath="$PROJECT_DIR$/src/NumboMenu.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Resource.js" afterPath="$PROJECT_DIR$/src/Resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/SettingsMenu.js" afterPath="$PROJECT_DIR$/src/SettingsMenu.js" />
     </list>
     <ignored path="NumboJumbo.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -125,8 +118,8 @@
       <file leaf-file-name="NumboHeader.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/NumboHeader.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6072319">
-              <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+            <state vertical-scroll-proportion="0.5698254">
+              <caret line="46" column="38" selection-start-line="46" selection-start-column="38" selection-end-line="46" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -674,8 +667,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/NumboHeader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6072319">
-          <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+        <state vertical-scroll-proportion="0.5698254">
+          <caret line="46" column="38" selection-start-line="46" selection-start-column="38" selection-end-line="46" selection-end-column="38" />
           <folding />
         </state>
       </provider>

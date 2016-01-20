@@ -19,7 +19,7 @@ var NumboHeader = cc.LayerColor.extend({
     },
 
     initLabels: function() {
-        this.scoreValueLabel = new cc.LabelTTF("Score: 0", b_getFontName(res.markerFontTTF), 32);
+        this.scoreValueLabel = new cc.LabelTTF("0", b_getFontName(res.markerFontTTF), 32);
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -44,7 +44,7 @@ var NumboHeader = cc.LayerColor.extend({
     },
 
     writePrimaryValue: function(val) {
-      this.scoreValueLabel.setString("Score:\t" + Math.floor(val));
+      this.scoreValueLabel.setString("" + Math.floor(val));
     },
 
     generateTitleButton: function(title, callback) {
