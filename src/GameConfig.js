@@ -46,3 +46,9 @@ NJ.BLOCK_MAX_VALUE = 9;
 // audio
 NJ.MUSIC = true;
 NJ.SOUNDS = true;
+
+NJ.Settings = {
+    music: true,
+    sounds, true
+};
+
