@@ -16,12 +16,13 @@ var SettingsMenu = cc.Layer.extend({
         sp.scale = NJ.SCALE;
         this.addChild(sp, 0, 1);
 
+        /*
         var cacheImage = cc.textureCache.addImage(res.buttonImage);
         var title = new cc.Sprite(cacheImage);
         title.x = cc.winSize.width / 2;
         title.y = cc.winSize.height - 120;
         this.addChild(title);
-
+*/
         // generate music toggle
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFontTTF));
         cc.MenuItemFont.setFontSize(18);
@@ -36,7 +37,8 @@ var SettingsMenu = cc.Layer.extend({
         );
         item1.setColor(cc.color(255, 255, 255, 255));
         item1.setCallback(this.onMusicControl);
-        var state = NJ.MUSIC ? 0 : 1;
+
+        var state = (NJ.settings.music ? 0 : 1);
         item1.setSelectedIndex(state);
 
         // generate sounds toggle
@@ -52,14 +54,14 @@ var SettingsMenu = cc.Layer.extend({
         );
         item2.setColor(cc.color(255, 255, 255, 255));
         item2.setCallback(this.onSoundsControl);
-        state = NJ.SOUNDS ? 0 : 1;
-        item1.setSelectedIndex(state);
+        state = (NJ.settings.sounds ? 0 : 1);
+        item2.setSelectedIndex(state);
 
         cc.MenuItemFont.setFontSize(26);
         var label = new cc.LabelTTF("Back", b_getFontName(res.markerFontTTF), 20);
         label.setColor(cc.color(255, 255, 255, 255));
         var back = new cc.MenuItemLabel(label, this.onBack);
-        back.scale = 0.8;
+        back.scale = 1.0;
 
         var menu = new cc.Menu(title1, title2, item1, item2, back);
         menu.alignItemsInColumns(2, 2, 1);
@@ -71,22 +73,32 @@ var SettingsMenu = cc.Layer.extend({
     },
 
     onBack: function(sender) {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.successTrack, false);
+
+        // save any modified settings
+        NJ.saveSettings();
+
         var scene = new cc.Scene();
         scene.addChild(new NumboMenu());
-        cc.director.runScene(new cc.TransitionFade(1.2, scene));
+        cc.director.runScene(new cc.TransitionFade(0.5, scene));
     },
 
     onMusicControl: function() {
-        NJ.MUSIC = !NJ.MUSIC;
-        if(NJ.MUSIC)
+        NJ.settings.music = !NJ.settings.music;
+
+        if(NJ.settings.music)
             cc.audioEngine.playMusic(res.menuTrack);
         else
             cc.audioEngine.stopMusic();
     },
 
     onSoundsControl: function() {
-        NJ.SOUNDS = !NJ.SOUNDS;
-        if(!NJ.SOUNDS)
+        NJ.settings.sounds = !NJ.settings.sounds;
+
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.successTrack, false);
+        else
             cc.audioEngine.stopAllEffects();
     }
 });

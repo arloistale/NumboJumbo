@@ -161,5 +161,5 @@ var NumboLevel = cc.Class.extend({
     // returns whether a block exists at given coords
     getBlock: function(col, row) {
         return this.blocks[col][row];
-    },
+    }
 });
