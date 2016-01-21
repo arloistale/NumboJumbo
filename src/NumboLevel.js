@@ -75,17 +75,20 @@ var NumboLevel = cc.Class.extend({
 
     // drop block into random column with random value
     // returns dropped block
-    dropRandomBlock: function() {
+    dropRandomBlock: function(difficultyMgr) {
         cc.assert(!this.isFull(), "Can't drop any more blocks");
 
-        var val = Math.floor(Math.random() * (NJ.BLOCK_MAX_VALUE) + 1);
+        // val = Math.floor(Math.random() * (NJ.BLOCK_MAX_VALUE) + 1);
+        var block = difficultyMgr.getNextBlock(this.numBlocks);
+        var val = block.val;
+        var col = block.col;
 
         // search for a non full column to drop block into
-        var col = Math.floor(Math.random() * NJ.NUM_COLS);
+        /*var col = Math.floor(Math.random() * NJ.NUM_COLS);
         while (this.numBlocks[col] >= NJ.NUM_ROWS) {
             col = Math.floor(Math.random() * NJ.NUM_COLS);
         }
-
+        */
         return this.dropBlock(col, val);
     },
 

@@ -17,6 +17,7 @@
         "src/NumboLevel.js",
         "src/GameConfig.js",
         "src/ComboManager.js",
-        "src/NumboHeader.js"
+        "src/NumboHeader.js",
+        "src/DifficultyManager.js"
     ]
 }

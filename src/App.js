@@ -16,6 +16,9 @@ var MainGameLayer = cc.Layer.extend({
     // Scoring Data
     _comboManager: null,
 
+    // Difficulty Data
+    _difficultyManager: null,
+
     ctor: function () {
         this._super();
 
@@ -64,9 +67,10 @@ var MainGameLayer = cc.Layer.extend({
         this.initUI();
         this.initLevel();
         this.initComboManager();
+        this.initDifficultyManager();
 
         // begin scheduling block drops
-        this.schedule(this.spawnDropRandomBlock, 1.0);
+        this.schedule(this.spawnDropRandomBlock, this._difficultyManager.getSpawnTime(), "spawn-block");
 
         return true;
     },
@@ -161,6 +165,12 @@ var MainGameLayer = cc.Layer.extend({
         this._comboManager.init();
     },
 
+    // initialize difficulty manager into the scene
+    initDifficultyManager: function() {
+        this._difficultyManager = new DifficultyManager();
+        this._difficultyManager.init();
+    },
+
     // make a block start falling into place
     // NOTE: only call directly to drop a shifted block (this function is not for to spawn blocks, use spawnDropRandomBlock instead)
     dropBlock: function(block) {
@@ -182,12 +192,17 @@ var MainGameLayer = cc.Layer.extend({
         if(this._numboLevel.isFull())
             return;
 
-        var block = this._numboLevel.dropRandomBlock();
+        var block = this._numboLevel.dropRandomBlock(this._difficultyManager);
         var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
         block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
         this.addChild(block);
 
         this.dropBlock(block);
+        // Check for difficulty
+        if(this._difficultyManager.recordDrop()) {
+            this.unschedule(this.spawnDropRandomBlock);
+            this.schedule(this.spawnDropRandomBlock, this._difficultyManager.getSpawnTime());
+        }
     },
 
     // select a block, giving it a highlight
@@ -247,7 +262,8 @@ var MainGameLayer = cc.Layer.extend({
             var selectedBlockCount = this._selectedBlocks.length;
 
             this._comboManager.addScoreForCombo(selectedBlockCount);
-            this._numboHeader.writePrimaryValue(this._comboManager.getScore());
+            this._numboHeader.writePrimaryValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel());
+            this._difficultyManager.recordScore(this._selectedBlocks);
 
             var i = 0;
             for(; i < this._selectedBlocks.length; ++i)
@@ -334,4 +350,3 @@ var MainGameScene = cc.Scene.extend({
         this.addChild(layer);
     }
 });
-

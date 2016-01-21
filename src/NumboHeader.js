@@ -19,7 +19,7 @@ var NumboHeader = cc.LayerColor.extend({
     initLabels: function() {
         contentSize = this.getContentSize();
 
-        this.scoreValueLabel = new cc.LabelTTF("NUMBO JUMBO score: 0", res.markerFontTTF, 32);
+        this.scoreValueLabel = new cc.LabelTTF("BEGIN", res.markerFontTTF, 32);
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -37,8 +37,8 @@ var NumboHeader = cc.LayerColor.extend({
         this.color = color;
     },
 
-    writePrimaryValue: function(val) {
-      this.scoreValueLabel.setString("NUMBO JUMBO score:\t" + Math.floor(val));
+    writePrimaryValue: function(val, blocks) {
+      this.scoreValueLabel.setString("Blocks to Levelup: " + blocks + "  Score:" + Math.floor(val));
     },
 
 
