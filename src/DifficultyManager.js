@@ -31,6 +31,10 @@ var DifficultyManager = cc.Class.extend({
         this.blocksPerMinute = this.chainBlockFreq.reduce(function(a,b){return a+b;}, 0) / this.timeElapsed * 60;
         this.blocksInLevel -= blocks.length
 
+        // level up
+        if(this.blocksToLevelUp[this.level] <= this.blocksCleared)
+            this.level++;
+
         console.log("USER DATA");
         console.log("Time Elapsed: " + this.timeElapsed);
         console.log("Blocks Cleared: " + this.blocksCleared);
@@ -48,45 +52,41 @@ var DifficultyManager = cc.Class.extend({
     // update on spawn time needs to be updated
     adjustSpawnTime: function() {
         // end intro
-        if(this.settings.intro) {
-            if(this.blocksInLevel >= NJ.NUM_COLS*NJ.NUM_ROWS/3) {
+        if (this.settings.intro) {
+            if (this.blocksInLevel >= NJ.NUM_COLS * NJ.NUM_ROWS / 3) {
                 this.spawnTime = 2;
                 this.settings.intro = false;
                 return true;
             }
         }
         // stop the slowdown
-        else if(this.settings.inDanger) {
-            if (this.blocksInLevel <= NJ.NUM_COLS*NJ.NUM_ROWS - 2*NJ.NUM_COLS) {
+        else if (this.settings.inDanger) {
+            if (this.blocksInLevel <= NJ.NUM_COLS * NJ.NUM_ROWS - 2 * NJ.NUM_COLS) {
                 this.settings.inDanger = false;
             }
         }
         // start the slowdown
-        else if(this.blocksInLevel > NJ.NUM_COLS*NJ.NUM_ROWS - NJ.NUM_COLS) {
+        else if (this.blocksInLevel > NJ.NUM_COLS * NJ.NUM_ROWS - NJ.NUM_COLS) {
             this.settings.inDanger = true;
             this.spawnTime += .6;
             return true;
         }
-        else {
-            if(this.blocksToLevelUp[this.level] <= this.blocksCleared) {
-                this.level++;
-                this.spawnTime = this.spawnConsts[this.level];
-                return true;
-            }
-        }
 
+        // speed up for a level up
+        if (this.spawnTime != this.spawnConsts[this.level])
+            return true;
 
         return false;
     },
 
     // returns value of next block
-    getNextBlock: function(inCols) {
+    getNextBlock: function(blocks) {
         var block = {};
         // Set up val/col possibilities
         var vals = [1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,6,6,7,7,8,8,9,9];
         var cols = [];
         for(var i=0; i<NJ.NUM_COLS; i++) {
-            for(var j=7; j > inCols[i]; j--) {
+            for(var j=NJ.NUM_ROWS; j > blocks[i].length; j--) {
                 cols.push(i);
             }
         }

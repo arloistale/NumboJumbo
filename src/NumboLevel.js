@@ -1,164 +1,184 @@
 /**
- Created by jonathanlu on 1/10/16.
+   Created by jonathanlu on 1/10/16.
 
- Part of the model-view scheme used by the level system.
+   Part of the model-view scheme used by the level system.
 
- NumboLevel represents a grid with blocks. The actual sprites for blocks and level are contained
- within the MainGame scene but all logic for dropping blocks and shifting blocks
- are done in this module.
+   NumboLevel represents a grid with blocks. The actual sprites for blocks and level are contained
+   within the MainGame scene but all logic for dropping blocks and shifting blocks
+   are done in this module.
 
- */
-
+*/
 var NumboLevel = cc.Class.extend({
-    blocks: [],
-    numBlocks: [],
-    totalNumBlocks: 0,
+	blocks: [],
+	totalNumBlocks: 0,
 
-    // initialize the level to empty
-    init: function() {
-        // initialize to all blocks null in level
-        var i;
-        for(i = 0; i < NJ.NUM_COLS; ++i)
-            this.blocks.push([]);
+	// initialize the level to empty
+	init: function() {
+	    // create empty columns:
+	    for(var i = 0; i < NJ.NUM_COLS; ++i)
+			this.blocks.push([]);
+	},
 
-        for(i = 0; i < NJ.NUM_ROWS; ++i) {
-            this.blocks[i].push(null);
-            this.numBlocks.push(0);
-        }
-    },
+	// reset the level, removing all blocks
+	reset: function() {
+	    for(var i = 0; i < NJ.NUM_ROWS; ++i) {
+		for(var j = 0; j < NJ.NUM_COLS; ++j) {
+		    this.blocks[i][j] = null;
+		}
+	    }
+	},
 
-    // reset the level, removing all blocks
-    reset: function() {
-        for(var i = 0; i < NJ.NUM_COLS; ++i) {
-            this.numBlocks[i] = 0;
+	// fill the level with random blocks
+	fillBlocks: function() {
+	    for(var i = 0; i < NJ.NUM_COLS; ++i) {
+		for(var j = 0; j < NJ.NUM_ROWS; ++j) {
+		    var blockVal = Math.floor(Math.random() * (NJ.BLOCK_MAX_VALUE) + 1);
+		    this.spawnBlock(i, blockVal).bHasDropped = true;
+		}
+	    }
+	},
 
-            for(var j = 0; j < NJ.NUM_ROWS; ++j) {
-                this.blocks[i][j] = null;
-            }
-        }
-    },
+	// spawn a block at the given col and value
+	// returns spawned block
+	// DO NOT publicly use directly!!! Use dropBlock or dropRandomBlock instead
+	spawnBlock: function(col, val) {
+	    cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid coords");
+	    
+	    var block = new NumboBlock();
 
-    // fill the level with random blocks
-    fillBlocks: function() {
-        for(var i = 0; i < NJ.NUM_ROWS; ++i) {
-            for(var j = 0; j < NJ.NUM_COLS; ++j) {
-                var blockVal = Math.floor(Math.random() * (NJ.BLOCK_MAX_VALUE) + 1);
-                this.spawnBlock(j, i, blockVal).bHasDropped = true;
-            }
-        }
-    },
+	    block.init(col, this.blocks[col].length, val);
+	    this.blocks[col].push(block);
+	    this.totalNumBlocks++;
+	    return block;
+	},
 
-    // spawn a block at the given col, row, and value
-    // returns spawned block
-    // DO NOT publicly use directly!!! Use dropBlock or dropRandomBlock instead
-    spawnBlock: function(col, row, val) {
-        cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
+	// drop block into the given column with given value
+	// returns dropped block
+	dropBlock: function(col, val) {
+	    cc.assert(this.blocks[col].length < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
 
-        var block = new NumboBlock();
-        block.init(col, row, val);
-        this.blocks[col][row] = block;
-        this.numBlocks[col]++;
-        this.totalNumBlocks++;
-        return block;
-    },
+	    var block = this.spawnBlock(col, val);
+	    block.bHasDropped = false;
+	    return block;
+	},
 
-    // drop block into the given column with given value
-    // returns dropped block
-    dropBlock: function(col, val) {
-        cc.assert(this.numBlocks[col] < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
+	// drop block into random column with random value
+	// returns dropped block
+	// drop block into random column with random value
+	// returns dropped block
+	dropRandomBlock: function(difficultyMgr) {
+		cc.assert(!this.isFull(), "Can't drop any more blocks");
 
-        var row = this.numBlocks[col];
-        var block = this.spawnBlock(col, row, val);
-        block.bHasDropped = false;
-        return block;
-    },
+		var block = difficultyMgr.getNextBlock(this.blocks);
+		var val = block.val;
+		var col = block.col;
 
-    // drop block into random column with random value
-    // returns dropped block
-    dropRandomBlock: function(difficultyMgr) {
-        cc.assert(!this.isFull(), "Can't drop any more blocks");
+		return this.dropBlock(col, val);
+	},
 
-        // val = Math.floor(Math.random() * (NJ.BLOCK_MAX_VALUE) + 1);
-        var block = difficultyMgr.getNextBlock(this.numBlocks);
-        var val = block.val;
-        var col = block.col;
+	// kill given block
+	killBlock: function(block) {
+	    cc.assert(block, "Invalid block");
 
-        // search for a non full column to drop block into
-        /*var col = Math.floor(Math.random() * NJ.NUM_COLS);
-        while (this.numBlocks[col] >= NJ.NUM_ROWS) {
-            col = Math.floor(Math.random() * NJ.NUM_COLS);
-        }
-        */
-        return this.dropBlock(col, val);
-    },
+	    var col = block.col;
+	    var row = block.row;
+	    block.kill();
 
-    // kill given block
-    killBlock: function(block) {
-        cc.assert(block, "Invalid block");
+	    this.blocks[col].splice(row, 1);
+	    this.totalNumBlocks--;
+	    for (var j = row; j < this.blocks[col].length; ++j){
+		this.blocks[col][j].row = j;
+		this.blocks[col][j].bHasDropped = false;
+	    }
+	},
 
-        var col = block.col;
-        block.kill();
+	// kill block at given coordinates
+	killBlockAtCoords: function(col, row) {
+	    cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
+	    
+	    if (row < this.blocks[col].length) 
+		killBlock(this.blocks[col][row]);
+	    
+	},
+	
+	// shifts all blocks on the given column downward
+	// by setting its bHasDropped to false
+	shiftBlocksInColumn: function(col) {
+	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
+	    
+	    for (var row = 0; row < this.blocks[col].length; ++row){
+		this.blocks[col][row].bHasDropped = false;
+		this.blocks[col][row].row = row;
+	    }
+	},
 
-        this.blocks[col][block.row] = null;
-        this.numBlocks[col]--;
-        this.totalNumBlocks--;
-    },
+	collapseColumnsToward: function (col) {
+	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
+	    
+	    collapseLeftSideToward(col);
+	    collapseRightSideToward(col);
+	},
 
-    // kill block at given coordinates
-    killBlockAtCoords: function(col, row) {
-        cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
+	collapseLeftSideToward: function(col) {
+	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
 
-        this.blocks[col][row].kill();
-        this.blocks[col][row] = null;
-        this.numBlocks[col]--;
-        this.totalNumBlocks--;
-    },
+	    // find an empty column:
+	    for (var e; e >= 0; --e) {
+		if (blocks[e].length == 0) { // found one
+		    // find index of next non-empty column:
+		    for (var n = e; n >= 0; --n) {
+			if (blocks[n].length > 0) {// found one
+			    this.swapColumns(n, e);
+			    break;
+			}
+		    }
+		}
+	    }
+	},
+	
+	collapseRightSideToward: function(col){
+	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
+	    	
+	    // find an empty column:
+	    for (var e; e < NJ.NUM_COLS; ++e) {
+		if (blocks[e].length == 0) { // found one
+		    // find index of next non-empty column:
+		    for (var n = e; n >= 0; --n) {
+			if (blocks[n].length > 0) {// found one
+			    this.swapColumns(n, e);
+			    break;
+			}
+		    }
+		}
+	    }
+    
+	},
 
-    // shifts all blocks down, removing gaps
-    shiftBlocks: function() {
-        var result = [];
+	swapColumns: function(i, j){
+	    var t = blocks[i];
+	    blocks[i] = blocks[j];
+	    blocks[j] = blocks[t];
+	},
 
-        for(var i = 0; i < NJ.NUM_COLS; i++) {
-            if(!this.numBlocks[i])
-                continue;
+	// returns whether level is currently full of blocks
+	isFull: function() {
+	    return this.totalNumBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
+	},
 
-            var shiftRow = !this.blocks[i][0] ? 0 : -1;
-            for(var j = 0; j < NJ.NUM_ROWS; j++) {
-                if(this.blocks[i][j]) {
-                    if(shiftRow >= 0) {
-                        this.blocks[i][shiftRow] = this.blocks[i][j];
-                        this.blocks[i][shiftRow].bHasDropped = false;
-                        this.blocks[i][shiftRow].row = shiftRow;
-                        result.push(this.blocks[i][shiftRow]);
-                        shiftRow++;
-                        this.blocks[i][j] = null;
-                    }
-                } else if(this.blocks[i][j - 1]) {
-                    shiftRow = j;
-                }
-            }
-        }
+	// returns whether two coordinates are adjacent (diagonal allowed)
+	isAdjCoords: function(col1, row1, col2, row2) {
+	    return Math.abs(col2 - col1) <= 1 && Math.abs(row2 - row1) <= 1;
+	},
 
-        return result;
-    },
+	// returns whether two blocks are adjacent (diagonal allowed)
+	isAdjBlocks: function(block1, block2) {
+	    return this.isAdjCoords(block1.col, block1.row, block2.col, block2.row);
+	},
 
-    // returns whether level is currently full of blocks
-    isFull: function() {
-        return this.totalNumBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
-    },
-
-    // returns whether two coordinates are adjacent (diagonal allowed)
-    isAdjCoords: function(col1, row1, col2, row2) {
-        return Math.abs(col2 - col1) <= 1 && Math.abs(row2 - row1) <= 1;
-    },
-
-    // returns whether two blocks are adjacent (diagonal allowed)
-    isAdjBlocks: function(block1, block2) {
-        return this.isAdjCoords(block1.col, block1.row, block2.col, block2.row);
-    },
-
-    // returns whether a block exists at given coords
-    getBlock: function(col, row) {
-        return this.blocks[col][row];
-    }
-});
+	// returns whether a block exists at given coords
+	getBlock: function(col, row) {
+	    cc.assert(0 <= col && col < NJ.NUM_COLS && 0 <= row && row < NJ.NUM_ROWS 
+		      && row < this.blocks[col].length, "invalid coords!");
+	    return this.blocks[col][row];
+	}
+    });

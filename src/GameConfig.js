@@ -1,6 +1,6 @@
 /**
- Created by jonathanlu on 1/10/16.
- */
+   Created by jonathanlu on 1/10/16.
+*/
 
 var NJ = NJ || {};
 
@@ -44,6 +44,17 @@ NJ.BLOCK_MAX_VALUE = 9;
 /** State Data **/
 NJ.gameState = NJ.GAME_STATE.HOME;
 
+
+// audio
+NJ.MUSIC = true;
+NJ.SOUNDS = true;
+
+NJ.Settings = {
+    music: true,
+    sounds: true
+};
+
+
 /** Settings Data **/
 
 NJ.settings = {
@@ -74,3 +85,4 @@ NJ.saveSettings = function() {
         cc.sys.localStorage.setItem(key, NJ.settings[key]);
     }
 };
+

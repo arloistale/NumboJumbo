@@ -58,3 +58,4 @@ var g_game = [
     // fonts
     b_getFontName(res.markerFontTTF)
 ];
+
