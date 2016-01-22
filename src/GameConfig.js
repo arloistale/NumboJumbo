@@ -1,6 +1,6 @@
 /**
- Created by jonathanlu on 1/10/16.
- */
+   Created by jonathanlu on 1/10/16.
+*/
 
 var NJ = NJ || {};
 
@@ -51,7 +51,7 @@ NJ.SOUNDS = true;
 
 NJ.Settings = {
     music: true,
-    sounds, true
+    sounds: true
 };
 
 
