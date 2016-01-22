@@ -12,7 +12,9 @@
 
     "jsList" : [
         "src/Resource.js",
-        "src/App.js",
+        "src/NumboMenu.js",
+        "src/SettingsMenu.js",
+        "src/NumboGameLayer.js",
         "src/NumboBlock.js",
         "src/NumboLevel.js",
         "src/GameConfig.js",

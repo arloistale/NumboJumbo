@@ -49,7 +49,7 @@ var DifficultyManager = cc.Class.extend({
     adjustSpawnTime: function() {
         // end intro
         if(this.settings.intro) {
-            if(this.blocksInLevel >= 27) {
+            if(this.blocksInLevel >= NJ.NUM_COLS*NJ.NUM_ROWS/3) {
                 this.spawnTime = 2;
                 this.settings.intro = false;
                 return true;
@@ -57,14 +57,14 @@ var DifficultyManager = cc.Class.extend({
         }
         // stop the slowdown
         else if(this.settings.inDanger) {
-            if (this.blocksInLevel <= 65) {
+            if (this.blocksInLevel <= NJ.NUM_COLS*NJ.NUM_ROWS - 2*NJ.NUM_COLS) {
                 this.settings.inDanger = false;
             }
         }
         // start the slowdown
-        else if(this.blocksInLevel > 72) {
+        else if(this.blocksInLevel > NJ.NUM_COLS*NJ.NUM_ROWS - NJ.NUM_COLS) {
             this.settings.inDanger = true;
-            this.spawnTime += .4;
+            this.spawnTime += .6;
             return true;
         }
         else {
@@ -85,8 +85,8 @@ var DifficultyManager = cc.Class.extend({
         // Set up val/col possibilities
         var vals = [1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,6,6,7,7,8,8,9,9];
         var cols = [];
-        for(var i=0; i<inCols.length; i++) {
-            for(var j=9; j > inCols[i]; j--) {
+        for(var i=0; i<NJ.NUM_COLS; i++) {
+            for(var j=7; j > inCols[i]; j--) {
                 cols.push(i);
             }
         }
