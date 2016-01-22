@@ -1,5 +1,8 @@
 
-var NumboMenu = cc.Layer.extend({
+var NumboMenuLayer = cc.Layer.extend({
+
+    _menu: null,
+    _settingsMenuLayer: null,
 
     ctor: function () {
         this._super();
@@ -16,8 +19,6 @@ var NumboMenu = cc.Layer.extend({
         this.initBackground();
         this.initUI();
         this.initAudio();
-
-        return true;
     },
 
     // initialize background for menu
@@ -36,17 +37,24 @@ var NumboMenu = cc.Layer.extend({
 
     // initialize menu elements
     initUI: function() {
-        var playButton = this.generateTitleButton("Play", this.onPlay);
-        var settingsButton = this.generateTitleButton("Settings", this.onSettings);
+        var that = this;
+
+        var playButton = this.generateTitleButton("Play", function() {
+            that.onPlay();
+        });
+
+        var settingsButton = this.generateTitleButton("Settings", function() {
+            that.onSettings();
+        });
 
         playButton.scale = NJ.SCALE;
         settingsButton.scale = NJ.SCALE;
 
-        var menu = new cc.Menu(playButton, settingsButton);
-        menu.alignItemsVerticallyWithPadding(15);
-        this.addChild(menu, 100, 2);
-        menu.x = cc.winSize.width / 2;
-        menu.y = cc.winSize.height / 2;// - 140;
+        this._menu = new cc.Menu(playButton, settingsButton);
+        this._menu.alignItemsVerticallyWithPadding(15);
+        this.addChild(this._menu, 100);
+        this._menu.x = cc.winSize.width / 2;
+        this._menu.y = cc.winSize.height / 2;
     },
 
     // initialize game audio
@@ -58,7 +66,9 @@ var NumboMenu = cc.Layer.extend({
         cc.audioEngine.playMusic(res.menuTrack, true);
     },
 
-    onPlay: function(sender) {
+    // event callbacks
+
+    onPlay: function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.successTrack, false);
 
@@ -73,13 +83,12 @@ var NumboMenu = cc.Layer.extend({
         }, this);
     },
 
-    onSettings: function(sender) {
+    onSettings: function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.successTrack, false);
 
-        var scene = new cc.Scene();
-        scene.addChild(new SettingsMenu());
-        cc.director.runScene(new cc.TransitionFade(0.5, scene));
+        this._settingsMenuLayer = new SettingsMenuLayer();
+        this.addChild(this._settingsMenuLayer, 999);
     },
 
     generateTitleButton: function(title, callback) {
@@ -125,9 +134,9 @@ var NumboMenu = cc.Layer.extend({
     }
 });
 
-NumboMenu.scene = function () {
+NumboMenuLayer.scene = function () {
     var scene = new cc.Scene();
-    var layer = new NumboMenu();
+    var layer = new NumboMenuLayer();
     scene.addChild(layer);
     return scene;
 };

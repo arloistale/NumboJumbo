@@ -1,7 +1,12 @@
-var NumboHeader = cc.LayerColor.extend({
+var NumboHeaderLayer = cc.LayerColor.extend({
 
     scoreValueLabel: null,
-    pauseButton: null,
+
+    onPauseCallback: null,
+
+////////////////////
+// Initialization //
+////////////////////
 
     ctor: function() {
         this._super();
@@ -11,14 +16,17 @@ var NumboHeader = cc.LayerColor.extend({
 
         this.setPosition(0, cc.winSize.height);
 
-        this.initLabels();
-        this.initButtons();
+        this.initUI();
 
         var moveTo = cc.MoveTo.create(.4, cc.p(0, cc.winSize.height-NJ.HEADER_HEIGHT));
         this.runAction(moveTo);
     },
 
-    initLabels: function() {
+    // initialize labels for game stats
+    initUI: function() {
+        var that = this;
+
+        // initialize score label
         this.scoreValueLabel = new cc.LabelTTF("0", b_getFontName(res.markerFontTTF), 32);
         this.scoreValueLabel.attr({
             scale: 1.0,
@@ -31,21 +39,33 @@ var NumboHeader = cc.LayerColor.extend({
         this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.scoreValueLabel.setColor(cc.color(255, 146, 48, 255));
         this.addChild(this.scoreValueLabel);
+
+        // initialize pause button
+        this.pauseButton = this.generateTitleButton("Pause", function() {
+            if(that.onPauseCallback)
+                that.onPauseCallback();
+        });
+
+        this.addChild(this.pauseButton);
     },
 
-    initButtons: function() {
-        this.pauseButton = this.generateTitleButton("Pause", this.onPause);
-    },
+////////////////
+// UI setters //
+////////////////
 
-    onPause: function() {
-        var scene = cc.getRunningScene();
-        scene.addChild(new SettingsMenu());
-        cc.director.pause();
-    },
-
-    writePrimaryValue: function(val) {
+    setScoreValue: function(val) {
       this.scoreValueLabel.setString("" + Math.floor(val));
     },
+
+// UI callbacks //
+
+    setOnPauseCallback: function(callback) {
+        this.onPauseCallback = callback;
+    },
+
+////////////////
+// UI helpers //
+////////////////
 
     generateTitleButton: function(title, callback) {
         var normalSprite = new cc.Sprite(res.buttonImage);

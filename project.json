@@ -12,13 +12,13 @@
 
     "jsList" : [
         "src/Resource.js",
-        "src/NumboMenu.js",
-        "src/SettingsMenu.js",
+        "src/NumboMenuLayer.js",
+        "src/SettingsMenuLayer.js",
         "src/NumboGameLayer.js",
+        "src/NumboHeaderLayer.js",
         "src/NumboBlock.js",
         "src/NumboLevel.js",
         "src/GameConfig.js",
-        "src/ComboManager.js",
-        "src/NumboHeader.js"
+        "src/ComboManager.js"
     ]
 }

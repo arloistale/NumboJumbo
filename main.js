@@ -61,7 +61,7 @@ cc.game.onStart = function() {
 
     // load resources
     cc.LoaderScene.preload(g_menu, function () {
-        cc.director.runScene(NumboMenu.scene());
+        cc.director.runScene(NumboMenuLayer.scene());
     }, this);
 };
 

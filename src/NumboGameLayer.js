@@ -19,6 +19,10 @@ var NumboGameLayer = cc.Layer.extend({
     // Scoring Data
     _comboManager: null,
 
+////////////////////
+// Initialization //
+////////////////////
+
     ctor: function () {
         this._super();
 
@@ -31,8 +35,6 @@ var NumboGameLayer = cc.Layer.extend({
 
         // begin scheduling block drops
         this.schedule(this.spawnDropRandomBlock, 1.0);
-
-        return true;
     },
 
     // initialize background for game
@@ -99,7 +101,13 @@ var NumboGameLayer = cc.Layer.extend({
 
     // initialize UI elements into the scene
     initUI: function() {
-        this._numboHeader = new NumboHeader();
+
+        var that = this;
+
+        this._numboHeader = new NumboHeaderLayer();
+        this._numboHeader.setOnPauseCallback(function() {
+            that.onPause();
+        });
         this.addChild(this._numboHeader, 999);
     },
 
@@ -137,6 +145,10 @@ var NumboGameLayer = cc.Layer.extend({
         cc.audioEngine.playMusic(res.backgroundTrack, true);
     },
 
+////////////////////
+// Block Spawning //
+////////////////////
+
     // make a block start falling into place
     // NOTE: only call directly to drop a shifted block (this function is not for to spawn blocks, use spawnDropRandomBlock instead)
     dropBlock: function(block) {
@@ -165,6 +177,10 @@ var NumboGameLayer = cc.Layer.extend({
 
         this.dropBlock(block);
     },
+
+/////////////////////
+// Block Selection //
+/////////////////////
 
     // select a block, giving it a highlight
     selectBlock: function(col, row) {
@@ -224,7 +240,7 @@ var NumboGameLayer = cc.Layer.extend({
             var selectedBlockCount = this._selectedBlocks.length;
 
             this._comboManager.addScoreForCombo(selectedBlockCount);
-            this._numboHeader.writePrimaryValue(this._comboManager.getScore());
+            this._numboHeader.setScoreValue(this._comboManager.getScore());
 
             var i = 0;
             for(; i < this._selectedBlocks.length; ++i)
@@ -239,7 +255,20 @@ var NumboGameLayer = cc.Layer.extend({
         this.deselectAllBlocks();
     },
 
-    // touch events
+///////////////
+// UI Events //
+///////////////
+
+    // on pause, opens up the settings menu
+    onPause: function() {
+        console.log("yolo swag");
+        //cc.director.pause();
+        this.addChild(new SettingsMenuLayer(), 999);
+    },
+
+//////////////////
+// Touch Events //
+//////////////////
 
     // on touch began, tries to find level coordinates for the touch and selects block accordingly
     onTouchBegan: function(touchPosition) {
@@ -261,6 +290,10 @@ var NumboGameLayer = cc.Layer.extend({
     onTouchEnded: function(touchPosition) {
         this.activateSelectedBlocks();
     },
+
+/////////////
+// Helpers //
+/////////////
 
     // checks if the current selected blocks can be activated (their equation is valid)
     isSelectedClearable: function() {
