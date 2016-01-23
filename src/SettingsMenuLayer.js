@@ -6,6 +6,12 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 
     _menu: null,
 
+    onCloseCallback: null,
+    
+////////////////////
+// Initialization //
+////////////////////
+
     ctor: function() {
         this._super();
 
@@ -13,8 +19,6 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 
         this.initUI();
     },
-
-    that: null,
 
     initUI: function() {
         var sp = new cc.Sprite(res.loading_png);
@@ -58,7 +62,9 @@ var SettingsMenuLayer = cc.LayerColor.extend({
         this.addChild(this._menu, 100);
     },
 
-    // event overrides
+///////////////
+// UI Events //
+///////////////
 
     onBack: function() {
         if(NJ.settings.sounds)
@@ -67,7 +73,8 @@ var SettingsMenuLayer = cc.LayerColor.extend({
         // save any modified settings
         NJ.saveSettings();
 
-        this.removeFromParent(true);
+        if(this.onCloseCallback)
+            this.onCloseCallback();
     },
 
     onMusicControl: function() {
@@ -87,6 +94,18 @@ var SettingsMenuLayer = cc.LayerColor.extend({
         else
             cc.audioEngine.stopAllEffects();
     },
+    
+//////////////////
+// UI Callbacks //
+//////////////////
+    
+    setOnCloseCallback: function(callback) {
+        this.onCloseCallback = callback;
+    },
+    
+////////////////
+// UI Helpers //
+////////////////
 
     generateLabel: function(title) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFontTTF));

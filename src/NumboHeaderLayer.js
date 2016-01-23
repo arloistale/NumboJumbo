@@ -39,14 +39,30 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.scoreValueLabel.setColor(cc.color(255, 146, 48, 255));
         this.addChild(this.scoreValueLabel);
+        
+        var contentSize = this.getContentSize();
+        var minDim = Math.min(contentSize.width, contentSize.height);
 
         // initialize pause button
-        this.pauseButton = this.generateTitleButton("Pause", function() {
-            if(that.onPauseCallback)
-                that.onPauseCallback();
+        var button = new ccui.Button();
+        button.setTitleFontName(b_getFontName(res.markerFontTTF));
+        button.setTitleFontSize(26);
+        button.setTitleText("Pause");
+        button.attr({
+            scale: 0.5,
+            anchorX: 1,
+            anchorY: 1,
+            x: contentSize.width - minDim * 0.1,
+            y: contentSize.height - minDim * 0.1
         });
+        button.loadTextureNormal(res.buttonImage);
+        button.addTouchEventListener(function (ref, touchEventType) {
+            if(touchEventType === ccui.Widget.TOUCH_ENDED)
+                that.onPauseCallback();
+            
+        }, this);
 
-        this.addChild(this.pauseButton);
+        this.addChild(button);
     },
 
 ////////////////
@@ -61,51 +77,5 @@ var NumboHeaderLayer = cc.LayerColor.extend({
 
     setOnPauseCallback: function(callback) {
         this.onPauseCallback = callback;
-    },
-
-////////////////
-// UI helpers //
-////////////////
-
-    generateTitleButton: function(title, callback) {
-        var normalSprite = new cc.Sprite(res.buttonImage);
-        var selectedSprite = new cc.Sprite(res.buttonImage);
-        var disabledSprite = new cc.Sprite(res.buttonImage);
-
-        selectedSprite.setColor(cc.color(192, 192, 192, 255));
-        disabledSprite.setColor(cc.color(64, 64, 64, 255));
-
-        var normalLabel = new cc.LabelTTF(title, b_getFontName(res.markerFontTTF), 32);
-        normalLabel.attr({
-            scale: 1.0,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: normalSprite.getContentSize().width / 2,
-            y: normalSprite.getContentSize().height / 2
-        });
-
-        var selectedLabel = new cc.LabelTTF(title, b_getFontName(res.markerFontTTF), 32);
-        selectedLabel.attr({
-            scale: 1.0,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: selectedSprite.getContentSize().width / 2,
-            y: selectedSprite.getContentSize().height / 2
-        });
-
-        var disabledLabel = new cc.LabelTTF(title, b_getFontName(res.markerFontTTF), 32);
-        disabledLabel.attr({
-            scale: 1.0,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: disabledSprite.getContentSize().width / 2,
-            y: disabledSprite.getContentSize().height / 2
-        });
-
-        normalSprite.addChild(normalLabel);
-        selectedSprite.addChild(selectedLabel);
-        disabledSprite.addChild(disabledLabel);
-
-        return new cc.MenuItemSprite(normalSprite, selectedSprite, disabledSprite, callback, this);
     }
 });

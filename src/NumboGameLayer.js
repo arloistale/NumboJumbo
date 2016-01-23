@@ -5,6 +5,7 @@
 var NumboGameLayer = cc.Layer.extend({
     // UI Data
     _numboHeader: null,
+    _settingsMenuLayer: null,
 
     // Sprite Data
     _backgroundSprite: null,
@@ -261,9 +262,21 @@ var NumboGameLayer = cc.Layer.extend({
 
     // on pause, opens up the settings menu
     onPause: function() {
-        console.log("yolo swag");
-        //cc.director.pause();
-        this.addChild(new SettingsMenuLayer(), 999);
+        var that = this;
+        
+        cc.director.pause();
+        cc.eventManager.pauseTarget(this, true);
+        this._settingsMenuLayer = new SettingsMenuLayer();
+        this._settingsMenuLayer.setOnCloseCallback(function() {
+            that.onResume();
+        });
+        this.addChild(this._settingsMenuLayer, 999);
+    },
+    
+    onResume: function() {
+        cc.director.resume();
+        cc.eventManager.resumeTarget(this, true);
+        this.removeChild(this._settingsMenuLayer);
     },
 
 //////////////////

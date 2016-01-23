@@ -3,6 +3,10 @@ var NumboMenuLayer = cc.Layer.extend({
 
     _menu: null,
     _settingsMenuLayer: null,
+    
+////////////////////
+// Initialization //
+////////////////////
 
     ctor: function () {
         this._super();
@@ -66,7 +70,9 @@ var NumboMenuLayer = cc.Layer.extend({
         cc.audioEngine.playMusic(res.menuTrack, true);
     },
 
-    // event callbacks
+///////////////
+// UI Events //
+///////////////
 
     onPlay: function() {
         if(NJ.settings.sounds)
@@ -78,7 +84,6 @@ var NumboMenuLayer = cc.Layer.extend({
             cc.audioEngine.stopAllEffects();
             var scene = new cc.Scene();
             scene.addChild(new NumboGameLayer());
-            //scene.addChild(new GameControlMenu());
             cc.director.runScene(new cc.TransitionFade(0.5, scene));
         }, this);
     },
@@ -86,10 +91,21 @@ var NumboMenuLayer = cc.Layer.extend({
     onSettings: function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.successTrack, false);
+            
+        var that = this;
 
+        cc.eventManager.pauseTarget(this, true);
         this._settingsMenuLayer = new SettingsMenuLayer();
+        this._settingsMenuLayer.setOnCloseCallback(function() {
+            cc.eventManager.resumeTarget(that, true);
+            that.removeChild(that._settingsMenuLayer);
+        });
         this.addChild(this._settingsMenuLayer, 999);
     },
+    
+////////////////
+// UI Helpers //
+////////////////
 
     generateTitleButton: function(title, callback) {
         var normalSprite = new cc.Sprite(res.buttonImage);
