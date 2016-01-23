@@ -94,10 +94,8 @@ var NumboLevel = cc.Class.extend({
 		if (this.blocks[i].length > 0)
 		    nonEmptyExists = true;
 	    }
-	    console.log("non-empty exists?", nonEmptyExists);
 
 	    var legit = false;
-	    var count = 1;
 	    while (legit == false && count < 100){
 		var col = Math.floor(Math.random() * NJ.NUM_COLS);
 		if (this.blocks[col].length >= NJ.NUM_ROWS)
@@ -110,12 +108,9 @@ var NumboLevel = cc.Class.extend({
 		}
 		else
 		    legit = true;
-		++count;
 	    }
-	    cc.assert(count < 100, "rut roh inf loop");
 	    
 	    return col;
-	    
 	},
 
 	// kill given block
