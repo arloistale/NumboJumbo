@@ -3,11 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d13e4eaf-0db8-4331-9c5a-9d51a1612666" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameConfig.js" afterPath="$PROJECT_DIR$/src/GameConfig.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NumboBlock.js" afterPath="$PROJECT_DIR$/src/NumboBlock.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NumboGameLayer.js" afterPath="$PROJECT_DIR$/src/NumboGameLayer.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NumboLevel.js" afterPath="$PROJECT_DIR$/src/NumboLevel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Resource.js" afterPath="$PROJECT_DIR$/src/Resource.js" />
     </list>
     <ignored path="NumboJumbo.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -74,7 +69,7 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
               <folding>
-                <marker date="1453524365000" expanded="true" signature="0:5" placeholder="/**Created by jonathanlu on 1/10/16. ...*/" />
+                <marker date="1453535072000" expanded="true" signature="0:5" placeholder="/**Created by jonathanlu on 1/10/16. ...*/" />
               </folding>
             </state>
           </provider>
@@ -102,21 +97,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ComboManager.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ComboManager.js">
+      <file leaf-file-name="NumboLevel.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/NumboLevel.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <caret line="237" column="34" selection-start-line="237" selection-start-column="34" selection-end-line="237" selection-end-column="34" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NumboLevel.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/NumboLevel.js">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.79477614">
-              <caret line="237" column="34" selection-start-line="237" selection-start-column="34" selection-end-line="237" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.22307692">
+              <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -162,6 +157,7 @@
         <option value="$PROJECT_DIR$/src/NumboGameLayer.js" />
         <option value="$PROJECT_DIR$/src/NumboBlock.js" />
         <option value="$PROJECT_DIR$/src/NumboLevel.js" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -700,13 +696,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="13" selection-start-line="42" selection-start-column="13" selection-end-line="42" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -742,7 +731,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
           <folding>
-            <marker date="1453524365000" expanded="true" signature="0:5" placeholder="/**Created by jonathanlu on 1/10/16. ...*/" />
+            <marker date="1453535072000" expanded="true" signature="0:5" placeholder="/**Created by jonathanlu on 1/10/16. ...*/" />
           </folding>
         </state>
       </provider>
@@ -807,8 +796,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/NumboLevel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.79477614">
+        <state vertical-scroll-proportion="0.0">
           <caret line="237" column="34" selection-start-line="237" selection-start-column="34" selection-end-line="237" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.22307692">
+          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
           <folding />
         </state>
       </provider>
