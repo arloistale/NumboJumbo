@@ -142,9 +142,10 @@ var NumboGameLayer = cc.Layer.extend({
 	dropBlock: function(block) {
 	    var blockTargetY = this._levelBounds.y 
 	    + this._levelCellSize.height * (block.row + 0.5);
+	    var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
 
 	    var duration = 0.5;
-	    var moveAction = cc.MoveTo.create(duration, cc.p(block.x, blockTargetY));
+	    var moveAction = cc.MoveTo.create(duration, cc.p(blockTargetX, blockTargetY));
 	    var dropAction = cc.CallFunc.create(function() {
 		    block.bHasDropped = true;
 		});
@@ -230,6 +231,7 @@ var NumboGameLayer = cc.Layer.extend({
 	activateSelectedBlocks: function() {
 	    if(this.isSelectedClearable()) {
 		var selectedBlockCount = this._selectedBlocks.length;
+		var lastCol = this._selectedBlocks[selectedBlockCount-1].col;
 
 		this._comboManager.addScoreForCombo(selectedBlockCount);
 		this._numboHeader.writePrimaryValue(this._comboManager.getScore());
@@ -249,12 +251,26 @@ var NumboGameLayer = cc.Layer.extend({
 		    }
 		    this.dropBlocksInColumn(col);
 		}
-
-
+		
+		this._numboLevel.collapseColumnsToward(lastCol);
+		this.shiftAllBlocks();
 	    }
 
 	    this.deselectAllBlocks();
 	},
+
+	// calls dropBlock on every block sprite, which moves each sprite
+	// to its correct (x,y) coordinates.
+	// useful blocks have been removed and need to fall or collapse.
+	shiftAllBlocks: function(){
+	    this._numboLevel.updateBlockRowsAndCols();
+	    for (var i = 0; i < NJ.NUM_COLS; ++i){
+		for (var j = 0; j < this._numboLevel.blocks[i].length; ++j){
+		    this.dropBlock(this._numboLevel.blocks[i][j]);
+		}
+	    }
+	},
+
 
 	// touch events
 

@@ -59,7 +59,9 @@ var NumboLevel = cc.Class.extend({
 	    return block;
 	},
 
-	// drop block into the given column with given value
+	// drop block into the given column with given value.
+	// since column collapsing was introduced, also
+	// shifts blocks horizontally if neccessary.
 	// returns dropped block
 	dropBlock: function(col, val) {
 	    cc.assert(this.blocks[col].length < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
@@ -120,24 +122,26 @@ var NumboLevel = cc.Class.extend({
 	    }
 	},
 
+	// takes in the index of a column in bricks[][].
+	// moves all non-empty columns toward that col
+	// (cols to the left of col move rightward, and vice-versa)
 	collapseColumnsToward: function (col) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
-	    
-	    collapseLeftSideToward(col);
-	    collapseRightSideToward(col);
+	    this.collapseLeftSideToward(col);
+	    this.collapseRightSideToward(col);
 	},
-
+	
 	collapseLeftSideToward: function(col) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
 
 	    // find an empty column:
-	    for (var e; e >= 0; --e) {
-		if (blocks[e].length == 0) { // found one
+	    for (var e = col; e >= 0; --e) {
+		if (this.blocks[e].length == 0) { // found one
 		    // find index of next non-empty column:
 		    for (var n = e; n >= 0; --n) {
-			if (blocks[n].length > 0) {// found one
+			if (this.blocks[n].length > 0) {// found one
 			    this.swapColumns(n, e);
-			    break;
+			    break; // should maybe write this w/o break :p
 			}
 		    }
 		}
@@ -148,24 +152,46 @@ var NumboLevel = cc.Class.extend({
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
 	    	
 	    // find an empty column:
-	    for (var e; e < NJ.NUM_COLS; ++e) {
-		if (blocks[e].length == 0) { // found one
+	    for (var e = col; e < NJ.NUM_COLS; ++e) {
+		if (this.blocks[e].length == 0) { // found one
 		    // find index of next non-empty column:
-		    for (var n = e; n >= 0; --n) {
-			if (blocks[n].length > 0) {// found one
+		    for (var n = e; n < NJ.NUM_COLS; ++n) {
+			if (this.blocks[n].length > 0) {// found one
 			    this.swapColumns(n, e);
-			    break;
+			    break; // should maybe write this w/o break :p
 			}
 		    }
 		}
 	    }
-    
+	},
+	
+
+	// takes in the indeces of two columns in blocks[] and swaps them.
+	// does not fix the internal block.col values;
+	// use this.updateBlockRowsAndCols() for that.
+	// (perhaps should create a new one that only updates locally)
+	swapColumns: function(i, j){
+	    cc.assert(0 <= i && i < NJ.NUM_COLS, "invalid column! " + i);
+	    cc.assert(0 <= j && j < NJ.NUM_COLS, "invalid column! " + j);
+
+	    var t = this.blocks[i];
+	    this.blocks[i] = this.blocks[j];
+	    this.blocks[j] = t;
+
 	},
 
-	swapColumns: function(i, j){
-	    var t = blocks[i];
-	    blocks[i] = blocks[j];
-	    blocks[j] = blocks[t];
+	// iterates over all blocks and updates their .row and .col
+	// member variables. useful when blocks are removed or need
+	// to be collapsed
+	updateBlockRowsAndCols: function(){
+	    for (var i=0; i < NJ.NUM_COLS; ++i){
+		for (var j=0; j < this.blocks[i].length; ++j){
+		    if (this.blocks[i][j]){
+			this.blocks[i][j].col = i;
+			this.blocks[i][j].row = j;
+		    }
+		}
+	    }
 	},
 
 	// returns whether level is currently full of blocks
