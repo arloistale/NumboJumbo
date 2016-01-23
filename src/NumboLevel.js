@@ -78,12 +78,44 @@ var NumboLevel = cc.Class.extend({
 
 	    var val = Math.floor(Math.random() * (NJ.BLOCK_MAX_VALUE) + 1);
 
-	    // search for a non full column to drop block into
-	    var col = Math.floor(Math.random() * NJ.NUM_COLS);
-	    while (this.blocks[col].length >= NJ.NUM_ROWS) 
-		col = Math.floor(Math.random() * NJ.NUM_COLS);
-
+	    var col = this.getRandomValidCol();
 	    return this.dropBlock(col, val);
+	},
+	
+	// search for a legit column to drop block into.
+	// does not return columns which are empty.
+	// prioritizes columns adjacent to non-empty columns, if possible.
+	// returns the valid column found
+	getRandomValidCol: function(){
+	    cc.assert(!this.isFull(), "cannot spawn brick when board is full!");
+
+	    var nonEmptyExists = false;
+	    for (var i=0; i< NJ.NUM_COLS; ++i){
+		if (this.blocks[i].length > 0)
+		    nonEmptyExists = true;
+	    }
+	    console.log("non-empty exists?", nonEmptyExists);
+
+	    var legit = false;
+	    var count = 1;
+	    while (legit == false && count < 100){
+		var col = Math.floor(Math.random() * NJ.NUM_COLS);
+		if (this.blocks[col].length >= NJ.NUM_ROWS)
+		    legit = false;
+		else if (nonEmptyExists == true){
+		    if (col > 0 && this.blocks[col-1].length > 0)
+			legit = true;
+		    else if (col < NJ.NUM_COLS-1 && this.blocks[col+1].length>0)
+			legit = true;
+		}
+		else
+		    legit = true;
+		++count;
+	    }
+	    cc.assert(count < 100, "rut roh inf loop");
+	    
+	    return col;
+	    
 	},
 
 	// kill given block
