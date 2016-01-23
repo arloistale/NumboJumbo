@@ -96,7 +96,7 @@ var NumboLevel = cc.Class.extend({
 	    }
 
 	    var legit = false;
-	    while (legit == false && count < 100){
+	    while (legit == false ){
 		var col = Math.floor(Math.random() * NJ.NUM_COLS);
 		if (this.blocks[col].length >= NJ.NUM_ROWS)
 		    legit = false;
