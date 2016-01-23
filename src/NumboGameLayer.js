@@ -112,6 +112,7 @@ var NumboGameLayer = cc.Layer.extend({
         this.addChild(this._numboHeader, 999);
     },
 
+
     // initialize the empty level into the scene
     initLevel: function() {
         this._numboLevel = new NumboLevel();
@@ -150,111 +151,142 @@ var NumboGameLayer = cc.Layer.extend({
 // Block Spawning //
 ////////////////////
 
-    // make a block start falling into place
-    // NOTE: only call directly to drop a shifted block (this function is not for to spawn blocks, use spawnDropRandomBlock instead)
-    dropBlock: function(block) {
-        var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (block.row + 0.5);
+	// make a block start falling into place
+	// NOTE: only call directly to drop a shifted block (this function is not for to spawn blocks, use spawnDropRandomBlock instead)
+	dropBlock: function(block) {
+		var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (block.row + 0.5);
+		var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
 
-        var duration = 0.5;
-        var moveAction = cc.MoveTo.create(duration, cc.p(block.x, blockTargetY));
-        var dropAction = cc.CallFunc.create(function() {
-            block.bHasDropped = true;
-        });
-        block.stopAllActions();
-        block.runAction(cc.sequence(moveAction, dropAction));
-    },
+		var duration = 0.5;
+		var moveAction = cc.MoveTo.create(duration, cc.p(blockTargetX, blockTargetY));
+		var dropAction = cc.CallFunc.create(function() {
+			block.bHasDropped = true;
+		});
+		block.stopAllActions();
+		block.runAction(cc.sequence(moveAction, dropAction));
+	},
 
-    // spawns a block at a random column in the level
-    // drops the spawned block into place
-    // NOTE: This is the function you should be using to put new blocks into the game
-    spawnDropRandomBlock: function() {
-        if(this._numboLevel.isFull())
-            return;
+	dropBlocksInColumn: function(col) {
+		cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid coords");
+		for (row in this._numboLevel.blocks[col])
+			this.dropBlock(this._numboLevel.blocks[col][row]);
 
-        var block = this._numboLevel.dropRandomBlock();
-        var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
-        block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
-        this.addChild(block);
+	},
 
-        this.dropBlock(block);
-    },
+	// spawns a block at a random column in the level
+	// drops the spawned block into place
+	// NOTE: This is the function you should be using to put new blocks into the game
+	spawnDropRandomBlock: function() {
+		if(this._numboLevel.isFull())
+			return;
+
+		var block = this._numboLevel.dropRandomBlock();
+		var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
+		block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
+		this.addChild(block);
+
+		this.dropBlock(block);
+	},
 
 /////////////////////
 // Block Selection //
 /////////////////////
 
-    // select a block, giving it a highlight
-    selectBlock: function(col, row) {
-        cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
+	// select a block, giving it a highlight
+	selectBlock: function(col, row) {
+		cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
 
-        var block = this._numboLevel.getBlock(col, row);
+		var block = this._numboLevel.getBlock(col, row);
 
-        if(!block)
-            return;
+		if(!block)
+			return;
 
-        // TODO: possible optimization
-        if(!block.bHasDropped || this._selectedBlocks.indexOf(block) >= 0)
-            return;
+		// TODO: possible optimization
+		if(!block.bHasDropped || this._selectedBlocks.indexOf(block) >= 0)
+			return;
 
-        // we make this block green, make the last selected block red
-        if(this._selectedBlocks.length > 0) {
-            var lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
-            lastBlock.highlight(cc.color(255, 0, 0, 255));
-        }
+		// we make this block green, make the last selected block red
+		if(this._selectedBlocks.length > 0) {
+			var lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
+			lastBlock.highlight(cc.color(255, 0, 0, 255));
+		}
 
-        block.highlight(cc.color(0, 255, 0, 255));
-        this._selectedBlocks.push(block);
+		block.highlight(cc.color(0, 255, 0, 255));
+		this._selectedBlocks.push(block);
 
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack);
-    },
+		if(NJ.settings.sounds)
+			cc.audioEngine.playEffect(res.successTrack);
+	},
 
-    // deselect a single block, removing its highlight
-    deselectBlock: function(col, row) {
-        cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
+	// deselect a single block, removing its highlight
+	deselectBlock: function(col, row) {
+		cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
 
-        var block = this._numboLevel.getBlock(col, row);
+		var block = this._numboLevel.getBlock(col, row);
 
-        if(!block || !block.bHasDropped)
-            return;
+		if(!block || !block.bHasDropped)
+			return;
 
-        block.clearHighlight();
+		block.clearHighlight();
 
-        var index = this._selectedBlocks.indexOf(block);
-        if(index >= 0)
-            this._selectedBlocks.splice(index, 1);
-    },
+		var index = this._selectedBlocks.indexOf(block);
+		if(index >= 0)
+			this._selectedBlocks.splice(index, 1);
+	},
 
-    // deselect all currently selected blocks, removing their highlights
-    deselectAllBlocks: function() {
-        for (var i = 0; i < this._selectedBlocks.length; ++i)
-            this._selectedBlocks[i].clearHighlight();
+	// deselect all currently selected blocks, removing their highlights
+	deselectAllBlocks: function() {
+		for (var i = 0; i < this._selectedBlocks.length; ++i)
+			this._selectedBlocks[i].clearHighlight();
 
-        this._selectedBlocks = [];
-    },
+		this._selectedBlocks = [];
+	},
 
-    // activate currently selected blocks
-    // awards player score depending on blocks selected
-    // shifts all blocks down to remove gaps and drops them accordingly
-    activateSelectedBlocks: function() {
-        if(this.isSelectedClearable()) {
-            var selectedBlockCount = this._selectedBlocks.length;
+	// activate currently selected blocks
+	// awards player score depending on blocks selected
+	// shifts all blocks down to remove gaps and drops them accordingly
+	activateSelectedBlocks: function() {
+		if(this.isSelectedClearable()) {
+			var selectedBlockCount = this._selectedBlocks.length;
+			var lastCol = this._selectedBlocks[selectedBlockCount-1].col;
 
-            this._comboManager.addScoreForCombo(selectedBlockCount);
-            this._numboHeader.setScoreValue(this._comboManager.getScore());
+			this._comboManager.addScoreForCombo(selectedBlockCount);
+			this._numboHeader.setScoreValue(this._comboManager.getScore());
 
-            var i = 0;
-            for(; i < this._selectedBlocks.length; ++i)
-                this._numboLevel.killBlock(this._selectedBlocks[i]);
+			// new boolean array [0, 1, ..., NUM_COLS - 1]; all = false:
+			affectedColumns = Array.apply(null, new Array(NJ.NUM_COLS)).map(function(){return false});
+			// set each affected column to true:
+			for (var block in this._selectedBlocks)
+				affectedColumns[this._selectedBlocks[block].col] = true;
+			// remove any affected block sprite objects:
+			for(var i=0; i < this._selectedBlocks.length; ++i)
+				this._numboLevel.killBlock(this._selectedBlocks[i]);
+			// shift blocks in affected columns down:
+			for (var col in affectedColumns){
+				if (affectedColumns[col]){
+					this._numboLevel.shiftBlocksInColumn(col);
+				}
+				this.dropBlocksInColumn(col);
+			}
 
+			this._numboLevel.collapseColumnsToward(lastCol);
+			this.shiftAllBlocks();
+		}
 
-            var shiftedBlocks = this._numboLevel.shiftBlocks();
-            for(i = 0; i < shiftedBlocks.length; ++i)
-                this.dropBlock(shiftedBlocks[i]);
-        }
+		this.deselectAllBlocks();
+	},
 
-        this.deselectAllBlocks();
-    },
+	// calls dropBlock on every block sprite, which moves each sprite
+	// to its correct (x,y) coordinates.
+	// useful blocks have been removed and need to fall or collapse.
+	shiftAllBlocks: function(){
+		this._numboLevel.updateBlockRowsAndCols();
+		for (var i = 0; i < NJ.NUM_COLS; ++i){
+			for (var j = 0; j < this._numboLevel.blocks[i].length; ++j){
+				this.dropBlock(this._numboLevel.blocks[i][j]);
+			}
+		}
+	},
 
 ///////////////
 // UI Events //
@@ -308,44 +340,44 @@ var NumboGameLayer = cc.Layer.extend({
 // Helpers //
 /////////////
 
-    // checks if the current selected blocks can be activated (their equation is valid)
-    isSelectedClearable: function() {
-        if(!this._selectedBlocks.length)
-            return false;
+	// checks if the current selected blocks can be activated (their equation is valid)
+	isSelectedClearable: function() {
+		if(!this._selectedBlocks.length)
+			return false;
 
-        var selectedBlocksLength = this._selectedBlocks.length;
+		var selectedBlocksLength = this._selectedBlocks.length;
 
-        // all blocks must be sequentially adjacent
+		// all blocks must be sequentially adjacent
 
-        var sum = 0;
+		var sum = 0;
 
-        for(var i = 0; i < selectedBlocksLength - 1; ++i) {
-            if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
-                return false;
+		for(var i = 0; i < selectedBlocksLength - 1; ++i) {
+			if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
+				return false;
 
-            sum += this._selectedBlocks[i].val;
-        }
+			sum += this._selectedBlocks[i].val;
+		}
 
-        return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
-    },
+		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
+	},
 
-    // attempt to convert point to location on grid
-    convertPointToLevelCoords: function(point) {
-        if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
-            point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
+	// attempt to convert point to location on grid
+	convertPointToLevelCoords: function(point) {
+		if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
+			point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
 
-            var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
-            var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
+			var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
+			var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
 
-            // return only if coordinates in certain radius of the block.
-            var radius = 0.65;
-            if(Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
-                point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2)
-                return {col: col, row: row};
+			// return only if coordinates in certain radius of the block.
+			var radius = 0.65;
+			if(Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
+				point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2)
+				return {col: col, row: row};
 
-            return null;
-        }
+			return null;
+		}
 
-        return null;
-    }
+		return null;
+	}
 });
