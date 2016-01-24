@@ -233,8 +233,10 @@ var NumboLevel = cc.Class.extend({
 
 	// returns whether a block exists at given coords
 	getBlock: function(col, row) {
-	    cc.assert(col >= 0 && col < NJ.NUM_COLS && row >= 0 && row < NJ.NUM_ROWS
-		      && row < this.blocks[col].length, "invalid coords!");
-	    return this.blocks[col][row];
+	    if(col >= 0 && col < NJ.NUM_COLS && row >= 0 && row < NJ.NUM_ROWS
+		      && row < this.blocks[col].length)
+	    	return this.blocks[col][row];
+
+		return null;
 	}
 });
