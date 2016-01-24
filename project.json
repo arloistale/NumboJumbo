@@ -19,6 +19,7 @@
         "src/NumboBlock.js",
         "src/NumboLevel.js",
         "src/GameConfig.js",
-        "src/ComboManager.js"
+        "src/ComboManager.js",
+        "src/DifficultyManager.js"
     ]
 }

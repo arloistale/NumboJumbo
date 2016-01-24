@@ -8,22 +8,15 @@
    are done in this module.
 
 */
-
-
-
-
 var NumboLevel = cc.Class.extend({
-	
 	blocks: [],
-	numBlocks: [],
 	totalNumBlocks: 0,
 
 	// initialize the level to empty
 	init: function() {
 	    // create empty columns:
 	    for(var i = 0; i < NJ.NUM_COLS; ++i)
-		this.blocks.push([]);
-
+			this.blocks.push([]);
 	},
 
 	// reset the level, removing all blocks
@@ -73,13 +66,17 @@ var NumboLevel = cc.Class.extend({
 
 	// drop block into random column with random value
 	// returns dropped block
-	dropRandomBlock: function() {
-	    cc.assert(!this.isFull(), "Can't drop any more blocks");
+	// drop block into random column with random value
+	// returns dropped block
+	dropRandomBlock: function(difficultyMgr) {
+		cc.assert(!this.isFull(), "Can't drop any more blocks");
 
-	    var val = Math.floor(Math.random() * (NJ.BLOCK_MAX_VALUE) + 1);
+	    //var col = this.getRandomValidCol();
+		var block = difficultyMgr.getNextBlock(this.blocks);
+		var val = block.val;
+		var col = block.col;
 
-	    var col = this.getRandomValidCol();
-	    return this.dropBlock(col, val);
+		return this.dropBlock(col, val);
 	},
 	
 	// search for a legit column to drop block into.

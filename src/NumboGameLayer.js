@@ -19,6 +19,7 @@ var NumboGameLayer = cc.Layer.extend({
 
     // Scoring Data
     _comboManager: null,
+    _difficultyManager: null,
 
 ////////////////////
 // Initialization //
@@ -32,10 +33,11 @@ var NumboGameLayer = cc.Layer.extend({
         this.initUI();
         this.initLevel();
         this.initComboManager();
+        this.initDifficultyManager();
         this.initAudio();
 
         // begin scheduling block drops
-        this.schedule(this.spawnDropRandomBlock, 1.0);
+        this.schedule(this.spawnDropRandomBlock, this._difficultyManager.getSpawnTime());
     },
 
     // initialize background for game
@@ -112,7 +114,6 @@ var NumboGameLayer = cc.Layer.extend({
         this.addChild(this._numboHeader, 999);
     },
 
-
     // initialize the empty level into the scene
     initLevel: function() {
         this._numboLevel = new NumboLevel();
@@ -137,6 +138,12 @@ var NumboGameLayer = cc.Layer.extend({
         this._comboManager = new ComboManager();
         this._comboManager.init();
     },
+
+	// initialize difficulty manager into the scene
+	initDifficultyManager: function() {
+		this._difficultyManager = new DifficultyManager();
+		this._difficultyManager.init();
+	},
 
     // initialize game audio
     initAudio: function() {
@@ -170,7 +177,6 @@ var NumboGameLayer = cc.Layer.extend({
 		cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid coords");
 		for (row in this._numboLevel.blocks[col])
 			this.dropBlock(this._numboLevel.blocks[col][row]);
-
 	},
 
 	// spawns a block at a random column in the level
@@ -180,10 +186,14 @@ var NumboGameLayer = cc.Layer.extend({
 		if(this._numboLevel.isFull())
 			return;
 
-		var block = this._numboLevel.dropRandomBlock();
-		var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
-		block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
-		this.addChild(block);
+	    var block = this._numboLevel.dropRandomBlock(this._difficultyManager);
+	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
+	    block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
+	    this.addChild(block);
+		if(this._difficultyManager.recordDrop()) {
+			this.unschedule(this.spawnDropRandomBlock);
+			this.schedule(this.spawnDropRandomBlock, this._difficultyManager.getSpawnTime());
+		}
 
 		this.dropBlock(block);
 	},
@@ -248,22 +258,24 @@ var NumboGameLayer = cc.Layer.extend({
 	activateSelectedBlocks: function() {
 		if(this.isSelectedClearable()) {
 			var selectedBlockCount = this._selectedBlocks.length;
-			var lastCol = this._selectedBlocks[selectedBlockCount-1].col;
+			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
 			this._comboManager.addScoreForCombo(selectedBlockCount);
+            this._difficultyManager.recordScore(this._selectedBlocks);
+            console.log(this._difficultyManager.getBlocksToLevel());
 			this._numboHeader.setScoreValue(this._comboManager.getScore());
 
 			// new boolean array [0, 1, ..., NUM_COLS - 1]; all = false:
-			affectedColumns = Array.apply(null, new Array(NJ.NUM_COLS)).map(function(){return false});
+			affectedColumns = Array.apply(null, new Array(NJ.NUM_COLS)).map(function() { return false; });
 			// set each affected column to true:
 			for (var block in this._selectedBlocks)
-				affectedColumns[this._selectedBlocks[block].col] = true;
+			    affectedColumns[this._selectedBlocks[block].col] = true;
 			// remove any affected block sprite objects:
-			for(var i=0; i < this._selectedBlocks.length; ++i)
-				this._numboLevel.killBlock(this._selectedBlocks[i]);
+			for(var i = 0; i < this._selectedBlocks.length; ++i)
+			    this._numboLevel.killBlock(this._selectedBlocks[i]);
 			// shift blocks in affected columns down:
-			for (var col in affectedColumns){
-				if (affectedColumns[col]){
+			for (var col in affectedColumns) {
+				if (affectedColumns[col]) {
 					this._numboLevel.shiftBlocksInColumn(col);
 				}
 				this.dropBlocksInColumn(col);
