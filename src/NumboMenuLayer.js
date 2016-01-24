@@ -99,6 +99,9 @@ var NumboMenuLayer = cc.Layer.extend({
         this._settingsMenuLayer.setOnCloseCallback(function() {
             cc.eventManager.resumeTarget(that, true);
             that.removeChild(that._settingsMenuLayer);
+
+            if(NJ.settings.music)
+                cc.audioEngine.playMusic(res.menuTrack);
         });
         this.addChild(this._settingsMenuLayer, 999);
     },

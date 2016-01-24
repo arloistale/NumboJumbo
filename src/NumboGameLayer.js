@@ -321,6 +321,10 @@ var NumboGameLayer = cc.Layer.extend({
         cc.director.resume();
         cc.eventManager.resumeTarget(this, true);
         this.removeChild(this._settingsMenuLayer);
+
+        // play music again if music settings turned on
+        if(NJ.settings.music)
+            cc.audioEngine.playMusic(res.backgroundTrack);
     },
 
 //////////////////

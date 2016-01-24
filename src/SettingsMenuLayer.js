@@ -80,9 +80,9 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     onMusicControl: function() {
         NJ.settings.music = !NJ.settings.music;
 
-        if(NJ.settings.music)
-            cc.audioEngine.playMusic(res.menuTrack);
-        else
+        cc.audioEngine.playEffect(res.successTrack, false);
+
+        if(!NJ.settings.music)
             cc.audioEngine.stopMusic();
     },
 
