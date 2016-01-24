@@ -6,6 +6,7 @@ var NumboGameLayer = cc.Layer.extend({
     // UI Data
     _numboHeader: null,
     _settingsMenuLayer: null,
+    _gameOverMenuLayer: null,
 
     // Sprite Data
     _backgroundSprite: null,
@@ -182,9 +183,13 @@ var NumboGameLayer = cc.Layer.extend({
 	// spawns a block at a random column in the level
 	// drops the spawned block into place
 	// NOTE: This is the function you should be using to put new blocks into the game
+    // TODO: Improve structure (don't check game over state here for improved separation of concerns)
 	spawnDropRandomBlock: function() {
-		if(this._numboLevel.isFull())
-			return;
+		if(this.isGameOver()) {
+            this.onGameOver();
+
+            return;
+        }
 
 	    var block = this._numboLevel.dropRandomBlock(this._difficultyManager);
 	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
@@ -300,6 +305,24 @@ var NumboGameLayer = cc.Layer.extend({
 		}
 	},
 
+///////////////////////
+// Game State Events //
+///////////////////////
+
+    onGameOver: function() {
+        var that = this;
+
+        cc.audioEngine.stopMusic();
+        cc.audioEngine.stopAllEffects();
+        cc.director.pause();
+        cc.eventManager.pauseTarget(this, true);
+        this._gameOverMenuLayer = new GameOverMenuLayer();
+        this._gameOverMenuLayer.setOnMenuCallback(function() {
+            that.onMenu();
+        });
+        this.addChild(this._gameOverMenuLayer, 999);
+    },
+
 ///////////////
 // UI Events //
 ///////////////
@@ -316,7 +339,8 @@ var NumboGameLayer = cc.Layer.extend({
         });
         this.addChild(this._settingsMenuLayer, 999);
     },
-    
+
+    // on closing previously opened settings menu we resume
     onResume: function() {
         cc.director.resume();
         cc.eventManager.resumeTarget(this, true);
@@ -325,6 +349,22 @@ var NumboGameLayer = cc.Layer.extend({
         // play music again if music settings turned on
         if(NJ.settings.music)
             cc.audioEngine.playMusic(res.backgroundTrack);
+    },
+
+    // on game over when player chooses to go to menu we return to menu
+    onMenu: function() {
+        cc.director.resume();
+        cc.eventManager.resumeTarget(this, true);
+        this.removeChild(this._gameOverMenuLayer);
+
+        //load resources
+        cc.LoaderScene.preload(g_menu, function () {
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
+            var scene = new cc.Scene();
+            scene.addChild(new NumboMenuLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+        }, this);
     },
 
 //////////////////
@@ -355,6 +395,11 @@ var NumboGameLayer = cc.Layer.extend({
 /////////////
 // Helpers //
 /////////////
+
+    // check if game over state has been reached (level has filled up)
+    isGameOver: function() {
+        return this._numboLevel.isFull();
+    },
 
 	// checks if the current selected blocks can be activated (their equation is valid)
 	isSelectedClearable: function() {

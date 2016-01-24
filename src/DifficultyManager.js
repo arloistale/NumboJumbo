@@ -1,5 +1,5 @@
 var DifficultyManager = cc.Class.extend({
-    spawnTime: .2, // frequeny of block
+    spawnTime: .1, // frequeny of block
     startTime: 0, // time of init
     timeElapsed: 0, // duration of gameplay
     blocksInLevel: 0, // number of blocks in level
@@ -15,7 +15,7 @@ var DifficultyManager = cc.Class.extend({
     // initialize timing, initial mode
     init: function() {
         this.startTime = Date.now();
-        this.spawnTime = .2;
+        this.spawnTime = .1;
         this.settings.intro = true;
     },
 

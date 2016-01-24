@@ -16,6 +16,7 @@
         "src/SettingsMenuLayer.js",
         "src/NumboGameLayer.js",
         "src/NumboHeaderLayer.js",
+        "src/GameOverMenuLayer.js",
         "src/NumboBlock.js",
         "src/NumboLevel.js",
         "src/GameConfig.js",

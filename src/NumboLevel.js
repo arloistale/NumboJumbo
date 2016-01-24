@@ -14,6 +14,8 @@ var NumboLevel = cc.Class.extend({
 
 	// initialize the level to empty
 	init: function() {
+		this.blocks = [];
+
 	    // create empty columns:
 	    for(var i = 0; i < NJ.NUM_COLS; ++i)
 			this.blocks.push([]);
@@ -22,9 +24,9 @@ var NumboLevel = cc.Class.extend({
 	// reset the level, removing all blocks
 	reset: function() {
 	    for(var i = 0; i < NJ.NUM_ROWS; ++i) {
-		for(var j = 0; j < NJ.NUM_COLS; ++j) {
-		    this.blocks[i][j] = null;
-		}
+			for(var j = 0; j < NJ.NUM_COLS; ++j) {
+				this.blocks[i][j] = null;
+			}
 	    }
 	},
 
