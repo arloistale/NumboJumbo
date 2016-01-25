@@ -1,14 +1,15 @@
 var express = require('express');
 
 var app = express();
-var server = http.createServer(app);
 
-server.use('/frameworks/cocos2d-html5', express.static(__dirname + '/frameworks/cocos2d-html5'));
-server.use('/src', express.static(__dirname + '/src'));
-server.use('/res', express.static(__dirname + '/res'));
-server.use('/', express.static(__dirname));
-
-server.get('/', function(req, res) {
+app.configure(function() {
+    app.use('/frameworks/cocos2d-html5', express.static(__dirname + '/frameworks/cocos2d-html5'));
+    app.use('/src', express.static(__dirname + '/src'));
+    app.use('/res', express.static(__dirname + '/res'));
+    app.use('/', express.static(__dirname));
 });
 
-server.listen(process.env.PORT || 8081);
+app.get('/', function(req, res) {
+});
+
+app.listen(process.env.PORT || 8081);
