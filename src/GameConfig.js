@@ -62,7 +62,7 @@ NJ.loadSettings = function() {
     // if this is our first time then save defaults
     if(!(cc.sys.localStorage.getItem('hasLoaded') == 'true')) {
         cc.sys.localStorage.setItem('hasLoaded', true);
-        NJ.settings.save();
+        NJ.saveSettings();
         return;
     }
 

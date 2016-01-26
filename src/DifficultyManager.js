@@ -34,8 +34,9 @@ var DifficultyManager = cc.Class.extend({
             this.level++;
 
         console.log(this.level);
-        if(this.recordDrop()) {
-            console.log("speeding");
+        // speed up for a level up
+        if (this.spawnTime != this.spawnConsts[this.level]) {
+            this.spawnTime = this.spawnConsts[this.level];
         }
 
         console.log("USER DATA");
@@ -61,6 +62,8 @@ var DifficultyManager = cc.Class.extend({
                 this.settings.intro = false;
                 return true;
             }
+
+            return false;
         }
         // stop the slowdown
         else if (this.settings.inDanger) {
@@ -72,12 +75,6 @@ var DifficultyManager = cc.Class.extend({
         else if (this.blocksInLevel > NJ.NUM_COLS * NJ.NUM_ROWS - NJ.NUM_COLS) {
             this.settings.inDanger = true;
             this.spawnTime += .6;
-            return true;
-        }
-
-        // speed up for a level up
-        if (this.spawnTime != this.spawnConsts[this.level]) {
-            this.spawnTime = this.spawnConsts[this.level];
             return true;
         }
 
