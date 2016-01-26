@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a6e62388-f748-484e-bb25-b6eb704928c4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DifficultyManager.js" afterPath="$PROJECT_DIR$/src/DifficultyManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameConfig.js" afterPath="$PROJECT_DIR$/src/GameConfig.js" />
-    </list>
+    <list default="true" id="a6e62388-f748-484e-bb25-b6eb704928c4" name="Default" comment="" />
     <ignored path="NumboJumbo.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -39,8 +34,8 @@
       <file leaf-file-name="GameConfig.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GameConfig.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.63137996">
-              <caret line="73" column="2" selection-start-line="73" selection-start-column="2" selection-end-line="73" selection-end-column="2" />
+            <state vertical-scroll-proportion="0.43289226">
+              <caret line="66" column="5" selection-start-line="66" selection-start-column="5" selection-end-line="66" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -747,8 +742,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GameConfig.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.63137996">
-          <caret line="73" column="2" selection-start-line="73" selection-start-column="2" selection-end-line="73" selection-end-column="2" />
+        <state vertical-scroll-proportion="0.43289226">
+          <caret line="66" column="5" selection-start-line="66" selection-start-column="5" selection-end-line="66" selection-end-column="5" />
           <folding />
         </state>
       </provider>
