@@ -34,12 +34,6 @@ var DifficultyManager = cc.Class.extend({
         // level up
         if(this.blocksToLevelUp[this.level] <= this.blocksCleared)
             this.level++;
-
-        console.log("USER DATA");
-        console.log("Time Elapsed: " + this.timeElapsed);
-        console.log("Blocks Cleared: " + this.blocksCleared);
-        console.log("Blocks Cleared per Minute: " + this.blocksPerMinute);
-        console.log("Blocks currently introduced per minute: " + (1/this.spawnTime) * 60)
     },
 
     // update data following a drop

@@ -1,6 +1,11 @@
 var NumboHeader = cc.LayerColor.extend({
 
     scoreValueLabel: null,
+    scovreValueText: null,
+    blocksToLevelLabel: null,
+    blocksToLevelText: null,
+    feedbackLabel: null,
+
     pauseButton: null,
 
     ctor: function() {
@@ -21,19 +26,69 @@ var NumboHeader = cc.LayerColor.extend({
     initLabels: function() {
         contentSize = this.getContentSize();
 
-        this.scoreValueLabel = new cc.LabelTTF("", b_getFontName(res.markerFontTTF), 32);
+        // Score Labels
+        this.scoreValueText = new cc.LabelTTF("Score", b_getFontName(res.markerFontTTF), 24);
+        this.scoreValueText.attr({
+            scale: 1.0,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: this.getContentSize().width / 8,
+            y: this.getContentSize().height / 2 - 65
+        });
+        this.scoreValueText.enableStroke(cc.color(0, 0, 255, 255), 1);
+        this.scoreValueText.setColor(cc.color(255, 146, 48, 255));
+        this.addChild(this.scoreValueText);
 
+        this.scoreValueLabel = new cc.LabelTTF("", b_getFontName(res.markerFontTTF), 32);
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
             anchorY: 0.5,
-            x: this.getContentSize().width / 2,
-            y: this.getContentSize().height / 2
+            x: this.getContentSize().width / 8,
+            y: this.getContentSize().height / 2 - 90
         });
-
         this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.scoreValueLabel.setColor(cc.color(255, 146, 48, 255));
         this.addChild(this.scoreValueLabel);
+
+        // Blocks til Levelup Labels
+        this.blocksToLevelText = new cc.LabelTTF("Level up in", b_getFontName(res.markerFontTTF), 20);
+        this.blocksToLevelText.attr({
+            scale: 1.0,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: this.getContentSize().width / 8,
+            y: this.getContentSize().height / 2
+        });
+        this.blocksToLevelText.enableStroke(cc.color(0, 0, 255, 255), 1);
+        this.blocksToLevelText.setColor(cc.color(255, 146, 48, 255));
+        this.addChild(this.blocksToLevelText);
+
+        this.blocksToLevelLabel = new cc.LabelTTF("15", b_getFontName(res.markerFontTTF), 32);
+        this.blocksToLevelLabel.attr({
+            scale: 1.0,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: this.getContentSize().width / 8,
+            y: this.getContentSize().height / 2 - 25
+        });
+        this.blocksToLevelLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
+        this.blocksToLevelLabel.setColor(cc.color(255, 146, 48, 255));
+        this.addChild(this.blocksToLevelLabel);
+
+        // In-game Feedback Labels
+        this.feedbackLabel = new cc.LabelTTF("", b_getFontName(res.markerFontTTF), 32);
+        this.feedbackLabel.attr({
+            scale: 1.0,
+            anchorX: .5,
+            anchorY: .5,
+            x: this.getContentSize().width / 2,
+            y: this.getContentSize().height / 2
+        });
+        this.feedbackLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
+        this.feedbackLabel.setColor(cc.color(255, 146, 48, 255));
+        this.addChild(this.feedbackLabel);
+
     },
 
     initButtons: function() {
@@ -46,8 +101,13 @@ var NumboHeader = cc.LayerColor.extend({
         cc.director.pause();
     },
 
-    writePrimaryValue: function(val, blocks) {
-      this.scoreValueLabel.setString("Blocks to Levelup: " + blocks + "  Score:" + Math.floor(val));
+    writePrimaryValue: function(scoreVal, blocksVal) {
+      this.scoreValueLabel.setString(Math.floor(scoreVal));
+        this.blocksToLevelLabel.setString(blocksVal);
+    },
+
+    giveFeedback: function(feedback) {
+        this.feedbackLabel.setString(feedback);
     },
 
     generateTitleButton: function(title, callback) {

@@ -246,7 +246,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 			this._comboManager.addScoreForCombo(selectedBlockCount);
 			this._difficultyManager.recordScore(this._selectedBlocks);
-			console.log(this._difficultyManager.getBlocksToLevel());
 			this._numboHeader.writePrimaryValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel());
 
 			// new boolean array [0, 1, ..., NUM_COLS - 1]; all = false:
