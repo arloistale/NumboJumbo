@@ -94,6 +94,9 @@ NJ.analytics = {
 
 NJ.analytics.send = function() {
     // send over relevant analytics data to Google Analytics
-    ga('set', NJ.analytics);
-    ga('send', 'event', 'Game', 'end', 'Session Data');
+    ga('set', 'metric1', NJ.analytics.blocksCleared);
+    ga('set', 'metric2', NJ.analytics.sessionLength);
+    ga('set', 'metric3', NJ.analytics.maxComboLength);
+    ga('set', 'metric4', NJ.analytics.blocksPerMinute);
+    ga('send', 'event', 'Game', 'end', 'Game Session Data');
 };
