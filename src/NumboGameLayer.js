@@ -418,6 +418,10 @@ var NumboGameLayer = cc.Layer.extend({
 		if(!this._selectedBlocks.length)
 			return false;
 
+        if(this._selectedBlocks.length < 3) {
+            return false;
+        }
+
 		var selectedBlocksLength = this._selectedBlocks.length;
 
 		// all blocks must be sequentially adjacent
