@@ -50,16 +50,6 @@ NJ.BLOCK_MAX_VALUE = 9;
 NJ.gameState = NJ.GAME_STATE.HOME;
 
 
-// audio
-NJ.MUSIC = true;
-NJ.SOUNDS = true;
-
-NJ.Settings = {
-    music: true,
-    sounds: true
-};
-
-
 /** Settings Data **/
 
 NJ.settings = {
@@ -68,11 +58,11 @@ NJ.settings = {
 };
 
 // load settings from local store
-NJ.loadSettings = function() {
+NJ.settings.load = function() {
     // if this is our first time then save defaults
     if(!(cc.sys.localStorage.getItem('hasLoaded') == 'true')) {
         cc.sys.localStorage.setItem('hasLoaded', true);
-        NJ.saveSettings();
+        NJ.settings.save();
         return;
     }
 
@@ -85,12 +75,25 @@ NJ.loadSettings = function() {
 
 // save settings to local store
 // NOTE: Must be called to persist changes in settings
-NJ.saveSettings = function() {
+NJ.settings.save = function() {
     for(var key in NJ.settings) {
         cc.sys.localStorage.setItem(key, NJ.settings[key]);
     }
 };
 
 NJ.analytics = {
+    sessionLength: 0,
 
+    maxComboLength: 0,
+
+    // numbo popularity
+
+    blocksCleared: 0,
+    blocksPerMinute: 0
+};
+
+NJ.analytics.send = function() {
+    // send over relevant analytics data to Google Analytics
+    ga('set', NJ.analytics);
+    ga('send', 'event', 'Game', 'end', 'Session Data');
 };

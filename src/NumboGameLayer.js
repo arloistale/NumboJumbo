@@ -263,6 +263,11 @@ var NumboGameLayer = cc.Layer.extend({
 	activateSelectedBlocks: function() {
 		if(this.isSelectedClearable()) {
 			var selectedBlockCount = this._selectedBlocks.length;
+
+            NJ.analytics.blocksCleared += selectedBlockCount;
+            if(selectedBlockCount > NJ.analytics.maxComboLength)
+                NJ.analytics.maxComboLength = selectedBlockCount;
+
 			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
 			this._comboManager.addScoreForCombo(selectedBlockCount);
@@ -316,6 +321,13 @@ var NumboGameLayer = cc.Layer.extend({
         cc.audioEngine.stopAllEffects();
         cc.director.pause();
         cc.eventManager.pauseTarget(this, true);
+
+        // save stats
+        NJ.analytics.sessionLength = this._difficultyManager.timeElapsed;
+        NJ.analytics.blocksPerMinute = NJ.analytics.blocksCleared / NJ.analytics.sessionLength * 60;
+
+        NJ.analytics.send();
+
         this._gameOverMenuLayer = new GameOverMenuLayer();
         this._gameOverMenuLayer.setOnMenuCallback(function() {
             that.onMenu();

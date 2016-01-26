@@ -57,7 +57,7 @@ cc.game.onStart = function() {
         document.body.removeChild(document.getElementById("cocosLoading"));
 
     // load settings
-    NJ.loadSettings();
+    NJ.settings.load();
 
     // load resources
     cc.LoaderScene.preload(g_menu, function () {

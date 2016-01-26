@@ -23,5 +23,4 @@ var ComboManager = cc.Class.extend({
     getScoreForCombo: function(blockCount) {
         return 16 * Math.pow(NJ.E_CONST, Math.max(blockCount-2, 0));
     }
-
 });
