@@ -1,5 +1,10 @@
 /**
-   Created by jonathanlu on 1/10/16.
+ *
+ * Defines a namespace NJ containing releveant global data.
+ * NJ contains information regarding:
+ * - Game Constants
+ * - Game Settings
+ * - Game Analytics Data
 */
 
 var NJ = NJ || {};
@@ -45,16 +50,6 @@ NJ.BLOCK_MAX_VALUE = 9;
 NJ.gameState = NJ.GAME_STATE.HOME;
 
 
-// audio
-NJ.MUSIC = true;
-NJ.SOUNDS = true;
-
-NJ.Settings = {
-    music: true,
-    sounds: true
-};
-
-
 /** Settings Data **/
 
 NJ.settings = {
@@ -67,7 +62,7 @@ NJ.loadSettings = function() {
     // if this is our first time then save defaults
     if(!(cc.sys.localStorage.getItem('hasLoaded') == 'true')) {
         cc.sys.localStorage.setItem('hasLoaded', true);
-        NJ.saveSettings();
+        NJ.settings.save();
         return;
     }
 
@@ -86,3 +81,24 @@ NJ.saveSettings = function() {
     }
 };
 
+NJ.analytics = {
+    sessionLength: 0,
+
+    maxComboLength: 0,
+
+    // numbo popularity
+
+    blocksCleared: 0,
+    blocksPerMinute: 0
+};
+
+NJ.sendAnalytics = function() {
+    console.log("Sending analytics");
+
+    // send over relevant analytics data to Google Analytics
+    ga('set', 'metric1', NJ.analytics.blocksCleared);
+    ga('set', 'metric2', NJ.analytics.sessionLength);
+    ga('set', 'metric3', NJ.analytics.maxComboLength);
+    ga('set', 'metric4', NJ.analytics.blocksPerMinute);
+    ga('send', 'event', 'Game', 'end', 'Game Session Data');
+};

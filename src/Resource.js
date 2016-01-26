@@ -4,6 +4,7 @@
  *
  */
 
+// list of resource definitions
 var res = {
     // Fonts
     markerFontTTF: {
@@ -24,6 +25,7 @@ var res = {
     successTrack: "res/Sounds/Ka-Ching.wav"
 };
 
+// returns proper font name based on platform
 var b_getFontName = function(fontRes) {
     if (cc.sys.isNative) {
         return fontRes.srcs[0];
@@ -32,6 +34,7 @@ var b_getFontName = function(fontRes) {
     }
 }
 
+// resources for the main menu of the game
 var g_menu = [
     // images
     res.backgroundImage,
@@ -44,6 +47,7 @@ var g_menu = [
     b_getFontName(res.markerFontTTF)
 ];
 
+// resources for ingame
 var g_game = [
     // images
     res.backgroundImage,
