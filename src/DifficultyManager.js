@@ -35,7 +35,9 @@ var DifficultyManager = cc.Class.extend({
             this.level++;
 
         console.log(this.level);
-        this.recordDrop();
+        if(this.recordDrop()) {
+            console.log("speeding");
+        }
 
         console.log("USER DATA");
         console.log("Time Elapsed: " + this.timeElapsed);
@@ -75,8 +77,10 @@ var DifficultyManager = cc.Class.extend({
         }
 
         // speed up for a level up
-        if (this.spawnTime != this.spawnConsts[this.level])
+        if (this.spawnTime != this.spawnConsts[this.level]) {
+            this.spawnTime = this.spawnConsts[this.level];
             return true;
+        }
 
         return false;
     },

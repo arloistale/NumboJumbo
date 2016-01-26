@@ -71,7 +71,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
             cc.audioEngine.playEffect(res.successTrack, false);
 
         // save any modified settings
-        NJ.settings.save();
+        NJ.saveSettings();
 
         if(this.onCloseCallback)
             this.onCloseCallback();

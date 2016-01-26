@@ -58,7 +58,7 @@ NJ.settings = {
 };
 
 // load settings from local store
-NJ.settings.load = function() {
+NJ.loadSettings = function() {
     // if this is our first time then save defaults
     if(!(cc.sys.localStorage.getItem('hasLoaded') == 'true')) {
         cc.sys.localStorage.setItem('hasLoaded', true);
@@ -75,7 +75,7 @@ NJ.settings.load = function() {
 
 // save settings to local store
 // NOTE: Must be called to persist changes in settings
-NJ.settings.save = function() {
+NJ.saveSettings = function() {
     for(var key in NJ.settings) {
         cc.sys.localStorage.setItem(key, NJ.settings[key]);
     }
@@ -92,7 +92,9 @@ NJ.analytics = {
     blocksPerMinute: 0
 };
 
-NJ.analytics.send = function() {
+NJ.sendAnalytics = function() {
+    console.log("Sending analytics");
+
     // send over relevant analytics data to Google Analytics
     ga('set', 'metric1', NJ.analytics.blocksCleared);
     ga('set', 'metric2', NJ.analytics.sessionLength);

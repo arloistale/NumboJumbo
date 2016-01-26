@@ -326,7 +326,7 @@ var NumboGameLayer = cc.Layer.extend({
         NJ.analytics.sessionLength = this._difficultyManager.timeElapsed;
         NJ.analytics.blocksPerMinute = NJ.analytics.blocksCleared / NJ.analytics.sessionLength * 60;
 
-        NJ.analytics.send();
+        NJ.sendAnalytics();
 
         this._gameOverMenuLayer = new GameOverMenuLayer();
         this._gameOverMenuLayer.setOnMenuCallback(function() {
