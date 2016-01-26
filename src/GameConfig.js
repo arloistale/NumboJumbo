@@ -1,5 +1,10 @@
 /**
-   Created by jonathanlu on 1/10/16.
+ *
+ * Defines a namespace NJ containing releveant global data.
+ * NJ contains information regarding:
+ * - Game Constants
+ * - Game Settings
+ * - Game Analytics Data
 */
 
 var NJ = NJ || {};
@@ -86,3 +91,6 @@ NJ.saveSettings = function() {
     }
 };
 
+NJ.analytics = {
+
+};
