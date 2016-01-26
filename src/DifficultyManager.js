@@ -2,8 +2,7 @@ var DifficultyManager = cc.Class.extend({
     spawnTime: .1, // frequeny of block
     startTime: 0, // time of init
     timeElapsed: 0, // duration of gameplay
-    blocksInLevel: 0, // number of blocks in level\
-    blocksPerMinute: 0, // blocks cleared/minute
+    blocksInLevel: 0, // number of blocks in level
     chainBlockFreq: [0,0,0,0,0,0,0,0,0,0], // frequency of numbers picked
     chainLengthFreq: [0,0,0,0,0,0,0,0,0,0], // frequency of chain lengths
     settings: {}, // object for holding sequence flags
@@ -27,8 +26,8 @@ var DifficultyManager = cc.Class.extend({
 
         this.chainLengthFreq[blocks.length-1]++;
 
-        this.blocksPerMinute = this.chainBlockFreq.reduce(function(a,b){return a+b;}, 0) / this.timeElapsed * 60;
-        this.blocksInLevel -= blocks.length
+        NJ.analytics.blocksPerMinute = this.chainBlockFreq.reduce(function(a,b){return a+b;}, 0) / this.timeElapsed * 60;
+        this.blocksInLevel -= blocks.length;
 
         // level up
         if(this.blocksToLevelUp[this.level] <= NJ.analytics.blocksCleared)
@@ -42,7 +41,7 @@ var DifficultyManager = cc.Class.extend({
         console.log("USER DATA");
         console.log("Time Elapsed: " + this.timeElapsed);
         console.log("Blocks Cleared: " + NJ.analytics.blocksCleared);
-        console.log("Blocks Cleared per Minute: " + this.blocksPerMinute);
+        console.log("Blocks Cleared per Minute: " + NJ.analytics.blocksPerMinute);
         console.log("Blocks currently introduced per minute: " + (1/this.spawnTime) * 60)
     },
 
