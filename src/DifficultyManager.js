@@ -71,16 +71,11 @@ var DifficultyManager = cc.Class.extend({
     },
 
     // returns value of next block
-    getNextBlock: function(blocks) {
+    getNextBlock: function(blocks, cols) {
         var block = {};
         // Set up val/col possibilities
         var vals = [1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,6,6,7,7,8,8,9,9];
-        var cols = [];
-        for(var i=0; i<NJ.NUM_COLS; i++) {
-            for(var j=NJ.NUM_ROWS; j > blocks[i].length; j--) {
-                cols.push(i);
-            }
-        }
+	
         // Pick random val/col from set
         block.val = vals[Math.floor(Math.random()*vals.length)];
         block.col = cols[Math.floor(Math.random()*cols.length)];

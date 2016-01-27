@@ -193,7 +193,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 	scheduleSpawn: function() {
 		this.spawnDropRandomBlock();
-		console.log("time: " + this._difficultyManager.getSpawnTime());
 		this.unschedule(this.scheduleSpawn);
 		this.schedule(this.scheduleSpawn, this._difficultyManager.getSpawnTime());
 	},
@@ -202,18 +201,18 @@ var NumboGameLayer = cc.Layer.extend({
 	// drops the spawned block into place
 	// NOTE: This is the function you should be using to put new blocks into the game
     // TODO: Improve structure (don't check game over state here for improved separation of concerns)
-	spawnDropRandomBlock: function() {
-		if(this.isGameOver()) {
-            this.onGameOver();
-
-            return;
-        }
-
+    spawnDropRandomBlock: function() {
+	    if(this.isGameOver()) {
+		this.onGameOver();
+		
+		return;
+	    }
+	    
 	    var block = this._numboLevel.dropRandomBlock(this._difficultyManager);
 	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
 	    block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
 	    this.addChild(block);
-		this._difficultyManager.recordDrop();
+	    this._difficultyManager.recordDrop();
 
 		this.dropBlock(block);
 	},
@@ -287,9 +286,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 			this._comboManager.addScoreForCombo(selectedBlockCount);
 			this._difficultyManager.recordScore(this._selectedBlocks);
-			console.log(this._numboHeader);
-			console.log(this._comboManager.getScore());
-			console.log(this._difficultyManager.getBlocksToLevel());
 			this._numboHeader.writePrimaryValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel());
 
 			// new boolean array [0, 1, ..., NUM_COLS - 1]; all = false:
