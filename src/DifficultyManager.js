@@ -17,39 +17,31 @@ var DifficultyManager = cc.Class.extend({
         this.settings.intro = true;
     },
 
+    recordDrop: function() {
+        this.blocksInLevel++;
+        this.adjustSpawnTime();
+    },
+
     // update data following a score
     recordScore: function(blocks) {
         this.timeElapsed = (Date.now() - this.startTime) / 1000;
 
-        for(var i=0; i<blocks.length; i++)
-            this.chainBlockFreq[blocks[i].val-1]++;
+        for (var i = 0; i < blocks.length; i++)
+            this.chainBlockFreq[blocks[i].val - 1]++;
 
-        this.chainLengthFreq[blocks.length-1]++;
+        this.chainLengthFreq[blocks.length - 1]++;
 
         NJ.analytics.blocksPerMinute = this.chainBlockFreq.reduce(function(a,b){return a+b;}, 0) / this.timeElapsed * 60;
         this.blocksInLevel -= blocks.length;
 
         // level up
-        if(this.blocksToLevelUp[this.level] <= NJ.analytics.blocksCleared)
+        if (this.blocksToLevelUp[this.level] <= NJ.analytics.blocksCleared)
             this.level++;
 
-        console.log(this.level);
         // speed up for a level up
         if (this.spawnTime != this.spawnConsts[this.level]) {
             this.spawnTime = this.spawnConsts[this.level];
         }
-
-        console.log("USER DATA");
-        console.log("Time Elapsed: " + this.timeElapsed);
-        console.log("Blocks Cleared: " + NJ.analytics.blocksCleared);
-        console.log("Blocks Cleared per Minute: " + NJ.analytics.blocksPerMinute);
-        console.log("Blocks currently introduced per minute: " + (1/this.spawnTime) * 60)
-    },
-
-    // update data following a drop
-    recordDrop: function() {
-        this.blocksInLevel++;
-        return this.adjustSpawnTime();
     },
 
     // adjusts the spawn frequency based parameters, returns if
@@ -60,7 +52,6 @@ var DifficultyManager = cc.Class.extend({
             if (this.blocksInLevel >= NJ.NUM_COLS * NJ.NUM_ROWS / 3) {
                 this.spawnTime = 2;
                 this.settings.intro = false;
-                return true;
             }
 
             return false;
@@ -75,10 +66,7 @@ var DifficultyManager = cc.Class.extend({
         else if (this.blocksInLevel > NJ.NUM_COLS * NJ.NUM_ROWS - NJ.NUM_COLS) {
             this.settings.inDanger = true;
             this.spawnTime += .6;
-            return true;
         }
-
-        return false;
     },
 
     // returns value of next block

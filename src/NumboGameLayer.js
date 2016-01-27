@@ -38,7 +38,9 @@ var NumboGameLayer = cc.Layer.extend({
         this.initAudio();
 
         // begin scheduling block drops
-        this.schedule(this.spawnDropRandomBlock, this._difficultyManager.getSpawnTime());
+        //this.schedule(this.scheduleSpawn, this._difficultyManager.getSpawnTime());
+		this.spawnN = 20;
+		this.schedule(this.spawnNBlocks, .1);
     },
 
     // initialize background for game
@@ -85,7 +87,7 @@ var NumboGameLayer = cc.Layer.extend({
             }, this);
         }
 
-        if (cc.sys.capabilities.hasOwnProperty('touches')) {
+        else if (cc.sys.capabilities.hasOwnProperty('touches')) {
             cc.eventManager.addListener({
                 prevTouchId: -1,
                 event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -180,6 +182,22 @@ var NumboGameLayer = cc.Layer.extend({
 			this.dropBlock(this._numboLevel.blocks[col][row]);
 	},
 
+	spawnNBlocks: function() {
+		this.spawnDropRandomBlock();
+		this.spawnN--;
+		if(this.spawnN == 0) {
+			this.unschedule(this.spawnNBlocks);
+			this.schedule(this.scheduleSpawn, this._difficultyManager.getSpawnTime());
+		}
+	},
+
+	scheduleSpawn: function() {
+		this.spawnDropRandomBlock();
+		console.log("time: " + this._difficultyManager.getSpawnTime());
+		this.unschedule(this.scheduleSpawn);
+		this.schedule(this.scheduleSpawn, this._difficultyManager.getSpawnTime());
+	},
+
 	// spawns a block at a random column in the level
 	// drops the spawned block into place
 	// NOTE: This is the function you should be using to put new blocks into the game
@@ -195,10 +213,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
 	    block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
 	    this.addChild(block);
-		if(this._difficultyManager.recordDrop()) {
-			this.unschedule(this.spawnDropRandomBlock);
-			this.schedule(this.spawnDropRandomBlock, this._difficultyManager.getSpawnTime());
-		}
+		this._difficultyManager.recordDrop();
 
 		this.dropBlock(block);
 	},
@@ -271,9 +286,11 @@ var NumboGameLayer = cc.Layer.extend({
 			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
 			this._comboManager.addScoreForCombo(selectedBlockCount);
-            this._difficultyManager.recordScore(this._selectedBlocks);
-            console.log(this._difficultyManager.getBlocksToLevel());
-			this._numboHeader.setScoreValue(this._comboManager.getScore());
+			this._difficultyManager.recordScore(this._selectedBlocks);
+			console.log(this._numboHeader);
+			console.log(this._comboManager.getScore());
+			console.log(this._difficultyManager.getBlocksToLevel());
+			this._numboHeader.setScoreValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel());
 
 			// new boolean array [0, 1, ..., NUM_COLS - 1]; all = false:
 			affectedColumns = Array.apply(null, new Array(NJ.NUM_COLS)).map(function() { return false; });
