@@ -4,7 +4,14 @@
 
 var GameOverMenuLayer = cc.LayerColor.extend({
 
+    // UI Data
     _menu: null,
+    //_menu1: null,
+
+    _finalScoreLabel: null,
+
+    // Scoring Data
+    _finalScore: 0,
 
     onMenuCallback: null,
     
@@ -15,10 +22,18 @@ var GameOverMenuLayer = cc.LayerColor.extend({
     ctor: function() {
         this._super();
 
+        //this.initComboManager();
+
         this.init(cc.color(0, 0, 0, 255));
 
         this.initUI();
     },
+
+    // initialize combo manager into the scene
+    //initComboManager: function() {
+    //    this._comboManager = new ComboManager();
+    //    this._comboManager.init();
+    //},
 
     initUI: function() {
         var sp = new cc.Sprite(res.loading_png);
@@ -37,15 +52,24 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 
         var that = this;
 
+        var finalS = this._finalScore.toString();
+
         var headerLabel = this.generateLabel("OUT OF SPACE!");
+
+        var finalScoreTitleLabel = this.generateLabel("Final Score");
+
+        this._finalScoreLabel = this.generateLabel(finalS);
 
         var menuButton = this.generateTitleButton("Menu", function() {
             that.onMenu();
         });
 
-        this._menu = new cc.Menu(headerLabel, menuButton);
+        this._menu = new cc.Menu(headerLabel, finalScoreTitleLabel, this._finalScoreLabel, menuButton);
+        //this._menu1 = new cc.Menu();
         this._menu.alignItemsVerticallyWithPadding(30);
+        //this._menu1.alignItemsVerticallyWithPadding(100);
         this.addChild(this._menu, 100);
+        //this.addChild(this._menu1, 100);
     },
 
 ///////////////
@@ -88,5 +112,11 @@ var GameOverMenuLayer = cc.LayerColor.extend({
         label.setColor(cc.color(255, 255, 255, 255));
 
         return new cc.MenuItemLabel(label, callback);
+    },
+
+    setScore: function(score) {
+        this._finalScore = Math.floor(score);
+
+        this._finalScoreLabel.setString(this._finalScore);
     }
 });

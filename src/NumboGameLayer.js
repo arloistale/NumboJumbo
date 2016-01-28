@@ -193,7 +193,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 	scheduleSpawn: function() {
 		this.spawnDropRandomBlock();
-		console.log("time: " + this._difficultyManager.getSpawnTime());
 		this.unschedule(this.scheduleSpawn);
 		this.schedule(this.scheduleSpawn, this._difficultyManager.getSpawnTime());
 	},
@@ -202,18 +201,18 @@ var NumboGameLayer = cc.Layer.extend({
 	// drops the spawned block into place
 	// NOTE: This is the function you should be using to put new blocks into the game
     // TODO: Improve structure (don't check game over state here for improved separation of concerns)
-	spawnDropRandomBlock: function() {
-		if(this.isGameOver()) {
-            this.onGameOver();
-
-            return;
-        }
-
+    spawnDropRandomBlock: function() {
+	    if(this.isGameOver()) {
+		this.onGameOver();
+		
+		return;
+	    }
+	    
 	    var block = this._numboLevel.dropRandomBlock(this._difficultyManager);
 	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
 	    block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
 	    this.addChild(block);
-		this._difficultyManager.recordDrop();
+	    this._difficultyManager.recordDrop();
 
 		this.dropBlock(block);
 	},
@@ -287,9 +286,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 			this._comboManager.addScoreForCombo(selectedBlockCount);
 			this._difficultyManager.recordScore(this._selectedBlocks);
-			console.log(this._numboHeader);
-			console.log(this._comboManager.getScore());
-			console.log(this._difficultyManager.getBlocksToLevel());
 			this._numboHeader.setScoreValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel(),
                                             this._difficultyManager.getLevel());
 
@@ -316,6 +312,7 @@ var NumboGameLayer = cc.Layer.extend({
 		this.deselectAllBlocks();
 	},
 
+
 	// calls dropBlock on every block sprite, which moves each sprite
 	// to its correct (x,y) coordinates.
 	// useful blocks have been removed and need to fall or collapse.
@@ -341,12 +338,14 @@ var NumboGameLayer = cc.Layer.extend({
         cc.eventManager.pauseTarget(this, true);
 
         // save stats
+        NJ.analytics.score = this._comboManager.getScore();
         NJ.analytics.sessionLength = this._difficultyManager.timeElapsed;
         NJ.analytics.blocksPerMinute = NJ.analytics.blocksCleared / NJ.analytics.sessionLength * 60;
 
         NJ.sendAnalytics();
 
         this._gameOverMenuLayer = new GameOverMenuLayer();
+        this._gameOverMenuLayer.setScore(this._comboManager.getScore());
         this._gameOverMenuLayer.setOnMenuCallback(function() {
             that.onMenu();
         });
@@ -433,12 +432,8 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// checks if the current selected blocks can be activated (their equation is valid)
 	isSelectedClearable: function() {
-		if(!this._selectedBlocks.length)
+		if(!this._selectedBlocks.length || this._selectedBlocks.length < 3)
 			return false;
-
-        if(this._selectedBlocks.length < 3) {
-            return false;
-        }
 
 		var selectedBlocksLength = this._selectedBlocks.length;
 

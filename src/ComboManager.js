@@ -3,7 +3,6 @@ var ComboManager = cc.Class.extend({
     mScore: 0,
 
     init: function() {
-
         this.reset();
 
     },
