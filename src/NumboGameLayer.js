@@ -340,6 +340,7 @@ var NumboGameLayer = cc.Layer.extend({
         cc.eventManager.pauseTarget(this, true);
 
         // save stats
+        NJ.analytics.score = this._comboManager.getScore();
         NJ.analytics.sessionLength = this._difficultyManager.timeElapsed;
         NJ.analytics.blocksPerMinute = NJ.analytics.blocksCleared / NJ.analytics.sessionLength * 60;
 

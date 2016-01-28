@@ -84,16 +84,16 @@ NJ.saveSettings = function() {
 NJ.analytics = {
     sessionLength: 0,
 
-    maxComboLength: 0,
-
-    // numbo popularity
+    score: 0,
 
     blocksCleared: 0,
-    blocksPerMinute: 0
+    blocksPerMinute: 0,
+
+    maxComboLength: 0,
 };
 
 NJ.sendAnalytics = function() {
-    console.log("Sending analytics");
+    console.log("Score: " + NJ.analytics.score);
 
     var rid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -106,5 +106,7 @@ NJ.sendAnalytics = function() {
     ga('set', 'metric2', NJ.analytics.sessionLength);
     ga('set', 'metric3', NJ.analytics.maxComboLength);
     ga('set', 'metric4', NJ.analytics.blocksPerMinute);
+    ga('set', 'metric5', NJ.analytics.score);
+
     ga('send', 'event', 'Game', 'end', 'Game Session Data');
 };
