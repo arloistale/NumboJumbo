@@ -49,7 +49,7 @@ var DifficultyManager = cc.Class.extend({
     adjustSpawnTime: function() {
         // end intro
         if (this.settings.intro) {
-            if (this.blocksInLevel >= NJ.NUM_COLS * NJ.NUM_ROWS / 3) {
+            if (false && this.blocksInLevel >= NJ.NUM_COLS * NJ.NUM_ROWS / 3) {
                 this.spawnTime = 2;
                 this.settings.intro = false;
             }

@@ -287,9 +287,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 			this._comboManager.addScoreForCombo(selectedBlockCount);
 			this._difficultyManager.recordScore(this._selectedBlocks);
-			console.log(this._numboHeader);
-			console.log(this._comboManager.getScore());
-			console.log(this._difficultyManager.getBlocksToLevel());
 			this._numboHeader.setScoreValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel());
 
 			// new boolean array [0, 1, ..., NUM_COLS - 1]; all = false:
@@ -314,6 +311,7 @@ var NumboGameLayer = cc.Layer.extend({
 
 		this.deselectAllBlocks();
 	},
+
 
 	// calls dropBlock on every block sprite, which moves each sprite
 	// to its correct (x,y) coordinates.
@@ -346,6 +344,7 @@ var NumboGameLayer = cc.Layer.extend({
         NJ.sendAnalytics();
 
         this._gameOverMenuLayer = new GameOverMenuLayer();
+        this._gameOverMenuLayer.setScore(this._comboManager.getScore());
         this._gameOverMenuLayer.setOnMenuCallback(function() {
             that.onMenu();
         });
