@@ -95,7 +95,13 @@ NJ.analytics = {
 NJ.sendAnalytics = function() {
     console.log("Sending analytics");
 
+    var rid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+
     // send over relevant analytics data to Google Analytics
+    ga('set', 'dimension1', rid);
     ga('set', 'metric1', NJ.analytics.blocksCleared);
     ga('set', 'metric2', NJ.analytics.sessionLength);
     ga('set', 'metric3', NJ.analytics.maxComboLength);
