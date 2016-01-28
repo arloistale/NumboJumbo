@@ -312,6 +312,7 @@ var NumboGameLayer = cc.Layer.extend({
 		this.deselectAllBlocks();
 	},
 
+
 	// calls dropBlock on every block sprite, which moves each sprite
 	// to its correct (x,y) coordinates.
 	// useful blocks have been removed and need to fall or collapse.
@@ -344,6 +345,7 @@ var NumboGameLayer = cc.Layer.extend({
         NJ.sendAnalytics();
 
         this._gameOverMenuLayer = new GameOverMenuLayer();
+        this._gameOverMenuLayer.setScore(this._comboManager.getScore());
         this._gameOverMenuLayer.setOnMenuCallback(function() {
             that.onMenu();
         });
@@ -430,12 +432,8 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// checks if the current selected blocks can be activated (their equation is valid)
 	isSelectedClearable: function() {
-		if(!this._selectedBlocks.length)
+		if(!this._selectedBlocks.length || this._selectedBlocks.length < 3)
 			return false;
-
-        if(this._selectedBlocks.length < 3) {
-            return false;
-        }
 
 		var selectedBlocksLength = this._selectedBlocks.length;
 
