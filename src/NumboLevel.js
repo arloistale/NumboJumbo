@@ -54,33 +54,6 @@ var NumboLevel = cc.Class.extend({
 	    return block;
 	},
 
-	// drop block into the given column with given value.
-	// since column collapsing was introduced, also
-	// shifts blocks horizontally if neccessary.
-	// returns dropped block
-	dropBlock: function(col, val) {
-	    cc.assert(this.blocks[col].length < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
-
-	    var block = this.spawnBlock(col, val);
-	    block.bHasDropped = false;
-	    return block;
-	},
-
-	// drop block into random column with random value
-	// returns dropped block
-	// drop block into random column with random value
-	// returns dropped block
-	dropRandomBlock: function(difficultyMgr) {
-		cc.assert(!this.isFull(), "Can't drop any more blocks");
-
-	    //var col = this.getRandomValidCol();
-		var block = difficultyMgr.getNextBlock(this.blocks);
-		var val = block.val;
-		var col = block.col;
-
-		return this.dropBlock(col, val);
-	},
-	
 	// search for a legit column to drop block into.
 	// does not return columns which are empty.
 	// prioritizes columns adjacent to non-empty columns, if possible.
@@ -112,6 +85,74 @@ var NumboLevel = cc.Class.extend({
 	    return col;
 	},
 
+	getAllValidCols: function(){
+	    validCols = [];
+	    
+	    // check if column is full:
+	    for (var c = 0; c < NJ.NUM_COLS; ++c){
+		if (this.blocks[c].length < NJ.NUM_ROWS)
+		    validCols.push(true);
+		else
+		    validCols.push(false);
+	    }
+	    
+	    if (this.totalNumBlocks > 0){
+		// check if column is adjacent to a non-empty column:
+		for (var c = 0; c < NJ.NUM_COLS; ++c){
+		    if (validCols[c]){
+			if (c == 0){
+			    if (this.blocks[c+1].length == 0)
+				validCols[c] = false;
+			}
+			else if (c == NJ.NUM_COLS - 1){
+			    if ( this.blocks[c-1].length == 0)
+			    validCols[c] = false;
+			}
+			else if (this.blocks[c-1].length == 0 
+				 && this.blocks[c+1].length == 0){
+			    validCols[c] = false;
+			}
+		    }
+		}
+
+	    }
+	    
+	    var validAsList = [];
+	    for (var c = 0; c < NJ.NUM_COLS; ++c)
+		if (validCols[c])
+		    validAsList.push(c);
+	    
+	    return validAsList;
+	    
+	},
+
+	// drop block into the given column with given value.
+	// since column collapsing was introduced, also
+	// shifts blocks horizontally if neccessary.
+	// returns dropped block
+	dropBlock: function(col, val) {
+	    cc.assert(this.blocks[col].length < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
+
+	    var block = this.spawnBlock(col, val);
+	    block.bHasDropped = false;
+	    return block;
+	},
+
+	// drop block into random column with random value
+	// returns dropped block
+	// drop block into random column with random value
+	// returns dropped block
+	dropRandomBlock: function(difficultyMgr) {
+	    cc.assert(!this.isFull(), "Can't drop any more blocks");
+	    
+	    var cols = this.getAllValidCols();
+	    var block = difficultyMgr.getNextBlock(this.blocks, cols);
+	    var val = block.val;
+	    var col = block.col;
+	    
+	    return this.dropBlock(col, val);
+	},
+	
 	// kill given block
 	killBlock: function(block) {
 	    cc.assert(block, "Invalid block");
