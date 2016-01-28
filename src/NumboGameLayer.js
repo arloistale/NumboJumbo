@@ -290,7 +290,8 @@ var NumboGameLayer = cc.Layer.extend({
 			console.log(this._numboHeader);
 			console.log(this._comboManager.getScore());
 			console.log(this._difficultyManager.getBlocksToLevel());
-			this._numboHeader.setScoreValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel());
+			this._numboHeader.setScoreValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel(),
+                                            this._difficultyManager.getLevel());
 
 			// new boolean array [0, 1, ..., NUM_COLS - 1]; all = false:
 			affectedColumns = Array.apply(null, new Array(NJ.NUM_COLS)).map(function() { return false; });
