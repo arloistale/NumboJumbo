@@ -287,7 +287,8 @@ var NumboGameLayer = cc.Layer.extend({
 			this._comboManager.addScoreForCombo(selectedBlockCount);
 			this._difficultyManager.recordScore(this._selectedBlocks);
 
-			this._numboHeader.setScoreValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel());
+			this._numboHeader.setScoreValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel(),
+                                            this._difficultyManager.getLevel());
 
 			// new boolean array [0, 1, ..., NUM_COLS - 1]; all = false:
 			affectedColumns = Array.apply(null, new Array(NJ.NUM_COLS)).map(function() { return false; });

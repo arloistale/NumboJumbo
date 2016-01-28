@@ -90,5 +90,9 @@ var DifficultyManager = cc.Class.extend({
 
     getBlocksToLevel: function() {
         return this.blocksToLevelUp[this.level] - NJ.analytics.blocksCleared;
+    },
+
+    getLevel: function() {
+        return this.level+1;
     }
 });
