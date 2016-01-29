@@ -63,7 +63,6 @@ var NumboGameLayer = cc.Layer.extend({
 
     // initialize input for the game
     initInput: function() {
-        /*
         if ('mouse' in cc.sys.capabilities) {
             cc.eventManager.addListener({
                 event: cc.EventListener.MOUSE,
@@ -87,21 +86,19 @@ var NumboGameLayer = cc.Layer.extend({
                 }
             }, this);
         }
-        else */if (cc.sys.capabilities.hasOwnProperty('touches')) {
+        else if (cc.sys.capabilities.hasOwnProperty('touches')) {
             cc.eventManager.addListener({
                 prevTouchId: -1,
                 event: cc.EventListener.TOUCH_ONE_BY_ONE,
                 swallowTouches: true,
                 onTouchBegan: function(touch, event) {
-                                        //cc.log(touch);
-                                        cc.log(event);
-                    event.getCurrentTarget().onTouchBegan(event.getLocation());
+                    event.getCurrentTarget().onTouchBegan(touch.getLocation());
                 },
                 onTouchMoved: function(touch, event) {
-                    event.getCurrentTarget().onTouchMoved(event.getLocation());
+                    event.getCurrentTarget().onTouchMoved(touch.getLocation());
                 },
                 onTouchEnded: function(touch, event) {
-                    event.getCurrentTarget().onTouchEnded(event.getLocation());
+                    event.getCurrentTarget().onTouchEnded(touch.getLocation());
                 }
             }, this);
         }
@@ -148,7 +145,6 @@ var NumboGameLayer = cc.Layer.extend({
 	initDifficultyManager: function() {
 		this._difficultyManager = new DifficultyManager();
 		this._difficultyManager.init();
-        console.log("Player level: " + this._difficultyManager.level);
 	},
 
     // initialize game audio
