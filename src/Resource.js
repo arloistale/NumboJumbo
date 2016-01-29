@@ -4,31 +4,37 @@
  *
  */
 
+var resRoot = "";
+
+if(!cc.sys.isNative) {
+    resRoot = "res/";
+}
+
 // list of resource definitions
 var res = {
     // Fonts
     markerFontTTF: {
         type: "font",
         name: "Marker Felt",
-        srcs: ["res/Fonts/MarkerFelt.ttf"]
+        src: resRoot + "Fonts/MarkerFelt.ttf"
     },
 
 	// images
-    buttonImage: "res/Images/Button.png",
-    backgroundImage: "res/Images/Background.png",
-    glowImage: "res/Images/Glow.png",
-    blockImage: "res/Images/Projectile.png",
+    buttonImage: resRoot + "Images/Button.png",
+    backgroundImage: resRoot + "Images/Background.png",
+    glowImage: resRoot + "Images/Glow.png",
+    blockImage: resRoot + "Images/Projectile.png",
 
     // sound
-    menuTrack: "res/Sounds/Track2.mp3",
-    backgroundTrack: "res/Sounds/Track1.mp3",
-    successTrack: "res/Sounds/Ka-Ching.wav"
+    menuTrack: resRoot + "Sounds/Track2.mp3",
+    backgroundTrack: resRoot + "Sounds/Track1.mp3",
+    successTrack: resRoot + "Sounds/Ka-Ching.wav"
 };
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes) {
     if (cc.sys.isNative) {
-        return fontRes.srcs[0];
+        return fontRes.src;
     } else {
         return fontRes.name;
     }
