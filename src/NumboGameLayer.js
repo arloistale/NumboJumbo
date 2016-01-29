@@ -68,21 +68,27 @@ var NumboGameLayer = cc.Layer.extend({
                 event: cc.EventListener.MOUSE,
                 onMouseDown: function (event) {
                     if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-                        return;
+                        return false;
 
                     event.getCurrentTarget().onTouchBegan(event.getLocation());
+                                        
+                    return true;
                 },
                 onMouseMove: function (event) {
                     if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-                        return;
+                        return false;
 
                     event.getCurrentTarget().onTouchMoved(event.getLocation());
+                                        
+                    return true;
                 },
                 onMouseUp: function (event) {
                     if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-                        return;
+                        return false;
 
                     event.getCurrentTarget().onTouchEnded(event.getLocation());
+                                        
+                    return true;
                 }
             }, this);
         }
@@ -93,12 +99,15 @@ var NumboGameLayer = cc.Layer.extend({
                 swallowTouches: true,
                 onTouchBegan: function(touch, event) {
                     event.getCurrentTarget().onTouchBegan(touch.getLocation());
+                    return true;
                 },
                 onTouchMoved: function(touch, event) {
                     event.getCurrentTarget().onTouchMoved(touch.getLocation());
+                    return true;
                 },
                 onTouchEnded: function(touch, event) {
                     event.getCurrentTarget().onTouchEnded(touch.getLocation());
+                    return true;
                 }
             }, this);
         }
