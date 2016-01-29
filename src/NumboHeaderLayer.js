@@ -3,11 +3,11 @@ var NumboHeaderLayer = cc.LayerColor.extend({
     scoreValueLabel: null,
     scoreValueText: null,
 
-    blocksToLevelLabel: null,
-    blocksToLevelText: null,
-
     levelText: null,
     levelLabel: null,
+
+    blocksToLevelLabel: null,
+    blocksToLevelText: null,
 
     feedbackLabel: null,
 
@@ -51,7 +51,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
             anchorX: 0.5,
             anchorY: 0.5,
             x: this.getContentSize().width / 8,
-            y: this.getContentSize().height / 2 - 156
+            y: this.getContentSize().height / 2 - 155
         });
         this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.scoreValueLabel.setColor(cc.color(255, 146, 48, 255));

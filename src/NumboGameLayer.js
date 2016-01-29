@@ -148,6 +148,7 @@ var NumboGameLayer = cc.Layer.extend({
 	initDifficultyManager: function() {
 		this._difficultyManager = new DifficultyManager();
 		this._difficultyManager.init();
+        console.log("Player level: " + this._difficultyManager.level);
 	},
 
     // initialize game audio
@@ -288,7 +289,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 			this._comboManager.addScoreForCombo(selectedBlockCount);
 			this._difficultyManager.recordScore(this._selectedBlocks);
-
 			this._numboHeader.setScoreValue(this._comboManager.getScore(), this._difficultyManager.getBlocksToLevel(),
                                             this._difficultyManager.getLevel());
 
@@ -346,6 +346,16 @@ var NumboGameLayer = cc.Layer.extend({
         NJ.analytics.blocksPerMinute = NJ.analytics.blocksCleared / NJ.analytics.sessionLength * 60;
 
         NJ.sendAnalytics();
+        NJ.analytics = {
+            sessionLength: 0,
+
+            score: 0,
+
+            blocksCleared: 0,
+            blocksPerMinute: 0,
+
+            maxComboLength: 0,
+        };
 
         this._gameOverMenuLayer = new GameOverMenuLayer();
         this._gameOverMenuLayer.setScore(this._comboManager.getScore());
