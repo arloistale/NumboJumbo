@@ -6,7 +6,7 @@ cc.game.onStart = function() {
     
     if(cc.sys.isNative) {
         var isLandscape = false;
-        
+
         var searchPaths = jsb.fileUtils.getSearchPaths();
         
         var frameSize = cc.view.getFrameSize();
