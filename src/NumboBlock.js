@@ -21,7 +21,7 @@ var NumboBlock = cc.Sprite.extend({
         this._super(res.blockImage);
 
         this.attr({
-            scale: 1.2
+            scale: 1.5
         });
 
         this.highlightSprite = cc.Sprite.createWithTexture(cc.textureCache.addImage(res.glowImage));
@@ -34,7 +34,6 @@ var NumboBlock = cc.Sprite.extend({
             visible: false
         });
         this.addChild(this.highlightSprite, -1);
-
 	
         this.valueLabel = new cc.LabelTTF("label test", b_getFontName(res.markerFontTTF), 32);
         this.valueLabel.attr({
@@ -63,7 +62,7 @@ var NumboBlock = cc.Sprite.extend({
     // NOTE: DO NOT call directly, call kill block in NumboLevel instead
     kill: function() {
         var block = this;
-        var fadeAction = cc.FadeTo.create(0.2);
+        var fadeAction = cc.FadeTo(0.2);
         var removeAction = cc.CallFunc.create(function() {
             block.removeFromParent(true);
         });

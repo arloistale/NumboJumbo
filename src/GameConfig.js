@@ -61,7 +61,7 @@ NJ.settings = {
 NJ.loadSettings = function() {
     // if this is our first time then save defaults
     if(!(cc.sys.localStorage.getItem('hasLoaded') == 'true')) {
-        cc.sys.localStorage.setItem('hasLoaded', true);
+        cc.sys.localStorage.setItem('hasLoaded', 'true');
         NJ.saveSettings();
         return;
     }
@@ -77,7 +77,7 @@ NJ.loadSettings = function() {
 // NOTE: Must be called to persist changes in settings
 NJ.saveSettings = function() {
     for(var key in NJ.settings) {
-        cc.sys.localStorage.setItem(key, NJ.settings[key]);
+        cc.sys.localStorage.setItem(key, JSON.stringify(NJ.settings[key]));
     }
 };
 
@@ -93,7 +93,8 @@ NJ.analytics = {
 };
 
 NJ.sendAnalytics = function() {
-    console.log("Score: " + NJ.analytics.score);
+    if(cc.sys.isNative)
+        return;
 
     var rid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);

@@ -22,18 +22,10 @@ var GameOverMenuLayer = cc.LayerColor.extend({
     ctor: function() {
         this._super();
 
-        //this.initComboManager();
-
         this.init(cc.color(0, 0, 0, 255));
 
         this.initUI();
     },
-
-    // initialize combo manager into the scene
-    //initComboManager: function() {
-    //    this._comboManager = new ComboManager();
-    //    this._comboManager.init();
-    //},
 
     initUI: function() {
         var sp = new cc.Sprite(res.loading_png);

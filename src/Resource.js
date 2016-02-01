@@ -33,11 +33,7 @@ var res = {
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes) {
-    if (cc.sys.isNative) {
-        return fontRes.src;
-    } else {
-        return fontRes.name;
-    }
+    return fontRes.name;
 }
 
 // resources for the main menu of the game
@@ -50,7 +46,7 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    b_getFontName(res.markerFontTTF)
+    res.markerFontTTF
 ];
 
 // resources for ingame
@@ -66,6 +62,6 @@ var g_game = [
     res.successTrack,
 
     // fonts
-    b_getFontName(res.markerFontTTF)
+    res.markerFontTTF
 ];
 
