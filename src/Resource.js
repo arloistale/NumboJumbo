@@ -64,4 +64,3 @@ var g_game = [
     // fonts
     res.markerFontTTF
 ];
-
