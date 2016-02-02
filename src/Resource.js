@@ -14,7 +14,6 @@ if(!cc.sys.isNative) {
 var res = {
     // Fonts
     markerFontTTF: {
-        type: "font",
         name: "Marker Felt",
         src: resRoot + "Fonts/MarkerFelt.ttf"
     },
@@ -33,8 +32,11 @@ var res = {
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes) {
+    //if(cc.sys.os == cc.sys.OS_ANDROID)
+      //  return fontRes.src[0];
+
     return fontRes.name;
-}
+};
 
 // resources for the main menu of the game
 var g_menu = [
@@ -46,7 +48,7 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.markerFontTTF
+    res.markerFontTTF.src
 ];
 
 // resources for ingame
@@ -62,5 +64,5 @@ var g_game = [
     res.successTrack,
 
     // fonts
-    res.markerFontTTF
+    res.markerFontTTF.src
 ];
