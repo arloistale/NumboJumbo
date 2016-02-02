@@ -1,4 +1,4 @@
-var DifficultyManager = cc.Class.extend({
+var NumboController = cc.Class.extend({
     spawnTime: .1, // frequeny of block
     startTime: 0, // time of init
     timeElapsed: 0, // duration of gameplay
