@@ -127,6 +127,8 @@ var NumboGameLayer = cc.Layer.extend({
 
     // initialize the empty level into the scene
     initLevel: function() {
+        this._selectedBlocks = [];
+        
         this._numboLevel = new NumboLevel();
         this._numboLevel.init();
 
