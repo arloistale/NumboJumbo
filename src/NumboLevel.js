@@ -138,21 +138,6 @@ var NumboLevel = cc.Class.extend({
 	    return block;
 	},
 
-	// drop block into random column with random value
-	// returns dropped block
-	// drop block into random column with random value
-	// returns dropped block
-	dropRandomBlock: function(difficultyMgr) {
-	    cc.assert(!this.isFull(), "Can't drop any more blocks");
-	    
-	    var cols = this.getAllValidCols();
-	    var block = difficultyMgr.getNextBlock(this.blocks, cols);
-	    var val = block.val;
-	    var col = block.col;
-	    
-	    return this.dropBlock(col, val);
-	},
-	
 	// kill given block
 	killBlock: function(block) {
 	    cc.assert(block, "Invalid block");
@@ -276,10 +261,13 @@ var NumboLevel = cc.Class.extend({
 
 	// returns whether a block exists at given coords
 	getBlock: function(col, row) {
-	    if(col >= 0 && col < NJ.NUM_COLS && row >= 0 && row < NJ.NUM_ROWS
-		      && row < this.blocks[col].length)
-	    	return this.blocks[col][row];
-
+	    cc.assert(0 <= col && col <= NJ.NUM_COLS &&
+		      0 <= row && row < NJ.NUM_ROWS ,
+		      "block coordinates out of bounds!")
+	    if (row < this.blocks[col].length)
+		return this.blocks[col][row];
+	    else
 		return null;
+	    
 	}
 });
