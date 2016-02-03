@@ -151,7 +151,7 @@ var NumboGameLayer = cc.Layer.extend({
 	initNumboController: function() {
 	    this._numboController = new NumboController();
 	    this._numboController.init();
-		this._numboController.setDistribution(cc.loader.getRes(res.distributionJson)["normal"]);
+		this._numboController.setDistribution(cc.loader.getRes(res.distributionJson)["normal-adjusted-with-negatives"]);
 
 	},
 
