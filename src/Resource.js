@@ -27,7 +27,10 @@ var res = {
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
-    successTrack: resRoot + "Sounds/Ka-Ching.wav"
+    successTrack: resRoot + "Sounds/Ka-Ching.wav",
+
+    // jsons
+    distributionJson: resRoot + "distributions.json"
 };
 
 // returns proper font name based on platform
@@ -64,5 +67,8 @@ var g_game = [
     res.successTrack,
 
     // fonts
-    res.markerFontTTF.src
+    res.markerFontTTF.src,
+
+    // jsons
+    res.distributionJson
 ];

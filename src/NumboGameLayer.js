@@ -18,6 +18,8 @@ var NumboGameLayer = cc.Layer.extend({
 	// Controller Data
 	_numboController: null,
 
+	_distributionsData: null,
+
 	////////////////////
 	// Initialization //
 	////////////////////
@@ -35,7 +37,8 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.initUI();
 	    this.initLevel();
 	    this.initNumboController();
-	    this.initAudio();
+		this.initDistributions();
+		this.initAudio();
 
 	    // begin scheduling block drops
 	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
@@ -140,10 +143,16 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(levelNode);
 	},
 
+	initDistributions: function() {
+		this._distributionsData = cc.loader.getRes(res.distributionJson);
+	},
+
 	// initialize difficulty manager into the scene
 	initNumboController: function() {
 	    this._numboController = new NumboController();
 	    this._numboController.init();
+		this._numboController.setDistribution(cc.loader.getRes(res.distributionJson)["normal"]);
+
 	},
 
 	// initialize game audio

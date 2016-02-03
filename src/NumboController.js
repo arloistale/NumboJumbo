@@ -2,6 +2,7 @@ var NumboController = cc.Class.extend({
 	spawnTime: .1,
 	spawnConsts: [2, 1.8, 1.6, 1.4, 1.25, 1.1, 0.95, 0.8], // spawn times based on level index
 	blocksToLevelUp: [15, 30, 50, 75, 105, 140, 175, 210],
+    distribution: [],
 
     // level data
 	_numboLevel: null,
@@ -115,12 +116,14 @@ var NumboController = cc.Class.extend({
 	    cc.assert(!this.isGameOver(), "Can't drop any more blocks");
 
 	    // Set up val/col possibilities
-	    var vals = [1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,6,6,7,7,8,8,9,9];	    
+	    //var vals = [1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,6,6,7,7,8,8,9,9];
+
 	    var cols = this._numboLevel.getAllValidCols();
 	
 	    // Pick random val/col from set
-	    var val = vals[Math.floor(Math.random()*vals.length)];
-	    var col = cols[Math.floor(Math.random()*cols.length)];
+	    //var val = vals[Math.floor(Math.random()*vals.length)];
+	    var val = this.distribution[Math.floor(Math.random()*this.distribution.length)];
+        var col = cols[Math.floor(Math.random()*cols.length)];
 
 	    return this._numboLevel.dropBlock(col, val);
 	},
@@ -179,5 +182,9 @@ var NumboController = cc.Class.extend({
         }
 
         return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
+    },
+
+    setDistribution: function(distribution) {
+        this.distribution = distribution["number_list"];
     }
 });
