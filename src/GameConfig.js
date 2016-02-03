@@ -1,25 +1,20 @@
 /**
  *
- * Defines a namespace NJ containing releveant global data.
+ * Defines a namespace NJ containing relevant global data.
  * NJ contains information regarding:
  * - Game Constants
  * - Game Settings
- * - Game Analytics Data
+ * - Game Stats
 */
 
 var NJ = NJ || {};
 
-/** CONSTANTS **/
+///////////////
+// CONSTANTS //
+///////////////
 
 // dims
 NJ.SCALE = 1;
-
-// game state
-NJ.GAME_STATE = {
-    HOME: 0,
-    PLAY: 1,
-    OVER: 2
-};
 
 // level
 NJ.NUM_COLS = 7;
@@ -27,9 +22,6 @@ NJ.NUM_ROWS = 7;
 
 // UI
 NJ.HEADER_HEIGHT = 56;
-
-// lives
-NJ.START_LIVES = 4;
 
 // units
 NJ.UNIT_TAG = {
@@ -46,11 +38,10 @@ NJ.BLOCK_TYPE = {
 
 NJ.BLOCK_MAX_VALUE = 9;
 
-/** State Data **/
-NJ.gameState = NJ.GAME_STATE.HOME;
 
-
-/** Settings Data **/
+//////////////
+// SETTINGS //
+//////////////
 
 NJ.settings = {
     music: true,
@@ -81,33 +72,58 @@ NJ.saveSettings = function() {
     }
 };
 
-NJ.analytics = {
+///////////
+// STATS //
+///////////
+
+NJ.stats = {
+    startTime: 0, // time of init
+
+    // game data
     sessionLength: 0,
 
+    // core stats
     score: 0,
+    level: 0,
 
+    // calculated stats
     blocksCleared: 0,
-    blocksPerMinute: 0,
+    maxComboLength: 0
+};
 
-    maxComboLength: 0,
+NJ.resetStats = function() {
+    for(var key in NJ.stats) {
+        NJ.stats[key] = 0;
+    }
 };
 
 NJ.sendAnalytics = function() {
     if(cc.sys.isNative)
         return;
 
+    NJ.stats.sessionLength = (Date.now() - NJ.stats.startTime) / 1000;
+    NJ.logStats();
+
     var rid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
         return v.toString(16);
     });
 
-    // send over relevant analytics data to Google Analytics
+    // send over relevant stats data to Google Analytics
     ga('set', 'dimension1', rid);
-    ga('set', 'metric1', NJ.analytics.blocksCleared);
-    ga('set', 'metric2', NJ.analytics.sessionLength);
-    ga('set', 'metric3', NJ.analytics.maxComboLength);
-    ga('set', 'metric4', NJ.analytics.blocksPerMinute);
-    ga('set', 'metric5', NJ.analytics.score);
+    ga('set', 'metric1', NJ.stats.blocksCleared);
+    ga('set', 'metric2', NJ.stats.sessionLength);
+    ga('set', 'metric3', NJ.stats.maxComboLength);
+    ga('set', 'metric4', NJ.stats.level);
+    ga('set', 'metric5', NJ.stats.score);
 
     ga('send', 'event', 'Game', 'end', 'Game Session Data');
+};
+
+NJ.logStats = function() {
+    var statsStr = "Here are stats...\n";
+    for(var key in NJ.stats) {
+        statsStr += key + ": " + NJ.stats[key] + "\n";
+    }
+    console.log(statsStr);
 };

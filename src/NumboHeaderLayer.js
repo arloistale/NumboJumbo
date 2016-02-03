@@ -159,7 +159,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
 ////////////////
 
     setScoreValue: function(scoreVal, blocksVal, levelVal) {
-        this.scoreValueLabel.setString(Math.floor(scoreVal));
+        this.scoreValueLabel.setString(scoreVal);
         this.blocksToLevelLabel.setString(blocksVal);
         this.levelLabel.setString(levelVal);
     },
