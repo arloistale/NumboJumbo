@@ -200,15 +200,9 @@ var NumboController = cc.Class.extend({
 	    return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
 	},
 
-<<<<<<< HEAD
 	setDistribution: function(distribution) {
 	    this.distribution = distribution["number_list"];
 	    this.spawnTimer = distribution["timer"];
 	}
+
     });
-=======
-    setDistribution: function(distribution) {
-        this.distribution = distribution["number_list"];
-    }
-});
->>>>>>> 7d5d697ff33b0839b423a3684cddb2cbc7772b75

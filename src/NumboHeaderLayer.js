@@ -97,11 +97,11 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.levelText.setColor(cc.color(255, 146, 48, 255));
         this.addChild(this.levelText);
 
-<<<<<<< HEAD
-        this.levelLabel = new cc.LabelTTF("69", b_getFontName(res.markerFontTTF), 32);
-=======
+
+	//        this.levelLabel = new cc.LabelTTF("69", b_getFontName(res.markerFontTTF), 32);
+
         this.levelLabel = new cc.LabelTTF("1", b_getFontName(res.markerFont), 32);
->>>>>>> 7d5d697ff33b0839b423a3684cddb2cbc7772b75
+
         this.levelLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
