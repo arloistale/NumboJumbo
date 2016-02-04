@@ -33,7 +33,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         contentSize = this.getContentSize();
 
         // Score Labels
-        this.scoreValueText = new cc.LabelTTF("Score", b_getFontName(res.markerFontTTF), 24);
+        this.scoreValueText = new cc.LabelTTF("Score", b_getFontName(res.markerFont), 24);
         this.scoreValueText.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -45,7 +45,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.scoreValueText.setColor(cc.color(255, 146, 48, 255));
         this.addChild(this.scoreValueText);
 
-        this.scoreValueLabel = new cc.LabelTTF("0", b_getFontName(res.markerFontTTF), 32);
+        this.scoreValueLabel = new cc.LabelTTF("0", b_getFontName(res.markerFont), 32);
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -58,7 +58,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.addChild(this.scoreValueLabel);
 
         // Blocks til Levelup Labels
-        this.blocksToLevelText = new cc.LabelTTF("Level up in", b_getFontName(res.markerFontTTF), 20);
+        this.blocksToLevelText = new cc.LabelTTF("Level up in", b_getFontName(res.markerFont), 20);
         this.blocksToLevelText.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -70,7 +70,9 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.blocksToLevelText.setColor(cc.color(255, 146, 48, 255));
         this.addChild(this.blocksToLevelText);
 
-        this.blocksToLevelLabel = new cc.LabelTTF("42", b_getFontName(res.markerFontTTF), 32);
+        this.blocksToLevelLabel = new cc.LabelTTF("42", b_getFontName(res.markerFont), 32);
+        //this.blocksToLevelLabel = new cc.LabelTTF("15", b_getFontName(res.markerFontTTF), 32);
+
         this.blocksToLevelLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -83,7 +85,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.addChild(this.blocksToLevelLabel);
 
         // Level Labels
-        this.levelText = new cc.LabelTTF("Level", b_getFontName(res.markerFontTTF), 20);
+        this.levelText = new cc.LabelTTF("Level", b_getFontName(res.markerFont), 20);
         this.levelText.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -95,7 +97,11 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.levelText.setColor(cc.color(255, 146, 48, 255));
         this.addChild(this.levelText);
 
+<<<<<<< HEAD
         this.levelLabel = new cc.LabelTTF("69", b_getFontName(res.markerFontTTF), 32);
+=======
+        this.levelLabel = new cc.LabelTTF("1", b_getFontName(res.markerFont), 32);
+>>>>>>> 7d5d697ff33b0839b423a3684cddb2cbc7772b75
         this.levelLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -108,7 +114,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.addChild(this.levelLabel);
 
         // In-game Feedback Labels
-        this.feedbackLabel = new cc.LabelTTF("", b_getFontName(res.markerFontTTF), 32);
+        this.feedbackLabel = new cc.LabelTTF("", b_getFontName(res.markerFont), 32);
         this.feedbackLabel.attr({
             scale: 1.0,
             anchorX: .5,
@@ -130,7 +136,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
 
         // initialize pause button
         var button = new ccui.Button();
-        button.setTitleFontName(b_getFontName(res.markerFontTTF));
+        button.setTitleFontName(b_getFontName(res.markerFont));
         button.setTitleFontSize(26);
         button.setTitleText("Pause");
         button.attr({

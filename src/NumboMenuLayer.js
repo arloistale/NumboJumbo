@@ -118,7 +118,7 @@ var NumboMenuLayer = cc.Layer.extend({
         selectedSprite.setColor(cc.color(192, 192, 192, 255));
         disabledSprite.setColor(cc.color(64, 64, 64, 255));
 
-        var normalLabel = new cc.LabelTTF(title, b_getFontName(res.markerFontTTF), 32);
+        var normalLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), 32);
         normalLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -127,7 +127,7 @@ var NumboMenuLayer = cc.Layer.extend({
             y: normalSprite.getContentSize().height / 2
         });
 
-        var selectedLabel = new cc.LabelTTF(title, b_getFontName(res.markerFontTTF), 32);
+        var selectedLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), 32);
         selectedLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -136,7 +136,7 @@ var NumboMenuLayer = cc.Layer.extend({
             y: selectedSprite.getContentSize().height / 2
         });
 
-        var disabledLabel = new cc.LabelTTF(title, b_getFontName(res.markerFontTTF), 32);
+        var disabledLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), 32);
         disabledLabel.attr({
             scale: 1.0,
             anchorX: 0.5,

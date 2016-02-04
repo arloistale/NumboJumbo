@@ -4,10 +4,13 @@ var NumboController = cc.Class.extend({
 
 	// level data
 	_numboLevel: null,
-	_selectedBlocks: [],
 
-	// score data
-	_comboManager: null,
+	_selectedBlocks: [],
+                                      
+	////////////////////
+	// INITIALIZATION //
+	////////////////////
+
 	
 	// initialize timing, initial mode
 	init: function() {
@@ -197,8 +200,15 @@ var NumboController = cc.Class.extend({
 	    return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
 	},
 
+<<<<<<< HEAD
 	setDistribution: function(distribution) {
 	    this.distribution = distribution["number_list"];
 	    this.spawnTimer = distribution["timer"];
 	}
     });
+=======
+    setDistribution: function(distribution) {
+        this.distribution = distribution["number_list"];
+    }
+});
+>>>>>>> 7d5d697ff33b0839b423a3684cddb2cbc7772b75
