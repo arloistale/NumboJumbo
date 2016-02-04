@@ -10,6 +10,10 @@ var NumboController = cc.Class.extend({
 
     // score data
     _comboManager: null,
+                                      
+                                      ////////////////////
+                                      // INITIALIZATION //
+                                      ////////////////////
 	
 	// initialize timing, initial mode
 	init: function() {

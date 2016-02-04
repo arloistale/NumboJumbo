@@ -62,7 +62,7 @@ var NumboBlock = cc.Sprite.extend({
     // NOTE: DO NOT call directly, call kill block in NumboLevel instead
     kill: function() {
         var block = this;
-        var fadeAction = cc.fadeTo(0.2);
+        var fadeAction = cc.fadeTo(0.2, 0);
         var removeAction = cc.callFunc(function() {
             block.removeFromParent(true);
         });
