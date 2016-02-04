@@ -70,7 +70,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.blocksToLevelText.setColor(cc.color(255, 146, 48, 255));
         this.addChild(this.blocksToLevelText);
 
-        this.blocksToLevelLabel = new cc.LabelTTF("15", b_getFontName(res.markerFontTTF), 32);
+        this.blocksToLevelLabel = new cc.LabelTTF("42", b_getFontName(res.markerFontTTF), 32);
         this.blocksToLevelLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -95,7 +95,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.levelText.setColor(cc.color(255, 146, 48, 255));
         this.addChild(this.levelText);
 
-        this.levelLabel = new cc.LabelTTF("1", b_getFontName(res.markerFontTTF), 32);
+        this.levelLabel = new cc.LabelTTF("69", b_getFontName(res.markerFontTTF), 32);
         this.levelLabel.attr({
             scale: 1.0,
             anchorX: 0.5,

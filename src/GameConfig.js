@@ -84,7 +84,7 @@ NJ.stats = {
 
     // core stats
     score: 0,
-    level: 0,
+    level: 1,
 
     // calculated stats
     blocksCleared: 0,
@@ -95,6 +95,7 @@ NJ.resetStats = function() {
     for(var key in NJ.stats) {
         NJ.stats[key] = 0;
     }
+    NJ.stats["level"] = 1;
 };
 
 NJ.sendAnalytics = function() {

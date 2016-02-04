@@ -27,22 +27,25 @@ var NumboGameLayer = cc.Layer.extend({
 	ctor: function () {
 	    this._super();
 
-        NJ.resetStats();
+	    NJ.resetStats();
 
-        // init time
-        NJ.stats.startTime = Date.now();
-
+	    // init time
+	    NJ.stats.startTime = Date.now();
+	    
 	    this.initBackground();
 	    this.initInput();
 	    this.initUI();
 	    this.initLevel();
 	    this.initNumboController();
-		this.initDistributions();
-		this.initAudio();
+	    this.initDistributions();
+	    this.initAudio();
+
+
+	    this._numboHeader.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 
 	    // begin scheduling block drops
 	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
-        this.schedule(this.scheduleSpawn, 2);
+	    this.schedule(this.scheduleSpawn, 0.1*20);
 	},
 
 	// initialize background for game
@@ -66,52 +69,52 @@ var NumboGameLayer = cc.Layer.extend({
 	// initialize input for the game
 	initInput: function() {
 	    if ('mouse' in cc.sys.capabilities) {
-            cc.eventManager.addListener({
-                event: cc.EventListener.MOUSE,
-                onMouseDown: function (event) {
-                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-                    return false;
+		cc.eventManager.addListener({
+			event: cc.EventListener.MOUSE,
+			onMouseDown: function (event) {
+			    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+				return false;
 
-                    event.getCurrentTarget().onTouchBegan(event.getLocation());
+			    event.getCurrentTarget().onTouchBegan(event.getLocation());
 
-                    return true;
-                },
-                onMouseMove: function (event) {
-                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-                    return false;
+			    return true;
+			},
+			onMouseMove: function (event) {
+			    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+				return false;
 
-                    event.getCurrentTarget().onTouchMoved(event.getLocation());
+			    event.getCurrentTarget().onTouchMoved(event.getLocation());
 
-                    return true;
-                },
-                onMouseUp: function (event) {
-                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-                    return false;
+			    return true;
+			},
+			onMouseUp: function (event) {
+			    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+				return false;
 
-                    event.getCurrentTarget().onTouchEnded(event.getLocation());
+			    event.getCurrentTarget().onTouchEnded(event.getLocation());
 
-                    return true;
-                }
-            }, this);
+			    return true;
+			}
+		    }, this);
 	    }
 	    else if (cc.sys.capabilities.hasOwnProperty('touches')) {
-            cc.eventManager.addListener({
-                prevTouchId: -1,
-                event: cc.EventListener.TOUCH_ONE_BY_ONE,
-                swallowTouches: true,
-                onTouchBegan: function(touch, event) {
-                    event.getCurrentTarget().onTouchBegan(touch.getLocation());
-                    return true;
-                },
-                onTouchMoved: function(touch, event) {
-                    event.getCurrentTarget().onTouchMoved(touch.getLocation());
-                    return true;
-                },
-                onTouchEnded: function(touch, event) {
-                    event.getCurrentTarget().onTouchEnded(touch.getLocation());
-                    return true;
-                }
-            }, this);
+		cc.eventManager.addListener({
+			prevTouchId: -1,
+			event: cc.EventListener.TOUCH_ONE_BY_ONE,
+			swallowTouches: true,
+			onTouchBegan: function(touch, event) {
+			    event.getCurrentTarget().onTouchBegan(touch.getLocation());
+			    return true;
+			},
+			onTouchMoved: function(touch, event) {
+			    event.getCurrentTarget().onTouchMoved(touch.getLocation());
+			    return true;
+			},
+			onTouchEnded: function(touch, event) {
+			    event.getCurrentTarget().onTouchEnded(touch.getLocation());
+			    return true;
+			}
+		    }, this);
 	    }
 	},
 
@@ -144,14 +147,15 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	initDistributions: function() {
-		this._distributionsData = cc.loader.getRes(res.distributionJson);
+	    this._distributionsData = cc.loader.getRes(res.distributionJson);
 	},
 
-	// initialize difficulty manager into the scene
+	// initialize numbo controller (formerly the difficulty manager)
+	// into the scene
 	initNumboController: function() {
 	    this._numboController = new NumboController();
 	    this._numboController.init();
-		this._numboController.setDistribution(cc.loader.getRes(res.distributionJson)["normal"]);
+	    this._numboController.setDistribution(cc.loader.getRes(res.distributionJson)["primes"]);
 
 	},
 
@@ -194,9 +198,9 @@ var NumboGameLayer = cc.Layer.extend({
 	// TODO: Improve structure (don't check game over state here for improved separation of concerns)
 	spawnDropRandomBlock: function() {
 	    if(this.isGameOver()) {
-            this.onGameOver();
+		this.onGameOver();
 
-            return;
+		return;
 	    }
 	    
 	    var block = this._numboController.dropRandomBlock();
@@ -282,7 +286,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
 	    if (touchCoords)
-		    this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+		this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 	},
 
 	// on touch moved, selects additional blocks as the touch is held and moved
@@ -290,20 +294,20 @@ var NumboGameLayer = cc.Layer.extend({
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
 	    if (touchCoords)
-		    this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+		this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 	},
 
 	// on touch ended, activates all selected blocks once touch is released
 	onTouchEnded: function(touchPosition) {
 	    this._numboController.activateSelectedBlocks();
 
-        for (var col = 0; col < NJ.NUM_COLS; ++col) {
-            for (var row = 0; row < this._numboController.getColLength(col); ++row){
-                this.moveBlockSprite(this._numboController.getBlock(col, row));
-            }
-        }
+	    for (var col = 0; col < NJ.NUM_COLS; ++col) {
+		for (var row = 0; row < this._numboController.getColLength(col); ++row){
+		    this.moveBlockSprite(this._numboController.getBlock(col, row));
+		}
+	    }
 
-        this._numboHeader.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevel(), NJ.stats.level + 1);
+	    this._numboHeader.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	},
 
 	/////////////
@@ -318,20 +322,20 @@ var NumboGameLayer = cc.Layer.extend({
 	// attempt to convert point to location on grid
 	convertPointToLevelCoords: function(point) {
 	    if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
-		    point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
+		point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
 
-		    var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
-		    var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
+		var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
+		var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
 
-		    // return only if coordinates in certain radius of the block.
-		    var radius = 0.65;
-		    if (Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
-		        point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2) {
+		// return only if coordinates in certain radius of the block.
+		var radius = 0.65;
+		if (Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
+		    point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2) {
 
-                return {col: col, row: row};
-            }
+		    return {col: col, row: row};
+		}
 	    }
 
 	    return null;
 	}
-});
+    });

@@ -12,31 +12,31 @@ var NumboLevel = cc.Class.extend({
 	blocks: [],
 	totalNumBlocks: 0,
 
-////////////////////
-// INITIALIZATION //
-////////////////////
+	////////////////////
+	// INITIALIZATION //
+	////////////////////
 
 	// initialize the level to empty
 	init: function() {
-		this.blocks = [];
+	    this.blocks = [];
 
 	    // create empty columns:
 	    for(var i = 0; i < NJ.NUM_COLS; ++i)
-			this.blocks.push([]);
+		this.blocks.push([]);
 	},
 
 	// reset the level, removing all blocks
 	reset: function() {
 	    for(var i = 0; i < NJ.NUM_ROWS; ++i) {
-			for(var j = 0; j < NJ.NUM_COLS; ++j) {
-				this.blocks[i][j] = null;
-			}
+		for(var j = 0; j < NJ.NUM_COLS; ++j) {
+		    this.blocks[i][j] = null;
+		}
 	    }
 	},
 
-////////////////////
-// BLOCK MANIPULATION //
-////////////////////
+	////////////////////
+	// BLOCK MANIPULATION //
+	////////////////////
 
 	// spawn a block at the given col and value
 	// returns spawned block
@@ -57,90 +57,90 @@ var NumboLevel = cc.Class.extend({
 	// shifts blocks horizontally if neccessary.
 	// returns dropped block
 	dropBlock: function(col, val) {
-		cc.assert(this.blocks[col].length < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
+	    cc.assert(this.blocks[col].length < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
 
-		var block = this.spawnBlock(col, val);
-		block.bHasDropped = false;
-		return block;
+	    var block = this.spawnBlock(col, val);
+	    block.bHasDropped = false;
+	    return block;
 	},
 
 	// kill given block
 	killBlock: function(block) {
-		cc.assert(block, "Invalid block");
+	    cc.assert(block, "Invalid block");
 
-		var col = block.col;
-		var row = block.row;
-		block.kill();
+	    var col = block.col;
+	    var row = block.row;
+	    block.kill();
 
-		this.blocks[col].splice(row, 1);
-		this.totalNumBlocks--;
-		for (var j = row; j < this.blocks[col].length; ++j){
-			this.blocks[col][j].row = j;
-			this.blocks[col][j].bHasDropped = false;
-		}
+	    this.blocks[col].splice(row, 1);
+	    this.totalNumBlocks--;
+	    for (var j = row; j < this.blocks[col].length; ++j){
+		this.blocks[col][j].row = j;
+		this.blocks[col][j].bHasDropped = false;
+	    }
 	},
 
 	// kill block at given coordinates
 	killBlockAtCoords: function(col, row) {
-		cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
+	    cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
 
-		if (row < this.blocks[col].length)
-			killBlock(this.blocks[col][row]);
+	    if (row < this.blocks[col].length)
+		killBlock(this.blocks[col][row]);
 
 	},
 
 	// shifts all blocks on the given column downward
 	// by setting its bHasDropped to false
 	shiftBlocksInColumn: function(col) {
-		cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
+	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
 
-		for (var row = 0; row < this.blocks[col].length; ++row){
-			this.blocks[col][row].bHasDropped = false;
-			this.blocks[col][row].row = row;
-		}
+	    for (var row = 0; row < this.blocks[col].length; ++row){
+		this.blocks[col][row].bHasDropped = false;
+		this.blocks[col][row].row = row;
+	    }
 	},
 
 	// takes in the index of a column in bricks[][].
 	// moves all non-empty columns toward that col
 	// (cols to the left of col move rightward, and vice-versa)
 	collapseColumnsToward: function (col) {
-		cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
-		this.collapseLeftSideToward(col);
-		this.collapseRightSideToward(col);
+	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
+	    this.collapseLeftSideToward(col);
+	    this.collapseRightSideToward(col);
 	},
 
 	collapseLeftSideToward: function(col) {
-		cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
+	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
 
-		// find an empty column:
-		for (var e = col; e >= 0; --e) {
-			if (this.blocks[e].length == 0) { // found one
-				// find index of next non-empty column:
-				for (var n = e; n >= 0; --n) {
-					if (this.blocks[n].length > 0) { // found one
-						this.swapColumns(n, e);
-						break; // should maybe write this w/o break :p
-					}
-				}
+	    // find an empty column:
+	    for (var e = col; e >= 0; --e) {
+		if (this.blocks[e].length == 0) { // found one
+		    // find index of next non-empty column:
+		    for (var n = e; n >= 0; --n) {
+			if (this.blocks[n].length > 0) { // found one
+			    this.swapColumns(n, e);
+			    break; // should maybe write this w/o break :p
 			}
+		    }
 		}
+	    }
 	},
 
 	collapseRightSideToward: function(col){
-		cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
+	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
 
-		// find an empty column:
-		for (var e = col; e < NJ.NUM_COLS; ++e) {
-			if (this.blocks[e].length == 0) { // found one
-				// find index of next non-empty column:
-				for (var n = e; n < NJ.NUM_COLS; ++n) {
-					if (this.blocks[n].length > 0) {// found one
-						this.swapColumns(n, e);
-						break; // should maybe write this w/o break :p
-					}
-				}
+	    // find an empty column:
+	    for (var e = col; e < NJ.NUM_COLS; ++e) {
+		if (this.blocks[e].length == 0) { // found one
+		    // find index of next non-empty column:
+		    for (var n = e; n < NJ.NUM_COLS; ++n) {
+			if (this.blocks[n].length > 0) {// found one
+			    this.swapColumns(n, e);
+			    break; // should maybe write this w/o break :p
 			}
+		    }
 		}
+	    }
 	},
 
 	// takes in the indeces of two columns in blocks[] and swaps them.
@@ -148,31 +148,31 @@ var NumboLevel = cc.Class.extend({
 	// use this.updateBlockRowsAndCols() for that.
 	// (perhaps should create a new one that only updates locally)
 	swapColumns: function(i, j){
-		cc.assert(0 <= i && i < NJ.NUM_COLS, "invalid column! " + i);
-		cc.assert(0 <= j && j < NJ.NUM_COLS, "invalid column! " + j);
+	    cc.assert(0 <= i && i < NJ.NUM_COLS, "invalid column! " + i);
+	    cc.assert(0 <= j && j < NJ.NUM_COLS, "invalid column! " + j);
 
-		var t = this.blocks[i];
-		this.blocks[i] = this.blocks[j];
-		this.blocks[j] = t;
+	    var t = this.blocks[i];
+	    this.blocks[i] = this.blocks[j];
+	    this.blocks[j] = t;
 	},
 
 	// iterates over all blocks and updates their .row and .col
 	// member variables. useful when blocks are removed or need
 	// to be collapsed
 	updateBlockRowsAndCols: function() {
-		for (var i=0; i < NJ.NUM_COLS; ++i){
-			for (var j=0; j < this.blocks[i].length; ++j){
-				if (this.blocks[i][j]){
-					this.blocks[i][j].col = i;
-					this.blocks[i][j].row = j;
-				}
-			}
+	    for (var i=0; i < NJ.NUM_COLS; ++i){
+		for (var j=0; j < this.blocks[i].length; ++j){
+		    if (this.blocks[i][j]){
+			this.blocks[i][j].col = i;
+			this.blocks[i][j].row = j;
+		    }
 		}
+	    }
 	},
 
-/////////////
-// GETTERS //
-/////////////
+	/////////////
+	// GETTERS //
+	/////////////
 
 	// search for a legit column to drop block into.
 	// does not return columns which are empty.
@@ -220,18 +220,18 @@ var NumboLevel = cc.Class.extend({
 		// check if column is adjacent to a non-empty column:
 		for (var c = 0; c < NJ.NUM_COLS; ++c) {
 		    if (validCols[c]) {
-				if (c == 0) {
-					if (this.blocks[c+1].length == 0)
-					validCols[c] = false;
-				}
-				else if (c == NJ.NUM_COLS - 1) {
-					if ( this.blocks[c-1].length == 0)
-					validCols[c] = false;
-				}
-				else if (this.blocks[c-1].length == 0
-					 && this.blocks[c+1].length == 0) {
-					validCols[c] = false;
-				}
+			if (c == 0) {
+			    if (this.blocks[c+1].length == 0)
+				validCols[c] = false;
+			}
+			else if (c == NJ.NUM_COLS - 1) {
+			    if ( this.blocks[c-1].length == 0)
+				validCols[c] = false;
+			}
+			else if (this.blocks[c-1].length == 0
+				 && this.blocks[c+1].length == 0) {
+			    validCols[c] = false;
+			}
 		    }
 		}
 
@@ -272,4 +272,4 @@ var NumboLevel = cc.Class.extend({
 		return null;
 	    
 	}
-});
+    });
