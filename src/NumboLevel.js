@@ -246,6 +246,51 @@ var NumboLevel = cc.Class.extend({
 	    
 	},
 
+	// returns number of valid drops in each column
+	getSpacesInCols: function() {
+		validCols = [];
+		for(var i=0; i<NJ.NUM_ROWS; i++) {
+			validCols[i] = [];
+		}
+
+		// check if column is full:
+		for (var c = 0; c < NJ.NUM_COLS; ++c){
+			for(var r=this.blocks[c].length; r < NJ.NUM_ROWS; ++r)
+				validCols[c].push(c);
+		}
+
+		if (this.totalNumBlocks > 0){
+			// check if column is adjacent to a non-empty column:
+			for (var c = 0; c < NJ.NUM_COLS; ++c) {
+				if (validCols[c]) {
+					if (c == 0) {
+						if (this.blocks[c+1].length == 0)
+							validCols[c].length = 0;
+					}
+					else if (c == NJ.NUM_COLS - 1) {
+						if ( this.blocks[c-1].length == 0)
+							validCols[c].length = 0;
+					}
+					else if (this.blocks[c-1].length == 0
+						&& this.blocks[c+1].length == 0) {
+						validCols[c].length = 0;
+					}
+				}
+			}
+
+		}
+
+		var possibilityList = [];
+		for(var i=0; i<validCols.length; i++) {
+			for(var j=0; j<validCols[i].length; j++) {
+				for(var k=0; k<validCols[i].length; k++)
+					possibilityList.push(validCols[i][j]);
+			}
+		}
+
+		return possibilityList;
+	},
+
 	// returns whether level is currently full of blocks
 	isFull: function() {
 	    return this.totalNumBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
