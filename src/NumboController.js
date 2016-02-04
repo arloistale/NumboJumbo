@@ -7,9 +7,6 @@ var NumboController = cc.Class.extend({
     // level data
 	_numboLevel: null,
     _selectedBlocks: [],
-
-    // score data
-    _comboManager: null,
                                       
                                       ////////////////////
                                       // INITIALIZATION //
