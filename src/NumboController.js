@@ -49,7 +49,7 @@ var NumboController = cc.Class.extend({
 
 	    block.highlight(cc.color(0, 255, 0, 255));
 	    this._selectedBlocks.push(block);
-
+	    
 	    if(NJ.settings.sounds)
 		cc.audioEngine.playEffect(res.successTrack);
 	},
@@ -108,8 +108,6 @@ var NumboController = cc.Class.extend({
 
 	// drop block into random column with random value
 	// returns dropped block
-	// drop block into random column with random value
-	// returns dropped block
 	dropRandomBlock: function() {
 	    cc.assert(!this.isGameOver(), "Can't drop any more blocks");
 
@@ -122,6 +120,9 @@ var NumboController = cc.Class.extend({
 	    //var val = vals[Math.floor(Math.random()*vals.length)];
 	    var val = this.distribution[Math.floor(Math.random()*this.distribution.length)];
 	    var col = cols[Math.floor(Math.random()*cols.length)];
+	    
+	    if(NJ.settings.sounds)
+		cc.audioEngine.playEffect(res.spawnBlockTrack);
 
 	    return this._numboLevel.dropBlock(col, val);
 	},

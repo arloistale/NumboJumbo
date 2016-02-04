@@ -28,6 +28,8 @@ var res = {
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
     successTrack: resRoot + "Sounds/Ka-Ching.wav",
+    // thump from https://www.freesound.org/people/BristolStories/sounds/46136/
+    spawnBlockTrack: resRoot + "Sounds/Thump.wav", 
 
     // jsons
     distributionJson: resRoot + "distributions.json"
