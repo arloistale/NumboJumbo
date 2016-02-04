@@ -205,6 +205,7 @@ var NumboLevel = cc.Class.extend({
 	    return col;
 	},
 
+	// get rid of this?
 	getAllValidCols: function(){
 	    validCols = [];
 	    
@@ -246,49 +247,46 @@ var NumboLevel = cc.Class.extend({
 	    
 	},
 
-	// returns number of valid drops in each column
-	getSpacesInCols: function() {
-		validCols = [];
-		for(var i=0; i<NJ.NUM_ROWS; i++) {
-			validCols[i] = [];
-		}
+	// returns list of objects containing column weighting information
+	getColWeights: function() {
+		var weights = [];
+		var weightObjects = [];
 
-		// check if column is full:
-		for (var c = 0; c < NJ.NUM_COLS; ++c){
-			for(var r=this.blocks[c].length; r < NJ.NUM_ROWS; ++r)
-				validCols[c].push(c);
-		}
-
-		if (this.totalNumBlocks > 0){
-			// check if column is adjacent to a non-empty column:
-			for (var c = 0; c < NJ.NUM_COLS; ++c) {
-				if (validCols[c]) {
-					if (c == 0) {
-						if (this.blocks[c+1].length == 0)
-							validCols[c].length = 0;
-					}
-					else if (c == NJ.NUM_COLS - 1) {
-						if ( this.blocks[c-1].length == 0)
-							validCols[c].length = 0;
-					}
-					else if (this.blocks[c-1].length == 0
-						&& this.blocks[c+1].length == 0) {
-						validCols[c].length = 0;
-					}
-				}
+		for(var c=0; c<NJ.NUM_COLS; c++) {
+			// Get number of spaces in each column.
+			weights[c] = NJ.NUM_ROWS - this.blocks[c].length;
+			// Ignore columns which have only empty neighbors.
+			if (c == 0) {
+				if (this.blocks[c + 1].length == 0)
+					weights[c] = 0;
 			}
-
-		}
-
-		var possibilityList = [];
-		for(var i=0; i<validCols.length; i++) {
-			for(var j=0; j<validCols[i].length; j++) {
-				for(var k=0; k<validCols[i].length; k++)
-					possibilityList.push(validCols[i][j]);
+			else if (c == NJ.NUM_COLS - 1) {
+				if (this.blocks[c - 1].length == 0)
+					weights[c] = 0;
 			}
+			else if (this.blocks[c - 1].length == 0
+				&& this.blocks[c + 1].length == 0) {
+				weights[c] = 0;
+			}
+			// Square weights.
+			weights[c] = Math.pow(weights[c], 2);
 		}
 
-		return possibilityList;
+		// Set weights equal if board is empty.
+		if(weights.every(function(element) {
+			return element === 0;
+		})) {
+			for(var i=0; i<weights.length; i++)
+				weights[i] = 1;
+		}
+
+		// Convert weights to objects.
+		for(var i=0; i<weights.length; i++) {
+			weightObjects.push({key: i, weight: weights[i]});
+		}
+		console.log(weightObjects);
+
+		return weightObjects;
 	},
 
 	// returns whether level is currently full of blocks
