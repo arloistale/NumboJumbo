@@ -13,8 +13,8 @@ if(!cc.sys.isNative) {
 // list of resource definitions
 var res = {
     // Fonts
-    markerFontTTF: {
-        name: "Marker Felt",
+    markerFont: {
+        name: "MarkerFelt",
         src: resRoot + "Fonts/MarkerFelt.ttf"
     },
 
@@ -51,7 +51,7 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.markerFontTTF.src
+    res.markerFont.src
 ];
 
 // resources for ingame
@@ -67,7 +67,7 @@ var g_game = [
     res.successTrack,
 
     // fonts
-    res.markerFontTTF.src,
+    res.markerFont.src,
 
     // jsons
     res.distributionJson

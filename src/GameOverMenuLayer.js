@@ -81,7 +81,7 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 ////////////////
 
     generateLabel: function(title) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFontTTF));
+        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
         cc.MenuItemFont.setFontSize(42);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
@@ -91,7 +91,7 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 
     generateTitleButton: function(title, callback) {
         cc.MenuItemFont.setFontSize(26);
-        var label = new cc.LabelTTF(title, b_getFontName(res.markerFontTTF), 20);
+        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 20);
         label.setColor(cc.color(255, 255, 255, 255));
 
         return new cc.MenuItemLabel(label, callback);
