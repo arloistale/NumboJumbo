@@ -72,6 +72,25 @@ NJ.saveSettings = function() {
     }
 };
 
+
+////////////////
+// GAME STATE //
+////////////////
+
+NJ.gameState = {
+    currentJumboId: ""
+};
+
+// Use this function to set the current jumbo. DO NOT read currentJumboId directly!!!
+NJ.chooseJumbo = function(jumboId) {
+    NJ.gameState.currentJumboId = jumboId;
+};
+
+// Use this function to access the current jumbo. DO NOT access currentJumboId directly!!!
+NJ.getCurrentJumbo = function() {
+    return NJ.jumbos.data[NJ.gameState.currentJumboId];
+};
+
 ///////////
 // STATS //
 ///////////

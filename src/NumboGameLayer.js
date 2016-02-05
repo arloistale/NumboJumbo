@@ -40,7 +40,6 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.initDistributions();
 	    this.initAudio();
 
-
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 
 	    // begin scheduling block drops
@@ -147,7 +146,7 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	initDistributions: function() {
-	    this._distributionsData = cc.loader.getRes(res.distributionJson);
+	    this._distributionsData = cc.loader.getRes(res.jumboDistributionsJSON);
 	},
 
 	// initialize numbo controller (formerly the difficulty manager)
@@ -155,8 +154,6 @@ var NumboGameLayer = cc.Layer.extend({
 	initNumboController: function() {
 	    this._numboController = new NumboController();
 	    this._numboController.init();
-
-	    this._numboController.setDistribution(cc.loader.getRes(res.distributionJson)["one-mania"]);
 	},
 
 	// initialize game audio

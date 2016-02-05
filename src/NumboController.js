@@ -1,6 +1,6 @@
 var NumboController = cc.Class.extend({
 	distribution: [],
-	spawnTimer: 1.0,
+	spawnTime: 1.0,
 
 	// level data
 	_numboLevel: null,
@@ -18,7 +18,14 @@ var NumboController = cc.Class.extend({
 	    this._numboLevel = new NumboLevel();
 	    this._numboLevel.init();
 
+        this.initJumbo();
 	},
+
+    initJumbo: function() {
+        var jumbo = NJ.getCurrentJumbo();
+        this.distribution = jumbo.numberList;
+        this.spawnTime = jumbo.spawnTime;
+    },
     
 	isGameOver: function() {
 	    return this._numboLevel.isFull();
@@ -175,33 +182,28 @@ var NumboController = cc.Class.extend({
 	},
 
 	getSpawnTime: function() {
-	    return this.spawnConst() * this.spawnTimer;
+	    return this.spawnConst() * this.spawnTime;
 	},
 
 
 	// checks if the current selected blocks can be activated (their equation is valid)
 	isSelectedClearable: function() {
-	    if(!this._selectedBlocks.length || this._selectedBlocks.length < 3)
-		return false;
+		if (!this._selectedBlocks.length || this._selectedBlocks.length < 3)
+			return false;
 
-	    var selectedBlocksLength = this._selectedBlocks.length;
+		var selectedBlocksLength = this._selectedBlocks.length;
 
-	    // all blocks must be sequentially adjacent
+		// all blocks must be sequentially adjacent
 
-	    var sum = 0;
+		var sum = 0;
 
-	    for(var i = 0; i < selectedBlocksLength - 1; ++i) {
-		if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
-		    return false;
+		for (var i = 0; i < selectedBlocksLength - 1; ++i) {
+			if (!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
+				return false;
 
-		sum += this._selectedBlocks[i].val;
-	    }
+			sum += this._selectedBlocks[i].val;
+		}
 
-	    return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
-	},
-
-	setDistribution: function(distribution) {
-	    this.distribution = distribution["number_list"];
-	    this.spawnTimer = distribution["timer"];
+		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
 	}
 });

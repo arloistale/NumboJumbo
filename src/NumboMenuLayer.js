@@ -2,6 +2,7 @@
 var NumboMenuLayer = cc.Layer.extend({
 
     _menu: null,
+    _jumboMenuLayer: null,
     _settingsMenuLayer: null,
     
 ////////////////////
@@ -78,14 +79,18 @@ var NumboMenuLayer = cc.Layer.extend({
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.successTrack, false);
 
-        //load resources
-        cc.LoaderScene.preload(g_game, function () {
-            cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
-            var scene = new cc.Scene();
-            scene.addChild(new NumboGameLayer());
-            cc.director.runScene(new cc.TransitionFade(0.5, scene));
-        }, this);
+        var that = this;
+
+        cc.eventManager.pauseTarget(this, true);
+        this._jumboMenuLayer = new JumboMenuLayer();
+        this._jumboMenuLayer.setOnCloseCallback(function() {
+            cc.eventManager.resumeTarget(that, true);
+            that.removeChild(that._jumboMenuLayer);
+
+            //if(NJ.settings.music)
+                //cc.audioEngine.playMusic(res.menuTrack);
+        });
+        this.addChild(this._jumboMenuLayer, 999);
     },
 
     onSettings: function() {
