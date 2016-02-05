@@ -299,13 +299,20 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// on touch ended, activates all selected blocks once touch is released
 	onTouchEnded: function(touchPosition) {
+		// first activate any selected blocks
 	    this._numboController.activateSelectedBlocks();
 
+		// gaps may be created; shift all affected blocks down
 	    for (var col = 0; col < NJ.NUM_COLS; ++col) {
-		for (var row = 0; row < this._numboController.getColLength(col); ++row){
-		    this.moveBlockSprite(this._numboController.getBlock(col, row));
-		}
+			for (var row = 0; row < this._numboController.getColLength(col); ++row){
+				this.moveBlockSprite(this._numboController.getBlock(col, row));
+			}
 	    }
+
+		// level up if needed
+		if(this._numboController.levelUp()) {
+			this._numboHeaderLayer.giveFeedback("FUCK YEAH");
+		}
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	},

@@ -100,7 +100,7 @@ var NumboController = cc.Class.extend({
 			this._numboLevel.collapseColumnsToward(lastCol);
 			this._numboLevel.updateBlockRowsAndCols();
 
-			this.checkForLevelUp();
+			this.levelUp();
 	    }
 
 	    this.deselectAllBlocks();
@@ -133,7 +133,7 @@ var NumboController = cc.Class.extend({
 
 	// check if we should level up if blocks cleared is 
 	// greater than level up threshold
-	checkForLevelUp: function() {
+	levelUp: function() {
 	    // level up
 	    while (NJ.stats.blocksCleared >= this.blocksToLevelUp()) {
 			NJ.stats.level++;

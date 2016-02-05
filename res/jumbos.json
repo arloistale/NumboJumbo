@@ -43,7 +43,6 @@
   "fives": {
     "name": "Fives",
     "spawnTime": 1.0,
-    "numberList": [5,5,10,15,20,25,30],
     "numberList": [{"key":5, "weight":2},
       {"key":10, "weight":1},
       {"key":15, "weight":1},
@@ -71,7 +70,7 @@
   "one-mania": {
     "name": "One Mania",
     "spawnTime": 0.333,
-    "numberList": [{"key":1, "weight":2},
+    "numberList": [{"key":1, "weight":10},
       {"key":5, "weight":1},
       {"key":10, "weight":1},
       {"key":15, "weight":1}

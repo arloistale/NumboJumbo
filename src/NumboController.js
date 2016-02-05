@@ -106,8 +106,6 @@ var NumboController = cc.Class.extend({
 
 			this._numboLevel.collapseColumnsToward(lastCol);
 			this._numboLevel.updateBlockRowsAndCols();
-
-			this.checkForLevelUp();
 	    }
 
 	    this.deselectAllBlocks();
@@ -136,15 +134,21 @@ var NumboController = cc.Class.extend({
 
 	// check if we should level up if blocks cleared is 
 	// greater than level up threshold
-	checkForLevelUp: function() {
+    // return how many times we leveled up
+	levelUp: function() {
 	    // level up
+        var levelUpCount = 0;
+
 	    while (NJ.stats.blocksCleared >= this.blocksToLevelUp()) {
 			NJ.stats.level++;
+            levelUpCount++;
 	    }
+
+        return levelUpCount;
 	},
 
 	// a scaling factor to reduce spawn time on higher levels
-	spawnConst: function(){
+	spawnConst: function() {
 	    return 1 + 2/NJ.stats.level
 	},
 	
