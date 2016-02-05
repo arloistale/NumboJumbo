@@ -4,23 +4,26 @@
 
 var SettingsMenuLayer = cc.LayerColor.extend({
 
+    // UI Data
     _menu: null,
 
+    // Callbacks Data
+    onMenuCallback: null,
     onCloseCallback: null,
     
 ////////////////////
 // Initialization //
 ////////////////////
 
-    ctor: function() {
+    ctor: function(bInGame) {
         this._super();
 
         this.init(cc.color(0, 0, 0, 255));
 
-        this.initUI();
+        this.initUI(bInGame);
     },
 
-    initUI: function() {
+    initUI: function(bInGame) {
         var sp = new cc.Sprite(res.loading_png);
         sp.anchorX = 0;
         sp.anchorY = 0;
@@ -53,18 +56,43 @@ var SettingsMenuLayer = cc.LayerColor.extend({
         state = (NJ.settings.sounds ? 0 : 1);
         soundsToggle.setSelectedIndex(state);
 
-        var backButton = this.generateTitleButton("Back", function() {
-            that.onBack();
-        });
+        if(!bInGame) {
+            var backButton = this.generateTitleButton("Back", function () {
+                that.onBack();
+            });
 
-        this._menu = new cc.Menu(musicLabel, soundsLabel, musicToggle, soundsToggle, backButton);
-        this._menu.alignItemsInColumns(2, 2, 1);
+            this._menu = new cc.Menu(musicLabel, soundsLabel, musicToggle, soundsToggle, backButton);
+            this._menu.alignItemsInColumns(2, 2, 1);
+        } else {
+            var menuButton = this.generateTitleButton("Menu", function () {
+                that.onMenu();
+            });
+
+            var resumeButton = this.generateTitleButton("Resume", function () {
+                that.onBack();
+            });
+
+            this._menu = new cc.Menu(musicLabel, soundsLabel, musicToggle, soundsToggle, menuButton, resumeButton);
+            this._menu.alignItemsInColumns(2, 2, 1, 1, 1);
+        }
+
         this.addChild(this._menu, 100);
     },
 
 ///////////////
 // UI Events //
 ///////////////
+
+    onMenu: function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.successTrack, false);
+
+        // save any modified settings
+        NJ.saveSettings();
+
+        if(this.onMenuCallback)
+            this.onMenuCallback();
+    },
 
     onBack: function() {
         if(NJ.settings.sounds)
@@ -102,6 +130,10 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     setOnCloseCallback: function(callback) {
         this.onCloseCallback = callback;
     },
+
+    setOnMenuCallback: function(callback) {
+        this.onMenuCallback = callback;
+    },
     
 ////////////////
 // UI Helpers //
@@ -109,7 +141,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 
     generateLabel: function(title) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
-        cc.MenuItemFont.setFontSize(18);
+        cc.MenuItemFont.setFontSize(28);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
         toggleLabel.setColor(cc.color(255, 255, 255, 255));
@@ -117,7 +149,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     },
 
     generateToggle: function(callback) {
-        cc.MenuItemFont.setFontSize(26);
+        cc.MenuItemFont.setFontSize(36);
         var toggle = new cc.MenuItemToggle(
             new cc.MenuItemFont("On"),
             new cc.MenuItemFont("Off")
@@ -129,8 +161,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     },
 
     generateTitleButton: function(title, callback) {
-        cc.MenuItemFont.setFontSize(26);
-        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 20);
+        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 42);
         label.setColor(cc.color(255, 255, 255, 255));
 
         return new cc.MenuItemLabel(label, callback);

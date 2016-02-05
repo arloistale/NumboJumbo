@@ -31,13 +31,13 @@ var res = {
     spawnBlockTrack: resRoot + "Sounds/Plop.wav", 
 
     // jsons
-    distributionJson: resRoot + "distributions.json"
+    jumboDistributionsJSON: resRoot + "jumbos.json"
 };
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes) {
-    //if(cc.sys.os == cc.sys.OS_ANDROID)
-      //  return fontRes.src[0];
+    if(cc.sys.os == cc.sys.OS_ANDROID)
+        return fontRes.src;
 
     return fontRes.name;
 };
@@ -68,8 +68,5 @@ var g_game = [
     res.successTrack,
 
     // fonts
-    res.markerFont.src,
-
-    // jsons
-    res.distributionJson
+    res.markerFont.src
 ];

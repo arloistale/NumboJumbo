@@ -9,7 +9,6 @@ var NJHelper = NJHelper || {};
 // returns the key 2 about 70% of the time.
 // only use non-negative weights if you expect sane results!
 NJHelper.weightedRandom = function(pairsList){
-    console.log(pairsList);
     var totalWeight = 0;
     for (var pair in pairsList)
         totalWeight += pairsList[pair].weight;

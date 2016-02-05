@@ -28,9 +28,9 @@ var NumboLevel = cc.Class.extend({
 	// reset the level, removing all blocks
 	reset: function() {
 	    for(var i = 0; i < NJ.NUM_ROWS; ++i) {
-		for(var j = 0; j < NJ.NUM_COLS; ++j) {
-		    this.blocks[i][j] = null;
-		}
+			for(var j = 0; j < NJ.NUM_COLS; ++j) {
+				this.blocks[i][j] = null;
+			}
 	    }
 	},
 
@@ -74,9 +74,9 @@ var NumboLevel = cc.Class.extend({
 
 	    this.blocks[col].splice(row, 1);
 	    this.totalNumBlocks--;
-	    for (var j = row; j < this.blocks[col].length; ++j){
-		this.blocks[col][j].row = j;
-		this.blocks[col][j].bHasDropped = false;
+	    for (var j = row; j < this.blocks[col].length; ++j) {
+			this.blocks[col][j].row = j;
+			this.blocks[col][j].bHasDropped = false;
 	    }
 	},
 
@@ -95,8 +95,8 @@ var NumboLevel = cc.Class.extend({
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
 
 	    for (var row = 0; row < this.blocks[col].length; ++row){
-		this.blocks[col][row].bHasDropped = false;
-		this.blocks[col][row].row = row;
+			this.blocks[col][row].bHasDropped = false;
+			this.blocks[col][row].row = row;
 	    }
 	},
 
@@ -114,15 +114,15 @@ var NumboLevel = cc.Class.extend({
 
 	    // find an empty column:
 	    for (var e = col; e >= 0; --e) {
-		if (this.blocks[e].length == 0) { // found one
-		    // find index of next non-empty column:
-		    for (var n = e; n >= 0; --n) {
-			if (this.blocks[n].length > 0) { // found one
-			    this.swapColumns(n, e);
-			    break; // should maybe write this w/o break :p
+			if (this.blocks[e].length == 0) { // found one
+				// find index of next non-empty column:
+				for (var n = e; n >= 0; --n) {
+					if (this.blocks[n].length > 0) { // found one
+						this.swapColumns(n, e);
+						break; // should maybe write this w/o break :p
+					}
+				}
 			}
-		    }
-		}
 	    }
 	},
 
@@ -131,15 +131,15 @@ var NumboLevel = cc.Class.extend({
 
 	    // find an empty column:
 	    for (var e = col; e < NJ.NUM_COLS; ++e) {
-		if (this.blocks[e].length == 0) { // found one
-		    // find index of next non-empty column:
-		    for (var n = e; n < NJ.NUM_COLS; ++n) {
-			if (this.blocks[n].length > 0) {// found one
-			    this.swapColumns(n, e);
-			    break; // should maybe write this w/o break :p
+			if (this.blocks[e].length == 0) { // found one
+				// find index of next non-empty column:
+				for (var n = e; n < NJ.NUM_COLS; ++n) {
+					if (this.blocks[n].length > 0) {// found one
+						this.swapColumns(n, e);
+						break; // should maybe write this w/o break :p
+					}
+				}
 			}
-		    }
-		}
 	    }
 	},
 
@@ -161,12 +161,12 @@ var NumboLevel = cc.Class.extend({
 	// to be collapsed
 	updateBlockRowsAndCols: function() {
 	    for (var i=0; i < NJ.NUM_COLS; ++i){
-		for (var j=0; j < this.blocks[i].length; ++j){
-		    if (this.blocks[i][j]){
-			this.blocks[i][j].col = i;
-			this.blocks[i][j].row = j;
-		    }
-		}
+			for (var j=0; j < this.blocks[i].length; ++j){
+				if (this.blocks[i][j]) {
+					this.blocks[i][j].col = i;
+					this.blocks[i][j].row = j;
+				}
+			}
 	    }
 	},
 
@@ -182,24 +182,24 @@ var NumboLevel = cc.Class.extend({
 	    cc.assert(!this.isFull(), "cannot spawn brick when board is full!");
 
 	    var nonEmptyExists = false;
-	    for (var i=0; i< NJ.NUM_COLS; ++i){
-		if (this.blocks[i].length > 0)
-		    nonEmptyExists = true;
+	    for (var i=0; i< NJ.NUM_COLS; ++i) {
+			if (this.blocks[i].length > 0)
+				nonEmptyExists = true;
 	    }
 
 	    var legit = false;
-	    while (legit == false ){
-		var col = Math.floor(Math.random() * NJ.NUM_COLS);
-		if (this.blocks[col].length >= NJ.NUM_ROWS)
-		    legit = false;
-		else if (nonEmptyExists == true){
-		    if (col > 0 && this.blocks[col-1].length > 0)
-			legit = true;
-		    else if (col < NJ.NUM_COLS-1 && this.blocks[col+1].length>0)
-			legit = true;
-		}
-		else
-		    legit = true;
+	    while (legit == false ) {
+			var col = Math.floor(Math.random() * NJ.NUM_COLS);
+			if (this.blocks[col].length >= NJ.NUM_ROWS)
+				legit = false;
+			else if (nonEmptyExists == true) {
+				if (col > 0 && this.blocks[col-1].length > 0)
+					legit = true;
+				else if (col < NJ.NUM_COLS-1 && this.blocks[col+1].length>0)
+					legit = true;
+			}
+			else
+				legit = true;
 	    }
 	    
 	    return col;
@@ -217,25 +217,24 @@ var NumboLevel = cc.Class.extend({
 		    validCols.push(false);
 	    }
 	    
-	    if (this.totalNumBlocks > 0){
-		// check if column is adjacent to a non-empty column:
-		for (var c = 0; c < NJ.NUM_COLS; ++c) {
-		    if (validCols[c]) {
-			if (c == 0) {
-			    if (this.blocks[c+1].length == 0)
-				validCols[c] = false;
+	    if (this.totalNumBlocks > 0) {
+			// check if column is adjacent to a non-empty column:
+			for (var c = 0; c < NJ.NUM_COLS; ++c) {
+				if (validCols[c]) {
+					if (c == 0) {
+						if (this.blocks[c+1].length == 0)
+						validCols[c] = false;
+					}
+					else if (c == NJ.NUM_COLS - 1) {
+						if ( this.blocks[c-1].length == 0)
+						validCols[c] = false;
+					}
+					else if (this.blocks[c-1].length == 0
+						 && this.blocks[c+1].length == 0) {
+						validCols[c] = false;
+					}
+				}
 			}
-			else if (c == NJ.NUM_COLS - 1) {
-			    if ( this.blocks[c-1].length == 0)
-				validCols[c] = false;
-			}
-			else if (this.blocks[c-1].length == 0
-				 && this.blocks[c+1].length == 0) {
-			    validCols[c] = false;
-			}
-		    }
-		}
-
 	    }
 	    
 	    var validAsList = [];
@@ -284,7 +283,6 @@ var NumboLevel = cc.Class.extend({
 		for(var i=0; i<weights.length; i++) {
 			weightObjects.push({key: i, weight: weights[i]});
 		}
-		console.log(weightObjects);
 
 		return weightObjects;
 	},
@@ -315,4 +313,4 @@ var NumboLevel = cc.Class.extend({
 		return null;
 	    
 	}
-    });
+});

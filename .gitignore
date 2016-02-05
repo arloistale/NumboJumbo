@@ -90,3 +90,5 @@ Android/bin/
 Android/gen/
 Android/obj/
 Android/lint.xml
+
+runtime/
