@@ -121,12 +121,13 @@ var NumboController = cc.Class.extend({
 	    // Set up val/col possibilities
 	    //var vals = [1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,6,6,7,7,8,8,9,9];
 
-	    var cols = this._numboLevel.getAllValidCols();
-	
+	    //var cols = this._numboLevel.getAllValidCols();
+	    var col = NJHelper.weightedRandom(this._numboLevel.getColWeights());
+
 	    // Pick random val/col from set
 	    //var val = vals[Math.floor(Math.random()*vals.length)];
 	    var val = this.distribution[Math.floor(Math.random()*this.distribution.length)];
-	    var col = cols[Math.floor(Math.random()*cols.length)];
+	    //var col = cols[Math.floor(Math.random()*cols.length)];
 	    
 	    if(NJ.settings.sounds)
 		cc.audioEngine.playEffect(res.spawnBlockTrack);

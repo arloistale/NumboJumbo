@@ -245,6 +245,48 @@ var NumboLevel = cc.Class.extend({
 	    
 	},
 
+	// returns list of objects containing column weighting information
+	getColWeights: function() {
+		var weights = [];
+		var weightObjects = [];
+
+		for(var c=0; c<NJ.NUM_COLS; c++) {
+			// Get number of spaces in each column.
+			weights[c] = NJ.NUM_ROWS - this.blocks[c].length;
+			// Ignore columns which have only empty neighbors.
+			if (c == 0) {
+				if (this.blocks[c + 1].length == 0)
+					weights[c] = 0;
+			}
+			else if (c == NJ.NUM_COLS - 1) {
+				if (this.blocks[c - 1].length == 0)
+					weights[c] = 0;
+			}
+			else if (this.blocks[c - 1].length == 0
+				&& this.blocks[c + 1].length == 0) {
+				weights[c] = 0;
+			}
+			// Square weights.
+			weights[c] = Math.pow(weights[c], 2);
+		}
+
+		// Set weights equal if board is empty.
+		if(weights.every(function(element) {
+			return element === 0;
+		})) {
+			for(var i=0; i<weights.length; i++)
+				weights[i] = 1;
+		}
+
+		// Convert weights to objects.
+		for(var i=0; i<weights.length; i++) {
+			weightObjects.push({key: i, weight: weights[i]});
+		}
+		console.log(weightObjects);
+
+		return weightObjects;
+	},
+
 	// returns whether level is currently full of blocks
 	isFull: function() {
 	    return this.totalNumBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
