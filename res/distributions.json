@@ -1,33 +1,120 @@
 {
-      "normal": {
-	"timer": 1.0,
-        "number_list": [1,2,3,4,5,6,7,8,9]
-      },
-      "normal-adjusted": {
-        "number_list": [1,1,1,1,2,2,2,3,3,3,4,4,5,5,6,7,8,9]
-      },
-      "odds": {
-	"timer": 1.0,		
-        "number_list": [1,1,1,3,3,3,5,5,7,9,9,11,13,15]
-      },
-      "fives": {
-	"timer": 1.0,			
-        "number_list": [5,5,10,15,20,25,30]
-      },
-      "primes": {
-	"timer": 1.0,			
-        "number_list": [1,1,1,2,2,2,2,3,3,3,5,5,7,7,11,13,17,19,23,29,31]
-      },
-      "one-mania": {
-	"timer": 0.333,			
-        "number_list": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,10,15]
-      },
-      "normal-with-negatives": {
-        "timer": 1.0,
-        "number_list": [1,2,3,4,5,6,7,8,9,-1,-2,-3,-4,-5,-6,-7,-8,-9]
-      },
-      "normal-adjusted-with-negatives": {
-        "timer": 1.0,
-        "number_list": [1,1,1,1,2,2,2,3,3,3,4,4,5,5,6,7,8,9,-1,-1,-1,-1,-2,-2,-2,-3,-3,-3,-4,-4,-5,-5,-6,-7,-8,-9]
-      }
+  "normal": {
+    "name": "Normal",
+    "spawnTime": 1.0,
+    "numberList": [{"key":1, "weight":1},
+      {"key":2, "weight":1},
+      {"key":3, "weight":1},
+      {"key":4, "weight":1},
+      {"key":5, "weight":1},
+      {"key":6, "weight":1},
+      {"key":7, "weight":1},
+      {"key":8, "weight":1},
+      {"key":9, "weight":1}]
+  },
+  "normal-adjusted": {
+    "name": "Normal Adjusted",
+    "spawnTime": 1.0,
+    "numberList": [{"key":1, "weight":4},
+      {"key":2, "weight":3},
+      {"key":3, "weight":3},
+      {"key":4, "weight":2},
+      {"key":5, "weight":2},
+      {"key":6, "weight":1},
+      {"key":7, "weight":1},
+      {"key":8, "weight":1},
+      {"key":9, "weight":1}]
+  },
+  "odds": {
+    "name": "Odds",
+    "spawnTime": 1.0,
+    "numberList": [{"key":1, "weight":3},
+      {"key":3, "weight":2},
+      {"key":5, "weight":2},
+      {"key":7, "weight":1},
+      {"key":9, "weight":2},
+      {"key":11, "weight":1},
+      {"key":13, "weight":1},
+      {"key":15, "weight":1}]
+  },
+  "fives": {
+    "name": "Fives",
+    "spawnTime": 1.0,
+    "numberList": [5,5,10,15,20,25,30],
+    "numberList": [{"key":5, "weight":2},
+      {"key":10, "weight":1},
+      {"key":15, "weight":1},
+      {"key":20, "weight":1},
+      {"key":25, "weight":1},
+      {"key":30, "weight":1}]
+  },
+  "primes": {
+    "name": "Primes",
+    "spawnTime": 1.0,
+    "numberList": [{"key":1, "weight":1},
+      {"key":2, "weight":1},
+      {"key":3, "weight":1},
+      {"key":5, "weight":1},
+      {"key":7, "weight":1},
+      {"key":11, "weight":1},
+      {"key":13, "weight":1},
+      {"key":17, "weight":1},
+      {"key":19, "weight":1},
+      {"key":23, "weight":1},
+      {"key":29, "weight":1}]
+  },
+  "one-mania": {
+    "name": "One Mania",
+    "spawnTime": 0.333,
+    "numberList": [{"key":1, "weight":1},
+      {"key":5, "weight":1},
+      {"key":10, "weight":1},
+      {"key":15, "weight":1}]
+  },
+  "normal-negatives": {
+    "name": "Normal + Negatives",
+    "spawnTime": 1.0,
+    "numberList": [1,2,3,4,5,6,7,8,9,-1,-2,-3,-4,-5,-6,-7,-8,-9],
+    "numberList": [{"key":1, "weight":1},
+      {"key":2, "weight":1},
+      {"key":3, "weight":1},
+      {"key":4, "weight":1},
+      {"key":5, "weight":1},
+      {"key":6, "weight":1},
+      {"key":7, "weight":1},
+      {"key":8, "weight":1},
+      {"key":9, "weight":1},
+      {"key":-1, "weight":1},
+      {"key":-2, "weight":1},
+      {"key":-3, "weight":1},
+      {"key":-4, "weight":1},
+      {"key":-5, "weight":1},
+      {"key":-6, "weight":1},
+      {"key":-7, "weight":1},
+      {"key":-8, "weight":1},
+      {"key":-9, "weight":1}]
+  },
+  "normal-adjusted-negatives": {
+    "name": "Normal Adjusted + Negatives",
+    "spawnTime": 1.0,
+    "numberList": [1,1,1,1,2,2,2,3,3,3,4,4,5,5,6,7,8,9,-1,-1,-1,-1,-2,-2,-2,-3,-3,-3,-4,-4,-5,-5,-6,-7,-8,-9],
+    "numberList": [{"key":1, "weight":4},
+      {"key":2, "weight":3},
+      {"key":3, "weight":3},
+      {"key":4, "weight":2},
+      {"key":5, "weight":2},
+      {"key":6, "weight":1},
+      {"key":7, "weight":1},
+      {"key":8, "weight":1},
+      {"key":9, "weight":1},
+      {"key":-1, "weight":4},
+      {"key":-2, "weight":3},
+      {"key":-3, "weight":3},
+      {"key":-4, "weight":2},
+      {"key":-5, "weight":2},
+      {"key":-6, "weight":1},
+      {"key":-7, "weight":1},
+      {"key":-8, "weight":1},
+      {"key":-9, "weight":1}]
+  }
 }

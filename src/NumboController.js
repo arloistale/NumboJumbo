@@ -113,8 +113,10 @@ var NumboController = cc.Class.extend({
 
 	    // Set up val/col
 	    var col = NJHelper.weightedRandom(this._numboLevel.getColWeights());
-	    var val = this.distribution[Math.floor(Math.random()*this.distribution.length)];
-	    
+	    //var val = this.distribution[Math.floor(Math.random()*this.distribution.length)];
+	    var val = NJHelper.weightedRandom(this.distribution);
+
+
 	    if(NJ.settings.sounds)
 		cc.audioEngine.playEffect(res.spawnBlockTrack);
 
@@ -196,8 +198,8 @@ var NumboController = cc.Class.extend({
 	},
 
 	setDistribution: function(distribution) {
-	    this.distribution = distribution["number_list"];
-	    this.spawnTimer = distribution["timer"];
+	    this.distribution = distribution["numberList"];
+	    this.spawnTimer = distribution["spawnTime"];
 	}
 
     });
