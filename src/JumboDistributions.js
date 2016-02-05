@@ -24,12 +24,16 @@ NJ.loadJumbosFromJSON = function() {
             return;
         }
 
+        var currIndex = 0;
         for(var key in data) {
             NJ.jumbos.data[key] = {
+                index: currIndex,
                 name: data[key].name,
                 spawnTime: data[key].spawnTime,
                 numberList: data[key].numberList
-            }
+            };
+
+            currIndex++;
         }
     });
 };

@@ -129,6 +129,9 @@ NJ.sendAnalytics = function() {
         return v.toString(16);
     });
 
+    var jumboIndex = NJ.getCurrentJumbo().index;
+    console.log(jumboIndex);
+
     // send over relevant stats data to Google Analytics
     ga('set', 'dimension1', rid);
     ga('set', 'metric1', NJ.stats.blocksCleared);
@@ -136,6 +139,7 @@ NJ.sendAnalytics = function() {
     ga('set', 'metric3', NJ.stats.maxComboLength);
     ga('set', 'metric4', NJ.stats.level);
     ga('set', 'metric5', NJ.stats.score);
+    ga('set', 'metric6', jumboIndex);
 
     ga('send', 'event', 'Game', 'end', 'Game Session Data');
 };
