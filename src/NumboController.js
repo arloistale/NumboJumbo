@@ -97,10 +97,10 @@ var NumboController = cc.Class.extend({
 		for(var i = 0; i < this._selectedBlocks.length; ++i)
 		    this._numboLevel.killBlock(this._selectedBlocks[i]);
 
-		this._numboLevel.collapseColumnsToward(lastCol);
-		this._numboLevel.updateBlockRowsAndCols();
+			this._numboLevel.collapseColumnsToward(lastCol);
+			this._numboLevel.updateBlockRowsAndCols();
 
-		this.checkForLevelUp();
+			this.checkForLevelUp();
 	    }
 
 	    this.deselectAllBlocks();
@@ -134,10 +134,9 @@ var NumboController = cc.Class.extend({
 	// check if we should level up if blocks cleared is 
 	// greater than level up threshold
 	checkForLevelUp: function() {
-
 	    // level up
-	    if (NJ.stats.blocksCleared >= this.blocksToLevelUp() ) {
-		NJ.stats.level++;
+	    while (NJ.stats.blocksCleared >= this.blocksToLevelUp()) {
+			NJ.stats.level++;
 	    }
 	},
 
@@ -154,7 +153,7 @@ var NumboController = cc.Class.extend({
 	    var b = 5.0;
 	    var c = 2.0;
 	    var L = NJ.stats.level;
-	    return Math.round( a*L*L + b*L + c );
+	    return Math.round( a*L*L+b*L+c );
 	},
 	
 	getBlocksToLevelString: function() {
@@ -205,5 +204,4 @@ var NumboController = cc.Class.extend({
 	    this.distribution = distribution["number_list"];
 	    this.spawnTimer = distribution["timer"];
 	}
-
-    });
+});

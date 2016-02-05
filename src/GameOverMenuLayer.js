@@ -6,9 +6,9 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 
     // UI Data
     _menu: null,
-
     _finalScoreLabel: null,
 
+    // Callbacks Data
     onMenuCallback: null,
     
 ////////////////////

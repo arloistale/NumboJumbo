@@ -4,7 +4,7 @@
 
 var NumboGameLayer = cc.Layer.extend({
 	// UI Data
-	_numboHeader: null,
+	_numboHeaderLayer: null,
 	_settingsMenuLayer: null,
 	_gameOverMenuLayer: null,
 
@@ -41,7 +41,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.initAudio();
 
 
-	    this._numboHeader.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
+	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 
 	    // begin scheduling block drops
 	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
@@ -123,11 +123,11 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    var that = this;
 
-	    this._numboHeader = new NumboHeaderLayer();
-	    this._numboHeader.setOnPauseCallback(function() {
+	    this._numboHeaderLayer = new NumboHeaderLayer();
+	    this._numboHeaderLayer.setOnPauseCallback(function() {
 		    that.onPause();
 		});
-	    this.addChild(this._numboHeader, 999);
+	    this.addChild(this._numboHeaderLayer, 999);
 	},
 
 	// initialize the empty level into the scene
@@ -156,8 +156,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    this._numboController = new NumboController();
 	    this._numboController.init();
 
-	    this._numboController.setDistribution(cc.loader.getRes(res.distributionJson)["normal-with-negatives"]);
-
+	    this._numboController.setDistribution(cc.loader.getRes(res.distributionJson)["one-mania"]);
 	},
 
 	// initialize game audio
@@ -224,9 +223,6 @@ var NumboGameLayer = cc.Layer.extend({
 	    cc.director.pause();
 	    cc.eventManager.pauseTarget(this, true);
 
-	    // save stats
-	    NJ.sendAnalytics();
-
 	    this._gameOverMenuLayer = new GameOverMenuLayer();
 	    this._gameOverMenuLayer.setOnMenuCallback(function() {
 		    that.onMenu();
@@ -244,9 +240,12 @@ var NumboGameLayer = cc.Layer.extend({
         
 	    cc.director.pause();
 	    cc.eventManager.pauseTarget(this, true);
-	    this._settingsMenuLayer = new SettingsMenuLayer();
+	    this._settingsMenuLayer = new SettingsMenuLayer(true);
 	    this._settingsMenuLayer.setOnCloseCallback(function() {
 		    that.onResume();
+		});
+		this._settingsMenuLayer.setOnMenuCallback(function() {
+			that.onMenu();
 		});
 	    this.addChild(this._settingsMenuLayer, 999);
 	},
@@ -264,6 +263,9 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// on game over when player chooses to go to menu we return to menu
 	onMenu: function() {
+		// first send the analytics for the current game session
+		NJ.sendAnalytics();
+
 	    cc.director.resume();
 	    cc.eventManager.resumeTarget(this, true);
 	    this.removeChild(this._gameOverMenuLayer);
@@ -308,7 +310,7 @@ var NumboGameLayer = cc.Layer.extend({
 		}
 	    }
 
-	    this._numboHeader.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
+	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	},
 
 	/////////////

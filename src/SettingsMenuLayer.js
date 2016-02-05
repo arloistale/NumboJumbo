@@ -4,23 +4,26 @@
 
 var SettingsMenuLayer = cc.LayerColor.extend({
 
+    // UI Data
     _menu: null,
 
+    // Callbacks Data
+    onMenuCallback: null,
     onCloseCallback: null,
     
 ////////////////////
 // Initialization //
 ////////////////////
 
-    ctor: function() {
+    ctor: function(bInGame) {
         this._super();
 
         this.init(cc.color(0, 0, 0, 255));
 
-        this.initUI();
+        this.initUI(bInGame);
     },
 
-    initUI: function() {
+    initUI: function(bInGame) {
         var sp = new cc.Sprite(res.loading_png);
         sp.anchorX = 0;
         sp.anchorY = 0;
@@ -53,18 +56,43 @@ var SettingsMenuLayer = cc.LayerColor.extend({
         state = (NJ.settings.sounds ? 0 : 1);
         soundsToggle.setSelectedIndex(state);
 
-        var backButton = this.generateTitleButton("Back", function() {
-            that.onBack();
-        });
+        if(!bInGame) {
+            var backButton = this.generateTitleButton("Back", function () {
+                that.onBack();
+            });
 
-        this._menu = new cc.Menu(musicLabel, soundsLabel, musicToggle, soundsToggle, backButton);
-        this._menu.alignItemsInColumns(2, 2, 1);
+            this._menu = new cc.Menu(musicLabel, soundsLabel, musicToggle, soundsToggle, backButton);
+            this._menu.alignItemsInColumns(2, 2, 1);
+        } else {
+            var menuButton = this.generateTitleButton("Menu", function () {
+                that.onMenu();
+            });
+
+            var resumeButton = this.generateTitleButton("Resume", function () {
+                that.onBack();
+            });
+
+            this._menu = new cc.Menu(musicLabel, soundsLabel, musicToggle, soundsToggle, menuButton, resumeButton);
+            this._menu.alignItemsInColumns(2, 2, 1, 1, 1);
+        }
+
         this.addChild(this._menu, 100);
     },
 
 ///////////////
 // UI Events //
 ///////////////
+
+    onMenu: function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.successTrack, false);
+
+        // save any modified settings
+        NJ.saveSettings();
+
+        if(this.onMenuCallback)
+            this.onMenuCallback();
+    },
 
     onBack: function() {
         if(NJ.settings.sounds)
@@ -101,6 +129,10 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     
     setOnCloseCallback: function(callback) {
         this.onCloseCallback = callback;
+    },
+
+    setOnMenuCallback: function(callback) {
+        this.onMenuCallback = callback;
     },
     
 ////////////////
