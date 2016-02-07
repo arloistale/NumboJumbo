@@ -23,8 +23,8 @@ NJ.NUM_ROWS = 7;
 // UI
 NJ.HEADER_HEIGHT = 56;
 
-// units
-NJ.UNIT_TAG = {
+// node tags
+NJ.tags = {
     BLOCK: 9001
 };
 
@@ -130,7 +130,6 @@ NJ.sendAnalytics = function() {
     });
 
     var jumboIndex = NJ.getCurrentJumbo().index;
-    console.log(jumboIndex);
 
     // send over relevant stats data to Google Analytics
     ga('set', 'dimension1', rid);

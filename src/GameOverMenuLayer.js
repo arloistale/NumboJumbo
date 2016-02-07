@@ -40,7 +40,7 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 
         var that = this;
 
-        var headerLabel = this.generateLabel("OUT OF SPACE!");
+        var headerLabel = this.generateLabel("OUT OF SPACE!", 56);
 
         var finalScoreTitleLabel = this.generateLabel("Final Score");
 
@@ -80,9 +80,9 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 // UI Helpers //
 ////////////////
 
-    generateLabel: function(title) {
+    generateLabel: function(title, size) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
-        cc.MenuItemFont.setFontSize(42);
+        cc.MenuItemFont.setFontSize(size || 36);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
         toggleLabel.setColor(cc.color(255, 255, 255, 255));
@@ -90,8 +90,7 @@ var GameOverMenuLayer = cc.LayerColor.extend({
     },
 
     generateTitleButton: function(title, callback) {
-        cc.MenuItemFont.setFontSize(26);
-        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 20);
+        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 42);
         label.setColor(cc.color(255, 255, 255, 255));
 
         return new cc.MenuItemLabel(label, callback);

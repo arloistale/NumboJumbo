@@ -68,8 +68,5 @@ var g_game = [
     res.successTrack,
 
     // fonts
-    res.markerFont.src,
-
-    // jsons
-    res.jumboDistributionsJSON
+    res.markerFont.src
 ];

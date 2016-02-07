@@ -22,5 +22,4 @@ NJHelper.weightedRandom = function(pairsList){
     }
 
     console.log("uh oh, i should have returned by now!");
-
 };

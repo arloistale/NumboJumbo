@@ -18,11 +18,9 @@ var NumboGameLayer = cc.Layer.extend({
 	// Controller Data
 	_numboController: null,
 
-	_distributionsData: null,
-
-	////////////////////
-	// Initialization //
-	////////////////////
+////////////////////
+// Initialization //
+////////////////////
 
 	ctor: function () {
 	    this._super();
@@ -37,7 +35,6 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.initUI();
 	    this.initLevel();
 	    this.initNumboController();
-	    this.initDistributions();
 	    this.initAudio();
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
@@ -145,10 +142,6 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(levelNode);
 	},
 
-	initDistributions: function() {
-	    this._distributionsData = cc.loader.getRes(res.jumboDistributionsJSON);
-	},
-
 	// initialize numbo controller (formerly the difficulty manager)
 	// into the scene
 	initNumboController: function() {
@@ -164,10 +157,42 @@ var NumboGameLayer = cc.Layer.extend({
 	    // start the music
 	    cc.audioEngine.playMusic(res.backgroundTrack, true);
 	},
+                                     
+ /////////////////////////////
+ // GAME STATE MANIPULATION //
+ /////////////////////////////
 
-	////////////////////
-	// Block Spawning //
-	////////////////////
+	// pauses the game, halting all actions and schedulers
+	pauseGame: function() {
+        cc.eventManager.pauseTarget(this, true);
+                                   
+        this.pause();
+
+        var children = this.getChildren();
+
+        for(var i = 0; i < children.length; ++i) {
+            if(children[i].getTag() == NJ.tags.BLOCK)
+                children[i].pause();
+        }
+	},
+
+	// resumes all actions and schedulers
+	resumeGame: function() {
+        cc.eventManager.resumeTarget(this, true);
+
+        this.resume();
+
+        var children = this.getChildren();
+
+        for(var i = 0; i < children.length; ++i) {
+            if(children[i].getTag() == NJ.tags.BLOCK)
+                children[i].resume();
+        }
+	},
+
+////////////////////
+// Block Spawning //
+////////////////////
 
 	// move scene block sprite into place
 	moveBlockSprite: function(block) {
@@ -184,9 +209,12 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	scheduleSpawn: function() {
+        // TODO: Order matters when scheduling, must schedule before spawning WHY?
+        // PROBABLY because we pause, but then it schedules another one after
+        this.unschedule(this.scheduleSpawn);
+        this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
+                                     
 	    this.spawnDropRandomBlock();
-	    this.unschedule(this.scheduleSpawn);
-	    this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
 	},
 
 	// spawns a block at a random column in the level
@@ -194,12 +222,11 @@ var NumboGameLayer = cc.Layer.extend({
 	// NOTE: This is the function you should be using to put new blocks into the game
 	// TODO: Improve structure (don't check game over state here for improved separation of concerns)
 	spawnDropRandomBlock: function() {
-	    if(this.isGameOver()) {
-		this.onGameOver();
-
-		return;
+	    if(this._numboController.isGameOver()) {
+			this.onGameOver();
+			return;
 	    }
-	    
+                        
 	    var block = this._numboController.dropRandomBlock();
 	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
 	    block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
@@ -213,12 +240,14 @@ var NumboGameLayer = cc.Layer.extend({
 	///////////////////////
 
 	onGameOver: function() {
+        // first send the analytics for the current game session
+        NJ.sendAnalytics();
+                                     
 	    var that = this;
 
 	    cc.audioEngine.stopMusic();
-	    cc.audioEngine.stopAllEffects();
-	    cc.director.pause();
-	    cc.eventManager.pauseTarget(this, true);
+                                     
+        this.pauseGame();
 
 	    this._gameOverMenuLayer = new GameOverMenuLayer();
 	    this._gameOverMenuLayer.setOnMenuCallback(function() {
@@ -227,16 +256,19 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(this._gameOverMenuLayer, 999);
 	},
 
-	///////////////
-	// UI Events //
-	///////////////
+///////////////
+// UI Events //
+///////////////
 
-	// on pause, opens up the settings menu
+	// on pause, pauses game and opens up the settings menu
 	onPause: function() {
 	    var that = this;
-        
-	    cc.director.pause();
-	    cc.eventManager.pauseTarget(this, true);
+
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.successTrack, false);
+
+	    this.pauseGame();
+
 	    this._settingsMenuLayer = new SettingsMenuLayer(true);
 	    this._settingsMenuLayer.setOnCloseCallback(function() {
 		    that.onResume();
@@ -249,37 +281,29 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// on closing previously opened settings menu we resume
 	onResume: function() {
-	    cc.director.resume();
-	    cc.eventManager.resumeTarget(this, true);
+	    this.resumeGame();
+
 	    this.removeChild(this._settingsMenuLayer);
 
 	    // play music again if music settings turned on
 	    if(NJ.settings.music)
-		cc.audioEngine.playMusic(res.backgroundTrack);
+		    cc.audioEngine.playMusic(res.backgroundTrack);
 	},
 
 	// on game over when player chooses to go to menu we return to menu
 	onMenu: function() {
-		// first send the analytics for the current game session
-		NJ.sendAnalytics();
-
-	    cc.director.resume();
-	    cc.eventManager.resumeTarget(this, true);
-	    this.removeChild(this._gameOverMenuLayer);
-
 	    //load resources
 	    cc.LoaderScene.preload(g_menu, function () {
 		    cc.audioEngine.stopMusic();
-		    cc.audioEngine.stopAllEffects();
 		    var scene = new cc.Scene();
 		    scene.addChild(new NumboMenuLayer());
 		    cc.director.runScene(new cc.TransitionFade(0.5, scene));
 		}, this);
 	},
 
-	//////////////////
-	// Touch Events //
-	//////////////////
+//////////////////
+// Touch Events //
+//////////////////
 
 	// on touch began, tries to find level coordinates for the touch and selects block accordingly
 	onTouchBegan: function(touchPosition) {
@@ -317,14 +341,9 @@ var NumboGameLayer = cc.Layer.extend({
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	},
 
-	/////////////
-	// Helpers //
-	/////////////
-
-	// check if game over state has been reached (level has filled up)
-	isGameOver: function() {
-	    return this._numboController.isGameOver();
-	},
+/////////////
+// Helpers //
+/////////////
 
 	// attempt to convert point to location on grid
 	convertPointToLevelCoords: function(point) {
@@ -345,4 +364,4 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    return null;
 	}
-    });
+});
