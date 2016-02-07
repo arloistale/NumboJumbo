@@ -36,7 +36,7 @@ var res = {
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes) {
-    if(cc.sys.os == cc.sys.OS_ANDROID)
+    if(cc.sys.isNative)
         return fontRes.src;
 
     return fontRes.name;
