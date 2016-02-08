@@ -121,5 +121,31 @@
       {"key":-8, "weight":1},
       {"key":-9, "weight":1}
     ]
+  },
+
+  "large-numbers": {
+    "name": "Large Numbers",
+    "spawnTime": 1.0,
+    "numberList": [{"key":50, "weight":5},
+      {"key":100, "weight":4},
+      {"key":150, "weight":2},
+      {"key":200, "weight":4},
+      {"key":250, "weight":3},
+      {"key":300, "weight":3},
+      {"key":350, "weight":2},
+      {"key":400, "weight":3},
+      {"key":450, "weight":2},
+      {"key":500, "weight":2},
+      {"key":550, "weight":1},
+      {"key":600, "weight":2},
+      {"key":650, "weight":1},
+      {"key":700, "weight":2},
+      {"key":750, "weight":1},
+      {"key":800, "weight":2},
+      {"key":850, "weight":1},
+      {"key":900, "weight":2},
+      {"key":950, "weight":1},
+      {"key":1000, "weight":2}
+    ]
   }
 }
