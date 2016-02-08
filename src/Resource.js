@@ -31,7 +31,12 @@ var res = {
     spawnBlockTrack: resRoot + "Sounds/Plop.wav", 
 
     // jsons
-    jumboDistributionsJSON: resRoot + "jumbos.json"
+    jumboDistributionsJSON: resRoot + "jumbos.json",
+
+    backBottom: resRoot + "Images/bottom.png",
+    backMiddle: resRoot + "Images/middle.png",
+    backTop: resRoot + "Images/Top.png",
+    block: resRoot + "Images/blocks.png"
 };
 
 // returns proper font name based on platform
@@ -68,5 +73,10 @@ var g_game = [
     res.successTrack,
 
     // fonts
-    res.markerFont.src
+    res.markerFont.src,
+
+    res.backBottom,
+    res.backMiddle,
+    res.backTop,
+    res.block
 ];

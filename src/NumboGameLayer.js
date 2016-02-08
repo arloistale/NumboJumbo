@@ -9,7 +9,11 @@ var NumboGameLayer = cc.Layer.extend({
 	_gameOverMenuLayer: null,
 
 	// Sprite Data
-	_backgroundSprite: null,
+	_backgroundSpriteBottom: null,
+	_backgroundSpriteMiddle: null,
+	_backgroundSpriteMiddleTwo: null,
+	_backgroundSpriteTop: null,
+	_backgroundSpriteTopTwo: null,
 
 	// Level Data
 	_levelBounds: null,
@@ -50,8 +54,8 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    // add the background
 	    // TODO: Move this to a separate layer to be more organized
-	    this._backgroundSprite = new cc.Sprite(res.backgroundImage);
-	    this._backgroundSprite.attr({
+	    this._backgroundSpriteBottom = new cc.Sprite(res.backBottom);
+	    this._backgroundSpriteBottom.attr({
 		    x: size.width / 2,
 			y: size.height / 2,
 			anchorX: 0.5,
@@ -59,7 +63,79 @@ var NumboGameLayer = cc.Layer.extend({
 			scale: 1,
 			rotation: 0
 			});
-	    this.addChild(this._backgroundSprite, 0);
+	    this.addChild(this._backgroundSpriteBottom, 0);
+
+		this._backgroundSpriteMiddle = new cc.Sprite(res.backMiddle);
+		this._backgroundSpriteMiddle.attr({
+			x: size.width / 2,
+			y: size.height,
+			anchorX: 0.5,
+			anchorY: 1,
+			scale: 1,
+			rotation: 0
+		});
+		this.addChild(this._backgroundSpriteMiddle, 0);
+
+		this._backgroundSpriteMiddleTwo = new cc.Sprite(res.backMiddle);
+		this._backgroundSpriteMiddleTwo.attr({
+			x: size.width / 2,
+			y: size.height-res.backMiddle.height,
+			anchorX: 0.5,
+			anchorY: 1,
+			scale: 1,
+			rotation: 0
+		});
+		this.addChild(this._backgroundSpriteMiddleTwo, 0);
+
+		this._backgroundSpriteTop = new cc.Sprite(res.backTop);
+		this._backgroundSpriteTop.attr({
+			x: size.width / 2,
+			y: size.height,
+			anchorX: 0.5,
+			anchorY: 1,
+			scale: 1,
+			rotation: 0
+		});
+		this.addChild(this._backgroundSpriteTop, 0);
+
+		this._backgroundSpriteTopTwo = new cc.Sprite(res.backTop);
+		this._backgroundSpriteTopTwo.attr({
+			x: size.width / 2,
+			y: size.height-res.backTop.height,
+			anchorX: 0.5,
+			anchorY: 1,
+			scale: 1,
+			rotation: 0
+		});
+		this.addChild(this._backgroundSpriteTopTwo, 0);
+
+		this.schedule(this.moveBackground,.01);
+	},
+
+	moveBackground: function() {
+		this._backgroundSpriteMiddle.y += 1;
+		this._backgroundSpriteMiddleTwo.y += 1;
+		this._backgroundSpriteTop.y += 2;
+		this._backgroundSpriteTopTwo.y += 2;
+
+		if(this._backgroundSpriteMiddle.y > this._backgroundSpriteMiddleTwo.y) {
+			if(this._backgroundSpriteMiddleTwo.y > cc.winSize.height)
+				this._backgroundSpriteMiddle.y = this._backgroundSpriteMiddleTwo.y - this._backgroundSpriteMiddle.height;
+		}
+		else {
+			if(this._backgroundSpriteMiddle.y > cc.winSize.height)
+				this._backgroundSpriteMiddleTwo.y = this._backgroundSpriteMiddle.y - this._backgroundSpriteMiddleTwo.height;
+		}
+
+		if(this._backgroundSpriteTop.y > this._backgroundSpriteTopTwo.y) {
+			if(this._backgroundSpriteTopTwo.y > cc.winSize.height)
+				this._backgroundSpriteTop.y = this._backgroundSpriteTopTwo.y - this._backgroundSpriteTop.height;
+		}
+		else {
+			if(this._backgroundSpriteTop.y > cc.winSize.height)
+				this._backgroundSpriteTopTwo.y = this._backgroundSpriteTop.y - this._backgroundSpriteTopTwo.height;
+		}
+
 	},
 
 	// initialize input for the game
