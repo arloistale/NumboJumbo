@@ -344,7 +344,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    var that = this;
 
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
 
 	    this.pauseGame();
 
