@@ -20,7 +20,7 @@ var res = {
 
 	// images
     buttonImage: resRoot + "Images/Button.png",
-    backgroundImage: resRoot + "Images/Background.png",
+    backgroundImage: resRoot + "Images/middle.png",
     glowImage: resRoot + "Images/Glow.png",
     blockImage: resRoot + "Images/blocks.png",
 
