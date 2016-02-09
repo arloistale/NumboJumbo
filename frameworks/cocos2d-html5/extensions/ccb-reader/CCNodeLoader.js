@@ -605,7 +605,7 @@ cc.NodeLoader = cc.Class.extend({
 
         //TODO Fix me if it is wrong
         /* If the fontTTF comes with the ".ttf" extension, prepend the absolute path.
-         * System Fonts come without the ".ttf" extension and do not need the path prepended. */
+         * System fonts come without the ".ttf" extension and do not need the path prepended. */
         /*if (cc.CCBReader.endsWith(fontTTF.toLowerCase(), ttfEnding)) {
             fontTTF = ccbReader.getCCBRootPath() + fontTTF;
         }*/

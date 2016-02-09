@@ -38,6 +38,10 @@ var NumboMenuLayer = cc.Layer.extend({
             rotation: 0
         });
         this.addChild(backgroundSprite, 10, 1);
+
+        var rotatePoint = new cc.RotateBy(250, 360); // <- Rotate the node by 360 degrees in 5 seconds.
+        var rotateForever = new cc.RepeatForever(rotatePoint); // <- Keeps the node rotating forever.
+        backgroundSprite.runAction(rotateForever);
     },
 
     // initialize menu elements

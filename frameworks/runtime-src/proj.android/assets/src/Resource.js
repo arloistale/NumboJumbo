@@ -5,7 +5,6 @@
  */
 
 var resRoot = "";
-var backgroundsRoot = "Images/facet/";
 
 if(!cc.sys.isNative) {
     resRoot = "res/";
@@ -23,7 +22,7 @@ var res = {
     buttonImage: resRoot + "Images/Button.png",
     backgroundImage: resRoot + "Images/Background.png",
     glowImage: resRoot + "Images/Glow.png",
-    blockImage: resRoot + "Images/Projectile.png",
+    blockImage: resRoot + "Images/blocks.png",
 
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
@@ -34,18 +33,16 @@ var res = {
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
 
-    backBottom: resRoot + backgroundsRoot + "back.png",
-    backMiddle: resRoot + backgroundsRoot + "middle.png",
-    backTop: resRoot + backgroundsRoot + "Top.png",
-
-    block: resRoot + "Images/blocks.png"
+    backBottom: resRoot + "Images/back.png",
+    backMiddle: resRoot + "Images/middle.png",
+    backTop: resRoot + "Images/Top.png"
 };
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes) {
-    if(cc.sys.isNative)
+    if(cc.sys.os == cc.sys.OS_ANDROID)
         return fontRes.src;
-
+    
     return fontRes.name;
 };
 
@@ -65,7 +62,6 @@ var g_menu = [
 // resources for ingame
 var g_game = [
     // images
-    res.backgroundImage,
     res.glowImage,
     res.blockImage,
     res.buttonImage,
@@ -79,6 +75,5 @@ var g_game = [
 
     res.backBottom,
     res.backMiddle,
-    res.backTop,
-    res.block
+    res.backTop
 ];

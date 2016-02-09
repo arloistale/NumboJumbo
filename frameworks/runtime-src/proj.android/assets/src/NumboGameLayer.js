@@ -28,21 +28,19 @@ var NumboGameLayer = cc.Layer.extend({
 
 	ctor: function () {
 	    this._super();
-
+        
 	    NJ.resetStats();
 
 	    // init time
 	    NJ.stats.startTime = Date.now();
 	    
 	    this.initBackground();
+        this.initNumboController();
 	    this.initInput();
 	    this.initUI();
 	    this.initLevel();
-	    this.initNumboController();
 	    this.initAudio();
-
-	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
-
+                                     
 	    // begin scheduling block drops
 	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
 	    this.schedule(this.scheduleSpawn, 0.1*20);
@@ -79,12 +77,13 @@ var NumboGameLayer = cc.Layer.extend({
 		this._backgroundSpriteMiddleTwo = new cc.Sprite(res.backMiddle);
 		this._backgroundSpriteMiddleTwo.attr({
 			x: size.width / 2,
-			y: size.height-res.backMiddle.height,
+			y: size.height * 2,
 			anchorX: 0.5,
 			anchorY: 1,
 			scale: 1,
 			rotation: 0
 		});
+
 		this.addChild(this._backgroundSpriteMiddleTwo, 0);
 
 		this._backgroundSpriteTop = new cc.Sprite(res.backTop);
@@ -101,7 +100,7 @@ var NumboGameLayer = cc.Layer.extend({
 		this._backgroundSpriteTopTwo = new cc.Sprite(res.backTop);
 		this._backgroundSpriteTopTwo.attr({
 			x: size.width / 2,
-			y: size.height-res.backTop.height,
+			y: size.height * 2,
 			anchorX: 0.5,
 			anchorY: 1,
 			scale: 1,
@@ -110,6 +109,7 @@ var NumboGameLayer = cc.Layer.extend({
 		this.addChild(this._backgroundSpriteTopTwo, 0);
 
 		this.schedule(this.moveBackground,.01);
+
 	},
 
 	moveBackground: function() {
@@ -200,6 +200,9 @@ var NumboGameLayer = cc.Layer.extend({
 		    that.onPause();
 		});
 	    this.addChild(this._numboHeaderLayer, 999);
+                                     
+        this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
+
 	},
 
 	// initialize the empty level into the scene
