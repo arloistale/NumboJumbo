@@ -89,6 +89,9 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 
         // save any modified settings
         NJ.saveSettings();
+                                             
+        // first send the analytics for the current game session
+        NJ.sendAnalytics();
 
         if(this.onMenuCallback)
             this.onMenuCallback();

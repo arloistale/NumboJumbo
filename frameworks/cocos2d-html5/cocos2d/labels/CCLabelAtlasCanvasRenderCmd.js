@@ -66,7 +66,7 @@
                     fontChar.init();
                     fontChar.setTextureRect(cc.rect(0, 0, 10, 10), false, cc.size(0, 0));
                 } else {
-                    // reusing Fonts
+                    // reusing fonts
                     fontChar.initWithTexture(texture, rect);
                     // restore to default in case they were modified
                     fontChar.visible = true;

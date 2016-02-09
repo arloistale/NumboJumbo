@@ -158,6 +158,12 @@ var NumboHeaderLayer = cc.LayerColor.extend({
 
     giveFeedback: function(feedback) {
         this.feedbackLabel.setString(feedback);
+
+        this.schedule(this.clearFeedback, 2, 1);
+    },
+
+    clearFeedback: function() {
+        this.feedbackLabel.setString("");
     },
 
 ////////////////

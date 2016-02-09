@@ -23,8 +23,8 @@ NJ.NUM_ROWS = 7;
 // UI
 NJ.HEADER_HEIGHT = 56;
 
-// units
-NJ.UNIT_TAG = {
+// node tags
+NJ.tags = {
     BLOCK: 9001
 };
 
@@ -72,6 +72,25 @@ NJ.saveSettings = function() {
     }
 };
 
+
+////////////////
+// GAME STATE //
+////////////////
+
+NJ.gameState = {
+    currentJumboId: ""
+};
+
+// Use this function to set the current jumbo. DO NOT read currentJumboId directly!!!
+NJ.chooseJumbo = function(jumboId) {
+    NJ.gameState.currentJumboId = jumboId;
+};
+
+// Use this function to access the current jumbo. DO NOT access currentJumboId directly!!!
+NJ.getCurrentJumbo = function() {
+    return NJ.jumbos.data[NJ.gameState.currentJumboId];
+};
+
 ///////////
 // STATS //
 ///////////
@@ -110,6 +129,8 @@ NJ.sendAnalytics = function() {
         return v.toString(16);
     });
 
+    var jumboIndex = NJ.getCurrentJumbo().index;
+
     // send over relevant stats data to Google Analytics
     ga('set', 'dimension1', rid);
     ga('set', 'metric1', NJ.stats.blocksCleared);
@@ -117,6 +138,7 @@ NJ.sendAnalytics = function() {
     ga('set', 'metric3', NJ.stats.maxComboLength);
     ga('set', 'metric4', NJ.stats.level);
     ga('set', 'metric5', NJ.stats.score);
+    ga('set', 'metric6', jumboIndex);
 
     ga('send', 'event', 'Game', 'end', 'Game Session Data');
 };

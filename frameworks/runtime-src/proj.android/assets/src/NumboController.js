@@ -18,7 +18,14 @@ var NumboController = cc.Class.extend({
 	    this._numboLevel = new NumboLevel();
 	    this._numboLevel.init();
 
+        this.initJumbo();
 	},
+
+    initJumbo: function() {
+        var jumbo = NJ.getCurrentJumbo();
+        this.distribution = jumbo.numberList;
+        this.spawnTime = jumbo.spawnTime;
+    },
     
 	isGameOver: function() {
 	    return this._numboLevel.isFull();
@@ -99,8 +106,6 @@ var NumboController = cc.Class.extend({
 
 			this._numboLevel.collapseColumnsToward(lastCol);
 			this._numboLevel.updateBlockRowsAndCols();
-
-			this.levelUp();
 	    }
 
 	    this.deselectAllBlocks();
@@ -111,16 +116,12 @@ var NumboController = cc.Class.extend({
 	dropRandomBlock: function() {
 	    cc.assert(!this.isGameOver(), "Can't drop any more blocks");
 
-	    // Set up val/col possibilities
-	    //var vals = [1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,6,6,7,7,8,8,9,9];
+	    // Set up val/col
+	    var col = NJHelper.weightedRandom(this._numboLevel.getColWeights());
+	    //var val = this.distribution[Math.floor(Math.random()*this.distribution.length)];
+	    var val = NJHelper.weightedRandom(this.distribution);
 
-	    var cols = this._numboLevel.getAllValidCols();
-	
-	    // Pick random val/col from set
-	    //var val = vals[Math.floor(Math.random()*vals.length)];
-	    var val = this.distribution[Math.floor(Math.random()*this.distribution.length)];
-	    var col = cols[Math.floor(Math.random()*cols.length)];
-	    
+
 	    if(NJ.settings.sounds)
 		cc.audioEngine.playEffect(res.spawnBlockTrack);
 
@@ -133,15 +134,21 @@ var NumboController = cc.Class.extend({
 
 	// check if we should level up if blocks cleared is 
 	// greater than level up threshold
+    // return how many times we leveled up
 	levelUp: function() {
 	    // level up
+        var levelUpCount = 0;
+
 	    while (NJ.stats.blocksCleared >= this.blocksToLevelUp()) {
 			NJ.stats.level++;
+            levelUpCount++;
 	    }
+
+        return levelUpCount;
 	},
 
 	// a scaling factor to reduce spawn time on higher levels
-	spawnConst: function(){
+	spawnConst: function() {
 	    return 1 + 2/NJ.stats.level
 	},
 	
@@ -181,27 +188,22 @@ var NumboController = cc.Class.extend({
 
 	// checks if the current selected blocks can be activated (their equation is valid)
 	isSelectedClearable: function() {
-	    if(!this._selectedBlocks.length || this._selectedBlocks.length < 3)
-		return false;
+		if (!this._selectedBlocks.length || this._selectedBlocks.length < 3)
+			return false;
 
-	    var selectedBlocksLength = this._selectedBlocks.length;
+		var selectedBlocksLength = this._selectedBlocks.length;
 
-	    // all blocks must be sequentially adjacent
+		// all blocks must be sequentially adjacent
 
-	    var sum = 0;
+		var sum = 0;
 
-	    for(var i = 0; i < selectedBlocksLength - 1; ++i) {
-		if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
-		    return false;
+		for (var i = 0; i < selectedBlocksLength - 1; ++i) {
+			if (!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
+				return false;
 
-		sum += this._selectedBlocks[i].val;
-	    }
+			sum += this._selectedBlocks[i].val;
+		}
 
-	    return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
-	},
-
-	setDistribution: function(distribution) {
-	    this.distribution = distribution["number_list"];
-	    this.spawnTime = distribution["timer"];
+		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
 	}
 });

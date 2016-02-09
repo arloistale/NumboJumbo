@@ -89,6 +89,9 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 
         // save any modified settings
         NJ.saveSettings();
+                                             
+        // first send the analytics for the current game session
+        NJ.sendAnalytics();
 
         if(this.onMenuCallback)
             this.onMenuCallback();
@@ -141,7 +144,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 
     generateLabel: function(title) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
-        cc.MenuItemFont.setFontSize(18);
+        cc.MenuItemFont.setFontSize(28);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
         toggleLabel.setColor(cc.color(255, 255, 255, 255));
@@ -149,7 +152,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     },
 
     generateToggle: function(callback) {
-        cc.MenuItemFont.setFontSize(26);
+        cc.MenuItemFont.setFontSize(36);
         var toggle = new cc.MenuItemToggle(
             new cc.MenuItemFont("On"),
             new cc.MenuItemFont("Off")
@@ -161,8 +164,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     },
 
     generateTitleButton: function(title, callback) {
-        cc.MenuItemFont.setFontSize(26);
-        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 20);
+        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 42);
         label.setColor(cc.color(255, 255, 255, 255));
 
         return new cc.MenuItemLabel(label, callback);
