@@ -18,7 +18,7 @@ var NumboBlock = cc.Sprite.extend({
     bHasDropped: false,
 
     ctor: function() {
-        this._super(res.blockImage);
+        this._super(res.block);
 
         this.setTag(NJ.tags.BLOCK);
 

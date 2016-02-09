@@ -3,7 +3,7 @@ cc.game.onStart = function() {
     // resize based on platform
     
     var isLandscape = true;
-    var resolutionPolicy = cc.ResolutionPolicy.EXACT_FIT;
+    var resolutionPolicy = cc.ResolutionPolicy.SHOW_ALL;
     
     if(cc.sys.isNative) {
         var isLandscape = false;
@@ -11,7 +11,7 @@ cc.game.onStart = function() {
         var searchPaths = jsb.fileUtils.getSearchPaths();
         
         var frameSize = cc.view.getFrameSize();
-        
+        /*
         if(frameSize.width >= 1536 && frameSize.height >= 1536) { // ipad retina
             if(isLandscape)
                 cc.view.setDesignResolutionSize(2048, 1536, resolutionPolicy);
@@ -21,7 +21,7 @@ cc.game.onStart = function() {
             // TODO: change to use large sized resources
             searchPaths.push("res");
             searchPaths.push("src");
-        } else if(frameSize.width >= 640 && frameSize.height >= 640) { // iphone hd or above + android
+        } else */if(frameSize.width >= 640 && frameSize.height >= 640) { // iphone hd or above + android
             var tempSize;
             
             if(frameSize.width >= 1136 || frameSize.height >= 1136)

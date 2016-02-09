@@ -33,9 +33,10 @@ var res = {
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
 
-    backBottom: resRoot + "Images/bottom.png",
+    backBottom: resRoot + "Images/back.png",
     backMiddle: resRoot + "Images/middle.png",
     backTop: resRoot + "Images/Top.png",
+
     block: resRoot + "Images/blocks.png"
 };
 

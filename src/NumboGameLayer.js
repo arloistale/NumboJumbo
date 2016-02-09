@@ -28,7 +28,7 @@ var NumboGameLayer = cc.Layer.extend({
 
 	ctor: function () {
 	    this._super();
-
+        
 	    NJ.resetStats();
 
 	    // init time
@@ -113,6 +113,7 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	moveBackground: function() {
+                                     cc.log("yoloswag")
 		this._backgroundSpriteMiddle.y += 1;
 		this._backgroundSpriteMiddleTwo.y += 1;
 		this._backgroundSpriteTop.y += 2;

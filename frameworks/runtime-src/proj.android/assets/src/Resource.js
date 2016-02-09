@@ -5,6 +5,7 @@
  */
 
 var resRoot = "";
+var backgroundsRoot = "Images/facet/";
 
 if(!cc.sys.isNative) {
     resRoot = "res/";
@@ -31,7 +32,13 @@ var res = {
     spawnBlockTrack: resRoot + "Sounds/Plop.wav", 
 
     // jsons
-    jumboDistributionsJSON: resRoot + "jumbos.json"
+    jumboDistributionsJSON: resRoot + "jumbos.json",
+
+    backBottom: resRoot + backgroundsRoot + "back.png",
+    backMiddle: resRoot + backgroundsRoot + "middle.png",
+    backTop: resRoot + backgroundsRoot + "Top.png",
+
+    block: resRoot + "Images/blocks.png"
 };
 
 // returns proper font name based on platform
@@ -68,5 +75,10 @@ var g_game = [
     res.successTrack,
 
     // fonts
-    res.markerFont.src
+    res.markerFont.src,
+
+    res.backBottom,
+    res.backMiddle,
+    res.backTop,
+    res.block
 ];
