@@ -28,8 +28,12 @@ var res = {
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
     successTrack: resRoot + "Sounds/Ka-Ching.wav",
-    spawnBlockTrack: resRoot + "Sounds/Plop.wav", 
-
+    plip_plip: resRoot + "Sounds/plip_plip.wav",
+    plop: resRoot + "Sounds/plop.wav", 
+    thoomp1: resRoot + "Sounds/thoomp1.wav",
+    thoomp2: resRoot + "Sounds/thoomp2.wav",
+    tongue_click: resRoot + "Sounds/tongue_click.wav",
+    
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
 

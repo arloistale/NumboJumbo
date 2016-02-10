@@ -85,7 +85,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 
     onMenu: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
 
         // save any modified settings
         NJ.saveSettings();
@@ -99,7 +99,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 
     onBack: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
 
         // save any modified settings
         NJ.saveSettings();
@@ -111,7 +111,8 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     onMusicControl: function() {
         NJ.settings.music = !NJ.settings.music;
 
-        cc.audioEngine.playEffect(res.successTrack, false);
+        if(NJ.settings.sounds)
+	    cc.audioEngine.playEffect(res.tongue_click, false);
 
         if(!NJ.settings.music)
             cc.audioEngine.stopMusic();
@@ -121,7 +122,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
         NJ.settings.sounds = !NJ.settings.sounds;
 
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
         else
             cc.audioEngine.stopAllEffects();
     },
