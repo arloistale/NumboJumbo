@@ -208,7 +208,7 @@ var NumboGameLayer = cc.Layer.extend({
 	// initialize the empty level into the scene
 	initLevel: function() {
 	    var size = cc.winSize;
-	    var refDim = Math.min(size.width, size.height);
+	    var refDim = Math.min(size.width, size.height, 900);
 	    var levelPadding = refDim * 0.02;
 	    var levelDims = cc.size(refDim - levelPadding * 2, refDim - levelPadding * 2);
 	    var levelOrigin = cc.p(size.width / 2 - levelDims.width / 2, size.height / 2 - levelDims.height / 2);
@@ -217,7 +217,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
 
 	    var levelNode = cc.DrawNode.create();
-	    levelNode.drawRect(levelOrigin, cc.p(levelOrigin.x + levelDims.width, levelOrigin.y + levelDims.height), cc.color.white);
+	    levelNode.drawRect(levelOrigin, cc.p(levelOrigin.x + levelDims.width, levelOrigin.y + levelDims.height), cc.color.white, 6, cc.color(173, 216, 230, 0.4*255));
 	    this.addChild(levelNode);
 	},
 
