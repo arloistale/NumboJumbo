@@ -231,7 +231,9 @@ var NumboGameLayer = cc.Layer.extend({
 	// initialize game audio
 	initAudio: function() {
 	    if(!NJ.settings.music)
-		return;
+			return;
+
+		//cc.audioEngine.setMusicVolume(0.5);
 
 	    // start the music
 	    cc.audioEngine.playMusic(res.backgroundTrack, true);

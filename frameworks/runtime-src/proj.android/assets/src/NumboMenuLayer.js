@@ -71,7 +71,7 @@ var NumboMenuLayer = cc.Layer.extend({
         if(!NJ.settings.music)
             return;
 
-        cc.audioEngine.setMusicVolume(0.7);
+        cc.audioEngine.setMusicVolume(NJ.MUSIC_VOLUME);
         cc.audioEngine.playMusic(res.menuTrack, true);
     },
 

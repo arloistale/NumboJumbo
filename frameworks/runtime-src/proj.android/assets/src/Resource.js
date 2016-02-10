@@ -28,9 +28,7 @@ var res = {
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
     plip_plip: resRoot + "Sounds/plip_plip.wav",
-    plop: resRoot + "Sounds/plop.wav", 
-    thoomp1: resRoot + "Sounds/thoomp1.wav",
-    thoomp2: resRoot + "Sounds/thoomp2.wav",
+    plop: resRoot + "Sounds/Plop.wav",
     tongue_click: resRoot + "Sounds/tongue_click.wav",
     
     // jsons
@@ -56,6 +54,7 @@ var g_menu = [
     res.buttonImage,
 
     // sounds
+    res.tongue_click,
     res.menuTrack,
 
     // fonts
@@ -70,8 +69,10 @@ var g_game = [
     res.buttonImage,
 
     // sounds
+    res.tongue_click,
+    res.plip_plip,
+    res.plop,
     res.backgroundTrack,
-    res.successTrack,
 
     // fonts
     res.markerFont.src,

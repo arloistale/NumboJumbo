@@ -64,7 +64,7 @@ var NumboController = cc.Class.extend({
 	    this._selectedBlocks.push(block);
 	    
 	    if(NJ.settings.sounds)
-		cc.audioEngine.playEffect(res.plop);
+			cc.audioEngine.playEffect(res.plop);
 	},
 
 	// deselect a single block, removing its highlight
