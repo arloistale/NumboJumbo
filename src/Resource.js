@@ -20,7 +20,7 @@ var res = {
 
 	// images
     buttonImage: resRoot + "Images/Button.png",
-    backgroundImage: resRoot + "Images/middle.png",
+    backgroundImage: resRoot + "Images/normal/middle.png",
     glowImage: resRoot + "Images/Glow.png",
     blockImage: resRoot + "Images/blocks.png",
 
@@ -33,9 +33,9 @@ var res = {
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
 
-    backBottom: resRoot + "Images/facet/back.png",
-    backMiddle: resRoot + "Images/facet/middle.png",
-    backTop: resRoot + "Images/facet/Top.png"
+    backBottom: resRoot + "Images/normal/back.png",
+    backMiddle: resRoot + "Images/normal/middle.png",
+    backTop: resRoot + "Images/normal/Top.png"
 };
 
 // returns proper font name based on platform
