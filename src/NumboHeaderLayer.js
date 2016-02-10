@@ -147,7 +147,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         button.setTitleFontSize(26);
         button.setTitleText("Pause");
         button.attr({
-            scale: 0.5,
+            scale: 1.0,
             anchorX: 1,
             anchorY: 1,
             x: contentSize.width - minDim * 0.1,
