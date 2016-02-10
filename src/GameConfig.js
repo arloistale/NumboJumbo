@@ -38,6 +38,8 @@ NJ.BLOCK_TYPE = {
 
 NJ.BLOCK_MAX_VALUE = 9;
 
+NJ.MUSIC_VOLUME = 0.2;
+NJ.SOUNDS_VOLUME = 1;
 
 //////////////
 // SETTINGS //
@@ -141,7 +143,7 @@ NJ.sendAnalytics = function() {
 
         ga('send', 'event', 'Game', 'end', 'Game Session Data');
     } else {
-        
+
     }
 };
 

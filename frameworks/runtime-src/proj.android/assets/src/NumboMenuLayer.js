@@ -81,7 +81,7 @@ var NumboMenuLayer = cc.Layer.extend({
 
     onPlay: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
 
         var that = this;
 
@@ -99,7 +99,7 @@ var NumboMenuLayer = cc.Layer.extend({
 
     onSettings: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
             
         var that = this;
 

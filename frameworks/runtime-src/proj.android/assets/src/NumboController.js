@@ -64,7 +64,7 @@ var NumboController = cc.Class.extend({
 	    this._selectedBlocks.push(block);
 	    
 	    if(NJ.settings.sounds)
-		cc.audioEngine.playEffect(res.successTrack);
+		cc.audioEngine.playEffect(res.plop);
 	},
 
 	// deselect a single block, removing its highlight
@@ -108,7 +108,11 @@ var NumboController = cc.Class.extend({
 		var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
 		NJ.stats.score += this.getScoreForCombo(selectedBlockCount, blockSum);
+		
+		if(NJ.settings.sounds)
+		    cc.audioEngine.playEffect(res.plip_plip);
 
+		
 		// remove any affected block sprite objects:
 		for(var i = 0; i < this._selectedBlocks.length; ++i)
 		    this._numboLevel.killBlock(this._selectedBlocks[i]);
@@ -131,8 +135,10 @@ var NumboController = cc.Class.extend({
 	    var val = NJHelper.weightedRandom(this.distribution);
 
 
-	    if(NJ.settings.sounds)
-		cc.audioEngine.playEffect(res.spawnBlockTrack);
+	    
+	    if(NJ.settings.sounds){
+		cc.audioEngine.playEffect(res.tongue_click);
+	    }
 
 	    return this._numboLevel.dropBlock(col, val);
 	},
