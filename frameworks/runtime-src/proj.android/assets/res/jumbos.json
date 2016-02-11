@@ -2,21 +2,8 @@
   "normal": {
     "name": "Normal",
     "spawnTime": 1.0,
-    "numberList": [{"key":1, "weight":1},
-      {"key":2, "weight":1},
-      {"key":3, "weight":1},
-      {"key":4, "weight":1},
-      {"key":5, "weight":1},
-      {"key":6, "weight":1},
-      {"key":7, "weight":1},
-      {"key":8, "weight":1},
-      {"key":9, "weight":1}
-    ]
-  },
-  "normal-adjusted": {
-    "name": "Normal Adjusted",
-    "spawnTime": 1.0,
-    "numberList": [{"key":1, "weight":4},
+    "numberList": [
+      {"key":1, "weight":4},
       {"key":2, "weight":3},
       {"key":3, "weight":3},
       {"key":4, "weight":2},
@@ -27,23 +14,11 @@
       {"key":9, "weight":1}
     ]
   },
-  "odds": {
-    "name": "Odds",
-    "spawnTime": 1.0,
-    "numberList": [{"key":1, "weight":3},
-      {"key":3, "weight":3},
-      {"key":5, "weight":2},
-      {"key":7, "weight":1},
-      {"key":9, "weight":2},
-      {"key":11, "weight":1},
-      {"key":13, "weight":1},
-      {"key":15, "weight":1}
-    ]
-  },
   "fives": {
     "name": "Fives",
     "spawnTime": 1.0,
-    "numberList": [{"key":5, "weight":2},
+    "numberList": [
+      {"key":5, "weight":2},
       {"key":10, "weight":1},
       {"key":15, "weight":1},
       {"key":20, "weight":1},
@@ -54,7 +29,8 @@
   "primes": {
     "name": "Primes",
     "spawnTime": 1.0,
-    "numberList": [{"key":1, "weight":3},
+    "numberList": [
+      {"key":1, "weight":3},
       {"key":2, "weight":4},
       {"key":3, "weight":3},
       {"key":5, "weight":2},
@@ -70,56 +46,11 @@
   "one-mania": {
     "name": "One Mania",
     "spawnTime": 0.333,
-    "numberList": [{"key":1, "weight":10},
+    "numberList": [
+      {"key":1, "weight":10},
       {"key":5, "weight":1},
       {"key":10, "weight":1},
       {"key":15, "weight":1}
-    ]
-  },
-  "normal-negatives": {
-    "name": "Normal + Negatives",
-    "spawnTime": 1.0,
-    "numberList": [{"key":1, "weight":2},
-      {"key":2, "weight":1},
-      {"key":3, "weight":1},
-      {"key":4, "weight":1},
-      {"key":5, "weight":1},
-      {"key":6, "weight":1},
-      {"key":7, "weight":1},
-      {"key":8, "weight":1},
-      {"key":9, "weight":1},
-      {"key":-1, "weight":1},
-      {"key":-2, "weight":1},
-      {"key":-3, "weight":1},
-      {"key":-4, "weight":1},
-      {"key":-5, "weight":1},
-      {"key":-6, "weight":1},
-      {"key":-7, "weight":1},
-      {"key":-8, "weight":1},
-      {"key":-9, "weight":1}
-    ]
-  },
-  "normal-adjusted-negatives": {
-    "name": "Normal Adjusted + Negatives",
-    "spawnTime": 1.0,
-    "numberList": [{"key":1, "weight":4},
-      {"key":2, "weight":3},
-      {"key":3, "weight":3},
-      {"key":4, "weight":2},
-      {"key":5, "weight":2},
-      {"key":6, "weight":1},
-      {"key":7, "weight":1},
-      {"key":8, "weight":1},
-      {"key":9, "weight":1},
-      {"key":-1, "weight":4},
-      {"key":-2, "weight":3},
-      {"key":-3, "weight":3},
-      {"key":-4, "weight":2},
-      {"key":-5, "weight":2},
-      {"key":-6, "weight":1},
-      {"key":-7, "weight":1},
-      {"key":-8, "weight":1},
-      {"key":-9, "weight":1}
     ]
   }
 }

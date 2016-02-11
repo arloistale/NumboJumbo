@@ -75,7 +75,7 @@ var JumboMenuLayer = cc.LayerColor.extend({
 
     onChoose: function(jumboId) {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
 
         NJ.chooseJumbo(jumboId);
 
@@ -90,7 +90,7 @@ var JumboMenuLayer = cc.LayerColor.extend({
 
     onBack: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
 
         if(this.onCloseCallback)
             this.onCloseCallback();

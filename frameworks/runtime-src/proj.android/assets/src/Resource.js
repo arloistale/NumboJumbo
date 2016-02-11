@@ -20,22 +20,23 @@ var res = {
 
 	// images
     buttonImage: resRoot + "Images/Button.png",
-    backgroundImage: resRoot + "Images/Background.png",
+    backgroundImage: resRoot + "Images/normal/middle.png",
     glowImage: resRoot + "Images/Glow.png",
     blockImage: resRoot + "Images/blocks.png",
 
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
-    successTrack: resRoot + "Sounds/Ka-Ching.wav",
-    spawnBlockTrack: resRoot + "Sounds/Plop.wav", 
-
+    plip_plip: resRoot + "Sounds/plip_plip.wav",
+    plop: resRoot + "Sounds/Plop.wav",
+    tongue_click: resRoot + "Sounds/tongue_click.wav",
+    
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
 
-    backBottom: resRoot + "Images/back.png",
-    backMiddle: resRoot + "Images/middle.png",
-    backTop: resRoot + "Images/Top.png"
+    backBottom: resRoot + "Images/normal/back.png",
+    backMiddle: resRoot + "Images/normal/middle.png",
+    backTop: resRoot + "Images/normal/Top.png"
 };
 
 // returns proper font name based on platform
@@ -53,6 +54,7 @@ var g_menu = [
     res.buttonImage,
 
     // sounds
+    res.tongue_click,
     res.menuTrack,
 
     // fonts
@@ -67,8 +69,10 @@ var g_game = [
     res.buttonImage,
 
     // sounds
+    res.tongue_click,
+    res.plip_plip,
+    res.plop,
     res.backgroundTrack,
-    res.successTrack,
 
     // fonts
     res.markerFont.src,

@@ -37,7 +37,7 @@ var NumboController = cc.Class.extend({
 
 	// select a block, giving it a highlight
 	selectBlock: function(col, row) {
-	    cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
+	    cc.assert(0 <= col && col < NJ.NUM_COLS && 0 <= row && row < NJ.NUM_ROWS, "Invalid coords");
 
 	    var block = this._numboLevel.getBlock(col, row);
 
@@ -48,6 +48,12 @@ var NumboController = cc.Class.extend({
 	    if(!block.bHasDropped || this._selectedBlocks.indexOf(block) >= 0)
 		return;
 
+	    // make sure this block is adjacent to the block before it
+	    if (this._selectedBlocks.length > 0){
+		var lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
+		if (! this._numboLevel.isAdjBlocks(block, lastBlock) )
+		    return;
+	    }
 	    // we make this block green, make the last selected block red
 	    if(this._selectedBlocks.length > 0) {
 		var lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
@@ -58,7 +64,7 @@ var NumboController = cc.Class.extend({
 	    this._selectedBlocks.push(block);
 	    
 	    if(NJ.settings.sounds)
-		cc.audioEngine.playEffect(res.successTrack);
+			cc.audioEngine.playEffect(res.plop);
 	},
 
 	// deselect a single block, removing its highlight
@@ -91,21 +97,28 @@ var NumboController = cc.Class.extend({
 	activateSelectedBlocks: function() {
 	    if(this.isSelectedClearable()) {
 		var selectedBlockCount = this._selectedBlocks.length;
-
+		var blockSum = 0;
+		for (var block in this._selectedBlocks)
+		    blockSum += this._selectedBlocks[block].val;
+		
 		NJ.stats.blocksCleared += selectedBlockCount;
 		if(selectedBlockCount > NJ.stats.maxComboLength)
 		    NJ.stats.maxComboLength = selectedBlockCount;
 
 		var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
-		NJ.stats.score += this.getScoreForCombo(selectedBlockCount);
+		NJ.stats.score += this.getScoreForCombo(selectedBlockCount, blockSum);
+		
+		if(NJ.settings.sounds)
+		    cc.audioEngine.playEffect(res.plip_plip);
 
+		
 		// remove any affected block sprite objects:
 		for(var i = 0; i < this._selectedBlocks.length; ++i)
 		    this._numboLevel.killBlock(this._selectedBlocks[i]);
-
-			this._numboLevel.collapseColumnsToward(lastCol);
-			this._numboLevel.updateBlockRowsAndCols();
+		
+		this._numboLevel.collapseColumnsToward(lastCol);
+		this._numboLevel.updateBlockRowsAndCols();
 	    }
 
 	    this.deselectAllBlocks();
@@ -122,8 +135,10 @@ var NumboController = cc.Class.extend({
 	    var val = NJHelper.weightedRandom(this.distribution);
 
 
-	    if(NJ.settings.sounds)
-		cc.audioEngine.playEffect(res.spawnBlockTrack);
+	    
+	    if(NJ.settings.sounds){
+		cc.audioEngine.playEffect(res.tongue_click);
+	    }
 
 	    return this._numboLevel.dropBlock(col, val);
 	},
@@ -177,8 +192,8 @@ var NumboController = cc.Class.extend({
 	    return this._numboLevel.getBlock(col, row);
 	},
 
-	getScoreForCombo: function(blockCount) {
-	    return Math.floor(16 * Math.pow(NJ.E_CONST, Math.max(blockCount - 2, 0)));
+	getScoreForCombo: function(blockCount, blockSum) {
+	    return blockCount*blockSum;
 	},
 
 	getSpawnTime: function() {
@@ -189,7 +204,7 @@ var NumboController = cc.Class.extend({
 	// checks if the current selected blocks can be activated (their equation is valid)
 	isSelectedClearable: function() {
 		if (!this._selectedBlocks.length || this._selectedBlocks.length < 3)
-			return false;
+		    return false;
 
 		var selectedBlocksLength = this._selectedBlocks.length;
 
@@ -198,12 +213,12 @@ var NumboController = cc.Class.extend({
 		var sum = 0;
 
 		for (var i = 0; i < selectedBlocksLength - 1; ++i) {
-			if (!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
-				return false;
-
-			sum += this._selectedBlocks[i].val;
+		    if (!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
+			return false;
+		    
+		    sum += this._selectedBlocks[i].val;
 		}
-
+		
 		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
 	}
 });

@@ -38,6 +38,10 @@ var NumboMenuLayer = cc.Layer.extend({
             rotation: 0
         });
         this.addChild(backgroundSprite, 10, 1);
+
+        var rotatePoint = new cc.RotateBy(250, 360); // <- Rotate the node by 360 degrees in 5 seconds.
+        var rotateForever = new cc.RepeatForever(rotatePoint); // <- Keeps the node rotating forever.
+        backgroundSprite.runAction(rotateForever);
     },
 
     // initialize menu elements
@@ -67,7 +71,7 @@ var NumboMenuLayer = cc.Layer.extend({
         if(!NJ.settings.music)
             return;
 
-        cc.audioEngine.setMusicVolume(0.7);
+        cc.audioEngine.setMusicVolume(NJ.MUSIC_VOLUME);
         cc.audioEngine.playMusic(res.menuTrack, true);
     },
 
@@ -77,7 +81,7 @@ var NumboMenuLayer = cc.Layer.extend({
 
     onPlay: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
 
         var that = this;
 
@@ -95,7 +99,7 @@ var NumboMenuLayer = cc.Layer.extend({
 
     onSettings: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.successTrack, false);
+            cc.audioEngine.playEffect(res.tongue_click, false);
             
         var that = this;
 

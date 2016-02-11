@@ -38,6 +38,8 @@ NJ.BLOCK_TYPE = {
 
 NJ.BLOCK_MAX_VALUE = 9;
 
+NJ.MUSIC_VOLUME = 0.2;
+NJ.SOUNDS_VOLUME = 1;
 
 //////////////
 // SETTINGS //
@@ -118,29 +120,31 @@ NJ.resetStats = function() {
 };
 
 NJ.sendAnalytics = function() {
-    if(cc.sys.isNative)
-        return;
-
+    // prepare the stats package to send to GA
     NJ.stats.sessionLength = (Date.now() - NJ.stats.startTime) / 1000;
     NJ.logStats();
 
-    var rid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    var rid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 
     var jumboIndex = NJ.getCurrentJumbo().index;
 
-    // send over relevant stats data to Google Analytics
-    ga('set', 'dimension1', rid);
-    ga('set', 'metric1', NJ.stats.blocksCleared);
-    ga('set', 'metric2', NJ.stats.sessionLength);
-    ga('set', 'metric3', NJ.stats.maxComboLength);
-    ga('set', 'metric4', NJ.stats.level);
-    ga('set', 'metric5', NJ.stats.score);
-    ga('set', 'metric6', jumboIndex);
+    // now send over relevant stats data to GA
+    if(!cc.sys.isNative) {
+        ga('set', 'dimension1', rid);
+        ga('set', 'metric1', NJ.stats.blocksCleared);
+        ga('set', 'metric2', NJ.stats.sessionLength);
+        ga('set', 'metric3', NJ.stats.maxComboLength);
+        ga('set', 'metric4', NJ.stats.level);
+        ga('set', 'metric5', NJ.stats.score);
+        ga('set', 'metric6', jumboIndex);
 
-    ga('send', 'event', 'Game', 'end', 'Game Session Data');
+        ga('send', 'event', 'Game', 'end', 'Game Session Data');
+    } else {
+
+    }
 };
 
 NJ.logStats = function() {
@@ -148,5 +152,5 @@ NJ.logStats = function() {
     for(var key in NJ.stats) {
         statsStr += key + ": " + NJ.stats[key] + "\n";
     }
-    console.log(statsStr);
+    cc.log(statsStr);
 };
