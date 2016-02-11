@@ -29,6 +29,7 @@ NJ.loadJumbosFromJSON = function() {
             NJ.jumbos.data[key] = {
                 index: currIndex,
                 name: data[key].name,
+                difficulty: data[key].difficulty,
                 spawnTime: data[key].spawnTime,
                 numberList: data[key].numberList
             };

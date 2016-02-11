@@ -45,7 +45,7 @@
   },
   "one-mania": {
     "name": "One Mania",
-    "spawnTime": 0.333,
+    "spawnTime": 0.34,
     "numberList": [
       {"key":1, "weight":10},
       {"key":5, "weight":1},
