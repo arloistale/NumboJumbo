@@ -1,6 +1,6 @@
 {
   "basic": {
-    "name": "1-4",
+    "name": "Basic",
     "difficulty": "Easy",
     "spawnTime": 1.0,
     "numberList": [
@@ -11,7 +11,7 @@
     ]
   },
   "normal": {
-    "name": "1-9",
+    "name": "Classic",
     "difficulty": "Medium",
     "spawnTime": 1.0,
     "numberList": [
@@ -39,7 +39,7 @@
   },
   "sevens": {
     "name": "Sevens",
-    "difficulty": "Medium",
+    "difficulty": "Hard",
     "spawnTime": 1.0,
     "numberList": [
       {"key":7, "weight":5},
@@ -53,31 +53,13 @@
   },
   "one-mania": {
     "name": "One Mania",
-    "difficulty": "Hard",
-    "spawnTime": 0.333,
+    "difficulty": "Very Hard",
+    "spawnTime": 0.5,
     "numberList": [
       {"key":1, "weight":10},
       {"key":5, "weight":1},
       {"key":10, "weight":1},
       {"key":15, "weight":1}
-    ]
-  },
-  "primes": {
-    "name": "Primes",
-    "difficulty": "Real Hard",
-    "spawnTime": 1.0,
-    "numberList": [
-      {"key":1, "weight":3},
-      {"key":2, "weight":4},
-      {"key":3, "weight":3},
-      {"key":5, "weight":2},
-      {"key":7, "weight":2},
-      {"key":11, "weight":1},
-      {"key":13, "weight":1},
-      {"key":17, "weight":1},
-      {"key":19, "weight":1},
-      {"key":23, "weight":1},
-      {"key":29, "weight":1}
     ]
   }
 }
