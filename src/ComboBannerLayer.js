@@ -21,7 +21,7 @@ var ComboBannerLayer = cc.Layer.extend({
 			anchorY: 0.5,
 			x: this.getContentSize().width / 8,
 			y: 0
-			});
+		});
 	    console.log(this.banner.y);
 	    
 	    this.banner.enableStroke(cc.color(0, 0, 255, 255), 1);

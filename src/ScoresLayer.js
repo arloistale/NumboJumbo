@@ -55,6 +55,7 @@ var ScoresLayer = cc.LayerColor.extend({
             statsList.sort(function(a, b) {
                 return b.score - a.score;
             });
+            statsList = statsList.slice(0, 8);
 
             var scoreLabel = null;
             var statPackage = null;

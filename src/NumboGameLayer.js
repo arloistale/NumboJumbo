@@ -419,8 +419,7 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    // level up if needed
 	    if(this._numboController.levelUp()) {
-		this._numboHeaderLayer.giveFeedback("FUCK YEAH");
-		this._comboBannerLayer.makeFeedbackText();
+			this._comboBannerLayer.makeFeedbackText();
 	    }
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );

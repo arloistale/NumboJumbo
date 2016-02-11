@@ -9,8 +9,6 @@ var NumboHeaderLayer = cc.LayerColor.extend({
     blocksToLevelLabel: null,
     blocksToLevelText: null,
 
-    feedbackLabel: null,
-
     // callback
     onPauseCallback: null,
 
@@ -110,20 +108,6 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.levelLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.levelLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelLabel);
-
-        // In-game Feedback Labels
-        this.feedbackLabel = new cc.LabelTTF("", b_getFontName(res.markerFont), 32);
-        this.feedbackLabel.attr({
-            scale: 1.0,
-            anchorX: .5,
-            anchorY: .5,
-            x: this.getContentSize().width / 2,
-            y: this.getContentSize().height / 2
-        });
-        this.feedbackLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-        this.feedbackLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.feedbackLabel);
-
     },
 
     initButtons: function() {
@@ -152,16 +136,6 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         }, this);
 
         this.addChild(button);
-    },
-
-    giveFeedback: function(feedback) {
-        this.feedbackLabel.setString(feedback);
-
-        this.schedule(this.clearFeedback, 2, 1);
-    },
-
-    clearFeedback: function() {
-        this.feedbackLabel.setString("");
     },
 
 ////////////////
