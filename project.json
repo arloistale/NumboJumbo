@@ -11,8 +11,10 @@
     "modules": ["cocos2d", "extensions"],
 
     "jsList": [
+        "src/DateExtensions.js",
         "src/Resource.js",
         "src/JumboDistributions.js",
+        "src/ScoresLayer.js",
         "src/NumboMenuLayer.js",
         "src/JumboMenuLayer.js",
         "src/SettingsMenuLayer.js",
@@ -23,7 +25,7 @@
         "src/NumboBlock.js",
         "src/NumboLevel.js",
         "src/GameConfig.js",
-        "src/Helper.js",
+        "src/NJHelper.js",
         "src/NumboController.js"
     ]
 }

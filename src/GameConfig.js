@@ -119,7 +119,34 @@ NJ.resetStats = function() {
     NJ.stats["level"] = 1;
 };
 
+NJ.saveStats = function() {
+    var statPackage = {
+        timestamp: Date.now(),
+        score: NJ.stats.score,
+        level: NJ.stats.level
+    };
+    
+    if(statPackage.score > 0 && statPackage.level > 0) {
+        var statsList = [];
+
+        var statsListJSON = "";
+
+        // if this is our first time then save defaults
+        if(cc.sys.localStorage.getItem('stats')) {
+            statsListJSON = cc.sys.localStorage.getItem('stats');
+            statsList = JSON.parse(statsListJSON);
+        }
+
+        statsList.push(statPackage);
+
+        statsListJSON = JSON.stringify(statsList);
+        cc.sys.localStorage.setItem('stats', statsListJSON);
+    }
+};
+
 NJ.sendAnalytics = function() {
+    NJ.saveStats();
+
     // prepare the stats package to send to GA
     NJ.stats.sessionLength = (Date.now() - NJ.stats.startTime) / 1000;
     NJ.logStats();
