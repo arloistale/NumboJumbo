@@ -44,16 +44,18 @@ var ScoresLayer = cc.LayerColor.extend({
         var titleLabel = this.generateLabel("Scores");
         this._menu.addChild(titleLabel);
 
+        var menu
+
         // load scores
         if(cc.sys.localStorage.getItem('stats')) {
             statsListJSON = cc.sys.localStorage.getItem('stats');
             cc.assert(statsListJSON, "Invalid stats file");
-            cc.log("Loaded stats list: " + statsListJSON);
 
             var statsList = JSON.parse(statsListJSON);
             statsList.sort(function(a, b) {
                 return b.score - a.score;
             });
+            statsList = statsList.slice(0, 8);
 
             var scoreLabel = null;
             var statPackage = null;
@@ -66,7 +68,7 @@ var ScoresLayer = cc.LayerColor.extend({
                 score = statPackage.score;
                 level = statPackage.level;
 
-                scoreLabel = this.generateScoreLabel(timestamp.mmddyyyy() + ": Level: " + level + ", Score: " + score);
+                scoreLabel = this.generateScoreLabel(timestamp.formatAMPM() + "          Level: " + level + "          Score: " + score);
 
                 this._menu.addChild(scoreLabel);
             }

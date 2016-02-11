@@ -9,8 +9,6 @@ var NumboHeaderLayer = cc.LayerColor.extend({
     blocksToLevelLabel: null,
     blocksToLevelText: null,
 
-    feedbackLabel: null,
-
     // callback
     onPauseCallback: null,
 
@@ -42,7 +40,6 @@ var NumboHeaderLayer = cc.LayerColor.extend({
             y: this.getContentSize().height / 2 - 130
         });
         this.scoreValueText.enableStroke(cc.color(0, 0, 255, 255), 1);
-	//        this.scoreValueText.setColor(cc.color(255, 146, 48, 255));
         this.scoreValueText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.scoreValueText);
 
@@ -55,7 +52,6 @@ var NumboHeaderLayer = cc.LayerColor.extend({
             y: this.getContentSize().height / 2 - 155
         });
         this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-	//        this.scoreValueLabel.setColor(cc.color(255, 146, 48, 255));
         this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.scoreValueLabel);
 
@@ -69,12 +65,10 @@ var NumboHeaderLayer = cc.LayerColor.extend({
             y: this.getContentSize().height / 2 - 64
         });
         this.blocksToLevelText.enableStroke(cc.color(0, 0, 255, 255), 1);
-	//        this.blocksToLevelText.setColor(cc.color(255, 146, 48, 255));
         this.blocksToLevelText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.blocksToLevelText);
 
         this.blocksToLevelLabel = new cc.LabelTTF("42", b_getFontName(res.markerFont), 32);
-        //this.blocksToLevelLabel = new cc.LabelTTF("15", b_getFontName(res.markerFontTTF), 32);
 
         this.blocksToLevelLabel.attr({
             scale: 1.0,
@@ -84,7 +78,6 @@ var NumboHeaderLayer = cc.LayerColor.extend({
             y: this.getContentSize().height / 2 - 90
         });
         this.blocksToLevelLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-	//        this.blocksToLevelLabel.setColor(cc.color(255, 146, 48, 255));
         this.blocksToLevelLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.blocksToLevelLabel);
 
@@ -98,12 +91,10 @@ var NumboHeaderLayer = cc.LayerColor.extend({
             y: this.getContentSize().height / 2
         });
         this.levelText.enableStroke(cc.color(0, 0, 255, 255), 1);
-	//        this.levelText.setColor(cc.color(255, 146, 48, 255));
         this.levelText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelText);
 
 
-	//        this.levelLabel = new cc.LabelTTF("69", b_getFontName(res.markerFontTTF), 32);
 
         this.levelLabel = new cc.LabelTTF("1", b_getFontName(res.markerFont), 32);
 
@@ -115,24 +106,8 @@ var NumboHeaderLayer = cc.LayerColor.extend({
             y: this.getContentSize().height / 2 - 26
         });
         this.levelLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-	//        this.levelLabel.setColor(cc.color(255, 146, 48, 255));
         this.levelLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelLabel);
-
-        // In-game Feedback Labels
-        this.feedbackLabel = new cc.LabelTTF("", b_getFontName(res.markerFont), 32);
-        this.feedbackLabel.attr({
-            scale: 1.0,
-            anchorX: .5,
-            anchorY: .5,
-            x: this.getContentSize().width / 2,
-            y: this.getContentSize().height / 2
-        });
-        this.feedbackLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-	//        this.feedbackLabel.setColor(cc.color(255, 146, 48, 255));
-        this.feedbackLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.feedbackLabel);
-
     },
 
     initButtons: function() {
@@ -161,16 +136,6 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         }, this);
 
         this.addChild(button);
-    },
-
-    giveFeedback: function(feedback) {
-        this.feedbackLabel.setString(feedback);
-
-        this.schedule(this.clearFeedback, 2, 1);
-    },
-
-    clearFeedback: function() {
-        this.feedbackLabel.setString("");
     },
 
 ////////////////
