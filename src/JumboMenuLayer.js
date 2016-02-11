@@ -47,11 +47,13 @@ var JumboMenuLayer = cc.LayerColor.extend({
         // get possible jumbos
         var jumboButton = null;
         var jumboName = "";
+        var jumboDifficulty = "";
         for(var key in NJ.jumbos.data) {
             jumboName = NJ.jumbos.data[key].name;
+            jumboDifficulty = NJ.jumbos.data[key].difficulty;
 
             // here we create a callback for each button and bind the associated jumbo id to the callback
-            jumboButton = this.generateJumboButton(jumboName, (function(jumboId) {
+            jumboButton = this.generateJumboButton(jumboName, jumboDifficulty, (function(jumboId) {
                 return function() { that.onChoose(jumboId) };
             })(key));
 
@@ -117,8 +119,8 @@ var JumboMenuLayer = cc.LayerColor.extend({
         return toggleLabel;
     },
 
-    generateJumboButton: function(title, callback) {
-        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 30);
+    generateJumboButton: function(title, difficulty, callback) {
+        var label = new cc.LabelTTF(title + "  (" + difficulty + ")", b_getFontName(res.markerFont), 30);
         label.setColor(cc.color(255, 255, 255, 255));
 
         return new cc.MenuItemLabel(label, callback);
