@@ -3,6 +3,7 @@ var NumboMenuLayer = cc.Layer.extend({
 
     _menu: null,
     _jumboMenuLayer: null,
+    _scoresLayer: null,
     _settingsMenuLayer: null,
     
 ////////////////////
@@ -52,14 +53,15 @@ var NumboMenuLayer = cc.Layer.extend({
             that.onPlay();
         });
 
+        var scoresButton = this.generateTitleButton("Scores", function() {
+            that.onScores();
+        });
+
         var settingsButton = this.generateTitleButton("Settings", function() {
             that.onSettings();
         });
 
-        playButton.scale = NJ.SCALE;
-        settingsButton.scale = NJ.SCALE;
-
-        this._menu = new cc.Menu(playButton, settingsButton);
+        this._menu = new cc.Menu(playButton, scoresButton, settingsButton);
         this._menu.alignItemsVerticallyWithPadding(15);
         this.addChild(this._menu, 100);
         this._menu.x = cc.winSize.width / 2;
@@ -90,11 +92,23 @@ var NumboMenuLayer = cc.Layer.extend({
         this._jumboMenuLayer.setOnCloseCallback(function() {
             cc.eventManager.resumeTarget(that, true);
             that.removeChild(that._jumboMenuLayer);
-
-            //if(NJ.settings.music)
-                //cc.audioEngine.playMusic(res.menuTrack);
         });
         this.addChild(this._jumboMenuLayer, 999);
+    },
+
+    onScores: function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.tongue_click, false);
+
+        var that = this;
+
+        cc.eventManager.pauseTarget(this, true);
+        this._scoresLayer = new ScoresLayer();
+        this._scoresLayer.setOnCloseCallback(function() {
+            cc.eventManager.resumeTarget(that, true);
+            that.removeChild(that._scoresLayer);
+        });
+        this.addChild(this._scoresLayer, 999);
     },
 
     onSettings: function() {
