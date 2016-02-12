@@ -7,7 +7,7 @@ var NumboGameLayer = cc.Layer.extend({
 	_numboHeaderLayer: null,
 	_settingsMenuLayer: null,
 	_gameOverMenuLayer: null,
-	_comboBannerLayer: null,
+	_bannerLayer: null,
 
 	// Sprite Data
 	_backgroundSpriteBottom: null,
@@ -203,8 +203,8 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(this._numboHeaderLayer, 999);
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	    
-	    this._comboBannerLayer = new ComboBannerLayer();
-	    this.addChild(this._comboBannerLayer, 999);
+	    this._bannerLayer = new BannerLayer();
+	    this.addChild(this._bannerLayer, 999);
 	    
 	},
 
@@ -419,7 +419,7 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    // level up if needed
 	    if(this._numboController.levelUp()) {
-			this._comboBannerLayer.makeFeedbackText();
+			this._bannerLayer.makeFeedbackText();
 	    }
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
