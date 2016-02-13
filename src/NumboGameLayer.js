@@ -7,6 +7,7 @@ var NumboGameLayer = cc.Layer.extend({
 	_numboHeaderLayer: null,
 	_settingsMenuLayer: null,
 	_gameOverMenuLayer: null,
+	_comboBannerLayer: null,
 
 	// Sprite Data
 	_backgroundSpriteBottom: null,
@@ -22,9 +23,9 @@ var NumboGameLayer = cc.Layer.extend({
 	// Controller Data
 	_numboController: null,
 
-////////////////////
-// Initialization //
-////////////////////
+	////////////////////
+	// Initialization //
+	////////////////////
 
 	ctor: function () {
 	    this._super();
@@ -35,7 +36,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    NJ.stats.startTime = Date.now();
 	    
 	    this.initBackground();
-        this.initNumboController();
+	    this.initNumboController();
 	    this.initInput();
 	    this.initUI();
 	    this.initLevel();
@@ -63,78 +64,78 @@ var NumboGameLayer = cc.Layer.extend({
 			});
 	    this.addChild(this._backgroundSpriteBottom, 0);
 
-		this._backgroundSpriteMiddle = new cc.Sprite(res.backMiddle);
-		this._backgroundSpriteMiddle.attr({
-			x: size.width / 2,
+	    this._backgroundSpriteMiddle = new cc.Sprite(res.backMiddle);
+	    this._backgroundSpriteMiddle.attr({
+		    x: size.width / 2,
 			y: size.height,
 			anchorX: 0.5,
 			anchorY: 1,
 			scale: 1,
 			rotation: 0
-		});
-		this.addChild(this._backgroundSpriteMiddle, 0);
+			});
+	    this.addChild(this._backgroundSpriteMiddle, 0);
 
-		this._backgroundSpriteMiddleTwo = new cc.Sprite(res.backMiddle);
-		this._backgroundSpriteMiddleTwo.attr({
-			x: size.width / 2,
+	    this._backgroundSpriteMiddleTwo = new cc.Sprite(res.backMiddle);
+	    this._backgroundSpriteMiddleTwo.attr({
+		    x: size.width / 2,
 			y: size.height * 2,
 			anchorX: 0.5,
 			anchorY: 1,
 			scale: 1,
 			rotation: 0
-		});
+			});
 
-		this.addChild(this._backgroundSpriteMiddleTwo, 0);
+	    this.addChild(this._backgroundSpriteMiddleTwo, 0);
 
-		this._backgroundSpriteTop = new cc.Sprite(res.backTop);
-		this._backgroundSpriteTop.attr({
-			x: size.width / 2,
+	    this._backgroundSpriteTop = new cc.Sprite(res.backTop);
+	    this._backgroundSpriteTop.attr({
+		    x: size.width / 2,
 			y: size.height,
 			anchorX: 0.5,
 			anchorY: 1,
 			scale: 1,
 			rotation: 0
-		});
-		this.addChild(this._backgroundSpriteTop, 0);
+			});
+	    this.addChild(this._backgroundSpriteTop, 0);
 
-		this._backgroundSpriteTopTwo = new cc.Sprite(res.backTop);
-		this._backgroundSpriteTopTwo.attr({
-			x: size.width / 2,
+	    this._backgroundSpriteTopTwo = new cc.Sprite(res.backTop);
+	    this._backgroundSpriteTopTwo.attr({
+		    x: size.width / 2,
 			y: size.height * 2,
 			anchorX: 0.5,
 			anchorY: 1,
 			scale: 1,
 			rotation: 0
-		});
-		this.addChild(this._backgroundSpriteTopTwo, 0);
+			});
+	    this.addChild(this._backgroundSpriteTopTwo, 0);
 
-		this.schedule(this.moveBackground,.01);
+	    this.schedule(this.moveBackground,.01);
 
 	},
 
 	moveBackground: function() {
-		this._backgroundSpriteMiddle.y += 1;
-		this._backgroundSpriteMiddleTwo.y += 1;
-		this._backgroundSpriteTop.y += 2;
-		this._backgroundSpriteTopTwo.y += 2;
+	    this._backgroundSpriteMiddle.y += 1;
+	    this._backgroundSpriteMiddleTwo.y += 1;
+	    this._backgroundSpriteTop.y += 2;
+	    this._backgroundSpriteTopTwo.y += 2;
 
-		if(this._backgroundSpriteMiddle.y > this._backgroundSpriteMiddleTwo.y) {
-			if(this._backgroundSpriteMiddleTwo.y > cc.winSize.height)
-				this._backgroundSpriteMiddle.y = this._backgroundSpriteMiddleTwo.y - this._backgroundSpriteMiddle.height;
-		}
-		else {
-			if(this._backgroundSpriteMiddle.y > cc.winSize.height)
-				this._backgroundSpriteMiddleTwo.y = this._backgroundSpriteMiddle.y - this._backgroundSpriteMiddleTwo.height;
-		}
+	    if(this._backgroundSpriteMiddle.y > this._backgroundSpriteMiddleTwo.y) {
+		if(this._backgroundSpriteMiddleTwo.y > cc.winSize.height)
+		    this._backgroundSpriteMiddle.y = this._backgroundSpriteMiddleTwo.y - this._backgroundSpriteMiddle.height;
+	    }
+	    else {
+		if(this._backgroundSpriteMiddle.y > cc.winSize.height)
+		    this._backgroundSpriteMiddleTwo.y = this._backgroundSpriteMiddle.y - this._backgroundSpriteMiddleTwo.height;
+	    }
 
-		if(this._backgroundSpriteTop.y > this._backgroundSpriteTopTwo.y) {
-			if(this._backgroundSpriteTopTwo.y > cc.winSize.height)
-				this._backgroundSpriteTop.y = this._backgroundSpriteTopTwo.y - this._backgroundSpriteTop.height;
-		}
-		else {
-			if(this._backgroundSpriteTop.y > cc.winSize.height)
-				this._backgroundSpriteTopTwo.y = this._backgroundSpriteTop.y - this._backgroundSpriteTopTwo.height;
-		}
+	    if(this._backgroundSpriteTop.y > this._backgroundSpriteTopTwo.y) {
+		if(this._backgroundSpriteTopTwo.y > cc.winSize.height)
+		    this._backgroundSpriteTop.y = this._backgroundSpriteTopTwo.y - this._backgroundSpriteTop.height;
+	    }
+	    else {
+		if(this._backgroundSpriteTop.y > cc.winSize.height)
+		    this._backgroundSpriteTopTwo.y = this._backgroundSpriteTop.y - this._backgroundSpriteTopTwo.height;
+	    }
 
 	},
 
@@ -200,9 +201,11 @@ var NumboGameLayer = cc.Layer.extend({
 		    that.onPause();
 		});
 	    this.addChild(this._numboHeaderLayer, 999);
-                                     
-        this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
-
+	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
+	    
+	    this._comboBannerLayer = new ComboBannerLayer();
+	    this.addChild(this._comboBannerLayer, 999);
+	    
 	},
 
 	// initialize the empty level into the scene
@@ -231,49 +234,49 @@ var NumboGameLayer = cc.Layer.extend({
 	// initialize game audio
 	initAudio: function() {
 	    if(!NJ.settings.music)
-			return;
+		return;
 
-		//cc.audioEngine.setMusicVolume(0.5);
+	    //cc.audioEngine.setMusicVolume(0.5);
 
 	    // start the music
 	    cc.audioEngine.playMusic(res.backgroundTrack, true);
 	},
                                      
- /////////////////////////////
- // GAME STATE MANIPULATION //
- /////////////////////////////
+	/////////////////////////////
+	// GAME STATE MANIPULATION //
+	/////////////////////////////
 
 	// pauses the game, halting all actions and schedulers
 	pauseGame: function() {
-        cc.eventManager.pauseTarget(this, true);
+	    cc.eventManager.pauseTarget(this, true);
                                    
-        this.pause();
+	    this.pause();
 
-        var children = this.getChildren();
+	    var children = this.getChildren();
 
-        for(var i = 0; i < children.length; ++i) {
-            if(children[i].getTag() == NJ.tags.BLOCK)
-                children[i].pause();
-        }
+	    for(var i = 0; i < children.length; ++i) {
+		if(children[i].getTag() == NJ.tags.BLOCK)
+		    children[i].pause();
+	    }
 	},
 
 	// resumes all actions and schedulers
 	resumeGame: function() {
-        cc.eventManager.resumeTarget(this, true);
+	    cc.eventManager.resumeTarget(this, true);
 
-        this.resume();
+	    this.resume();
 
-        var children = this.getChildren();
+	    var children = this.getChildren();
 
-        for(var i = 0; i < children.length; ++i) {
-            if(children[i].getTag() == NJ.tags.BLOCK)
-                children[i].resume();
-        }
+	    for(var i = 0; i < children.length; ++i) {
+		if(children[i].getTag() == NJ.tags.BLOCK)
+		    children[i].resume();
+	    }
 	},
 
-////////////////////
-// Block Spawning //
-////////////////////
+	////////////////////
+	// Block Spawning //
+	////////////////////
 
 	// move scene block sprite into place
 	moveBlockSprite: function(block) {
@@ -290,10 +293,10 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	scheduleSpawn: function() {
-        // TODO: Order matters when scheduling, must schedule before spawning WHY?
-        // PROBABLY because we pause, but then it schedules another one after
-        this.unschedule(this.scheduleSpawn);
-        this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
+	    // TODO: Order matters when scheduling, must schedule before spawning WHY?
+	    // PROBABLY because we pause, but then it schedules another one after
+	    this.unschedule(this.scheduleSpawn);
+	    this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
                                      
 	    this.spawnDropRandomBlock();
 	},
@@ -304,8 +307,8 @@ var NumboGameLayer = cc.Layer.extend({
 	// TODO: Improve structure (don't check game over state here for improved separation of concerns)
 	spawnDropRandomBlock: function() {
 	    if(this._numboController.isGameOver()) {
-			this.onGameOver();
-			return;
+		this.onGameOver();
+		return;
 	    }
                         
 	    var block = this._numboController.dropRandomBlock();
@@ -321,14 +324,14 @@ var NumboGameLayer = cc.Layer.extend({
 	///////////////////////
 
 	onGameOver: function() {
-        // first send the analytics for the current game session
-        NJ.sendAnalytics();
+	    // first send the analytics for the current game session
+	    NJ.sendAnalytics();
                                      
 	    var that = this;
 
 	    cc.audioEngine.stopMusic();
                                      
-        this.pauseGame();
+	    this.pauseGame();
 
 	    this._gameOverMenuLayer = new GameOverMenuLayer();
 	    this._gameOverMenuLayer.setOnMenuCallback(function() {
@@ -337,16 +340,16 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(this._gameOverMenuLayer, 999);
 	},
 
-///////////////
-// UI Events //
-///////////////
+	///////////////
+	// UI Events //
+	///////////////
 
 	// on pause, pauses game and opens up the settings menu
 	onPause: function() {
 	    var that = this;
 
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.tongue_click, false);
+	    if(NJ.settings.sounds)
+		cc.audioEngine.playEffect(res.tongue_click, false);
 
 	    this.pauseGame();
 
@@ -354,8 +357,8 @@ var NumboGameLayer = cc.Layer.extend({
 	    this._settingsMenuLayer.setOnCloseCallback(function() {
 		    that.onResume();
 		});
-		this._settingsMenuLayer.setOnMenuCallback(function() {
-			that.onMenu();
+	    this._settingsMenuLayer.setOnMenuCallback(function() {
+		    that.onMenu();
 		});
 	    this.addChild(this._settingsMenuLayer, 999);
 	},
@@ -368,7 +371,7 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    // play music again if music settings turned on
 	    if(NJ.settings.music)
-		    cc.audioEngine.playMusic(res.backgroundTrack);
+		cc.audioEngine.playMusic(res.backgroundTrack);
 	},
 
 	// on game over when player chooses to go to menu we return to menu
@@ -382,9 +385,9 @@ var NumboGameLayer = cc.Layer.extend({
 		}, this);
 	},
 
-//////////////////
-// Touch Events //
-//////////////////
+	//////////////////
+	// Touch Events //
+	//////////////////
 
 	// on touch began, tries to find level coordinates for the touch and selects block accordingly
 	onTouchBegan: function(touchPosition) {
@@ -404,27 +407,27 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// on touch ended, activates all selected blocks once touch is released
 	onTouchEnded: function(touchPosition) {
-		// first activate any selected blocks
+	    // first activate any selected blocks
 	    this._numboController.activateSelectedBlocks();
 
-		// gaps may be created; shift all affected blocks down
+	    // gaps may be created; shift all affected blocks down
 	    for (var col = 0; col < NJ.NUM_COLS; ++col) {
-			for (var row = 0; row < this._numboController.getColLength(col); ++row){
-				this.moveBlockSprite(this._numboController.getBlock(col, row));
-			}
+		for (var row = 0; row < this._numboController.getColLength(col); ++row){
+		    this.moveBlockSprite(this._numboController.getBlock(col, row));
+		}
 	    }
 
-		// level up if needed
-		if(this._numboController.levelUp()) {
-			this._numboHeaderLayer.giveFeedback("FUCK YEAH");
-		}
+	    // level up if needed
+	    if(this._numboController.levelUp()) {
+			this._comboBannerLayer.makeFeedbackText();
+	    }
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	},
 
-/////////////
-// Helpers //
-/////////////
+	/////////////
+	// Helpers //
+	/////////////
 
 	// attempt to convert point to location on grid
 	convertPointToLevelCoords: function(point) {
@@ -435,7 +438,7 @@ var NumboGameLayer = cc.Layer.extend({
 		var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
 
 		// return only if coordinates in certain radius of the block.
-		var radius = 0.65;
+		var radius = 0.45;
 		if (Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
 		    point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2) {
 
@@ -445,4 +448,4 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    return null;
 	}
-});
+    });

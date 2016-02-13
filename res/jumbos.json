@@ -1,6 +1,6 @@
 {
   "basic": {
-    "name": "1-4",
+    "name": "Basic",
     "difficulty": "Easy",
     "spawnTime": 1.0,
     "numberList": [
@@ -11,7 +11,7 @@
     ]
   },
   "normal": {
-    "name": "1-9",
+    "name": "Classic",
     "difficulty": "Medium",
     "spawnTime": 1.0,
     "numberList": [
@@ -39,7 +39,7 @@
   },
   "sevens": {
     "name": "Sevens",
-    "difficulty": "Medium",
+    "difficulty": "Hard",
     "spawnTime": 1.0,
     "numberList": [
       {"key": 7, "weight": 5},
@@ -53,8 +53,8 @@
   },
   "one-mania": {
     "name": "One Mania",
-    "difficulty": "Hard",
-    "spawnTime": 0.333,
+    "difficulty": "Very Hard",
+    "spawnTime": 0.5,
     "numberList": [
       {"key": 1, "weight": 10},
       {"key": 5, "weight": 1},
