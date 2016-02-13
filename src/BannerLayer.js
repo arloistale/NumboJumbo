@@ -75,15 +75,15 @@ var BannerLayer = cc.Layer.extend({
             titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)];
         }
         var oldFontSize = this.banner.bannerLabel.getFontSize();
-        this.banner.bannerLabel.setFontSize(500);
+        this.banner.bannerLabel.setFontSize(200);
         this.banner.setVisible(true);
         this.banner.launchWithText(titleStr);
-        this.banner.setPosition(cc.winSize.width / 2, cc.winSize.height / 2);
+        this.banner.setPosition(cc.winSize.width*(1/2), cc.winSize.height*(3/4));
 
         var scaleUpAction = cc.scaleBy(0.1, 40.0);
-        var scaleDownAction = cc.scaleBy(2.0, 1/40.0);
+        var scaleDownAction = cc.scaleBy(1.5, 1/40.0);
         scaleDownAction.easing(cc.easeIn(3.0));
-        var fadeOutAction = cc.fadeTo(0.3, 0*255);
+        var fadeOutAction = cc.fadeTo(0.1, 0*255);
         var fadeInAction = cc.fadeTo(0.1, 0.75*255);
         var removeAction = cc.callFunc(function() {
             that.banner.setVisible(false);
@@ -91,7 +91,7 @@ var BannerLayer = cc.Layer.extend({
         var fixFontAction = cc.callFunc(function(){
            that.banner.bannerLabel.setFontSize(72);
         });
-        this.banner.stopAllActions();
+	this.banner.stopAllActions();
         this.banner.runAction(cc.sequence(scaleDownAction, fadeOutAction, removeAction, fadeInAction, scaleUpAction, fixFontAction));
     },
 
