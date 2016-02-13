@@ -7,7 +7,7 @@ var NumboGameLayer = cc.Layer.extend({
 	_numboHeaderLayer: null,
 	_settingsMenuLayer: null,
 	_gameOverMenuLayer: null,
-	_comboBannerLayer: null,
+	_bannerLayer: null,
 
 	// Sprite Data
 	_backgroundSpriteBottom: null,
@@ -203,8 +203,8 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(this._numboHeaderLayer, 999);
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	    
-	    this._comboBannerLayer = new ComboBannerLayer();
-	    this.addChild(this._comboBannerLayer, 999);
+	    this._bannerLayer = new BannerLayer();
+	    this.addChild(this._bannerLayer, 999);
 	    
 	},
 
@@ -408,26 +408,33 @@ var NumboGameLayer = cc.Layer.extend({
 	// on touch ended, activates all selected blocks once touch is released
 	onTouchEnded: function(touchPosition) {
 	    // first activate any selected blocks
-	    this._numboController.activateSelectedBlocks();
+	    var cleared = this._numboController.activateSelectedBlocks();
 
 	    // gaps may be created; shift all affected blocks down
 	    for (var col = 0; col < NJ.NUM_COLS; ++col) {
-		for (var row = 0; row < this._numboController.getColLength(col); ++row){
+		for (var row = 0; row < this._numboController.getColLength(col); ++row) {
 		    this.moveBlockSprite(this._numboController.getBlock(col, row));
 		}
 	    }
 
 	    // level up if needed
 	    if(this._numboController.levelUp()) {
-			this._comboBannerLayer.makeFeedbackText();
+		this._bannerLayer.launchShrinkingBanner({
+			title: "Level " + NJ.stats.level
+		    });
 	    }
+	    else if (cleared > 3)
+                this._bannerLayer.launchFallingBanner();
+	    
+	    
+	    
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	},
 
-	/////////////
-	// Helpers //
-	/////////////
+/////////////
+// Helpers //
+/////////////
 
 	// attempt to convert point to location on grid
 	convertPointToLevelCoords: function(point) {

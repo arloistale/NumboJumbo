@@ -94,9 +94,11 @@ var NumboController = cc.Class.extend({
 	// activate currently selected blocks
 	// awards player score depending on blocks selected
 	// shifts all blocks down to remove gaps and drops them accordingly
+	// returns the number of blocks cleared if successful, or 0 otherwise
 	activateSelectedBlocks: function() {
+	    var selectedBlockCount = 0;
 	    if(this.isSelectedClearable()) {
-		var selectedBlockCount = this._selectedBlocks.length;
+		selectedBlockCount = this._selectedBlocks.length;
 		var blockSum = 0;
 		for (var block in this._selectedBlocks)
 		    blockSum += this._selectedBlocks[block].val;
@@ -119,9 +121,12 @@ var NumboController = cc.Class.extend({
 		
 		this._numboLevel.collapseColumnsToward(lastCol);
 		this._numboLevel.updateBlockRowsAndCols();
+		
 	    }
 
 	    this.deselectAllBlocks();
+
+	    return selectedBlockCount;
 	},
 
 	// drop block into random column with random value
