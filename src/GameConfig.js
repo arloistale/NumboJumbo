@@ -80,7 +80,8 @@ NJ.saveSettings = function() {
 ////////////////
 
 NJ.gameState = {
-    currentJumboId: ""
+    currentJumboId: "",
+    currentLevel: 1
 };
 
 // Use this function to set the current jumbo. DO NOT read currentJumboId directly!!!

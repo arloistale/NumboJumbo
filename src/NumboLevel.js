@@ -170,6 +170,29 @@ var NumboLevel = cc.Class.extend({
 	    }
 	},
 
+	divideBlocksBy: function(factor) {
+		for(var i=0; i<NJ.NUM_COLS; i++) {
+			for(var j=0; j<NJ.NUM_ROWS; j++) {
+				if(this.getBlock(i, j) != null) {
+
+					this.blocks[i][j].val = this.blocks[i][j].val / factor;
+					this.blocks[i][j].valueLabel.setString(this.blocks[i][j].val);
+				}
+			}
+		}
+	},
+
+	multiplyBlocksBy: function(factor) {
+		for(var i=0; i<NJ.NUM_ROWS; i++) {
+			for(var j=0; j<NJ.NUM_COLS; j++) {
+				if(this.getBlock(i, j) != null) {
+					this.blocks[i][j].val = this.blocks[i][j].val * factor;
+					this.blocks[i][j].valueLabel.setString(this.blocks[i][j].val);
+				}
+			}
+		}
+	},
+
 	/////////////
 	// GETTERS //
 	/////////////

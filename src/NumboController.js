@@ -157,6 +157,21 @@ var NumboController = cc.Class.extend({
 	    while (NJ.stats.blocksCleared >= this.blocksToLevelUp()) {
 			NJ.stats.level++;
             levelUpCount++;
+			// Check for Jumbo Swap
+			if(NJ.gameState.currentJumboId == "multiple-progression") {
+				if(NJ.stats.level % 3 == 0) {
+					// Change distribution by multiplying by a factor
+					var factor = Math.ceil(Math.random()*10)
+					for(var i=0; i < NJ.getCurrentJumbo()["numberList"].length; i++) {
+						NJ.getCurrentJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
+						NJ.getCurrentJumbo()["numberList"][i].key *= factor;
+					}
+					this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
+					this._numboLevel.multiplyBlocksBy(factor);
+					NJ.gameState.currentLevel = factor;
+					console.log(this._numboLevel.blocks);
+				}
+			}
 	    }
 
         return levelUpCount;
