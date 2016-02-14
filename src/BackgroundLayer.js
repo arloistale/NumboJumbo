@@ -19,6 +19,7 @@ var BackgroundLayer = cc.Layer.extend({
         this._super();
     },
 
+    // Initializes the background sprites for the scrolling background.
     initSprites: function(size) {
         this.bottomLayer = new cc.Sprite(res.backBottom);
         this.bottomLayer.attr({
@@ -76,6 +77,7 @@ var BackgroundLayer = cc.Layer.extend({
         this.addChild(this.topLayerTwo, 0);
     },
 
+    // PRIVATE! used by BackgroundLayer to calculate a parallax shift.
     updateBackground: function(shift) {
         this.middleLayer.y += shift;
         this.middleLayerTwo.y += shift;
@@ -101,6 +103,7 @@ var BackgroundLayer = cc.Layer.extend({
         }
     },
 
+    // Called by GameLayer each frame to move background depending on state.
     moveBackground: function() {
         if(this.speed == this.NORMAL_SPEED)
             this.updateBackground(1);
@@ -112,6 +115,7 @@ var BackgroundLayer = cc.Layer.extend({
         }
     },
 
+    // Start a rush, the background moving 3X as fast.
     initRush: function(duration) {
         this.speed = this.FAST_SPEED;
         this.frameCount = duration;

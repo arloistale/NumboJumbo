@@ -6,6 +6,8 @@ var NumboController = cc.Class.extend({
 	_numboLevel: null,
 
 	_selectedBlocks: [],
+
+	comboTimes: [],
                                       
 	////////////////////
 	// INITIALIZATION //
@@ -105,30 +107,31 @@ var NumboController = cc.Class.extend({
 	activateSelectedBlocks: function() {
 	    var selectedBlockCount = 0;
 	    if(this.isSelectedClearable()) {
-		selectedBlockCount = this._selectedBlocks.length;
-		var blockSum = 0;
-		for (var block in this._selectedBlocks)
-		    blockSum += this._selectedBlocks[block].val;
-		
-		NJ.stats.blocksCleared += selectedBlockCount;
-		if(selectedBlockCount > NJ.stats.maxComboLength)
-		    NJ.stats.maxComboLength = selectedBlockCount;
+			selectedBlockCount = this._selectedBlocks.length;
+			var blockSum = 0;
+			for (var block in this._selectedBlocks)
+		    	blockSum += this._selectedBlocks[block].val;
+			NJ.stats.blocksCleared += selectedBlockCount;
+			if(selectedBlockCount > NJ.stats.maxComboLength)
+			    NJ.stats.maxComboLength = selectedBlockCount;
 
-		var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
+			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
-		NJ.stats.score += this.getScoreForCombo(selectedBlockCount, blockSum);
+			NJ.stats.score += this.getScoreForCombo(selectedBlockCount, blockSum);
 		
-		if(NJ.settings.sounds)
-		    cc.audioEngine.playEffect(res.plip_plip);
+			if(NJ.settings.sounds)
+			    cc.audioEngine.playEffect(res.plip_plip);
 
 		
-		// remove any affected block sprite objects:
-		for(var i = 0; i < this._selectedBlocks.length; ++i)
-		    this._numboLevel.killBlock(this._selectedBlocks[i]);
+			// remove any affected block sprite objects:
+			for(var i = 0; i < this._selectedBlocks.length; ++i)
+			    this._numboLevel.killBlock(this._selectedBlocks[i]);
 		
-		this._numboLevel.collapseColumnsToward(lastCol);
-		this._numboLevel.updateBlockRowsAndCols();
-		
+			this._numboLevel.collapseColumnsToward(lastCol);
+			this._numboLevel.updateBlockRowsAndCols();
+
+
+
 	    }
 
 	    this.deselectAllBlocks();
