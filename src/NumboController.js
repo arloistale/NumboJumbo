@@ -18,6 +18,13 @@ var NumboController = cc.Class.extend({
 	    this._numboLevel = new NumboLevel();
 	    this._numboLevel.init();
 
+		if(NJ.gameState.currentJumboId == "multiple-progression" && NJ.gameState.currentLevel != 1) {
+			for(var i=0; i < NJ.getCurrentJumbo()["numberList"].length; i++) {
+				NJ.getCurrentJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
+			}
+			NJ.gameState.currentLevel = 1;
+		}
+
         this.initJumbo();
 	},
 
@@ -155,6 +162,7 @@ var NumboController = cc.Class.extend({
 	// check if we should level up if blocks cleared is 
 	// greater than level up threshold
     // return how many times we leveled up
+	// also execute level-up checks relevant to the controller
 	levelUp: function() {
 	    // level up
         var levelUpCount = 0;
@@ -163,23 +171,47 @@ var NumboController = cc.Class.extend({
 			NJ.stats.level++;
             levelUpCount++;
 			// Check for Jumbo Swap
-			if(NJ.gameState.currentJumboId == "multiple-progression") {
-				if(NJ.stats.level % 3 == 0) {
-					// Change distribution by multiplying by a factor
-					var factor = Math.ceil(Math.random()*10)
-					for(var i=0; i < NJ.getCurrentJumbo()["numberList"].length; i++) {
-						NJ.getCurrentJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
-						NJ.getCurrentJumbo()["numberList"][i].key *= factor;
-					}
-					this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
-					this._numboLevel.multiplyBlocksBy(factor);
-					NJ.gameState.currentLevel = factor;
-					console.log(this._numboLevel.blocks);
-				}
-			}
+			if(NJ.gameState.currentJumboId == "multiple-progression")
+				this.updateMultipleProgression();
 	    }
 
         return levelUpCount;
+	},
+
+	// updates the board/distribution given the mode is Multiple Progression
+	updateMultipleProgression: function() {
+		// Get possible factors based on level
+		var possibleFactors = null;
+		if(NJ.stats.level == 3)
+			possibleFactors = [2,3,4];
+		else if(NJ.stats.level == 5)
+			possibleFactors = [4,5,6];
+		else if(NJ.stats.level == 7)
+			possibleFactors = [6,7,8,10];
+		else if(NJ.stats.level == 9)
+			possibleFactors = [8,9,10];
+		else if(NJ.stats.level == 10)
+			possibleFactors = [7,8,9,11];
+		else if(NJ.stats.level == 11 || NJ.stats.level == 12)
+			possibleFactors = [9,12,13];
+		else if(NJ.stats.level > 12)
+			possibleFactors = [12,13,14,15];
+
+		if(possibleFactors != null) {
+			// Change distribution by multiplying by a random factor.
+			var factor = NJ.gameState.currentLevel;
+			while(factor == NJ.gameState.currentLevel)
+				factor = possibleFactors[Math.floor(Math.random()*possibleFactors.length)];
+			for(var i=0; i < NJ.getCurrentJumbo()["numberList"].length; i++) {
+				NJ.getCurrentJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
+				NJ.getCurrentJumbo()["numberList"][i].key *= factor;
+			}
+
+			// Update the blocks currently on the board.
+			this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
+			this._numboLevel.multiplyBlocksBy(factor);
+			NJ.gameState.currentLevel = factor;
+		}
 	},
 
 	// a scaling factor to reduce spawn time on higher levels

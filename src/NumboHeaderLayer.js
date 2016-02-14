@@ -9,6 +9,8 @@ var NumboHeaderLayer = cc.LayerColor.extend({
     blocksToLevelLabel: null,
     blocksToLevelText: null,
 
+    multiplierLabel: null,
+
     // callback
     onPauseCallback: null,
 
@@ -27,6 +29,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.runAction(moveTo);
     },
 
+    // Create the labels used to communicate game state with text.
     initLabels: function() {
         contentSize = this.getContentSize();
 
@@ -94,10 +97,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.levelText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelText);
 
-
-
         this.levelLabel = new cc.LabelTTF("1", b_getFontName(res.markerFont), 32);
-
         this.levelLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -108,6 +108,18 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this.levelLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.levelLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelLabel);
+
+        this.multiplierLabel = new cc.LabelTTF("X 1", b_getFontName(res.markerFont), 72);
+        this.multiplierLabel.attr({
+            scale: 1.0,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: this.getContentSize().width / 8,
+            y: this.getContentSize().height / 2 - 240
+        });
+        this.multiplierLabel.enableStroke(cc.color(0, 0, 255, 255), 6);
+        this.multiplierLabel.setColor(cc.color(255, 255, 255, 255));
+        this.addChild(this.multiplierLabel);
     },
 
     initButtons: function() {
