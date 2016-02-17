@@ -350,11 +350,10 @@ var NumboGameLayer = cc.Layer.extend({
 	// Carries out level-up visual transition.
 	executeLevelUp: function() {
 		// Display "LEVEL x"
-		for(var i = 0; i < 6; i++) {
-			this._bannerLayer.launchFallingBanner({
-				title: "Level " + NJ.stats.level + " | " + i
-			});
-		}
+		this._bannerLayer.launchFallingBanner({
+			title: "Level " + NJ.stats.level
+		});
+
 
 		// Speed up background for a bit.
 		this._backgroundLayer.initRush(180);

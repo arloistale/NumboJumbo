@@ -45,14 +45,7 @@ var FeedbackLayer = cc.Layer.extend({
     // pops a banner from the banner pool,
     // NOTE: Allocates a new banner if needed, increase pool size if this happens!
     popBannerPool: function() {
-        if(this.bannerPool.length == 0) {
-            var feedback = new Banner();
-            feedback.reset();
-
-            this.bannerPool.push(feedback);
-
-            cc.log("Warning: Banner pool size exceeded, allocating; new pool size = " + this.bannerPool.length);
-        }
+        cc.assert (this.bannerPool.length > 0, "error: trying to create too many banners!");
 
         var banner = this.bannerPool.pop();
         banner.reset();
@@ -63,19 +56,23 @@ var FeedbackLayer = cc.Layer.extend({
     // pops a banner from the banner pool,
     // NOTE: Allocates a new banner if needed, increase pool size if this happens!
     popSnippetPool: function() {
-        if(this.snippetPool.length == 0) {
-            cc.log("Warning: Snippet pool size exceeded, allocating new objects");
+        cc.assert (this.snippetPool.length > 0, "error: trying to create too many snippets!");
 
-            var feedback = new Snippet();
-            feedback.reset();
-
-            this.snippetPool.push(feedback);
-        }
 
         var snippet = this.snippetPool.pop();
         snippet.reset();
 
         return snippet;
+    },
+
+    pushBannerPool: function(banner) {
+        cc.assert(this.bannerPool.length < BANNER_POOL_SIZE, "Exceeded pool size for banners: " + (this.bannerPool.length + 1));
+        this.bannerPool.push(banner);
+    },
+
+    pushSnippetPool: function(snippet) {
+        cc.assert(this.snippetPool.length < SNIPPET_POOL_SIZE, "Exceeded pool size for snippets: " + (this.snippetPool.length + 1));
+        this.snippetPool.push(snippet);
     },
 
 ///////////////
@@ -114,9 +111,10 @@ var FeedbackLayer = cc.Layer.extend({
         var delayAction = cc.delayTime(0.8);
         var fadeOutAction = cc.fadeTo(0.2, 0);
         var removeAction = cc.callFunc(function() {
+            that.pushBannerPool(banner);
+            banner.stopAllActions();
             banner.removeFromParent(true);
         });
-        banner.stopAllActions();
         banner.runAction(cc.sequence(moveAction, delayAction, fadeOutAction, removeAction));
     },
 
