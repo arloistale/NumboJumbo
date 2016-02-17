@@ -105,6 +105,8 @@ var FeedbackLayer = cc.Layer.extend({
         banner.setPosition(cc.winSize.width / 2, cc.winSize.height + banner.getContentSize().height);
         banner.setOpacity(255);
 
+        this.addChild(banner);
+
         // start moving the banner
         var moveDuration = 0.5;
         var moveAction = cc.moveTo(moveDuration, cc.p(banner.x, cc.winSize.height / 2));
