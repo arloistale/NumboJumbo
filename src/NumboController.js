@@ -111,17 +111,15 @@ var NumboController = cc.Class.extend({
 			var blockSum = 0;
 			for (var block in this._selectedBlocks)
 		    	blockSum += this._selectedBlocks[block].val;
+
 			NJ.stats.blocksCleared += selectedBlockCount;
 			if(selectedBlockCount > NJ.stats.maxComboLength)
 			    NJ.stats.maxComboLength = selectedBlockCount;
 
 			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
-
-			NJ.stats.score += this.getScoreForCombo(selectedBlockCount, blockSum);
 		
 			if(NJ.settings.sounds)
 			    cc.audioEngine.playEffect(res.plip_plip);
-
 		
 			// remove any affected block sprite objects:
 			for(var i = 0; i < this._selectedBlocks.length; ++i)
@@ -129,14 +127,11 @@ var NumboController = cc.Class.extend({
 		
 			this._numboLevel.collapseColumnsToward(lastCol);
 			this._numboLevel.updateBlockRowsAndCols();
-
-
-
 	    }
 
 	    this.deselectAllBlocks();
 
-	    return selectedBlockCount;
+	    return { cleared: selectedBlockCount, blockSum: blockSum };
 	},
 
 	// drop block into random column with random value
@@ -152,7 +147,7 @@ var NumboController = cc.Class.extend({
 
 	    
 	    if(NJ.settings.sounds){
-		cc.audioEngine.playEffect(res.tongue_click);
+			cc.audioEngine.playEffect(res.tongue_click);
 	    }
 
 	    return this._numboLevel.dropBlock(col, val);
@@ -254,7 +249,6 @@ var NumboController = cc.Class.extend({
 	getSpawnTime: function() {
 	    return this.spawnConst() * this.spawnTime;
 	},
-
 
 	// checks if the current selected blocks can be activated (their equation is valid)
 	isSelectedClearable: function() {

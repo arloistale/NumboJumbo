@@ -319,7 +319,7 @@ var NumboGameLayer = cc.Layer.extend({
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
 	    // Activate any selected blocks.
-	    var cleared = this._numboController.activateSelectedBlocks();
+	    var data = this._numboController.activateSelectedBlocks();
 
 	    // Gaps may be created; shift all affected blocks down.
 	    for (var col = 0; col < NJ.NUM_COLS; ++col) {
@@ -327,25 +327,25 @@ var NumboGameLayer = cc.Layer.extend({
 		    	this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 	    }
 
-	    // Level up if needed.
-	    if(this._numboController.levelUp())
-			this.executeLevelUp();
-	    else if (cleared > 3)
-			this._feedbackLayer.launchGrowingBanner();
+        NJ.stats.score += this.getScoreForCombo(data.cleared, data.blockSum);
 
-	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
-	},
+	    // Level up with feedback if needed
+	    if(this._numboController.levelUp()) {
+            // give feedback for leveling up
 
-	// Carries out level-up visual transition.
-	executeLevelUp: function() {
-		// Display "LEVEL x"
-		this._feedbackLayer.launchFallingBanner({
-			title: "Level " + NJ.stats.level
-		});
+            // Display "LEVEL x"
+            this._feedbackLayer.launchFallingBanner({
+                title: "Level " + NJ.stats.level
+            });
 
+            // Speed up background for a bit.
+            this._backgroundLayer.initRush(180);
+        } else if (cleared > 3)
+			this._feedbackLayer.launchSnippet({
 
-		// Speed up background for a bit.
-		this._backgroundLayer.initRush(180);
+            });
+
+	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level);
 	},
 
 /////////////

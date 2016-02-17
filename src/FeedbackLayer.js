@@ -58,7 +58,6 @@ var FeedbackLayer = cc.Layer.extend({
     popSnippetPool: function() {
         cc.assert (this.snippetPool.length > 0, "error: trying to create too many snippets!");
 
-
         var snippet = this.snippetPool.pop();
         snippet.reset();
 
@@ -82,7 +81,8 @@ var FeedbackLayer = cc.Layer.extend({
     /*
      * Launches a banner onto the feedback layer, usually intended for
      * level ups and large combos.
-     * launchBanner({ title: 'Hello' })
+     *
+     * Usage: launchFallingBanner({ title: 'Hello' })
      */
     launchFallingBanner: function(data) {
 
@@ -90,17 +90,15 @@ var FeedbackLayer = cc.Layer.extend({
 
         var that = this;
 
-        var titleStr;
+        var titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)];
 
         if(data) {
-            titleStr = data.title;
-        } else {
-            titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)];
+            if(typeof data.title !== 'undefined')
+                titleStr = data.title;
         }
 
         banner.setText(titleStr);
         banner.setPosition(cc.winSize.width / 2, cc.winSize.height + banner.getContentSize().height);
-        banner.setOpacity(255);
 
         this.addChild(banner);
 
@@ -115,44 +113,59 @@ var FeedbackLayer = cc.Layer.extend({
             banner.stopAllActions();
             banner.removeFromParent(true);
         });
+
         banner.runAction(cc.sequence(moveAction, delayAction, fadeOutAction, removeAction));
     },
-
 
     /*
      * Launches a snippet onto the feedback layer, intended for showing small bits of info
      * such as score increases.
-     * launchSnippet ({ title: 'Hello' })
+     *
+     * Usage: launchSnippet ({ title: 'Hello', x: 500, y: 500, targetX: 400, targetY: 400 })
      */
     launchSnippet: function(data) {
 
+        var snippet = this.popSnippetPool();
+
         var that = this;
 
-        var titleStr;
+        var titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)],
+            x = cc.winSize.width / 2, y = cc.winSize.height / 2,
+            targetX = cc.winSize.width / 2, targetY = cc.winSize.height / 2;
 
         if(data) {
-            titleStr = data.title;
-        } else {
-            titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)];
+            if(typeof data.title !== 'undefined')
+                titleStr = data.title;
+
+            if(typeof data.x !== 'undefined')
+                x = data.x;
+
+            if(typeof data.y !== 'undefined')
+                y = data.y;
+
+            if(typeof data.targetX !== 'undefined')
+                targetX = data.targetX;
+
+            if(typeof data.targetY !== 'undefined')
+                targetY = data.targetY;
         }
-        var oldFontSize = this.banner.bannerLabel.getFontSize();
-        this.banner.reset();
-        this.banner.setVisible(true);
-        this.banner.launchWithText(titleStr);
-        this.banner.setPosition(cc.winSize.width*(1/2), cc.winSize.height * 0.5);
+
+        snippet.setText(titleStr);
+        snippet.setPosition(x, y);
+
+        this.addChild(snippet);
 
         var scaleUpAction = cc.scaleBy(0.1, 40.0);
+        var moveAction = cc.moveTo(0.5, cc.p(targetX, targetY));
         var scaleDownAction = cc.scaleBy(1.5, 1/40.0);
         scaleDownAction.easing(cc.easeIn(3.0));
         var fadeOutAction = cc.fadeTo(0.1, 0);
-        var fadeInAction = cc.fadeTo(0.1, 0.75*255);
         var removeAction = cc.callFunc(function() {
-            that.banner.setVisible(false);
+            that.pushSnippetPool(snippet);
+            snippet.stopAllActions();
+            snippet.removeFromParent(true);
         });
-        var fixFontAction = cc.callFunc(function() {
-           that.banner.bannerLabel.setFontSize(72);
-        });
-	this.banner.stopAllActions();
-        this.banner.runAction(cc.sequence(scaleDownAction, fadeOutAction, removeAction, fadeInAction, scaleUpAction, fixFontAction));
+
+        snippet.runAction(cc.sequence(scaleUpAction, moveAction, fadeOutAction, removeAction));
     }
 });
