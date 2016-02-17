@@ -54,12 +54,13 @@
   "one-mania": {
     "name": "One Mania",
     "difficulty": "Very Hard",
-    "spawnTime": 0.5,
+    "spawnTime": 0.3,
     "numberList": [
-      {"key": 1, "weight": 10},
+      {"key": 1, "weight": 15},
+      {"key": 2, "weight": 5},
+      {"key": 3, "weight": 2},
       {"key": 5, "weight": 1},
-      {"key": 10, "weight": 1},
-      {"key": 15, "weight": 1}
+      {"key": 10, "weight": 1}
     ]
   },
   "multiple-progression": {
