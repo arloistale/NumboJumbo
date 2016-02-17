@@ -160,6 +160,10 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.levelLabel.setString(levelVal);
     },
 
+    setMultiplierValue: function(multVal) {
+        this.multiplierLabel.setString("X " + multVal);
+    },
+
 // UI callbacks //
 
     setOnPauseCallback: function(callback) {

@@ -74,14 +74,14 @@ NJ.saveSettings = function() {
     }
 };
 
-
 ////////////////
 // GAME STATE //
 ////////////////
 
 NJ.gameState = {
     currentJumboId: "",
-    currentLevel: 1
+    currentLevel: 1,
+    multiplier: 1
 };
 
 // Use this function to set the current jumbo. DO NOT read currentJumboId directly!!!
@@ -113,6 +113,47 @@ NJ.stats = {
     maxComboLength: 0
 };
 
+// MANIPULATION //
+
+// returns the number of blocks left needed to get to the next level.
+// this is quadratic in the current level L, ie, aL^2 + bL + c.
+// values for a, b, c can (and should!) be tuned regularly :)
+NJ.getBlocksLeftForLevelUp = function() {
+    var a = 1.0;
+    var b = 5.0;
+    var c = 2.0;
+    var L = NJ.stats.level;
+    var totalBlocksToLevelUp = Math.round( a*L*L+b*L+c );
+    return totalBlocksToLevelUp - NJ.stats.blocksCleared;
+};
+
+// check if we should level up if blocks cleared is
+// greater than level up threshold
+// return how many times we leveled up
+// also execute level-up checks relevant to the controller
+NJ.levelUpIfNeeded = function() {
+    // level up
+    var levelUpCount = 0;
+
+    while (NJ.getBlocksLeftForLevelUp() <= 0) {
+        NJ.stats.level++;
+        levelUpCount++;
+    }
+
+    return levelUpCount;
+};
+
+// Adds score depending on the count of how many blocks were cleared
+// Returns the score difference (how much score we added)
+NJ.addScoreForCombo = function(blockCount) {
+    var difference =  10 * (Math.floor(0.5*blockCount*blockCount + blockCount) );
+    NJ.stats.score += difference;
+    return difference;
+};
+
+// SERIALIZATION //
+
+// reset stats for a new game
 NJ.resetStats = function() {
     for(var key in NJ.stats) {
         NJ.stats[key] = 0;
@@ -120,6 +161,7 @@ NJ.resetStats = function() {
     NJ.stats["level"] = 1;
 };
 
+// package relevant stats (score and level) to local storage
 NJ.saveStats = function() {
     var statPackage = {
         timestamp: Date.now(),
@@ -145,6 +187,7 @@ NJ.saveStats = function() {
     }
 };
 
+// send relevant stats over to Google Analytics
 NJ.sendAnalytics = function() {
     NJ.saveStats();
 

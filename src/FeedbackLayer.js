@@ -15,6 +15,8 @@ var FeedbackLayer = cc.Layer.extend({
 	ctor: function() {
 		this._super();
 
+        this.setName("FeedbackLayer");
+
 	    this.feedbackText = ["yahoo!", "yay!", "good job!", "cowabunga!",
 				 "holy crap!", "keep it up!", "whoa!", "dang!",
 				 "gosh golly!", "booya!", "oh wow!", 
@@ -151,14 +153,14 @@ var FeedbackLayer = cc.Layer.extend({
         }
 
         snippet.setText(titleStr);
+        snippet.setScale(0.01);
         snippet.setPosition(x, y);
 
         this.addChild(snippet);
 
-        var scaleUpAction = cc.scaleBy(0.1, 40.0);
-        var moveAction = cc.moveTo(0.5, cc.p(targetX, targetY));
-        var scaleDownAction = cc.scaleBy(1.5, 1/40.0);
-        scaleDownAction.easing(cc.easeIn(3.0));
+        var scaleUpAction = cc.scaleTo(0.1, 1.0);
+        //scaleDownAction.easing(cc.easeIn(3.0));
+        var moveAction = cc.moveTo(0.69, cc.p(targetX, targetY));
         var fadeOutAction = cc.fadeTo(0.1, 0);
         var removeAction = cc.callFunc(function() {
             that.pushSnippetPool(snippet);

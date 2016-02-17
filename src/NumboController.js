@@ -8,6 +8,7 @@ var NumboController = cc.Class.extend({
 	_selectedBlocks: [],
 
 	comboTimes: [],
+	multiplier: 1,
                                       
 	////////////////////
 	// INITIALIZATION //
@@ -101,7 +102,6 @@ var NumboController = cc.Class.extend({
 	},
 
 	// activate currently selected blocks
-	// awards player score depending on blocks selected
 	// shifts all blocks down to remove gaps and drops them accordingly
 	// returns the number of blocks cleared if successful, or 0 otherwise
 	activateSelectedBlocks: function() {
@@ -117,7 +117,7 @@ var NumboController = cc.Class.extend({
 			    NJ.stats.maxComboLength = selectedBlockCount;
 
 			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
-		
+
 			if(NJ.settings.sounds)
 			    cc.audioEngine.playEffect(res.plip_plip);
 		
@@ -127,6 +127,8 @@ var NumboController = cc.Class.extend({
 		
 			this._numboLevel.collapseColumnsToward(lastCol);
 			this._numboLevel.updateBlockRowsAndCols();
+
+			this.updateCombo(Date.now());
 	    }
 
 	    this.deselectAllBlocks();
@@ -150,31 +152,13 @@ var NumboController = cc.Class.extend({
 			cc.audioEngine.playEffect(res.tongue_click);
 	    }
 
+
 	    return this._numboLevel.dropBlock(col, val);
 	},
 
 	/////////////
 	// GETTERS //
 	/////////////
-
-	// check if we should level up if blocks cleared is 
-	// greater than level up threshold
-    // return how many times we leveled up
-	// also execute level-up checks relevant to the controller
-	levelUp: function() {
-	    // level up
-        var levelUpCount = 0;
-
-	    while (NJ.stats.blocksCleared >= this.blocksToLevelUp()) {
-			NJ.stats.level++;
-            levelUpCount++;
-			// Check for Jumbo Swap
-			if(NJ.gameState.currentJumboId == "multiple-progression")
-				this.updateMultipleProgression();
-	    }
-
-        return levelUpCount;
-	},
 
 	// updates the board/distribution given the mode is Multiple Progression
 	updateMultipleProgression: function() {
@@ -212,24 +196,30 @@ var NumboController = cc.Class.extend({
 		}
 	},
 
+	updateCombo: function(time) {
+		if(this.comboTimes.length == 0)
+			this.comboTimes.push(time);
+		else if((time - this.comboTimes[this.comboTimes.length-1])/1000 < 5) {
+			this.comboTimes.push(time);
+			if(this.comboTimes.length > 2)
+				this.multiplier = 1 + (this.comboTimes.length-2)*.5;
+		}
+		else this.comboTimes = [time];
+	},
+
+	checkMultiplier: function() {
+		if(this.comboTimes.length > 0) {
+			if((Date.now() - this.comboTimes[this.comboTimes.length-1])/1000 > 5) {
+				this.comboTimes = [];
+				NJ.multiplier = 1;
+				this.multiplier = 1;
+			}
+		}
+	},
+
 	// a scaling factor to reduce spawn time on higher levels
 	spawnConst: function() {
 	    return 1 + 2/NJ.stats.level
-	},
-	
-	// returns the number of blocks needed to get to the next level.
-	// this is quadratic in the current level L, ie, aL^2 + bL + c.
-	// values for a, b, c can (and should!) be tuned regularly :)
-	blocksToLevelUp: function(){
-	    var a = 1.0;
-	    var b = 5.0;
-	    var c = 2.0;
-	    var L = NJ.stats.level;
-	    return Math.round( a*L*L+b*L+c );
-	},
-	
-	getBlocksToLevelString: function() {
-	    return (this.blocksToLevelUp() - NJ.stats.blocksCleared) + "";
 	},
 	
 	// checks if the current selected blocks can be activated (their equation is valid)
@@ -240,10 +230,6 @@ var NumboController = cc.Class.extend({
 
 	getBlock: function(col, row) {
 	    return this._numboLevel.getBlock(col, row);
-	},
-
-	getScoreForCombo: function(blockCount, blockSum) {
-	    return blockCount*blockSum;
 	},
 
 	getSpawnTime: function() {

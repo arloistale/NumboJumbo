@@ -9,6 +9,9 @@ var Feedback = cc.Sprite.extend({
     ctor: function() {
         this._super();
 
+        this.setName("Feedback");
+        this.setTag(NJ.tags.PAUSABLE);
+
         this.setCascadeOpacityEnabled(true);
 
         // initialize feedback children

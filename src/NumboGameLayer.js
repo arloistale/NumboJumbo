@@ -26,6 +26,8 @@ var NumboGameLayer = cc.Layer.extend({
 	ctor: function () {
 	    this._super();
 
+        this.setTag(NJ.tags.PAUSABLE);
+
 		// Init stats data.
 	    NJ.resetStats();
 	    NJ.stats.startTime = Date.now();
@@ -112,7 +114,7 @@ var NumboGameLayer = cc.Layer.extend({
 		    that.onPause();
 		});
 	    this.addChild(this._numboHeaderLayer, 999);
-	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
+	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, NJ.getBlocksLeftForLevelUp(), NJ.stats.level);
 
         // feedback overlay
 	    this._feedbackLayer = new FeedbackLayer();
@@ -159,29 +161,57 @@ var NumboGameLayer = cc.Layer.extend({
 	// Pauses the game, halting all actions and schedulers.
 	pauseGame: function() {
 	    cc.eventManager.pauseTarget(this, true);
-                                   
-	    this.pause();
 
-	    var children = this.getChildren();
+        // use breadth first search to pause all valid children
+	    var children = [this];
+        var visited = [this];
 
-	    for(var i = 0; i < children.length; ++i) {
-            if(children[i].getTag() == NJ.tags.PAUSABLE)
-                children[i].pause();
-	    }
+        this.pause();
+
+        var child, i, newChildren;
+        while(children.length > 0) {
+            child = children.pop();
+
+            if (child.getTag() == NJ.tags.PAUSABLE)
+                child.pause();
+
+            newChildren = child.getChildren();
+            for(i = 0; i < newChildren.length; i++) {
+                if(visited.indexOf(newChildren[i]) < 0) {
+                    visited.push(newChildren[i]);
+                    children.push(newChildren[i]);
+                }
+            }
+        }
+
+        cc.log(children.length);
 	},
 
 	// Unpauses game, resuming all actions and schedulers.
 	resumeGame: function() {
 	    cc.eventManager.resumeTarget(this, true);
 
-	    this.resume();
+        // use breadth first search to resume all valid children
+        var children = [this];
+        var visited = [this];
 
-	    var children = this.getChildren();
+        this.resume();
 
-	    for(var i = 0; i < children.length; ++i) {
-            if(children[i].getTag() == NJ.tags.PAUSABLE)
-                children[i].resume();
-	    }
+        var child, i, newChildren;
+        while(children.length > 0) {
+            child = children.pop();
+
+            if (child.getTag() == NJ.tags.PAUSABLE)
+                child.resume();
+
+            newChildren = child.getChildren();
+            for(i = 0; i < newChildren.length; i++) {
+                if(visited.indexOf(newChildren[i]) < 0) {
+                    visited.push(newChildren[i]);
+                    children.push(newChildren[i]);
+                }
+            }
+        }
 	},
 
 	////////////////////
@@ -230,6 +260,25 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	///////////////////////
+	//     Multiplier    //
+	///////////////////////
+
+	updateMultiplier: function() {
+		NJ.multiplier = this._numboController.multiplier;
+		this._numboHeaderLayer.setMultiplierValue(NJ.multiplier);
+		if(NJ.multiplier > 1) {
+			this.unschedule(this.checkMultiplier);
+			this.schedule(this.checkMultiplier, 5, 1);
+		}
+	},
+
+	checkMultiplier: function() {
+		this._numboController.checkMultiplier();
+		if(this._numboController.comboTimes.length == 0)
+			this._numboHeaderLayer.setMultiplierValue(NJ.multiplier);
+	},
+
+	///////////////////////
 	// Game State Events //
 	///////////////////////
 
@@ -271,7 +320,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    this._settingsMenuLayer.setOnMenuCallback(function() {
 		    that.onMenu();
 		});
-	    //this.addChild(this._settingsMenuLayer, 999);
+	    this.addChild(this._settingsMenuLayer, 999);
 	},
 
 	// On closing previously opened settings menu we resume.
@@ -321,31 +370,51 @@ var NumboGameLayer = cc.Layer.extend({
 	    // Activate any selected blocks.
 	    var data = this._numboController.activateSelectedBlocks();
 
-	    // Gaps may be created; shift all affected blocks down.
-	    for (var col = 0; col < NJ.NUM_COLS; ++col) {
-			for (var row = 0; row < this._numboController.getColLength(col); ++row)
-		    	this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-	    }
+        // make sure something actually happened
+        if(data.cleared > 0) {
+            // Gaps may be created; shift all affected blocks down.
+            for (var col = 0; col < NJ.NUM_COLS; ++col) {
+                for (var row = 0; row < this._numboController.getColLength(col); ++row)
+                    this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+            }
 
-        NJ.stats.score += this.getScoreForCombo(data.cleared, data.blockSum);
+            var scoreDifference = NJ.addScoreForCombo(data.cleared, data.blockSum);
 
-	    // Level up with feedback if needed
-	    if(this._numboController.levelUp()) {
-            // give feedback for leveling up
-
-            // Display "LEVEL x"
-            this._feedbackLayer.launchFallingBanner({
-                title: "Level " + NJ.stats.level
+            // launch feedback for combo
+            this._feedbackLayer.launchSnippet({
+                title: "+" + scoreDifference,
+                x: touchPosition.x,
+                y: touchPosition.y,
+                targetX: touchPosition.x,
+                targetY: cc.winSize.height * 1.2
             });
 
-            // Speed up background for a bit.
-            this._backgroundLayer.initRush(180);
-        } else if (cleared > 3)
-			this._feedbackLayer.launchSnippet({
+            // Level up with feedback if needed
+            if (NJ.levelUpIfNeeded()) {
+                // Check for Jumbo Swap
+                if (NJ.gameState.currentJumboId == "multiple-progression")
+                    this._numboController.updateMultipleProgression();
 
-            });
+                // give feedback for leveling up
 
-	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level);
+                // Update multiplier based on changes made by first line of this function within NumboController.
+                if (this._numboController.multiplier != NJ.multiplier) {
+                    this.updateMultiplier();
+                }
+
+                // Display "LEVEL x"
+                this._feedbackLayer.launchFallingBanner({
+                    title: "Level " + NJ.stats.level
+                });
+
+                // Speed up background for a bit.
+                this._backgroundLayer.initRush(180);
+            } else if (data.cleared > 3) {
+
+            }
+
+            this._numboHeaderLayer.setScoreValue(NJ.stats.score, NJ.getBlocksLeftForLevelUp(), NJ.stats.level);
+        }
 	},
 
 /////////////
@@ -357,16 +426,16 @@ var NumboGameLayer = cc.Layer.extend({
 	    if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
 		point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
 
-		var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
-		var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
+            var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
+            var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
 
-		// return only if coordinates in certain radius of the block.
-		var radius = 0.45;
-		if (Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
-		    point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2) {
+            // return only if coordinates in certain radius of the block.
+            var radius = 0.45;
+            if (Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
+                point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2) {
 
-		    return {col: col, row: row};
-		}
+                return {col: col, row: row};
+            }
 	    }
 
 	    return null;
