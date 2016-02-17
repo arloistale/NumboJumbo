@@ -8,6 +8,7 @@ var Banner = Feedback.extend({
         this._super();
 
         this.label.setFontSize(72);
+        this.label.enableStroke(cc.color(0, 0, 0, 255), 5);
 
         this.setContentSize(this.label.getContentSize());
     }

@@ -22,31 +22,74 @@ var FeedbackLayer = cc.Layer.extend({
 
 		var size = cc.winSize;
 
-        // initialize banner pool with entities
         var feedback = null;
-        for(var i = 0; i < BANNER_POOL_SIZE; i++) {
-            feedback = new Banner();
-            feedback.attr({
-                scale: 1.0,
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: cc.winSize.width / 2,
-                y: cc.winSize.height / 2,
-                visible: false
-            });
+        var i = 0;
 
+        // initialize banner pool with entities
+        for(; i < BANNER_POOL_SIZE; i++) {
+            feedback = new Banner();
             this.bannerPool.push(feedback);
         }
+
+        // initialize snippet pool with entities
+        for(i = 0; i < BANNER_POOL_SIZE; i++) {
+            feedback = new Snippet();
+            this.snippetPool.push(feedback);
+        }
 	},
+
+/////////////
+// POOLING //
+/////////////
+
+    // pops a banner from the banner pool,
+    // NOTE: Allocates a new banner if needed, increase pool size if this happens!
+    popBannerPool: function() {
+        if(this.bannerPool.length == 0) {
+            var feedback = new Banner();
+            feedback.reset();
+
+            this.bannerPool.push(feedback);
+
+            cc.log("Warning: Banner pool size exceeded, allocating; new pool size = " + this.bannerPool.length);
+        }
+
+        var banner = this.bannerPool.pop();
+        banner.reset();
+
+        return banner;
+    },
+
+    // pops a banner from the banner pool,
+    // NOTE: Allocates a new banner if needed, increase pool size if this happens!
+    popSnippetPool: function() {
+        if(this.snippetPool.length == 0) {
+            cc.log("Warning: Snippet pool size exceeded, allocating new objects");
+
+            var feedback = new Snippet();
+            feedback.reset();
+
+            this.snippetPool.push(feedback);
+        }
+
+        var snippet = this.snippetPool.pop();
+        snippet.reset();
+
+        return snippet;
+    },
 
 ///////////////
 // LAUNCHING //
 ///////////////
 
     /*
+     * Launches a banner onto the feedback layer, usually intended for
+     * level ups and large combos.
      * launchBanner({ title: 'Hello' })
      */
     launchFallingBanner: function(data) {
+
+        var banner = this.popBannerPool();
 
         var that = this;
 
@@ -57,29 +100,31 @@ var FeedbackLayer = cc.Layer.extend({
         } else {
             titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)];
         }
-        this.banner.setVisible(true);
-        this.banner.setText(titleStr);
-        cc.log(this.banner.getContentSize());
-        this.banner.setPosition(cc.winSize.width / 2, cc.winSize.height + this.banner.getContentSize().height);
-        this.banner.setOpacity(255);
 
+        banner.setText(titleStr);
+        banner.setPosition(cc.winSize.width / 2, cc.winSize.height + banner.getContentSize().height);
+        banner.setOpacity(255);
+
+        // start moving the banner
         var moveDuration = 0.5;
-        var moveAction = cc.moveTo(moveDuration, cc.p(this.banner.x, cc.winSize.height / 2));
+        var moveAction = cc.moveTo(moveDuration, cc.p(banner.x, cc.winSize.height / 2));
         moveAction.easing(cc.easeOut(2.0));
         var delayAction = cc.delayTime(0.8);
         var fadeOutAction = cc.fadeTo(0.2, 0);
         var removeAction = cc.callFunc(function() {
-            that.banner.setVisible(false);
+            banner.removeFromParent(true);
         });
-        this.banner.stopAllActions();
-        this.banner.runAction(cc.sequence(moveAction, delayAction, fadeOutAction, removeAction));
+        banner.stopAllActions();
+        banner.runAction(cc.sequence(moveAction, delayAction, fadeOutAction, removeAction));
     },
 
 
     /*
-     * launchBanner({ title: 'Hello' })
+     * Launches a snippet onto the feedback layer, intended for showing small bits of info
+     * such as score increases.
+     * launchSnippet ({ title: 'Hello' })
      */
-    launchGrowingBanner: function(data) {
+    launchSnippet: function(data) {
 
         var that = this;
 
@@ -91,7 +136,7 @@ var FeedbackLayer = cc.Layer.extend({
             titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)];
         }
         var oldFontSize = this.banner.bannerLabel.getFontSize();
-        this.banner.bannerLabel.setFontSize(200);
+        this.banner.reset();
         this.banner.setVisible(true);
         this.banner.launchWithText(titleStr);
         this.banner.setPosition(cc.winSize.width*(1/2), cc.winSize.height * 0.5);

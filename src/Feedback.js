@@ -11,7 +11,18 @@ var Feedback = cc.Sprite.extend({
 
         this.setCascadeOpacityEnabled(true);
 
+        // initialize feedback children
         this.label = new cc.LabelTTF("", b_getFontName(res.markerFont), 48);
+
+        this.label.enableStroke(cc.color(0, 0, 0, 255), 1);
+        this.label.setColor(cc.color(255, 255, 255, 255));
+
+        this.addChild(this.label);
+
+        this.reset();
+    },
+
+    reset: function() {
         this.label.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -19,11 +30,6 @@ var Feedback = cc.Sprite.extend({
             x: this.getContentSize().width / 2,
             y: this.getContentSize().height / 2
         });
-
-        this.label.enableStroke(cc.color(0, 0, 255, 0.75*255), 1);
-        this.label.setColor(cc.color(255, 255, 255, 0.75*255));
-
-        this.addChild(this.label);
     },
 
     setText: function(text) {

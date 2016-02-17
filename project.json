@@ -22,6 +22,7 @@
         "src/NumboHeaderLayer.js",
         "src/GameOverMenuLayer.js",
 	    "src/FeedbackLayer.js",
+        "src/Feedback.js",
         "src/Banner.js",
         "src/Snippet.js",
         "src/NumboBlock.js",
