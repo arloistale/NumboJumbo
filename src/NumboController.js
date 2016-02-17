@@ -117,7 +117,7 @@ var NumboController = cc.Class.extend({
 
 			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
-			NJ.stats.score += this.getScoreForCombo(selectedBlockCount, blockSum);
+			NJ.stats.score += this.getScoreForCombo(selectedBlockCount);
 		
 			if(NJ.settings.sounds)
 			    cc.audioEngine.playEffect(res.plip_plip);
@@ -247,8 +247,10 @@ var NumboController = cc.Class.extend({
 	    return this._numboLevel.getBlock(col, row);
 	},
 
-	getScoreForCombo: function(blockCount, blockSum) {
-	    return blockCount*blockSum;
+	getScoreForCombo: function(blockCount) {
+	    var score =  10 * (Math.floor(0.5*blockCount*blockCount + blockCount) );
+		console.log(score);
+		return score;
 	},
 
 	getSpawnTime: function() {
