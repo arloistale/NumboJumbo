@@ -52,7 +52,6 @@ var NumboGameLayer = cc.Layer.extend({
 		this.addChild(this._backgroundLayer);
 
 	    this.schedule(this.moveBackground,.01);
-
 	},
 
 	// Initialize input depending on the device.
@@ -119,9 +118,8 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(this._numboHeaderLayer, 999);
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	    
-	    this._bannerLayer = new BannerLayer();
+	    this._bannerLayer = new FeedbackLayer();
 	    this.addChild(this._bannerLayer, 999);
-	    
 	},
 
 	// Initialize the empty level into the scene.
@@ -344,7 +342,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    if(this._numboController.levelUp())
 			this.executeLevelUp();
 	    else if (cleared > 3)
-			this._bannerLayer.launchFallingBanner();
+			this._bannerLayer.launchGrowingBanner();
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	},
@@ -352,7 +350,7 @@ var NumboGameLayer = cc.Layer.extend({
 	// Carries out level-up visual transition.
 	executeLevelUp: function() {
 		// Display "LEVEL x"
-		this._bannerLayer.launchShrinkingBanner({
+		this._bannerLayer.launchFallingBanner({
 			title: "Level " + NJ.stats.level
 		});
 
@@ -383,4 +381,4 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    return null;
 	}
-    });
+});

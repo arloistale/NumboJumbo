@@ -203,7 +203,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(this._numboHeaderLayer, 999);
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	    
-	    this._bannerLayer = new BannerLayer();
+	    this._bannerLayer = new FeedbackLayer();
 	    this.addChild(this._bannerLayer, 999);
 	    
 	},

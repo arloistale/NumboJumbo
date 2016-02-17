@@ -119,7 +119,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         });
         this.multiplierLabel.enableStroke(cc.color(0, 0, 255, 255), 6);
         this.multiplierLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.multiplierLabel);
+        //this.addChild(this.multiplierLabel);
     },
 
     initButtons: function() {
