@@ -15,17 +15,16 @@ var FeedbackLayer = cc.Layer.extend({
 	ctor: function() {
 		this._super();
 
-        this.setName("FeedbackLayer");
-
 	    this.feedbackText = ["yahoo!", "yay!", "good job!", "cowabunga!",
 				 "holy crap!", "keep it up!", "whoa!", "dang!",
 				 "gosh golly!", "booya!", "oh wow!", 
 				 "oh jeez!", "so good!", "!!!!!!!!!!!!!!!!!" ];
 
-		var size = cc.winSize;
-
         var feedback = null;
         var i = 0;
+
+        // TODO: Should not have to call this here...
+        this.reset();
 
         // initialize banner pool with entities
         for(; i < BANNER_POOL_SIZE; i++) {
@@ -39,6 +38,21 @@ var FeedbackLayer = cc.Layer.extend({
             this.snippetPool.push(feedback);
         }
 	},
+
+    reset: function() {
+        var i = 0;
+        for(; i < this.bannerPool.length; i++) {
+            this.bannerPool[i].stopAllActions();
+        }
+
+        this.bannerPool = [];
+
+        for(i = 0; i < this.snippetPool.length; i++) {
+            this.snippetPool[i].stopAllActions();
+        }
+
+        this.snippetPool = [];
+    },
 
 /////////////
 // POOLING //

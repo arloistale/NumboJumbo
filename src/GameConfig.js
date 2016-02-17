@@ -84,6 +84,11 @@ NJ.gameState = {
     multiplier: 1
 };
 
+NJ.resetGameState = function() {
+    NJ.gameState.currentLevel = 1;
+    NJ.gameState.multiplier = 1;
+};
+
 // Use this function to set the current jumbo. DO NOT read currentJumboId directly!!!
 NJ.chooseJumbo = function(jumboId) {
     NJ.gameState.currentJumboId = jumboId;
@@ -146,9 +151,10 @@ NJ.levelUpIfNeeded = function() {
 // Adds score depending on the count of how many blocks were cleared
 // Returns the score difference (how much score we added)
 NJ.addScoreForCombo = function(blockCount) {
-    var difference =  10 * (Math.floor(0.5*blockCount*blockCount + blockCount) );
-    NJ.stats.score += difference;
-    return difference;
+    var clearedScoreValue = 10 * (Math.floor(0.5*blockCount*blockCount + blockCount) );
+    var scoreDifference = clearedScoreValue * NJ.gameState.multiplier;
+    NJ.stats.score += scoreDifference;
+    return scoreDifference;
 };
 
 // SERIALIZATION //

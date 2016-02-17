@@ -20,7 +20,7 @@ var BackgroundLayer = cc.Layer.extend({
 
         this.setTag(NJ.tags.PAUSABLE);
 
-        //this.initSprites();
+        this.initSprites();
     },
 
     // Initializes the background sprites for the scrolling background.
@@ -82,7 +82,7 @@ var BackgroundLayer = cc.Layer.extend({
         });
         this.addChild(this.topLayerTwo, 0);
 
-        //this.schedule(this.moveBackground, 0.01);
+        this.schedule(this.moveBackground, 0.01);
     },
 
     // PRIVATE! used by BackgroundLayer to calculate a parallax shift.

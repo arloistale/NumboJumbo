@@ -29,7 +29,9 @@ var NumboGameLayer = cc.Layer.extend({
         this.setTag(NJ.tags.PAUSABLE);
 
 		// Init stats data.
+        NJ.resetGameState();
 	    NJ.resetStats();
+
 	    NJ.stats.startTime = Date.now();
 
 		// Init game elements.
@@ -39,6 +41,8 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.initUI();
 	    this.initLevel();
 	    this.initAudio();
+
+        this.updateMultiplier();
                                      
 	    // Begin scheduling block drops.
 	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
@@ -118,7 +122,7 @@ var NumboGameLayer = cc.Layer.extend({
 
         // feedback overlay
 	    this._feedbackLayer = new FeedbackLayer();
-	    this.addChild(this._feedbackLayer, 999);
+	    this.addChild(this._feedbackLayer, 800);
 	},
 
 	// Initialize the empty level into the scene.
@@ -183,8 +187,6 @@ var NumboGameLayer = cc.Layer.extend({
                 }
             }
         }
-
-        cc.log(children.length);
 	},
 
 	// Unpauses game, resuming all actions and schedulers.
@@ -264,9 +266,9 @@ var NumboGameLayer = cc.Layer.extend({
 	///////////////////////
 
 	updateMultiplier: function() {
-		NJ.multiplier = this._numboController.multiplier;
-		this._numboHeaderLayer.setMultiplierValue(NJ.multiplier);
-		if(NJ.multiplier > 1) {
+		NJ.gameState.multiplier = this._numboController.multiplier;
+		this._numboHeaderLayer.setMultiplierValue(NJ.gameState.multiplier);
+		if(NJ.gameState.multiplier > 1) {
 			this.unschedule(this.checkMultiplier);
 			this.schedule(this.checkMultiplier, 5, 1);
 		}
@@ -275,7 +277,7 @@ var NumboGameLayer = cc.Layer.extend({
 	checkMultiplier: function() {
 		this._numboController.checkMultiplier();
 		if(this._numboController.comboTimes.length == 0)
-			this._numboHeaderLayer.setMultiplierValue(NJ.multiplier);
+			this._numboHeaderLayer.setMultiplierValue(NJ.gameState.multiplier);
 	},
 
 	///////////////////////
@@ -336,6 +338,9 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// On game over when player chooses to go to menu we return to menu.
 	onMenu: function() {
+        // reset necessary modules
+        this._feedbackLayer.reset();
+
 	    //load resources
 	    cc.LoaderScene.preload(g_menu, function () {
 		    cc.audioEngine.stopMusic();
@@ -398,7 +403,7 @@ var NumboGameLayer = cc.Layer.extend({
                 // give feedback for leveling up
 
                 // Update multiplier based on changes made by first line of this function within NumboController.
-                if (this._numboController.multiplier != NJ.multiplier) {
+                if (this._numboController.multiplier != NJ.gameState.multiplier) {
                     this.updateMultiplier();
                 }
 
@@ -410,7 +415,7 @@ var NumboGameLayer = cc.Layer.extend({
                 // Speed up background for a bit.
                 this._backgroundLayer.initRush(180);
             } else if (data.cleared > 3) {
-
+                this._feedbackLayer.launchFallingBanner();
             }
 
             this._numboHeaderLayer.setScoreValue(NJ.stats.score, NJ.getBlocksLeftForLevelUp(), NJ.stats.level);

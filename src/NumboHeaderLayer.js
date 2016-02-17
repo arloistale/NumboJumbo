@@ -46,7 +46,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.scoreValueText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.scoreValueText);
 
-        this.scoreValueLabel = new cc.LabelTTF("0", b_getFontName(res.markerFont), 32);
+        this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), 32);
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -71,7 +71,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.blocksToLevelText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.blocksToLevelText);
 
-        this.blocksToLevelLabel = new cc.LabelTTF("42", b_getFontName(res.markerFont), 32);
+        this.blocksToLevelLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), 32);
 
         this.blocksToLevelLabel.attr({
             scale: 1.0,
@@ -97,7 +97,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.levelText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelText);
 
-        this.levelLabel = new cc.LabelTTF("1", b_getFontName(res.markerFont), 32);
+        this.levelLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), 32);
         this.levelLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -109,7 +109,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.levelLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelLabel);
 
-        this.multiplierLabel = new cc.LabelTTF("X 1", b_getFontName(res.markerFont), 72);
+        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), 72);
         this.multiplierLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -119,7 +119,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         });
         this.multiplierLabel.enableStroke(cc.color(0, 0, 255, 255), 6);
         this.multiplierLabel.setColor(cc.color(255, 255, 255, 255));
-        //this.addChild(this.multiplierLabel);
+        this.addChild(this.multiplierLabel);
     },
 
     initButtons: function() {

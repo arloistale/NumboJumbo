@@ -211,7 +211,7 @@ var NumboController = cc.Class.extend({
 		if(this.comboTimes.length > 0) {
 			if((Date.now() - this.comboTimes[this.comboTimes.length-1])/1000 > 5) {
 				this.comboTimes = [];
-				NJ.multiplier = 1;
+				NJ.gameState.multiplier = 1;
 				this.multiplier = 1;
 			}
 		}
