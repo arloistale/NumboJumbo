@@ -17,10 +17,16 @@ var BackgroundLayer = cc.Layer.extend({
 
     ctor: function () {
         this._super();
+
+        this.setTag(NJ.tags.PAUSABLE);
+
+        //this.initSprites();
     },
 
     // Initializes the background sprites for the scrolling background.
-    initSprites: function(size) {
+    initSprites: function() {
+        var size = cc.winSize;
+
         this.bottomLayer = new cc.Sprite(res.backBottom);
         this.bottomLayer.attr({
             x: size.width / 2,
@@ -75,6 +81,8 @@ var BackgroundLayer = cc.Layer.extend({
             rotation: 0
         });
         this.addChild(this.topLayerTwo, 0);
+
+        //this.schedule(this.moveBackground, 0.01);
     },
 
     // PRIVATE! used by BackgroundLayer to calculate a parallax shift.

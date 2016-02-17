@@ -20,7 +20,7 @@ var NumboBlock = cc.Sprite.extend({
     ctor: function() {
         this._super(res.blockImage);
 
-        this.setTag(NJ.tags.BLOCK);
+        this.setTag(NJ.tags.PAUSABLE);
 
         this.attr({
             scale: 1.5

@@ -1,4 +1,4 @@
-var NumboHeaderLayer = cc.LayerColor.extend({
+var NumboHeaderLayer = cc.Layer.extend({
 
     scoreValueLabel: null,
     scoreValueText: null,
@@ -18,7 +18,7 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         this._super();
 
         var headerSize = cc.size(cc.winSize.width, NJ.HEADER_HEIGHT);
-        this.init(cc.color(255, 255, 255, 0), headerSize.width, headerSize.height);
+        this.setContentSize(headerSize.width, headerSize.height);
 
         this.setPosition(0, cc.winSize.height);
 

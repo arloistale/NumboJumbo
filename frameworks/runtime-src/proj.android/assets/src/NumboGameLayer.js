@@ -7,7 +7,7 @@ var NumboGameLayer = cc.Layer.extend({
 	_numboHeaderLayer: null,
 	_settingsMenuLayer: null,
 	_gameOverMenuLayer: null,
-	_bannerLayer: null,
+	_feedbackLayer: null,
 
 	// Sprite Data
 	_backgroundSpriteBottom: null,
@@ -203,8 +203,8 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(this._numboHeaderLayer, 999);
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	    
-	    this._bannerLayer = new FeedbackLayer();
-	    this.addChild(this._bannerLayer, 999);
+	    this._feedbackLayer = new FeedbackLayer();
+	    this.addChild(this._feedbackLayer, 999);
 	    
 	},
 
@@ -255,7 +255,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    var children = this.getChildren();
 
 	    for(var i = 0; i < children.length; ++i) {
-		if(children[i].getTag() == NJ.tags.BLOCK)
+		if(children[i].getTag() == NJ.tags.PAUSABLE)
 		    children[i].pause();
 	    }
 	},
@@ -269,7 +269,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    var children = this.getChildren();
 
 	    for(var i = 0; i < children.length; ++i) {
-		if(children[i].getTag() == NJ.tags.BLOCK)
+		if(children[i].getTag() == NJ.tags.PAUSABLE)
 		    children[i].resume();
 	    }
 	},
@@ -279,7 +279,7 @@ var NumboGameLayer = cc.Layer.extend({
 	////////////////////
 
 	// move scene block sprite into place
-	moveBlockSprite: function(block) {
+	moveBlockIntoPlace: function(block) {
 	    var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (block.row + 0.5);
 	    var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
 
@@ -316,7 +316,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
 	    this.addChild(block);
 
-	    this.moveBlockSprite(block);
+	    this.moveBlockIntoPlace(block);
 	},
 
 	///////////////////////
@@ -413,13 +413,13 @@ var NumboGameLayer = cc.Layer.extend({
 	    // gaps may be created; shift all affected blocks down
 	    for (var col = 0; col < NJ.NUM_COLS; ++col) {
 		for (var row = 0; row < this._numboController.getColLength(col); ++row){
-		    this.moveBlockSprite(this._numboController.getBlock(col, row));
+		    this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 		}
 	    }
 
 	    // level up if needed
 	    if(this._numboController.levelUp()) {
-			this._bannerLayer.makeFeedbackText();
+			this._feedbackLayer.makeFeedbackText();
 	    }
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );

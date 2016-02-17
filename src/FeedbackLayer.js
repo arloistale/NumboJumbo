@@ -155,5 +155,4 @@ var FeedbackLayer = cc.Layer.extend({
 	this.banner.stopAllActions();
         this.banner.runAction(cc.sequence(scaleDownAction, fadeOutAction, removeAction, fadeInAction, scaleUpAction, fixFontAction));
     }
-
 });

@@ -35,12 +35,12 @@ var NumboLevel = cc.Class.extend({
 	},
 
 	////////////////////
-	// BLOCK MANIPULATION //
+	// PAUSABLE MANIPULATION //
 	////////////////////
 
 	// spawn a block at the given col and value
 	// returns spawned block
-	// DO NOT publicly use directly!!! Use moveBlockSprite or dropRandomBlock instead
+	// DO NOT publicly use directly!!! Use moveBlockIntoPlace or dropRandomBlock instead
 	spawnBlock: function(col, val) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid coords");
 	    

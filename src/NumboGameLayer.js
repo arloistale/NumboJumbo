@@ -7,7 +7,7 @@ var NumboGameLayer = cc.Layer.extend({
 	_numboHeaderLayer: null,
 	_settingsMenuLayer: null,
 	_gameOverMenuLayer: null,
-	_bannerLayer: null,
+	_feedbackLayer: null,
 
 	// Sprite Data
 	_backgroundLayer: null,
@@ -45,63 +45,58 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Initialize the level's background.
 	initBackground: function() {
-	    var size = cc.winSize;
-
 	    this._backgroundLayer = new BackgroundLayer();
-		this._backgroundLayer.initSprites(cc.winSize);
 		this.addChild(this._backgroundLayer);
-
-	    this.schedule(this.moveBackground,.01);
 	},
 
 	// Initialize input depending on the device.
 	initInput: function() {
 	    if ('mouse' in cc.sys.capabilities) {
-		cc.eventManager.addListener({
-			event: cc.EventListener.MOUSE,
-			onMouseDown: function (event) {
-			    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-				return false;
+		    cc.eventManager.addListener({
+                event: cc.EventListener.MOUSE,
+                onMouseDown: function (event) {
+                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+                    return false;
 
-			    event.getCurrentTarget().onTouchBegan(event.getLocation());
+                    event.getCurrentTarget().onTouchBegan(event.getLocation());
 
-			    return true;
-			},
-			onMouseMove: function (event) {
-			    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-				return false;
+                    return true;
+                },
+                onMouseMove: function (event) {
+                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+                    return false;
 
-			    event.getCurrentTarget().onTouchMoved(event.getLocation());
+                    event.getCurrentTarget().onTouchMoved(event.getLocation());
 
-			    return true;
-			},
-			onMouseUp: function (event) {
-			    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-				return false;
+                    return true;
+                },
+                onMouseUp: function (event) {
+                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+                    return false;
 
-			    event.getCurrentTarget().onTouchEnded(event.getLocation());
+                    event.getCurrentTarget().onTouchEnded(event.getLocation());
 
-			    return true;
-			}
+                    return true;
+                }
 		    }, this);
 	    }
 	    else if (cc.sys.capabilities.hasOwnProperty('touches')) {
-		cc.eventManager.addListener({
-			prevTouchId: -1,
-			event: cc.EventListener.TOUCH_ONE_BY_ONE,
-			swallowTouches: true,
-			onTouchBegan: function(touch, event) {
-			    event.getCurrentTarget().onTouchBegan(touch.getLocation());
-			    return true;
-			},
-			onTouchMoved: function(touch, event) {
-			    event.getCurrentTarget().onTouchMoved(touch.getLocation());
-			    return true;
-			},
-			onTouchEnded: function(touch, event) {
-			    event.getCurrentTarget().onTouchEnded(touch.getLocation());
-			    return true;
-			}
+		    cc.eventManager.addListener({
+                prevTouchId: -1,
+                event: cc.EventListener.TOUCH_ONE_BY_ONE,
+                swallowTouches: true,
+                onTouchBegan: function(touch, event) {
+                    event.getCurrentTarget().onTouchBegan(touch.getLocation());
+                    return true;
+                },
+                onTouchMoved: function(touch, event) {
+                    event.getCurrentTarget().onTouchMoved(touch.getLocation());
+                    return true;
+                },
+                onTouchEnded: function(touch, event) {
+                    event.getCurrentTarget().onTouchEnded(touch.getLocation());
+                    return true;
+                }
 		    }, this);
 	    }
 	},
@@ -111,15 +106,17 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    var that = this;
 
+        // header
 	    this._numboHeaderLayer = new NumboHeaderLayer();
 	    this._numboHeaderLayer.setOnPauseCallback(function() {
 		    that.onPause();
 		});
 	    this.addChild(this._numboHeaderLayer, 999);
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
-	    
-	    this._bannerLayer = new FeedbackLayer();
-	    this.addChild(this._bannerLayer, 999);
+
+        // feedback overlay
+	    this._feedbackLayer = new FeedbackLayer();
+	    this.addChild(this._feedbackLayer, 999);
 	},
 
 	// Initialize the empty level into the scene.
@@ -168,8 +165,8 @@ var NumboGameLayer = cc.Layer.extend({
 	    var children = this.getChildren();
 
 	    for(var i = 0; i < children.length; ++i) {
-		if(children[i].getTag() == NJ.tags.BLOCK)
-		    children[i].pause();
+            if(children[i].getTag() == NJ.tags.PAUSABLE)
+                children[i].pause();
 	    }
 	},
 
@@ -182,8 +179,8 @@ var NumboGameLayer = cc.Layer.extend({
 	    var children = this.getChildren();
 
 	    for(var i = 0; i < children.length; ++i) {
-		if(children[i].getTag() == NJ.tags.BLOCK)
-		    children[i].resume();
+            if(children[i].getTag() == NJ.tags.PAUSABLE)
+                children[i].resume();
 	    }
 	},
 
@@ -192,7 +189,7 @@ var NumboGameLayer = cc.Layer.extend({
 	////////////////////
 
 	// Move scene block sprite into place.
-	moveBlockSprite: function(block) {
+	moveBlockIntoPlace: function(block) {
 	    var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (block.row + 0.5);
 	    var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
 
@@ -229,15 +226,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
 	    this.addChild(block);
 
-	    this.moveBlockSprite(block);
-	},
-
-	///////////////////////
-	//     Background    //
-	///////////////////////
-
-	moveBackground: function() {
-		this._backgroundLayer.moveBackground();
+	    this.moveBlockIntoPlace(block);
 	},
 
 	///////////////////////
@@ -271,7 +260,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    var that = this;
 
 	    if(NJ.settings.sounds)
-		cc.audioEngine.playEffect(res.tongue_click, false);
+		    cc.audioEngine.playEffect(res.tongue_click, false);
 
 	    this.pauseGame();
 
@@ -282,7 +271,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    this._settingsMenuLayer.setOnMenuCallback(function() {
 		    that.onMenu();
 		});
-	    this.addChild(this._settingsMenuLayer, 999);
+	    //this.addChild(this._settingsMenuLayer, 999);
 	},
 
 	// On closing previously opened settings menu we resume.
@@ -316,7 +305,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
 	    if (touchCoords)
-		this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+		    this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 	},
 
 	// On touch moved, selects additional blocks as the touch is held and moved.
@@ -335,14 +324,14 @@ var NumboGameLayer = cc.Layer.extend({
 	    // Gaps may be created; shift all affected blocks down.
 	    for (var col = 0; col < NJ.NUM_COLS; ++col) {
 			for (var row = 0; row < this._numboController.getColLength(col); ++row)
-		    	this.moveBlockSprite(this._numboController.getBlock(col, row));
+		    	this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 	    }
 
 	    // Level up if needed.
 	    if(this._numboController.levelUp())
 			this.executeLevelUp();
 	    else if (cleared > 3)
-			this._bannerLayer.launchGrowingBanner();
+			this._feedbackLayer.launchGrowingBanner();
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
 	},
@@ -350,7 +339,7 @@ var NumboGameLayer = cc.Layer.extend({
 	// Carries out level-up visual transition.
 	executeLevelUp: function() {
 		// Display "LEVEL x"
-		this._bannerLayer.launchFallingBanner({
+		this._feedbackLayer.launchFallingBanner({
 			title: "Level " + NJ.stats.level
 		});
 

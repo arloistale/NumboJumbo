@@ -6,7 +6,7 @@ cc.game.onStart = function() {
     var resolutionPolicy = cc.ResolutionPolicy.SHOW_ALL;
     
     if(cc.sys.isNative) {
-        var isLandscape = false;
+        isLandscape = false;
 
         var searchPaths = jsb.fileUtils.getSearchPaths();
         

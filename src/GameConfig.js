@@ -25,7 +25,7 @@ NJ.HEADER_HEIGHT = 56;
 
 // node tags
 NJ.tags = {
-    BLOCK: 9001
+    PAUSABLE: 9001
 };
 
 // math
