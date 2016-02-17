@@ -243,6 +243,25 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	///////////////////////
+	//     Multiplier    //
+	///////////////////////
+
+	updateMultiplier: function() {
+		NJ.multiplier = this._numboController.multiplier;
+		this._numboHeaderLayer.setMultiplierValue(NJ.multiplier);
+		if(NJ.multiplier > 1) {
+			this.unschedule(this.checkMultiplier);
+			this.schedule(this.checkMultiplier, 5, 1);
+		}
+	},
+
+	checkMultiplier: function() {
+		this._numboController.checkMultiplier();
+		if(this._numboController.comboTimes.length == 0)
+			this._numboHeaderLayer.setMultiplierValue(NJ.multiplier);
+	},
+
+	///////////////////////
 	// Game State Events //
 	///////////////////////
 
@@ -347,6 +366,11 @@ var NumboGameLayer = cc.Layer.extend({
 			this._bannerLayer.launchFallingBanner();
 
 	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
+
+		// Update multiplier based on changes made by first line of this function within NumboController.
+		if(this._numboController.multiplier != NJ.multiplier) {
+			this.updateMultiplier();
+		}
 	},
 
 	// Carries out level-up visual transition.

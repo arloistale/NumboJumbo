@@ -8,6 +8,7 @@ var NumboController = cc.Class.extend({
 	_selectedBlocks: [],
 
 	comboTimes: [],
+	multiplier: 1,
                                       
 	////////////////////
 	// INITIALIZATION //
@@ -117,8 +118,8 @@ var NumboController = cc.Class.extend({
 
 			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
-			NJ.stats.score += this.getScoreForCombo(selectedBlockCount);
-		
+			NJ.stats.score += this.getScoreForCombo(selectedBlockCount, blockSum)*this.multiplier;
+
 			if(NJ.settings.sounds)
 			    cc.audioEngine.playEffect(res.plip_plip);
 
@@ -130,8 +131,7 @@ var NumboController = cc.Class.extend({
 			this._numboLevel.collapseColumnsToward(lastCol);
 			this._numboLevel.updateBlockRowsAndCols();
 
-
-
+			this.updateCombo(Date.now());
 	    }
 
 	    this.deselectAllBlocks();
@@ -154,6 +154,7 @@ var NumboController = cc.Class.extend({
 	    if(NJ.settings.sounds){
 		cc.audioEngine.playEffect(res.tongue_click);
 	    }
+
 
 	    return this._numboLevel.dropBlock(col, val);
 	},
@@ -214,6 +215,27 @@ var NumboController = cc.Class.extend({
 			this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
 			this._numboLevel.multiplyBlocksBy(factor);
 			NJ.gameState.currentLevel = factor;
+		}
+	},
+
+	updateCombo: function(time) {
+		if(this.comboTimes.length == 0)
+			this.comboTimes.push(time);
+		else if((time - this.comboTimes[this.comboTimes.length-1])/1000 < 5) {
+			this.comboTimes.push(time);
+			if(this.comboTimes.length > 2)
+				this.multiplier = 1 + (this.comboTimes.length-2)*.5;
+		}
+		else this.comboTimes = [time];
+	},
+
+	checkMultiplier: function() {
+		if(this.comboTimes.length > 0) {
+			if((Date.now() - this.comboTimes[this.comboTimes.length-1])/1000 > 5) {
+				this.comboTimes = [];
+				NJ.multiplier = 1;
+				this.multiplier = 1;
+			}
 		}
 	},
 
