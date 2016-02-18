@@ -82,13 +82,13 @@ NJ.gameState = {
     currentJumboId: "",
     currentLevel: 1,
     multiplier: 1,
-    randomJumbo: false
+    randomJumbos: false
 };
 
 NJ.resetGameState = function() {
     NJ.gameState.currentLevel = 1;
     NJ.gameState.multiplier = 1;
-    NJ.gameState.randomJumbo = false;
+    NJ.gameState.randomJumbos = false;
 };
 
 // Use this function to set the current jumbo. DO NOT read currentJumboId directly!!!
