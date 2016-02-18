@@ -81,12 +81,14 @@ NJ.saveSettings = function() {
 NJ.gameState = {
     currentJumboId: "",
     currentLevel: 1,
-    multiplier: 1
+    multiplier: 1,
+    randomJumbo: false
 };
 
 NJ.resetGameState = function() {
     NJ.gameState.currentLevel = 1;
     NJ.gameState.multiplier = 1;
+    NJ.gameState.randomJumbo = false;
 };
 
 // Use this function to set the current jumbo. DO NOT read currentJumboId directly!!!
