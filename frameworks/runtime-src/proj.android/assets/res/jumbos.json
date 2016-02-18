@@ -3,6 +3,7 @@
     "name": "Basic",
     "difficulty": "Easy",
     "spawnTime": 1.0,
+    "weight": 1.0,
     "numberList": [
       {"key": 1, "weight": 2},
       {"key": 2, "weight": 1},
@@ -14,6 +15,7 @@
     "name": "Classic",
     "difficulty": "Medium",
     "spawnTime": 1.0,
+    "weight": 3.0,
     "numberList": [
       {"key": 1, "weight": 4},
       {"key": 2, "weight": 3},
@@ -30,6 +32,7 @@
     "name": "Fives",
     "difficulty": "Medium",
     "spawnTime": 0.7,
+    "weight": 3.0,
     "numberList": [
       {"key": 5, "weight": 3},
       {"key": 10, "weight": 2},
@@ -41,6 +44,7 @@
     "name": "Sevens",
     "difficulty": "Hard",
     "spawnTime": 1.0,
+    "weight": 1.0,
     "numberList": [
       {"key": 7, "weight": 5},
       {"key": 14, "weight": 4},
@@ -55,6 +59,7 @@
     "name": "One Mania",
     "difficulty": "Very Hard",
     "spawnTime": 0.3,
+    "weight": 2.0,
     "numberList": [
       {"key": 1, "weight": 15},
       {"key": 2, "weight": 5},
@@ -63,10 +68,28 @@
       {"key": 10, "weight": 1}
     ]
   },
+  "random-jumbos": {
+    "name": "Random Jumbos!",
+    "difficulty": "Like, Way Hard!",
+    "spawnTime": 1.0,
+    "weight": 0.0,
+    "numberList": [
+      {"key": 1, "weight": 4},
+      {"key": 2, "weight": 3},
+      {"key": 3, "weight": 3},
+      {"key": 4, "weight": 2},
+      {"key": 5, "weight": 2},
+      {"key": 6, "weight": 1},
+      {"key": 7, "weight": 1},
+      {"key": 8, "weight": 1},
+      {"key": 9, "weight": 1}
+    ]
+  },
   "multiple-progression": {
     "name": "Multiples Progression",
     "difficulty": "Medium",
     "spawnTime": 1.0,
+    "weight": 0.0,
     "numberList": [
       {"key": 1, "weight": 4},
       {"key": 2, "weight": 3},
