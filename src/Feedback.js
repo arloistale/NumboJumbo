@@ -30,7 +30,7 @@ var Feedback = cc.Sprite.extend({
             scale: 1.0,
             opacity: 255
         });
-
+                                
         this.label.attr({
             scale: 1.0,
             anchorX: 0.5,

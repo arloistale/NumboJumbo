@@ -10,11 +10,7 @@ var NumboGameLayer = cc.Layer.extend({
 	_feedbackLayer: null,
 
 	// Sprite Data
-	_backgroundSpriteBottom: null,
-	_backgroundSpriteMiddle: null,
-	_backgroundSpriteMiddleTwo: null,
-	_backgroundSpriteTop: null,
-	_backgroundSpriteTopTwo: null,
+	_backgroundLayer: null,
 
 	// Level Data
 	_levelBounds: null,
@@ -29,186 +25,107 @@ var NumboGameLayer = cc.Layer.extend({
 
 	ctor: function () {
 	    this._super();
-        
+
+        this.setTag(NJ.tags.PAUSABLE);
+
+		// Init stats data.
+        NJ.resetGameState();
 	    NJ.resetStats();
 
-	    // init time
 	    NJ.stats.startTime = Date.now();
-	    
+
+		// Init game elements.
 	    this.initBackground();
 	    this.initNumboController();
 	    this.initInput();
 	    this.initUI();
 	    this.initLevel();
 	    this.initAudio();
+
+        this.updateMultiplier();
                                      
-	    // begin scheduling block drops
+	    // Begin scheduling block drops.
 	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
 	    this.schedule(this.scheduleSpawn, 0.1*20);
 	},
 
-	// initialize background for game
+	// Initialize the level's background.
 	initBackground: function() {
-	    var size = cc.winSize;
-
-	    // add the background
-	    // TODO: Move this to a separate layer to be more organized
-	    this._backgroundSpriteBottom = new cc.Sprite(res.backBottom);
-	    this._backgroundSpriteBottom.attr({
-		    x: size.width / 2,
-			y: size.height / 2,
-			anchorX: 0.5,
-			anchorY: 0.5,
-			scale: 1,
-			rotation: 0
-			});
-	    this.addChild(this._backgroundSpriteBottom, 0);
-
-	    this._backgroundSpriteMiddle = new cc.Sprite(res.backMiddle);
-	    this._backgroundSpriteMiddle.attr({
-		    x: size.width / 2,
-			y: size.height,
-			anchorX: 0.5,
-			anchorY: 1,
-			scale: 1,
-			rotation: 0
-			});
-	    this.addChild(this._backgroundSpriteMiddle, 0);
-
-	    this._backgroundSpriteMiddleTwo = new cc.Sprite(res.backMiddle);
-	    this._backgroundSpriteMiddleTwo.attr({
-		    x: size.width / 2,
-			y: size.height * 2,
-			anchorX: 0.5,
-			anchorY: 1,
-			scale: 1,
-			rotation: 0
-			});
-
-	    this.addChild(this._backgroundSpriteMiddleTwo, 0);
-
-	    this._backgroundSpriteTop = new cc.Sprite(res.backTop);
-	    this._backgroundSpriteTop.attr({
-		    x: size.width / 2,
-			y: size.height,
-			anchorX: 0.5,
-			anchorY: 1,
-			scale: 1,
-			rotation: 0
-			});
-	    this.addChild(this._backgroundSpriteTop, 0);
-
-	    this._backgroundSpriteTopTwo = new cc.Sprite(res.backTop);
-	    this._backgroundSpriteTopTwo.attr({
-		    x: size.width / 2,
-			y: size.height * 2,
-			anchorX: 0.5,
-			anchorY: 1,
-			scale: 1,
-			rotation: 0
-			});
-	    this.addChild(this._backgroundSpriteTopTwo, 0);
-
-	    this.schedule(this.moveBackground,.01);
-
+	    this._backgroundLayer = new BackgroundLayer();
+		this.addChild(this._backgroundLayer);
 	},
 
-	moveBackground: function() {
-	    this._backgroundSpriteMiddle.y += 1;
-	    this._backgroundSpriteMiddleTwo.y += 1;
-	    this._backgroundSpriteTop.y += 2;
-	    this._backgroundSpriteTopTwo.y += 2;
-
-	    if(this._backgroundSpriteMiddle.y > this._backgroundSpriteMiddleTwo.y) {
-		if(this._backgroundSpriteMiddleTwo.y > cc.winSize.height)
-		    this._backgroundSpriteMiddle.y = this._backgroundSpriteMiddleTwo.y - this._backgroundSpriteMiddle.height;
-	    }
-	    else {
-		if(this._backgroundSpriteMiddle.y > cc.winSize.height)
-		    this._backgroundSpriteMiddleTwo.y = this._backgroundSpriteMiddle.y - this._backgroundSpriteMiddleTwo.height;
-	    }
-
-	    if(this._backgroundSpriteTop.y > this._backgroundSpriteTopTwo.y) {
-		if(this._backgroundSpriteTopTwo.y > cc.winSize.height)
-		    this._backgroundSpriteTop.y = this._backgroundSpriteTopTwo.y - this._backgroundSpriteTop.height;
-	    }
-	    else {
-		if(this._backgroundSpriteTop.y > cc.winSize.height)
-		    this._backgroundSpriteTopTwo.y = this._backgroundSpriteTop.y - this._backgroundSpriteTopTwo.height;
-	    }
-
-	},
-
-	// initialize input for the game
+	// Initialize input depending on the device.
 	initInput: function() {
 	    if ('mouse' in cc.sys.capabilities) {
-		cc.eventManager.addListener({
-			event: cc.EventListener.MOUSE,
-			onMouseDown: function (event) {
-			    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-				return false;
+		    cc.eventManager.addListener({
+                event: cc.EventListener.MOUSE,
+                onMouseDown: function (event) {
+                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+                    return false;
 
-			    event.getCurrentTarget().onTouchBegan(event.getLocation());
+                    event.getCurrentTarget().onTouchBegan(event.getLocation());
 
-			    return true;
-			},
-			onMouseMove: function (event) {
-			    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-				return false;
+                    return true;
+                },
+                onMouseMove: function (event) {
+                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+                    return false;
 
-			    event.getCurrentTarget().onTouchMoved(event.getLocation());
+                    event.getCurrentTarget().onTouchMoved(event.getLocation());
 
-			    return true;
-			},
-			onMouseUp: function (event) {
-			    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-				return false;
+                    return true;
+                },
+                onMouseUp: function (event) {
+                    if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
+                    return false;
 
-			    event.getCurrentTarget().onTouchEnded(event.getLocation());
+                    event.getCurrentTarget().onTouchEnded(event.getLocation());
 
-			    return true;
-			}
+                    return true;
+                }
 		    }, this);
 	    }
 	    else if (cc.sys.capabilities.hasOwnProperty('touches')) {
-		cc.eventManager.addListener({
-			prevTouchId: -1,
-			event: cc.EventListener.TOUCH_ONE_BY_ONE,
-			swallowTouches: true,
-			onTouchBegan: function(touch, event) {
-			    event.getCurrentTarget().onTouchBegan(touch.getLocation());
-			    return true;
-			},
-			onTouchMoved: function(touch, event) {
-			    event.getCurrentTarget().onTouchMoved(touch.getLocation());
-			    return true;
-			},
-			onTouchEnded: function(touch, event) {
-			    event.getCurrentTarget().onTouchEnded(touch.getLocation());
-			    return true;
-			}
+		    cc.eventManager.addListener({
+                prevTouchId: -1,
+                event: cc.EventListener.TOUCH_ONE_BY_ONE,
+                swallowTouches: true,
+                onTouchBegan: function(touch, event) {
+                    event.getCurrentTarget().onTouchBegan(touch.getLocation());
+                    return true;
+                },
+                onTouchMoved: function(touch, event) {
+                    event.getCurrentTarget().onTouchMoved(touch.getLocation());
+                    return true;
+                },
+                onTouchEnded: function(touch, event) {
+                    event.getCurrentTarget().onTouchEnded(touch.getLocation());
+                    return true;
+                }
 		    }, this);
 	    }
 	},
 
-	// initialize UI elements into the scene
+	// Initialize UI elements for communicating game state.
 	initUI: function() {
 
 	    var that = this;
 
+        // header
 	    this._numboHeaderLayer = new NumboHeaderLayer();
 	    this._numboHeaderLayer.setOnPauseCallback(function() {
 		    that.onPause();
 		});
 	    this.addChild(this._numboHeaderLayer, 999);
-	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
-	    
+	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, NJ.getBlocksLeftForLevelUp(), NJ.stats.level);
+
+        // feedback overlay
 	    this._feedbackLayer = new FeedbackLayer();
-	    this.addChild(this._feedbackLayer, 999);
-	    
+	    this.addChild(this._feedbackLayer, 800);
 	},
 
-	// initialize the empty level into the scene
+	// Initialize the empty level into the scene.
 	initLevel: function() {
 	    var size = cc.winSize;
 	    var refDim = Math.min(size.width, size.height, 900);
@@ -224,14 +141,13 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(levelNode);
 	},
 
-	// initialize numbo controller (formerly the difficulty manager)
-	// into the scene
+	// Initialize the Numbo Controller, which controls the level.
 	initNumboController: function() {
 	    this._numboController = new NumboController();
 	    this._numboController.init();
 	},
 
-	// initialize game audio
+	// Initialize audio.
 	initAudio: function() {
 	    if(!NJ.settings.music)
 		return;
@@ -246,39 +162,65 @@ var NumboGameLayer = cc.Layer.extend({
 	// GAME STATE MANIPULATION //
 	/////////////////////////////
 
-	// pauses the game, halting all actions and schedulers
+	// Pauses the game, halting all actions and schedulers.
 	pauseGame: function() {
 	    cc.eventManager.pauseTarget(this, true);
-                                   
-	    this.pause();
 
-	    var children = this.getChildren();
+        // use breadth first search to pause all valid children
+	    var children = [this];
+        var visited = [this];
 
-	    for(var i = 0; i < children.length; ++i) {
-		if(children[i].getTag() == NJ.tags.PAUSABLE)
-		    children[i].pause();
-	    }
+        this.pause();
+
+        var child, i, newChildren;
+        while(children.length > 0) {
+            child = children.pop();
+
+            if (child.getTag() == NJ.tags.PAUSABLE)
+                child.pause();
+
+            newChildren = child.getChildren();
+            for(i = 0; i < newChildren.length; i++) {
+                if(visited.indexOf(newChildren[i]) < 0) {
+                    visited.push(newChildren[i]);
+                    children.push(newChildren[i]);
+                }
+            }
+        }
 	},
 
-	// resumes all actions and schedulers
+	// Unpauses game, resuming all actions and schedulers.
 	resumeGame: function() {
 	    cc.eventManager.resumeTarget(this, true);
 
-	    this.resume();
+        // use breadth first search to resume all valid children
+        var children = [this];
+        var visited = [this];
 
-	    var children = this.getChildren();
+        this.resume();
 
-	    for(var i = 0; i < children.length; ++i) {
-		if(children[i].getTag() == NJ.tags.PAUSABLE)
-		    children[i].resume();
-	    }
+        var child, i, newChildren;
+        while(children.length > 0) {
+            child = children.pop();
+
+            if (child.getTag() == NJ.tags.PAUSABLE)
+                child.resume();
+
+            newChildren = child.getChildren();
+            for(i = 0; i < newChildren.length; i++) {
+                if(visited.indexOf(newChildren[i]) < 0) {
+                    visited.push(newChildren[i]);
+                    children.push(newChildren[i]);
+                }
+            }
+        }
 	},
 
 	////////////////////
 	// Block Spawning //
 	////////////////////
 
-	// move scene block sprite into place
+	// Move scene block sprite into place.
 	moveBlockIntoPlace: function(block) {
 	    var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (block.row + 0.5);
 	    var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
@@ -292,6 +234,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    block.runAction(cc.sequence(moveAction, dropAction));
 	},
 
+	// Spawns a block and calls itself in a loop.
 	scheduleSpawn: function() {
 	    // TODO: Order matters when scheduling, must schedule before spawning WHY?
 	    // PROBABLY because we pause, but then it schedules another one after
@@ -301,14 +244,13 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.spawnDropRandomBlock();
 	},
 
-	// spawns a block at a random column in the level
-	// drops the spawned block into place
+	// Spawns a block and drops the spawned block into place.
 	// NOTE: This is the function you should be using to put new blocks into the game
 	// TODO: Improve structure (don't check game over state here for improved separation of concerns)
 	spawnDropRandomBlock: function() {
 	    if(this._numboController.isGameOver()) {
-		this.onGameOver();
-		return;
+			this.onGameOver();
+			return;
 	    }
                         
 	    var block = this._numboController.dropRandomBlock();
@@ -320,9 +262,29 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	///////////////////////
+	//     Multiplier    //
+	///////////////////////
+
+	updateMultiplier: function() {
+		NJ.gameState.multiplier = this._numboController.multiplier;
+		this._numboHeaderLayer.setMultiplierValue(NJ.gameState.multiplier);
+		if(NJ.gameState.multiplier > 1) {
+			this.unschedule(this.checkMultiplier);
+			this.schedule(this.checkMultiplier, 5, 1);
+		}
+	},
+
+	checkMultiplier: function() {
+		this._numboController.checkMultiplier();
+		if(this._numboController.comboTimes.length == 0)
+			this._numboHeaderLayer.setMultiplierValue(NJ.gameState.multiplier);
+	},
+
+	///////////////////////
 	// Game State Events //
 	///////////////////////
 
+	// Halts game, switches to game over, sends data.
 	onGameOver: function() {
 	    // first send the analytics for the current game session
 	    NJ.sendAnalytics();
@@ -344,12 +306,12 @@ var NumboGameLayer = cc.Layer.extend({
 	// UI Events //
 	///////////////
 
-	// on pause, pauses game and opens up the settings menu
+	// On pause, pauses game and opens up the settings menu.
 	onPause: function() {
 	    var that = this;
 
 	    if(NJ.settings.sounds)
-		cc.audioEngine.playEffect(res.tongue_click, false);
+		    cc.audioEngine.playEffect(res.tongue_click, false);
 
 	    this.pauseGame();
 
@@ -363,7 +325,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.addChild(this._settingsMenuLayer, 999);
 	},
 
-	// on closing previously opened settings menu we resume
+	// On closing previously opened settings menu we resume.
 	onResume: function() {
 	    this.resumeGame();
 
@@ -374,8 +336,11 @@ var NumboGameLayer = cc.Layer.extend({
 		cc.audioEngine.playMusic(res.backgroundTrack);
 	},
 
-	// on game over when player chooses to go to menu we return to menu
+	// On game over when player chooses to go to menu we return to menu.
 	onMenu: function() {
+        // reset necessary modules
+        this._feedbackLayer.reset();
+
 	    //load resources
 	    cc.LoaderScene.preload(g_menu, function () {
 		    cc.audioEngine.stopMusic();
@@ -389,15 +354,15 @@ var NumboGameLayer = cc.Layer.extend({
 	// Touch Events //
 	//////////////////
 
-	// on touch began, tries to find level coordinates for the touch and selects block accordingly
+	// On touch began, tries to find level coordinates for the touch and selects block accordingly.
 	onTouchBegan: function(touchPosition) {
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
 	    if (touchCoords)
-		this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+		    this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 	},
 
-	// on touch moved, selects additional blocks as the touch is held and moved
+	// On touch moved, selects additional blocks as the touch is held and moved.
 	onTouchMoved: function(touchPosition) {
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
@@ -405,47 +370,79 @@ var NumboGameLayer = cc.Layer.extend({
 		this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 	},
 
-	// on touch ended, activates all selected blocks once touch is released
+	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
-	    // first activate any selected blocks
-	    this._numboController.activateSelectedBlocks();
+	    // Activate any selected blocks.
+	    var data = this._numboController.activateSelectedBlocks();
 
-	    // gaps may be created; shift all affected blocks down
-	    for (var col = 0; col < NJ.NUM_COLS; ++col) {
-		for (var row = 0; row < this._numboController.getColLength(col); ++row){
-		    this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-		}
-	    }
+        // make sure something actually happened
+        if(data.cleared > 0) {
+            // Gaps may be created; shift all affected blocks down.
+            for (var col = 0; col < NJ.NUM_COLS; ++col) {
+                for (var row = 0; row < this._numboController.getColLength(col); ++row)
+                    this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+            }
 
-	    // level up if needed
-	    if(this._numboController.levelUp()) {
-			this._feedbackLayer.makeFeedbackText();
-	    }
+            var scoreDifference = NJ.addScoreForCombo(data.cleared, data.blockSum);
 
-	    this._numboHeaderLayer.setScoreValue(NJ.stats.score, this._numboController.getBlocksToLevelString(), NJ.stats.level );
+            // launch feedback for combo
+            this._feedbackLayer.launchSnippet({
+                title: "+" + scoreDifference,
+                x: touchPosition.x,
+                y: touchPosition.y,
+                targetX: touchPosition.x,
+                targetY: cc.winSize.height * 1.2
+            });
+
+            // Level up with feedback if needed
+            if (NJ.levelUpIfNeeded()) {
+                // Check for Jumbo Swap
+                if (NJ.gameState.currentJumboId == "multiple-progression")
+                    this._numboController.updateMultipleProgression();
+
+                // give feedback for leveling up
+
+                // Update multiplier based on changes made by first line of this function within NumboController.
+                if (this._numboController.multiplier != NJ.gameState.multiplier) {
+                    this.updateMultiplier();
+                }
+
+                // Display "LEVEL x"
+                this._feedbackLayer.launchFallingBanner({
+                    title: "Level " + NJ.stats.level
+                });
+
+                // Speed up background for a bit.
+                this._backgroundLayer.initRush(180);
+            } else if (data.cleared > 3) {
+                this._feedbackLayer.launchFallingBanner();
+            }
+
+            this._numboHeaderLayer.setScoreValue(NJ.stats.score, NJ.getBlocksLeftForLevelUp(), NJ.stats.level);
+        }
 	},
 
-	/////////////
-	// Helpers //
-	/////////////
+/////////////
+// Helpers //
+/////////////
 
-	// attempt to convert point to location on grid
+	// Attempt to convert point to location on grid.
 	convertPointToLevelCoords: function(point) {
 	    if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
 		point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
 
-		var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
-		var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
+            var col = Math.floor((point.x - this._levelBounds.x) / this._levelCellSize.width);
+            var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
 
-		// return only if coordinates in certain radius of the block.
-		var radius = 0.45;
-		if (Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
-		    point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2) {
+            // return only if coordinates in certain radius of the block.
+            var radius = 0.45;
+            if (Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
+                point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2) {
 
-		    return {col: col, row: row};
-		}
+                return {col: col, row: row};
+            }
 	    }
 
 	    return null;
 	}
-    });
+});

@@ -29,12 +29,14 @@ var FeedbackLayer = cc.Layer.extend({
         // initialize banner pool with entities
         for(; i < BANNER_POOL_SIZE; i++) {
             feedback = new Banner();
+                                    feedback.retain();
             this.bannerPool.push(feedback);
         }
 
         // initialize snippet pool with entities
         for(i = 0; i < BANNER_POOL_SIZE; i++) {
             feedback = new Snippet();
+                                    feedback.retain();
             this.snippetPool.push(feedback);
         }
 	},
@@ -43,12 +45,14 @@ var FeedbackLayer = cc.Layer.extend({
         var i = 0;
         for(; i < this.bannerPool.length; i++) {
             this.bannerPool[i].stopAllActions();
+            this.bannerPool[i].release();
         }
 
         this.bannerPool = [];
 
         for(i = 0; i < this.snippetPool.length; i++) {
             this.snippetPool[i].stopAllActions();
+            this.snippetPool[i].release();
         }
 
         this.snippetPool = [];
@@ -101,7 +105,6 @@ var FeedbackLayer = cc.Layer.extend({
      * Usage: launchFallingBanner({ title: 'Hello' })
      */
     launchFallingBanner: function(data) {
-
         var banner = this.popBannerPool();
 
         var that = this;
@@ -140,7 +143,6 @@ var FeedbackLayer = cc.Layer.extend({
      * Usage: launchSnippet ({ title: 'Hello', x: 500, y: 500, targetX: 400, targetY: 400 })
      */
     launchSnippet: function(data) {
-
         var snippet = this.popSnippetPool();
 
         var that = this;
@@ -167,14 +169,15 @@ var FeedbackLayer = cc.Layer.extend({
         }
 
         snippet.setText(titleStr);
-        snippet.setScale(0.01);
+        snippet.setScale(0.01, 0.01);
         snippet.setPosition(x, y);
 
         this.addChild(snippet);
 
-        var scaleUpAction = cc.scaleTo(0.1, 1.0);
+        var scaleUpAction = cc.scaleTo(0.1, 1.0, 1.0);
         //scaleDownAction.easing(cc.easeIn(3.0));
-        var moveAction = cc.moveTo(0.69, cc.p(targetX, targetY));
+                                    var delayAction = cc.delayTime(0.1);
+        var moveAction = cc.moveTo(1, cc.p(targetX, targetY));
         var fadeOutAction = cc.fadeTo(0.1, 0);
         var removeAction = cc.callFunc(function() {
             that.pushSnippetPool(snippet);
@@ -182,6 +185,6 @@ var FeedbackLayer = cc.Layer.extend({
             snippet.removeFromParent(true);
         });
 
-        snippet.runAction(cc.sequence(scaleUpAction, moveAction, fadeOutAction, removeAction));
+        snippet.runAction(cc.sequence(scaleUpAction, delayAction, moveAction, fadeOutAction, removeAction));
     }
 });

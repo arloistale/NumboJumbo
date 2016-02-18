@@ -6,6 +6,9 @@ var NumboController = cc.Class.extend({
 	_numboLevel: null,
 
 	_selectedBlocks: [],
+
+	comboTimes: [],
+	multiplier: 1,
                                       
 	////////////////////
 	// INITIALIZATION //
@@ -17,6 +20,13 @@ var NumboController = cc.Class.extend({
 	    this._selectedBlocks = [];
 	    this._numboLevel = new NumboLevel();
 	    this._numboLevel.init();
+
+		if(NJ.gameState.currentJumboId == "multiple-progression" && NJ.gameState.currentLevel != 1) {
+			for(var i=0; i < NJ.getCurrentJumbo()["numberList"].length; i++) {
+				NJ.getCurrentJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
+			}
+			NJ.gameState.currentLevel = 1;
+		}
 
         this.initJumbo();
 	},
@@ -92,36 +102,38 @@ var NumboController = cc.Class.extend({
 	},
 
 	// activate currently selected blocks
-	// awards player score depending on blocks selected
 	// shifts all blocks down to remove gaps and drops them accordingly
+	// returns the number of blocks cleared if successful, or 0 otherwise
 	activateSelectedBlocks: function() {
+	    var selectedBlockCount = 0;
 	    if(this.isSelectedClearable()) {
-		var selectedBlockCount = this._selectedBlocks.length;
-		var blockSum = 0;
-		for (var block in this._selectedBlocks)
-		    blockSum += this._selectedBlocks[block].val;
-		
-		NJ.stats.blocksCleared += selectedBlockCount;
-		if(selectedBlockCount > NJ.stats.maxComboLength)
-		    NJ.stats.maxComboLength = selectedBlockCount;
+			selectedBlockCount = this._selectedBlocks.length;
+			var blockSum = 0;
+			for (var block in this._selectedBlocks)
+		    	blockSum += this._selectedBlocks[block].val;
 
-		var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
+			NJ.stats.blocksCleared += selectedBlockCount;
+			if(selectedBlockCount > NJ.stats.maxComboLength)
+			    NJ.stats.maxComboLength = selectedBlockCount;
 
-		NJ.stats.score += this.getScoreForCombo(selectedBlockCount, blockSum);
-		
-		if(NJ.settings.sounds)
-		    cc.audioEngine.playEffect(res.plip_plip);
+			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
+			if(NJ.settings.sounds)
+			    cc.audioEngine.playEffect(res.plip_plip);
 		
-		// remove any affected block sprite objects:
-		for(var i = 0; i < this._selectedBlocks.length; ++i)
-		    this._numboLevel.killBlock(this._selectedBlocks[i]);
+			// remove any affected block sprite objects:
+			for(var i = 0; i < this._selectedBlocks.length; ++i)
+			    this._numboLevel.killBlock(this._selectedBlocks[i]);
 		
-		this._numboLevel.collapseColumnsToward(lastCol);
-		this._numboLevel.updateBlockRowsAndCols();
+			this._numboLevel.collapseColumnsToward(lastCol);
+			this._numboLevel.updateBlockRowsAndCols();
+
+			this.updateCombo(Date.now());
 	    }
 
 	    this.deselectAllBlocks();
+
+	    return { cleared: selectedBlockCount, blockSum: blockSum };
 	},
 
 	// drop block into random column with random value
@@ -137,8 +149,9 @@ var NumboController = cc.Class.extend({
 
 	    
 	    if(NJ.settings.sounds){
-		cc.audioEngine.playEffect(res.tongue_click);
+			cc.audioEngine.playEffect(res.tongue_click);
 	    }
+
 
 	    return this._numboLevel.dropBlock(col, val);
 	},
@@ -147,39 +160,66 @@ var NumboController = cc.Class.extend({
 	// GETTERS //
 	/////////////
 
-	// check if we should level up if blocks cleared is 
-	// greater than level up threshold
-    // return how many times we leveled up
-	levelUp: function() {
-	    // level up
-        var levelUpCount = 0;
+	// updates the board/distribution given the mode is Multiple Progression
+	updateMultipleProgression: function() {
+		// Get possible factors based on level
+		var possibleFactors = null;
+		if(NJ.stats.level == 3)
+			possibleFactors = [2,3,4];
+		else if(NJ.stats.level == 5)
+			possibleFactors = [4,5,6];
+		else if(NJ.stats.level == 7)
+			possibleFactors = [6,7,8,10];
+		else if(NJ.stats.level == 9)
+			possibleFactors = [8,9,10];
+		else if(NJ.stats.level == 10)
+			possibleFactors = [7,8,9,11];
+		else if(NJ.stats.level == 11 || NJ.stats.level == 12)
+			possibleFactors = [9,12,13];
+		else if(NJ.stats.level > 12)
+			possibleFactors = [12,13,14,15];
 
-	    while (NJ.stats.blocksCleared >= this.blocksToLevelUp()) {
-			NJ.stats.level++;
-            levelUpCount++;
-	    }
+		if(possibleFactors != null) {
+			// Change distribution by multiplying by a random factor.
+			var factor = NJ.gameState.currentLevel;
+			while(factor == NJ.gameState.currentLevel)
+				factor = possibleFactors[Math.floor(Math.random()*possibleFactors.length)];
+			for(var i=0; i < NJ.getCurrentJumbo()["numberList"].length; i++) {
+				NJ.getCurrentJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
+				NJ.getCurrentJumbo()["numberList"][i].key *= factor;
+			}
 
-        return levelUpCount;
+			// Update the blocks currently on the board.
+			this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
+			this._numboLevel.multiplyBlocksBy(factor);
+			NJ.gameState.currentLevel = factor;
+		}
+	},
+
+	updateCombo: function(time) {
+		if(this.comboTimes.length == 0)
+			this.comboTimes.push(time);
+		else if((time - this.comboTimes[this.comboTimes.length-1])/1000 < 5) {
+			this.comboTimes.push(time);
+			if(this.comboTimes.length > 2)
+				this.multiplier = 1 + (this.comboTimes.length-2)*.5;
+		}
+		else this.comboTimes = [time];
+	},
+
+	checkMultiplier: function() {
+		if(this.comboTimes.length > 0) {
+			if((Date.now() - this.comboTimes[this.comboTimes.length-1])/1000 > 5) {
+				this.comboTimes = [];
+				NJ.gameState.multiplier = 1;
+				this.multiplier = 1;
+			}
+		}
 	},
 
 	// a scaling factor to reduce spawn time on higher levels
 	spawnConst: function() {
 	    return 1 + 2/NJ.stats.level
-	},
-	
-	// returns the number of blocks needed to get to the next level.
-	// this is quadratic in the current level L, ie, aL^2 + bL + c.
-	// values for a, b, c can (and should!) be tuned regularly :)
-	blocksToLevelUp: function(){
-	    var a = 1.0;
-	    var b = 5.0;
-	    var c = 2.0;
-	    var L = NJ.stats.level;
-	    return Math.round( a*L*L+b*L+c );
-	},
-	
-	getBlocksToLevelString: function() {
-	    return (this.blocksToLevelUp() - NJ.stats.blocksCleared) + "";
 	},
 	
 	// checks if the current selected blocks can be activated (their equation is valid)
@@ -192,14 +232,9 @@ var NumboController = cc.Class.extend({
 	    return this._numboLevel.getBlock(col, row);
 	},
 
-	getScoreForCombo: function(blockCount, blockSum) {
-	    return blockCount*blockSum;
-	},
-
 	getSpawnTime: function() {
 	    return this.spawnConst() * this.spawnTime;
 	},
-
 
 	// checks if the current selected blocks can be activated (their equation is valid)
 	isSelectedClearable: function() {

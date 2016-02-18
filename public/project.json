@@ -1,0 +1,35 @@
+{
+    "project_type": "javascript",
+
+    "debugMode": 1,
+    "showFPS": true,
+    "frameRate": 60,
+    "id": "gameCanvas",
+    "renderMode": 0,
+    "engineDir": "frameworks/cocos2d-html5",
+
+    "modules": ["cocos2d", "extensions"],
+
+    "jsList": [
+        "src/DateExtensions.js",
+        "src/Resource.js",
+        "src/JumboDistributions.js",
+        "src/ScoresLayer.js",
+        "src/NumboMenuLayer.js",
+        "src/JumboMenuLayer.js",
+        "src/SettingsMenuLayer.js",
+        "src/NumboGameLayer.js",
+        "src/NumboHeaderLayer.js",
+        "src/GameOverMenuLayer.js",
+	    "src/FeedbackLayer.js",
+        "src/Feedback.js",
+        "src/Banner.js",
+        "src/Snippet.js",
+        "src/NumboBlock.js",
+        "src/NumboLevel.js",
+        "src/GameConfig.js",
+        "src/NJHelper.js",
+        "src/NumboController.js",
+        "src/BackgroundLayer.js"
+    ]
+}

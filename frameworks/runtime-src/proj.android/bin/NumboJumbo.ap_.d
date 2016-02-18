@@ -19,13 +19,8 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Fonts/MarkerFelt.ttf \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/blocks.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/Button.png \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/Button3.png \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/facet \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/Glow.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/normal \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/facet/back.png \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/facet/middle.png \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/facet/Top.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/normal/back.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/normal/middle.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/normal/Top.png \
@@ -92,8 +87,11 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/script/studio/parsers/timelineParser-1.x.js \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/script/studio/parsers/timelineParser-2.x.js \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/script/studio/parsers/uiParser-1.x.js \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/FeedbackLayer.js \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/BackgroundLayer.js \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/Banner.js \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/DateExtensions.js \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/Feedback.js \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/FeedbackLayer.js \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/GameConfig.js \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/GameOverMenuLayer.js \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/JumboDistributions.js \
@@ -108,4 +106,5 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/Resource.js \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/ScoresLayer.js \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/SettingsMenuLayer.js \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/Snippet.js \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/AndroidManifest.xml \

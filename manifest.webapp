@@ -2,7 +2,7 @@
   "version": "1.0",
   "name": "Numbo Jumbo",
   "description": "2D arcade arithmetic mobile and web game",
-  "launch_path": "/site/index.html",
+  "launch_path": "/index.html",
   "icons": {
     "128": "/res/icon.png"
   },
