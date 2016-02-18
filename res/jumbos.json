@@ -40,6 +40,24 @@
       {"key": 50, "weight": 1}
     ]
   },
+  "fibonacci": {
+    "name": "Fibonacci",
+    "difficulty": "Medium",
+    "spawnTime": 1.0,
+    "weight": 2.0,
+    "numberList": [
+      {"key": 1, "weight": 0},
+      {"key": 1, "weight": 4},
+      {"key": 2, "weight": 3},
+      {"key": 3, "weight": 3},
+      {"key": 5, "weight": 2},
+      {"key": 8, "weight": 2},
+      {"key": 13, "weight": 2},
+      {"key": 21, "weight": 1},
+      {"key": 35, "weight": 1},
+      {"key": 56, "weight": 1}
+    ]
+  },
   "sevens": {
     "name": "Sevens",
     "difficulty": "Hard",
