@@ -31,7 +31,8 @@ NJ.loadJumbosFromJSON = function() {
                 name: data[key].name,
                 difficulty: data[key].difficulty,
                 spawnTime: data[key].spawnTime,
-                numberList: data[key].numberList
+                numberList: data[key].numberList,
+                weight: data[key].weight
             };
 
             currIndex++;

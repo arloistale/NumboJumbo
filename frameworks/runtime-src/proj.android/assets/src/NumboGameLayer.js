@@ -19,6 +19,7 @@ var NumboGameLayer = cc.Layer.extend({
 	// Controller Data
 	_numboController: null,
 
+
 	////////////////////
 	// Initialization //
 	////////////////////
@@ -396,6 +397,13 @@ var NumboGameLayer = cc.Layer.extend({
 
             // Level up with feedback if needed
             if (NJ.levelUpIfNeeded()) {
+
+				if (NJ.gameState.randomJumbos || NJ.gameState.currentJumboId == "random-jumbos") {
+					NJ.gameState.randomJumbos = true;
+					this._numboController.updateRandomJumbo();
+				}
+
+
                 // Check for Jumbo Swap
                 if (NJ.gameState.currentJumboId == "multiple-progression")
                     this._numboController.updateMultipleProgression();
