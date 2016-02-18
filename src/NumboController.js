@@ -1,5 +1,6 @@
 var NumboController = cc.Class.extend({
 	distribution: [],
+	jumboDistribution: [],
 	spawnTime: 1.0,
 
 	// level data
@@ -29,6 +30,7 @@ var NumboController = cc.Class.extend({
 		}
 
         this.initJumbo();
+		this.initJumboDistribution();
 	},
 
     initJumbo: function() {
@@ -36,6 +38,12 @@ var NumboController = cc.Class.extend({
         this.distribution = jumbo.numberList;
         this.spawnTime = jumbo.spawnTime;
     },
+
+	initJumboDistribution: function(){
+		for (var KEY in NJ.jumbos.data){
+			this.jumboDistribution.push({key: KEY, weight: NJ.jumbos.data[KEY].weight});
+		}
+	},
     
 	isGameOver: function() {
 	    return this._numboLevel.isFull();
@@ -159,6 +167,15 @@ var NumboController = cc.Class.extend({
 	/////////////
 	// GETTERS //
 	/////////////
+
+	updateRandomJumbo: function(){
+		console.log(this.jumboDistribution);
+		NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution))
+		console.log(NJ.getCurrentJumbo());
+		var jumbo = NJ.getCurrentJumbo();
+		this.distribution = jumbo.numberList;
+		this.spawnTime = jumbo.spawnTime;
+	},
 
 	// updates the board/distribution given the mode is Multiple Progression
 	updateMultipleProgression: function() {
