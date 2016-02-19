@@ -16,6 +16,7 @@
         "src/JumboDistributions.js",
         "src/ScoresLayer.js",
         "src/NumboMenuLayer.js",
+        "src/InstructionsLayer.js",
         "src/JumboMenuLayer.js",
         "src/SettingsMenuLayer.js",
         "src/NumboGameLayer.js",

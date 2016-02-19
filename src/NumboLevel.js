@@ -86,7 +86,6 @@ var NumboLevel = cc.Class.extend({
 
 	    if (row < this.blocks[col].length)
 		killBlock(this.blocks[col][row]);
-
 	},
 
 	// shifts all blocks on the given column downward

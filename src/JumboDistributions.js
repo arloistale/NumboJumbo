@@ -37,5 +37,7 @@ NJ.loadJumbosFromJSON = function() {
 
             currIndex++;
         }
+
+        NJ.jumbos.isLoaded = true;
     });
 };

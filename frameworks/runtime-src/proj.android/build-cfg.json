@@ -15,11 +15,11 @@
             "to": "res"
         },
         {
-            "from": "../../../main.js",
+            "from": "../../../public/main.js",
             "to": ""
         },
         {
-            "from": "../../../project.json",
+            "from": "../../../public/project.json",
             "to": ""
         },
         {
