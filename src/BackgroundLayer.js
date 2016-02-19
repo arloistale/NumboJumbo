@@ -20,7 +20,7 @@ var BackgroundLayer = cc.Layer.extend({
 
         this.setTag(NJ.tags.PAUSABLE);
 
-        //this.initSprites();
+        this.initSprites();
     },
 
     // Initializes the background sprites for the scrolling background.
