@@ -277,7 +277,6 @@ var NumboGameLayer = cc.Layer.extend({
 	///////////////////////
 
 	updateMultiplier: function() {
-		NJ.gameState.multiplier = this._numboController.multiplier;
 		this._numboHeaderLayer.setMultiplierValue(NJ.gameState.multiplier);
 		if(NJ.gameState.multiplier > 1) {
 			this.unschedule(this.checkMultiplier);
@@ -437,11 +436,6 @@ var NumboGameLayer = cc.Layer.extend({
 
                 // give feedback for leveling up
 
-                // Update multiplier based on changes made by first line of this function within NumboController.
-                if (this._numboController.multiplier != NJ.gameState.multiplier) {
-                    this.updateMultiplier();
-                }
-
                 // Display "LEVEL x"
                 this._feedbackLayer.launchFallingBanner({
                     title: "Level " + NJ.stats.level
@@ -452,6 +446,10 @@ var NumboGameLayer = cc.Layer.extend({
             } else if (data.cleared > 3) {
                 this._feedbackLayer.launchFallingBanner();
             }
+
+			// Update multiplier if needed.
+			if (parseFloat(this._numboHeaderLayer.getMultiplier()) != NJ.gameState.multiplier)
+				this.updateMultiplier();
 
             this._numboHeaderLayer.setScoreValue(NJ.stats.score, NJ.getBlocksLeftForLevelUp(), NJ.stats.level);
         }

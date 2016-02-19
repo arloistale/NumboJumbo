@@ -9,7 +9,6 @@ var NumboController = cc.Class.extend({
 	_selectedBlocks: [],
 
 	comboTimes: [],
-	multiplier: 1,
                                       
 	////////////////////
 	// INITIALIZATION //
@@ -234,7 +233,7 @@ var NumboController = cc.Class.extend({
 		else if((time - this.comboTimes[this.comboTimes.length-1])/1000 < 5) {
 			this.comboTimes.push(time);
 			if(this.comboTimes.length > 2)
-				this.multiplier = 1 + (this.comboTimes.length-2)*.5;
+				NJ.gameState.multiplier = 1 + (this.comboTimes.length-2)*.5;
 		}
 		else this.comboTimes = [time];
 	},
@@ -244,7 +243,6 @@ var NumboController = cc.Class.extend({
 			if((Date.now() - this.comboTimes[this.comboTimes.length-1])/1000 > 5) {
 				this.comboTimes = [];
 				NJ.gameState.multiplier = 1;
-				this.multiplier = 1;
 			}
 		}
 	},
