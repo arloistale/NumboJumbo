@@ -11,7 +11,12 @@ NJ.jumbos = {
     isLoaded: false,
 
     data: {
+        jumbos: {
 
+        },
+        jumboMap: {
+
+        }
     }
 };
 
@@ -25,17 +30,19 @@ NJ.loadJumbosFromJSON = function() {
         }
 
         var currIndex = 0;
-        for(var key in data) {
-            NJ.jumbos.data[key] = {
+        for(var key in data.jumbos) {
+            NJ.jumbos.data.jumbos[key] = {
                 index: currIndex,
-                name: data[key].name,
-                difficulty: data[key].difficulty,
-                spawnTime: data[key].spawnTime,
-                numberList: data[key].numberList,
-                weight: data[key].weight
+                name: data.jumbos[key].name,
+                difficulty: data.jumbos[key].difficulty,
+                spawnTime: data.jumbos[key].spawnTime,
+                numberList: data.jumbos[key].numberList,
+                weight: data.jumbos[key].weight
             };
 
             currIndex++;
         }
+
+       NJ.jumbos.jumboMap = data.jumboMap;
     });
 };

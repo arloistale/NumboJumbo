@@ -82,13 +82,15 @@ NJ.gameState = {
     currentJumboId: "",
     currentLevel: 1,
     multiplier: 1,
-    randomJumbos: false
+    randomJumbos: false,
+    powerupMode: false
 };
 
 NJ.resetGameState = function() {
     NJ.gameState.currentLevel = 1;
     NJ.gameState.multiplier = 1;
     NJ.gameState.randomJumbos = false;
+    NJ.gameState.powerupMode = false;
 };
 
 // Use this function to set the current jumbo. DO NOT read currentJumboId directly!!!
@@ -98,7 +100,7 @@ NJ.chooseJumbo = function(jumboId) {
 
 // Use this function to access the current jumbo. DO NOT access currentJumboId directly!!!
 NJ.getCurrentJumbo = function() {
-    return NJ.jumbos.data[NJ.gameState.currentJumboId];
+    return NJ.jumbos.data.jumbos[NJ.gameState.currentJumboId];
 };
 
 ///////////

@@ -405,6 +405,22 @@ var NumboGameLayer = cc.Layer.extend({
                 targetY: cc.winSize.height * 1.2
             });
 
+			// TODO: check if a special block was in the selected thing
+			if (NJ.gameState.powerupMode || NJ.gameState.currentJumboId == "powerup-mode"){
+				NJ.gameState.powerupMode = true;
+				if (data.powerupValue){
+					cc.log(data.powerupValue);
+					var jumboString = NJ.jumbos.jumboMap[data.powerupValue];
+					cc.log(jumboString);
+					cc.log(NJ.jumbos.data.jumbos[jumboString]);
+					if (jumboString){
+						this._numboController.updateJumboTo(jumboString);
+					}
+
+
+				}
+			}
+
             // Level up with feedback if needed
             if (NJ.levelUpIfNeeded()) {
 
@@ -415,8 +431,7 @@ var NumboGameLayer = cc.Layer.extend({
 					this.spawnNBlocks(20);
 				}
 
-
-                // Check for Jumbo Swap
+				                // Check for Jumbo Swap
                 if (NJ.gameState.currentJumboId == "multiple-progression")
                     this._numboController.updateMultipleProgression();
 

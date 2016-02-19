@@ -40,8 +40,8 @@ var NumboController = cc.Class.extend({
     },
 
 	initJumboDistribution: function(){
-		for (var KEY in NJ.jumbos.data){
-			this.jumboDistribution.push({key: KEY, weight: NJ.jumbos.data[KEY].weight});
+		for (var KEY in NJ.jumbos.data.jumbos){
+			this.jumboDistribution.push({key: KEY, weight: NJ.jumbos.data.jumbos[KEY].weight});
 		}
 	},
     
@@ -60,22 +60,22 @@ var NumboController = cc.Class.extend({
 	    var block = this._numboLevel.getBlock(col, row);
 
 	    if(!block)
-		return;
+			return;
 
 	    // TODO: possible optimization
 	    if(!block.bHasDropped || this._selectedBlocks.indexOf(block) >= 0)
-		return;
+			return;
 
 	    // make sure this block is adjacent to the block before it
 	    if (this._selectedBlocks.length > 0){
-		var lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
-		if (! this._numboLevel.isAdjBlocks(block, lastBlock) )
-		    return;
+			var lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
+			if (! this._numboLevel.isAdjBlocks(block, lastBlock) )
+				return;
 	    }
 	    // we make this block green, make the last selected block red
 	    if(this._selectedBlocks.length > 0) {
-		var lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
-		lastBlock.highlight(cc.color(255, 0, 0, 255));
+			var lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
+			lastBlock.highlight(cc.color(255, 0, 0, 255));
 	    }
 
 	    block.highlight(cc.color(0, 255, 0, 255));
@@ -113,12 +113,18 @@ var NumboController = cc.Class.extend({
 	// shifts all blocks down to remove gaps and drops them accordingly
 	// returns the number of blocks cleared if successful, or 0 otherwise
 	activateSelectedBlocks: function() {
+		var powerupValue = null;
+
 	    var selectedBlockCount = 0;
 	    if(this.isSelectedClearable()) {
 			selectedBlockCount = this._selectedBlocks.length;
 			var blockSum = 0;
-			for (var block in this._selectedBlocks)
-		    	blockSum += this._selectedBlocks[block].val;
+			for (var block in this._selectedBlocks) {
+				blockSum += this._selectedBlocks[block].val;
+				if (this._selectedBlocks[block].powerup) {
+					powerupValue = this._selectedBlocks[block].val;
+				}
+			}
 
 			NJ.stats.blocksCleared += selectedBlockCount;
 			if(selectedBlockCount > NJ.stats.maxComboLength)
@@ -141,7 +147,7 @@ var NumboController = cc.Class.extend({
 
 	    this.deselectAllBlocks();
 
-	    return { cleared: selectedBlockCount, blockSum: blockSum };
+	    return { cleared: selectedBlockCount, blockSum: blockSum, powerupValue: powerupValue};
 	},
 
 	// drop block into random column with random value
@@ -151,17 +157,19 @@ var NumboController = cc.Class.extend({
 
 	    // Set up val/col
 	    var col = NJHelper.weightedRandom(this._numboLevel.getColWeights());
-	    //var val = this.distribution[Math.floor(Math.random()*this.distribution.length)];
 	    var val = NJHelper.weightedRandom(this.distribution);
 
-
-	    
 	    if(NJ.settings.sounds){
 			cc.audioEngine.playEffect(res.tongue_click);
 	    }
 
+		var powerup = (Math.random() < 0.05); // 5% chance
+		if (powerup){
+			var keys = Object.keys(NJ.jumbos.jumboMap)
+			val = parseInt(keys[Math.floor(Math.random() * keys.length)]);
+		}
 
-	    return this._numboLevel.dropBlock(col, val);
+	    return this._numboLevel.dropBlock(col, val, powerup);
 	},
 
 	/////////////
@@ -169,12 +177,22 @@ var NumboController = cc.Class.extend({
 	/////////////
 
 	updateRandomJumbo: function(){
-		console.log(this.jumboDistribution);
+		cc.log(this.jumboDistribution);
 		NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution))
-		console.log(NJ.getCurrentJumbo());
+		cc.log(NJ.getCurrentJumbo());
 		var jumbo = NJ.getCurrentJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
+	},
+
+	updateJumboTo: function(jumboString){
+
+		NJ.chooseJumbo(jumboString);
+
+		var jumbo = NJ.getCurrentJumbo();
+		this.distribution = jumbo.numberList;
+		this.spawnTime = jumbo.spawnTime;
+		cc.log(jumboString);
 	},
 
 	// updates the board/distribution given the mode is Multiple Progression
