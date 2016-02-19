@@ -50,13 +50,15 @@ var NumboMenuLayer = cc.Layer.extend({
     initUI: function() {
         var that = this;
 
-        var playButton = this.generateTitleButton("Play", function() {
+        var playButton = this.generateTitleButton("Play!", function() {
             that.onPlay();
         });
 
-        var instructionsButton = this.generateTitleButton("Instructions", function() {
+        var instructionsButton = this.generateTitleButton("How?", function() {
             that.onInstructions();
         });
+
+        var dummyLabel = this.generateLabel(" ");
 
         var scoresButton = this.generateTitleButton("Scores", function() {
             that.onScores();
@@ -66,7 +68,7 @@ var NumboMenuLayer = cc.Layer.extend({
             that.onSettings();
         });
 
-        this._menu = new cc.Menu(playButton, instructionsButton, scoresButton, settingsButton);
+        this._menu = new cc.Menu(playButton, instructionsButton, dummyLabel, scoresButton, settingsButton);
         this._menu.alignItemsVerticallyWithPadding(15);
         this.addChild(this._menu, 100);
         this._menu.x = cc.winSize.width / 2;
@@ -152,6 +154,15 @@ var NumboMenuLayer = cc.Layer.extend({
 ////////////////
 // UI Helpers //
 ////////////////
+
+    generateLabel: function(title) {
+        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontSize(48);
+        var toggleLabel = new cc.MenuItemFont(title);
+        toggleLabel.setEnabled(false);
+        toggleLabel.setColor(cc.color(255, 255, 255, 255));
+        return toggleLabel;
+    },
 
     generateTitleButton: function(title, callback) {
         var normalSprite = new cc.Sprite(res.buttonImage);
