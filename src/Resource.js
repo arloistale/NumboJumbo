@@ -65,6 +65,7 @@ var g_menu = [
 // resources for ingame
 var g_game = [
     // images
+    res.powerupImage,
     res.glowImage,
     res.blockImage,
     res.buttonImage,
