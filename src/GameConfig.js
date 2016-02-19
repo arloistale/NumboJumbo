@@ -126,10 +126,12 @@ NJ.stats = {
 // this is quadratic in the current level L, ie, aL^2 + bL + c.
 // values for a, b, c can (and should!) be tuned regularly :)
 NJ.getBlocksLeftForLevelUp = function() {
+
     var a = 1.0;
-    var b = 5.0;
-    var c = 2.0;
+    var b = 20;
+    var c = 0.0;
     var L = NJ.stats.level;
+
     var totalBlocksToLevelUp = Math.round( a*L*L+b*L+c );
     return totalBlocksToLevelUp - NJ.stats.blocksCleared;
 };
