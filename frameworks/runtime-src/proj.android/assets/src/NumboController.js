@@ -168,10 +168,8 @@ var NumboController = cc.Class.extend({
 	// GETTERS //
 	/////////////
 
-	updateRandomJumbo: function(){
-		console.log(this.jumboDistribution);
+	updateRandomJumbo: function() {
 		NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution))
-		console.log(NJ.getCurrentJumbo());
 		var jumbo = NJ.getCurrentJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;

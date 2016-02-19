@@ -20,6 +20,6 @@ NJHelper.weightedRandom = function(pairsList){
         else
             value -= pairsList[pair].weight;
     }
-
-    console.log("uh oh, i should have returned by now!");
+ 
+    return -1;
 };
