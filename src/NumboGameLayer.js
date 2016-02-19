@@ -412,10 +412,7 @@ var NumboGameLayer = cc.Layer.extend({
             });
 
 			if (data.powerupValue){
-				cc.log(data.powerupValue);
 				var jumboString = NJ.jumbos.jumboMap[data.powerupValue];
-				cc.log(jumboString);
-				cc.log(NJ.jumbos.data.jumbos[jumboString]);
 				if (jumboString) {
 					this._numboController.updateJumboTo(jumboString);
 				}

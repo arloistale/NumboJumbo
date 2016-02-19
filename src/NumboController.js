@@ -179,7 +179,6 @@ var NumboController = cc.Class.extend({
 	updateRandomJumbo: function() {
 	 	NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution));
 		var jumbo = NJ.getCurrentJumbo();
-		cc.log(jumbo);
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
 	},
@@ -190,7 +189,6 @@ var NumboController = cc.Class.extend({
 		var jumbo = NJ.getCurrentJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
-		cc.log(jumboString);
 	},
 
 	// updates the board/distribution given the mode is Multiple Progression
