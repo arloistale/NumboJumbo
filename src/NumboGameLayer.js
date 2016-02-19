@@ -43,11 +43,18 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.initLevel();
 	    this.initAudio();
 
+		this.initPowerups();
         this.updateMultiplier();
                                      
 	    // Begin scheduling block drops.
 	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
 	    this.schedule(this.scheduleSpawn, 0.1*20);
+	},
+
+	// initialize the powerup mode variable
+	initPowerups: function(){
+		if (NJ.gameState.currentJumboId == "powerup-mode")
+			NJ.gameState.powerupMode = true;
 	},
 
 	// Initialize the level's background.
@@ -404,19 +411,13 @@ var NumboGameLayer = cc.Layer.extend({
                 targetY: cc.winSize.height * 1.2
             });
 
-			// TODO: check if a special block was in the selected thing
-			if (NJ.gameState.powerupMode || NJ.gameState.currentJumboId == "powerup-mode"){
-				NJ.gameState.powerupMode = true;
-				if (data.powerupValue){
-					cc.log(data.powerupValue);
-					var jumboString = NJ.jumbos.jumboMap[data.powerupValue];
-					cc.log(jumboString);
-					cc.log(NJ.jumbos.data.jumbos[jumboString]);
-					if (jumboString){
-						this._numboController.updateJumboTo(jumboString);
-					}
-
-
+			if (data.powerupValue){
+				cc.log(data.powerupValue);
+				var jumboString = NJ.jumbos.jumboMap[data.powerupValue];
+				cc.log(jumboString);
+				cc.log(NJ.jumbos.data.jumbos[jumboString]);
+				if (jumboString) {
+					this._numboController.updateJumboTo(jumboString);
 				}
 			}
 

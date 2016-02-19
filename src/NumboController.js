@@ -9,12 +9,12 @@ var NumboController = cc.Class.extend({
 	_selectedBlocks: [],
 
 	comboTimes: [],
-                                      
+
 	////////////////////
 	// INITIALIZATION //
 	////////////////////
 
-	
+
 	// initialize timing, initial mode
 	init: function() {
 	    this._selectedBlocks = [];
@@ -43,7 +43,7 @@ var NumboController = cc.Class.extend({
 			this.jumboDistribution.push({key: KEY, weight: NJ.jumbos.data.jumbos[KEY].weight});
 		}
 	},
-    
+
 	isGameOver: function() {
 	    return this._numboLevel.isFull();
 	},
@@ -79,7 +79,7 @@ var NumboController = cc.Class.extend({
 
 	    block.highlight(cc.color(0, 255, 0, 255));
 	    this._selectedBlocks.push(block);
-	    
+
 	    if(NJ.settings.sounds)
 			cc.audioEngine.playEffect(res.plop);
 	},
@@ -133,11 +133,11 @@ var NumboController = cc.Class.extend({
 
 			if(NJ.settings.sounds)
 			    cc.audioEngine.playEffect(res.plip_plip);
-		
+
 			// remove any affected block sprite objects:
 			for(var i = 0; i < this._selectedBlocks.length; ++i)
 			    this._numboLevel.killBlock(this._selectedBlocks[i]);
-		
+
 			this._numboLevel.collapseColumnsToward(lastCol);
 			this._numboLevel.updateBlockRowsAndCols();
 
@@ -162,7 +162,7 @@ var NumboController = cc.Class.extend({
 			cc.audioEngine.playEffect(res.tongue_click);
 	    }
 
-		var powerup = (Math.random() < 0.05); // 5% chance
+		var powerup = NJ.gameState.powerupMode && (Math.random() < 0.05); // 5% chance
 		if (powerup){
 			var keys = Object.keys(NJ.jumbos.jumboMap)
 			val = parseInt(keys[Math.floor(Math.random() * keys.length)]);
@@ -177,7 +177,9 @@ var NumboController = cc.Class.extend({
 
 
 	updateRandomJumbo: function() {
-		NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution))
+	 	NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution));
+		var jumbo = NJ.getCurrentJumbo();
+		cc.log(jumbo);
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
 	},
@@ -251,7 +253,7 @@ var NumboController = cc.Class.extend({
 	spawnConst: function() {
 	    return 1 + 2/NJ.stats.level
 	},
-	
+
 	// checks if the current selected blocks can be activated (their equation is valid)
 	getColLength: function(col) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid column");
@@ -280,10 +282,10 @@ var NumboController = cc.Class.extend({
 		for (var i = 0; i < selectedBlocksLength - 1; ++i) {
 		    if (!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
 			return false;
-		    
+
 		    sum += this._selectedBlocks[i].val;
 		}
-		
+
 		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
 	}
 });
