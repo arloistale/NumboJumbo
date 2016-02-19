@@ -262,6 +262,16 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.moveBlockIntoPlace(block);
 	},
 
+	spawnNBlocks: function(N){
+		this.schedule(this.spawnDropRandomBlock, 0.1, N);
+	},
+
+	clearBlocks: function(){
+		this._numboController._numboLevel.killAllBlocks();
+	},
+
+
+
 	///////////////////////
 	//     Multiplier    //
 	///////////////////////
@@ -401,6 +411,8 @@ var NumboGameLayer = cc.Layer.extend({
 				if (NJ.gameState.randomJumbos || NJ.gameState.currentJumboId == "random-jumbos") {
 					NJ.gameState.randomJumbos = true;
 					this._numboController.updateRandomJumbo();
+					this.clearBlocks();
+					this.spawnNBlocks(20);
 				}
 
 
