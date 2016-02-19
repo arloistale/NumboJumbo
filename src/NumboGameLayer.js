@@ -369,16 +369,18 @@ var NumboGameLayer = cc.Layer.extend({
 	onTouchBegan: function(touchPosition) {
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
-	    if (touchCoords)
-		    this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+	    if (touchCoords) {
+			this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+		}
 	},
 
 	// On touch moved, selects additional blocks as the touch is held and moved.
 	onTouchMoved: function(touchPosition) {
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
-	    if (touchCoords)
-		this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+	    if (touchCoords) {
+			this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+		}
 	},
 
 	// On touch ended, activates all selected blocks once touch is released.
