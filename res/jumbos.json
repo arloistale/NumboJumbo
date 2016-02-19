@@ -1,131 +1,346 @@
 {
-  "basic": {
-    "name": "Basic",
-    "difficulty": "Easy",
-    "spawnTime": 1.0,
-    "weight": 1.0,
-    "anchor": 4,
-    "numberList": [
-      {"key": 1, "weight": 2},
-      {"key": 2, "weight": 1},
-      {"key": 3, "weight": 1},
-      {"key": 4, "weight": 1}
-    ]
+  "jumboMap":{
+    "1": "one-mania",
+    "5": "fives",
+    "8": "fibonacci",
+    "9": "normal"
   },
-  "normal": {
-    "name": "Classic",
-    "difficulty": "Medium",
-    "spawnTime": 1.0,
-    "weight": 3.0,
-    "anchor": 9,
-    "numberList": [
-      {"key": 1, "weight": 4},
-      {"key": 2, "weight": 3},
-      {"key": 3, "weight": 3},
-      {"key": 4, "weight": 2},
-      {"key": 5, "weight": 2},
-      {"key": 6, "weight": 1},
-      {"key": 7, "weight": 1},
-      {"key": 8, "weight": 1},
-      {"key": 9, "weight": 1}
-    ]
-  },
-  "fives": {
-    "name": "Fives",
-    "difficulty": "Medium",
-    "spawnTime": 0.7,
-    "weight": 3.0,
-    "anchor": 5,
-    "numberList": [
-      {"key": 5, "weight": 3},
-      {"key": 10, "weight": 2},
-      {"key": 25, "weight": 2},
-      {"key": 50, "weight": 1}
-    ]
-  },
-  "fibonacci": {
-    "name": "Fibonacci",
-    "difficulty": "Medium",
-    "spawnTime": 1.0,
-    "weight": 2.0,
-    "anchor": 8,
-    "numberList": [
-      {"key": 1, "weight": 0},
-      {"key": 1, "weight": 4},
-      {"key": 2, "weight": 3},
-      {"key": 3, "weight": 3},
-      {"key": 5, "weight": 2},
-      {"key": 8, "weight": 2},
-      {"key": 13, "weight": 2},
-      {"key": 21, "weight": 1},
-      {"key": 34, "weight": 1},
-      {"key": 55, "weight": 1}
-    ]
-  },
-  "sevens": {
-    "name": "Sevens",
-    "difficulty": "Hard",
-    "spawnTime": 1.0,
-    "weight": 1.0,
-    "anchor": 7,
-    "numberList": [
-      {"key": 7, "weight": 5},
-      {"key": 14, "weight": 4},
-      {"key": 21, "weight": 3},
-      {"key": 28, "weight": 3},
-      {"key": 35, "weight": 2},
-      {"key": 42, "weight": 1},
-      {"key": 49, "weight": 1}
-    ]
-  },
-  "one-mania": {
-    "name": "One Mania",
-    "difficulty": "Very Hard",
-    "spawnTime": 0.3,
-    "weight": 2.0,
-    "anchor": 1,
-    "numberList": [
-      {"key": 1, "weight": 15},
-      {"key": 2, "weight": 5},
-      {"key": 3, "weight": 2},
-      {"key": 5, "weight": 1},
-      {"key": 10, "weight": 1}
-    ]
-  },
-  "random-jumbos": {
-    "name": "Random Jumbos!",
-    "difficulty": "Hard",
-    "spawnTime": 1.0,
-    "weight": 0.0,
-    "anchor": null,
-    "numberList": [
-      {"key": 1, "weight": 4},
-      {"key": 2, "weight": 3},
-      {"key": 3, "weight": 3},
-      {"key": 4, "weight": 2},
-      {"key": 5, "weight": 2},
-      {"key": 6, "weight": 1},
-      {"key": 7, "weight": 1},
-      {"key": 8, "weight": 1},
-      {"key": 9, "weight": 1}
-    ]
-  },
-  "multiple-progression": {
-    "name": "Multiples Progression",
-    "difficulty": "Medium",
-    "spawnTime": 1.0,
-    "weight": 0.0,
-    "anchor": null,
-    "numberList": [
-      {"key": 1, "weight": 4},
-      {"key": 2, "weight": 3},
-      {"key": 3, "weight": 3},
-      {"key": 4, "weight": 2},
-      {"key": 5, "weight": 2},
-      {"key": 6, "weight": 1},
-      {"key": 7, "weight": 1},
-      {"key": 8, "weight": 1},
-      {"key": 9, "weight": 1}
-    ]
+  "jumbos": {
+    "basic": {
+      "name": "Basic",
+      "difficulty": "Easy",
+      "spawnTime": 1.0,
+      "weight": 1.0,
+      "numberList": [
+        {
+          "key": 1,
+          "weight": 2
+        },
+        {
+          "key": 2,
+          "weight": 1
+        },
+        {
+          "key": 3,
+          "weight": 1
+        },
+        {
+          "key": 4,
+          "weight": 1
+        }
+      ]
+    },
+    "normal": {
+      "name": "Classic",
+      "difficulty": "Medium",
+      "spawnTime": 1.0,
+      "weight": 3.0,
+      "numberList": [
+        {
+          "key": 1,
+          "weight": 4
+        },
+        {
+          "key": 2,
+          "weight": 3
+        },
+        {
+          "key": 3,
+          "weight": 3
+        },
+        {
+          "key": 4,
+          "weight": 2
+        },
+        {
+          "key": 5,
+          "weight": 2
+        },
+        {
+          "key": 6,
+          "weight": 1
+        },
+        {
+          "key": 7,
+          "weight": 1
+        },
+        {
+          "key": 8,
+          "weight": 1
+        },
+        {
+          "key": 9,
+          "weight": 1
+        }
+      ]
+    },
+    "fives": {
+      "name": "Fives",
+      "difficulty": "Medium",
+      "spawnTime": 0.7,
+      "weight": 3.0,
+      "numberList": [
+        {
+          "key": 5,
+          "weight": 3
+        },
+        {
+          "key": 10,
+          "weight": 2
+        },
+        {
+          "key": 25,
+          "weight": 2
+        },
+        {
+          "key": 50,
+          "weight": 1
+        }
+      ]
+    },
+    "fibonacci": {
+      "name": "Fibonacci",
+      "difficulty": "Medium",
+      "spawnTime": 1.0,
+      "weight": 2.0,
+      "numberList": [
+        {
+          "key": 1,
+          "weight": 0
+        },
+        {
+          "key": 1,
+          "weight": 4
+        },
+        {
+          "key": 2,
+          "weight": 3
+        },
+        {
+          "key": 3,
+          "weight": 3
+        },
+        {
+          "key": 5,
+          "weight": 2
+        },
+        {
+          "key": 8,
+          "weight": 2
+        },
+        {
+          "key": 13,
+          "weight": 2
+        },
+        {
+          "key": 21,
+          "weight": 1
+        },
+        {
+          "key": 34,
+          "weight": 1
+        },
+        {
+          "key": 55,
+          "weight": 1
+        }
+      ]
+    },
+    "sevens": {
+      "name": "Sevens",
+      "difficulty": "Hard",
+      "spawnTime": 1.0,
+      "weight": 1.0,
+      "numberList": [
+        {
+          "key": 7,
+          "weight": 5
+        },
+        {
+          "key": 14,
+          "weight": 4
+        },
+        {
+          "key": 21,
+          "weight": 3
+        },
+        {
+          "key": 28,
+          "weight": 3
+        },
+        {
+          "key": 35,
+          "weight": 2
+        },
+        {
+          "key": 42,
+          "weight": 1
+        },
+        {
+          "key": 49,
+          "weight": 1
+        }
+      ]
+    },
+    "one-mania": {
+      "name": "One Mania",
+      "difficulty": "Very Hard",
+      "spawnTime": 0.3,
+      "weight": 2.0,
+      "numberList": [
+        {
+          "key": 1,
+          "weight": 15
+        },
+        {
+          "key": 2,
+          "weight": 5
+        },
+        {
+          "key": 3,
+          "weight": 2
+        },
+        {
+          "key": 5,
+          "weight": 1
+        },
+        {
+          "key": 10,
+          "weight": 1
+        }
+      ]
+    },
+    "random-jumbos": {
+      "name": "Random Jumbos!",
+      "difficulty": "Hard",
+      "spawnTime": 1.0,
+      "weight": 0.0,
+      "numberList": [
+        {
+          "key": 1,
+          "weight": 4
+        },
+        {
+          "key": 2,
+          "weight": 3
+        },
+        {
+          "key": 3,
+          "weight": 3
+        },
+        {
+          "key": 4,
+          "weight": 2
+        },
+        {
+          "key": 5,
+          "weight": 2
+        },
+        {
+          "key": 6,
+          "weight": 1
+        },
+        {
+          "key": 7,
+          "weight": 1
+        },
+        {
+          "key": 8,
+          "weight": 1
+        },
+        {
+          "key": 9,
+          "weight": 1
+        }
+      ]
+    },
+    "powerup-mode": {
+      "name": "Powerups!",
+      "difficulty": "Medium",
+      "spawnTime": 1.0,
+      "weight": 0.0,
+      "numberList": [
+        {
+          "key": 1,
+          "weight": 4
+        },
+        {
+          "key": 2,
+          "weight": 3
+        },
+        {
+          "key": 3,
+          "weight": 3
+        },
+        {
+          "key": 4,
+          "weight": 2
+        },
+        {
+          "key": 5,
+          "weight": 2
+        },
+        {
+          "key": 6,
+          "weight": 1
+        },
+        {
+          "key": 7,
+          "weight": 1
+        },
+        {
+          "key": 8,
+          "weight": 1
+        },
+        {
+          "key": 9,
+          "weight": 1
+        }
+      ]
+    },
+    "multiple-progression": {
+      "name": "Multiples Progression",
+      "difficulty": "Medium",
+      "spawnTime": 1.0,
+      "weight": 0.0,
+      "numberList": [
+        {
+          "key": 1,
+          "weight": 4
+        },
+        {
+          "key": 2,
+          "weight": 3
+        },
+        {
+          "key": 3,
+          "weight": 3
+        },
+        {
+          "key": 4,
+          "weight": 2
+        },
+        {
+          "key": 5,
+          "weight": 2
+        },
+        {
+          "key": 6,
+          "weight": 1
+        },
+        {
+          "key": 7,
+          "weight": 1
+        },
+        {
+          "key": 8,
+          "weight": 1
+        },
+        {
+          "key": 9,
+          "weight": 1
+        }
+      ]
+    }
   }
 }
