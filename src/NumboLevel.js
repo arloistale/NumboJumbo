@@ -85,8 +85,17 @@ var NumboLevel = cc.Class.extend({
 	    cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
 
 	    if (row < this.blocks[col].length)
-		killBlock(this.blocks[col][row]);
+		this.killBlock(this.blocks[col][row]);
 
+	},
+
+	killAllBlocks: function(){
+		for (var col = 0; col < NJ.NUM_COLS; ++col){
+			for (var row = this.blocks[col].length-1; row >= 0; --row){
+				var block = this.blocks[col][row];
+				this.killBlock(block);
+			}
+		}
 	},
 
 	// shifts all blocks on the given column downward
