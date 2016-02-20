@@ -41,12 +41,12 @@ var NumboLevel = cc.Class.extend({
 	// spawn a block at the given col and value
 	// returns spawned block
 	// DO NOT publicly use directly!!! Use moveBlockIntoPlace or dropRandomBlock instead
-	spawnBlock: function(col, val) {
+	spawnBlock: function(col, val, powerup) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid coords");
 	    
 	    var block = new NumboBlock();
 
-	    block.init(col, this.blocks[col].length, val);
+	    block.init(col, this.blocks[col].length, val, powerup);
 	    this.blocks[col].push(block);
 	    this.totalNumBlocks++;
 	    return block;
@@ -56,10 +56,10 @@ var NumboLevel = cc.Class.extend({
 	// since column collapsing was introduced, also
 	// shifts blocks horizontally if neccessary.
 	// returns dropped block
-	dropBlock: function(col, val) {
+	dropBlock: function(col, val, powerup) {
 	    cc.assert(this.blocks[col].length < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
 
-	    var block = this.spawnBlock(col, val);
+	    var block = this.spawnBlock(col, val, powerup);
 	    block.bHasDropped = false;
 	    return block;
 	},

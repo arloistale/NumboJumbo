@@ -28,7 +28,7 @@ var NumboBlock = cc.Sprite.extend({
             scale: 1.5
         });
 
-        this.highlightSprite = new Sprite(res.glowImage);
+        this.highlightSprite = new cc.Sprite(res.glowImage);
         this.highlightSprite.attr({
             scale: 1.8,
             anchorX: 0.5,

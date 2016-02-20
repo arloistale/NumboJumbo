@@ -48,9 +48,9 @@ var JumboMenuLayer = cc.LayerColor.extend({
         var jumboButton = null;
         var jumboName = "";
         var jumboDifficulty = "";
-        for(var key in NJ.jumbos.data) {
-            jumboName = NJ.jumbos.data[key].name;
-            jumboDifficulty = NJ.jumbos.data[key].difficulty;
+        for(var key in NJ.jumbos.data.jumbos) {
+            jumboName = NJ.jumbos.data.jumbos[key].name;
+            jumboDifficulty = NJ.jumbos.data.jumbos[key].difficulty;
 
             // here we create a callback for each button and bind the associated jumbo id to the callback
             jumboButton = this.generateJumboButton(jumboName, jumboDifficulty, (function(jumboId) {
