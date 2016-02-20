@@ -9,13 +9,12 @@ var NumboController = cc.Class.extend({
 	_selectedBlocks: [],
 
 	comboTimes: [],
-	multiplier: 1,
-                                      
+
 	////////////////////
 	// INITIALIZATION //
 	////////////////////
 
-	
+
 	// initialize timing, initial mode
 	init: function() {
 	    this._selectedBlocks = [];
@@ -40,11 +39,11 @@ var NumboController = cc.Class.extend({
     },
 
 	initJumboDistribution: function(){
-		for (var KEY in NJ.jumbos.data){
-			this.jumboDistribution.push({key: KEY, weight: NJ.jumbos.data[KEY].weight});
+		for (var KEY in NJ.jumbos.data.jumbos){
+			this.jumboDistribution.push({key: KEY, weight: NJ.jumbos.data.jumbos[KEY].weight});
 		}
 	},
-    
+
 	isGameOver: function() {
 	    return this._numboLevel.isFull();
 	},
@@ -60,27 +59,27 @@ var NumboController = cc.Class.extend({
 	    var block = this._numboLevel.getBlock(col, row);
 
 	    if(!block)
-		return;
+			return;
 
 	    // TODO: possible optimization
 	    if(!block.bHasDropped || this._selectedBlocks.indexOf(block) >= 0)
-		return;
+			return;
 
 	    // make sure this block is adjacent to the block before it
 	    if (this._selectedBlocks.length > 0){
-		var lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
-		if (! this._numboLevel.isAdjBlocks(block, lastBlock) )
-		    return;
+			var lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
+			if (! this._numboLevel.isAdjBlocks(block, lastBlock) )
+				return;
 	    }
 	    // we make this block green, make the last selected block red
 	    if(this._selectedBlocks.length > 0) {
-		var lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
-		lastBlock.highlight(cc.color(255, 0, 0, 255));
+			var lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
+			lastBlock.highlight(cc.color(255, 0, 0, 255));
 	    }
 
 	    block.highlight(cc.color(0, 255, 0, 255));
 	    this._selectedBlocks.push(block);
-	    
+
 	    if(NJ.settings.sounds)
 			cc.audioEngine.playEffect(res.plop);
 	},
@@ -113,12 +112,18 @@ var NumboController = cc.Class.extend({
 	// shifts all blocks down to remove gaps and drops them accordingly
 	// returns the number of blocks cleared if successful, or 0 otherwise
 	activateSelectedBlocks: function() {
+		var powerupValue = null;
+
 	    var selectedBlockCount = 0;
 	    if(this.isSelectedClearable()) {
 			selectedBlockCount = this._selectedBlocks.length;
 			var blockSum = 0;
-			for (var block in this._selectedBlocks)
-		    	blockSum += this._selectedBlocks[block].val;
+			for (var block in this._selectedBlocks) {
+				blockSum += this._selectedBlocks[block].val;
+				if (this._selectedBlocks[block].powerup) {
+					powerupValue = this._selectedBlocks[block].val;
+				}
+			}
 
 			NJ.stats.blocksCleared += selectedBlockCount;
 			if(selectedBlockCount > NJ.stats.maxComboLength)
@@ -128,11 +133,11 @@ var NumboController = cc.Class.extend({
 
 			if(NJ.settings.sounds)
 			    cc.audioEngine.playEffect(res.plip_plip);
-		
+
 			// remove any affected block sprite objects:
 			for(var i = 0; i < this._selectedBlocks.length; ++i)
 			    this._numboLevel.killBlock(this._selectedBlocks[i]);
-		
+
 			this._numboLevel.collapseColumnsToward(lastCol);
 			this._numboLevel.updateBlockRowsAndCols();
 
@@ -141,7 +146,7 @@ var NumboController = cc.Class.extend({
 
 	    this.deselectAllBlocks();
 
-	    return { cleared: selectedBlockCount, blockSum: blockSum };
+	    return { cleared: selectedBlockCount, blockSum: blockSum, powerupValue: powerupValue};
 	},
 
 	// drop block into random column with random value
@@ -151,25 +156,36 @@ var NumboController = cc.Class.extend({
 
 	    // Set up val/col
 	    var col = NJHelper.weightedRandom(this._numboLevel.getColWeights());
-	    //var val = this.distribution[Math.floor(Math.random()*this.distribution.length)];
 	    var val = NJHelper.weightedRandom(this.distribution);
 
-
-	    
 	    if(NJ.settings.sounds){
 			cc.audioEngine.playEffect(res.tongue_click);
 	    }
 
+		var powerup = NJ.gameState.powerupMode && (Math.random() < 0.05); // 5% chance
+		if (powerup){
+			var keys = Object.keys(NJ.jumbos.jumboMap)
+			val = parseInt(keys[Math.floor(Math.random() * keys.length)]);
+		}
 
-	    return this._numboLevel.dropBlock(col, val);
+	    return this._numboLevel.dropBlock(col, val, powerup);
 	},
 
 	/////////////
 	// GETTERS //
 	/////////////
 
+
 	updateRandomJumbo: function() {
-		NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution))
+	 	NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution));
+		var jumbo = NJ.getCurrentJumbo();
+		this.distribution = jumbo.numberList;
+		this.spawnTime = jumbo.spawnTime;
+	},
+
+	updateJumboTo: function(jumboString){
+
+		NJ.chooseJumbo(jumboString);
 		var jumbo = NJ.getCurrentJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
@@ -217,7 +233,7 @@ var NumboController = cc.Class.extend({
 		else if((time - this.comboTimes[this.comboTimes.length-1])/1000 < 5) {
 			this.comboTimes.push(time);
 			if(this.comboTimes.length > 2)
-				this.multiplier = 1 + (this.comboTimes.length-2)*.5;
+				NJ.gameState.multiplier = 1 + (this.comboTimes.length-2)*.5;
 		}
 		else this.comboTimes = [time];
 	},
@@ -227,7 +243,6 @@ var NumboController = cc.Class.extend({
 			if((Date.now() - this.comboTimes[this.comboTimes.length-1])/1000 > 5) {
 				this.comboTimes = [];
 				NJ.gameState.multiplier = 1;
-				this.multiplier = 1;
 			}
 		}
 	},
@@ -236,7 +251,7 @@ var NumboController = cc.Class.extend({
 	spawnConst: function() {
 	    return 1 + 2/NJ.stats.level
 	},
-	
+
 	// checks if the current selected blocks can be activated (their equation is valid)
 	getColLength: function(col) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid column");
@@ -265,10 +280,10 @@ var NumboController = cc.Class.extend({
 		for (var i = 0; i < selectedBlocksLength - 1; ++i) {
 		    if (!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
 			return false;
-		    
+
 		    sum += this._selectedBlocks[i].val;
 		}
-		
+
 		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
 	}
 });

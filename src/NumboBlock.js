@@ -15,6 +15,8 @@ var NumboBlock = cc.Sprite.extend({
 
     val: -1,
 
+    powerup: false,
+
     bHasDropped: false,
 
     ctor: function() {
@@ -52,14 +54,19 @@ var NumboBlock = cc.Sprite.extend({
     },
 
     // initialize block values
-    init: function(col, row, val) {
+    init: function(col, row, val, powerup) {
         this.col = col;
         this.row = row;
         this.val = val;
+        this.powerup = powerup;
 
         this.bHasDropped = false;
 
         this.valueLabel.setString(val + "");
+
+        if (this.powerup){
+            this.setTexture(res.powerupImage);
+        }
     },
 
     // kill the block

@@ -43,11 +43,18 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.initLevel();
 	    this.initAudio();
 
+		this.initPowerups();
         this.updateMultiplier();
                                      
 	    // Begin scheduling block drops.
 	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
 	    this.schedule(this.scheduleSpawn, 0.1*20);
+	},
+
+	// initialize the powerup mode variable
+	initPowerups: function(){
+		if (NJ.gameState.currentJumboId == "powerup-mode")
+			NJ.gameState.powerupMode = true;
 	},
 
 	// Initialize the level's background.
@@ -277,7 +284,6 @@ var NumboGameLayer = cc.Layer.extend({
 	///////////////////////
 
 	updateMultiplier: function() {
-		NJ.gameState.multiplier = this._numboController.multiplier;
 		this._numboHeaderLayer.setMultiplierValue(NJ.gameState.multiplier);
 		if(NJ.gameState.multiplier > 1) {
 			this.unschedule(this.checkMultiplier);
@@ -407,6 +413,13 @@ var NumboGameLayer = cc.Layer.extend({
                 targetY: cc.winSize.height * 1.2
             });
 
+			if (data.powerupValue){
+				var jumboString = NJ.jumbos.jumboMap[data.powerupValue];
+				if (jumboString) {
+					this._numboController.updateJumboTo(jumboString);
+				}
+			}
+
             // Level up with feedback if needed
             if (NJ.levelUpIfNeeded()) {
 
@@ -417,17 +430,11 @@ var NumboGameLayer = cc.Layer.extend({
 					this.spawnNBlocks(20);
 				}
 
-
-                // Check for Jumbo Swap
+				                // Check for Jumbo Swap
                 if (NJ.gameState.currentJumboId == "multiple-progression")
                     this._numboController.updateMultipleProgression();
 
                 // give feedback for leveling up
-
-                // Update multiplier based on changes made by first line of this function within NumboController.
-                if (this._numboController.multiplier != NJ.gameState.multiplier) {
-                    this.updateMultiplier();
-                }
 
                 // Display "LEVEL x"
                 this._feedbackLayer.launchFallingBanner({
@@ -439,6 +446,10 @@ var NumboGameLayer = cc.Layer.extend({
             } else if (data.cleared > 3) {
                 this._feedbackLayer.launchFallingBanner();
             }
+
+			// Update multiplier if needed.
+			if (parseFloat(this._numboHeaderLayer.getMultiplier()) != NJ.gameState.multiplier)
+				this.updateMultiplier();
 
             this._numboHeaderLayer.setScoreValue(NJ.stats.score, NJ.getBlocksLeftForLevelUp(), NJ.stats.level);
         }
