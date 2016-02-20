@@ -175,16 +175,14 @@ var FeedbackLayer = cc.Layer.extend({
         this.addChild(snippet);
 
         var scaleUpAction = cc.scaleTo(0.1, 1.0, 1.0);
-        //scaleDownAction.easing(cc.easeIn(3.0));
-                                    var delayAction = cc.delayTime(0.1);
         var moveAction = cc.moveTo(1, cc.p(targetX, targetY));
-        var fadeOutAction = cc.fadeTo(0.1, 0);
+        var fadeOutAction = cc.fadeTo(1, 0);
         var removeAction = cc.callFunc(function() {
             that.pushSnippetPool(snippet);
             snippet.stopAllActions();
             snippet.removeFromParent(true);
         });
 
-        snippet.runAction(cc.sequence(scaleUpAction, delayAction, moveAction, fadeOutAction, removeAction));
+        snippet.runAction(cc.sequence(scaleUpAction, cc.spawn(moveAction, fadeOutAction), removeAction));
     }
 });
