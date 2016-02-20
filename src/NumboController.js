@@ -52,36 +52,37 @@ var NumboController = cc.Class.extend({
 	// SELECTION FUNCTIONALITY //
 	/////////////////////////////
 
-	// select a block, giving it a highlight
+	// select a block in the level, adding it to the selectedBlocks collection
+	// returns an object containing { currentSelectedBlock, lastSelectedBlock }, or null if there was no block
 	selectBlock: function(col, row) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS && 0 <= row && row < NJ.NUM_ROWS, "Invalid coords");
 
 	    var block = this._numboLevel.getBlock(col, row);
+		var lastBlock = null;
 
 	    if(!block)
-			return;
+			return null;
 
 	    // TODO: possible optimization
 	    if(!block.bHasDropped || this._selectedBlocks.indexOf(block) >= 0)
-			return;
+			return null;
 
 	    // make sure this block is adjacent to the block before it
 	    if (this._selectedBlocks.length > 0){
-			var lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
-			if (! this._numboLevel.isAdjBlocks(block, lastBlock) )
-				return;
-	    }
-	    // we make this block green, make the last selected block red
-	    if(this._selectedBlocks.length > 0) {
-			var lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
-			lastBlock.highlight(cc.color(255, 0, 0, 255));
+			lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
+			if (!this._numboLevel.isAdjBlocks(block, lastBlock) )
+				return null;
 	    }
 
-	    block.highlight(cc.color(0, 255, 0, 255));
 	    this._selectedBlocks.push(block);
 
 	    if(NJ.settings.sounds)
 			cc.audioEngine.playEffect(res.plop);
+
+		return {
+			currBlock: block,
+			lastBlock: lastBlock
+		};
 	},
 
 	// deselect a single block, removing its highlight
@@ -91,7 +92,7 @@ var NumboController = cc.Class.extend({
 	    var block = this._numboLevel.getBlock(col, row);
 
 	    if(!block || !block.bHasDropped)
-		return;
+			return;
 
 	    block.clearHighlight();
 
@@ -256,6 +257,10 @@ var NumboController = cc.Class.extend({
 	getColLength: function(col) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid column");
 	    return this._numboLevel.blocks[col].length;
+	},
+
+	getSelectedBlocks: function() {
+		return this._selectedBlocks;
 	},
 
 	getBlock: function(col, row) {

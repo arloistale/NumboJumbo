@@ -9,6 +9,9 @@ var NumboGameLayer = cc.Layer.extend({
 	_gameOverMenuLayer: null,
 	_feedbackLayer: null,
 
+	// Geometry Data
+	_selectedLinesNode: null,
+
 	// Sprite Data
 	_backgroundLayer: null,
 
@@ -18,7 +21,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Controller Data
 	_numboController: null,
-
 
 	////////////////////
 	// Initialization //
@@ -35,14 +37,17 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    NJ.stats.startTime = Date.now();
 
-		// Init game elements.
-	    this.initBackground();
+		// Init game logic
 	    this.initNumboController();
 	    this.initInput();
+		this.initLevel();
+
+		// Init game visuals and audio
 	    this.initUI();
-	    this.initLevel();
+		this.initGeometry();
 	    this.initAudio();
 
+		this.initPowerups();
         this.updateMultiplier();
                                      
 	    // Begin scheduling block drops.
@@ -50,10 +55,10 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.schedule(this.scheduleSpawn, 0.1*20);
 	},
 
-	// Initialize the level's background.
-	initBackground: function() {
-	    this._backgroundLayer = new BackgroundLayer();
-		this.addChild(this._backgroundLayer);
+	// initialize the powerup mode variable
+	initPowerups: function(){
+		if (NJ.gameState.currentJumboId == "powerup-mode")
+			NJ.gameState.powerupMode = true;
 	},
 
 	// Initialize input depending on the device.
@@ -108,10 +113,13 @@ var NumboGameLayer = cc.Layer.extend({
 	    }
 	},
 
-	// Initialize UI elements for communicating game state.
+	// Initialize UI elements
 	initUI: function() {
-
 	    var that = this;
+
+		// background
+		this._backgroundLayer = new BackgroundLayer();
+		this.addChild(this._backgroundLayer);
 
         // header
 	    this._numboHeaderLayer = new NumboHeaderLayer();
@@ -124,6 +132,22 @@ var NumboGameLayer = cc.Layer.extend({
         // feedback overlay
 	    this._feedbackLayer = new FeedbackLayer();
 	    this.addChild(this._feedbackLayer, 800);
+
+		this._feedbackLayer.launchFallingBanner({
+			title: "Level " + NJ.stats.level
+		});
+	},
+
+	// Initialize visual geometry
+	initGeometry: function() {
+		// initialize rectangle around level
+		var levelNode = cc.DrawNode.create();
+		levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), cc.color.white, 6, cc.color(173, 216, 230, 0.4*255));
+		this.addChild(levelNode);
+
+		// initialize selection lines for selected nodes
+		this._selectedLinesNode = cc.DrawNode.create();
+		this.addChild(this._selectedLinesNode);
 	},
 
 	// Initialize the empty level into the scene.
@@ -136,10 +160,6 @@ var NumboGameLayer = cc.Layer.extend({
 	    var cellPadding = refDim * 0.02;
 	    this._levelCellSize = cc.size(levelDims.width / NJ.NUM_COLS, levelDims.height / NJ.NUM_ROWS);
 	    this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
-
-	    var levelNode = cc.DrawNode.create();
-	    levelNode.drawRect(levelOrigin, cc.p(levelOrigin.x + levelDims.width, levelOrigin.y + levelDims.height), cc.color.white, 6, cc.color(173, 216, 230, 0.4*255));
-	    this.addChild(levelNode);
 	},
 
 	// Initialize the Numbo Controller, which controls the level.
@@ -270,14 +290,11 @@ var NumboGameLayer = cc.Layer.extend({
 		this._numboController._numboLevel.killAllBlocks();
 	},
 
-
-
 	///////////////////////
 	//     Multiplier    //
 	///////////////////////
 
 	updateMultiplier: function() {
-		NJ.gameState.multiplier = this._numboController.multiplier;
 		this._numboHeaderLayer.setMultiplierValue(NJ.gameState.multiplier);
 		if(NJ.gameState.multiplier > 1) {
 			this.unschedule(this.checkMultiplier);
@@ -361,30 +378,50 @@ var NumboGameLayer = cc.Layer.extend({
 		}, this);
 	},
 
-	//////////////////
-	// Touch Events //
-	//////////////////
+//////////////////
+// Touch Events //
+//////////////////
 
 	// On touch began, tries to find level coordinates for the touch and selects block accordingly.
 	onTouchBegan: function(touchPosition) {
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
-	    if (touchCoords)
-		    this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+	    if (touchCoords) {
+			var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+
+			if(data) {
+				var currBlock = data.currBlock, lastBlock = data.lastBlock;
+				if (currBlock) currBlock.highlight(cc.color(0, 255, 0, 255));
+				if (lastBlock) lastBlock.highlight(cc.color(255, 0, 0, 255));
+
+				this.redrawSelectedLines();
+			}
+		}
 	},
 
 	// On touch moved, selects additional blocks as the touch is held and moved.
 	onTouchMoved: function(touchPosition) {
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
-	    if (touchCoords)
-		this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+	    if (touchCoords) {
+			var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+
+			if(data) {
+				var currBlock = data.currBlock, lastBlock = data.lastBlock;
+				if (currBlock) currBlock.highlight(cc.color(0, 255, 0, 255));
+				if (lastBlock) lastBlock.highlight(cc.color(255, 0, 0, 255));
+
+				this.redrawSelectedLines();
+			}
+		}
 	},
 
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
 	    // Activate any selected blocks.
 	    var data = this._numboController.activateSelectedBlocks();
+
+		this.redrawSelectedLines();
 
         // make sure something actually happened
         if(data.cleared > 0) {
@@ -402,8 +439,15 @@ var NumboGameLayer = cc.Layer.extend({
                 x: touchPosition.x,
                 y: touchPosition.y,
                 targetX: touchPosition.x,
-                targetY: cc.winSize.height * 1.2
+                targetY: touchPosition.y + cc.winSize.height / 6
             });
+
+			if (data.powerupValue){
+				var jumboString = NJ.jumbos.jumboMap[data.powerupValue];
+				if (jumboString) {
+					this._numboController.updateJumboTo(jumboString);
+				}
+			}
 
             // Level up with feedback if needed
             if (NJ.levelUpIfNeeded()) {
@@ -415,17 +459,11 @@ var NumboGameLayer = cc.Layer.extend({
 					this.spawnNBlocks(20);
 				}
 
-
-                // Check for Jumbo Swap
+				                // Check for Jumbo Swap
                 if (NJ.gameState.currentJumboId == "multiple-progression")
                     this._numboController.updateMultipleProgression();
 
                 // give feedback for leveling up
-
-                // Update multiplier based on changes made by first line of this function within NumboController.
-                if (this._numboController.multiplier != NJ.gameState.multiplier) {
-                    this.updateMultiplier();
-                }
 
                 // Display "LEVEL x"
                 this._feedbackLayer.launchFallingBanner({
@@ -438,8 +476,28 @@ var NumboGameLayer = cc.Layer.extend({
                 this._feedbackLayer.launchFallingBanner();
             }
 
+			// Update multiplier if needed.
+			if (parseFloat(this._numboHeaderLayer.getMultiplier()) != NJ.gameState.multiplier)
+				this.updateMultiplier();
+
             this._numboHeaderLayer.setScoreValue(NJ.stats.score, NJ.getBlocksLeftForLevelUp(), NJ.stats.level);
         }
+	},
+
+/////////////
+// Drawing //
+/////////////
+
+	// redraw lines indicating selected blocks
+	redrawSelectedLines: function() {
+		this._selectedLinesNode.clear();
+
+		var selectedBlocks = this._numboController.getSelectedBlocks();
+
+		for(var i = 0; i < selectedBlocks.length - 1; i++) {
+			this._selectedLinesNode.drawSegment(cc.p(selectedBlocks[i].x, selectedBlocks[i].y),
+				cc.p(selectedBlocks[i + 1].x, selectedBlocks[i + 1].y), 2, cc.color.white);
+		}
 	},
 
 /////////////

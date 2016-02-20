@@ -23,6 +23,7 @@ var res = {
     backgroundImage: resRoot + "Images/normal/middle.png",
     glowImage: resRoot + "Images/Glow.png",
     blockImage: resRoot + "Images/blocks.png",
+    powerupImage: resRoot + "Images/powerup.png",
 
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
@@ -64,6 +65,7 @@ var g_menu = [
 // resources for ingame
 var g_game = [
     // images
+    res.powerupImage,
     res.glowImage,
     res.blockImage,
     res.buttonImage,
