@@ -8,6 +8,9 @@ var FeedbackLayer = cc.Layer.extend({
 	bannerPool: [],
     snippetPool: [],
 
+    // whether the doomsayer has been launched
+    bIsDoomsayerLaunched: false,
+
 ////////////////////
 // INITIALIZATION //
 ////////////////////
@@ -184,5 +187,32 @@ var FeedbackLayer = cc.Layer.extend({
         });
 
         snippet.runAction(cc.sequence(scaleUpAction, cc.spawn(moveAction, fadeOutAction), removeAction));
+    },
+
+    ////////////
+    // SAYING //
+    ////////////
+
+    runDoomsayer: function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.alertSound);
+    },
+
+    launchDoomsayer: function() {
+        if(!this.bIsDoomsayerLaunched) {
+            this.schedule(this.runDoomsayer, 1);
+        }
+
+        this.bIsDoomsayerLaunched = true;
+    },
+
+    clearDoomsayer: function() {
+        this.bIsDoomsayerLaunched = false;
+
+        this.unschedule(this.runDoomsayer);
+    },
+
+    isDoomsayerLaunched: function() {
+        return this.bIsDoomsayerLaunched;
     }
 });

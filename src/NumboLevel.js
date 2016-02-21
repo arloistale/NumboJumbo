@@ -10,11 +10,11 @@
 */
 var NumboLevel = cc.Class.extend({
 	blocks: [],
-	totalNumBlocks: 0,
+	numBlocks: 0,
 
-	////////////////////
-	// INITIALIZATION //
-	////////////////////
+////////////////////
+// INITIALIZATION //
+////////////////////
 
 	// initialize the level to empty
 	init: function() {
@@ -22,7 +22,7 @@ var NumboLevel = cc.Class.extend({
 
 	    // create empty columns:
 	    for(var i = 0; i < NJ.NUM_COLS; ++i)
-		this.blocks.push([]);
+			this.blocks.push([]);
 	},
 
 	// reset the level, removing all blocks
@@ -34,9 +34,9 @@ var NumboLevel = cc.Class.extend({
 	    }
 	},
 
-	////////////////////
-	// PAUSABLE MANIPULATION //
-	////////////////////
+//////////////////
+// MANIPULATION //
+//////////////////
 
 	// spawn a block at the given col and value
 	// returns spawned block
@@ -48,7 +48,7 @@ var NumboLevel = cc.Class.extend({
 
 	    block.init(col, this.blocks[col].length, val, powerup);
 	    this.blocks[col].push(block);
-	    this.totalNumBlocks++;
+	    this.numBlocks++;
 	    return block;
 	},
 
@@ -73,7 +73,7 @@ var NumboLevel = cc.Class.extend({
 	    block.kill();
 
 	    this.blocks[col].splice(row, 1);
-	    this.totalNumBlocks--;
+	    this.numBlocks--;
 	    for (var j = row; j < this.blocks[col].length; ++j) {
 			this.blocks[col][j].row = j;
 			this.blocks[col][j].bHasDropped = false;
@@ -144,7 +144,7 @@ var NumboLevel = cc.Class.extend({
 				for (var n = e; n < NJ.NUM_COLS; ++n) {
 					if (this.blocks[n].length > 0) {// found one
 						this.swapColumns(n, e);
-						break; // should maybe write this w/o break :p
+						break; // TODO: should maybe write this w/o break :p
 					}
 				}
 			}
@@ -201,9 +201,9 @@ var NumboLevel = cc.Class.extend({
 		}
 	},
 
-	/////////////
-	// GETTERS //
-	/////////////
+/////////////
+// GETTERS //
+/////////////
 
 	// search for a legit column to drop block into.
 	// does not return columns which are empty.
@@ -236,7 +236,7 @@ var NumboLevel = cc.Class.extend({
 	    return col;
 	},
 
-	// get rid of this?
+	// TODO: get rid of this?
 	getAllValidCols: function(){
 	    validCols = [];
 	    
@@ -248,7 +248,7 @@ var NumboLevel = cc.Class.extend({
 		    validCols.push(false);
 	    }
 	    
-	    if (this.totalNumBlocks > 0) {
+	    if (this.numBlocks > 0) {
 			// check if column is adjacent to a non-empty column:
 			for (var c = 0; c < NJ.NUM_COLS; ++c) {
 				if (validCols[c]) {
@@ -318,9 +318,19 @@ var NumboLevel = cc.Class.extend({
 		return weightObjects;
 	},
 
+	// Returns the number of blocks in the level
+	getNumBlocks: function() {
+		return this.numBlocks;
+	},
+
+	// Returns the total capacity of the level
+	getCapacity: function() {
+		return NJ.NUM_COLS * NJ.NUM_ROWS;
+	},
+
 	// returns whether level is currently full of blocks
 	isFull: function() {
-	    return this.totalNumBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
+	    return this.numBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
 	},
 
 	// returns whether two coordinates are adjacent (diagonal allowed)

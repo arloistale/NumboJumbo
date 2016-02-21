@@ -94,7 +94,7 @@ var ScoresLayer = cc.LayerColor.extend({
 
     onBack: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.tongue_click, false);
+            cc.audioEngine.playEffect(res.clickSound, false);
 
         if(this.onCloseCallback)
             this.onCloseCallback();

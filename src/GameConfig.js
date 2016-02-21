@@ -38,6 +38,10 @@ NJ.BLOCK_TYPE = {
 
 NJ.BLOCK_MAX_VALUE = 9;
 
+// game settings
+NJ.DANGER_THRESHOLD = 0.75;
+
+// default settings
 NJ.MUSIC_VOLUME = 0.2;
 NJ.SOUNDS_VOLUME = 1;
 

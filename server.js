@@ -10,7 +10,7 @@ app.configure(function() {
 });
 
 app.get('/', function(req, res) {
-    res.sendfile(__dirname + '/index.html');
+    res.sendfile(__dirname + '/release.html');
 });
 
 app.listen(process.env.PORT || 8081, function() {

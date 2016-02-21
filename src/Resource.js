@@ -14,8 +14,8 @@ if(!cc.sys.isNative) {
 var res = {
     // Fonts
     markerFont: {
-        name: "MarkerFelt",
-        src: resRoot + "Fonts/MarkerFelt.ttf"
+        name: "Felt",
+        src: resRoot + "Fonts/Felt.ttf"
     },
 
 	// images
@@ -28,9 +28,10 @@ var res = {
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
-    plip_plip: resRoot + "Sounds/plip_plip.wav",
-    plop: resRoot + "Sounds/Plop.wav",
-    tongue_click: resRoot + "Sounds/tongue_click.wav",
+    alertSound: resRoot + "Sounds/alert.mp3",
+    plipSound: resRoot + "Sounds/plipSound.wav",
+    plopSound: resRoot + "Sounds/Plop.wav",
+    clickSound: resRoot + "Sounds/clickSound.wav",
     
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
@@ -45,6 +46,9 @@ var b_getFontName = function(fontRes) {
     if(cc.sys.os == cc.sys.OS_ANDROID)
         return fontRes.src;
     
+    if(cc.sys.os == cc.sys.OS_IOS)
+        return "Marker Felt"
+    
     return fontRes.name;
 };
 
@@ -55,7 +59,7 @@ var g_menu = [
     res.buttonImage,
 
     // sounds
-    res.tongue_click,
+    res.clickSound,
     res.menuTrack,
 
     // fonts
@@ -71,9 +75,9 @@ var g_game = [
     res.buttonImage,
 
     // sounds
-    res.tongue_click,
-    res.plip_plip,
-    res.plop,
+    res.clickSound,
+    res.plipSound,
+    res.plopSound,
     res.backgroundTrack,
 
     // fonts

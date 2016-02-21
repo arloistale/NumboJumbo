@@ -185,6 +185,9 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Pauses the game, halting all actions and schedulers.
 	pauseGame: function() {
+		// halt the doomsayer
+		this._feedbackLayer.clearDoomsayer();
+
 	    cc.eventManager.pauseTarget(this, true);
 
         // use breadth first search to pause all valid children
@@ -212,6 +215,10 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Unpauses game, resuming all actions and schedulers.
 	resumeGame: function() {
+		// resume doomsayer if needed
+		if(this._numboController.isInDanger())
+			this._feedbackLayer.launchDoomsayer();
+
 	    cc.eventManager.resumeTarget(this, true);
 
         // use breadth first search to resume all valid children
@@ -273,6 +280,14 @@ var NumboGameLayer = cc.Layer.extend({
 			this.onGameOver();
 			return;
 	    }
+
+		if(!this._feedbackLayer.isDoomsayerLaunched()) {
+			if(this._numboController.isInDanger())
+				this._feedbackLayer.launchDoomsayer();
+		} else {
+			if(!this._numboController.isInDanger())
+				this._feedbackLayer.clearDoomsayer();
+		}
                         
 	    var block = this._numboController.dropRandomBlock();
 	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
@@ -339,7 +354,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    var that = this;
 
 	    if(NJ.settings.sounds)
-		    cc.audioEngine.playEffect(res.tongue_click, false);
+		    cc.audioEngine.playEffect(res.clickSound, false);
 
 	    this.pauseGame();
 

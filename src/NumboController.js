@@ -44,10 +44,6 @@ var NumboController = cc.Class.extend({
 		}
 	},
 
-	isGameOver: function() {
-	    return this._numboLevel.isFull();
-	},
-
 	/////////////////////////////
 	// SELECTION FUNCTIONALITY //
 	/////////////////////////////
@@ -77,7 +73,7 @@ var NumboController = cc.Class.extend({
 	    this._selectedBlocks.push(block);
 
 	    if(NJ.settings.sounds)
-			cc.audioEngine.playEffect(res.plop);
+			cc.audioEngine.playEffect(res.plopSound);
 
 		return {
 			currBlock: block,
@@ -133,7 +129,7 @@ var NumboController = cc.Class.extend({
 			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
 			if(NJ.settings.sounds)
-			    cc.audioEngine.playEffect(res.plip_plip);
+			    cc.audioEngine.playEffect(res.plipSound);
 
 			// remove any affected block sprite objects:
 			for(var i = 0; i < this._selectedBlocks.length; ++i)
@@ -160,7 +156,7 @@ var NumboController = cc.Class.extend({
 	    var val = NJHelper.weightedRandom(this.distribution);
 
 	    if(NJ.settings.sounds){
-			cc.audioEngine.playEffect(res.tongue_click);
+			cc.audioEngine.playEffect(res.clickSound);
 	    }
 
 		var powerup = NJ.gameState.powerupMode && (Math.random() < 0.05); // 5% chance
@@ -172,9 +168,9 @@ var NumboController = cc.Class.extend({
 	    return this._numboLevel.dropBlock(col, val, powerup);
 	},
 
-	/////////////
-	// GETTERS //
-	/////////////
+	////////////
+	// COMBOS //
+	////////////
 
 
 	updateRandomJumbo: function() {
@@ -248,8 +244,20 @@ var NumboController = cc.Class.extend({
 		}
 	},
 
+	/////////////
+	// GETTERS //
+	/////////////
+
+	isInDanger: function() {
+		return this._numboLevel.getNumBlocks() / this._numboLevel.getCapacity() >= NJ.DANGER_THRESHOLD;
+	},
+
+	isGameOver: function() {
+		return this._numboLevel.isFull();
+	},
+
 	// a scaling factor to reduce spawn time on higher levels
-	spawnConst: function() {
+	getSpawnConst: function() {
 	    return 1 + 2/NJ.stats.level
 	},
 
@@ -268,7 +276,7 @@ var NumboController = cc.Class.extend({
 	},
 
 	getSpawnTime: function() {
-	    return this.spawnConst() * this.spawnTime;
+	    return this.getSpawnConst() * this.spawnTime;
 	},
 
 	// checks if the current selected blocks can be activated (their equation is valid)

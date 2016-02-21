@@ -38,8 +38,6 @@ var InstructionsLayer = cc.LayerColor.extend({
         this._menu.addChild(titleLabel);
 
         // write instructions label
-        var instructionsLabel = this.generateInstructionsLabel("Select Combos of Numbo Blocks by dragging across the blocks.\nPrevious numbers should add up to the last number in the Combo.");
-        // write instructions label
         var instructionsTokens = [
             "Select Combos of Numbo Blocks by dragging mouse or finger across the blocks.",
             "Previous Numbos should add up to the last Numbos in the Combo."
@@ -57,7 +55,7 @@ var InstructionsLayer = cc.LayerColor.extend({
 
         var nextButton = this.generateTitleButton("Next", function () {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.tongue_click, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
             that.presentGoalsSlide();
         });
@@ -91,7 +89,7 @@ var InstructionsLayer = cc.LayerColor.extend({
 
         var backButton = this.generateTitleButton("Previous", function () {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.tongue_click, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
             that.presentControlsSlide();
         });
@@ -112,7 +110,7 @@ var InstructionsLayer = cc.LayerColor.extend({
 
     onBack: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.tongue_click, false);
+            cc.audioEngine.playEffect(res.clickSound, false);
 
         if(this.onCloseCallback)
             this.onCloseCallback();
@@ -140,12 +138,16 @@ var InstructionsLayer = cc.LayerColor.extend({
     },
 
     generateInstructionsLabel: function(title) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
-        cc.MenuItemFont.setFontSize(30);
-        var toggleLabel = new cc.MenuItemFont(title);
-        toggleLabel.setEnabled(false);
-        toggleLabel.setColor(cc.color(255, 255, 255, 255));
-        return toggleLabel;
+                                             var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 30, cc.size(cc.winSize.width * 0.9, 0));
+                                             label.setHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
+                                             label.setVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
+                                             label.setColor(cc.color(255, 255, 255, 255));
+                                             
+                                             var menuLabel = new cc.MenuItemLabel(label);
+                                             menuLabel.setEnabled(false);
+                                             menuLabel.setColor(cc.color(255, 255, 255, 255));
+                                             menuLabel.setDisabledColor(cc.color(255, 255, 255, 255));
+                                             return menuLabel;
     },
 
     generateTitleButton: function(title, callback) {
