@@ -247,6 +247,23 @@ var NumboController = cc.Class.extend({
 		}
 	},
 
+	getRowsToClearAfterLevelup: function() {
+		var numBlocks = this._numboLevel.getNumBlocks();
+		if(numBlocks < NJ.NUM_COLS)
+			return 2;
+		else if(numBlocks < NJ.NUM_COLS*2)
+			return 1;
+		else if(numBlocks > NJ.NUM_COLS*5)
+			return -2;
+		else if(numBlocks > NJ.NUM_COLS*4)
+			return -1;
+		return 0;
+	},
+
+	clearRows: function(num) {
+		this._numboLevel.clearBottomRows(num);
+	},
+
 	// a scaling factor to reduce spawn time on higher levels
 	spawnConst: function() {
 	    return 1 + 2/NJ.stats.level
