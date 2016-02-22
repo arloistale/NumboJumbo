@@ -275,7 +275,9 @@ var NumboController = cc.Class.extend({
 
 	// a scaling factor to reduce spawn time on higher levels
 	getSpawnConst: function() {
-	    return 1 + 2/NJ.stats.level
+		var L = NJ.stats.level;
+		return 0.5 + 2/Math.pow(L, 1/4);
+	    //return 1 + 2/L;
 	},
 
 	// checks if the current selected blocks can be activated (their equation is valid)
