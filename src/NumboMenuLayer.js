@@ -176,7 +176,7 @@ var NumboMenuLayer = cc.Layer.extend({
         normalLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: normalSprite.getContentSize().width / 2,
             y: normalSprite.getContentSize().height / 2
         });

@@ -19,9 +19,14 @@ var FeedbackLayer = cc.Layer.extend({
 		this._super();
 
 	    this.feedbackText = ["yahoo!", "yay!", "good job!", "cowabunga!",
-				 "holy crap!", "keep it up!", "whoa!", "dang!",
-				 "gosh golly!", "booya!", "oh wow!", 
-				 "oh jeez!", "so good!", "!!!!!!!!!!!!!!!!!" ];
+            "keep it up!", "whoa!", "dang!",
+            "gosh golly!", "booya!", "oh wow!",
+            "oh jeez!", "so good!", "astonishing!",
+            "jackpot!", "nice execution!", "miracle worker!",
+            "winner!", "combo master!", "fabulous!", "moving up!",
+            "astonishing work!", "wonderful!", "that's how it's done!",
+            "mind blowing!", "stupendous moves!", "breathtaking!",
+            "fantastic!", "crushing the competition!", "masterful!"];
 
         var feedback = null;
         var i = 0;
