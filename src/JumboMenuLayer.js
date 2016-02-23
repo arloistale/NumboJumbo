@@ -66,7 +66,7 @@ var JumboMenuLayer = cc.LayerColor.extend({
 
         this._menu.addChild(backButton);
 
-        this._menu.alignItemsVerticallyWithPadding(30);
+        this._menu.alignItemsVerticallyWithPadding(10);
 
         this.addChild(this._menu, 100);
     },
@@ -112,7 +112,7 @@ var JumboMenuLayer = cc.LayerColor.extend({
 
     generateLabel: function(title) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
-        cc.MenuItemFont.setFontSize(56);
+        cc.MenuItemFont.setFontSize(46);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
         toggleLabel.setColor(cc.color(255, 255, 255, 255));
