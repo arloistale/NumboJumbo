@@ -185,7 +185,7 @@ var NumboMenuLayer = cc.Layer.extend({
         selectedLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: selectedSprite.getContentSize().width / 2,
             y: selectedSprite.getContentSize().height / 2
         });
@@ -194,7 +194,7 @@ var NumboMenuLayer = cc.Layer.extend({
         disabledLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: disabledSprite.getContentSize().width / 2,
             y: disabledSprite.getContentSize().height / 2
         });
