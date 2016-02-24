@@ -1,47 +1,32 @@
 cc.game.onStart = function() {
+    var designResolutionSize = cc.size(320, 480);
+    var smallResolutionSize = cc.size(320, 480);
+    var mediumResolutionSize = cc.size(768, 1024);
+    var largeResolutionSize = cc.size(1536, 2048);
     
     // resize based on platform
     
-    var isLandscape = true;
-    var resolutionPolicy = cc.ResolutionPolicy.SHOW_ALL;
-    
     if(cc.sys.isNative) {
-        isLandscape = false;
+        cc.view.setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, cc.ResolutionPolicy.NO_BORDER);
 
         var searchPaths = jsb.fileUtils.getSearchPaths();
         
         var frameSize = cc.view.getFrameSize();
-        /*
-        if(frameSize.width >= 1536 && frameSize.height >= 1536) { // ipad retina
-            if(isLandscape)
-                cc.view.setDesignResolutionSize(2048, 1536, resolutionPolicy);
-            else
-                cc.view.setDesignResolutionSize(1536, 2048, resolutionPolicy);
+
+        if(frameSize.height >= largeResolutionSize.height) { // ipad retina
+            cc.director.setContentScaleFactor(largeResolutionSize.height / designResolutionSize.height);
             
             // TODO: change to use large sized resources
             searchPaths.push("res");
             searchPaths.push("src");
-        } else */if(frameSize.width >= 640 && frameSize.height >= 640) { // iphone hd or above + android
-            var tempSize;
-            
-            if(frameSize.width >= 1136 || frameSize.height >= 1136)
-                tempSize = 1136;
-            else
-                tempSize = 960;
-            
-            if(isLandscape)
-                cc.view.setDesignResolutionSize(tempSize, 640, resolutionPolicy);
-            else
-                cc.view.setDesignResolutionSize(640, tempSize, resolutionPolicy);
+        } else if(frameSize.height >= mediumResolutionSize.height) { // iphone hd or above + android
+            cc.director.setContentScaleFactor(mediumResolutionSize.height / designResolutionSize.height);
             
             // TODO: change to use medium sized resources
             searchPaths.push("res");
             searchPaths.push("src");
         } else { // small device
-            if(isLandscape)
-                cc.view.setDesignResolutionSize(480, 320, resolutionPolicy);
-            else
-                cc.view.setDesignResolutionSize(320, 480, resolutionPolicy);
+            cc.director.setContentScaleFactor(smallResolutionSize.height / designResolutionSize.height);
             
             // TODO: change to use small sized resources
             searchPaths.push("res");
@@ -50,10 +35,9 @@ cc.game.onStart = function() {
         
         jsb.fileUtils.setSearchPaths(searchPaths)
     } else { // web
-        if(isLandscape)
-            cc.view.setDesignResolutionSize(1280, 720, resolutionPolicy);
-        else
-            cc.view.setDesignResolutionSize(720, 1280, resolutionPolicy);
+        cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.NO_BORDER);
+
+        cc.director.setContentScaleFactor(smallResolutionSize.width / designResolutionSize.width);
         
         cc.view.resizeWithBrowserSize(true);
     }

@@ -24,21 +24,13 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     },
 
     initUI: function(bInGame) {
-        var sp = new cc.Sprite(res.loading_png);
-        sp.anchorX = 0;
-        sp.anchorY = 0;
-        sp.scale = NJ.SCALE;
-        this.addChild(sp, 0, 1);
-
-        /*
-        var cacheImage = cc.textureCache.addImage(res.buttonImage);
-        var title = new cc.Sprite(cacheImage);
-        title.x = cc.winSize.width / 2;
-        title.y = cc.winSize.height - 120;
-        this.addChild(title);
-*/
-
         var that = this;
+
+        this._menu = new cc.Menu();
+
+        var headerLabel = this.generateHeaderLabel(bInGame ? "Paused" : "Settings");
+
+        this._menu.addChild(headerLabel);
 
         // generate music toggle
         var musicLabel = this.generateLabel("Music");
@@ -56,24 +48,32 @@ var SettingsMenuLayer = cc.LayerColor.extend({
         state = (NJ.settings.sounds ? 0 : 1);
         soundsToggle.setSelectedIndex(state);
 
+        this._menu.addChild(musicLabel);
+        this._menu.addChild(soundsLabel);
+        this._menu.addChild(musicToggle);
+        this._menu.addChild(soundsToggle);
+
+        var backButton = new MenuTitleButton(bInGame ? "Resume" : "Back", function () {
+            that.onBack();
+        }, this);
+
+        backButton.setImageRes(res.buttonImage);
+
         if(!bInGame) {
-            var backButton = this.generateTitleButton("Back", function () {
-                that.onBack();
-            });
+            this._menu.addChild(backButton);
 
-            this._menu = new cc.Menu(musicLabel, soundsLabel, musicToggle, soundsToggle, backButton);
-            this._menu.alignItemsInColumns(2, 2, 1);
+            this._menu.alignItemsInColumns(1, 2, 2, 1);
         } else {
-            var menuButton = this.generateTitleButton("Menu", function () {
+            var menuButton = new MenuTitleButton("Menu", function () {
                 that.onMenu();
-            });
+            }, this);
 
-            var resumeButton = this.generateTitleButton("Resume", function () {
-                that.onBack();
-            });
+            menuButton.setImageRes(res.buttonImage);
 
-            this._menu = new cc.Menu(musicLabel, soundsLabel, musicToggle, soundsToggle, menuButton, resumeButton);
-            this._menu.alignItemsInColumns(2, 2, 1, 1, 1);
+            this._menu.addChild(menuButton);
+            this._menu.addChild(backButton);
+
+            this._menu.alignItemsInColumns(1, 2, 2, 1, 1, 1);
         }
 
         this.addChild(this._menu, 100);
@@ -143,9 +143,18 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 // UI Helpers //
 ////////////////
 
+    generateHeaderLabel: function(title) {
+        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
+        var toggleLabel = new cc.MenuItemFont(title);
+        toggleLabel.setEnabled(false);
+        toggleLabel.setColor(cc.color(255, 255, 255, 255));
+        return toggleLabel;
+    },
+
     generateLabel: function(title) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
-        cc.MenuItemFont.setFontSize(28);
+        cc.MenuItemFont.setFontSize(NJ.fontSizes.paragraph);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
         toggleLabel.setColor(cc.color(255, 255, 255, 255));
@@ -153,21 +162,15 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     },
 
     generateToggle: function(callback) {
-        cc.MenuItemFont.setFontSize(36);
+        cc.MenuItemFont.setFontSize(NJ.fontSizes.buttonSmall);
         var toggle = new cc.MenuItemToggle(
             new cc.MenuItemFont("On"),
             new cc.MenuItemFont("Off")
         );
+
         toggle.setColor(cc.color(255, 255, 255, 255));
         toggle.setCallback(callback);
 
         return toggle;
-    },
-
-    generateTitleButton: function(title, callback) {
-        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 42);
-        label.setColor(cc.color(255, 255, 255, 255));
-
-        return new cc.MenuItemLabel(label, callback);
     }
 });

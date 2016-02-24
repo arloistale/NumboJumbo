@@ -40,7 +40,6 @@ var NumboGameLayer = cc.Layer.extend({
 		// Init game logic
 	    this.initNumboController();
 	    this.initInput();
-		this.initLevel();
 
 		// Init game visuals and audio
 	    this.initUI();
@@ -56,7 +55,7 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	// initialize the powerup mode variable
-	initPowerups: function(){
+	initPowerups: function() {
 		if (NJ.gameState.currentJumboId == "powerup-mode")
 			NJ.gameState.powerupMode = true;
 	},
@@ -138,28 +137,28 @@ var NumboGameLayer = cc.Layer.extend({
 		});
 	},
 
-	// Initialize visual geometry
+	// Initialize dimensions and geometry
 	initGeometry: function() {
+		var origin = cc.director.getVisibleOrigin();
+		var size = cc.director.getVisibleSize();
+		var headerHeight = this._numboHeaderLayer.getContentSize().height;
+		var playableSize = cc.size(size.width, size.height - headerHeight);
+		var refDim = Math.min(playableSize.width, playableSize.height);
+
+		var levelPadding = refDim * 0.02;
+		var levelDims = cc.size(refDim - levelPadding * 2, refDim - levelPadding * 2);
+		var levelOrigin = cc.p(origin.x + playableSize.width / 2 - levelDims.width / 2, origin.y + playableSize.height / 2 - levelDims.height / 2);
+		this._levelCellSize = cc.size(levelDims.width / NJ.NUM_COLS, levelDims.height / NJ.NUM_ROWS);
+		this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
+
 		// initialize rectangle around level
 		var levelNode = cc.DrawNode.create();
-		levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), cc.color.white, 6, cc.color(173, 216, 230, 0.4*255));
+		levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), cc.color.white, 2, cc.color(173, 216, 230, 0.4*255));
 		this.addChild(levelNode);
 
 		// initialize selection lines for selected nodes
 		this._selectedLinesNode = cc.DrawNode.create();
 		this.addChild(this._selectedLinesNode);
-	},
-
-	// Initialize the empty level into the scene.
-	initLevel: function() {
-	    var size = cc.winSize;
-	    var refDim = Math.min(size.width, size.height, 900);
-	    var levelPadding = refDim * 0.02;
-	    var levelDims = cc.size(refDim - levelPadding * 2, refDim - levelPadding * 2);
-	    var levelOrigin = cc.p(size.width / 2 - levelDims.width / 2, size.height / 2 - levelDims.height / 2);
-	    var cellPadding = refDim * 0.02;
-	    this._levelCellSize = cc.size(levelDims.width / NJ.NUM_COLS, levelDims.height / NJ.NUM_ROWS);
-	    this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
 	},
 
 	// Initialize the Numbo Controller, which controls the level.
@@ -205,10 +204,10 @@ var NumboGameLayer = cc.Layer.extend({
 
             newChildren = child.getChildren();
             for(i = 0; i < newChildren.length; i++) {
-                if(visited.indexOf(newChildren[i]) < 0) {
-                    visited.push(newChildren[i]);
-                    children.push(newChildren[i]);
-                }
+                cc.assert(visited.indexOf(newChildren[i]) < 0, "Circular node references detected!");
+
+				visited.push(newChildren[i]);
+				children.push(newChildren[i]);
             }
         }
 	},
@@ -236,10 +235,10 @@ var NumboGameLayer = cc.Layer.extend({
 
             newChildren = child.getChildren();
             for(i = 0; i < newChildren.length; i++) {
-                if(visited.indexOf(newChildren[i]) < 0) {
-                    visited.push(newChildren[i]);
-                    children.push(newChildren[i]);
-                }
+                cc.assert(visited.indexOf(newChildren[i]) < 0, "Circular node references detected");
+
+				visited.push(newChildren[i]);
+				children.push(newChildren[i]);
             }
         }
 	},
@@ -255,8 +254,8 @@ var NumboGameLayer = cc.Layer.extend({
 
 	    var duration = 0.5;
 	    var moveAction = cc.MoveTo.create(duration, cc.p(blockTargetX, blockTargetY));
-	    var dropAction = cc.CallFunc.create(function() {
-		    block.bHasDropped = true;
+	    var dropAction = cc.callFunc(function() {
+		    // extra functionality for when block has finished dropping
 		});
 	    block.stopAllActions();
 	    block.runAction(cc.sequence(moveAction, dropAction));
@@ -288,10 +287,11 @@ var NumboGameLayer = cc.Layer.extend({
 			if(!this._numboController.isInDanger())
 				this._feedbackLayer.clearDoomsayer();
 		}
-                        
-	    var block = this._numboController.dropRandomBlock();
+
+		var blockSize = cc.size(this._levelCellSize.width * 0.75, this._levelCellSize.height * 0.75);
+	    var block = this._numboController.spawnDropRandomBlock(blockSize);
 	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
-	    block.setPosition(blockX, cc.winSize.height + this._levelCellSize.height / 2);
+	    block.setPosition(blockX, cc.director.getVisibleOrigin().y + cc.director.getVisibleSize().height + this._levelCellSize.height / 2);
 	    this.addChild(block);
 
 	    this.moveBlockIntoPlace(block);
@@ -454,7 +454,7 @@ var NumboGameLayer = cc.Layer.extend({
                 x: touchPosition.x,
                 y: touchPosition.y,
                 targetX: touchPosition.x,
-                targetY: touchPosition.y + cc.winSize.height / 6
+                targetY: touchPosition.y + this._levelBounds.height / 6
             });
 
 			if (data.powerupValue){
@@ -528,12 +528,18 @@ var NumboGameLayer = cc.Layer.extend({
             var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
 
             // return only if coordinates in certain radius of the block.
-            var radius = 0.45;
-            if (Math.abs(point.x - this._levelBounds.x - (this._levelCellSize.width/2 + (col * this._levelCellSize.width))) < radius*this._levelCellSize.width/2 &&
-                point.y - this._levelBounds.y - (this._levelCellSize.height/2 + (row * this._levelCellSize.height)) < radius*this._levelCellSize.height/2) {
+            var radius = 0.75 * this._levelCellSize.width / 2;
 
-                return {col: col, row: row};
-            }
+			var cellWidth = this._levelCellSize.width;
+			var cellCenterX = this._levelBounds.x + (col + 0.5) * cellWidth;
+			var cellHeight = this._levelCellSize.height;
+			var cellCenterY = this._levelBounds.y + (row + 0.5) * cellHeight;
+
+			var dist = (cellCenterX - point.x) * (cellCenterX - point.x) + (cellCenterY - point.y) * (cellCenterY - point.y);
+
+			// check distance
+            if (dist < radius * radius)
+                return { col: col, row: row };
 	    }
 
 	    return null;
