@@ -32,8 +32,8 @@ var NumboMenuLayer = cc.Layer.extend({
     initBackground: function() {
         var backgroundSprite = new cc.Sprite(res.backgroundImage);
         backgroundSprite.attr({
-            x: cc.winSize.width / 2,
-            y: cc.winSize.height / 2,
+            x: cc.visibleRect.center.x,
+            y: cc.visibleRect.center.y,
             anchorX: 0.5,
             anchorY: 0.5,
             scale: 1,

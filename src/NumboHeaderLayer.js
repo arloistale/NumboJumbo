@@ -17,23 +17,18 @@ var NumboHeaderLayer = cc.LayerColor.extend({
     ctor: function() {
         this._super();
 
-        var origin = cc.director.getVisibleOrigin();
-        var size = cc.director.getVisibleSize();
-
-        var headerSize = cc.size(size.width, NJ.HEADER_HEIGHT);
+        var headerSize = cc.size(cc.visibleRect.width, NJ.HEADER_HEIGHT);
         this.init(cc.color(255, 0, 0, 255), headerSize.width, headerSize.height);
         this.attr({
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: origin.x + size.width / 2,
-            y: origin.y + size.height - headerSize.height / 2
+            x: cc.visibleRect.topLeft.x,
+            y: cc.visibleRect.topLeft.y
         });
 
         this.initLabels();
         this.initButtons();
 
-        var moveTo = cc.moveTo(0.4, cc.p(0, size.height - headerSize.height));
-        //this.runAction(moveTo);
+        var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - headerSize.height));
+        this.runAction(moveTo);
     },
 
     // Create the labels used to communicate game state with text.
@@ -142,20 +137,19 @@ var NumboHeaderLayer = cc.LayerColor.extend({
         // initialize pause button
         var button = new ccui.Button();
         button.setTitleFontName(b_getFontName(res.markerFont));
-        button.setTitleFontSize(26);
+        button.setTitleFontSize(NJ.fontSizes.buttonMedium);
         button.setTitleText("Pause");
         button.attr({
             scale: 1.0,
             anchorX: 1,
-            anchorY: 1,
+            anchorY: 0.5,
             x: contentSize.width - minDim * 0.1,
-            y: contentSize.height - minDim * 0.1
+            y: contentSize.height / 2
         });
         button.loadTextureNormal(res.buttonImage);
         button.addTouchEventListener(function (ref, touchEventType) {
             if(touchEventType === ccui.Widget.TOUCH_ENDED)
                 that.onPauseCallback();
-
         }, this);
 
         this.addChild(button);

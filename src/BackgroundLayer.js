@@ -25,12 +25,10 @@ var BackgroundLayer = cc.Layer.extend({
 
     // Initializes the background sprites for the scrolling background.
     initSprites: function() {
-        var size = cc.winSize;
-
         this.bottomLayer = new cc.Sprite(res.backBottom);
         this.bottomLayer.attr({
-            x: size.width / 2,
-            y: size.height / 2,
+            x: cc.visibleRect.center.x,
+            y: cc.visibleRect.center.y,
             anchorX: 0.5,
             anchorY: 0.5,
             scale: 1,
@@ -40,8 +38,8 @@ var BackgroundLayer = cc.Layer.extend({
 
         this.middleLayer = new cc.Sprite(res.backMiddle);
         this.middleLayer.attr({
-            x: size.width / 2,
-            y: size.height,
+            x: cc.visibleRect.center.x,
+            y: cc.visibleRect.center.y,
             anchorX: 0.5,
             anchorY: 1,
             scale: 1,
@@ -51,8 +49,8 @@ var BackgroundLayer = cc.Layer.extend({
 
         this.middleLayerTwo = new cc.Sprite(res.backMiddle);
         this.middleLayerTwo.attr({
-            x: size.width / 2,
-            y: size.height * 2,
+            x: cc.visibleRect.center.x,
+            y: cc.visibleRect.center.y,
             anchorX: 0.5,
             anchorY: 1,
             scale: 1,
@@ -62,8 +60,8 @@ var BackgroundLayer = cc.Layer.extend({
 
         this.topLayer = new cc.Sprite(res.backTop);
         this.topLayer.attr({
-            x: size.width / 2,
-            y: size.height,
+            x: cc.visibleRect.center.x,
+            y: cc.visibleRect.center.y,
             anchorX: 0.5,
             anchorY: 1,
             scale: 1,
@@ -73,8 +71,8 @@ var BackgroundLayer = cc.Layer.extend({
 
         this.topLayerTwo = new cc.Sprite(res.backTop);
         this.topLayerTwo.attr({
-            x: size.width / 2,
-            y: size.height * 2,
+            x: cc.visibleRect.center.x,
+            y: cc.visibleRect.center.y,
             anchorX: 0.5,
             anchorY: 1,
             scale: 1,
@@ -93,20 +91,20 @@ var BackgroundLayer = cc.Layer.extend({
         this.topLayerTwo.y += shift*2;
 
         if(this.middleLayer.y > this.middleLayerTwo.y) {
-            if(this.middleLayerTwo.y > cc.winSize.height)
+            if(this.middleLayerTwo.y > cc.visibleRect.top.y)
                 this.middleLayer.y = this.middleLayerTwo.y - this.middleLayer.height;
         }
         else {
-            if(this.middleLayer.y > cc.winSize.height)
+            if(this.middleLayer.y > cc.visibleRect.top.y)
                 this.middleLayerTwo.y = this.middleLayer.y - this.middleLayerTwo.height;
         }
 
         if(this.topLayer.y > this.topLayerTwo.y) {
-            if(this.topLayerTwo.y > cc.winSize.height)
+            if(this.topLayerTwo.y > cc.visibleRect.top.y)
                 this.topLayer.y = this.topLayerTwo.y - this.topLayer.height;
         }
         else {
-            if(this.topLayer.y > cc.winSize.height)
+            if(this.topLayer.y > cc.visibleRect.top.y)
                 this.topLayerTwo.y = this.topLayer.y - this.topLayerTwo.height;
         }
     },

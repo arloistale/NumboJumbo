@@ -29,14 +29,6 @@ var JumboMenuLayer = cc.LayerColor.extend({
         sp.scale = NJ.SCALE;
         this.addChild(sp, 0, 1);
 
-        /*
-        var cacheImage = cc.textureCache.addImage(res.buttonImage);
-        var title = new cc.Sprite(cacheImage);
-        title.x = cc.winSize.width / 2;
-        title.y = cc.winSize.height - 120;
-        this.addChild(title);
-*/
-
         var that = this;
 
         this._menu = new cc.Menu();

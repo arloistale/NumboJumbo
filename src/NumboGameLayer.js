@@ -139,15 +139,18 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Initialize dimensions and geometry
 	initGeometry: function() {
-		var origin = cc.director.getVisibleOrigin();
-		var size = cc.director.getVisibleSize();
-		var headerHeight = this._numboHeaderLayer.getContentSize().height;
-		var playableSize = cc.size(size.width, size.height - headerHeight);
-		var refDim = Math.min(playableSize.width, playableSize.height);
+		var playableRect = cc.rect({
+			x: cc.visibleRect.bottomLeft.x,
+			y: cc.visibleRect.bottomLeft.y,
+			width: cc.visibleRect.width,
+			height: cc.visibleRect.height - this._numboHeaderLayer.getContentSize().height
+		});
+
+		var refDim = Math.min(playableRect.width, playableRect.height);
 
 		var levelPadding = refDim * 0.02;
 		var levelDims = cc.size(refDim - levelPadding * 2, refDim - levelPadding * 2);
-		var levelOrigin = cc.p(origin.x + playableSize.width / 2 - levelDims.width / 2, origin.y + playableSize.height / 2 - levelDims.height / 2);
+		var levelOrigin = cc.p(playableRect.x + playableRect.width / 2 - levelDims.width / 2, playableRect.y + playableRect.height / 2 - levelDims.height / 2);
 		this._levelCellSize = cc.size(levelDims.width / NJ.NUM_COLS, levelDims.height / NJ.NUM_ROWS);
 		this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
 
@@ -291,7 +294,7 @@ var NumboGameLayer = cc.Layer.extend({
 		var blockSize = cc.size(this._levelCellSize.width * 0.75, this._levelCellSize.height * 0.75);
 	    var block = this._numboController.spawnDropRandomBlock(blockSize);
 	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
-	    block.setPosition(blockX, cc.director.getVisibleOrigin().y + cc.director.getVisibleSize().height + this._levelCellSize.height / 2);
+	    block.setPosition(blockX, cc.visibleRect.top.y + this._levelCellSize.height / 2);
 	    this.addChild(block);
 
 	    this.moveBlockIntoPlace(block);
