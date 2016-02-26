@@ -175,8 +175,6 @@ var NumboGameLayer = cc.Layer.extend({
 	    if(!NJ.settings.music)
 		return;
 
-	    //cc.audioEngine.setMusicVolume(0.5);
-
 	    // start the music
 	    cc.audioEngine.playMusic(res.backgroundTrack, true);
 	},

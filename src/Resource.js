@@ -64,9 +64,7 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.markerFont.src,
-
-    res.backBottom
+    res.markerFont.src
 ];
 
 // resources for ingame

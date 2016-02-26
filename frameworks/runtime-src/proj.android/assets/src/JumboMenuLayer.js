@@ -60,7 +60,7 @@ var JumboMenuLayer = cc.LayerColor.extend({
 
         this._menu.addChild(backButton);
 
-        this._menu.alignItemsVertically();
+        this._menu.alignItemsVerticallyWithPadding(10);
 
         this.addChild(this._menu, 100);
     },

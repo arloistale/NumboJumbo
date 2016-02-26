@@ -14,8 +14,8 @@ if(!cc.sys.isNative) {
 var res = {
     // Fonts
     markerFont: {
-        name: "Felt",
-        src: resRoot + "Fonts/Felt.ttf"
+        name: "MarkerFelt-Regular",
+        src: resRoot + "Fonts/MarkerFelt-Regular.ttf"
     },
 
 	// images
@@ -64,9 +64,7 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.markerFont.src,
-
-    res.backBottom
+    res.markerFont.src
 ];
 
 // resources for ingame

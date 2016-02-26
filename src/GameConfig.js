@@ -23,6 +23,7 @@ if(NJ.isFirefox) {
     NJ.anchorOffsetX = 0;
     NJ.anchorOffsetY = 0;
 }
+
 // dims
 NJ.SCALE = 1;
 

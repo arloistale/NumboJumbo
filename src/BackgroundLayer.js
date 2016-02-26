@@ -126,5 +126,4 @@ var BackgroundLayer = cc.Layer.extend({
         this.speed = this.FAST_SPEED;
         this.frameCount = duration;
     }
-
 });
