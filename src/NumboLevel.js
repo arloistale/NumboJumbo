@@ -38,29 +38,17 @@ var NumboLevel = cc.Class.extend({
 // MANIPULATION //
 //////////////////
 
-	// spawn a block at the given col and value
+	// spawn and drop block at the given col and value
 	// returns spawned block
-	// DO NOT publicly use directly!!! Use moveBlockIntoPlace or dropRandomBlock instead
-	spawnBlock: function(col, val, powerup) {
-	    cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid coords");
+	// DO NOT publicly use directly!!! Use NumboController spawnDropRandomBlock instead
+	spawnDropBlock: function(blockSize, col, val, powerup) {
+	    cc.assert(0 <= col && col < NJ.NUM_COLS && this.blocks[col].length < NJ.NUM_ROWS, "Invalid coords");
 	    
-	    var block = new NumboBlock();
+	    var block = new NumboBlock(blockSize);
 
 	    block.init(col, this.blocks[col].length, val, powerup);
 	    this.blocks[col].push(block);
 	    this.numBlocks++;
-	    return block;
-	},
-
-	// drop block into the given column with given value.
-	// since column collapsing was introduced, also
-	// shifts blocks horizontally if neccessary.
-	// returns dropped block
-	dropBlock: function(col, val, powerup) {
-	    cc.assert(this.blocks[col].length < NJ.NUM_ROWS, "Can't drop any more blocks in this column!");
-
-	    var block = this.spawnBlock(col, val, powerup);
-	    block.bHasDropped = false;
 	    return block;
 	},
 
@@ -72,11 +60,13 @@ var NumboLevel = cc.Class.extend({
 	    var row = block.row;
 	    block.kill();
 
+		// naturally the blocks collection for this column will rearrange itself
 	    this.blocks[col].splice(row, 1);
 	    this.numBlocks--;
+
+		// update internal row index to reflect new indices
 	    for (var j = row; j < this.blocks[col].length; ++j) {
 			this.blocks[col][j].row = j;
-			this.blocks[col][j].bHasDropped = false;
 	    }
 	},
 
@@ -97,17 +87,6 @@ var NumboLevel = cc.Class.extend({
 		}
 	},
 
-	// shifts all blocks on the given column downward
-	// by setting its bHasDropped to false
-	shiftBlocksInColumn: function(col) {
-	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
-
-	    for (var row = 0; row < this.blocks[col].length; ++row){
-			this.blocks[col][row].bHasDropped = false;
-			this.blocks[col][row].row = row;
-	    }
-	},
-
 	// takes in the index of a column in bricks[][].
 	// moves all non-empty columns toward that col
 	// (cols to the left of col move rightward, and vice-versa)
@@ -115,6 +94,14 @@ var NumboLevel = cc.Class.extend({
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
 	    this.collapseLeftSideToward(col);
 	    this.collapseRightSideToward(col);
+
+		for (var i=0; i < NJ.NUM_COLS; ++i){
+			for (var j=0; j < this.blocks[i].length; ++j){
+				if (this.blocks[i][j]) {
+					this.blocks[i][j].col = i;
+				}
+			}
+		}
 	},
 
 	collapseLeftSideToward: function(col) {
@@ -162,20 +149,6 @@ var NumboLevel = cc.Class.extend({
 	    var t = this.blocks[i];
 	    this.blocks[i] = this.blocks[j];
 	    this.blocks[j] = t;
-	},
-
-	// iterates over all blocks and updates their .row and .col
-	// member variables. useful when blocks are removed or need
-	// to be collapsed
-	updateBlockRowsAndCols: function() {
-	    for (var i=0; i < NJ.NUM_COLS; ++i){
-			for (var j=0; j < this.blocks[i].length; ++j){
-				if (this.blocks[i][j]) {
-					this.blocks[i][j].col = i;
-					this.blocks[i][j].row = j;
-				}
-			}
-	    }
 	},
 
 	divideBlocksBy: function(factor) {

@@ -23,7 +23,9 @@ var InstructionsLayer = cc.LayerColor.extend({
     },
 
     initUI: function() {
+
         this._menu = new cc.Menu();
+
         this.addChild(this._menu);
 
         this.presentControlsSlide();
@@ -49,16 +51,20 @@ var InstructionsLayer = cc.LayerColor.extend({
             this._menu.addChild(instructionLabel);
         }
 
-        var backButton = this.generateTitleButton("Back", function () {
+        var backButton = new MenuTitleButton("Back", function () {
             that.onBack();
-        });
+        }, this);
 
-        var nextButton = this.generateTitleButton("Next", function () {
+        var nextButton = new MenuTitleButton("Next", function () {
+
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             that.presentGoalsSlide();
-        });
+        }, this);
+
+        backButton.setImageRes(res.buttonImage);
+        nextButton.setImageRes(res.buttonImage);
 
         this._menu.addChild(backButton);
         this._menu.addChild(nextButton);
@@ -87,16 +93,19 @@ var InstructionsLayer = cc.LayerColor.extend({
             this._menu.addChild(instructionLabel);
         }
 
-        var backButton = this.generateTitleButton("Previous", function () {
+        var backButton = new MenuTitleButton("Previous", function () {
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             that.presentControlsSlide();
-        });
+        }, this);
 
-        var nextButton = this.generateTitleButton("Finish", function () {
+        var nextButton = new MenuTitleButton("Finish", function () {
             that.onBack();
-        });
+        }, this);
+
+        backButton.setImageRes(res.buttonImage);
+        nextButton.setImageRes(res.buttonImage);
 
         this._menu.addChild(backButton);
         this._menu.addChild(nextButton);
@@ -130,7 +139,7 @@ var InstructionsLayer = cc.LayerColor.extend({
 
     generateLabel: function(title) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
-        cc.MenuItemFont.setFontSize(56);
+        cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
         toggleLabel.setColor(cc.color(255, 255, 255, 255));
@@ -138,22 +147,15 @@ var InstructionsLayer = cc.LayerColor.extend({
     },
 
     generateInstructionsLabel: function(title) {
-                                             var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 30, cc.size(cc.winSize.width * 0.9, 0));
-                                             label.setHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
-                                             label.setVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
-                                             label.setColor(cc.color(255, 255, 255, 255));
-                                             
-                                             var menuLabel = new cc.MenuItemLabel(label);
-                                             menuLabel.setEnabled(false);
-                                             menuLabel.setColor(cc.color(255, 255, 255, 255));
-                                             menuLabel.setDisabledColor(cc.color(255, 255, 255, 255));
-                                             return menuLabel;
-    },
+         var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.paragraph, cc.size(cc.visibleRect.width * 0.9, 0));
+         label.setHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
+         label.setVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
+         label.setColor(cc.color(255, 255, 255, 255));
 
-    generateTitleButton: function(title, callback) {
-        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 42);
-        label.setColor(cc.color(255, 255, 255, 255));
-
-        return new cc.MenuItemLabel(label, callback);
+         var menuLabel = new cc.MenuItemLabel(label);
+         menuLabel.setEnabled(false);
+         menuLabel.setColor(cc.color(255, 255, 255, 255));
+         menuLabel.setDisabledColor(cc.color(255, 255, 255, 255));
+         return menuLabel;
     }
 });

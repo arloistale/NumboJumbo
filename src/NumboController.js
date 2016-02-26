@@ -60,7 +60,7 @@ var NumboController = cc.Class.extend({
 			return null;
 
 	    // TODO: possible optimization
-	    if(!block.bHasDropped || this._selectedBlocks.indexOf(block) >= 0)
+	    if(this._selectedBlocks.indexOf(block) >= 0)
 			return null;
 
 	    // make sure this block is adjacent to the block before it
@@ -87,7 +87,7 @@ var NumboController = cc.Class.extend({
 
 	    var block = this._numboLevel.getBlock(col, row);
 
-	    if(!block || !block.bHasDropped)
+	    if(!block)
 			return;
 
 	    block.clearHighlight();
@@ -136,7 +136,6 @@ var NumboController = cc.Class.extend({
 			    this._numboLevel.killBlock(this._selectedBlocks[i]);
 
 			this._numboLevel.collapseColumnsToward(lastCol);
-			this._numboLevel.updateBlockRowsAndCols();
 
 			this.updateCombo(Date.now());
 	    }
@@ -147,8 +146,9 @@ var NumboController = cc.Class.extend({
 	},
 
 	// drop block into random column with random value
+	// must define block size in terms of world coordinates
 	// returns dropped block
-	dropRandomBlock: function() {
+	spawnDropRandomBlock: function(blockSize) {
 	    cc.assert(!this.isGameOver(), "Can't drop any more blocks");
 
 	    // Set up val/col
@@ -174,7 +174,7 @@ var NumboController = cc.Class.extend({
 				powerup = false;
 		}
 
-	    var block = this._numboLevel.dropBlock(col, val, powerup);
+	    var block = this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
 		return block;
 	},
 
@@ -214,7 +214,6 @@ var NumboController = cc.Class.extend({
 	////////////
 	// COMBOS //
 	////////////
-
 
 	updateRandomJumbo: function() {
 	 	NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution));

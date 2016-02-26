@@ -41,7 +41,6 @@ Published
 # Compiled Static libraries
 *.lai
 *.la
-*.a
 
 # XCode (and ancestors) per-user config (very noisy, and not relevant)
 *.mode1

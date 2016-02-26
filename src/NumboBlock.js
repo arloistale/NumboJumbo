@@ -7,6 +7,7 @@ Definition for falling blocks.
 */
 
 var NumboBlock = cc.Sprite.extend({
+    backgroundSprite: null,
     highlightSprite: null,
     valueLabel: null,
 
@@ -17,37 +18,43 @@ var NumboBlock = cc.Sprite.extend({
 
     powerup: false,
 
-    bHasDropped: false,
+    ctor: function(blockSize) {
+        this._super();
 
-    ctor: function() {
-        this._super(res.blockImage);
+        this.setContentSize(blockSize.width, blockSize.height);
 
         this.setTag(NJ.tags.PAUSABLE);
 
-        this.attr({
-            scale: 1.5
-        });
-
-        this.highlightSprite = new cc.Sprite(res.glowImage);
-        this.highlightSprite.attr({
-            scale: 1.8,
+        this.backgroundSprite = new cc.Sprite(res.blockImage);
+        this.backgroundSprite.setScale(blockSize.width / this.backgroundSprite.getContentSize().width, blockSize.height / this.backgroundSprite.getContentSize().height);
+        this.backgroundSprite.attr({
             anchorX: 0.5,
             anchorY: 0.5,
-            x: this.getContentSize().width / 2,
-            y: this.getContentSize().height / 2,
+            x: blockSize.width / 2,
+            y: blockSize.height / 2
+        });
+        this.addChild(this.backgroundSprite, -2);
+
+        this.highlightSprite = new cc.Sprite(res.glowImage);
+        this.highlightSprite.setScale(blockSize.width / this.highlightSprite.getContentSize().width * 1.1, blockSize.height / this.highlightSprite.getContentSize().height * 1.1);
+        this.highlightSprite.attr({
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: blockSize.width / 2,
+            y: blockSize.height / 2,
             visible: false
         });
         this.addChild(this.highlightSprite, -1);
 	
-        this.valueLabel = cc.LabelTTF.create("label test", b_getFontName(res.markerFont), 32);
+        this.valueLabel = cc.LabelTTF.create("label test", b_getFontName(res.markerFont), NJ.fontSizes.numbo);
         this.valueLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
             anchorY: 0.5 + NJ.anchorOffsetY,
-            x: this.getContentSize().width / 2,
-            y: this.getContentSize().height / 2
+            x: blockSize.width / 2,
+            y: blockSize.height / 2
         });
-	    this.valueLabel.enableStroke(cc.color(0, 0, 255, 255), 2);
+	    this.valueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.valueLabel.setColor(cc.color(255, 255, 255, 255));
 
         this.addChild(this.valueLabel);
@@ -59,8 +66,6 @@ var NumboBlock = cc.Sprite.extend({
         this.row = row;
         this.val = val;
         this.powerup = powerup;
-
-        this.bHasDropped = false;
 
         this.valueLabel.setString(val + "");
 

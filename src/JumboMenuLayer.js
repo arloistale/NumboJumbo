@@ -29,14 +29,6 @@ var JumboMenuLayer = cc.LayerColor.extend({
         sp.scale = NJ.SCALE;
         this.addChild(sp, 0, 1);
 
-        /*
-        var cacheImage = cc.textureCache.addImage(res.buttonImage);
-        var title = new cc.Sprite(cacheImage);
-        title.x = cc.winSize.width / 2;
-        title.y = cc.winSize.height - 120;
-        this.addChild(title);
-*/
-
         var that = this;
 
         this._menu = new cc.Menu();
@@ -60,9 +52,11 @@ var JumboMenuLayer = cc.LayerColor.extend({
             this._menu.addChild(jumboButton);
         }
 
-        var backButton = this.generateTitleButton("Back", function () {
+        var backButton = new MenuTitleButton("Back", function () {
             that.onBack();
-        });
+        }, this);
+
+        backButton.setImageRes(res.buttonImage);
 
         this._menu.addChild(backButton);
 
@@ -112,7 +106,7 @@ var JumboMenuLayer = cc.LayerColor.extend({
 
     generateLabel: function(title) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
-        cc.MenuItemFont.setFontSize(46);
+        cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
         toggleLabel.setColor(cc.color(255, 255, 255, 255));
@@ -120,14 +114,7 @@ var JumboMenuLayer = cc.LayerColor.extend({
     },
 
     generateJumboButton: function(title, difficulty, callback) {
-        var label = new cc.LabelTTF(title + "  (" + difficulty + ")", b_getFontName(res.markerFont), 30);
-        label.setColor(cc.color(255, 255, 255, 255));
-
-        return new cc.MenuItemLabel(label, callback);
-    },
-
-    generateTitleButton: function(title, callback) {
-        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), 42);
+        var label = new cc.LabelTTF(title + "  (" + difficulty + ")", b_getFontName(res.markerFont), NJ.fontSizes.buttonSmall);
         label.setColor(cc.color(255, 255, 255, 255));
 
         return new cc.MenuItemLabel(label, callback);

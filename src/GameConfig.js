@@ -55,6 +55,20 @@ NJ.DANGER_THRESHOLD = 0.75;
 NJ.MUSIC_VOLUME = 0.2;
 NJ.SOUNDS_VOLUME = 1;
 
+////////////////
+// DIMENSIONS //
+////////////////
+
+NJ.fontSizes = {
+    buttonSmall: 16,
+    buttonMedium: 20,
+    paragraph: 12,
+    sub: 16,
+    header2: 22,
+    header: 32,
+    numbo: 22
+};
+
 //////////////
 // SETTINGS //
 //////////////

@@ -24,6 +24,7 @@ var res = {
     glowImage: resRoot + "Images/Glow.png",
     blockImage: resRoot + "Images/blocks.png",
     powerupImage: resRoot + "Images/powerup.png",
+    alertImage: resRoot + "Images/alertOverlay.png",
 
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
@@ -47,7 +48,7 @@ var b_getFontName = function(fontRes) {
         return fontRes.src;
     
     if(cc.sys.os == cc.sys.OS_IOS)
-        return "Marker Felt"
+        return "Marker Felt";
     
     return fontRes.name;
 };
@@ -63,7 +64,9 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.markerFont.src
+    res.markerFont.src,
+
+    res.backBottom
 ];
 
 // resources for ingame
@@ -73,6 +76,7 @@ var g_game = [
     res.glowImage,
     res.blockImage,
     res.buttonImage,
+    res.alertImage,
 
     // sounds
     res.clickSound,
