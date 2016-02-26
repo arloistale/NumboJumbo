@@ -162,7 +162,7 @@ var NumboController = cc.Class.extend({
 		var powerup = NJ.gameState.powerupMode && (Math.random() < 0.05); // 5% chance
 		if (powerup) {
 			var path = this.meanderSearch(col, this._numboLevel.blocks[col].length, this.pathAtLeastTwoWithNoiseCriteria);
-			if (path.length > 0) {
+			if (path && path.length > 0) {
 				var sum = 0;
 				for (var i in path) {
 					cc.log(path[i].val);

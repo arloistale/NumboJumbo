@@ -469,9 +469,6 @@ var NumboGameLayer = cc.Layer.extend({
             // Level up with feedback if needed
             if (NJ.levelUpIfNeeded()) {
 
-
-
-
 				if (NJ.gameState.randomJumbos || NJ.gameState.currentJumboId == "random-jumbos") {
 					NJ.gameState.randomJumbos = true;
 					this._numboController.updateRandomJumbo();
