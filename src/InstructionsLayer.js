@@ -25,12 +25,6 @@ var InstructionsLayer = cc.LayerColor.extend({
     initUI: function() {
 
         this._menu = new cc.Menu();
-        this._menu.attr({
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: size.width / 2,
-            y: size.height / 2
-        });
 
         this.addChild(this._menu);
 

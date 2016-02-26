@@ -35,7 +35,7 @@ cc.game.onStart = function() {
         
         jsb.fileUtils.setSearchPaths(searchPaths)
     } else { // web
-        cc.view.setDesignResolutionSize(1280, 720, cc.ResolutionPolicy.NO_BORDER);
+        cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.NO_BORDER);
 
         cc.director.setContentScaleFactor(smallResolutionSize.width / designResolutionSize.width);
         

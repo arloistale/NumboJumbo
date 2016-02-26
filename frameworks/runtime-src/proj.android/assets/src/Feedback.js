@@ -15,7 +15,7 @@ var Feedback = cc.Sprite.extend({
         this.setCascadeOpacityEnabled(true);
 
         // initialize feedback children
-        this.label = new cc.LabelTTF("", b_getFontName(res.markerFont), 48);
+        this.label = new cc.LabelTTF("", b_getFontName(res.markerFont), 0);
 
         this.label.enableStroke(cc.color(0, 0, 0, 255), 1);
         this.label.setColor(cc.color(255, 255, 255, 255));

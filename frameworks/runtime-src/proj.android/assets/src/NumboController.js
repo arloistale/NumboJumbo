@@ -172,7 +172,6 @@ var NumboController = cc.Class.extend({
 	// COMBOS //
 	////////////
 
-
 	updateRandomJumbo: function() {
 	 	NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution));
 		var jumbo = NJ.getCurrentJumbo();

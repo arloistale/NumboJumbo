@@ -134,13 +134,13 @@ var FeedbackLayer = cc.Layer.extend({
         }
 
         banner.setText(titleStr);
-        banner.setPosition(cc.winSize.width / 2, cc.winSize.height + banner.getContentSize().height);
+        banner.setPosition(cc.visibleRect.center.x, cc.visibleRect.top.y * 1.1);
 
         this.addChild(banner);
 
         // start moving the banner
         var moveDuration = 0.5;
-        var moveAction = cc.moveTo(moveDuration, cc.p(banner.x, cc.winSize.height / 2));
+        var moveAction = cc.moveTo(moveDuration, cc.p(banner.x, cc.visibleRect.center.y));
         moveAction.easing(cc.easeOut(2.0));
         var delayAction = cc.delayTime(0.8);
         var fadeOutAction = cc.fadeTo(0.2, 0);
@@ -165,8 +165,8 @@ var FeedbackLayer = cc.Layer.extend({
         var that = this;
 
         var titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)],
-            x = cc.winSize.width / 2, y = cc.winSize.height / 2,
-            targetX = cc.winSize.width / 2, targetY = cc.winSize.height / 2;
+            x = 0, y = 0,
+            targetX = 0, targetY = 0;
 
         if(data) {
             if(typeof data.title !== 'undefined')
@@ -223,9 +223,9 @@ var FeedbackLayer = cc.Layer.extend({
 
         this.bIsDoomsayerLaunched = true;
         this.addChild(this.alertOverlay);
-        this.alertOverlay.setPosition(cc.winSize.width / 2, cc.winSize.height / 2);
+        this.alertOverlay.setPosition(cc.visibleRect.center.x, cc.visibleRect.center.y);
         var contentSize = this.alertOverlay.getContentSize();
-        this.alertOverlay.setScale(cc.winSize.width / contentSize.width, cc.winSize.height / contentSize.height);
+        this.alertOverlay.setScale(cc.visibleRect.width / contentSize.width, cc.visibleRect.height / contentSize.height);
 
         this.runDoomsayer();
     },

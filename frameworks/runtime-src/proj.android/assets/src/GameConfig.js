@@ -54,7 +54,9 @@ NJ.fontSizes = {
     buttonMedium: 20,
     paragraph: 12,
     sub: 16,
-    header: 32
+    header2: 22,
+    header: 32,
+    numbo: 22
 };
 
 //////////////

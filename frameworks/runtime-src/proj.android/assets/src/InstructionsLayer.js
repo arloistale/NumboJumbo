@@ -2,10 +2,9 @@
  * Created by jonathanlu on 1/19/16.
  */
 
-var InstructionsLayer = cc.Layer.extend({
+var InstructionsLayer = cc.LayerColor.extend({
 
     // UI Data
-    _containerSprite: null,
     _menu: null,
 
     // Callbacks Data
@@ -18,36 +17,12 @@ var InstructionsLayer = cc.Layer.extend({
     ctor: function() {
         this._super();
 
+        this.init(cc.color(0, 0, 0, 255));
+
         this.initUI();
     },
 
     initUI: function() {
-        var visibleSize = cc.director.getVisibleSize();
-        var size = cc.size(visibleSize.width, visibleSize.height);
-
-        this._containerSprite = new cc.Sprite();
-        this._containerSprite.setContentSize(size);
-
-        this._containerSprite.attr({
-            x: cc.winSize.width / 2,
-            y: cc.winSize.height / 2,
-            anchorX: 0.5,
-            anchorY: 0.5
-        });
-        this.addChild(this._containerSprite);
-
-        var backgroundSprite = new cc.Sprite(res.backBottom);
-        var backgroundSize = backgroundSprite.getContentSize();
-        backgroundSprite.setScale(size.width / backgroundSize.width, size.height / backgroundSize.height);
-
-        backgroundSprite.attr({
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: size.width / 2,
-            y: size.height / 2
-        });
-
-        this._containerSprite.addChild(backgroundSprite);
 
         this._menu = new cc.Menu();
         this._menu.attr({
@@ -57,7 +32,7 @@ var InstructionsLayer = cc.Layer.extend({
             y: size.height / 2
         });
 
-        this._containerSprite.addChild(this._menu);
+        this.addChild(this._menu);
 
         this.presentControlsSlide();
     },
@@ -178,7 +153,7 @@ var InstructionsLayer = cc.Layer.extend({
     },
 
     generateInstructionsLabel: function(title) {
-         var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.paragraph, cc.size(cc.winSize.width * 0.9, 0));
+         var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.paragraph, cc.size(cc.visibleRect.width * 0.9, 0));
          label.setHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
          label.setVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
          label.setColor(cc.color(255, 255, 255, 255));

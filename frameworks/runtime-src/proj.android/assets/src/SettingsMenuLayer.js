@@ -68,6 +68,8 @@ var SettingsMenuLayer = cc.LayerColor.extend({
                 that.onMenu();
             }, this);
 
+            menuButton.setImageRes(res.buttonImage);
+
             this._menu.addChild(menuButton);
             this._menu.addChild(backButton);
 

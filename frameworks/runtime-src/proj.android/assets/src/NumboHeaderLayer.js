@@ -1,10 +1,10 @@
-var NumboHeaderLayer = cc.Layer.extend({
+var NumboHeaderLayer = cc.LayerColor.extend({
 
     scoreValueLabel: null,
     scoreValueText: null,
 
     levelText: null,
-    levelLabel: null,
+    levelValueLabel: null,
 
     blocksToLevelLabel: null,
     blocksToLevelText: null,
@@ -17,18 +17,17 @@ var NumboHeaderLayer = cc.Layer.extend({
     ctor: function() {
         this._super();
 
-        var headerSize = cc.size(cc.winSize.width, NJ.HEADER_HEIGHT);
+        var headerSize = cc.size(cc.visibleRect.width, NJ.HEADER_HEIGHT);
+        this.init(cc.color(255, 0, 0, 255), headerSize.width, headerSize.height);
         this.attr({
-            anchorX: 0,
-            anchorY: 0
+            x: cc.visibleRect.topLeft.x,
+            y: cc.visibleRect.topLeft.y
         });
-        this.setContentSize(headerSize.width, headerSize.height);
-        //this.setPosition(0, cc.winSize.height * 1.1);
 
         this.initLabels();
         this.initButtons();
 
-        var moveTo = cc.moveTo(0.4, cc.p(0, cc.winSize.height - headerSize.height));
+        var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - headerSize.height));
         this.runAction(moveTo);
     },
 
@@ -39,11 +38,11 @@ var NumboHeaderLayer = cc.Layer.extend({
         var scoreLabelPos = cc.p(contentSize.width / 8, contentSize.height / 2);
 
         // Score Labels
-        this.scoreValueText = new cc.LabelTTF("Score", b_getFontName(res.markerFont), 40);
+        this.scoreValueText = new cc.LabelTTF("Score: ", b_getFontName(res.markerFont), NJ.fontSizes.sub);
         this.scoreValueText.attr({
             scale: 1.0,
-            anchorX: 0.5,
-            anchorY: 0,
+            anchorX: 0,
+            anchorY: 0.5,
             x: scoreLabelPos.x,
             y: scoreLabelPos.y
         });
@@ -51,11 +50,11 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.scoreValueText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.scoreValueText);
 
-        this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), 48);
+        this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
         this.scoreValueLabel.attr({
             scale: 1.0,
-            anchorX: 0.5,
-            anchorY: 1,
+            anchorX: 0,
+            anchorY: 0.5,
             x: scoreLabelPos.x,
             y: scoreLabelPos.y - contentSize.height * 0.6
         });
@@ -64,7 +63,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.addChild(this.scoreValueLabel);
 
         // Blocks til Levelup Labels
-        this.blocksToLevelText = new cc.LabelTTF("Level up in", b_getFontName(res.markerFont), 40);
+        this.blocksToLevelText = new cc.LabelTTF("Level up in", b_getFontName(res.markerFont), NJ.fontSizes.sub);
         this.blocksToLevelText.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -76,7 +75,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.blocksToLevelText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.blocksToLevelText);
 
-        this.blocksToLevelLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), 48);
+        this.blocksToLevelLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
 
         this.blocksToLevelLabel.attr({
             scale: 1.0,
@@ -92,7 +91,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         var levelLabelPos = cc.p(scoreLabelPos + contentSize / 8, contentSize.height / 2);
 
         // Level Labels
-        this.levelText = new cc.LabelTTF("Level", b_getFontName(res.markerFont), 40);
+        this.levelText = new cc.LabelTTF("Level", b_getFontName(res.markerFont), NJ.fontSizes.sub);
         this.levelText.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -104,19 +103,19 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.levelText.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelText);
 
-        this.levelLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), 48);
-        this.levelLabel.attr({
+        this.levelValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
+        this.levelValueLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
             anchorY: 0.5,
             x: contentSize.width / 8,
             y: contentSize.height / 2 - 26
         });
-        this.levelLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-        this.levelLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.levelLabel);
+        this.levelValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
+        this.levelValueLabel.setColor(cc.color(255, 255, 255, 255));
+        this.addChild(this.levelValueLabel);
 
-        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), 72);
+        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
         this.multiplierLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -138,20 +137,19 @@ var NumboHeaderLayer = cc.Layer.extend({
         // initialize pause button
         var button = new ccui.Button();
         button.setTitleFontName(b_getFontName(res.markerFont));
-        button.setTitleFontSize(26);
+        button.setTitleFontSize(NJ.fontSizes.buttonMedium);
         button.setTitleText("Pause");
         button.attr({
             scale: 1.0,
             anchorX: 1,
-            anchorY: 1,
+            anchorY: 0.5,
             x: contentSize.width - minDim * 0.1,
-            y: contentSize.height - minDim * 0.1
+            y: contentSize.height / 2
         });
         button.loadTextureNormal(res.buttonImage);
         button.addTouchEventListener(function (ref, touchEventType) {
             if(touchEventType === ccui.Widget.TOUCH_ENDED)
                 that.onPauseCallback();
-
         }, this);
 
         this.addChild(button);
@@ -164,7 +162,7 @@ var NumboHeaderLayer = cc.Layer.extend({
     setScoreValue: function(scoreVal, blocksVal, levelVal) {
         this.scoreValueLabel.setString(scoreVal);
         //this.blocksToLevelLabel.setString(blocksVal);
-        this.levelLabel.setString(levelVal);
+        this.levelValueLabel.setString(levelVal);
     },
 
     setMultiplierValue: function(multVal) {
