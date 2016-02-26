@@ -328,28 +328,27 @@ var NumboLevel = cc.Class.extend({
 	// returns a list of neighbors adjacent to this block
 	// takes in an object either containing a block variable or a col/row pair
 	getNeighbors: function(col, row){
-
-		//cc.log(col, row);
-
 		var neighbors = [];
 
 		if (col > 0) { // grab blocks in column to the left
-			if (row > 0)
+			if (row > 0 && this.getBlock(col-1, row-1))
 				neighbors.push(this.getBlock(col-1, row-1))
-			if (row < NJ.NUM_ROWS - 1)
+			if (row < NJ.NUM_ROWS - 1 && this.getBlock(col-1, row+1))
 				neighbors.push(this.getBlock(col-1, row+1));
-			neighbors.push(this.getBlock(col-1, row));
+			if (this.getBlock(col-1, row))
+				neighbors.push(this.getBlock(col-1, row));
 		}
-		if (row > 0) // grab block below
+		if (row > 0 && this.getBlock(col, row-1)) // grab block below
 			neighbors.push(this.getBlock(col, row-1));
-		if (row < NJ.NUM_ROWS - 1) // grab block above
+		if (row < NJ.NUM_ROWS - 1 && this.getBlock(col, row+1)) // grab block above
 			neighbors.push(this.getBlock(col, row+1))
 		if (col < NJ.NUM_COLS - 1) { // grab blocks in column to the right
-			if (row > 0)
+			if (row > 0 && this.getBlock(col+1, row-1))
 				neighbors.push(this.getBlock(col+1, row-1))
-			if (row < NJ.NUM_ROWS - 1)
+			if (row < NJ.NUM_ROWS - 1 && this.getBlock(col+1, row+1))
 				neighbors.push(this.getBlock(col+1, row+1));
-			neighbors.push(this.getBlock(col+1, row));
+			if (this.getBlock(col+1, row))
+				neighbors.push(this.getBlock(col+1, row));
 		}
 
 		return neighbors;

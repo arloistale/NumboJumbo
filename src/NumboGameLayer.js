@@ -461,10 +461,7 @@ var NumboGameLayer = cc.Layer.extend({
             });
 
 			if (data.powerupValue){
-				var keys = Object.keys(NJ.jumbos.jumboMap);
-				var randomKey = keys[Math.floor(Math.random()*keys.length)]
-				var jumboString = NJ.jumbos.jumboMap[randomKey];
-				this._numboController.updateJumboTo(jumboString);
+				this._numboController.updateRandomJumbo();
 				this.clearBlocks();
 				this.spawnNBlocks(20);
 			}

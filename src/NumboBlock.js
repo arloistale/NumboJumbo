@@ -70,8 +70,14 @@ var NumboBlock = cc.Sprite.extend({
         this.valueLabel.setString(val + "");
 
         if (this.powerup){
-            this.setTexture(res.powerupImage);
+            this.backgroundSprite.setTexture(res.powerupImage);
+            this.schedule(this.removePowerUp, 5);
         }
+    },
+
+    removePowerUp: function(){
+        this.powerup = false;
+        this.backgroundSprite.setTexture(res.blockImage);
     },
 
     // kill the block
