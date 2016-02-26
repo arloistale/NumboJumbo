@@ -14,8 +14,8 @@ if(!cc.sys.isNative) {
 var res = {
     // Fonts
     markerFont: {
-        name: "Felt",
-        src: resRoot + "Fonts/Felt.ttf"
+        name: "MarkerFelt-Regular",
+        src: resRoot + "Fonts/MarkerFelt-Regular.ttf"
     },
 
 	// images

@@ -23,7 +23,7 @@ var MenuTitleButton = cc.MenuItemSprite.extend({
         normalLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: size.width / 2,
             y: size.height / 2
         });
@@ -32,7 +32,7 @@ var MenuTitleButton = cc.MenuItemSprite.extend({
         selectedLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: size.width / 2,
             y: size.height / 2
         });
@@ -41,7 +41,7 @@ var MenuTitleButton = cc.MenuItemSprite.extend({
         disabledLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: size.width / 2,
             y: size.height / 2
         });

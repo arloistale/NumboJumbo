@@ -13,6 +13,16 @@ var NJ = NJ || {};
 // CONSTANTS //
 ///////////////
 
+// browser check
+// Firefox 1.0+
+NJ.isFirefox = typeof InstallTrigger !== 'undefined';
+if(NJ.isFirefox) {
+    NJ.anchorOffsetX = 0.1;
+    NJ.anchorOffsetY = 0.2;
+} else {
+    NJ.anchorOffsetX = 0;
+    NJ.anchorOffsetY = 0;
+}
 // dims
 NJ.SCALE = 1;
 

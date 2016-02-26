@@ -252,12 +252,31 @@ var NumboController = cc.Class.extend({
 	},
 
 	isGameOver: function() {
-		return this._numboLevel.isFull();
+        return this._numboLevel.isFull();
+    },
+
+	getRowsToClearAfterLevelup: function() {
+		var numBlocks = this._numboLevel.getNumBlocks();
+		if(numBlocks < NJ.NUM_COLS)
+			return 2;
+		else if(numBlocks < NJ.NUM_COLS*2)
+			return 1;
+		else if(numBlocks > NJ.NUM_COLS*5)
+			return -2;
+		else if(numBlocks > NJ.NUM_COLS*4)
+			return -1;
+		return 0;
+	},
+
+	clearRows: function(num) {
+		this._numboLevel.clearBottomRows(num);
 	},
 
 	// a scaling factor to reduce spawn time on higher levels
 	getSpawnConst: function() {
-	    return 1 + 2/NJ.stats.level
+		var L = NJ.stats.level;
+		return 0.5 + 2/Math.pow(L, 1/4);
+	    //return 1 + 2/L;
 	},
 
 	// checks if the current selected blocks can be activated (their equation is valid)
