@@ -173,10 +173,19 @@ var NumboLevel = cc.Class.extend({
 			}
 		}
 	},
+    
+	clearBottomRows: function(num) {
+		for(var c=0; c<NJ.NUM_COLS; c++) {
+			for(var r=0; r<num; r++)
+				this.killBlockAtCoords(c, r);
+		}
+		this.collapseColumnsToward(Math.floor(NJ.NUM_COLS/2));
+		this.updateBlockRowsAndCols();
+	},
 
-/////////////
-// GETTERS //
-/////////////
+	/////////////
+	// GETTERS //
+	/////////////
 
 	// search for a legit column to drop block into.
 	// does not return columns which are empty.
@@ -316,15 +325,55 @@ var NumboLevel = cc.Class.extend({
 	    return this.isAdjCoords(block1.col, block1.row, block2.col, block2.row);
 	},
 
+	// returns a list of neighbors adjacent to this block
+	// takes in an object either containing a block variable or a col/row pair
+	getNeighbors: function(col, row){
+
+		//cc.log(col, row);
+
+		var neighbors = [];
+
+		if (col > 0) { // grab blocks in column to the left
+			if (row > 0)
+				neighbors.push(this.getBlock(col-1, row-1))
+			if (row < NJ.NUM_ROWS - 1)
+				neighbors.push(this.getBlock(col-1, row+1));
+			neighbors.push(this.getBlock(col-1, row));
+		}
+		if (row > 0) // grab block below
+			neighbors.push(this.getBlock(col, row-1));
+		if (row < NJ.NUM_ROWS - 1) // grab block above
+			neighbors.push(this.getBlock(col, row+1))
+		if (col < NJ.NUM_COLS - 1) { // grab blocks in column to the right
+			if (row > 0)
+				neighbors.push(this.getBlock(col+1, row-1))
+			if (row < NJ.NUM_ROWS - 1)
+				neighbors.push(this.getBlock(col+1, row+1));
+			neighbors.push(this.getBlock(col+1, row));
+		}
+
+		return neighbors;
+	},
+
 	// returns whether a block exists at given coords
 	getBlock: function(col, row) {
-	    cc.assert(0 <= col && col <= NJ.NUM_COLS &&
-		      0 <= row && row < NJ.NUM_ROWS ,
-		      "block coordinates out of bounds!")
+	    cc.assert(0 <= col && col < NJ.NUM_COLS &&
+		      0 <= row && row < NJ.NUM_ROWS,
+		      "block coordinates out of bounds! (col: " + col + ", row: " + row + ")")
 	    if (row < this.blocks[col].length)
-		return this.blocks[col][row];
+			return this.blocks[col][row];
 	    else
-		return null;
+			return null;
 	    
+	},
+
+	getNumBlocks: function() {
+		var count = 0;
+		for(var c=0; c<NJ.NUM_COLS; c++) {
+			for(var r=0; r<NJ.NUM_ROWS; r++)
+				if(this.getBlock(c, r) != null)
+					count++;
+		}
+		return count;
 	}
 });

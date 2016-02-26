@@ -50,7 +50,7 @@ var NumboBlock = cc.Sprite.extend({
         this.valueLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: blockSize.width / 2,
             y: blockSize.height / 2
         });

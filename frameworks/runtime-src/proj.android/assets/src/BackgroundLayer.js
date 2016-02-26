@@ -57,7 +57,7 @@ var BackgroundLayer = cc.Layer.extend({
             rotation: 0
         });
         this.addChild(this.middleLayerTwo, 0);
-
+/*
         this.topLayer = new cc.Sprite(res.backTop);
         this.topLayer.attr({
             x: cc.visibleRect.center.x,
@@ -79,7 +79,7 @@ var BackgroundLayer = cc.Layer.extend({
             rotation: 0
         });
         this.addChild(this.topLayerTwo, 0);
-
+*/
         this.schedule(this.moveBackground, 0.01);
     },
 
@@ -126,5 +126,4 @@ var BackgroundLayer = cc.Layer.extend({
         this.speed = this.FAST_SPEED;
         this.frameCount = duration;
     }
-
 });

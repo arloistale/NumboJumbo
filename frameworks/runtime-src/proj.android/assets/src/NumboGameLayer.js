@@ -175,8 +175,6 @@ var NumboGameLayer = cc.Layer.extend({
 	    if(!NJ.settings.music)
 		return;
 
-	    //cc.audioEngine.setMusicVolume(0.5);
-
 	    // start the music
 	    cc.audioEngine.playMusic(res.backgroundTrack, true);
 	},
@@ -461,10 +459,12 @@ var NumboGameLayer = cc.Layer.extend({
             });
 
 			if (data.powerupValue){
-				var jumboString = NJ.jumbos.jumboMap[data.powerupValue];
-				if (jumboString) {
-					this._numboController.updateJumboTo(jumboString);
-				}
+				var keys = Object.keys(NJ.jumbos.jumboMap);
+				var randomKey = keys[Math.floor(Math.random()*keys.length)]
+				var jumboString = NJ.jumbos.jumboMap[randomKey];
+				this._numboController.updateJumboTo(jumboString);
+				this.clearBlocks();
+				this.spawnNBlocks(20);
 			}
 
             // Level up with feedback if needed
@@ -478,8 +478,24 @@ var NumboGameLayer = cc.Layer.extend({
 				}
 
 				                // Check for Jumbo Swap
-                if (NJ.gameState.currentJumboId == "multiple-progression")
-                    this._numboController.updateMultipleProgression();
+                if (NJ.gameState.currentJumboId == "multiple-progression") {
+					// Clear rows
+					var numRows = this._numboController.getRowsToClearAfterLevelup();
+					console.log(numRows);
+					if(numRows > 0) {
+						this.schedule(this.spawnDropRandomBlock, 0.1, numRows*NJ.NUM_COLS);
+					}
+					else {
+						this._numboController.clearRows(numRows*-1);
+					}
+					// Gaps may be created; shift all affected blocks down.
+					for (var col = 0; col < NJ.NUM_COLS; ++col) {
+						for (var row = 0; row < this._numboController.getColLength(col); ++row)
+							this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+					}
+
+					this._numboController.updateMultipleProgression();
+				}
 
                 // give feedback for leveling up
 

@@ -160,12 +160,55 @@ var NumboController = cc.Class.extend({
 	    }
 
 		var powerup = NJ.gameState.powerupMode && (Math.random() < 0.05); // 5% chance
-		if (powerup){
-			var keys = Object.keys(NJ.jumbos.jumboMap)
-			val = parseInt(keys[Math.floor(Math.random() * keys.length)]);
+		if (powerup) {
+			var path = this.meanderSearch(col, this._numboLevel.blocks[col].length, this.pathAtLeastTwoWithNoiseCriteria);
+			if (path && path.length > 0) {
+				var sum = 0;
+				for (var i in path) {
+					cc.log(path[i].val);
+					sum += path[i].val;
+				}
+				val = sum;
+			}
+			else
+				powerup = false;
 		}
 
-	    return this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
+	    var block = this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
+		return block;
+	},
+
+	pathLengthIsTwoCriteria: function(path) {
+		return path.length == 2;
+	},
+
+	pathAtLeastTwoWithNoiseCriteria: function(path){
+		return path.length >= 4 || path.length >= 2 && Math.random() > 0.5;
+	},
+
+	sumsToCriteria: function(path) {
+		var sum = 0;
+		for (var i = 0; i < path.length - 1; ++i)
+			sum += path[i].val;
+		return sum == path[path.length].val;
+	},
+
+	meanderSearch: function(col, row, criteria, path) {
+		var neighbors = NJHelper.shuffleArray(this._numboLevel.getNeighbors(col, row) );
+
+		path = path || [];
+
+		if (criteria(path))
+			return path;
+
+		for (var i in neighbors){
+			var block = neighbors[i];
+			if (block && path.indexOf(block) < 0){
+				var newPath = path.slice(0);
+				newPath.push(block);
+				return this.meanderSearch(block.col, block.row, criteria, newPath);
+			}
+		}
 	},
 
 	////////////
@@ -252,12 +295,31 @@ var NumboController = cc.Class.extend({
 	},
 
 	isGameOver: function() {
-		return this._numboLevel.isFull();
+        return this._numboLevel.isFull();
+    },
+
+	getRowsToClearAfterLevelup: function() {
+		var numBlocks = this._numboLevel.getNumBlocks();
+		if(numBlocks < NJ.NUM_COLS)
+			return 2;
+		else if(numBlocks < NJ.NUM_COLS*2)
+			return 1;
+		else if(numBlocks > NJ.NUM_COLS*5)
+			return -2;
+		else if(numBlocks > NJ.NUM_COLS*4)
+			return -1;
+		return 0;
+	},
+
+	clearRows: function(num) {
+		this._numboLevel.clearBottomRows(num);
 	},
 
 	// a scaling factor to reduce spawn time on higher levels
 	getSpawnConst: function() {
-	    return 1 + 2/NJ.stats.level
+		var L = NJ.stats.level;
+		return 0.3 + 2/Math.pow(L, 1/2);
+	    //return 1 + 2/L;
 	},
 
 	// checks if the current selected blocks can be activated (their equation is valid)
