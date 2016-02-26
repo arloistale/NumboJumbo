@@ -65,6 +65,7 @@ NJ.fontSizes = {
     buttonMedium: 20,
     paragraph: 12,
     sub: 16,
+    snippet: 24,
     header2: 22,
     header: 32,
     numbo: 22
@@ -185,11 +186,19 @@ NJ.levelUpIfNeeded = function() {
 
 // Adds score depending on the count of how many blocks were cleared
 // Returns the score difference (how much score we added)
-NJ.addScoreForCombo = function(blockCount) {
-    var clearedScoreValue = 10 * (Math.floor(0.5*blockCount*blockCount + blockCount) );
-    var scoreDifference = clearedScoreValue * NJ.gameState.multiplier;
+NJ.addScore = function(data) {
+    var scoreDifference = 0;
+    if (data && typeof data.blockCount !== 'undefined') {
+        var blockCount = data.blockCount;
+        var clearedScoreValue = 10 * (Math.floor(0.5 * blockCount * blockCount + blockCount) );
+        var scoreDifference = clearedScoreValue * NJ.gameState.multiplier;
+    }
+    else if (data && typeof data.numPoints !== 'undefined'){
+        scoreDifference = data.numPoints;
+    }
+
     NJ.stats.score += scoreDifference;
-    return scoreDifference;
+    return scoreDifference
 };
 
 // SERIALIZATION //

@@ -6,7 +6,7 @@ var Snippet = Feedback.extend({
     ctor: function() {
         this._super();
 
-        this.label.setFontSize(NJ.fontSizes.sub);
+        this.label.setFontSize(NJ.fontSizes.snippet);
 
         this.setContentSize(this.label.getContentSize());
     }

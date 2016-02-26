@@ -18,7 +18,6 @@ var MenuTitleButton = cc.MenuItemSprite.extend({
         this.normalSprite.setContentSize(size.width, size.height);
         this.selectedSprite.setContentSize(size.width, size.height);
         this.disabledSprite.setContentSize(size.width, size.height);
-        cc.log(NJ.anchorOffsetY);
         var normalLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.buttonMedium);
         normalLabel.attr({
             scale: 1.0,

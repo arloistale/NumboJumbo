@@ -321,6 +321,10 @@ var NumboController = cc.Class.extend({
 	    //return 1 + 2/L;
 	},
 
+	getNumBlocks: function(){
+		return this._numboLevel.getNumBlocks();
+	},
+
 	// checks if the current selected blocks can be activated (their equation is valid)
 	getColLength: function(col) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid column");
