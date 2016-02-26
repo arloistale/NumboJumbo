@@ -23,3 +23,13 @@ NJHelper.weightedRandom = function(pairsList){
  
     return -1;
 };
+
+NJHelper.shuffleArray = function(array) {
+    for (var i = 0; i < array.length; ++i){
+        var j = Math.floor(Math.random()*array.length);
+        var temp = array[i];
+        array[i] = array[j]
+        array[j] = temp;
+    }
+    return array;
+};

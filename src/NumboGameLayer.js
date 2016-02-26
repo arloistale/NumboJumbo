@@ -458,10 +458,12 @@ var NumboGameLayer = cc.Layer.extend({
             });
 
 			if (data.powerupValue){
-				var jumboString = NJ.jumbos.jumboMap[data.powerupValue];
-				if (jumboString) {
-					this._numboController.updateJumboTo(jumboString);
-				}
+				var keys = Object.keys(NJ.jumbos.jumboMap);
+				var randomKey = keys[Math.floor(Math.random()*keys.length)]
+				var jumboString = NJ.jumbos.jumboMap[randomKey];
+				this._numboController.updateJumboTo(jumboString);
+				this.clearBlocks();
+				this.spawnNBlocks(20);
 			}
 
             // Level up with feedback if needed
