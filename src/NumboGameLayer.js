@@ -22,6 +22,9 @@ var NumboGameLayer = cc.Layer.extend({
 	// Controller Data
 	_numboController: null,
 
+	// Selection Data
+	_lastTouchPosition: null,
+
 	////////////////////
 	// Initialization //
 	////////////////////
@@ -415,7 +418,7 @@ var NumboGameLayer = cc.Layer.extend({
 		}
 	},
 
-	// On touch moved, selects additional blocks as the touch is held and moved.
+	// On touch moved, selects additional blocks as the touch is held and moved using raycasting
 	onTouchMoved: function(touchPosition) {
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 

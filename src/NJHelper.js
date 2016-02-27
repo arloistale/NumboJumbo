@@ -2,13 +2,13 @@
  * some useful helper fns
  */
 
-var NJHelper = NJHelper || {};
+var NJ = NJ || {};
 
 // takes in a list of {key, weight} pairs, and returns a random key
 // eg, [{key:1, weight:3}, {key:2, weight:7}]
 // returns the key 2 about 70% of the time.
 // only use non-negative weights if you expect sane results!
-NJHelper.weightedRandom = function(pairsList){
+NJ.weightedRandom = function(pairsList){
     var totalWeight = 0;
     for (var pair in pairsList)
         totalWeight += pairsList[pair].weight;
@@ -24,11 +24,11 @@ NJHelper.weightedRandom = function(pairsList){
     return -1;
 };
 
-NJHelper.shuffleArray = function(array) {
+NJ.shuffleArray = function(array) {
     for (var i = 0; i < array.length; ++i){
         var j = Math.floor(Math.random()*array.length);
         var temp = array[i];
-        array[i] = array[j]
+        array[i] = array[j];
         array[j] = temp;
     }
     return array;

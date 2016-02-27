@@ -107,6 +107,7 @@ var BackgroundLayer = cc.Layer.extend({
             if(this.topLayer.y > cc.visibleRect.top.y)
                 this.topLayerTwo.y = this.topLayer.y - this.topLayerTwo.height;
         }
+
     },
 
     // Called by GameLayer each frame to move background depending on state.
