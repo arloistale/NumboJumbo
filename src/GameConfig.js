@@ -24,6 +24,14 @@ if(NJ.isFirefox) {
     NJ.anchorOffsetY = 0;
 }
 
+if(cc.sys.isNative)
+    NJ.fontScalingFactor = 1;
+else
+    NJ.fontScalingFactor = 4;
+
+
+
+
 // dims
 NJ.SCALE = 1;
 

@@ -18,27 +18,27 @@ var MenuTitleButton = cc.MenuItemSprite.extend({
         this.normalSprite.setContentSize(size.width, size.height);
         this.selectedSprite.setContentSize(size.width, size.height);
         this.disabledSprite.setContentSize(size.width, size.height);
-        var normalLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.buttonMedium);
+        var normalLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontScalingFactor*NJ.fontSizes.buttonMedium);
         normalLabel.attr({
-            scale: 1.0,
+            scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
             anchorY: 0.5 + NJ.anchorOffsetY,
             x: size.width / 2,
             y: size.height / 2
         });
 
-        var selectedLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.buttonMedium);
+        var selectedLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontScalingFactor*NJ.fontSizes.buttonMedium);
         selectedLabel.attr({
-            scale: 1.0,
+            scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
             anchorY: 0.5 + NJ.anchorOffsetY,
             x: size.width / 2,
             y: size.height / 2
         });
 
-        var disabledLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.buttonMedium);
+        var disabledLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontScalingFactor*NJ.fontSizes.buttonMedium);
         disabledLabel.attr({
-            scale: 1.0,
+            scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
             anchorY: 0.5 + NJ.anchorOffsetY,
             x: size.width / 2,

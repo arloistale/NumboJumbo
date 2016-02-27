@@ -106,15 +106,18 @@ var JumboMenuLayer = cc.LayerColor.extend({
 
     generateLabel: function(title) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
-        cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
+        cc.MenuItemFont.setFontSize( NJ.fontSizes.header);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
         toggleLabel.setColor(cc.color(255, 255, 255, 255));
         return toggleLabel;
     },
 
+    // TODO: for some reason, the inrease font size / decrease scale trick does not work here
     generateJumboButton: function(title, difficulty, callback) {
         var label = new cc.LabelTTF(title + "  (" + difficulty + ")", b_getFontName(res.markerFont), NJ.fontSizes.buttonSmall);
+        //label.setFontSize (NJ.fontScalingFactor * NJ.fontSizes.buttonSmall);
+        //label.setScale(1.0 / NJ.fontScalingFactor);
         label.setColor(cc.color(255, 255, 255, 255));
 
         return new cc.MenuItemLabel(label, callback);
