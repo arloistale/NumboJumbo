@@ -87,8 +87,8 @@ var BackgroundLayer = cc.Layer.extend({
     updateBackground: function(shift) {
         this.middleLayer.y += shift;
         this.middleLayerTwo.y += shift;
-        this.topLayer.y += shift*2;
-        this.topLayerTwo.y += shift*2;
+        //this.topLayer.y += shift*2;
+        //this.topLayerTwo.y += shift*2;
 
         if(this.middleLayer.y > this.middleLayerTwo.y) {
             if(this.middleLayerTwo.y > cc.visibleRect.top.y)
@@ -98,7 +98,7 @@ var BackgroundLayer = cc.Layer.extend({
             if(this.middleLayer.y > cc.visibleRect.top.y)
                 this.middleLayerTwo.y = this.middleLayer.y - this.middleLayerTwo.height;
         }
-
+/*
         if(this.topLayer.y > this.topLayerTwo.y) {
             if(this.topLayerTwo.y > cc.visibleRect.top.y)
                 this.topLayer.y = this.topLayerTwo.y - this.topLayer.height;
@@ -107,6 +107,7 @@ var BackgroundLayer = cc.Layer.extend({
             if(this.topLayer.y > cc.visibleRect.top.y)
                 this.topLayerTwo.y = this.topLayer.y - this.topLayerTwo.height;
         }
+        */
     },
 
     // Called by GameLayer each frame to move background depending on state.
