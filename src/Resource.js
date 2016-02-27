@@ -49,8 +49,8 @@ var b_getFontName = function(fontRes) {
     
     if(cc.sys.os == cc.sys.OS_IOS)
         return "Marker Felt";
-    
-    return "Marker Felt";
+
+    return res.markerFont.name;
 };
 
 // resources for the main menu of the game
