@@ -22,6 +22,9 @@ var NumboGameLayer = cc.Layer.extend({
 	// Controller Data
 	_numboController: null,
 
+	// Selection Data
+	_lastTouchPosition: null,
+
 	////////////////////
 	// Initialization //
 	////////////////////
@@ -400,6 +403,8 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// On touch began, tries to find level coordinates for the touch and selects block accordingly.
 	onTouchBegan: function(touchPosition) {
+		this._lastTouchPosition = touchPosition;
+
 	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
 
 	    if (touchCoords) {
@@ -415,21 +420,53 @@ var NumboGameLayer = cc.Layer.extend({
 		}
 	},
 
-	// On touch moved, selects additional blocks as the touch is held and moved.
+	// On touch moved, selects additional blocks as the touch is held and moved using raycasting
 	onTouchMoved: function(touchPosition) {
-	    var touchCoords = this.convertPointToLevelCoords(touchPosition);
+		var touchDiff = cc.pSub(touchPosition, this._lastTouchPosition);
+		var touchDistance = cc.pLength(touchDiff);
+		var touchDirection = cc.pNormalize(touchDiff);
+		var testLength = this._levelCellSize.width * 0.25;
+		var currLength = 0;
+		var currPosition = null;
 
-	    if (touchCoords) {
-			var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+		var touchCoords, data, currBlock, lastBlock;
+
+		for(var i = 0; currLength < touchDistance; i++) {
+			currLength = testLength * (i + 1);
+			currPosition = cc.pAdd(this._lastTouchPosition, cc.pMult(touchDirection, currLength));
+
+			touchCoords = this.convertPointToLevelCoords(currPosition);
+
+			//cc.log(NJ.raycastCircleTest(this._lastTouchPosition, touchPosition));
+
+			if (touchCoords) {
+				data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+
+				if(data) {
+					currBlock = data.currBlock, lastBlock = data.lastBlock;
+					if (currBlock) currBlock.highlight(cc.color(0, 255, 0, 255));
+					if (lastBlock) lastBlock.highlight(cc.color(255, 0, 0, 255));
+
+					this.redrawSelectedLines();
+				}
+			}
+		}
+
+		touchCoords = this.convertPointToLevelCoords(touchPosition);
+
+		if (touchCoords) {
+			data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 			if(data) {
-				var currBlock = data.currBlock, lastBlock = data.lastBlock;
+				currBlock = data.currBlock, lastBlock = data.lastBlock;
 				if (currBlock) currBlock.highlight(cc.color(0, 255, 0, 255));
 				if (lastBlock) lastBlock.highlight(cc.color(255, 0, 0, 255));
 
 				this.redrawSelectedLines();
 			}
 		}
+
+		this._lastTouchPosition = touchPosition;
 	},
 
 	// On touch ended, activates all selected blocks once touch is released.
@@ -459,10 +496,7 @@ var NumboGameLayer = cc.Layer.extend({
             });
 
 			if (data.powerupValue){
-				var keys = Object.keys(NJ.jumbos.jumboMap);
-				var randomKey = keys[Math.floor(Math.random()*keys.length)]
-				var jumboString = NJ.jumbos.jumboMap[randomKey];
-				this._numboController.updateJumboTo(jumboString);
+				this._numboController.updateRandomJumbo();
 				this.clearBlocks();
 				this.spawnNBlocks(20);
 			}
@@ -549,15 +583,14 @@ var NumboGameLayer = cc.Layer.extend({
             // return only if coordinates in certain radius of the block.
             var radius = 0.75 * this._levelCellSize.width / 2;
 
-			var cellWidth = this._levelCellSize.width;
-			var cellCenterX = this._levelBounds.x + (col + 0.5) * cellWidth;
-			var cellHeight = this._levelCellSize.height;
-			var cellCenterY = this._levelBounds.y + (row + 0.5) * cellHeight;
+			var cellCenter = cc.p(this._levelBounds.x + (col + 0.5) * this._levelCellSize.width,
+				this._levelBounds.y + (row + 0.5) * this._levelCellSize.height);
 
-			var dist = (cellCenterX - point.x) * (cellCenterX - point.x) + (cellCenterY - point.y) * (cellCenterY - point.y);
+			var diff = cc.pSub(point, cellCenter);
+			var distSq = cc.pDot(diff, diff);
 
 			// check distance
-            if (dist < radius * radius)
+            if (distSq <= radius * radius)
                 return { col: col, row: row };
 	    }
 

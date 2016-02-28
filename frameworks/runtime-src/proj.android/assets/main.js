@@ -35,9 +35,10 @@ cc.game.onStart = function() {
         
         jsb.fileUtils.setSearchPaths(searchPaths)
     } else { // web
-        cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.NO_BORDER);
+        designResolutionSize = cc.size(1280, 720);
+        cc.view.setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, cc.ResolutionPolicy.NO_BORDER);
 
-        cc.director.setContentScaleFactor(smallResolutionSize.width / designResolutionSize.width);
+        cc.director.setContentScaleFactor(largeResolutionSize.width / designResolutionSize.width);
         
         cc.view.resizeWithBrowserSize(true);
     }

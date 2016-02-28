@@ -152,8 +152,8 @@ var NumboController = cc.Class.extend({
 	    cc.assert(!this.isGameOver(), "Can't drop any more blocks");
 
 	    // Set up val/col
-	    var col = NJHelper.weightedRandom(this._numboLevel.getColWeights());
-	    var val = NJHelper.weightedRandom(this.distribution);
+	    var col = NJ.weightedRandom(this._numboLevel.getColWeights());
+	    var val = NJ.weightedRandom(this.distribution);
 
 	    if(NJ.settings.sounds){
 			cc.audioEngine.playEffect(res.clickSound);
@@ -161,17 +161,18 @@ var NumboController = cc.Class.extend({
 
 		var powerup = NJ.gameState.powerupMode && (Math.random() < 0.05); // 5% chance
 		if (powerup) {
-			var path = this.meanderSearch(col, this._numboLevel.blocks[col].length, this.pathAtLeastTwoWithNoiseCriteria);
+			var path = this.meanderSearch(col, this._numboLevel.blocks[col].length,
+				this.pathAtLeastTwoWithNoiseCriteria, []);
 			if (path && path.length > 0) {
 				var sum = 0;
 				for (var i in path) {
-					cc.log(path[i].val);
 					sum += path[i].val;
 				}
 				val = sum;
 			}
-			else
+			else {
 				powerup = false;
+			}
 		}
 
 	    var block = this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
@@ -195,9 +196,6 @@ var NumboController = cc.Class.extend({
 
 	meanderSearch: function(col, row, criteria, path) {
 		var neighbors = NJHelper.shuffleArray(this._numboLevel.getNeighbors(col, row) );
-
-		path = path || [];
-
 		if (criteria(path))
 			return path;
 
@@ -211,12 +209,13 @@ var NumboController = cc.Class.extend({
 		}
 	},
 
+
 	////////////
 	// COMBOS //
 	////////////
 
 	updateRandomJumbo: function() {
-	 	NJ.chooseJumbo(NJHelper.weightedRandom(this.jumboDistribution));
+	 	NJ.chooseJumbo(NJ.weightedRandom(this.jumboDistribution));
 		var jumbo = NJ.getCurrentJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;

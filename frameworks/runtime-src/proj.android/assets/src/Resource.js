@@ -14,6 +14,11 @@ if(!cc.sys.isNative) {
 var res = {
     // Fonts
     markerFont: {
+        name: "MarkerFelt",
+        src: resRoot + "Fonts/MarkerFelt.ttf"
+    },
+
+    markerFontFirefox: {
         name: "MarkerFelt-Regular",
         src: resRoot + "Fonts/MarkerFelt-Regular.ttf"
     },
@@ -50,7 +55,7 @@ var b_getFontName = function(fontRes) {
     if(cc.sys.os == cc.sys.OS_IOS)
         return "Marker Felt";
     
-    return "Marker Felt";
+    return fontRes.name;
 };
 
 // resources for the main menu of the game
