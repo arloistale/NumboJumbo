@@ -37,9 +37,13 @@ var res = {
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
 
-    backBottom: resRoot + "Images/normal/back.png",
+    backBG: resRoot + "Images/normal/BG.png",
+    backBottom: resRoot + "Images/normal/bottom.png",
     backMiddle: resRoot + "Images/normal/middle.png",
-    backTop: resRoot + "Images/normal/Top.png"
+    backTop: resRoot + "Images/normal/Top.png",
+    backVeryTop: resRoot + "Images/normal/verytop.png",
+    backStars: resRoot + "Images/normal/stars.png"
+
 };
 
 // returns proper font name based on platform

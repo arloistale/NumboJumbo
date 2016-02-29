@@ -180,7 +180,7 @@ var NumboLevel = cc.Class.extend({
 				this.killBlockAtCoords(c, r);
 		}
 		this.collapseColumnsToward(Math.floor(NJ.NUM_COLS/2));
-		this.updateBlockRowsAndCols();
+		//this.updateBlockRowsAndCols();
 	},
 
 	/////////////

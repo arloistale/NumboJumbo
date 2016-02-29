@@ -28,8 +28,8 @@ if(NJ.isFirefox) {
 NJ.SCALE = 1;
 
 // level
-NJ.NUM_COLS = 7;
-NJ.NUM_ROWS = 7;
+NJ.NUM_COLS = 5;
+NJ.NUM_ROWS = 5;
 
 // UI
 NJ.HEADER_HEIGHT = 56;
