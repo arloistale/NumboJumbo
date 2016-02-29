@@ -28,6 +28,10 @@
 #include "platform/ios/JavaScriptObjCBridge.h"
 #endif
 
+#ifdef SDKBOX_ENABLED
+#include "PluginGoogleAnalyticsJS.hpp"
+//#include "PluginGoogleAnalyticsJSHelper.h"
+#endif
 USING_NS_CC;
 using namespace CocosDenshion;
 
@@ -112,6 +116,10 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(JavascriptJavaBridge::_js_register);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     sc->addRegisterCallback(JavaScriptObjCBridge::_js_register);
+#endif
+#ifdef SDKBOX_ENABLED
+    sc->addRegisterCallback(register_all_PluginGoogleAnalyticsJS);
+//    sc->addRegisterCallback(register_all_PluginGoogleAnalyticsJS_helper);
 #endif
     sc->start();    
     sc->runScript("script/jsb_boot.js");

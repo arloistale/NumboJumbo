@@ -246,6 +246,9 @@ NJ.saveStats = function() {
 };
 
 NJ.initAnalytics = function() {
+    if(cc.sys.isNative) {
+        sdkbox.PluginGoogleAnalytics.init();
+    }
 };
 
 // send relevant stats over to Google Analytics
