@@ -228,6 +228,9 @@ NJ.saveStats = function() {
     }
 };
 
+NJ.initAnalytics = function() {
+};
+
 // send relevant stats over to Google Analytics
 NJ.sendAnalytics = function() {
     NJ.saveStats();
