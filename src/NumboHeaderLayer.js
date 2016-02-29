@@ -87,37 +87,9 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.levelValueLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelValueLabel);
 
-/*
-        // Blocks til Levelup Labels
-        this.blocksToLevelText = new cc.LabelTTF("Level up in", b_getFontName(res.markerFont), NJ.fontSizes.sub);
-        this.blocksToLevelText.attr({
-            scale: 1.0,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: contentSize.width / 2,
-            y: contentSize.height / 2 - 64
-        });
-        this.blocksToLevelText.enableStroke(cc.color(0, 0, 255, 255), 1);
-        this.blocksToLevelText.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.blocksToLevelText);
-
-        this.blocksToLevelLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
-
-        this.blocksToLevelLabel.attr({
-            scale: 1.0,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: contentSize.width / 8,
-            y: contentSize.height / 2 - 90
-        });
-        this.blocksToLevelLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-        this.blocksToLevelLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.blocksToLevelLabel);
-*/
-
-        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
+        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
         this.multiplierLabel.attr({
-            scale: 1.0,
+            scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
             anchorY: 0.5,
             x: contentSize.width / 2,
@@ -140,7 +112,8 @@ var NumboHeaderLayer = cc.Layer.extend({
             anchorY: 0.5
         });
         button.setTitleFontName(b_getFontName(res.markerFont));
-        button.setTitleFontSize(NJ.fontSizes.buttonMedium);
+        button.setTitleFontSize(NJ.fontScalingFactor * NJ.fontSizes.buttonMedium);
+        button.setScale(1.0 / NJ.fontScalingFactor);
         button.setTitleText("Pause");
         var titleSize = button.getTitleRenderer().getContentSize();
         var buttonSize = cc.size(titleSize.width * 2, titleSize.height * 2);

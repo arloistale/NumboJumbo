@@ -54,7 +54,7 @@ var b_getFontName = function(fontRes) {
     
     if(cc.sys.os == cc.sys.OS_IOS)
         return "Marker Felt";
-    
+
     return fontRes.name;
 };
 

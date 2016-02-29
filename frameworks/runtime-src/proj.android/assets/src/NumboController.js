@@ -195,7 +195,7 @@ var NumboController = cc.Class.extend({
 	},
 
 	meanderSearch: function(col, row, criteria, path) {
-		var neighbors = NJHelper.shuffleArray(this._numboLevel.getNeighbors(col, row) );
+		var neighbors = NJ.shuffleArray(this._numboLevel.getNeighbors(col, row) );
 		if (criteria(path))
 			return path;
 
@@ -319,6 +319,10 @@ var NumboController = cc.Class.extend({
 		var L = NJ.stats.level;
 		return 0.3 + 2/Math.pow(L, 1/2);
 	    //return 1 + 2/L;
+	},
+
+	getNumBlocks: function(){
+		return this._numboLevel.getNumBlocks();
 	},
 
 	// checks if the current selected blocks can be activated (their equation is valid)

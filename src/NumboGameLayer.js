@@ -484,7 +484,7 @@ var NumboGameLayer = cc.Layer.extend({
                     this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
             }
 
-            var scoreDifference = NJ.addScoreForCombo(data.cleared, data.blockSum);
+            var scoreDifference = NJ.addScore({blockCount: data.cleared});
 
             // launch feedback for combo
             this._feedbackLayer.launchSnippet({
@@ -495,11 +495,14 @@ var NumboGameLayer = cc.Layer.extend({
                 targetY: touchPosition.y + this._levelBounds.height / 6
             });
 
+			//
 			if (data.powerupValue){
 				this._numboController.updateRandomJumbo();
 				this.clearBlocks();
 				this.spawnNBlocks(20);
 			}
+
+
 
             // Level up with feedback if needed
             if (NJ.levelUpIfNeeded()) {
@@ -540,8 +543,33 @@ var NumboGameLayer = cc.Layer.extend({
 
                 // Speed up background for a bit.
                 this._backgroundLayer.initRush(180);
-            } else if (data.cleared > 3) {
-                this._feedbackLayer.launchFallingBanner();
+            }
+			// bonus for clearing screen
+			if (this._numboController.getNumBlocks() == 0) {
+				this.spawnNBlocks(15);
+				this._feedbackLayer.launchFallingBanner({
+					title: "Nice Clear!",
+					targetY: cc.visibleRect.center.y * 0.5
+				})
+				for (var i = 0; i < 5; ++i){
+					var scoreDifference = NJ.addScore({numPoints: 999});
+					// launch feedback for combo
+					this._feedbackLayer.launchSnippet({
+						title: "+" + scoreDifference,
+						x: cc.visibleRect.center.x,
+						y: cc.visibleRect.center.y,
+						targetX: this._levelBounds.x + Math.random() * this._levelBounds.width,
+						targetY: this._levelBounds.y + Math.random() * this._levelBounds.height,
+					});
+				}
+
+			}
+
+			// banner for a long combo
+			if (data.cleared > 3) {
+                this._feedbackLayer.launchFallingBanner({
+					targetY: cc.visibleRect.center.y * 1.5
+				});
             }
 
 			// Update multiplier if needed.

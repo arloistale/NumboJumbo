@@ -1,6 +1,6 @@
 
 var BANNER_POOL_SIZE = 5;
-var SNIPPET_POOL_SIZE = 5;
+var SNIPPET_POOL_SIZE = 10;
 
 var FeedbackLayer = cc.Layer.extend({
 
@@ -23,9 +23,9 @@ var FeedbackLayer = cc.Layer.extend({
             "keep it up!", "whoa!", "dang!",
             "gosh golly!", "booya!", "oh wow!",
             "oh jeez!", "so good!", "astonishing!",
-            "jackpot!", "nice execution!", "miracle worker!",
+            "jackpot!", "nice execution!",
             "winner!", "combo master!", "fabulous!", "moving up!",
-            "astonishing work!", "wonderful!", "that's how it's done!",
+            "nice work!", "wonderful!", "that's how it's done!",
             "mind blowing!", "stupendous moves!", "breathtaking!",
             "fantastic!", "crushing the competition!", "masterful!"];
 
@@ -43,7 +43,7 @@ var FeedbackLayer = cc.Layer.extend({
         }
 
         // initialize snippet pool with entities
-        for(i = 0; i < BANNER_POOL_SIZE; i++) {
+        for(i = 0; i < SNIPPET_POOL_SIZE; i++) {
             feedback = new Snippet();
                                     feedback.retain();
             this.snippetPool.push(feedback);
@@ -143,9 +143,12 @@ var FeedbackLayer = cc.Layer.extend({
 
         this.addChild(banner);
 
+        var targetX = data && typeof data.targetX !== 'undefined' ? data.targetX : cc.visibleRect.center.x;
+        var targetY = data && typeof data.targetY !== 'undefined' ? data.targetY : cc.visibleRect.center.y;
+
         // start moving the banner
         var moveDuration = 0.5;
-        var moveAction = cc.moveTo(moveDuration, cc.p(banner.x, cc.visibleRect.center.y));
+        var moveAction = cc.moveTo(moveDuration, cc.p(targetX, targetY));
         moveAction.easing(cc.easeOut(2.0));
         var delayAction = cc.delayTime(0.8);
         var fadeOutAction = cc.fadeTo(0.2, 0);
@@ -196,7 +199,7 @@ var FeedbackLayer = cc.Layer.extend({
 
         this.addChild(snippet);
 
-        var scaleUpAction = cc.scaleTo(0.1, 1.0, 1.0);
+        var scaleUpAction = cc.scaleTo(0.2, 1.0, 1.0);
         var moveAction = cc.moveTo(1, cc.p(targetX, targetY));
         var fadeOutAction = cc.fadeTo(1, 0);
         var removeAction = cc.callFunc(function() {

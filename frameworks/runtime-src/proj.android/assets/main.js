@@ -46,6 +46,8 @@ cc.game.onStart = function() {
     // load settings
     NJ.loadSettings();
     NJ.loadJumbosFromJSON();
+
+    NJ.initAnalytics();
     
     // load resources
     cc.LoaderScene.preload(g_menu, function () {

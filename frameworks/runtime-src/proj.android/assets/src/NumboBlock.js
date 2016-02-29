@@ -46,9 +46,9 @@ var NumboBlock = cc.Sprite.extend({
         });
         this.addChild(this.highlightSprite, -1);
 	
-        this.valueLabel = cc.LabelTTF.create("label test", b_getFontName(res.markerFont), NJ.fontSizes.numbo);
+        this.valueLabel = cc.LabelTTF.create("label test", b_getFontName(res.markerFont), NJ.fontScalingFactor * NJ.fontSizes.numbo);
         this.valueLabel.attr({
-            scale: 1.0,
+            scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
             anchorY: 0.5 + NJ.anchorOffsetY,
             x: blockSize.width / 2,
