@@ -32,8 +32,8 @@ var NumboMenuLayer = cc.Layer.extend({
     initBackground: function() {
         var backgroundSprite = new cc.Sprite(res.backgroundImage);
         backgroundSprite.attr({
-            x: cc.winSize.width / 2,
-            y: cc.winSize.height / 2,
+            x: cc.visibleRect.center.x,
+            y: cc.visibleRect.center.y,
             anchorX: 0.5,
             anchorY: 0.5,
             scale: 1,
@@ -50,29 +50,32 @@ var NumboMenuLayer = cc.Layer.extend({
     initUI: function() {
         var that = this;
 
-        var playButton = this.generateTitleButton("Play!", function() {
+        var playButton = new MenuTitleButton("Play!", function() {
             that.onPlay();
-        });
+        }, this);
 
-        var instructionsButton = this.generateTitleButton("How?", function() {
+        var instructionsButton = new MenuTitleButton("How?", function() {
             that.onInstructions();
-        });
+        }, this);
 
-        var dummyLabel = this.generateLabel(" ");
+        var dummyLabel = new cc.MenuItemFont(" ");
 
-        var scoresButton = this.generateTitleButton("Scores", function() {
+        var scoresButton = new MenuTitleButton("Scores", function() {
             that.onScores();
-        });
+        }, this);
 
-        var settingsButton = this.generateTitleButton("Settings", function() {
+        var settingsButton = new MenuTitleButton("Settings", function() {
             that.onSettings();
-        });
+        }, this);
+
+        playButton.setImageRes(res.buttonImage);
+        instructionsButton.setImageRes(res.buttonImage);
+        scoresButton.setImageRes(res.buttonImage);
+        settingsButton.setImageRes(res.buttonImage);
 
         this._menu = new cc.Menu(playButton, instructionsButton, dummyLabel, scoresButton, settingsButton);
         this._menu.alignItemsVerticallyWithPadding(15);
         this.addChild(this._menu, 100);
-        this._menu.x = cc.winSize.width / 2;
-        this._menu.y = cc.winSize.height / 2;
     },
 
     // initialize game audio
@@ -149,6 +152,7 @@ var NumboMenuLayer = cc.Layer.extend({
                 cc.audioEngine.playMusic(res.menuTrack);
         });
         this.addChild(this._settingsMenuLayer, 999);
+
     },
     
 ////////////////
@@ -204,6 +208,7 @@ var NumboMenuLayer = cc.Layer.extend({
         disabledSprite.addChild(disabledLabel);
 
         return new cc.MenuItemSprite(normalSprite, selectedSprite, disabledSprite, callback, this);
+
     }
 });
 

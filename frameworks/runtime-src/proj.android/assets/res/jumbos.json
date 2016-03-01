@@ -1,5 +1,5 @@
 {
-  "jumboMap":{
+  "jumboMap": {
     "1": "one-mania",
     "5": "fives",
     "8": "fibonacci",
@@ -36,6 +36,78 @@
       "spawnTime": 1.0,
       "weight": 3.0,
       "numberList": [
+        {
+          "key": 1,
+          "weight": 4
+        },
+        {
+          "key": 2,
+          "weight": 3
+        },
+        {
+          "key": 3,
+          "weight": 3
+        },
+        {
+          "key": 4,
+          "weight": 2
+        },
+        {
+          "key": 5,
+          "weight": 2
+        },
+        {
+          "key": 6,
+          "weight": 1
+        },
+        {
+          "key": 7,
+          "weight": 1
+        },
+        {
+          "key": 8,
+          "weight": 1
+        },
+        {
+          "key": 9,
+          "weight": 1
+        }
+      ]
+    },
+    "zeroes": {
+      "name": "All Zeroes",
+      "difficulty": "Like, Really Easy",
+      "spawnTime": 0.75,
+      "weight": 1.0,
+      "numberList": [
+        {
+          "key": 0,
+          "weight": 1
+        }
+      ]
+    },
+    "negatives": {
+      "name": "Classic --",
+      "difficulty": "Medium",
+      "spawnTime": 1.0,
+      "weight": 3.0,
+      "numberList": [
+        {
+          "key": -3,
+          "weight": 1
+        },
+        {
+          "key": -2,
+          "weight": 1
+        },
+        {
+          "key": -1,
+          "weight": 2
+        },
+        {
+          "key": 0,
+          "weight": 3
+        },
         {
           "key": 1,
           "weight": 4

@@ -5,15 +5,15 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDisplayName</key>
-	<string>Numbo Jumbo</string>
+	<string>${PRODUCT_NAME}</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>Icon-76.png</string>
-		<string>Icon-76@2x.png</string>
 		<string>Icon-60@2x.png</string>
 		<string>Icon-60@3x.png</string>
+		<string>Icon-76.png</string>
+		<string>Icon-76@2x.png</string>
 	</array>
 	<key>CFBundleIcons~ipad</key>
 	<dict>
@@ -21,10 +21,10 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>Icon-76.png</string>
-				<string>Icon-76@2x.png</string>
 				<string>Icon-60@2x.png</string>
 				<string>Icon-60@3x.png</string>
+				<string>Icon-76.png</string>
+				<string>Icon-76@2x.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
@@ -50,6 +50,8 @@
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<dict>
+		<key>accelerometer</key>
+		<true/>
 		<key>opengles-1</key>
 		<true/>
 	</dict>
