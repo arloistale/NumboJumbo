@@ -53,7 +53,7 @@ var NumboGameLayer = cc.Layer.extend({
         this.updateMultiplier();
                                      
 	    // Begin scheduling block drops.
-	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
+	    this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
 	    this.schedule(this.scheduleSpawn, 0.1*20);
 	},
 
@@ -120,7 +120,10 @@ var NumboGameLayer = cc.Layer.extend({
 	    var that = this;
 
 		// background
-		this._backgroundLayer = new BackgroundLayer();
+		this._backgroundLayer = new BackgroundLayer([res.backBG], [{image: res.backBottom, dx: 0, dy:.3},
+																	{image: res.backMiddle, dx: -.5, dy:.5},
+																	{image: res.backTop, dx:.5, dy:.5},
+																	{image: res.backVeryTop, dx: 0, dy:.22}]);
 		this.addChild(this._backgroundLayer);
 
         // header
@@ -318,13 +321,17 @@ var NumboGameLayer = cc.Layer.extend({
 		if(NJ.gameState.multiplier > 1) {
 			this.unschedule(this.checkMultiplier);
 			this.schedule(this.checkMultiplier, 5, 1);
+			this._backgroundLayer.speedUp();
 		}
+		else this._backgroundLayer.resetSpeed();
 	},
 
 	checkMultiplier: function() {
 		this._numboController.checkMultiplier();
-		if(this._numboController.comboTimes.length == 0)
+		if(this._numboController.comboTimes.length == 0) {
 			this._numboHeaderLayer.setMultiplierValue(NJ.gameState.multiplier);
+			this._backgroundLayer.resetSpeed();
+		}
 	},
 
 	///////////////////////
@@ -541,8 +548,6 @@ var NumboGameLayer = cc.Layer.extend({
                     title: "Level " + NJ.stats.level
                 });
 
-                // Speed up background for a bit.
-                this._backgroundLayer.initRush(180);
             }
 			// bonus for clearing screen
 			if (this._numboController.getNumBlocks() == 0) {
@@ -570,6 +575,8 @@ var NumboGameLayer = cc.Layer.extend({
                 this._feedbackLayer.launchFallingBanner({
 					targetY: cc.visibleRect.center.y * 1.5
 				});
+            } else if (data.cleared > 3) {
+                this._feedbackLayer.launchFallingBanner();
             }
 
 			// Update multiplier if needed.
