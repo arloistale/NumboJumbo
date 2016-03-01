@@ -508,8 +508,8 @@ var NumboGameLayer = cc.Layer.extend({
 				this.clearBlocks();
 				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 			}
-			else if(this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2))
-				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+			//else if(this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2))
+			//	this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 
             // Level up with feedback if needed
             if (NJ.levelUpIfNeeded()) {
@@ -550,8 +550,10 @@ var NumboGameLayer = cc.Layer.extend({
 
             }
 			// bonus for clearing screen
-			if (this._numboController.getNumBlocks() == 0) {
-				this.spawnNBlocks(15);
+			if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2)) {
+				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+				this.unschedule(this.scheduleSpawn);
+				this.schedule(this.scheduleSpawn, 6);
 				this._feedbackLayer.launchFallingBanner({
 					title: "Nice Clear!",
 					targetY: cc.visibleRect.center.y * 0.5
@@ -586,6 +588,16 @@ var NumboGameLayer = cc.Layer.extend({
             this._numboHeaderLayer.setScoreValue(NJ.stats.score, NJ.getBlocksLeftForLevelUp(), NJ.stats.level);
         }
 	},
+/*
+	pauseSpawn: function(time) {
+		this.unschedule(this.scheduleSpawn());
+		this.schedule(this.restartSpawn, time, 1);
+	},
+
+	restartSpawn: function() {
+		this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
+		console.log("FREEZE");
+	},*/
 
 /////////////
 // Drawing //
