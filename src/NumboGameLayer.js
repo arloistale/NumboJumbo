@@ -506,10 +506,10 @@ var NumboGameLayer = cc.Layer.extend({
 			if (data.powerupValue){
 				this._numboController.updateRandomJumbo();
 				this.clearBlocks();
-				this.spawnNBlocks(20);
+				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 			}
-
-
+			else if(this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2))
+				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 
             // Level up with feedback if needed
             if (NJ.levelUpIfNeeded()) {
@@ -518,7 +518,7 @@ var NumboGameLayer = cc.Layer.extend({
 					NJ.gameState.randomJumbos = true;
 					this._numboController.updateRandomJumbo();
 					this.clearBlocks();
-					this.spawnNBlocks(20);
+					this.spawnNBlocks(Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
 				}
 
 				                // Check for Jumbo Swap
