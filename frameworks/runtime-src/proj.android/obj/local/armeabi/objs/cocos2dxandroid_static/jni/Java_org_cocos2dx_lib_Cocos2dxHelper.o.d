@@ -1,28 +1,28 @@
 obj/local/armeabi/objs/cocos2dxandroid_static/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.cpp \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/stdlib.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/cdefs.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/cdefs_elf.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/api-level.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/string.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/malloc.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/alloca.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/strings.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/types.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/stdint.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/_types.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/machine/_types.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/linux/posix_types.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/linux/stddef.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/linux/compiler.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/asm/posix_types.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/asm/types.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/linux/types.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/machine/kernel.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/sysmacros.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/memory.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/jni.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/log.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdlib.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/cdefs.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/cdefs_elf.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/api-level.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/string.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/malloc.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/alloca.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/strings.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/types.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdint.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/_types.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/machine/_types.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/posix_types.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/stddef.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/compiler.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/asm/posix_types.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/asm/types.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/types.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/machine/kernel.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/sysmacros.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/memory.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/jni.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/string \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/jni/JniHelper.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../platform/CCPlatformMacros.h \
@@ -36,10 +36,10 @@ obj/local/armeabi/objs/cocos2dxandroid_static/jni/Java_org_cocos2dx_lib_Cocos2dx
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/unordered_map \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/ccTypes.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../math/CCGeometry.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/math.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/math.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/ccMacros.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/CCConsole.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/select.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/select.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/thread \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/map \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/mutex \
@@ -68,14 +68,14 @@ obj/local/armeabi/objs/cocos2dxandroid_static/jni/Java_org_cocos2dx_lib_Cocos2dx
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../math/Quaternion.inl \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../platform/CCGL.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../platform/android/CCGL-android.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/GLES2/gl2platform.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/KHR/khrplatform.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/GLES2/gl2.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/GLES2/gl2ext.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/CCValue.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/CCData.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/asset_manager.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/asset_manager_jni.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/asset_manager.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/asset_manager_jni.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../deprecated/CCString.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/sstream \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../deprecated/CCArray.h \
@@ -83,51 +83,51 @@ obj/local/armeabi/objs/cocos2dxandroid_static/jni/Java_org_cocos2dx_lib_Cocos2dx
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/CCDataVisitor.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/stdlib.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdlib.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/cdefs.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/cdefs.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/cdefs_elf.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/cdefs_elf.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/api-level.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/api-level.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/string.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/string.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/malloc.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/malloc.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/alloca.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/alloca.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/strings.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/strings.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/types.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/types.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/stdint.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdint.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/_types.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/_types.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/machine/_types.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/machine/_types.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/linux/posix_types.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/posix_types.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/linux/stddef.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/stddef.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/linux/compiler.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/compiler.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/asm/posix_types.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/asm/posix_types.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/asm/types.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/asm/types.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/linux/types.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/types.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/machine/kernel.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/machine/kernel.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/sysmacros.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/sysmacros.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/memory.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/memory.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/jni.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/jni.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/log.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h:
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/string:
 
@@ -155,13 +155,13 @@ obj/local/armeabi/objs/cocos2dxandroid_static/jni/Java_org_cocos2dx_lib_Cocos2dx
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../math/CCGeometry.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/math.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/math.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/ccMacros.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/CCConsole.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/sys/select.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/select.h:
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/thread:
 
@@ -219,21 +219,21 @@ obj/local/armeabi/objs/cocos2dxandroid_static/jni/Java_org_cocos2dx_lib_Cocos2dx
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../platform/android/CCGL-android.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/GLES2/gl2platform.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/KHR/khrplatform.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/GLES2/gl2.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/GLES2/gl2ext.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/CCValue.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../base/CCData.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/asset_manager.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/asset_manager.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/asset_manager_jni.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/asset_manager_jni.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/../../deprecated/CCString.h:
 

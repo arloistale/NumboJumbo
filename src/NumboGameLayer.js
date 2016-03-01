@@ -54,7 +54,7 @@ var NumboGameLayer = cc.Layer.extend({
                                      
 	    // Begin scheduling block drops.
 	    this.schedule(this.spawnDropRandomBlock, 0.1, 20);
-	    this.schedule(this.scheduleSpawn, 0.1*20);
+	    this.schedule(this.scheduleSpawn, 0.1 * 20);
 	},
 
 	// initialize the powerup mode variable
@@ -70,7 +70,7 @@ var NumboGameLayer = cc.Layer.extend({
                 event: cc.EventListener.MOUSE,
                 onMouseDown: function (event) {
                     if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-                    return false;
+                    	return false;
 
                     event.getCurrentTarget().onTouchBegan(event.getLocation());
 
@@ -78,7 +78,7 @@ var NumboGameLayer = cc.Layer.extend({
                 },
                 onMouseMove: function (event) {
                     if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-                    return false;
+                    	return false;
 
                     event.getCurrentTarget().onTouchMoved(event.getLocation());
 
@@ -86,7 +86,7 @@ var NumboGameLayer = cc.Layer.extend({
                 },
                 onMouseUp: function (event) {
                     if (event.getButton() != cc.EventMouse.BUTTON_LEFT)
-                    return false;
+                    	return false;
 
                     event.getCurrentTarget().onTouchEnded(event.getLocation());
 
