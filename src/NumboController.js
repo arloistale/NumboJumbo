@@ -76,6 +76,7 @@ var NumboController = cc.Class.extend({
 			cc.audioEngine.playEffect(res.plopSound);
 
 		return {
+			numSelectedBlocks: this._selectedBlocks.length,
 			currBlock: block,
 			lastBlock: lastBlock
 		};

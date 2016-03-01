@@ -25,6 +25,9 @@ var NumboGameLayer = cc.Layer.extend({
 	// Selection Data
 	_lastTouchPosition: null,
 
+	// map of available colors for block selection
+	selectionColors: [],
+
 	////////////////////
 	// Initialization //
 	////////////////////
@@ -48,6 +51,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    this.initUI();
 		this.initGeometry();
 	    this.initAudio();
+		this.initSelectionColors();
 
 		this.initPowerups();
         this.updateMultiplier();
@@ -55,6 +59,18 @@ var NumboGameLayer = cc.Layer.extend({
 	    // Begin scheduling block drops.
 	    this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
 	    this.schedule(this.scheduleSpawn, 0.1*20);
+	},
+
+	// set up the color-highlighting array
+	initSelectionColors: function() {
+		// color palette from: http://www.color-hex.com/color-palette/8075
+		this.selectionColors = [
+			cc.color(186, 39, 39),  // red
+			cc.color(236, 157, 34), // orange
+			cc.color(200, 212, 44), // yellow
+			cc.color(65, 188, 49),  // green
+			cc.color(44, 107, 173)  // blue
+		]
 	},
 
 	// initialize the powerup mode variable
@@ -404,6 +420,13 @@ var NumboGameLayer = cc.Layer.extend({
 		}, this);
 	},
 
+	getNextColor: function(index) {
+		if (typeof index == 'undefined')
+			index = 0;
+		index %= Object.keys(this.selectionColors).length;
+		return this.selectionColors[index];
+	},
+
 //////////////////
 // Touch Events //
 //////////////////
@@ -418,10 +441,9 @@ var NumboGameLayer = cc.Layer.extend({
 			var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 			if(data) {
-				var currBlock = data.currBlock, lastBlock = data.lastBlock;
-				if (currBlock) currBlock.highlight(cc.color(0, 255, 0, 255));
-				if (lastBlock) lastBlock.highlight(cc.color(255, 0, 0, 255));
 
+				var currBlock = data.currBlock, lastBlock = data.lastBlock;
+				currBlock.highlight(this.getNextColor(data.numSelectedBlocks));
 				this.redrawSelectedLines();
 			}
 		}
@@ -451,9 +473,7 @@ var NumboGameLayer = cc.Layer.extend({
 
 				if(data) {
 					currBlock = data.currBlock, lastBlock = data.lastBlock;
-					if (currBlock) currBlock.highlight(cc.color(0, 255, 0, 255));
-					if (lastBlock) lastBlock.highlight(cc.color(255, 0, 0, 255));
-
+					currBlock.highlight(this.getNextColor(data.numSelectedBlocks));
 					this.redrawSelectedLines();
 				}
 			}
@@ -466,9 +486,7 @@ var NumboGameLayer = cc.Layer.extend({
 
 			if(data) {
 				currBlock = data.currBlock, lastBlock = data.lastBlock;
-				if (currBlock) currBlock.highlight(cc.color(0, 255, 0, 255));
-				if (lastBlock) lastBlock.highlight(cc.color(255, 0, 0, 255));
-
+				currBlock.highlight(this.getNextColor(data.numSelectedBlocks));
 				this.redrawSelectedLines();
 			}
 		}
