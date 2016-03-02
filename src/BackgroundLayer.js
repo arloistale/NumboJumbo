@@ -53,7 +53,8 @@ var BackgroundLayer = cc.Layer.extend({
             });
             this.dynamicMovements[i] = {dx: dynamicSprites[i].dx, dy: dynamicSprites[i].dy, multiplier: 1.0};
             if(this.dynamicMovements[i].dx == 0)
-                this.dynamicMovements[i].anchorX = 1;
+                this.dynamicLayers[i].x -= this.dynamicLayers[i].width/2;
+            this.dynamicLayers[i].setOpacity(100);
             this.addChild(this.dynamicLayers[i], 0);
         }
     },
@@ -70,9 +71,9 @@ var BackgroundLayer = cc.Layer.extend({
             else if(this.dynamicLayers[i].dx < 0)
                 duplicates.push(3);
             if(this.dynamicLayers[i].dy > 0)
-                duplicates.push(0);
-            else if(this.dynamicLayers[i].dy < 0)
                 duplicates.push(1);
+            else if(this.dynamicLayers[i].dy < 0)
+                duplicates.push(0);
             for(var j=0; j<8; j++) {
                 this.duplicateLayers[i][j] = new cc.Sprite(dynamicSprites[i].image);
                 this.duplicateLayers[i][j].attr({
@@ -83,6 +84,7 @@ var BackgroundLayer = cc.Layer.extend({
                     scale: this.dynamicLayers[i].scale,
                     rotation: 0
                 });
+                this.duplicateLayers[i][j].setOpacity(this.dynamicLayers[i].getOpacity());
                 if(duplicates.indexOf(j) != -1)
                     this.addChild(this.duplicateLayers[i][j], 0);
             }
@@ -165,5 +167,29 @@ var BackgroundLayer = cc.Layer.extend({
     resetSpeed: function() {
         for(var i=0; i<this.dynamicMovements.length; i++)
             this.dynamicMovements[i].multiplier = 1;
+    },
+
+    updateBackgroundColor: function() {
+        var newColor = cc.color(255, 255, 255, 255);
+        var level = NJ.gameState.currentLevel % 6;
+        if(level == 1)
+            newColor = cc.color(0, 0, 255, 255);
+        if(level == 2)
+            newColor = cc.color(255, 0, 0, 255);
+        else if(level == 3)
+            newColor = cc.color(0, 255, 0, 255);
+        else if(level == 4)
+            newColor = cc.color(255, 255, 0, 255);
+        else if(level == 5)
+            newColor = cc.color(255, 0, 102, 255);
+        else if(level == 6)
+            newColor = cc.color(0, 255, 204, 255);
+
+        console.log("Level Color " + NJ.gameState.currentLevel);
+        for(var i=0; i<this.dynamicLayers.length; i++) {
+            this.dynamicLayers[i].setColor(newColor);
+            for(var j=0; j<this.duplicateLayers[i].length; j++)
+                this.duplicateLayers[i][j].setColor(newColor);
+        }
     }
 });
