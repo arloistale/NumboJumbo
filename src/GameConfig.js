@@ -246,6 +246,9 @@ NJ.saveStats = function() {
 };
 
 NJ.initAnalytics = function() {
+    if(cc.sys.isNative) {
+        sdkbox.PluginGoogleAnalytics.init();
+    }
 };
 
 // send relevant stats over to Google Analytics
@@ -261,21 +264,30 @@ NJ.sendAnalytics = function() {
         return v.toString(16);
     });
 
-    var jumboIndex = NJ.getCurrentJumbo().index;
+    var jumboName = NJ.getCurrentJumbo().name;
 
     // now send over relevant stats data to GA
     if(!cc.sys.isNative) {
         ga('set', 'dimension1', rid);
+        ga('set', 'dimension2', jumboName);
         ga('set', 'metric1', NJ.stats.blocksCleared);
         ga('set', 'metric2', NJ.stats.sessionLength);
         ga('set', 'metric3', NJ.stats.maxComboLength);
         ga('set', 'metric4', NJ.stats.level);
         ga('set', 'metric5', NJ.stats.score);
-        ga('set', 'metric6', jumboIndex);
 
-        ga('send', 'event', 'Game', 'end', 'Game Session Data');
+        ga('send', 'event', 'Game', 'end', 'Game Session Data', 42);
     } else {
+        sdkbox.PluginGoogleAnalytics.setDimension(1, rid);
+        sdkbox.PluginGoogleAnalytics.setDimension(2, jumboName);
+        sdkbox.PluginGoogleAnalytics.setMetric(1, NJ.stats.blocksCleared);
+        sdkbox.PluginGoogleAnalytics.setMetric(2, NJ.stats.sessionLength);
+        sdkbox.PluginGoogleAnalytics.setMetric(3, NJ.stats.maxComboLength);
+        sdkbox.PluginGoogleAnalytics.setMetric(4, NJ.stats.level);
+        sdkbox.PluginGoogleAnalytics.setMetric(5, NJ.stats.score);
 
+        sdkbox.PluginGoogleAnalytics.logEvent("Game", "end", "Game Session Data", 42);
+        sdkbox.PluginGoogleAnalytics.dispatchHits();
     }
 };
 

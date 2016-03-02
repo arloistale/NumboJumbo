@@ -7,14 +7,14 @@ obj/local/armeabi/objs/cocos_localstorage_static/LocalStorage-android.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/storage/local-storage/../../platform/CCPlatformConfig.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/storage/local-storage/../../platform/CCPlatformDefine.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/storage/local-storage/../../platform/android/CCPlatformDefine-android.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/log.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/storage/local-storage/../../platform/CCPlatformMacros.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/stdlib.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/alloca.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/strings.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/memory.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/assert.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/jni.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdlib.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/alloca.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/strings.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/memory.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/assert.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/jni.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/jni/JniHelper.h
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/storage/local-storage/LocalStorage.h:
@@ -31,20 +31,20 @@ obj/local/armeabi/objs/cocos_localstorage_static/LocalStorage-android.o: \
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/storage/local-storage/../../platform/android/CCPlatformDefine-android.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/log.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/storage/local-storage/../../platform/CCPlatformMacros.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/stdlib.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdlib.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/alloca.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/alloca.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/strings.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/strings.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/memory.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/memory.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/assert.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/assert.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/jni.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/jni.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/platform/android/jni/JniHelper.h:

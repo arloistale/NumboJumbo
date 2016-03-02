@@ -5,14 +5,14 @@ obj/local/armeabi/objs-debug/cocostudio_static/DictionaryHelper.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCPlatformConfig.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCPlatformDefine.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCPlatformDefine-android.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/log.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../cocostudio/DictionaryHelper.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/flatbuffers/../json/document.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/flatbuffers/../json/reader.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/flatbuffers/../json/rapidjson.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdlib \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/inttypes.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/inttypes.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/flatbuffers/../json/internal/pow10.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/flatbuffers/../json/internal/stack.h \
@@ -31,7 +31,7 @@ obj/local/armeabi/objs-debug/cocostudio_static/DictionaryHelper.o: \
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCPlatformDefine-android.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/android/log.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../cocostudio/DictionaryHelper.h:
 
@@ -45,7 +45,7 @@ obj/local/armeabi/objs-debug/cocostudio_static/DictionaryHelper.o: \
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-19/arch-arm/usr/include/inttypes.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/inttypes.h:
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert:
 
