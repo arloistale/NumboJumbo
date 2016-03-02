@@ -3,9 +3,10 @@ var NumboController = cc.Class.extend({
 	jumboDistribution: [],
 	spawnTime: 1.0,
 
+
 	// level data
 	_numboLevel: null,
-
+	_knownPath: [],
 	_selectedBlocks: [],
 
 	comboTimes: [],
@@ -192,7 +193,7 @@ var NumboController = cc.Class.extend({
 		var sum = 0;
 		for (var i = 0; i < path.length - 1; ++i)
 			sum += path[i].val;
-		return sum == path[path.length].val;
+		return path.length > 2 && sum == path[path.length - 1].val;
 	},
 
 	meanderSearch: function(col, row, criteria, path) {
@@ -202,12 +203,32 @@ var NumboController = cc.Class.extend({
 
 		for (var i in neighbors){
 			var block = neighbors[i];
-			if (block && path.indexOf(block) < 0){
+			if (block && path.indexOf(block) < 0) {
 				var newPath = path.slice(0);
 				newPath.push(block);
 				return this.meanderSearch(block.col, block.row, criteria, newPath);
 			}
 		}
+
+		return [];
+	},
+
+	findHint: function() {
+		var tries = 50; // try no more than 50 times
+		while (tries > 0 && this._knownPath.length == 0) {
+			var block = this._numboLevel.getRandomBlock();
+			this._knownPath = this.meanderSearch(block.col, block.row, this.sumsToCriteria, [block]);
+
+			--tries;
+		}
+
+		cc.log("tries: " + (50 - tries));
+
+		return this._knownPath;
+	},
+
+	resetKnownPath: function(){
+		this._knownPath = [];
 	},
 
 

@@ -36,8 +36,8 @@ else
 NJ.SCALE = 1;
 
 // level
-NJ.NUM_COLS = 5;
-NJ.NUM_ROWS = 5;
+NJ.NUM_COLS = 6;
+NJ.NUM_ROWS = 6;
 
 // UI
 NJ.HEADER_HEIGHT = 56;
