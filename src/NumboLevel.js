@@ -305,6 +305,19 @@ var NumboLevel = cc.Class.extend({
 		return this.numBlocks;
 	},
 
+	// grabs a random block, or null if the board is empty
+	getRandomBlock: function(){
+		var cols = [];
+		for (var i = 0; i < NJ.NUM_COLS; ++i){
+			if (this.blocks[i].length > 0) {
+				cols.push({key: i, weight: this.blocks[i].length});
+			}
+		}
+		var col = NJ.weightedRandom(cols);
+		row = Math.floor(Math.random() * this.blocks[col].length);
+		return this.getBlock(col, row);
+	},
+
 	// Returns the total capacity of the level
 	getCapacity: function() {
 		return NJ.NUM_COLS * NJ.NUM_ROWS;
