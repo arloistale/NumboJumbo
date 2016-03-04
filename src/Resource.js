@@ -14,13 +14,10 @@ if(!cc.sys.isNative) {
 var res = {
     // Fonts
     markerFont: {
-        name: "MarkerFelt",
-        src: resRoot + "Fonts/MarkerFelt.ttf"
-    },
-
-    markerFontFirefox: {
-        name: "MarkerFelt-Regular",
-        src: resRoot + "Fonts/MarkerFelt-Regular.ttf"
+        name: "Marker Felt",
+        src: resRoot + "Fonts/MarkerFelt.ttf",
+        firefoxName: "MarkerFelt-Regular",
+        firefoxSrc: resRoot + "Fonts/MarkerFelt-Regular.ttf"
     },
 
 	// images
@@ -53,11 +50,16 @@ var res = {
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes) {
+    if(NJ.isFirefox === true) {
+        return fontRes.firefoxName;
+    }
+
     if(cc.sys.os == cc.sys.OS_ANDROID)
         return fontRes.src;
     
     if(cc.sys.os == cc.sys.OS_IOS)
         return "Marker Felt";
+
 
     return fontRes.name;
 };
@@ -73,7 +75,8 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.markerFont.src
+    res.markerFont.src,
+    res.markerFont.firefoxSrc
 ];
 
 // resources for ingame
