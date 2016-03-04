@@ -176,7 +176,7 @@ var NumboMenuLayer = cc.Layer.extend({
         selectedSprite.setColor(cc.color(192, 192, 192, 255));
         disabledSprite.setColor(cc.color(64, 64, 64, 255));
 
-        var normalLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), 32);
+        var normalLabel = new cc.LabelTTF(title, b_getFontName(res), 32);
         normalLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
@@ -189,7 +189,7 @@ var NumboMenuLayer = cc.Layer.extend({
         selectedLabel.attr({
             scale: 1.0,
             anchorX: 0.5,
-            anchorY: 0.5 + NJ.anchorOffsetY,
+            anchorY: 0.9 + NJ.anchorOffsetY,
             x: selectedSprite.getContentSize().width / 2,
             y: selectedSprite.getContentSize().height / 2
         });

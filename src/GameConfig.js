@@ -18,7 +18,7 @@ var NJ = NJ || {};
 NJ.isFirefox = typeof InstallTrigger !== 'undefined';
 if(NJ.isFirefox) {
     NJ.anchorOffsetX = 0.1;
-    NJ.anchorOffsetY = 0.2;
+    NJ.anchorOffsetY = 0.1;
 } else {
     NJ.anchorOffsetX = 0;
     NJ.anchorOffsetY = 0;

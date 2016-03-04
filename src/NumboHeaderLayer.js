@@ -42,7 +42,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         scoreTitleLabel.attr({
             scale: 1.0,
             anchorX: 0,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: scoreStartPos.x,
             y: scoreStartPos.y
         });
@@ -54,7 +54,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: scoreStartPos.x + scoreTitleLabel.getContentSize().width,
             y: scoreStartPos.y
         });
@@ -67,7 +67,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         levelTitleLabel.attr({
             scale: 1.0,
             anchorX: 0,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: levelStartPos.x,
             y: levelStartPos.y
         });
@@ -79,7 +79,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.levelValueLabel.attr({
             scale: 1.0,
             anchorX: 0,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: levelStartPos.x + levelTitleLabel.getContentSize().width,
             y: levelStartPos.y
         });
@@ -91,7 +91,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.multiplierLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: contentSize.width / 2,
             y: contentSize.height / 2
         });
@@ -109,7 +109,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         var button = new ccui.Button();
         button.attr({
             anchorX: 0.5,
-            anchorY: 0.5
+            anchorY: 0.5 + NJ.anchorOffsetY
         });
         button.setTitleFontName(b_getFontName(res.markerFont));
         button.setTitleFontSize(NJ.fontScalingFactor * NJ.fontSizes.buttonMedium);
