@@ -25,12 +25,9 @@ var JumboMenuLayer = cc.LayerColor.extend({
     initUI: function() {
         var sp = new cc.Sprite(res.loading_png);
         sp.anchorX = 0;
-<<<<<<< HEAD
-        sp.anchorY = 0;
-=======
         sp.anchorY = 0 + NJ.anchorOffsetY;
         sp.scale = NJ.SCALE;
->>>>>>> 9b689a554ba4439ffecc4d552368165f17e95e91
+
         this.addChild(sp, 0, 1);
 
         var that = this;
