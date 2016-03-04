@@ -272,18 +272,18 @@ var NumboGameLayer = cc.Layer.extend({
 	// Block Spawning //
 	////////////////////
 
-	// Move scene block sprite into place.
+	// Move scene block sprite into place.S
 	moveBlockIntoPlace: function(block) {
 	    var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (block.row + 0.5);
 	    var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
 
 	    var duration = 0.5;
 	    var moveAction = cc.MoveTo.create(duration, cc.p(blockTargetX, blockTargetY));
-	    var dropAction = cc.callFunc(function() {
-		    // extra functionality for when block has finished dropping
-		});
-	    block.stopAllActions();
-	    block.runAction(cc.sequence(moveAction, dropAction));
+		moveAction.setTag(42);
+	    //block.stopAllActions();
+		block.stopActionByTag(42)
+		//block.stopAction(moveAction);
+	    block.runAction(moveAction);
 	},
 
 	// Spawns a block and calls itself in a loop.
