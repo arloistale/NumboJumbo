@@ -57,32 +57,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.scoreValueLabel);
-
-        // Level Labels
-        var levelTitleLabel = new cc.LabelTTF("Level: ", b_getFontName(res.markerFont), NJ.fontSizes.sub);
-        levelTitleLabel.attr({
-            scale: 1.0,
-            anchorX: 0,
-            anchorY: 0.5 + NJ.anchorOffsetY,
-            x: levelStartPos.x,
-            y: levelStartPos.y
-        });
-        levelTitleLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-        levelTitleLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(levelTitleLabel);
-
-        this.levelValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
-        this.levelValueLabel.attr({
-            scale: 1.0,
-            anchorX: 0,
-            anchorY: 0.5 + NJ.anchorOffsetY,
-            x: levelStartPos.x + levelTitleLabel.getContentSize().width,
-            y: levelStartPos.y
-        });
-        this.levelValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-        this.levelValueLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.levelValueLabel);
-
+        
         this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
         this.multiplierLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
