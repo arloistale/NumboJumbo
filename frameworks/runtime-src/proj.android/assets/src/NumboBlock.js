@@ -71,7 +71,7 @@ var NumboBlock = cc.Sprite.extend({
 
         if (this.powerup){
             this.backgroundSprite.setTexture(res.powerupImage);
-            this.schedule(this.removePowerUp, 5);
+            this.schedule(this.removePowerUp, 10);
         }
     },
 

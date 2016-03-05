@@ -1,4 +1,14 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes.dex : \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R$attr.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R$color.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R$dimen.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R$drawable.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R$id.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R$layout.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R$string.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R$style.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R$styleable.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/facebook/R.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/google/android/gms/R$attr.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/google/android/gms/R$color.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/google/android/gms/R$drawable.class \
@@ -12,9 +22,11 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/BuildConfig.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$attr.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$color.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$dimen.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$drawable.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$id.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$integer.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$layout.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$raw.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$string.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$style.class \
@@ -24,6 +36,10 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-2dd3d08347a2718c7beb11102ebde1b4.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-313dd82c243ca1c0130eb97e82293b26.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-f82b87fe6748082e662726569ed126af.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/bolts-android-1.1.2-605f1e3a95ca99ae45ed5d1c2a214612.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginFacebook-591cdbb57d694548a5d1e672890eaaa2.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginGoogleAnalytics-cf74162cea8261d045b5600f0e302bd2.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/android-support-v4-801aff6f4b4872388c67f04e0ed5e55e.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/google-play-services-5ef3f5692ea6a6b0e1822aa8474cb99c.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/sdkbox-38be74be08f901bd111d0d7d63feb93d.jar \

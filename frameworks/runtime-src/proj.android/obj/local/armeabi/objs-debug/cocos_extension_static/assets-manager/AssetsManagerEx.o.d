@@ -11,25 +11,25 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCPlatformConfig.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCPlatformDefine.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCPlatformDefine-android.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/android/log.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEventListener.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/memory \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCRef.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEvent.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCStdC.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCStdC-android.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/math.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdlib.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/alloca.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/strings.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/memory.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/math.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/stdlib.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/alloca.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/strings.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/memory.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCFileUtils.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/ccTypes.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./math/CCGeometry.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/ccMacros.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCConsole.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/select.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/select.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/thread \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/map \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/mutex \
@@ -54,10 +54,10 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./math/Quaternion.inl \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCGL.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCGL-android.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2platform.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/KHR/khrplatform.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2ext.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCValue.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCData.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/extensions/assets-manager/CCEventAssetsManagerEx.h \
@@ -70,7 +70,7 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./../external/json/reader.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./../external/json/rapidjson.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/inttypes.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/inttypes.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./../external/json/internal/pow10.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./../external/json/internal/stack.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/csetjmp \
@@ -100,12 +100,12 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/curl/prebuilt/android/../../include/android/curl/curl.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/curl/prebuilt/android/../../include/android/curl/curlver.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/curl/prebuilt/android/../../include/android/curl/curlbuild.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/socket.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/socket.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/asm/socket.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/asm/sockios.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/sockios.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/uio.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/socket.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/linux/socket.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/asm/socket.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/asm/sockios.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/linux/sockios.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/linux/uio.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/curl/prebuilt/android/../../include/android/curl/curlrules.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/curl/prebuilt/android/../../include/android/curl/easy.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/curl/prebuilt/android/../../include/android/curl/multi.h \
@@ -115,10 +115,10 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCPlatformDefine.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/zlib/prebuilt/android/../../include/zlib.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/zlib/prebuilt/android/../../include/zconf.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/unistd.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/sysconf.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/capability.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/pathconf.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/unistd.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/sysconf.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/linux/capability.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/pathconf.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./../external/unzip/ioapi.h
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/extensions/assets-manager/AssetsManagerEx.h:
@@ -143,7 +143,7 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCPlatformDefine-android.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/android/log.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEventListener.h:
 
@@ -157,15 +157,15 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCStdC-android.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/math.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/math.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdlib.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/stdlib.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/alloca.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/alloca.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/strings.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/strings.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/memory.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/memory.h:
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert:
 
@@ -179,7 +179,7 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCConsole.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/select.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/select.h:
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/thread:
 
@@ -229,13 +229,13 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCGL-android.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2platform.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/KHR/khrplatform.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2ext.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCValue.h:
 
@@ -261,7 +261,7 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/inttypes.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/inttypes.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./../external/json/internal/pow10.h:
 
@@ -321,17 +321,17 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/curl/prebuilt/android/../../include/android/curl/curlbuild.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/socket.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/socket.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/socket.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/linux/socket.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/asm/socket.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/asm/socket.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/asm/sockios.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/asm/sockios.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/sockios.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/linux/sockios.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/uio.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/linux/uio.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/curl/prebuilt/android/../../include/android/curl/curlrules.h:
 
@@ -351,12 +351,12 @@ obj/local/armeabi/objs-debug/cocos_extension_static/assets-manager/AssetsManager
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/external/zlib/prebuilt/android/../../include/zconf.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/unistd.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/unistd.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/sysconf.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/sysconf.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/linux/capability.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/linux/capability.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/pathconf.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/pathconf.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./../external/unzip/ioapi.h:

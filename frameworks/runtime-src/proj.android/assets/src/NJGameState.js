@@ -22,6 +22,13 @@ NJ.gameState = (function() {
     var randomJumbos = false;
     var powerupMode = false;
 
+    var updateMultiplier = function() {
+        if(comboRecords.length > 2)
+            multiplier = 1 + (comboRecords.length - 2) * 0.5;
+        else
+            multiplier = 1;
+    };
+
     return {
 
         ////////////////////
@@ -159,20 +166,13 @@ NJ.gameState = (function() {
 
             comboRecords.push(result);
 
-            this.updateMultiplier();
+            updateMultiplier();
         },
 
         resetMultiplier: function() {
             comboRecords = [];
 
-            this.updateMultiplier();
-        },
-
-        updateMultiplier: function() {
-            if(comboRecords.length > 2)
-                multiplier = 1 + (comboRecords.length - 2) * 0.5;
-            else
-                multiplier = 1;
+            updateMultiplier();
         },
 
         getMultiplier: function() {
