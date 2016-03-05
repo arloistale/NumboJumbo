@@ -71,7 +71,7 @@ var NumboBlock = cc.Sprite.extend({
 
         if (this.powerup){
             this.backgroundSprite.setTexture(res.powerupImage);
-            this.schedule(this.removePowerUp, 5);
+            this.schedule(this.removePowerUp, 10);
         }
     },
 
@@ -102,5 +102,13 @@ var NumboBlock = cc.Sprite.extend({
     // clear sprite highlight
     clearHighlight: function() {
         this.highlightSprite.setVisible(false);
+    },
+
+    jiggleSprite: function(){
+        var scaleDownAction = cc.scaleTo(0.2, 0.5);
+        var scaleUpAction = cc.scaleTo(0.2, 1.0);
+
+        this.runAction(cc.sequence(scaleDownAction, scaleUpAction, scaleDownAction, scaleUpAction));
+
     }
 });

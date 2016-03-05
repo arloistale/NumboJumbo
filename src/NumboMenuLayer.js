@@ -73,7 +73,7 @@ var NumboMenuLayer = cc.Layer.extend({
         scoresButton.setImageRes(res.buttonImage);
         settingsButton.setImageRes(res.buttonImage);
 
-        this._menu = new cc.Menu(playButton, instructionsButton, dummyLabel, scoresButton, settingsButton);
+        this._menu = new cc.Menu(playButton, instructionsButton, dummyLabel, settingsButton);
         this._menu.alignItemsVerticallyWithPadding(15);
         this.addChild(this._menu, 100);
     },
@@ -152,6 +152,63 @@ var NumboMenuLayer = cc.Layer.extend({
                 cc.audioEngine.playMusic(res.menuTrack);
         });
         this.addChild(this._settingsMenuLayer, 999);
+
+    },
+    
+////////////////
+// UI Helpers //
+////////////////
+
+    generateLabel: function(title) {
+        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontSize(48);
+        var toggleLabel = new cc.MenuItemFont(title);
+        toggleLabel.setEnabled(false);
+        toggleLabel.setColor(cc.color(255, 255, 255, 255));
+        return toggleLabel;
+    },
+
+    generateTitleButton: function(title, callback) {
+        var normalSprite = new cc.Sprite(res.buttonImage);
+        var selectedSprite = new cc.Sprite(res.buttonImage);
+        var disabledSprite = new cc.Sprite(res.buttonImage);
+
+        selectedSprite.setColor(cc.color(192, 192, 192, 255));
+        disabledSprite.setColor(cc.color(64, 64, 64, 255));
+
+        var normalLabel = new cc.LabelTTF(title, b_getFontName(res), 32);
+        normalLabel.attr({
+            scale: 1.0,
+            anchorX: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
+            x: normalSprite.getContentSize().width / 2,
+            y: normalSprite.getContentSize().height / 2
+        });
+
+        var selectedLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), 32);
+        selectedLabel.attr({
+            scale: 1.0,
+            anchorX: 0.5,
+            anchorY: 0.9 + NJ.anchorOffsetY,
+            x: selectedSprite.getContentSize().width / 2,
+            y: selectedSprite.getContentSize().height / 2
+        });
+
+        var disabledLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), 32);
+        disabledLabel.attr({
+            scale: 1.0,
+            anchorX: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
+            x: disabledSprite.getContentSize().width / 2,
+            y: disabledSprite.getContentSize().height / 2
+        });
+
+        normalSprite.addChild(normalLabel);
+        selectedSprite.addChild(selectedLabel);
+        disabledSprite.addChild(disabledLabel);
+
+        return new cc.MenuItemSprite(normalSprite, selectedSprite, disabledSprite, callback, this);
+
     }
 });
 

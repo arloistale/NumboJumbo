@@ -73,7 +73,7 @@ var NumboMenuLayer = cc.Layer.extend({
         scoresButton.setImageRes(res.buttonImage);
         settingsButton.setImageRes(res.buttonImage);
 
-        this._menu = new cc.Menu(playButton, instructionsButton, dummyLabel, scoresButton, settingsButton);
+        this._menu = new cc.Menu(playButton, instructionsButton, dummyLabel, settingsButton);
         this._menu.alignItemsVerticallyWithPadding(15);
         this.addChild(this._menu, 100);
     },

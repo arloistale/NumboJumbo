@@ -29,8 +29,12 @@
         "src/Snippet.js",
         "src/NumboBlock.js",
         "src/NumboLevel.js",
-        "src/GameConfig.js",
+        "src/NJConfig.js",
+        "src/NJStats.js",
+        "src/NJDimensions.js",
         "src/NJHelper.js",
+        "src/NJGameState.js",
+        "src/NJSettings.js",
         "src/NumboController.js",
         "src/BackgroundLayer.js"
     ]

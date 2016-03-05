@@ -6,9 +6,11 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 
     // UI Data
     _menu: null,
-    _finalScoreLabel: null,
+    _scoreLabel: null,
+    _bestLabel: null,
 
     // Callbacks Data
+    onRetryCallback: null,
     onMenuCallback: null,
     
 ////////////////////
@@ -26,18 +28,36 @@ var GameOverMenuLayer = cc.LayerColor.extend({
     initUI: function() {
         var that = this;
 
-        var headerLabel = this.generateLabel("OUT OF SPACE!", NJ.fontSizes.header);
+        this._menu = new cc.Menu();
 
-        var finalScoreTitleLabel = this.generateLabel("Final Score");
+        var headerLabel = this.generateLabel(NJ.gameState.getJumbo().name, NJ.fontSizes.header);
+        this._menu.addChild(headerLabel);
 
-        this._finalScoreLabel = this.generateLabel(NJ.stats.score + "", NJ.fontSizes.header2);
+        var scoreTitleLabel = this.generateLabel("Score");
+        this._scoreLabel = this.generateLabel(NJ.gameState.getScore() + "", NJ.fontSizes.header2);
+
+        this._menu.addChild(scoreTitleLabel);
+        this._menu.addChild(this._scoreLabel);
+
+        var bestTitleLabel = this.generateLabel("Best");
+        this._bestLabel = this.generateLabel(NJ.stats.highscore + "", NJ.fontSizes.header2);
+
+        this._menu.addChild(bestTitleLabel);
+        this._menu.addChild(this._bestLabel);
+
+        var retryButton = new MenuTitleButton("Retry", function() {
+            that.onRetry();
+        }, this);
+        retryButton.setImageRes(res.buttonImage);
 
         var menuButton = new MenuTitleButton("Menu", function() {
             that.onMenu();
         }, this);
         menuButton.setImageRes(res.buttonImage);
 
-        this._menu = new cc.Menu(headerLabel, finalScoreTitleLabel, this._finalScoreLabel, menuButton);
+        this._menu.addChild(retryButton);
+        this._menu.addChild(menuButton);
+
         this._menu.alignItemsVerticallyWithPadding(10);
         this.addChild(this._menu, 100);
     },
@@ -45,6 +65,14 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 ///////////////
 // UI Events //
 ///////////////
+
+    onRetry: function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        if(this.onRetryCallback)
+            this.onRetryCallback();
+    },
 
     onMenu: function() {
         if(NJ.settings.sounds)
@@ -58,6 +86,10 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 //////////////////
 // UI Callbacks //
 //////////////////
+
+    setOnRetryCallback: function(callback) {
+        this.onRetryCallback = callback;
+    },
     
     setOnMenuCallback: function(callback) {
         this.onMenuCallback = callback;
@@ -79,6 +111,6 @@ var GameOverMenuLayer = cc.LayerColor.extend({
     setScore: function(score) {
         this._finalScore = Math.floor(score);
 
-        this._finalScoreLabel.setString(this._finalScore);
+        this._scoreLabel.setString(this._finalScore);
     }
 });

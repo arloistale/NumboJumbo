@@ -4,9 +4,6 @@ var NumboHeaderLayer = cc.Layer.extend({
     buttonsMenu: null,
 
     scoreValueLabel: null,
-    levelValueLabel: null,
-
-    blocksToLevelLabel: null,
 
     multiplierLabel: null,
 
@@ -35,14 +32,13 @@ var NumboHeaderLayer = cc.Layer.extend({
         contentSize = this.getContentSize();
 
         // Score Labels
-        var scoreStartPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.75);
-        var levelStartPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.25);
+        var scoreStartPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.5);
 
         var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.markerFont), NJ.fontSizes.sub);
         scoreTitleLabel.attr({
             scale: 1.0,
             anchorX: 0,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: scoreStartPos.x,
             y: scoreStartPos.y
         });
@@ -54,44 +50,19 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: scoreStartPos.x + scoreTitleLabel.getContentSize().width,
             y: scoreStartPos.y
         });
         this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.scoreValueLabel);
-
-        // Level Labels
-        var levelTitleLabel = new cc.LabelTTF("Level: ", b_getFontName(res.markerFont), NJ.fontSizes.sub);
-        levelTitleLabel.attr({
-            scale: 1.0,
-            anchorX: 0,
-            anchorY: 0.5,
-            x: levelStartPos.x,
-            y: levelStartPos.y
-        });
-        levelTitleLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-        levelTitleLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(levelTitleLabel);
-
-        this.levelValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
-        this.levelValueLabel.attr({
-            scale: 1.0,
-            anchorX: 0,
-            anchorY: 0.5,
-            x: levelStartPos.x + levelTitleLabel.getContentSize().width,
-            y: levelStartPos.y
-        });
-        this.levelValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-        this.levelValueLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.levelValueLabel);
-
+        
         this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
         this.multiplierLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
-            anchorY: 0.5,
+            anchorY: 0.5 + NJ.anchorOffsetY,
             x: contentSize.width / 2,
             y: contentSize.height / 2
         });
@@ -109,7 +80,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         var button = new ccui.Button();
         button.attr({
             anchorX: 0.5,
-            anchorY: 0.5
+            anchorY: 0.5 + NJ.anchorOffsetY
         });
         button.setTitleFontName(b_getFontName(res.markerFont));
         button.setTitleFontSize(NJ.fontScalingFactor * NJ.fontSizes.buttonMedium);
@@ -134,18 +105,10 @@ var NumboHeaderLayer = cc.Layer.extend({
 // UI setters //
 ////////////////
 
-    setScoreValue: function(scoreVal, blocksVal, levelVal) {
-        this.scoreValueLabel.setString(scoreVal);
-        //this.blocksToLevelLabel.setString(blocksVal);
-        this.levelValueLabel.setString(levelVal);
-    },
+    updateValues: function() {
+        this.scoreValueLabel.setString(NJ.gameState.getScore());
 
-    setMultiplierValue: function(multVal) {
-        this.multiplierLabel.setString("X " + multVal);
-    },
-
-    getMultiplier: function() {
-        return this.multiplierLabel.getString().substr(2);
+        this.multiplierLabel.setString("x" + NJ.gameState.getMultiplier());
     },
 
 // UI callbacks //
@@ -153,8 +116,4 @@ var NumboHeaderLayer = cc.Layer.extend({
     setOnPauseCallback: function(callback) {
         this.onPauseCallback = callback;
     }
-
-/////////////////
-// UI Builders //
-/////////////////
 });

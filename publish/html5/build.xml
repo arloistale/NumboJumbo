@@ -306,7 +306,7 @@
                 <file name="src/Snippet.js"/>
                 <file name="src/NumboBlock.js"/>
                 <file name="src/NumboLevel.js"/>
-                <file name="src/GameConfig.js"/>
+                <file name="src/NJConfig.js"/>
                 <file name="src/NJHelper.js"/>
                 <file name="src/NumboController.js"/>
                 <file name="src/BackgroundLayer.js"/>

@@ -174,7 +174,8 @@ var FeedbackLayer = cc.Layer.extend({
 
         var titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)],
             x = 0, y = 0,
-            targetX = 0, targetY = 0;
+            targetX = 0, targetY = 0,
+            targetScale = 1;
 
         if(data) {
             if(typeof data.title !== 'undefined')
@@ -191,6 +192,9 @@ var FeedbackLayer = cc.Layer.extend({
 
             if(typeof data.targetY !== 'undefined')
                 targetY = data.targetY;
+
+            if(typeof data.targetScale !== 'undefined')
+                targetScale = data.targetScale;
         }
 
         snippet.setText(titleStr);
@@ -199,7 +203,7 @@ var FeedbackLayer = cc.Layer.extend({
 
         this.addChild(snippet);
 
-        var scaleUpAction = cc.scaleTo(0.2, 1.0, 1.0);
+        var scaleUpAction = cc.scaleTo(0.2, targetScale, targetScale);
         var moveAction = cc.moveTo(1, cc.p(targetX, targetY));
         var fadeOutAction = cc.fadeTo(1, 0);
         var removeAction = cc.callFunc(function() {

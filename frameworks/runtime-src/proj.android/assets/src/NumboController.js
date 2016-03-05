@@ -5,10 +5,8 @@ var NumboController = cc.Class.extend({
 
 	// level data
 	_numboLevel: null,
-
+	_knownPath: [],
 	_selectedBlocks: [],
-
-	comboTimes: [],
 
 	////////////////////
 	// INITIALIZATION //
@@ -22,8 +20,8 @@ var NumboController = cc.Class.extend({
 	    this._numboLevel.init();
 
 		if(NJ.gameState.currentJumboId == "multiple-progression" && NJ.gameState.currentLevel != 1) {
-			for(var i=0; i < NJ.getCurrentJumbo()["numberList"].length; i++) {
-				NJ.getCurrentJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
+			for(var i=0; i < NJ.getJumbo()["numberList"].length; i++) {
+				NJ.getJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
 			}
 			NJ.gameState.currentLevel = 1;
 		}
@@ -33,14 +31,15 @@ var NumboController = cc.Class.extend({
 	},
 
     initJumbo: function() {
-        var jumbo = NJ.getCurrentJumbo();
+        var jumbo = NJ.gameState.getJumbo();
         this.distribution = jumbo.numberList;
         this.spawnTime = jumbo.spawnTime;
     },
 
 	initJumboDistribution: function(){
-		for (var KEY in NJ.jumbos.data.jumbos){
-			this.jumboDistribution.push({key: KEY, weight: NJ.jumbos.data.jumbos[KEY].weight});
+		for (var key in NJ.jumbos.data.jumbos) {
+            if(NJ.jumbos.data.jumbos.hasOwnProperty(key))
+			    this.jumboDistribution.push({key: key, weight: NJ.jumbos.data.jumbos[key].weight});
 		}
 	},
 
@@ -76,6 +75,7 @@ var NumboController = cc.Class.extend({
 			cc.audioEngine.playEffect(res.plopSound);
 
 		return {
+			numSelectedBlocks: this._selectedBlocks.length,
 			currBlock: block,
 			lastBlock: lastBlock
 		};
@@ -122,7 +122,7 @@ var NumboController = cc.Class.extend({
 				}
 			}
 
-			NJ.stats.blocksCleared += selectedBlockCount;
+			NJ.gameState.addBlocksCleared(selectedBlockCount);
 			if(selectedBlockCount > NJ.stats.maxComboLength)
 			    NJ.stats.maxComboLength = selectedBlockCount;
 
@@ -136,14 +136,16 @@ var NumboController = cc.Class.extend({
 			    this._numboLevel.killBlock(this._selectedBlocks[i]);
 
 			this._numboLevel.collapseColumnsToward(lastCol);
-
-			this.updateCombo(Date.now());
 	    }
 
 	    this.deselectAllBlocks();
 
-	    return { cleared: selectedBlockCount, blockSum: blockSum, powerupValue: powerupValue};
+	    return { cleared: selectedBlockCount, blockSum: blockSum, powerupValue: powerupValue };
 	},
+
+    clearRows: function(num) {
+        this._numboLevel.clearBottomRows(num);
+    },
 
 	// drop block into random column with random value
 	// must define block size in terms of world coordinates
@@ -175,8 +177,7 @@ var NumboController = cc.Class.extend({
 			}
 		}
 
-	    var block = this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
-		return block;
+	    return this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
 	},
 
 	pathLengthIsTwoCriteria: function(path) {
@@ -191,7 +192,7 @@ var NumboController = cc.Class.extend({
 		var sum = 0;
 		for (var i = 0; i < path.length - 1; ++i)
 			sum += path[i].val;
-		return sum == path[path.length].val;
+		return path.length > 2 && sum == path[path.length - 1].val;
 	},
 
 	meanderSearch: function(col, row, criteria, path) {
@@ -200,15 +201,37 @@ var NumboController = cc.Class.extend({
 			return path;
 
 		for (var i in neighbors){
+			if(!neighbors.hasOwnProperty(i))
+				continue;
+
 			var block = neighbors[i];
-			if (block && path.indexOf(block) < 0){
+			if (block && path.indexOf(block) < 0) {
 				var newPath = path.slice(0);
 				newPath.push(block);
 				return this.meanderSearch(block.col, block.row, criteria, newPath);
 			}
 		}
+
+		return [];
 	},
 
+	findHint: function() {
+		var tries = 50; // try no more than 50 times
+		while (tries > 0 && this._knownPath.length == 0) {
+			var block = this._numboLevel.getRandomBlock();
+			this._knownPath = this.meanderSearch(block.col, block.row, this.sumsToCriteria, [block]);
+
+			--tries;
+		}
+
+		cc.log("tries: " + (50 - tries));
+
+		return this._knownPath;
+	},
+
+	resetKnownPath: function(){
+		this._knownPath = [];
+	},
 
 	////////////
 	// COMBOS //
@@ -216,7 +239,7 @@ var NumboController = cc.Class.extend({
 
 	updateRandomJumbo: function() {
 	 	NJ.chooseJumbo(NJ.weightedRandom(this.jumboDistribution));
-		var jumbo = NJ.getCurrentJumbo();
+		var jumbo = NJ.getJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
 	},
@@ -224,7 +247,7 @@ var NumboController = cc.Class.extend({
 	updateJumboTo: function(jumboString){
 
 		NJ.chooseJumbo(jumboString);
-		var jumbo = NJ.getCurrentJumbo();
+		var jumbo = NJ.getJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
 	},
@@ -233,19 +256,21 @@ var NumboController = cc.Class.extend({
 	updateMultipleProgression: function() {
 		// Get possible factors based on level
 		var possibleFactors = null;
-		if(NJ.stats.level == 3)
+        var level = NJ.gameState.getLevel();
+
+		if(level == 3)
 			possibleFactors = [2,3,4];
-		else if(NJ.stats.level == 5)
+		else if(level == 5)
 			possibleFactors = [4,5,6];
-		else if(NJ.stats.level == 7)
+		else if(level == 7)
 			possibleFactors = [6,7,8,10];
-		else if(NJ.stats.level == 9)
+		else if(level == 9)
 			possibleFactors = [8,9,10];
-		else if(NJ.stats.level == 10)
+		else if(level == 10)
 			possibleFactors = [7,8,9,11];
-		else if(NJ.stats.level == 11 || NJ.stats.level == 12)
+		else if(level == 11 || level == 12)
 			possibleFactors = [9,12,13];
-		else if(NJ.stats.level > 12)
+		else if(level > 12)
 			possibleFactors = [12,13,14,15];
 
 		if(possibleFactors != null) {
@@ -253,35 +278,16 @@ var NumboController = cc.Class.extend({
 			var factor = NJ.gameState.currentLevel;
 			while(factor == NJ.gameState.currentLevel)
 				factor = possibleFactors[Math.floor(Math.random()*possibleFactors.length)];
-			for(var i=0; i < NJ.getCurrentJumbo()["numberList"].length; i++) {
-				NJ.getCurrentJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
-				NJ.getCurrentJumbo()["numberList"][i].key *= factor;
+			for(var i=0; i < NJ.getJumbo()["numberList"].length; i++) {
+				NJ.getJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
+				NJ.getJumbo()["numberList"][i].key *= factor;
 			}
 
 			// Update the blocks currently on the board.
 			this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
 			this._numboLevel.multiplyBlocksBy(factor);
-			NJ.gameState.currentLevel = factor;
-		}
-	},
-
-	updateCombo: function(time) {
-		if(this.comboTimes.length == 0)
-			this.comboTimes.push(time);
-		else if((time - this.comboTimes[this.comboTimes.length-1])/1000 < 5) {
-			this.comboTimes.push(time);
-			if(this.comboTimes.length > 2)
-				NJ.gameState.multiplier = 1 + (this.comboTimes.length-2)*.5;
-		}
-		else this.comboTimes = [time];
-	},
-
-	checkMultiplier: function() {
-		if(this.comboTimes.length > 0) {
-			if((Date.now() - this.comboTimes[this.comboTimes.length-1])/1000 > 5) {
-				this.comboTimes = [];
-				NJ.gameState.multiplier = 1;
-			}
+            // TODO: What the flying fuck is this????
+			//NJ.gameState.currentLevel = factor;
 		}
 	},
 
@@ -310,13 +316,9 @@ var NumboController = cc.Class.extend({
 		return 0;
 	},
 
-	clearRows: function(num) {
-		this._numboLevel.clearBottomRows(num);
-	},
-
 	// a scaling factor to reduce spawn time on higher levels
 	getSpawnConst: function() {
-		var L = NJ.stats.level;
+		var L = NJ.gameState.getLevel();
 		return 0.3 + 2/Math.pow(L, 1/2);
 	    //return 1 + 2/L;
 	},

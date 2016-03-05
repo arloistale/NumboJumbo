@@ -20,7 +20,7 @@ var BackgroundLayer = cc.Layer.extend({
         this.initDynamicSprites(dynamicSprites);
         this.initDuplicateSprites(dynamicSprites);
 
-        this.schedule(this.updateBackground, 0.01);
+        //this.schedule(this.updateBackground, 0.01);
     },
 
     // Initialize sprites which serve as a background - do not change.
@@ -171,7 +171,7 @@ var BackgroundLayer = cc.Layer.extend({
 
     updateBackgroundColor: function() {
         var newColor = cc.color(255, 255, 255, 255);
-        var level = NJ.gameState.currentLevel % 6;
+        var level = NJ.gameState.getLevel() % 6;
         if(level == 1)
             newColor = cc.color(0, 0, 255, 255);
         if(level == 2)
@@ -185,7 +185,7 @@ var BackgroundLayer = cc.Layer.extend({
         else if(level == 6)
             newColor = cc.color(0, 255, 204, 255);
 
-        console.log("Level Color " + NJ.gameState.currentLevel);
+        //cc.log("Level Color " + NJ.gameState.currentLevel);
         for(var i=0; i<this.dynamicLayers.length; i++) {
             this.dynamicLayers[i].setColor(newColor);
             for(var j=0; j<this.duplicateLayers[i].length; j++)
