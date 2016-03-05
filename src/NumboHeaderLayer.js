@@ -58,8 +58,6 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.scoreValueLabel);
 
-<<<<<<< HEAD
-=======
         // Level Labels
         var levelTitleLabel = new cc.LabelTTF("Level: ", b_getFontName(res.markerFont), NJ.fontSizes.sub);
         levelTitleLabel.attr({
@@ -85,7 +83,6 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.levelValueLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.levelValueLabel);
 
->>>>>>> 9b689a554ba4439ffecc4d552368165f17e95e91
         this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
         this.multiplierLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
