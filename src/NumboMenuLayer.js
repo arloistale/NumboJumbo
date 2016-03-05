@@ -161,6 +161,7 @@ var NumboMenuLayer = (function() {
             if(NJ.settings.music)
                 cc.audioEngine.playMusic(res.menuTrack);
         });
+
         this.addChild(settingsMenuLayer, 999);
     };
 

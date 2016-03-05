@@ -25,7 +25,9 @@ var JumboMenuLayer = cc.LayerColor.extend({
     initUI: function() {
         var sp = new cc.Sprite(res.loading_png);
         sp.anchorX = 0;
-        sp.anchorY = 0;
+        sp.anchorY = 0 + NJ.anchorOffsetY;
+        sp.scale = NJ.SCALE;
+
         this.addChild(sp, 0, 1);
 
         var that = this;
@@ -111,7 +113,9 @@ var JumboMenuLayer = cc.LayerColor.extend({
     generateLabel: function(title) {
         cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
         cc.MenuItemFont.setFontSize( NJ.fontSizes.header);
+
         var toggleLabel = new cc.MenuItemFont(title);
+
         toggleLabel.setEnabled(false);
         toggleLabel.setColor(cc.color(255, 255, 255, 255));
         return toggleLabel;
