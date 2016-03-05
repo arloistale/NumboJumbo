@@ -1,35 +1,20 @@
 
-var NumboMenuLayer = cc.Layer.extend({
+var NumboMenuLayer = (function() {
 
-    _menu: null,
-    _jumboMenuLayer: null,
-    _instructionsLayer: null,
-    _scoresLayer: null,
-    _settingsMenuLayer: null,
-    
-////////////////////
-// Initialization //
-////////////////////
+    var menu = null;
+    var jumboMenuLayer = null;
+    var instructionsLayer = null;
+    var scoresLayer = null;
+    var settingsMenuLayer = null;
 
-    ctor: function () {
-        this._super();
+    var loginButton = null;
 
-        //cc.spriteFrameCache.addSpriteFrames(res.textureTransparentPack_plist);
-
-        /*
-        var sp = new cc.Sprite(res.loading_png);
-        sp.anchorX = 0;
-        sp.anchorY = 0;
-        sp.scale = NJ.SCALE;
-        this.addChild(sp, 0, 1);
-*/
-        this.initBackground();
-        this.initUI();
-        this.initAudio();
-    },
+    //////////////////////////
+    // Extra Initialization //
+    //////////////////////////
 
     // initialize background for menu
-    initBackground: function() {
+    var initBackground = function() {
         var backgroundSprite = new cc.Sprite(res.backgroundImage);
         backgroundSprite.attr({
             x: cc.visibleRect.center.x,
@@ -44,54 +29,58 @@ var NumboMenuLayer = cc.Layer.extend({
         var rotatePoint = new cc.RotateBy(250, 360); // <- Rotate the node by 360 degrees in 5 seconds.
         var rotateForever = new cc.RepeatForever(rotatePoint); // <- Keeps the node rotating forever.
         backgroundSprite.runAction(rotateForever);
-    },
+    };
 
     // initialize menu elements
-    initUI: function() {
+    var initUI = function() {
+        menu = new cc.Menu();
+
         var that = this;
 
-        var playButton = new MenuTitleButton("Play!", function() {
-            that.onPlay();
-        }, this);
+        var playButton = new MenuTitleButton("Play!", onPlay.bind(this), this);
+        playButton.setImageRes(res.buttonImage);
+        menu.addChild(playButton);
 
-        var instructionsButton = new MenuTitleButton("How?", function() {
-            that.onInstructions();
-        }, this);
+        var instructionsButton = new MenuTitleButton("How?", onInstructions.bind(this), this);
+        instructionsButton.setImageRes(res.buttonImage);
+        menu.addChild(instructionsButton);
 
         var dummyLabel = new cc.MenuItemFont(" ");
+        menu.addChild(dummyLabel);
 
-        var scoresButton = new MenuTitleButton("Scores", function() {
-            that.onScores();
-        }, this);
+        loginButton = new MenuTitleButton("Connect", onLogin.bind(this), this);
+        loginButton.setImageRes(res.buttonImage);
+        toggleLoginButton();
 
-        var settingsButton = new MenuTitleButton("Settings", function() {
-            that.onSettings();
-        }, this);
+        menu.addChild(loginButton);
 
-        playButton.setImageRes(res.buttonImage);
-        instructionsButton.setImageRes(res.buttonImage);
+        var scoresButton = new MenuTitleButton("Scores", onScores.bind(this), this);
         scoresButton.setImageRes(res.buttonImage);
-        settingsButton.setImageRes(res.buttonImage);
+        //menu.addChild(scoresButton);
 
-        this._menu = new cc.Menu(playButton, instructionsButton, dummyLabel, settingsButton);
-        this._menu.alignItemsVerticallyWithPadding(15);
-        this.addChild(this._menu, 100);
-    },
+        var settingsButton = new MenuTitleButton("Settings", onSettings.bind(this), this);
+        settingsButton.setImageRes(res.buttonImage);
+        menu.addChild(settingsButton);
+
+        menu.alignItemsVerticallyWithPadding(15);
+
+        this.addChild(menu, 100);
+    };
 
     // initialize game audio
-    initAudio: function() {
+    var initAudio = function() {
         if(!NJ.settings.music)
             return;
 
         cc.audioEngine.setMusicVolume(NJ.MUSIC_VOLUME);
         cc.audioEngine.playMusic(res.menuTrack, true);
-    },
+    };
 
-///////////////
-// UI Events //
-///////////////
+    ///////////////
+    // UI Events //
+    ///////////////
 
-    onPlay: function() {
+    var onPlay = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
 
@@ -104,56 +93,115 @@ var NumboMenuLayer = cc.Layer.extend({
             that.removeChild(that._jumboMenuLayer);
         });
         this.addChild(this._jumboMenuLayer, 999);
-    },
+    };
 
-    onInstructions: function() {
+    var onInstructions = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
 
         var that = this;
 
         cc.eventManager.pauseTarget(this, true);
-        this._instructionsLayer = new InstructionsLayer();
-        this._instructionsLayer.setOnCloseCallback(function() {
+        instructionsLayer = new InstructionsLayer();
+        instructionsLayer.setOnCloseCallback(function() {
             cc.eventManager.resumeTarget(that, true);
-            that.removeChild(that._instructionsLayer);
+            that.removeChild(instructionsLayer);
         });
-        this.addChild(this._instructionsLayer, 999);
-    },
+        this.addChild(instructionsLayer, 999);
+    };
 
-    onScores: function() {
+    var onLogin = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
 
         var that = this;
 
-        cc.eventManager.pauseTarget(this, true);
-        this._scoresLayer = new ScoresLayer();
-        this._scoresLayer.setOnCloseCallback(function() {
-            cc.eventManager.resumeTarget(that, true);
-            that.removeChild(that._scoresLayer);
+        NJ.social.facebookLogin(function(error, user) {
+            cc.log("Logged in successfully: " + user);
+
+            toggleLoginButton();
         });
-        this.addChild(this._scoresLayer, 999);
-    },
+    };
 
-    onSettings: function() {
+    var onLogout = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
-            
+
+        NJ.social.facebookLogout();
+        toggleLoginButton();
+    };
+
+    var onScores = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
         var that = this;
 
         cc.eventManager.pauseTarget(this, true);
-        this._settingsMenuLayer = new SettingsMenuLayer();
-        this._settingsMenuLayer.setOnCloseCallback(function() {
+        scoresLayer = new ScoresLayer();
+        scoresLayer.setOnCloseCallback(function() {
             cc.eventManager.resumeTarget(that, true);
-            that.removeChild(that._settingsMenuLayer);
+            that.removeChild(scoresLayer);
+        });
+        this.addChild(scoresLayer, 999);
+    };
+
+    var onSettings = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        var that = this;
+
+        cc.eventManager.pauseTarget(this, true);
+        settingsMenuLayer = new SettingsMenuLayer();
+        settingsMenuLayer.setOnCloseCallback(function() {
+            cc.eventManager.resumeTarget(that, true);
+            that.removeChild(settingsMenuLayer);
 
             if(NJ.settings.music)
                 cc.audioEngine.playMusic(res.menuTrack);
         });
-        this.addChild(this._settingsMenuLayer, 999);
-    }
-});
+        this.addChild(settingsMenuLayer, 999);
+    };
+
+    ////////////////
+    // UI Helpers //
+    ////////////////
+
+    // toggles login based on whether user is currently connected to facebook
+    var toggleLoginButton = function() {
+        if(NJ.social.isLoggedIn()) {
+            loginButton.setTitle("Logout");
+            loginButton.setCallback(onLogout.bind(this), this);
+        } else {
+            loginButton.setTitle("Connect");
+            loginButton.setCallback(onLogin.bind(this), this);
+        }
+    };
+
+    return cc.Layer.extend({
+
+        ////////////////////
+        // Initialization //
+        ////////////////////
+
+        ctor: function () {
+            this._super();
+
+            /*
+             var sp = new cc.Sprite(res.loading_png);
+             sp.anchorX = 0;
+             sp.anchorY = 0;
+             sp.scale = NJ.SCALE;
+             this.addChild(sp, 0, 1);
+             */
+
+            initBackground.bind(this)();
+            initUI.bind(this)();
+            initAudio.bind(this)();
+        }
+    });
+}());
 
 NumboMenuLayer.scene = function () {
     var scene = new cc.Scene();
