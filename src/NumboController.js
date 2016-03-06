@@ -372,6 +372,8 @@ var NumboController = cc.Class.extend({
 		for(var i=0; i<selectedBlocksLength-1; ++i) {
 			if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i+1]))
 				return false;
+		}
+		for(var i=0; i<selectedBlocksLength; ++i) {
 			sum += this._selectedBlocks[i].val;
 			max = Math.max(this._selectedBlocks[i].val, max);
 		}
