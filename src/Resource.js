@@ -14,7 +14,7 @@ if(!cc.sys.isNative) {
 var res = {
     // Fonts
     markerFont: {
-        name: "Marker Felt",
+        name: "MarkerFelt",
         src: resRoot + "Fonts/MarkerFelt.ttf",
         firefoxName: "MarkerFelt-Regular",
         firefoxSrc: resRoot + "Fonts/MarkerFelt-Regular.ttf"

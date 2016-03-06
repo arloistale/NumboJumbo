@@ -30,6 +30,7 @@
         "src/NumboBlock.js",
         "src/NumboLevel.js",
         "src/NJConfig.js",
+        "src/NJSocial.js",
         "src/NJStats.js",
         "src/NJDimensions.js",
         "src/NJHelper.js",

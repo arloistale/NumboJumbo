@@ -3,13 +3,19 @@
  */
 
 var MenuTitleButton = cc.MenuItemSprite.extend({
+    normalLabel: null,
+    selectedLabel: null,
+    disabledLabel: null,
+
     normalSprite: null,
     selectedSprite: null,
     disabledSprite: null,
 
     // assumes title is defined
     ctor: function(title, callback, target) {
-        var size = cc.size((NJ.fontSizes.buttonMedium + 10) * 2.875, NJ.fontSizes.buttonMedium + 10);
+        cc.assert(title && title.length, "Menu Button must have a title");
+
+        var size = cc.size(NJ.fontSizes.buttonMedium / NJ.fontScalingFactor * title.length + 10, NJ.fontSizes.buttonMedium + 10);
 
         this.normalSprite = new cc.Sprite();
         this.selectedSprite = new cc.Sprite();
@@ -19,8 +25,8 @@ var MenuTitleButton = cc.MenuItemSprite.extend({
         this.selectedSprite.setContentSize(size.width, size.height);
         this.disabledSprite.setContentSize(size.width, size.height);
 
-        var normalLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontScalingFactor*NJ.fontSizes.buttonMedium);
-        normalLabel.attr({
+        this.normalLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontScalingFactor*NJ.fontSizes.buttonMedium);
+        this.normalLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
             anchorY: 0.5 + NJ.anchorOffsetY,
@@ -28,8 +34,8 @@ var MenuTitleButton = cc.MenuItemSprite.extend({
             y: size.height / 2
         });
 
-        var selectedLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontScalingFactor*NJ.fontSizes.buttonMedium);
-        selectedLabel.attr({
+        this.selectedLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontScalingFactor*NJ.fontSizes.buttonMedium);
+        this.selectedLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
             anchorY: 0.5 + NJ.anchorOffsetY,
@@ -37,8 +43,8 @@ var MenuTitleButton = cc.MenuItemSprite.extend({
             y: size.height / 2
         });
 
-        var disabledLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontScalingFactor*NJ.fontSizes.buttonMedium);
-        disabledLabel.attr({
+        this.disabledLabel = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontScalingFactor*NJ.fontSizes.buttonMedium);
+        this.disabledLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
             anchorY: 0.5 + NJ.anchorOffsetY,
@@ -46,11 +52,17 @@ var MenuTitleButton = cc.MenuItemSprite.extend({
             y: size.height / 2
         });
 
-        this.normalSprite.addChild(normalLabel, 1);
-        this.selectedSprite.addChild(selectedLabel, 1);
-        this.disabledSprite.addChild(disabledLabel, 1);
+        this.normalSprite.addChild(this.normalLabel, 1);
+        this.selectedSprite.addChild(this.selectedLabel, 1);
+        this.disabledSprite.addChild(this.disabledLabel, 1);
 
         this._super(this.normalSprite, this.selectedSprite, this.disabledSprite, callback, target);
+    },
+
+    setTitle: function(title) {
+        this.normalLabel.setString(title);
+        this.selectedLabel.setString(title);
+        this.disabledLabel.setString(title);
     },
 
     setImageRes: function(res) {

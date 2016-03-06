@@ -78,6 +78,7 @@ NJ.sendAnalytics = function() {
 
 NJ.logStats = function() {
     var statsStr = "Here are stats...\n";
+    statsStr += "Jumbo: " + NJ.gameState.getJumbo().name + "\n";
     statsStr += "Start Time: " + NJ.gameState.getStartTime() + "\n";
 
     for(var key in NJ.stats) {
