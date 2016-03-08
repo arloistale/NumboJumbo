@@ -368,16 +368,21 @@ var NumboController = cc.Class.extend({
 		*/
 
 		var sum=0;
-		var max=0;
+		//var max=0;
+		/*
 		for(var i=0; i<selectedBlocksLength-1; ++i) {
 			if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i+1]))
 				return false;
-		}
-		for(var i=0; i<selectedBlocksLength; ++i) {
+		}*/
+		for(var i=0; i<selectedBlocksLength - 1; ++i) {
+			if (!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
+				return false;
+
 			sum += this._selectedBlocks[i].val;
-			max = Math.max(this._selectedBlocks[i].val, max);
+			//max = Math.max(this._selectedBlocks[i].val, max);
 		}
-		sum -= max;
-		return sum == max;
+		//sum -= max;
+
+		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
 	}
 });
