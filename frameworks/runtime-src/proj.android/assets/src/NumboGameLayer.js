@@ -171,11 +171,13 @@ var NumboGameLayer = cc.Layer.extend({
 		});
 
 		var refDim = Math.min(playableRect.width, playableRect.height);
+        var levelPadding = refDim * 0.02;
+        var safeDim = refDim - levelPadding * 2;
+        var cellSize = Math.min(safeDim / NJ.NUM_COLS, safeDim / NJ.NUM_ROWS);
 
-		var levelPadding = refDim * 0.02;
-		var levelDims = cc.size(refDim - levelPadding * 2, refDim - levelPadding * 2);
+		var levelDims = cc.size(cellSize * NJ.NUM_COLS, cellSize * NJ.NUM_ROWS);
 		var levelOrigin = cc.p(playableRect.x + playableRect.width / 2 - levelDims.width / 2, playableRect.y + playableRect.height / 2 - levelDims.height / 2);
-		this._levelCellSize = cc.size(levelDims.width / NJ.NUM_COLS, levelDims.height / NJ.NUM_ROWS);
+		this._levelCellSize = cc.size(cellSize, cellSize);
 		this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
 
 		// initialize rectangle around level
@@ -365,6 +367,10 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Halts game, switches to game over, sends data.
 	onGameOver: function() {
+
+		if(NJ.stats.offerHighscore(NJ.gameState.getScore()))
+			NJ.stats.save();
+
 	    // first send the analytics for the current game session
 	    NJ.sendAnalytics();
                                      
@@ -652,10 +658,12 @@ var NumboGameLayer = cc.Layer.extend({
 		this._selectedLinesNode.clear();
 
 		var selectedBlocks = this._numboController.getSelectedBlocks();
-
+        var first, second;
 		for(var i = 0; i < selectedBlocks.length - 1; i++) {
-			this._selectedLinesNode.drawSegment(cc.p(selectedBlocks[i].x, selectedBlocks[i].y),
-				cc.p(selectedBlocks[i + 1].x, selectedBlocks[i + 1].y), 2, cc.color.white);
+            first = selectedBlocks[i], second = selectedBlocks[i + 1];
+
+			this._selectedLinesNode.drawSegment(this.convertLevelCoordsToPoint(first.col, first.row),
+				this.convertLevelCoordsToPoint(second.col, second.row), 2, cc.color.white);
 		}
 	},
 
@@ -686,5 +694,12 @@ var NumboGameLayer = cc.Layer.extend({
 	    }
 
 	    return null;
+	},
+
+	// attempt to convert level coords to point
+	convertLevelCoordsToPoint: function(col, row) {
+        return cc.p(this._levelBounds.x + (col + 0.5) * this._levelCellSize.width,
+            this._levelBounds.y + (row + 0.5) * this._levelCellSize.height);
+
 	}
 });

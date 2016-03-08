@@ -37,7 +37,7 @@ NJ.gameState = (function() {
 
         // init game state for a new session
         init: function () {
-            // this in this case is bound to
+            // this in this case is bound
             this.reset();
 
             startTime = Date.now();
@@ -48,10 +48,11 @@ NJ.gameState = (function() {
         reset: function () {
             currentScore = 0;
             currentLevel = 1;
-            multiplier = 1;
             randomJumbos = false;
             powerupMode = false;
             blocksCleared = 0;
+
+            this.resetMultiplier();
         },
 
         //////////////////
