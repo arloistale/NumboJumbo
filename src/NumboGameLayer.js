@@ -367,6 +367,11 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Halts game, switches to game over, sends data.
 	onGameOver: function() {
+		NJ.stats.addCurrency(NJ.gameState.getScore());
+		NJ.stats.offerHighscore(NJ.gameState.getScore());
+
+		NJ.stats.save();
+
 	    // first send the analytics for the current game session
 	    NJ.sendAnalytics();
                                      
