@@ -28,7 +28,7 @@ NJ.sendAnalytics = function() {
         ga('set', 'dimension2', jumboName);
         ga('set', 'metric1', NJ.gameState.getBlocksCleared());
         ga('set', 'metric2', sessionLength);
-        ga('set', 'metric3', NJ.stats.maxComboLength);
+        //ga('set', 'metric3', NJ.stats.maxComboLength);
         ga('set', 'metric4', NJ.gameState.getLevel());
         ga('set', 'metric5', NJ.gameState.getScore());
 
@@ -38,7 +38,7 @@ NJ.sendAnalytics = function() {
         sdkbox.PluginGoogleAnalytics.setDimension(2, jumboName);
         sdkbox.PluginGoogleAnalytics.setMetric(1, NJ.gameState.getBlocksCleared());
         sdkbox.PluginGoogleAnalytics.setMetric(2, sessionLength);
-        sdkbox.PluginGoogleAnalytics.setMetric(3, NJ.stats.maxComboLength);
+        //sdkbox.PluginGoogleAnalytics.setMetric(3, NJ.stats.maxComboLength);
         sdkbox.PluginGoogleAnalytics.setMetric(4, NJ.gameState.getLevel());
         sdkbox.PluginGoogleAnalytics.setMetric(5, NJ.gameState.getScore());
 
