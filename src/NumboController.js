@@ -354,6 +354,7 @@ var NumboController = cc.Class.extend({
 
 		// all blocks must be sequentially adjacent
 
+		/*
 		var sum = 0;
 
 		for (var i = 0; i < selectedBlocksLength - 1; ++i) {
@@ -364,5 +365,19 @@ var NumboController = cc.Class.extend({
 		}
 
 		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
+		*/
+
+		var sum=0;
+		var max=0;
+		for(var i=0; i<selectedBlocksLength-1; ++i) {
+			if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i+1]))
+				return false;
+		}
+		for(var i=0; i<selectedBlocksLength; ++i) {
+			sum += this._selectedBlocks[i].val;
+			max = Math.max(this._selectedBlocks[i].val, max);
+		}
+		sum -= max;
+		return sum == max;
 	}
 });
