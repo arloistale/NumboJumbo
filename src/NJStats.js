@@ -5,6 +5,7 @@
 var NJ = NJ || {};
 
 NJ.stats = {
+    currency: 0,
     highscore: 0,
 
     // calculated stats
