@@ -25,7 +25,7 @@ var ScoresLayer = cc.LayerColor.extend({
     initUI: function() {
         var sp = new cc.Sprite(res.loading_png);
         sp.anchorX = 0;
-        sp.anchorY = 0;
+        sp.anchorY = 0 + NJ.anchorOffsetY;
         sp.scale = NJ.SCALE;
         this.addChild(sp, 0, 1);
 

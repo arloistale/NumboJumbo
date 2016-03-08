@@ -49,6 +49,8 @@ cc.game.onStart = function() {
     NJ.loadStats();
 
     NJ.initAnalytics();
+
+    NJ.social.init();
     
     // load resources
     cc.LoaderScene.preload(g_menu, function () {
