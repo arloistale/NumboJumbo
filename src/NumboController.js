@@ -165,8 +165,10 @@ var NumboController = cc.Class.extend({
 		if  (NJ.gameState.powerupMode && (Math.random() < 0.25) ) {// 5% chance
 			if (Math.random() < 0.50) // 50%
 				powerup = 'clearAndSpawn';
-			else
+			else {
+				// TODO: make this a temporary thing (ie, set a schedule to change jumbo back)
 				powerup = 'changeJumbo';
+			}
 		}
 
 		if (powerup) {
@@ -258,6 +260,7 @@ var NumboController = cc.Class.extend({
 		this.spawnTime = jumbo.spawnTime;
 	},
 
+
 	// updates the board/distribution given the mode is Multiple Progression
 	updateMultipleProgression: function() {
 		// Get possible factors based on level
@@ -292,8 +295,6 @@ var NumboController = cc.Class.extend({
 			// Update the blocks currently on the board.
 			this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
 			this._numboLevel.multiplyBlocksBy(factor);
-            // TODO: What the flying fuck is this????
-			//NJ.gameState.currentLevel = factor;
 		}
 	},
 
@@ -326,7 +327,6 @@ var NumboController = cc.Class.extend({
 	getSpawnConst: function() {
 		var L = NJ.gameState.getLevel();
 		return 0.3 + 2/Math.pow(L, 1/2);
-	    //return 1 + 2/L;
 	},
 
 	getNumBlocks: function(){

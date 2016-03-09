@@ -73,7 +73,7 @@ var NumboBlock = cc.Sprite.extend({
         this.valueLabel.setString(val + "");
 
         if (this.powerup){
-            this.schedule(this.blink);
+            this.schedule(this.blink, 0.05);
         }
 
         if (this.powerup == 'clearAndSpawn'){
@@ -94,7 +94,7 @@ var NumboBlock = cc.Sprite.extend({
         this.colorIndex += 1;
         this.colorIndex %= NumboBlock.selectionColors.length;
         this.highlight(NumboBlock.selectionColors[this.colorIndex]);
-        this.schedule(this.blink, 0.05);
+
     },
 
     removePowerUp: function(){
