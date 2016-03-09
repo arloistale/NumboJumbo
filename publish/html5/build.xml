@@ -291,7 +291,7 @@
             <sources dir="${basedir}">
                 <file name="src/DateExtensions.js"/>
                 <file name="src/Resource.js"/>
-                <file name="src/JumboDistributions.js"/>
+                <file name="src/NJJumbos.js"/>
                 <file name="src/ScoresLayer.js"/>
                 <file name="src/NumboMenuLayer.js"/>
                 <file name="src/InstructionsLayer.js"/>

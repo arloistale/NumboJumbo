@@ -1,6 +1,5 @@
 var NumboController = cc.Class.extend({
 	distribution: [],
-	jumboDistribution: [],
 	spawnTime: 1.0,
 
 	// level data
@@ -27,7 +26,6 @@ var NumboController = cc.Class.extend({
 		}
 
         this.initJumbo();
-		this.initJumboDistribution();
 	},
 
     initJumbo: function() {
@@ -35,13 +33,6 @@ var NumboController = cc.Class.extend({
         this.distribution = jumbo.numberList;
         this.spawnTime = jumbo.spawnTime;
     },
-
-	initJumboDistribution: function(){
-		for (var key in NJ.jumbos.data.jumbos) {
-            if(NJ.jumbos.data.jumbos.hasOwnProperty(key))
-			    this.jumboDistribution.push({key: key, weight: NJ.jumbos.data.jumbos[key].weight});
-		}
-	},
 
 	/////////////////////////////
 	// SELECTION FUNCTIONALITY //
@@ -365,7 +356,8 @@ var NumboController = cc.Class.extend({
 		for(i = 0; i < selectedBlocksLength; ++i)
 			sum += this._selectedBlocks[i].val;
 
-		for(i = 0; i <selectedBlocksLength; ++i) {
+
+		for(i = 0; i < selectedBlocksLength; ++i) {
 			if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val)
 				return true;
 		}

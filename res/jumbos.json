@@ -1,10 +1,4 @@
 {
-  "jumboMap": {
-    "1": "one-mania",
-    "5": "fives",
-    "8": "fibonacci",
-    "9": "normal"
-  },
   "jumbos": {
     "basic": {
       "name": "Basic",

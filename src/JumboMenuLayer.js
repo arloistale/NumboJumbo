@@ -37,20 +37,20 @@ var JumboMenuLayer = cc.LayerColor.extend({
         this._menu.addChild(jumboTitleLabel);
 
         // get possible jumbos
+        var jumbosList = NJ.jumbos.getJumbosList();
+        var jumbo;
         var jumboButton = null;
         var jumboName = "";
         var jumboDifficulty = "";
-        for(var key in NJ.jumbos.data.jumbos) {
-            if(!NJ.jumbos.data.jumbos.hasOwnProperty(key))
-                continue;
-
-            jumboName = NJ.jumbos.data.jumbos[key].name;
-            jumboDifficulty = NJ.jumbos.data.jumbos[key].difficulty;
+        for(var i = 0; i < jumbosList.length; i++) {
+            jumbo = jumbosList[i];
+            jumboName = jumbo.name;
+            jumboDifficulty = jumbo.difficulty;
 
             // here we create a callback for each button and bind the associated jumbo id to the callback
             jumboButton = this.generateJumboButton(jumboName, jumboDifficulty, (function(jumboId) {
                 return function() { that.onChoose(jumboId) };
-            })(key));
+            })(jumbo.key));
 
             this._menu.addChild(jumboButton);
         }

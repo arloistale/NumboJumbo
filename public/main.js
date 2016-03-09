@@ -45,17 +45,22 @@ cc.game.onStart = function() {
 
     // load settings
     NJ.loadSettings();
-    NJ.loadJumbosFromJSON();
-    NJ.stats.load();
-
     NJ.initAnalytics();
 
     NJ.social.init();
-    
-    // load resources
-    cc.LoaderScene.preload(g_menu, function () {
-        cc.director.runScene(NumboMenuLayer.scene());
-    }, this);
+
+    NJ.stats.load();
+
+    // load jumbos then we're good to go
+    var that = this;
+    NJ.jumbos.load(function(error) {
+        cc.assert(error === null, "Problem loading jumbos");
+
+        // load resources
+        cc.LoaderScene.preload(g_menu, function () {
+            cc.director.runScene(NumboMenuLayer.scene());
+        }, that);
+    });
 };
 
 cc.game.run();
