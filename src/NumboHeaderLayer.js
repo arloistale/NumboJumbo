@@ -10,6 +10,8 @@ var NumboHeaderLayer = cc.Layer.extend({
     // callback
     onPauseCallback: null,
 
+    draw: null,
+
     ctor: function() {
         this._super();
 

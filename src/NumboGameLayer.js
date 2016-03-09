@@ -25,6 +25,9 @@ var NumboGameLayer = cc.Layer.extend({
 	// Selection Data
 	_lastTouchPosition: null,
 
+	// Progress Bar
+	_progressBar: null,
+
 	// map of available colors for block selection
 	selectionColors: [],
 
@@ -50,6 +53,8 @@ var NumboGameLayer = cc.Layer.extend({
 		this.initSelectionColors();
 
 		this.initPowerups();
+
+		this.initProgressBar();
                                      
 	    // Begin scheduling block drops.
 	    this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
@@ -79,6 +84,11 @@ var NumboGameLayer = cc.Layer.extend({
 	initPowerups: function() {
 		if (NJ.gameState.currentJumboId == "powerup-mode")
 			NJ.gameState.powerupMode = true;
+	},
+
+	initProgressBar: function() {
+		this._progressBar = new ProgressBarLayer(this._levelBounds, 20);
+		this.addChild(this._progressBar);
 	},
 
 	// Initialize input depending on the device.
@@ -183,9 +193,6 @@ var NumboGameLayer = cc.Layer.extend({
 		levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), cc.color.white, 2, cc.color(173, 216, 230, 0.4*255));
 		this.addChild(levelNode);
 
-		// initialize selection lines for selected nodes
-		this._selectedLinesNode = cc.DrawNode.create();
-		this.addChild(this._selectedLinesNode);
 	},
 
 	// Initialize the Numbo Controller, which controls the level.
@@ -526,6 +533,10 @@ var NumboGameLayer = cc.Layer.extend({
 	onTouchEnded: function(touchPosition) {
 	    // Activate any selected blocks.
 	    var data = this._numboController.activateSelectedBlocks();
+
+		if(this._progressBar.update(data.length)) {
+			// DROP A POWERUP NEXT
+		}
 
 		this.redrawSelectedLines();
 

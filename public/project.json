@@ -37,6 +37,7 @@
         "src/NJGameState.js",
         "src/NJSettings.js",
         "src/NumboController.js",
-        "src/BackgroundLayer.js"
+        "src/BackgroundLayer.js",
+        "src/ProgressBarLayer.js"
     ]
 }
