@@ -109,7 +109,7 @@ var NumboController = cc.Class.extend({
 	// shifts all blocks down to remove gaps and drops them accordingly
 	// returns the number of blocks cleared if successful, or 0 otherwise
 	activateSelectedBlocks: function() {
-		var powerupValue = null;
+		var powerupValues = [];
 
 	    var selectedBlockCount = 0;
 	    if(this.isSelectedClearable()) {
@@ -118,7 +118,7 @@ var NumboController = cc.Class.extend({
 			for (var block in this._selectedBlocks) {
 				blockSum += this._selectedBlocks[block].val;
 				if (this._selectedBlocks[block].powerup) {
-					powerupValue = this._selectedBlocks[block].val;
+					powerupValues.push(this._selectedBlocks[block].powerup);
 				}
 			}
 
@@ -140,7 +140,7 @@ var NumboController = cc.Class.extend({
 
 	    this.deselectAllBlocks();
 
-	    return { cleared: selectedBlockCount, blockSum: blockSum, powerupValue: powerupValue };
+	    return { cleared: selectedBlockCount, blockSum: blockSum, powerupValues: powerupValues };
 	},
 
     clearRows: function(num) {
@@ -161,7 +161,14 @@ var NumboController = cc.Class.extend({
 			cc.audioEngine.playEffect(res.clickSound);
 	    }
 
-		var powerup = NJ.gameState.powerupMode && (Math.random() < 0.05); // 5% chance
+		var powerup = null;
+		if  (NJ.gameState.powerupMode && (Math.random() < 0.25) ) {// 5% chance
+			if (Math.random() < 0.50) // 50%
+				powerup = 'clearAndSpawn';
+			else
+				powerup = 'changeJumbo';
+		}
+
 		if (powerup) {
 			var path = this.meanderSearch(col, this._numboLevel.blocks[col].length,
 				this.pathAtLeastTwoWithNoiseCriteria, []);
@@ -224,7 +231,6 @@ var NumboController = cc.Class.extend({
 			--tries;
 		}
 
-		cc.log("tries: " + (50 - tries));
 
 		return this._knownPath;
 	},
@@ -238,8 +244,8 @@ var NumboController = cc.Class.extend({
 	////////////
 
 	updateRandomJumbo: function() {
-	 	NJ.chooseJumbo(NJ.weightedRandom(this.jumboDistribution));
-		var jumbo = NJ.getJumbo();
+	 	NJ.gameState.chooseJumbo(NJ.weightedRandom(this.jumboDistribution));
+		var jumbo = NJ.gameState.getJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
 	},
