@@ -162,7 +162,7 @@ var NumboController = cc.Class.extend({
 	    }
 
 		var powerup = null;
-		if  (NJ.gameState.powerupMode && (Math.random() < 0.25) ) {// 5% chance
+		if  (NJ.gameState.powerupMode && (Math.random() < 0.05) ) {// 5% chance
 			if (Math.random() < 0.50) // 50%
 				powerup = 'clearAndSpawn';
 			else
