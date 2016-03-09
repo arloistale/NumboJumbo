@@ -58,11 +58,11 @@ var NumboMenuLayer = (function() {
         var scoresButton = new MenuTitleButton("Scores", onScores.bind(this), this);
         scoresButton.setImageRes(res.buttonImage);
         //menu.addChild(scoresButton);
-
-        var shopButton = new MenuTitleButton("Shop", onShop.bind(this), this);
+/*
+        var shopButton = new MenuTitleButton("Jumbos", onShop.bind(this), this);
         shopButton.setImageRes(res.buttonImage);
         menu.addChild(shopButton);
-
+*/
         var settingsButton = new MenuTitleButton("Settings", onSettings.bind(this), this);
         settingsButton.setImageRes(res.buttonImage);
         menu.addChild(settingsButton);

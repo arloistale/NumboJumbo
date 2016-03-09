@@ -106,7 +106,7 @@ var NumboHeaderLayer = cc.Layer.extend({
 ////////////////
 
     updateValues: function() {
-        this.scoreValueLabel.setString(NJ.gameState.getScore());
+        this.scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
 
         this.multiplierLabel.setString("x" + NJ.gameState.getMultiplier());
     },

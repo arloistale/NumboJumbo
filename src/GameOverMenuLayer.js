@@ -35,19 +35,19 @@ var GameOverMenuLayer = cc.LayerColor.extend({
         this._menu.addChild(headerLabel);
 
         var scoreTitleLabel = this.generateLabel("Score");
-        this._scoreLabel = this.generateLabel(NJ.gameState.getScore() + "", NJ.fontSizes.header2);
+        this._scoreLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.gameState.getScore()) + "", NJ.fontSizes.header2);
 
         this._menu.addChild(scoreTitleLabel);
         this._menu.addChild(this._scoreLabel);
 
         var bestTitleLabel = this.generateLabel("Best");
-        this._bestLabel = this.generateLabel(NJ.stats.getHighscore() + "", NJ.fontSizes.header2);
+        this._bestLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getHighscore()) + "", NJ.fontSizes.header2);
 
         this._menu.addChild(bestTitleLabel);
         this._menu.addChild(this._bestLabel);
 
         var currencyTitleLabel = this.generateLabel("Currency");
-        this._currencyLabel = this.generateLabel(NJ.stats.getCurrency() + "", NJ.fontSizes.header2);
+        this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
 
         this._menu.addChild(currencyTitleLabel);
         this._menu.addChild(this._currencyLabel);

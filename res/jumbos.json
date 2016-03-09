@@ -2,7 +2,10 @@
   "jumbos": {
     "basic": {
       "name": "Basic",
-      "difficulty": "Easy",
+      "highscoreThreshold": 0,
+      "currencyThreshold": 0,
+      "color": "#00E676",
+      "difficulty": "Normal",
       "spawnTime": 1.0,
       "weight": 1.0,
       "numberList": [
@@ -26,7 +29,10 @@
     },
     "normal": {
       "name": "Classic",
-      "difficulty": "Medium",
+      "highscoreThreshold": 0,
+      "currencyThreshold": 0,
+      "color": "#00E676",
+      "difficulty": "Normal",
       "spawnTime": 1.0,
       "weight": 3.0,
       "numberList": [
@@ -68,45 +74,12 @@
         }
       ]
     },
-    "zeroes": {
-      "name": "All Zeroes",
-      "difficulty": "Like, Really Easy",
-      "spawnTime": 0.75,
-      "weight": 1.0,
-      "numberList": [
-        {
-          "key": 0,
-          "weight": 1
-        }
-      ]
-    },
-    "fives": {
-      "name": "Fives",
-      "difficulty": "Medium",
-      "spawnTime": 0.7,
-      "weight": 3.0,
-      "numberList": [
-        {
-          "key": 5,
-          "weight": 3
-        },
-        {
-          "key": 10,
-          "weight": 2
-        },
-        {
-          "key": 25,
-          "weight": 2
-        },
-        {
-          "key": 50,
-          "weight": 1
-        }
-      ]
-    },
     "one-mania": {
       "name": "One Mania",
-      "difficulty": "Very Hard",
+      "highscoreThreshold": 0,
+      "currencyThreshold": 0,
+      "color": "#00E676",
+      "difficulty": "Normal",
       "spawnTime": 0.3,
       "weight": 2.0,
       "numberList": [
@@ -132,9 +105,39 @@
         }
       ]
     },
+    "fives": {
+      "name": "Fives",
+      "highscoreThreshold": 15000,
+      "currencyThreshold": 50000,
+      "color": "#FFEB3B",
+      "difficulty": "Medium",
+      "spawnTime": 0.7,
+      "weight": 3.0,
+      "numberList": [
+        {
+          "key": 5,
+          "weight": 3
+        },
+        {
+          "key": 10,
+          "weight": 2
+        },
+        {
+          "key": 25,
+          "weight": 2
+        },
+        {
+          "key": 50,
+          "weight": 1
+        }
+      ]
+    },
     "random-jumbos": {
       "name": "Random Jumbos!",
-      "difficulty": "Hard",
+      "highscoreThreshold": 60000,
+      "currencyThreshold": 540000,
+      "color": "#FFEB3B",
+      "difficulty": "Medium",
       "spawnTime": 1.0,
       "weight": 0.0,
       "numberList": [
@@ -178,6 +181,9 @@
     },
     "powerup-mode": {
       "name": "Powerups!",
+      "highscoreThreshold": 150000,
+      "currencyThreshold": 600000,
+      "color": "#FFEB3B",
       "difficulty": "Medium",
       "spawnTime": 1.0,
       "weight": 0.0,
@@ -222,7 +228,10 @@
     },
     "multiple-progression": {
       "name": "Multiples Progression",
-      "difficulty": "Medium",
+      "highscoreThreshold": 500000,
+      "currencyThreshold": 10000000,
+      "color": "#FF1744",
+      "difficulty": "Hard",
       "spawnTime": 1.0,
       "weight": 0.0,
       "numberList": [
@@ -260,6 +269,22 @@
         },
         {
           "key": 9,
+          "weight": 1
+        }
+      ]
+    },
+
+    "zeroes": {
+      "name": "All Zeroes",
+      "highscoreThreshold": 0,
+      "currencyThreshold": 0,
+      "color": "#FF1744",
+      "difficulty": "Test",
+      "spawnTime": 0.75,
+      "weight": 1.0,
+      "numberList": [
+        {
+          "key": 0,
           "weight": 1
         }
       ]

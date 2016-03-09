@@ -12,6 +12,7 @@
 
     "jsList": [
         "src/DateExtensions.js",
+        "src/NJPrettifier.js",
         "src/Resource.js",
         "src/ScoresLayer.js",
         "src/NumboMenuLayer.js",

@@ -12,6 +12,7 @@ NJ.weightedRandom = function(pairsList){
     var totalWeight = 0;
     for (var pair in pairsList)
         totalWeight += pairsList[pair].weight;
+
     var value = Math.random()*totalWeight;
 
     for (var pair in pairsList){
