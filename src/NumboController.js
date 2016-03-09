@@ -1,6 +1,5 @@
 var NumboController = cc.Class.extend({
 	distribution: [],
-	jumboDistribution: [],
 	spawnTime: 1.0,
 
 	// level data
@@ -27,7 +26,6 @@ var NumboController = cc.Class.extend({
 		}
 
         this.initJumbo();
-		this.initJumboDistribution();
 	},
 
     initJumbo: function() {
@@ -35,13 +33,6 @@ var NumboController = cc.Class.extend({
         this.distribution = jumbo.numberList;
         this.spawnTime = jumbo.spawnTime;
     },
-
-	initJumboDistribution: function(){
-		for (var key in NJ.jumbos.data.jumbos) {
-            if(NJ.jumbos.data.jumbos.hasOwnProperty(key))
-			    this.jumboDistribution.push({key: key, weight: NJ.jumbos.data.jumbos[key].weight});
-		}
-	},
 
 	/////////////////////////////
 	// SELECTION FUNCTIONALITY //
@@ -109,7 +100,7 @@ var NumboController = cc.Class.extend({
 	// shifts all blocks down to remove gaps and drops them accordingly
 	// returns the number of blocks cleared if successful, or 0 otherwise
 	activateSelectedBlocks: function() {
-		var powerupValue = null;
+		var powerupValues = [];
 
 	    var selectedBlockCount = 0;
 	    if(this.isSelectedClearable()) {
@@ -118,7 +109,7 @@ var NumboController = cc.Class.extend({
 			for (var block in this._selectedBlocks) {
 				blockSum += this._selectedBlocks[block].val;
 				if (this._selectedBlocks[block].powerup) {
-					powerupValue = this._selectedBlocks[block].val;
+					powerupValues.push(this._selectedBlocks[block].powerup);
 				}
 			}
 
@@ -140,7 +131,7 @@ var NumboController = cc.Class.extend({
 
 	    this.deselectAllBlocks();
 
-	    return { cleared: selectedBlockCount, blockSum: blockSum, powerupValue: powerupValue };
+	    return { cleared: selectedBlockCount, blockSum: blockSum, powerupValues: powerupValues };
 	},
 
     clearRows: function(num) {
@@ -161,7 +152,16 @@ var NumboController = cc.Class.extend({
 			cc.audioEngine.playEffect(res.clickSound);
 	    }
 
-		var powerup = NJ.gameState.powerupMode && (Math.random() < 0.05); // 5% chance
+		var powerup = null;
+		if  (NJ.gameState.powerupMode && (Math.random() < 0.25) ) {// 5% chance
+			if (Math.random() < 0.50) // 50%
+				powerup = 'clearAndSpawn';
+			else {
+				// TODO: make this a temporary thing (ie, set a schedule to change jumbo back)
+				powerup = 'changeJumbo';
+			}
+		}
+
 		if (powerup) {
 			var path = this.meanderSearch(col, this._numboLevel.blocks[col].length,
 				this.pathAtLeastTwoWithNoiseCriteria, []);
@@ -224,7 +224,6 @@ var NumboController = cc.Class.extend({
 			--tries;
 		}
 
-		cc.log("tries: " + (50 - tries));
 
 		return this._knownPath;
 	},
@@ -238,8 +237,8 @@ var NumboController = cc.Class.extend({
 	////////////
 
 	updateRandomJumbo: function() {
-	 	NJ.chooseJumbo(NJ.weightedRandom(this.jumboDistribution));
-		var jumbo = NJ.getJumbo();
+	 	NJ.gameState.chooseJumbo(NJ.weightedRandom(this.jumboDistribution));
+		var jumbo = NJ.gameState.getJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
 	},
@@ -251,6 +250,7 @@ var NumboController = cc.Class.extend({
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
 	},
+
 
 	// updates the board/distribution given the mode is Multiple Progression
 	updateMultipleProgression: function() {
@@ -286,8 +286,6 @@ var NumboController = cc.Class.extend({
 			// Update the blocks currently on the board.
 			this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
 			this._numboLevel.multiplyBlocksBy(factor);
-            // TODO: What the flying fuck is this????
-			//NJ.gameState.currentLevel = factor;
 		}
 	},
 
@@ -320,7 +318,6 @@ var NumboController = cc.Class.extend({
 	getSpawnConst: function() {
 		var L = NJ.gameState.getLevel();
 		return 0.3 + 2/Math.pow(L, 1/2);
-	    //return 1 + 2/L;
 	},
 
 	getNumBlocks: function(){
@@ -365,7 +362,8 @@ var NumboController = cc.Class.extend({
 		for(i = 0; i < selectedBlocksLength; ++i)
 			sum += this._selectedBlocks[i].val;
 
-		for(i = 0; i <selectedBlocksLength; ++i) {
+
+		for(i = 0; i < selectedBlocksLength; ++i) {
 			if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val)
 				return true;
 		}

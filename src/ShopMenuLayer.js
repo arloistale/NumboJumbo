@@ -37,6 +37,7 @@ var ShopMenuLayer = cc.LayerColor.extend({
         var titleLabel = this.generateLabel("Shop");
         this._menu.addChild(titleLabel);
 
+        /*
         // get possible jumbos
         var jumboButton = null;
         var jumboName = "";
@@ -55,7 +56,8 @@ var ShopMenuLayer = cc.LayerColor.extend({
 
             this._menu.addChild(jumboButton);
         }
-
+        */
+        
         var backButton = new MenuTitleButton("Back", function () {
             that.onBack();
         }, this);

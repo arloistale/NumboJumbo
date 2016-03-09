@@ -12,8 +12,8 @@
 
     "jsList": [
         "src/DateExtensions.js",
+        "src/NJPrettifier.js",
         "src/Resource.js",
-        "src/JumboDistributions.js",
         "src/ScoresLayer.js",
         "src/NumboMenuLayer.js",
         "src/ShopMenuLayer.js",
@@ -30,6 +30,7 @@
         "src/Snippet.js",
         "src/NumboBlock.js",
         "src/NumboLevel.js",
+        "src/NJJumbos.js",
         "src/NJConfig.js",
         "src/NJSocial.js",
         "src/NJAnalytics.js",

@@ -82,8 +82,9 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// initialize the powerup mode variable
 	initPowerups: function() {
-		if (NJ.gameState.currentJumboId == "powerup-mode")
+		if (NJ.gameState.getJumbo().name == "Powerups!") {
 			NJ.gameState.powerupMode = true;
+		}
 	},
 
 	initProgressBar: function() {
@@ -576,34 +577,27 @@ var NumboGameLayer = cc.Layer.extend({
             });
 
 			//
-			if (data.powerupValue){
-				this._numboController.updateRandomJumbo();
-				this.clearBlocks();
-				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+			if (data.powerupValues.length > 0){
+				cc.log(data.powerupValues);
+				if (data.powerupValues[0] == 'clearAndSpawn') {
+					this.clearBlocks();
+					this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
+				}
+				else if (data.powerupValues[0] == 'changeJumbo') {
+					this._numboController.updateRandomJumbo();
+				}
 			}
-			//else if(this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2))
-			//	this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 
             // Level up with feedback if needed
             if (NJ.gameState.levelUpIfNeeded()) {
 				this._backgroundLayer.updateBackgroundColor();
-
-				// TODO: WTF?
-				if (NJ.gameState.randomJumbos || NJ.gameState.currentJumboId == "random-jumbos") {
-					NJ.gameState.randomJumbos = true;
-					this._numboController.updateRandomJumbo();
-					this.clearBlocks();
-					this.spawnNBlocks(Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
-				}
 
 				// Check for Jumbo Swap
                 if (NJ.gameState.currentJumboId == "multiple-progression") {
 					this._numboController.updateMultipleProgression();
 				}
 
-                // give feedback for leveling up
-
-                // Display "LEVEL x"
+                // Display "Level x"
                 this._feedbackLayer.launchFallingBanner({
                     title: "Level " + NJ.gameState.getLevel()
                 });
@@ -618,9 +612,10 @@ var NumboGameLayer = cc.Layer.extend({
 					title: "Nice Clear!",
 					targetY: cc.visibleRect.center.y * 0.5
 				});
+
+				// give the player 5*999 points and launch 5 random '+999' snippets
 				for (var i = 0; i < 5; ++i) {
 					scoreDifference = NJ.gameState.addScore({numPoints: 999});
-					// launch feedback for combo
 					this._feedbackLayer.launchSnippet({
 						title: "+" + scoreDifference,
 						x: cc.visibleRect.center.x,
@@ -636,15 +631,15 @@ var NumboGameLayer = cc.Layer.extend({
                 this._feedbackLayer.launchFallingBanner({
 					targetY: cc.visibleRect.center.y * 1.5
 				});
-            } else if (data.cleared > 3) {
-                this._feedbackLayer.launchFallingBanner();
             }
 
             // we made a new combo, record the combo time in game state
             this.unschedule(this.resetMultiplier);
             this.schedule(this.resetMultiplier, 5, 1);
 
+
             NJ.gameState.offerComboForMultiplier({
+
             });
 
 			// increment score, and update header labels

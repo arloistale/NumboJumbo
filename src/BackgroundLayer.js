@@ -125,14 +125,14 @@ var BackgroundLayer = cc.Layer.extend({
             if(this.dynamicMovements[i].dx != 0) {
                 if (this.dynamicLayers[i].x > cc.visibleRect.left.x
                     && this.dynamicMovements[i].dx > 0) {
-                    console.log("X > LEFT");
+
                     this.dynamicLayers[i].x -= this.dynamicLayers[i].width;
                     for (var j = 0; j < this.duplicateLayers[i].length; j++)
                         this.duplicateLayers[i][j].x -= this.dynamicLayers[i].width;
                 }
                 else if (this.dynamicLayers[i].x + this.dynamicLayers[i].width < cc.visibleRect.right.x
                     && this.dynamicMovements[i].dx < 0) {
-                    console.log("X+W < RIGHT");
+
                     this.dynamicLayers[i].x += this.dynamicLayers[i].width;
                     for (var j = 0; j < this.duplicateLayers[i].length; j++)
                         this.duplicateLayers[i][j].x += this.dynamicLayers[i].width;
@@ -142,14 +142,14 @@ var BackgroundLayer = cc.Layer.extend({
             if(this.dynamicMovements[i].dy != 0) {
                 if (this.dynamicLayers[i].y > cc.visibleRect.bottom.y
                     && this.dynamicMovements[i].dy > 0) {
-                    console.log("Y > BOTTOM");
+
                     this.dynamicLayers[i].y -= this.dynamicLayers[i].height;
                     for (var j = 0; j < this.duplicateLayers[i].length; j++)
                         this.duplicateLayers[i][j].y -= this.dynamicLayers[i].height;
                 }
                 else if (this.dynamicLayers[i].y + this.dynamicLayers[i].height < cc.visibleRect.top.y
                     && this.dynamicMovements[i].dy < 0) {
-                    console.log("Y+H < TOP");
+
                     this.dynamicLayers[i].y += this.dynamicLayers[i].height;
                     for (var j = 0; j < this.duplicateLayers[i].length; j++)
                         this.duplicateLayers[i][j].y += this.dynamicLayers[i].height;

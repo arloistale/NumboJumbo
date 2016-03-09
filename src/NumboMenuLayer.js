@@ -5,6 +5,7 @@ var NumboMenuLayer = (function() {
     var jumboMenuLayer = null;
     var instructionsLayer = null;
     var scoresLayer = null;
+    var shopLayer = null;
     var settingsMenuLayer = null;
 
     var loginButton = null;
@@ -57,7 +58,11 @@ var NumboMenuLayer = (function() {
         var scoresButton = new MenuTitleButton("Scores", onScores.bind(this), this);
         scoresButton.setImageRes(res.buttonImage);
         //menu.addChild(scoresButton);
-
+/*
+        var shopButton = new MenuTitleButton("Jumbos", onShop.bind(this), this);
+        shopButton.setImageRes(res.buttonImage);
+        menu.addChild(shopButton);
+*/
         var settingsButton = new MenuTitleButton("Settings", onSettings.bind(this), this);
         settingsButton.setImageRes(res.buttonImage);
         menu.addChild(settingsButton);
@@ -87,12 +92,12 @@ var NumboMenuLayer = (function() {
         var that = this;
 
         cc.eventManager.pauseTarget(this, true);
-        this._jumboMenuLayer = new JumboMenuLayer();
-        this._jumboMenuLayer.setOnCloseCallback(function() {
+        jumboMenuLayer = new JumboMenuLayer();
+        jumboMenuLayer.setOnCloseCallback(function() {
             cc.eventManager.resumeTarget(that, true);
-            that.removeChild(that._jumboMenuLayer);
+            that.removeChild(jumboMenuLayer);
         });
-        this.addChild(this._jumboMenuLayer, 999);
+        this.addChild(jumboMenuLayer, 999);
     };
 
     var onInstructions = function() {
@@ -144,6 +149,21 @@ var NumboMenuLayer = (function() {
             that.removeChild(scoresLayer);
         });
         this.addChild(scoresLayer, 999);
+    };
+
+    var onShop = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        var that = this;
+
+        cc.eventManager.pauseTarget(this, true);
+        shopLayer = new ShopMenuLayer();
+        shopLayer.setOnCloseCallback(function() {
+            cc.eventManager.resumeTarget(that, true);
+            that.removeChild(shopLayer);
+        });
+        this.addChild(shopLayer, 999);
     };
 
     var onSettings = function() {
