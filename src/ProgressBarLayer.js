@@ -26,21 +26,25 @@ var ProgressBarLayer = cc.Layer.extend({
         var w = this.gridSize.width;
         var h = this.gridSize.height;
         this.prog += progress;
-
+        console.log("Progress: " + this.prog + " / " + this.denom);
         this.draw.clear();
         this.draw.drawPoly([cc.p(x, y), cc.p(x+w, y), cc.p(x+w, y+h), cc.p(x, y+h)],
-            cc.color(255, 0, 0, 255), 4, cc.color(0, 0, 0, 255));
-        this.draw.drawPoly([cc.p(x, y), cc.p(x+w, y), cc.p(x+w, y + (this.prog/this.denom*h)), cc.p(x, y+(this.prog/this.denom*h))],
-            cc.color(0, 0, 255, 255), 4, cc.color(0, 0, 0, 255));
+            cc.color(77, 77, 77, 100), 1, cc.color(0, 0, 0, 255));
+        this.draw.drawPoly([cc.p(x, y), cc.p(x+w, y), cc.p(x+w, y+(this.prog/this.denom*h)), cc.p(x, y+(this.prog/this.denom*h))],
+            cc.color(0, 0, 255, 100), 1, cc.color(0, 0, 0, 255));
 
-        if (this.prog/this.denom >= 1) {
-            this.reset();
+        if (this.prog/this.denom >= 1)
             return true;
-        }
         return false;
     },
 
     reset: function() {
         this.prog = 0;
+        this.update(0);
+    },
+    reset: function(newDenom) {
+        this.denom = newDenom;
+        this.prog = 0;
+        this.update(0);
     }
 });

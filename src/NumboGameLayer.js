@@ -195,6 +195,9 @@ var NumboGameLayer = cc.Layer.extend({
 		levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), cc.color.white, 2, cc.color(173, 216, 230, 0.4*255));
 		this.addChild(levelNode);
 
+		this._selectedLinesNode = cc.DrawNode.create();
+		this.addChild(this._selectedLinesNode);
+
 	},
 
 	// Initialize the Numbo Controller, which controls the level.
@@ -541,9 +544,11 @@ var NumboGameLayer = cc.Layer.extend({
 	    // Activate any selected blocks.
 	    var data = this._numboController.activateSelectedBlocks();
 
-		if(this._progressBar.update(data.length)) {
+		if(this._progressBar.update(data.cleared)) {
 			// DROP A POWERUP NEXT
+			this._progressBar.reset(Math.floor(this._progressBar.denom*1.2));
 		}
+
 
 		this.redrawSelectedLines();
 
