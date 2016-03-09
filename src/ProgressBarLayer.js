@@ -26,7 +26,7 @@ var ProgressBarLayer = cc.Layer.extend({
         var w = this.gridSize.width;
         var h = this.gridSize.height;
         this.prog += progress;
-        console.log("Progress: " + this.prog + " / " + this.denom);
+
         this.draw.clear();
         this.draw.drawPoly([cc.p(x, y), cc.p(x+w, y), cc.p(x+w, y+h), cc.p(x, y+h)],
             cc.color(77, 77, 77, 100), 1, cc.color(0, 0, 0, 255));
@@ -44,7 +44,7 @@ var ProgressBarLayer = cc.Layer.extend({
     },
     reset: function(newDenom) {
         this.denom = newDenom;
-        this.prog = 0;
+        this.prog = this.denom-this.prog;
         this.update(0);
     }
 });
