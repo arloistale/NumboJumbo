@@ -20,7 +20,7 @@ var BackgroundLayer = cc.Layer.extend({
         this.initDynamicSprites(dynamicSprites);
         this.initDuplicateSprites(dynamicSprites);
 
-        //this.schedule(this.updateBackground, 0.01);
+        this.schedule(this.updateBackground, 0.01);
     },
 
     // Initialize sprites which serve as a background - do not change.

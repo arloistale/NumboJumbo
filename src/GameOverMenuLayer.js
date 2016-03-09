@@ -8,6 +8,7 @@ var GameOverMenuLayer = cc.LayerColor.extend({
     _menu: null,
     _scoreLabel: null,
     _bestLabel: null,
+    _currencyLabel: null,
 
     // Callbacks Data
     onRetryCallback: null,
@@ -40,10 +41,16 @@ var GameOverMenuLayer = cc.LayerColor.extend({
         this._menu.addChild(this._scoreLabel);
 
         var bestTitleLabel = this.generateLabel("Best");
-        this._bestLabel = this.generateLabel(NJ.stats.highscore + "", NJ.fontSizes.header2);
+        this._bestLabel = this.generateLabel(NJ.stats.getHighscore() + "", NJ.fontSizes.header2);
 
         this._menu.addChild(bestTitleLabel);
         this._menu.addChild(this._bestLabel);
+
+        var currencyTitleLabel = this.generateLabel("Currency");
+        this._currencyLabel = this.generateLabel(NJ.stats.getCurrency() + "", NJ.fontSizes.header2);
+
+        this._menu.addChild(currencyTitleLabel);
+        this._menu.addChild(this._currencyLabel);
 
         var retryButton = new MenuTitleButton("Retry", function() {
             that.onRetry();

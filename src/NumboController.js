@@ -352,32 +352,24 @@ var NumboController = cc.Class.extend({
 
 		var selectedBlocksLength = this._selectedBlocks.length;
 
-		// all blocks must be sequentially adjacent
-
-		/*
 		var sum = 0;
+		var max = 0;
 
-		for (var i = 0; i < selectedBlocksLength - 1; ++i) {
-		    if (!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
-			return false;
+		var i = 0;
 
-		    sum += this._selectedBlocks[i].val;
-		}
-
-		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
-		*/
-
-		var sum=0;
-		var max=0;
-		for(var i=0; i<selectedBlocksLength-1; ++i) {
-			if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i+1]))
+		for(; i < selectedBlocksLength - 1; ++i) {
+			if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
 				return false;
 		}
-		for(var i=0; i<selectedBlocksLength; ++i) {
+
+		for(i = 0; i < selectedBlocksLength; ++i)
 			sum += this._selectedBlocks[i].val;
-			max = Math.max(this._selectedBlocks[i].val, max);
+
+		for(i = 0; i <selectedBlocksLength; ++i) {
+			if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val)
+				return true;
 		}
-		sum -= max;
-		return sum == max;
+
+		return false;//sum == this._selectedBlocks[selectedBlocksLength - 1].val;
 	}
 });
