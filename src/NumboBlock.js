@@ -94,7 +94,7 @@ var NumboBlock = cc.Sprite.extend({
         this.colorIndex += 1;
         this.colorIndex %= NumboBlock.selectionColors.length;
         this.highlight(NumboBlock.selectionColors[this.colorIndex]);
-        this.schedule(this.blink, 0.05);
+        //this.schedule(this.blink, 0.05);
     },
 
     removePowerUp: function(){
@@ -143,8 +143,9 @@ var NumboBlock = cc.Sprite.extend({
 // a useful site for generating lists like this one:
 // http://www.tutorialrepublic.com/html-reference/html-color-picker.php
 NumboBlock.selectionColors = [
-    cc.color("#0D0511"),
+
     cc.color("#000000"),
+    cc.color("#0D0511"),
     cc.color("#1A0A22"),
     cc.color("#270F33"),
     cc.color("#351445"),
@@ -164,4 +165,27 @@ NumboBlock.selectionColors = [
     cc.color("#E6D6EE"),
     cc.color("#F2EAF6"),
     cc.color("#FFFFFF"),
+
+    cc.color("#F2EAF6"),
+    cc.color("#E6D6EE"),
+    cc.color("#DAC2E6"),
+    cc.color("#CEADDE"),
+    cc.color("#C299D6"),
+    cc.color("#B585CD"),
+    cc.color("#A970C5"),
+    cc.color("#9D5CBD"),
+    cc.color("#9148B5"),
+    cc.color("#8534AD"),
+    cc.color("#772E9B"),
+    cc.color("#6A298A"),
+    cc.color("#5D2479"),
+    cc.color("#4F1F67"),
+    cc.color("#421A56"),
+    cc.color("#351445"),
+    cc.color("#270F33"),
+    cc.color("#1A0A22"),
+    cc.color("#0D0511"),
+    cc.color("#000000"),
 ];
+
+NumboBlock.selectionColors.reverse();
