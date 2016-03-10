@@ -7,6 +7,8 @@ var NumboController = cc.Class.extend({
 	_knownPath: [],
 	_selectedBlocks: [],
 
+	nextBlockPowerup: false,
+
 	////////////////////
 	// INITIALIZATION //
 	////////////////////
@@ -153,13 +155,9 @@ var NumboController = cc.Class.extend({
 	    }
 
 		var powerup = null;
-		if  (NJ.gameState.powerupMode && (Math.random() < 0.25) ) {// 5% chance
-			if (Math.random() < 0.50) // 50%
-				powerup = 'clearAndSpawn';
-			else {
-				// TODO: make this a temporary thing (ie, set a schedule to change jumbo back)
-				powerup = 'changeJumbo';
-			}
+		if  (NJ.gameState.powerupMode && this.nextBlockPowerup ) {// 5% chance
+			powerup = 'clearAndSpawn';
+			this.nextBlockPowerup = false;
 		}
 
 		if (powerup) {
@@ -373,5 +371,9 @@ var NumboController = cc.Class.extend({
 		}
 
 		return false;//sum == this._selectedBlocks[selectedBlocksLength - 1].val;
+	},
+
+	requestPowerup: function() {
+		this.nextBlockPowerup = true;
 	}
 });

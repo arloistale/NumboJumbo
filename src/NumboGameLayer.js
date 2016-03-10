@@ -53,7 +53,6 @@ var NumboGameLayer = cc.Layer.extend({
 		this.initSelectionColors();
 
 		this.initPowerups();
-
 		if(NJ.gameState.powerupMode)
 			this.initProgressBar();
                                      
@@ -548,8 +547,8 @@ var NumboGameLayer = cc.Layer.extend({
 
 		if(NJ.gameState.powerupMode) {
 			if (this._progressBar.update(data.cleared)) {
-				// DROP A POWERUP NEXT
 				this._progressBar.reset(Math.floor(this._progressBar.denom * 1.2));
+				this._numboController.requestPowerup();
 			}
 		}
 
@@ -587,6 +586,7 @@ var NumboGameLayer = cc.Layer.extend({
 				}
 				else if (data.powerupValues[0] == 'changeJumbo') {
 					this._numboController.updateRandomJumbo();
+					this.schedule(resetjumotoclassimode, 10);
 				}
 			}
 
