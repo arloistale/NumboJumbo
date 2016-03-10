@@ -54,7 +54,8 @@ var NumboGameLayer = cc.Layer.extend({
 
 		this.initPowerups();
 
-		this.initProgressBar();
+		if(NJ.gameState.powerupMode)
+			this.initProgressBar();
                                      
 	    // Begin scheduling block drops.
 	    this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
@@ -545,11 +546,12 @@ var NumboGameLayer = cc.Layer.extend({
 	    // Activate any selected blocks.
 	    var data = this._numboController.activateSelectedBlocks();
 
-		if(this._progressBar.update(data.cleared)) {
-			// DROP A POWERUP NEXT
-			this._progressBar.reset(Math.floor(this._progressBar.denom*1.2));
+		if(NJ.gameState.powerupMode) {
+			if (this._progressBar.update(data.cleared)) {
+				// DROP A POWERUP NEXT
+				this._progressBar.reset(Math.floor(this._progressBar.denom * 1.2));
+			}
 		}
-
 
 		this.redrawSelectedLines();
 

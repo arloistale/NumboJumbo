@@ -181,8 +181,8 @@
     },
     "powerup-mode": {
       "name": "Powerups!",
-      "highscoreThreshold": 150000,
-      "currencyThreshold": 600000,
+      "highscoreThreshold": 0,
+      "currencyThreshold": 0,
       "color": "#FFEB3B",
       "difficulty": "Medium",
       "spawnTime": 1.0,

@@ -66,6 +66,7 @@ NJ.gameState = (function() {
 
         // get the currentJumbo
         getJumbo: function () {
+            console.log(currentJumboId);
             return NJ.jumbos.getJumboDataWithKey(currentJumboId);
         },
 

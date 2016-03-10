@@ -237,7 +237,11 @@ var NumboController = cc.Class.extend({
 	////////////
 
 	updateRandomJumbo: function() {
-	 	NJ.gameState.chooseJumbo(NJ.weightedRandom(this.jumboDistribution));
+		//console.log(NJ.jumbos.jumboDistribution);
+		var butt = NJ.weightedRandom(NJ.jumbos.getJumboDistribution());
+		console.log(butt);
+	 	NJ.gameState.chooseJumbo(butt);
+
 		var jumbo = NJ.gameState.getJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;

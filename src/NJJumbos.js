@@ -27,7 +27,7 @@ NJ.jumbos = (function() {
                 for(var key in data.jumbos) {
                     if(!data.jumbos.hasOwnProperty(key))
                         continue;
-
+                    console.log(key);
                     jumboData[key] = {
                         index: currIndex,
                         key: key,
@@ -44,6 +44,8 @@ NJ.jumbos = (function() {
                     currIndex++;
                 }
 
+                NJ.jumbos.initJumboDistribution();
+
                 isLoaded = true;
 
                 callback(null);
@@ -55,6 +57,7 @@ NJ.jumbos = (function() {
                 if(jumboData.hasOwnProperty(key))
                     jumboDistribution.push({key: key, weight: jumboData[key].weight});
             }
+            console.log(jumboDistribution);
         },
 
         // returns a jumbo given a key
@@ -65,6 +68,10 @@ NJ.jumbos = (function() {
         // returns an iterable list of jumbos
         getJumbosList: function() {
             return Object.keys(jumboData).map(function(key) { return jumboData[key]; });
+        },
+
+        getJumboDistribution: function() {
+            return jumboDistribution;
         }
     }
 }());
