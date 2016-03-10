@@ -53,7 +53,7 @@ var NumboGameLayer = cc.Layer.extend({
 		this.initSelectionColors();
 
 		this.initPowerups();
-		if(NJ.gameState.powerupMode)
+		if(NJ.gameState.isPowerupMode())
 			this.initProgressBar();
                                      
 	    // Begin scheduling block drops.
@@ -83,7 +83,7 @@ var NumboGameLayer = cc.Layer.extend({
 	// initialize the powerup mode variable
 	initPowerups: function() {
 		if (NJ.gameState.getJumbo().name == "Powerups!") {
-			NJ.gameState.powerupMode = true;
+			NJ.gameState.setPowerupMode();
 		}
 	},
 
@@ -545,7 +545,7 @@ var NumboGameLayer = cc.Layer.extend({
 	    // Activate any selected blocks.
 	    var data = this._numboController.activateSelectedBlocks();
 
-		if(NJ.gameState.powerupMode) {
+		if(NJ.gameState.isPowerupMode()) {
 			if (this._progressBar.update(data.cleared)) {
 				this._progressBar.reset(Math.floor(this._progressBar.denom * 1.2));
 				this._numboController.requestPowerup();
