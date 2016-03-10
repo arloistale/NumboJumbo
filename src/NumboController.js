@@ -155,7 +155,7 @@ var NumboController = cc.Class.extend({
 	    }
 
 		var powerup = null;
-		if  (NJ.gameState.powerupMode && this.nextBlockPowerup ) {// 5% chance
+		if  (NJ.gameState.isPowerupMode() && this.nextBlockPowerup ) {// 5% chance
 			powerup = 'clearAndSpawn';
 			this.nextBlockPowerup = false;
 		}
