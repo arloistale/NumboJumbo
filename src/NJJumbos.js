@@ -27,7 +27,7 @@ NJ.jumbos = (function() {
                 for(var key in data.jumbos) {
                     if(!data.jumbos.hasOwnProperty(key))
                         continue;
-                    console.log(key);
+                    
                     jumboData[key] = {
                         index: currIndex,
                         key: key,

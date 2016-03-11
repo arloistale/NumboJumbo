@@ -114,7 +114,6 @@ var NumboController = cc.Class.extend({
 					powerupValues.push(this._selectedBlocks[block].powerup);
 				}
 			}
-
 			NJ.gameState.addBlocksCleared(selectedBlockCount);
 			if(selectedBlockCount > NJ.stats.maxComboLength)
 			    NJ.stats.maxComboLength = selectedBlockCount;
@@ -156,7 +155,8 @@ var NumboController = cc.Class.extend({
 
 		var powerup = null;
 		if  (NJ.gameState.isPowerupMode() && this.nextBlockPowerup ) {// 5% chance
-			powerup = 'clearAndSpawn';
+			//powerup = 'clearAndSpawn';
+			powerup = 'bonusOneMania';
 			this.nextBlockPowerup = false;
 		}
 
@@ -375,5 +375,33 @@ var NumboController = cc.Class.extend({
 
 	requestPowerup: function() {
 		this.nextBlockPowerup = true;
+	},
+
+	initiateOneManiaBonus: function() {
+		NJ.gameState.chooseJumbo("one-mania");
+
+		var jumbo = NJ.gameState.getJumbo();
+		this.distribution = jumbo.numberList;
+		this.spawnTime = jumbo.spawnTime;
+	},
+
+	copyBoard: function() {
+		return this._numboLevel.getBlocks();
+	},
+
+	recallBoard: function(jumbo, blockSize) {
+		NJ.gameState.chooseJumbo(jumbo.id);
+		var id = jumbo.id;
+		var board = jumbo.board;
+		var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
+		this.distribution = heldJumbo.numberList;
+		this.spawnTime = heldJumbo.spawnTime;
+
+		for(var i=0; i<board.length; i++) {
+			for(var j=0; j<board[i].length; j++) {
+				if(board[i][j] != null)
+					this._numboLevel.spawnDropBlock(blockSize, board[i][j].col, board[i][j].val, board[i][j].powerup);
+			}
+		}
 	}
 });

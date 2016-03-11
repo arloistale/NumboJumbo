@@ -22,6 +22,8 @@ NJ.gameState = (function() {
     var randomJumbos = false;
     var powerupMode = false;
 
+    var stage = "normal";
+
     var updateMultiplier = function() {
         if(comboRecords.length > 2)
             multiplier = 1 + (comboRecords.length - 2) * 0.5;
@@ -67,6 +69,10 @@ NJ.gameState = (function() {
         // get the currentJumbo
         getJumbo: function () {
             return NJ.jumbos.getJumboDataWithKey(currentJumboId);
+        },
+
+        getJumboId: function() {
+            return currentJumboId;
         },
 
         ///////////////////
@@ -186,6 +192,14 @@ NJ.gameState = (function() {
 
         setPowerupMode: function() {
             powerupMode = true;
+        },
+
+        setStage: function(newStage) {
+            stage = newStage;
+        },
+
+        getStage: function() {
+            return stage;
         }
     }
 }());

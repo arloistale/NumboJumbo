@@ -88,6 +88,11 @@ var NumboBlock = cc.Sprite.extend({
             this.valueLabel.enableStroke(cc.color(0, 255, 255), 1);
             this.valueLabel.setColor(cc.color(0, 255, 255));
         }
+        if (this.powerup == 'bonusOneMania') {
+            this.schedule(this.removePowerUp, 10);
+            this.valueLabel.enableStroke(cc.color(255, 255, 255), 1);
+            this.valueLabel.setColor(cc.color(0, 255, 0));
+        }
     },
 
     blink: function(){

@@ -384,5 +384,9 @@ var NumboLevel = cc.Class.extend({
 	    else
 			return null;
 	    
+	},
+
+	getBlocks: function() {
+		return this.blocks;
 	}
 });

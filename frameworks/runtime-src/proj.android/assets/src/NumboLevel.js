@@ -12,7 +12,7 @@
 var NJ = NJ || {};
 
 // level
-NJ.NUM_COLS = 6;
+NJ.NUM_COLS = 4;
 NJ.NUM_ROWS = 6;
 
 var NumboLevel = cc.Class.extend({
@@ -384,5 +384,9 @@ var NumboLevel = cc.Class.extend({
 	    else
 			return null;
 	    
+	},
+
+	getBlocks: function() {
+		return this.blocks;
 	}
 });
