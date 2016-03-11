@@ -328,6 +328,7 @@ var NumboGameLayer = cc.Layer.extend({
 				this._backgroundLayer.updateBackgroundColor(new cc.color(0, 0, 0, 255));
 				var blockSize = cc.size(this._levelCellSize.width * 0.75, this._levelCellSize.height * 0.75);
 				this._numboController.recallBoard(this.pausedJumbo, blockSize);
+				this.spawnNBlocks(this.pausedJumbo.numBlocks);
 				this.pausedJumbo = null;
 				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 			}
@@ -608,7 +609,7 @@ var NumboGameLayer = cc.Layer.extend({
 					this.schedule(resetjumotoclassimode, 10);
 				}
 				else if(data.powerupValues[0] == 'bonusOneMania' && this.pausedJumbo == null) {
-					this.pausedJumbo = {id: NJ.gameState.getJumboId(), board: this._numboController.copyBoard()};
+					this.pausedJumbo = {id: NJ.gameState.getJumboId(), numBlocks: this._numboController.getNumBlocks()};
 					this.clearBlocks();
 					this._backgroundLayer.updateBackgroundColor(new cc.color(255, 255, 0, 255));
 					NJ.gameState.setStage("bonus");

@@ -392,16 +392,8 @@ var NumboController = cc.Class.extend({
 	recallBoard: function(jumbo, blockSize) {
 		NJ.gameState.chooseJumbo(jumbo.id);
 		var id = jumbo.id;
-		var board = jumbo.board;
 		var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
 		this.distribution = heldJumbo.numberList;
 		this.spawnTime = heldJumbo.spawnTime;
-
-		for(var i=0; i<board.length; i++) {
-			for(var j=0; j<board[i].length; j++) {
-				if(board[i][j] != null)
-					this._numboLevel.spawnDropBlock(blockSize, board[i][j].col, board[i][j].val, board[i][j].powerup);
-			}
-		}
 	}
 });
