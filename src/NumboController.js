@@ -46,7 +46,7 @@ var NumboController = cc.Class.extend({
 	    var block = this._numboLevel.getBlock(col, row);
 		var lastBlock = null;
 
-	    if(!block)
+	    if(block === null)
 			return null;
 
 	    // TODO: possible optimization
@@ -55,7 +55,7 @@ var NumboController = cc.Class.extend({
 
 	    // make sure this block is adjacent to the block before it
 	    if (this._selectedBlocks.length > 0){
-			lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
+			lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
 			if (!this._numboLevel.isAdjBlocks(block, lastBlock) )
 				return null;
 	    }
@@ -64,6 +64,10 @@ var NumboController = cc.Class.extend({
 
 	    if(NJ.settings.sounds)
 			cc.audioEngine.playEffect(res.plopSound);
+
+        cc.log(block.val);
+        //if(lastBlock !== null)
+            //cc.log(lastBlock.val);
 
 		return {
 			numSelectedBlocks: this._selectedBlocks.length,
@@ -91,7 +95,7 @@ var NumboController = cc.Class.extend({
 	// deselect all currently selected blocks, removing their highlights
 	deselectAllBlocks: function() {
 	    for (var i = 0; i < this._selectedBlocks.length; ++i)
-		this._selectedBlocks[i].clearHighlight();
+			this._selectedBlocks[i].clearHighlight();
 
 	    this._selectedBlocks = [];
 	},
@@ -250,7 +254,6 @@ var NumboController = cc.Class.extend({
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
 	},
-
 
 	// updates the board/distribution given the mode is Multiple Progression
 	updateMultipleProgression: function() {

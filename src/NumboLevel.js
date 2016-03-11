@@ -378,7 +378,8 @@ var NumboLevel = cc.Class.extend({
 	getBlock: function(col, row) {
 	    cc.assert(0 <= col && col < NJ.NUM_COLS &&
 		      0 <= row && row < NJ.NUM_ROWS,
-		      "block coordinates out of bounds! (col: " + col + ", row: " + row + ")")
+		      "block coordinates out of bounds! (col: " + col + ", row: " + row + ")");
+
 	    if (row < this.blocks[col].length)
 			return this.blocks[col][row];
 	    else

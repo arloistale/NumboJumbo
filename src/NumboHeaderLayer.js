@@ -34,7 +34,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         // Score Labels
         var scoreStartPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.5);
 
-        var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.markerFont), NJ.fontSizes.sub);
+        var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
         scoreTitleLabel.attr({
             scale: 1.0,
             anchorX: 0,
@@ -46,7 +46,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         scoreTitleLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(scoreTitleLabel);
 
-        this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
+        this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.header2);
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0,
@@ -58,7 +58,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.scoreValueLabel);
         
-        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
+        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
         this.multiplierLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
@@ -82,7 +82,7 @@ var NumboHeaderLayer = cc.Layer.extend({
             anchorX: 0.5,
             anchorY: 0.5 + NJ.anchorOffsetY
         });
-        button.setTitleFontName(b_getFontName(res.markerFont));
+        button.setTitleFontName(b_getFontName(res.mainFont));
         button.setTitleFontSize(NJ.fontScalingFactor * NJ.fontSizes.buttonMedium);
         button.setScale(1.0 / NJ.fontScalingFactor);
         button.setTitleText("Pause");

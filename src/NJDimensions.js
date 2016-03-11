@@ -12,7 +12,7 @@ NJ.fontSizes = {
     snippet: 24,
     header2: 22,
     header: 32,
-    numbo: 22
+    numbo: 24
 };
 
 // UI

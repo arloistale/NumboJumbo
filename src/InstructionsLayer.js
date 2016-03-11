@@ -138,7 +138,7 @@ var InstructionsLayer = cc.LayerColor.extend({
 ////////////////
 
     generateLabel: function(title) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
         cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
@@ -147,7 +147,7 @@ var InstructionsLayer = cc.LayerColor.extend({
     },
 
     generateInstructionsLabel: function(title) {
-         var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.paragraph, cc.size(cc.visibleRect.width * 0.9, 0));
+         var label = new cc.LabelTTF(title, b_getFontName(res.mainFont), NJ.fontSizes.paragraph, cc.size(cc.visibleRect.width * 0.9, 0));
          label.setHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
          label.setVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
          label.setColor(cc.color(255, 255, 255, 255));

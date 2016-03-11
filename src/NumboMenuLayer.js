@@ -16,6 +16,7 @@ var NumboMenuLayer = (function() {
 
     // initialize background for menu
     var initBackground = function() {
+        /*
         var backgroundSprite = new cc.Sprite(res.backgroundImage);
         backgroundSprite.attr({
             x: cc.visibleRect.center.x,
@@ -26,10 +27,11 @@ var NumboMenuLayer = (function() {
             rotation: 0
         });
         this.addChild(backgroundSprite, 10, 1);
+        */
 
         var rotatePoint = new cc.RotateBy(250, 360); // <- Rotate the node by 360 degrees in 5 seconds.
         var rotateForever = new cc.RepeatForever(rotatePoint); // <- Keeps the node rotating forever.
-        backgroundSprite.runAction(rotateForever);
+        //backgroundSprite.runAction(rotateForever);
     };
 
     // initialize menu elements
@@ -200,7 +202,7 @@ var NumboMenuLayer = (function() {
         }
     };
 
-    return cc.Layer.extend({
+    return cc.LayerColor.extend({
 
         ////////////////////
         // Initialization //
@@ -208,6 +210,8 @@ var NumboMenuLayer = (function() {
 
         ctor: function () {
             this._super();
+
+            this.init(cc.color("#000000"));
 
             /*
              var sp = new cc.Sprite(res.loading_png);

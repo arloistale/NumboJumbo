@@ -107,7 +107,7 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 ////////////////
 
     generateLabel: function(title, size) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
         cc.MenuItemFont.setFontSize(size || NJ.fontSizes.sub);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);

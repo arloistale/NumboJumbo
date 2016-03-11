@@ -12,19 +12,27 @@ if(!cc.sys.isNative) {
 
 // list of resource definitions
 var res = {
-    // Fonts
-    markerFont: {
-        name: "MarkerFelt",
-        src: resRoot + "Fonts/MarkerFelt.ttf",
-        firefoxName: "MarkerFelt-Regular",
-        firefoxSrc: resRoot + "Fonts/MarkerFelt-Regular.ttf"
+
+    mainFont: {
+        name: "NunitoLight",
+        src: resRoot + "Fonts/NunitoLight.ttf"
+    },
+
+    sinkinSansLightFont: {
+        name: "SinkinSansLight",
+        src: resRoot + "Fonts/SinkinSansLight.ttf"
+    },
+
+    sinkinSansRegularFont: {
+        name: "SinkinSansRegular",
+        src: resRoot + "Fonts/SinkinSansRegular.ttf"
     },
 
 	// images
     buttonImage: resRoot + "Images/Button.png",
     backgroundImage: resRoot + "Images/normal/middle.png",
     glowImage: resRoot + "Images/Glow.png",
-    blockImage: resRoot + "Images/blocks.png",
+    blockImage: resRoot + "Images/block.png",
     powerupImage: resRoot + "Images/powerup.png",
     alertImage: resRoot + "Images/alertOverlay.png",
 
@@ -56,9 +64,6 @@ var b_getFontName = function(fontRes) {
 
     if(cc.sys.os == cc.sys.OS_ANDROID)
         return fontRes.src;
-    
-    if(cc.sys.os == cc.sys.OS_IOS)
-        return "Marker Felt";
 
 
     return fontRes.name;
@@ -75,8 +80,8 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.markerFont.src,
-    res.markerFont.firefoxSrc
+    res.mainFont.src,
+    //res.markerFont.firefoxSrc
 ];
 
 // resources for ingame
@@ -95,7 +100,7 @@ var g_game = [
     res.backgroundTrack,
 
     // fonts
-    res.markerFont.src,
+    res.mainFont.src,
 
     res.backBottom,
     res.backMiddle,

@@ -141,7 +141,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 ////////////////
 
     generateHeaderLabel: function(title) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
         cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
@@ -150,7 +150,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     },
 
     generateLabel: function(title) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
         cc.MenuItemFont.setFontSize(NJ.fontSizes.paragraph);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);

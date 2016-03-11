@@ -1,5 +1,5 @@
 
-var BackgroundLayer = cc.Layer.extend({
+var BackgroundLayer = cc.LayerColor.extend({
     staticLayers: [],
     dynamicLayers: [],
     duplicateLayers: [],
@@ -15,12 +15,15 @@ var BackgroundLayer = cc.Layer.extend({
     ctor: function(staticSprites, dynamicSprites) {
         this._super();
         this.setTag(NJ.tags.PAUSABLE);
+                                           
+        this.init(cc.color("#000000"));
 
+        /*
         this.initStaticSprites(staticSprites);
         this.initDynamicSprites(dynamicSprites);
         this.initDuplicateSprites(dynamicSprites);
-
-        this.schedule(this.updateBackground, 0.01);
+*/
+        //this.schedule(this.updateBackground, 0.01);
     },
 
     // Initialize sprites which serve as a background - do not change.

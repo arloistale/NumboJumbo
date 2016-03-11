@@ -276,17 +276,17 @@ var NumboGameLayer = cc.Layer.extend({
 	////////////////////
 
 	// Move scene block sprite into place.S
-	moveBlockIntoPlace: function(block) {
-	    var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (block.row + 0.5);
-	    var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
+	moveBlockIntoPlace: function(moveBlock) {
+	    var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (moveBlock.row + 0.5);
+	    var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (moveBlock.col + 0.5);
 
 	    var duration = 0.5;
-	    var moveAction = cc.MoveTo.create(duration, cc.p(blockTargetX, blockTargetY));
+	    var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY));
 		moveAction.setTag(42);
 	    //block.stopAllActions();
-		block.stopActionByTag(42)
+		moveBlock.stopActionByTag(42);
 		//block.stopAction(moveAction);
-	    block.runAction(moveAction);
+	    moveBlock.runAction(moveAction);
 	},
 
 	// Spawns a block and calls itself in a loop.
@@ -317,12 +317,12 @@ var NumboGameLayer = cc.Layer.extend({
 		}
 
 		var blockSize = cc.size(this._levelCellSize.width * 0.75, this._levelCellSize.height * 0.75);
-	    var block = this._numboController.spawnDropRandomBlock(blockSize);
-	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
-	    block.setPosition(blockX, cc.visibleRect.top.y + this._levelCellSize.height / 2);
-	    this.addChild(block);
+	    var spawnBlock = this._numboController.spawnDropRandomBlock(blockSize);
+	    var blockX = this._levelBounds.x + this._levelCellSize.width * (spawnBlock.col + 0.5);
+	    spawnBlock.setPosition(blockX, cc.visibleRect.top.y + this._levelCellSize.height / 2);
+	    this.addChild(spawnBlock);
 
-	    this.moveBlockIntoPlace(block);
+	    this.moveBlockIntoPlace(spawnBlock);
 	},
 
 	spawnNBlocks: function(N){
@@ -351,7 +351,7 @@ var NumboGameLayer = cc.Layer.extend({
 		var hint = this._numboController.findHint();
 		var pathString = "path: ";
 		for (var i in hint) {
-			pathString += hint[i].val + ", "
+			pathString += hint[i].getValue() + ", "
 		}
 	},
 
@@ -477,9 +477,9 @@ var NumboGameLayer = cc.Layer.extend({
 			var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 			if(data) {
-
 				var currBlock = data.currBlock, lastBlock = data.lastBlock;
-				currBlock.highlight(this.getNextColor(data.numSelectedBlocks));
+				var color = this.getNextColor(data.numSelectedBlocks);
+				currBlock.highlight(color);
 				this.redrawSelectedLines();
 			}
 		}
@@ -502,13 +502,12 @@ var NumboGameLayer = cc.Layer.extend({
 
 			touchCoords = this.convertPointToLevelCoords(currPosition);
 
-			//cc.log(NJ.raycastCircleTest(this._lastTouchPosition, touchPosition));
-
 			if (touchCoords) {
 				data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 				if(data) {
-					currBlock = data.currBlock, lastBlock = data.lastBlock;
+					currBlock = data.currBlock;
+					lastBlock = data.lastBlock;
 					currBlock.highlight(this.getNextColor(data.numSelectedBlocks));
 					this.redrawSelectedLines();
 				}
@@ -521,7 +520,8 @@ var NumboGameLayer = cc.Layer.extend({
 			data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 			if(data) {
-				currBlock = data.currBlock, lastBlock = data.lastBlock;
+				currBlock = data.currBlock;
+				lastBlock = data.lastBlock;
 				currBlock.highlight(this.getNextColor(data.numSelectedBlocks));
 				this.redrawSelectedLines();
 			}
@@ -656,10 +656,11 @@ var NumboGameLayer = cc.Layer.extend({
 		var selectedBlocks = this._numboController.getSelectedBlocks();
         var first, second;
 		for(var i = 0; i < selectedBlocks.length - 1; i++) {
-            first = selectedBlocks[i], second = selectedBlocks[i + 1];
+            first = selectedBlocks[i];
+			second = selectedBlocks[i + 1];
 
 			this._selectedLinesNode.drawSegment(this.convertLevelCoordsToPoint(first.col, first.row),
-				this.convertLevelCoordsToPoint(second.col, second.row), 2, cc.color.white);
+				this.convertLevelCoordsToPoint(second.col, second.row), 2, cc.color("#ffffff"));
 		}
 	},
 

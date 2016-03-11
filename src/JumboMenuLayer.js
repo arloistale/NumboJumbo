@@ -108,7 +108,7 @@ var JumboMenuLayer = cc.LayerColor.extend({
 ////////////////
 
     generateLabel: function(title) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
         cc.MenuItemFont.setFontSize( NJ.fontSizes.header);
 
         var toggleLabel = new cc.MenuItemFont(title);
@@ -125,7 +125,7 @@ var JumboMenuLayer = cc.LayerColor.extend({
         var highscoreThreshold = jumbo.highscoreThreshold;
         var currencyThreshold = jumbo.currencyThreshold;
 
-        var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.buttonSmall);
+        var label = new cc.LabelTTF(title, b_getFontName(res.mainFont), NJ.fontSizes.buttonSmall);
 
         //label.setFontSize (NJ.fontScalingFactor * NJ.fontSizes.buttonSmall);
         //label.setScale(1.0 / NJ.fontScalingFactor);
