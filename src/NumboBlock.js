@@ -8,10 +8,34 @@ Definition for falling blocks.
 
 var NumboBlock = (function() {
 
+    var selectionColors = [
+        cc.color("#0D0511"),
+        cc.color("#000000"),
+        cc.color("#1A0A22"),
+        cc.color("#270F33"),
+        cc.color("#351445"),
+        cc.color("#421A56"),
+        cc.color("#4F1F67"),
+        cc.color("#5D2479"),
+        cc.color("#6A298A"),
+        cc.color("#772E9B"),
+        cc.color("#8534AD"),
+        cc.color("#9148B5"),
+        cc.color("#9D5CBD"),
+        cc.color("#A970C5"),
+        cc.color("#B585CD"),
+        cc.color("#C299D6"),
+        cc.color("#CEADDE"),
+        cc.color("#DAC2E6"),
+        cc.color("#E6D6EE"),
+        cc.color("#F2EAF6"),
+        cc.color("#FFFFFF")
+    ];
+
     var blink = function() {
-        colorIndex += 1;
-        colorIndex %= NumboBlock.selectionColors.length;
-        this.highlight(NumboBlock.selectionColors[colorIndex]);
+        this._colorIndex += 1;
+        this._colorIndex %= selectionColors.length;
+        this._backgroundSprite.setColor(selectionColors[this._colorIndex]);
     };
 
     return cc.Sprite.extend({
@@ -102,7 +126,7 @@ var NumboBlock = (function() {
                 //this.backgroundSprite.setTexture(res.powerupImage);
                 this.schedule(this.removePowerUp, 10);
                 //this.valueLabel.enableStroke(cc.color(0, 255, 255, 255), 1);
-                valueLabel.setColor(cc.color(255, 0, 0));
+                this._valueLabel.setColor(cc.color(255, 0, 0));
             }
             if (this.powerup == 'changeJumbo'){
                 //this.backgroundSprite.setTexture(res.powerupImage);
@@ -118,7 +142,7 @@ var NumboBlock = (function() {
                 cc.color("#FFCA1B")
             ];
 
-            var chosen = colors[Math.floor((this.val - 1) % colors.length)];
+            var chosen = colors[Math.floor(Math.max(0, (this.val - 1)) % colors.length)];
             this._backgroundSprite.setColor(chosen);
         },
 
@@ -163,30 +187,3 @@ var NumboBlock = (function() {
         }
     });
 }());
-
-// static array of color values for blinking purposes
-// a useful site for generating lists like this one:
-// http://www.tutorialrepublic.com/html-reference/html-color-picker.php
-NumboBlock.selectionColors = [
-    cc.color("#0D0511"),
-    cc.color("#000000"),
-    cc.color("#1A0A22"),
-    cc.color("#270F33"),
-    cc.color("#351445"),
-    cc.color("#421A56"),
-    cc.color("#4F1F67"),
-    cc.color("#5D2479"),
-    cc.color("#6A298A"),
-    cc.color("#772E9B"),
-    cc.color("#8534AD"),
-    cc.color("#9148B5"),
-    cc.color("#9D5CBD"),
-    cc.color("#A970C5"),
-    cc.color("#B585CD"),
-    cc.color("#C299D6"),
-    cc.color("#CEADDE"),
-    cc.color("#DAC2E6"),
-    cc.color("#E6D6EE"),
-    cc.color("#F2EAF6"),
-    cc.color("#FFFFFF"),
-];
