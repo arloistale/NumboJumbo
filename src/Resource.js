@@ -18,16 +18,6 @@ var res = {
         src: resRoot + "Fonts/NunitoLight.ttf"
     },
 
-    sinkinSansLightFont: {
-        name: "SinkinSansLight",
-        src: resRoot + "Fonts/SinkinSansLight.ttf"
-    },
-
-    sinkinSansRegularFont: {
-        name: "SinkinSansRegular",
-        src: resRoot + "Fonts/SinkinSansRegular.ttf"
-    },
-
 	// images
     buttonImage: resRoot + "Images/Button.png",
     backgroundImage: resRoot + "Images/normal/middle.png",
@@ -53,7 +43,6 @@ var res = {
     backTop: resRoot + "Images/normal/Top.png",
     backVeryTop: resRoot + "Images/normal/verytop.png",
     backStars: resRoot + "Images/normal/stars.png"
-
 };
 
 // returns proper font name based on platform
@@ -80,7 +69,7 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.mainFont.src,
+    res.mainFont.src
     //res.markerFont.firefoxSrc
 ];
 
@@ -94,6 +83,7 @@ var g_game = [
     res.alertImage,
 
     // sounds
+    res.alertSound,
     res.clickSound,
     res.plipSound,
     res.plopSound,

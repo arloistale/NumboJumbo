@@ -172,8 +172,8 @@ var BackgroundLayer = cc.LayerColor.extend({
             this.dynamicMovements[i].multiplier = 1;
     },
 
-    updateBackgroundColor: function() {
-        var newColor = cc.color(255, 255, 255, 255);
+    updateBackgroundColor: function(newColor) {
+        /*var newColor = cc.color(255, 255, 255, 255);
         var level = NJ.gameState.getLevel() % 6;
         if(level == 1)
             newColor = cc.color(0, 0, 255, 255);
@@ -186,8 +186,7 @@ var BackgroundLayer = cc.LayerColor.extend({
         else if(level == 5)
             newColor = cc.color(255, 0, 102, 255);
         else if(level == 6)
-            newColor = cc.color(0, 255, 204, 255);
-
+            newColor = cc.color(0, 255, 204, 255);*/
         //cc.log("Level Color " + NJ.gameState.currentLevel);
         for(var i=0; i<this.dynamicLayers.length; i++) {
             this.dynamicLayers[i].setColor(newColor);

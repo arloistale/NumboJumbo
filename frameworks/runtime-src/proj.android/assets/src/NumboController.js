@@ -107,26 +107,18 @@ var NumboController = cc.Class.extend({
 
 	// activate currently selected blocks
 	// shifts all blocks down to remove gaps and drops them accordingly
-	// returns the number of blocks cleared if successful, or 0 otherwise
+	// returns blocks that were cleared or null otherwise
 	activateSelectedBlocks: function() {
-		var powerupValue = null;
+		var clearedBlocks = null;
 
 	    var selectedBlockCount = 0;
 	    if(this.isSelectedClearable()) {
-			selectedBlockCount = this._selectedBlocks.length;
-			var blockSum = 0;
-			for (var block in this._selectedBlocks) {
-				blockSum += this._selectedBlocks[block].val;
-				if (this._selectedBlocks[block].powerup) {
-					powerupValue = this._selectedBlocks[block].val;
-				}
-			}
+			// TODO: What is this?
+			this._knownPath = [];
 
 			NJ.gameState.addBlocksCleared(selectedBlockCount);
 			if(selectedBlockCount > NJ.stats.maxComboLength)
 			    NJ.stats.maxComboLength = selectedBlockCount;
-
-			var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 
 			if(NJ.settings.sounds)
 			    cc.audioEngine.playEffect(res.plipSound);
@@ -135,12 +127,15 @@ var NumboController = cc.Class.extend({
 			for(var i = 0; i < this._selectedBlocks.length; ++i)
 			    this._numboLevel.killBlock(this._selectedBlocks[i]);
 
+            var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
 			this._numboLevel.collapseColumnsToward(lastCol);
+
+            clearedBlocks = this._selectedBlocks;
 	    }
 
 	    this.deselectAllBlocks();
 
-	    return { cleared: selectedBlockCount, blockSum: blockSum, powerupValue: powerupValue };
+	    return clearedBlocks;
 	},
 
     clearRows: function(num) {
@@ -227,10 +222,6 @@ var NumboController = cc.Class.extend({
 		cc.log("tries: " + (50 - tries));
 
 		return this._knownPath;
-	},
-
-	resetKnownPath: function(){
-		this._knownPath = [];
 	},
 
 	////////////

@@ -44,6 +44,8 @@ NJ.jumbos = (function() {
                     currIndex++;
                 }
 
+                NJ.jumbos.initJumboDistribution();
+
                 isLoaded = true;
 
                 callback(null);
@@ -65,6 +67,10 @@ NJ.jumbos = (function() {
         // returns an iterable list of jumbos
         getJumbosList: function() {
             return Object.keys(jumboData).map(function(key) { return jumboData[key]; });
+        },
+
+        getJumboDistribution: function() {
+            return jumboDistribution;
         }
     }
 }());

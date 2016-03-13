@@ -22,6 +22,8 @@ NJ.gameState = (function() {
     var randomJumbos = false;
     var powerupMode = false;
 
+    var stage = "normal";
+
     var updateMultiplier = function() {
         if(comboRecords.length > 2)
             multiplier = 1 + (comboRecords.length - 2) * 0.5;
@@ -67,6 +69,10 @@ NJ.gameState = (function() {
         // get the currentJumbo
         getJumbo: function () {
             return NJ.jumbos.getJumboDataWithKey(currentJumboId);
+        },
+
+        getJumboId: function() {
+            return currentJumboId;
         },
 
         ///////////////////
@@ -158,11 +164,9 @@ NJ.gameState = (function() {
         // record a new combo to increase the multiplier
         // this function also updates the multiplier if needed
         offerComboForMultiplier: function(data) {
-            cc.assert(data, "Invalid combo data");
-
             // construct a result to push into combo records
             // by concatenating to given data
-            var result = data;
+            var result = data || {};
             result.time = Date.now();
 
             comboRecords.push(result);
@@ -178,6 +182,22 @@ NJ.gameState = (function() {
 
         getMultiplier: function() {
             return multiplier;
+        },
+
+        isPowerupMode: function() {
+            return powerupMode;
+        },
+
+        setPowerupMode: function() {
+            powerupMode = true;
+        },
+
+        setStage: function(newStage) {
+            stage = newStage;
+        },
+
+        getStage: function() {
+            return stage;
         }
     }
 }());
