@@ -1,5 +1,5 @@
 
-var BackgroundLayer = cc.Layer.extend({
+var BackgroundLayer = cc.LayerColor.extend({
     staticLayers: [],
     dynamicLayers: [],
     duplicateLayers: [],
@@ -15,11 +15,14 @@ var BackgroundLayer = cc.Layer.extend({
     ctor: function(staticSprites, dynamicSprites) {
         this._super();
         this.setTag(NJ.tags.PAUSABLE);
+                                           
+        this.init(cc.color("#000000"));
 
+        /*
         this.initStaticSprites(staticSprites);
         this.initDynamicSprites(dynamicSprites);
         this.initDuplicateSprites(dynamicSprites);
-
+*/
         //this.schedule(this.updateBackground, 0.01);
     },
 
@@ -125,14 +128,14 @@ var BackgroundLayer = cc.Layer.extend({
             if(this.dynamicMovements[i].dx != 0) {
                 if (this.dynamicLayers[i].x > cc.visibleRect.left.x
                     && this.dynamicMovements[i].dx > 0) {
-                    console.log("X > LEFT");
+
                     this.dynamicLayers[i].x -= this.dynamicLayers[i].width;
                     for (var j = 0; j < this.duplicateLayers[i].length; j++)
                         this.duplicateLayers[i][j].x -= this.dynamicLayers[i].width;
                 }
                 else if (this.dynamicLayers[i].x + this.dynamicLayers[i].width < cc.visibleRect.right.x
                     && this.dynamicMovements[i].dx < 0) {
-                    console.log("X+W < RIGHT");
+
                     this.dynamicLayers[i].x += this.dynamicLayers[i].width;
                     for (var j = 0; j < this.duplicateLayers[i].length; j++)
                         this.duplicateLayers[i][j].x += this.dynamicLayers[i].width;
@@ -142,14 +145,14 @@ var BackgroundLayer = cc.Layer.extend({
             if(this.dynamicMovements[i].dy != 0) {
                 if (this.dynamicLayers[i].y > cc.visibleRect.bottom.y
                     && this.dynamicMovements[i].dy > 0) {
-                    console.log("Y > BOTTOM");
+
                     this.dynamicLayers[i].y -= this.dynamicLayers[i].height;
                     for (var j = 0; j < this.duplicateLayers[i].length; j++)
                         this.duplicateLayers[i][j].y -= this.dynamicLayers[i].height;
                 }
                 else if (this.dynamicLayers[i].y + this.dynamicLayers[i].height < cc.visibleRect.top.y
                     && this.dynamicMovements[i].dy < 0) {
-                    console.log("Y+H < TOP");
+
                     this.dynamicLayers[i].y += this.dynamicLayers[i].height;
                     for (var j = 0; j < this.duplicateLayers[i].length; j++)
                         this.duplicateLayers[i][j].y += this.dynamicLayers[i].height;
@@ -169,8 +172,8 @@ var BackgroundLayer = cc.Layer.extend({
             this.dynamicMovements[i].multiplier = 1;
     },
 
-    updateBackgroundColor: function() {
-        var newColor = cc.color(255, 255, 255, 255);
+    updateBackgroundColor: function(newColor) {
+        /*var newColor = cc.color(255, 255, 255, 255);
         var level = NJ.gameState.getLevel() % 6;
         if(level == 1)
             newColor = cc.color(0, 0, 255, 255);
@@ -183,8 +186,7 @@ var BackgroundLayer = cc.Layer.extend({
         else if(level == 5)
             newColor = cc.color(255, 0, 102, 255);
         else if(level == 6)
-            newColor = cc.color(0, 255, 204, 255);
-
+            newColor = cc.color(0, 255, 204, 255);*/
         //cc.log("Level Color " + NJ.gameState.currentLevel);
         for(var i=0; i<this.dynamicLayers.length; i++) {
             this.dynamicLayers[i].setColor(newColor);

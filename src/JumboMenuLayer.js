@@ -53,7 +53,10 @@ var JumboMenuLayer = cc.LayerColor.extend({
             this._menu.addChild(jumboButton);
         }
 
-        var backButton = new MenuTitleButton("Back", function () {
+        var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+        var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
+
+        var backButton = new NJButton(buttonSize, function () {
             that.onBack();
         }, this);
 

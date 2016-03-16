@@ -52,12 +52,17 @@ var GameOverMenuLayer = cc.LayerColor.extend({
         this._menu.addChild(currencyTitleLabel);
         this._menu.addChild(this._currencyLabel);
 
-        var retryButton = new MenuTitleButton("Retry", function() {
+        var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+        var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
+
+        var retryButton = new NJButton(buttonSize, function() {
             that.onRetry();
         }, this);
         retryButton.setImageRes(res.buttonImage);
 
-        var menuButton = new MenuTitleButton("Menu", function() {
+        buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
+
+        var menuButton = new NJButton(buttonSize, function() {
             that.onMenu();
         }, this);
         menuButton.setImageRes(res.buttonImage);

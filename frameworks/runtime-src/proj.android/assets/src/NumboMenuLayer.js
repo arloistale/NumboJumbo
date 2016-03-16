@@ -5,6 +5,7 @@ var NumboMenuLayer = (function() {
     var jumboMenuLayer = null;
     var instructionsLayer = null;
     var scoresLayer = null;
+    var shopLayer = null;
     var settingsMenuLayer = null;
 
     var loginButton = null;
@@ -15,6 +16,7 @@ var NumboMenuLayer = (function() {
 
     // initialize background for menu
     var initBackground = function() {
+        /*
         var backgroundSprite = new cc.Sprite(res.backgroundImage);
         backgroundSprite.attr({
             x: cc.visibleRect.center.x,
@@ -25,10 +27,11 @@ var NumboMenuLayer = (function() {
             rotation: 0
         });
         this.addChild(backgroundSprite, 10, 1);
+        */
 
         var rotatePoint = new cc.RotateBy(250, 360); // <- Rotate the node by 360 degrees in 5 seconds.
         var rotateForever = new cc.RepeatForever(rotatePoint); // <- Keeps the node rotating forever.
-        backgroundSprite.runAction(rotateForever);
+        //backgroundSprite.runAction(rotateForever);
     };
 
     // initialize menu elements
@@ -37,28 +40,34 @@ var NumboMenuLayer = (function() {
 
         var that = this;
 
-        var playButton = new MenuTitleButton("Play!", onPlay.bind(this), this);
-        playButton.setImageRes(res.buttonImage);
+        var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+        var buttonSize = cc.size(refDim * NJ.buttonSizes.play, refDim * NJ.buttonSizes.play);
+
+        var playButton = new NJButton(buttonSize, onPlay.bind(this), this);
+        playButton.setImageRes(res.playImage);
         menu.addChild(playButton);
 
-        var instructionsButton = new MenuTitleButton("How?", onInstructions.bind(this), this);
+        buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
+
+        var instructionsButton = new NJButton(buttonSize, onInstructions.bind(this), this);
         instructionsButton.setImageRes(res.buttonImage);
         menu.addChild(instructionsButton);
 
-        var dummyLabel = new cc.MenuItemFont(" ");
-        menu.addChild(dummyLabel);
-
-        loginButton = new MenuTitleButton("Connect", onLogin.bind(this), this);
+        loginButton = new NJButton(buttonSize, onLogin.bind(this), this);
         loginButton.setImageRes(res.buttonImage);
         toggleLoginButton();
 
         menu.addChild(loginButton);
 
-        var scoresButton = new MenuTitleButton("Scores", onScores.bind(this), this);
+        var scoresButton = new NJButton(buttonSize, onScores.bind(this), this);
         scoresButton.setImageRes(res.buttonImage);
         //menu.addChild(scoresButton);
-
-        var settingsButton = new MenuTitleButton("Settings", onSettings.bind(this), this);
+/*
+        var shopButton = new NJButton("Jumbos", onShop.bind(this), this);
+        shopButton.setImageRes(res.buttonImage);
+        menu.addChild(shopButton);
+*/
+        var settingsButton = new NJButton(buttonSize, onSettings.bind(this), this);
         settingsButton.setImageRes(res.buttonImage);
         menu.addChild(settingsButton);
 
@@ -87,12 +96,12 @@ var NumboMenuLayer = (function() {
         var that = this;
 
         cc.eventManager.pauseTarget(this, true);
-        this._jumboMenuLayer = new JumboMenuLayer();
-        this._jumboMenuLayer.setOnCloseCallback(function() {
+        jumboMenuLayer = new JumboMenuLayer();
+        jumboMenuLayer.setOnCloseCallback(function() {
             cc.eventManager.resumeTarget(that, true);
-            that.removeChild(that._jumboMenuLayer);
+            that.removeChild(jumboMenuLayer);
         });
-        this.addChild(this._jumboMenuLayer, 999);
+        this.addChild(jumboMenuLayer, 999);
     };
 
     var onInstructions = function() {
@@ -146,6 +155,21 @@ var NumboMenuLayer = (function() {
         this.addChild(scoresLayer, 999);
     };
 
+    var onShop = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        var that = this;
+
+        cc.eventManager.pauseTarget(this, true);
+        shopLayer = new ShopMenuLayer();
+        shopLayer.setOnCloseCallback(function() {
+            cc.eventManager.resumeTarget(that, true);
+            that.removeChild(shopLayer);
+        });
+        this.addChild(shopLayer, 999);
+    };
+
     var onSettings = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
@@ -180,7 +204,7 @@ var NumboMenuLayer = (function() {
         }
     };
 
-    return cc.Layer.extend({
+    return cc.LayerColor.extend({
 
         ////////////////////
         // Initialization //
@@ -188,6 +212,8 @@ var NumboMenuLayer = (function() {
 
         ctor: function () {
             this._super();
+
+            this.init(cc.color("#000000"));
 
             /*
              var sp = new cc.Sprite(res.loading_png);

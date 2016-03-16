@@ -12,31 +12,35 @@
 
     "jsList": [
         "src/DateExtensions.js",
+        "src/NJPrettifier.js",
         "src/Resource.js",
-        "src/JumboDistributions.js",
         "src/ScoresLayer.js",
         "src/NumboMenuLayer.js",
+        "src/ShopMenuLayer.js",
         "src/InstructionsLayer.js",
         "src/JumboMenuLayer.js",
         "src/SettingsMenuLayer.js",
         "src/NumboGameLayer.js",
         "src/NumboHeaderLayer.js",
         "src/GameOverMenuLayer.js",
-        "src/MenuTitleButton.js",
+        "src/NJButton.js",
 	    "src/FeedbackLayer.js",
         "src/Feedback.js",
         "src/Banner.js",
         "src/Snippet.js",
         "src/NumboBlock.js",
         "src/NumboLevel.js",
+        "src/NJJumbos.js",
         "src/NJConfig.js",
         "src/NJSocial.js",
+        "src/NJAnalytics.js",
         "src/NJStats.js",
         "src/NJDimensions.js",
         "src/NJHelper.js",
         "src/NJGameState.js",
         "src/NJSettings.js",
         "src/NumboController.js",
-        "src/BackgroundLayer.js"
+        "src/BackgroundLayer.js",
+        "src/ProgressBarLayer.js"
     ]
 }

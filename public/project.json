@@ -23,7 +23,7 @@
         "src/NumboGameLayer.js",
         "src/NumboHeaderLayer.js",
         "src/GameOverMenuLayer.js",
-        "src/MenuTitleButton.js",
+        "src/NJButton.js",
 	    "src/FeedbackLayer.js",
         "src/Feedback.js",
         "src/Banner.js",

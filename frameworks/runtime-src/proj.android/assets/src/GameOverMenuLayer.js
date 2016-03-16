@@ -8,6 +8,7 @@ var GameOverMenuLayer = cc.LayerColor.extend({
     _menu: null,
     _scoreLabel: null,
     _bestLabel: null,
+    _currencyLabel: null,
 
     // Callbacks Data
     onRetryCallback: null,
@@ -34,23 +35,34 @@ var GameOverMenuLayer = cc.LayerColor.extend({
         this._menu.addChild(headerLabel);
 
         var scoreTitleLabel = this.generateLabel("Score");
-        this._scoreLabel = this.generateLabel(NJ.gameState.getScore() + "", NJ.fontSizes.header2);
+        this._scoreLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.gameState.getScore()) + "", NJ.fontSizes.header2);
 
         this._menu.addChild(scoreTitleLabel);
         this._menu.addChild(this._scoreLabel);
 
         var bestTitleLabel = this.generateLabel("Best");
-        this._bestLabel = this.generateLabel(NJ.stats.highscore + "", NJ.fontSizes.header2);
+        this._bestLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getHighscore()) + "", NJ.fontSizes.header2);
 
         this._menu.addChild(bestTitleLabel);
         this._menu.addChild(this._bestLabel);
 
-        var retryButton = new MenuTitleButton("Retry", function() {
+        var currencyTitleLabel = this.generateLabel("Currency");
+        this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
+
+        this._menu.addChild(currencyTitleLabel);
+        this._menu.addChild(this._currencyLabel);
+
+        var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+        var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
+
+        var retryButton = new NJButton(buttonSize, function() {
             that.onRetry();
         }, this);
         retryButton.setImageRes(res.buttonImage);
 
-        var menuButton = new MenuTitleButton("Menu", function() {
+        buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
+
+        var menuButton = new NJButton(buttonSize, function() {
             that.onMenu();
         }, this);
         menuButton.setImageRes(res.buttonImage);
@@ -100,7 +112,7 @@ var GameOverMenuLayer = cc.LayerColor.extend({
 ////////////////
 
     generateLabel: function(title, size) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
         cc.MenuItemFont.setFontSize(size || NJ.fontSizes.sub);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);

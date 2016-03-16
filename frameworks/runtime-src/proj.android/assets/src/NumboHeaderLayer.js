@@ -10,6 +10,8 @@ var NumboHeaderLayer = cc.Layer.extend({
     // callback
     onPauseCallback: null,
 
+    draw: null,
+
     ctor: function() {
         this._super();
 
@@ -34,7 +36,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         // Score Labels
         var scoreStartPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.5);
 
-        var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.markerFont), NJ.fontSizes.sub);
+        var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
         scoreTitleLabel.attr({
             scale: 1.0,
             anchorX: 0,
@@ -46,7 +48,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         scoreTitleLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(scoreTitleLabel);
 
-        this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontSizes.header2);
+        this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.header2);
         this.scoreValueLabel.attr({
             scale: 1.0,
             anchorX: 0,
@@ -58,7 +60,7 @@ var NumboHeaderLayer = cc.Layer.extend({
         this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
         this.addChild(this.scoreValueLabel);
         
-        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.markerFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
+        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
         this.multiplierLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
             anchorX: 0.5,
@@ -78,25 +80,23 @@ var NumboHeaderLayer = cc.Layer.extend({
 
         // initialize pause button
         var button = new ccui.Button();
-        button.attr({
-            anchorX: 0.5,
-            anchorY: 0.5 + NJ.anchorOffsetY
-        });
-        button.setTitleFontName(b_getFontName(res.markerFont));
-        button.setTitleFontSize(NJ.fontScalingFactor * NJ.fontSizes.buttonMedium);
-        button.setScale(1.0 / NJ.fontScalingFactor);
-        button.setTitleText("Pause");
-        var titleSize = button.getTitleRenderer().getContentSize();
-        var buttonSize = cc.size(titleSize.width * 2, titleSize.height * 2);
+
+        //button.setTitleFontName(b_getFontName(res.mainFont));
+        //button.setTitleFontSize(NJ.fontScalingFactor * NJ.fontSizes.buttonMedium);
+        //button.setTitleText("Pause");
+        //var titleSize = button.getTitleRenderer().getContentSize();
+        var buttonSize = cc.size(contentSize.height * 0.9, contentSize.height * 0.9);
         button.setContentSize(buttonSize.width, buttonSize.height);
         button.ignoreContentAdaptWithSize(false);
         button.loadTextureNormal(res.buttonImage);
         button.setPosition(contentSize.width - buttonSize.width / 2 * 1.1, contentSize.height / 2);
-
+        button.setColor(cc.color("#424242"));
         button.addTouchEventListener(function (ref, touchEventType) {
             if(touchEventType === ccui.Widget.TOUCH_ENDED)
                 that.onPauseCallback();
         }, this);
+
+        button.addChild(new cc.Sprite(res.pauseImage));
 
         this.addChild(button);
     },
@@ -106,7 +106,7 @@ var NumboHeaderLayer = cc.Layer.extend({
 ////////////////
 
     updateValues: function() {
-        this.scoreValueLabel.setString(NJ.gameState.getScore());
+        this.scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
 
         this.multiplierLabel.setString("x" + NJ.gameState.getMultiplier());
     },

@@ -80,25 +80,23 @@ var NumboHeaderLayer = cc.Layer.extend({
 
         // initialize pause button
         var button = new ccui.Button();
-        button.attr({
-            anchorX: 0.5,
-            anchorY: 0.5 + NJ.anchorOffsetY
-        });
-        button.setTitleFontName(b_getFontName(res.mainFont));
-        button.setTitleFontSize(NJ.fontScalingFactor * NJ.fontSizes.buttonMedium);
-        button.setScale(1.0 / NJ.fontScalingFactor);
-        button.setTitleText("Pause");
-        var titleSize = button.getTitleRenderer().getContentSize();
-        var buttonSize = cc.size(titleSize.width * 2, titleSize.height * 2);
+
+        //button.setTitleFontName(b_getFontName(res.mainFont));
+        //button.setTitleFontSize(NJ.fontScalingFactor * NJ.fontSizes.buttonMedium);
+        //button.setTitleText("Pause");
+        //var titleSize = button.getTitleRenderer().getContentSize();
+        var buttonSize = cc.size(contentSize.height * 0.9, contentSize.height * 0.9);
         button.setContentSize(buttonSize.width, buttonSize.height);
         button.ignoreContentAdaptWithSize(false);
         button.loadTextureNormal(res.buttonImage);
         button.setPosition(contentSize.width - buttonSize.width / 2 * 1.1, contentSize.height / 2);
-
+        button.setColor(cc.color("#424242"));
         button.addTouchEventListener(function (ref, touchEventType) {
             if(touchEventType === ccui.Widget.TOUCH_ENDED)
                 that.onPauseCallback();
         }, this);
+
+        button.addChild(new cc.Sprite(res.pauseImage));
 
         this.addChild(button);
     },

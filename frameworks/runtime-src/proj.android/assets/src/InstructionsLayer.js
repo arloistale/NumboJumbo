@@ -51,11 +51,14 @@ var InstructionsLayer = cc.LayerColor.extend({
             this._menu.addChild(instructionLabel);
         }
 
-        var backButton = new MenuTitleButton("Back", function () {
+        var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+        var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
+
+        var backButton = new NJButton(buttonSize, function () {
             that.onBack();
         }, this);
 
-        var nextButton = new MenuTitleButton("Next", function () {
+        var nextButton = new NJButton(buttonSize, function () {
 
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
@@ -93,14 +96,17 @@ var InstructionsLayer = cc.LayerColor.extend({
             this._menu.addChild(instructionLabel);
         }
 
-        var backButton = new MenuTitleButton("Previous", function () {
+        var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+        var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
+
+        var backButton = new NJButton(buttonSize, function () {
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             that.presentControlsSlide();
         }, this);
 
-        var nextButton = new MenuTitleButton("Finish", function () {
+        var nextButton = new NJButton(buttonSize, function () {
             that.onBack();
         }, this);
 
@@ -138,7 +144,7 @@ var InstructionsLayer = cc.LayerColor.extend({
 ////////////////
 
     generateLabel: function(title) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
         cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
@@ -147,7 +153,7 @@ var InstructionsLayer = cc.LayerColor.extend({
     },
 
     generateInstructionsLabel: function(title) {
-         var label = new cc.LabelTTF(title, b_getFontName(res.markerFont), NJ.fontSizes.paragraph, cc.size(cc.visibleRect.width * 0.9, 0));
+         var label = new cc.LabelTTF(title, b_getFontName(res.mainFont), NJ.fontSizes.paragraph, cc.size(cc.visibleRect.width * 0.9, 0));
          label.setHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
          label.setVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
          label.setColor(cc.color(255, 255, 255, 255));

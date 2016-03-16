@@ -53,7 +53,10 @@ var SettingsMenuLayer = cc.LayerColor.extend({
         this._menu.addChild(musicToggle);
         this._menu.addChild(soundsToggle);
 
-        var backButton = new MenuTitleButton(bInGame ? "Resume" : "Back", function () {
+        var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+        var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
+
+        var backButton = new NJButton(buttonSize, function () {
             that.onBack();
         }, this);
 
@@ -64,7 +67,8 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 
             this._menu.alignItemsInColumns(1, 2, 2, 1);
         } else {
-            var menuButton = new MenuTitleButton("Menu", function () {
+            buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
+            var menuButton = new NJButton(buttonSize, function () {
                 that.onMenu();
             }, this);
 
@@ -141,7 +145,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
 ////////////////
 
     generateHeaderLabel: function(title) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
         cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);
@@ -150,7 +154,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
     },
 
     generateLabel: function(title) {
-        cc.MenuItemFont.setFontName(b_getFontName(res.markerFont));
+        cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
         cc.MenuItemFont.setFontSize(NJ.fontSizes.paragraph);
         var toggleLabel = new cc.MenuItemFont(title);
         toggleLabel.setEnabled(false);

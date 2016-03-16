@@ -25,8 +25,13 @@ var NumboGameLayer = cc.Layer.extend({
 	// Selection Data
 	_lastTouchPosition: null,
 
+	// Progress Bar
+	_progressBar: null,
+
 	// map of available colors for block selection
 	selectionColors: [],
+
+	pausedJumbo: null,
 
 	////////////////////
 	// Initialization //
@@ -50,6 +55,8 @@ var NumboGameLayer = cc.Layer.extend({
 		this.initSelectionColors();
 
 		this.initPowerups();
+		if(NJ.gameState.isPowerupMode())
+			this.initProgressBar();
                                      
 	    // Begin scheduling block drops.
 	    this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
@@ -77,8 +84,20 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// initialize the powerup mode variable
 	initPowerups: function() {
-		if (NJ.gameState.currentJumboId == "powerup-mode")
-			NJ.gameState.powerupMode = true;
+		if (NJ.gameState.getJumbo().name == "Powerups!") {
+			NJ.gameState.setPowerupMode();
+		}
+	},
+
+	initProgressBar: function() {
+		this._progressBar = new ProgressBarLayer(this._levelBounds, 20);
+		this.addChild(this._progressBar);
+		this.schedule(this.shrinkProgress, .1);
+	},
+
+	shrinkProgress: function() {
+		if(this.pausedJumbo == null)
+			this._progressBar.decrement();
 	},
 
 	// Initialize input depending on the device.
@@ -185,9 +204,9 @@ var NumboGameLayer = cc.Layer.extend({
 		levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), cc.color.white, 2, cc.color(173, 216, 230, 0.4*255));
 		this.addChild(levelNode);
 
-		// initialize selection lines for selected nodes
 		this._selectedLinesNode = cc.DrawNode.create();
 		this.addChild(this._selectedLinesNode);
+
 	},
 
 	// Initialize the Numbo Controller, which controls the level.
@@ -275,17 +294,17 @@ var NumboGameLayer = cc.Layer.extend({
 	////////////////////
 
 	// Move scene block sprite into place.S
-	moveBlockIntoPlace: function(block) {
-	    var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (block.row + 0.5);
-	    var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
+	moveBlockIntoPlace: function(moveBlock) {
+	    var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (moveBlock.row + 0.5);
+	    var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (moveBlock.col + 0.5);
 
 	    var duration = 0.5;
-	    var moveAction = cc.MoveTo.create(duration, cc.p(blockTargetX, blockTargetY));
+	    var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY));
 		moveAction.setTag(42);
 	    //block.stopAllActions();
-		block.stopActionByTag(42)
+		moveBlock.stopActionByTag(42);
 		//block.stopAction(moveAction);
-	    block.runAction(moveAction);
+	    moveBlock.runAction(moveAction);
 	},
 
 	// Spawns a block and calls itself in a loop.
@@ -303,7 +322,19 @@ var NumboGameLayer = cc.Layer.extend({
 	// TODO: Improve structure (don't check game over state here for improved separation of concerns)
 	spawnDropRandomBlock: function() {
 	    if(this._numboController.isGameOver()) {
-			this.onGameOver();
+			if(this.pausedJumbo != null) {
+				this.clearBlocks();
+				NJ.gameState.setStage("normal");
+				this._backgroundLayer.updateBackgroundColor(new cc.color(0, 0, 0, 255));
+				var blockSize = cc.size(this._levelCellSize.width * 0.75, this._levelCellSize.height * 0.75);
+				this._numboController.recallBoard(this.pausedJumbo, blockSize);
+				this.spawnNBlocks(this.pausedJumbo.numBlocks);
+				this.pausedJumbo = null;
+				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+			}
+			else {
+				this.onGameOver();
+			}
 			return;
 	    }
 
@@ -316,12 +347,12 @@ var NumboGameLayer = cc.Layer.extend({
 		}
 
 		var blockSize = cc.size(this._levelCellSize.width * 0.75, this._levelCellSize.height * 0.75);
-	    var block = this._numboController.spawnDropRandomBlock(blockSize);
-	    var blockX = this._levelBounds.x + this._levelCellSize.width * (block.col + 0.5);
-	    block.setPosition(blockX, cc.visibleRect.top.y + this._levelCellSize.height / 2);
-	    this.addChild(block);
+	    var spawnBlock = this._numboController.spawnDropRandomBlock(blockSize);
+	    var blockX = this._levelBounds.x + this._levelCellSize.width * (spawnBlock.col + 0.5);
+	    spawnBlock.setPosition(blockX, cc.visibleRect.top.y + this._levelCellSize.height / 2);
+	    this.addChild(spawnBlock);
 
-	    this.moveBlockIntoPlace(block);
+	    this.moveBlockIntoPlace(spawnBlock);
 	},
 
 	spawnNBlocks: function(N){
@@ -350,7 +381,7 @@ var NumboGameLayer = cc.Layer.extend({
 		var hint = this._numboController.findHint();
 		var pathString = "path: ";
 		for (var i in hint) {
-			pathString += hint[i].val + ", "
+			pathString += hint[i].getValue() + ", "
 		}
 	},
 
@@ -367,9 +398,10 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Halts game, switches to game over, sends data.
 	onGameOver: function() {
+		NJ.stats.addCurrency(NJ.gameState.getScore());
+		NJ.stats.offerHighscore(NJ.gameState.getScore());
 
-		if(NJ.stats.offerHighscore(NJ.gameState.getScore()))
-			NJ.stats.save();
+		NJ.stats.save();
 
 	    // first send the analytics for the current game session
 	    NJ.sendAnalytics();
@@ -429,6 +461,8 @@ var NumboGameLayer = cc.Layer.extend({
         // reset necessary modules
         this._feedbackLayer.reset();
 
+		this.unscheduleAllCallbacks();
+
         //load resources
         cc.LoaderScene.preload(g_game, function () {
             cc.audioEngine.stopMusic();
@@ -475,9 +509,9 @@ var NumboGameLayer = cc.Layer.extend({
 			var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 			if(data) {
-
 				var currBlock = data.currBlock, lastBlock = data.lastBlock;
-				currBlock.highlight(this.getNextColor(data.numSelectedBlocks));
+				var color = this.getNextColor(data.numSelectedBlocks);
+				currBlock.highlight(color);
 				this.redrawSelectedLines();
 			}
 		}
@@ -500,13 +534,12 @@ var NumboGameLayer = cc.Layer.extend({
 
 			touchCoords = this.convertPointToLevelCoords(currPosition);
 
-			//cc.log(NJ.raycastCircleTest(this._lastTouchPosition, touchPosition));
-
 			if (touchCoords) {
 				data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 				if(data) {
-					currBlock = data.currBlock, lastBlock = data.lastBlock;
+					currBlock = data.currBlock;
+					lastBlock = data.lastBlock;
 					currBlock.highlight(this.getNextColor(data.numSelectedBlocks));
 					this.redrawSelectedLines();
 				}
@@ -519,7 +552,8 @@ var NumboGameLayer = cc.Layer.extend({
 			data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 			if(data) {
-				currBlock = data.currBlock, lastBlock = data.lastBlock;
+				currBlock = data.currBlock;
+				lastBlock = data.lastBlock;
 				currBlock.highlight(this.getNextColor(data.numSelectedBlocks));
 				this.redrawSelectedLines();
 			}
@@ -531,22 +565,43 @@ var NumboGameLayer = cc.Layer.extend({
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
 	    // Activate any selected blocks.
-	    var data = this._numboController.activateSelectedBlocks();
+	    var clearedBlocks = this._numboController.activateSelectedBlocks();
 
 		this.redrawSelectedLines();
 
         // make sure something actually happened
-        if(data.cleared > 0) {
-			this._numboController.resetKnownPath();
+        if(clearedBlocks) {
+			if(NJ.gameState.isPowerupMode()) {
+				if (this._progressBar.update(clearedBlocks.length)) {
+					this._progressBar.reset(Math.floor(this._progressBar.denom * 1.5));
+					this._numboController.requestPowerup();
+				}
+			}
 
+			var powerupValues = [];
+			var blockSum = 0;
+			var block;
+
+			var i;
+
+			for (i = 0; i < clearedBlocks.length; i++) {
+				block = clearedBlocks[i];
+				blockSum += block.val;
+				if (block.powerup)
+					powerupValues.push(block.powerup);
+			}
+
+			// TODO: Really do not like how this is done
             // Gaps may be created; shift all affected blocks down.
             for (var col = 0; col < NJ.NUM_COLS; ++col) {
-                for (var row = 0; row < this._numboController.getColLength(col); ++row)
+                for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
                     this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
             }
 
-            var scoreDifference = NJ.gameState.addScore({blockCount: data.cleared});
+            var scoreDifference = NJ.gameState.addScore({blockCount: clearedBlocks.length});
             var differenceThreshold = 5000;
+
+			NJ.gameState.addBlocksCleared(clearedBlocks.length);
 
             // launch feedback for combo
             this._feedbackLayer.launchSnippet({
@@ -558,35 +613,36 @@ var NumboGameLayer = cc.Layer.extend({
                 targetScale: 1 + scoreDifference / differenceThreshold
             });
 
-			//
-			if (data.powerupValue){
-				this._numboController.updateRandomJumbo();
-				this.clearBlocks();
-				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+			// Check for a powerup.
+			if (powerupValues.length > 0){
+				//cc.log(data.powerupValues);
+				if (powerupValues[0] == 'clearAndSpawn') {
+					this.clearBlocks();
+					this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
+				}
+				else if (powerupValues[0] == 'changeJumbo') {
+					this._numboController.updateRandomJumbo();
+					//this.schedule(resetjumotoclassimode, 10);
+				}
+				else if(powerupValues[0] == 'bonusOneMania' && this.pausedJumbo == null) {
+					this.pausedJumbo = {id: NJ.gameState.getJumboId(), numBlocks: this._numboController.getNumBlocks()};
+					this.clearBlocks();
+					this._backgroundLayer.updateBackgroundColor(new cc.color(255, 255, 0, 255));
+					NJ.gameState.setStage("bonus");
+					this._progressBar.update();
+					this._numboController.initiateOneManiaBonus();
+					this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS *.4));
+				}
 			}
-			//else if(this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2))
-			//	this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 
             // Level up with feedback if needed
             if (NJ.gameState.levelUpIfNeeded()) {
-				this._backgroundLayer.updateBackgroundColor();
-
-				// TODO: WTF?
-				if (NJ.gameState.randomJumbos || NJ.gameState.currentJumboId == "random-jumbos") {
-					NJ.gameState.randomJumbos = true;
-					this._numboController.updateRandomJumbo();
-					this.clearBlocks();
-					this.spawnNBlocks(Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
-				}
-
 				// Check for Jumbo Swap
                 if (NJ.gameState.currentJumboId == "multiple-progression") {
 					this._numboController.updateMultipleProgression();
 				}
 
-                // give feedback for leveling up
-
-                // Display "LEVEL x"
+                // Display "Level x"
                 this._feedbackLayer.launchFallingBanner({
                     title: "Level " + NJ.gameState.getLevel()
                 });
@@ -601,9 +657,10 @@ var NumboGameLayer = cc.Layer.extend({
 					title: "Nice Clear!",
 					targetY: cc.visibleRect.center.y * 0.5
 				});
+
+				// give the player 5*999 points and launch 5 random '+999' snippets
 				for (var i = 0; i < 5; ++i) {
 					scoreDifference = NJ.gameState.addScore({numPoints: 999});
-					// launch feedback for combo
 					this._feedbackLayer.launchSnippet({
 						title: "+" + scoreDifference,
 						x: cc.visibleRect.center.x,
@@ -615,20 +672,17 @@ var NumboGameLayer = cc.Layer.extend({
 			}
 
 			// banner for a long combo
-			if (data.cleared > 3) {
+			if (clearedBlocks.length > 3) {
                 this._feedbackLayer.launchFallingBanner({
 					targetY: cc.visibleRect.center.y * 1.5
 				});
-            } else if (data.cleared > 3) {
-                this._feedbackLayer.launchFallingBanner();
             }
 
             // we made a new combo, record the combo time in game state
             this.unschedule(this.resetMultiplier);
             this.schedule(this.resetMultiplier, 5, 1);
 
-            NJ.gameState.offerComboForMultiplier({
-            });
+            NJ.gameState.offerComboForMultiplier();
 
 			// increment score, and update header labels
             this._numboHeaderLayer.updateValues();
@@ -660,10 +714,11 @@ var NumboGameLayer = cc.Layer.extend({
 		var selectedBlocks = this._numboController.getSelectedBlocks();
         var first, second;
 		for(var i = 0; i < selectedBlocks.length - 1; i++) {
-            first = selectedBlocks[i], second = selectedBlocks[i + 1];
+            first = selectedBlocks[i];
+			second = selectedBlocks[i + 1];
 
 			this._selectedLinesNode.drawSegment(this.convertLevelCoordsToPoint(first.col, first.row),
-				this.convertLevelCoordsToPoint(second.col, second.row), 2, cc.color.white);
+				this.convertLevelCoordsToPoint(second.col, second.row), 2, cc.color("#ffffff"));
 		}
 	},
 

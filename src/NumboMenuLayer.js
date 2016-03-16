@@ -40,32 +40,34 @@ var NumboMenuLayer = (function() {
 
         var that = this;
 
-        var playButton = new MenuTitleButton("Play!", onPlay.bind(this), this);
-        playButton.setImageRes(res.buttonImage);
+        var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+        var buttonSize = cc.size(refDim * NJ.buttonSizes.play, refDim * NJ.buttonSizes.play);
+
+        var playButton = new NJButton(buttonSize, onPlay.bind(this), this);
+        playButton.setImageRes(res.playImage);
         menu.addChild(playButton);
 
-        var instructionsButton = new MenuTitleButton("How?", onInstructions.bind(this), this);
+        buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
+
+        var instructionsButton = new NJButton(buttonSize, onInstructions.bind(this), this);
         instructionsButton.setImageRes(res.buttonImage);
         menu.addChild(instructionsButton);
 
-        var dummyLabel = new cc.MenuItemFont(" ");
-        menu.addChild(dummyLabel);
-
-        loginButton = new MenuTitleButton("Connect", onLogin.bind(this), this);
+        loginButton = new NJButton(buttonSize, onLogin.bind(this), this);
         loginButton.setImageRes(res.buttonImage);
         toggleLoginButton();
 
         menu.addChild(loginButton);
 
-        var scoresButton = new MenuTitleButton("Scores", onScores.bind(this), this);
+        var scoresButton = new NJButton(buttonSize, onScores.bind(this), this);
         scoresButton.setImageRes(res.buttonImage);
         //menu.addChild(scoresButton);
 /*
-        var shopButton = new MenuTitleButton("Jumbos", onShop.bind(this), this);
+        var shopButton = new NJButton("Jumbos", onShop.bind(this), this);
         shopButton.setImageRes(res.buttonImage);
         menu.addChild(shopButton);
 */
-        var settingsButton = new MenuTitleButton("Settings", onSettings.bind(this), this);
+        var settingsButton = new NJButton(buttonSize, onSettings.bind(this), this);
         settingsButton.setImageRes(res.buttonImage);
         menu.addChild(settingsButton);
 

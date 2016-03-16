@@ -1,12 +1,13 @@
 var NumboController = cc.Class.extend({
 	distribution: [],
-	jumboDistribution: [],
 	spawnTime: 1.0,
 
 	// level data
 	_numboLevel: null,
 	_knownPath: [],
 	_selectedBlocks: [],
+
+	nextBlockPowerup: false,
 
 	////////////////////
 	// INITIALIZATION //
@@ -27,7 +28,6 @@ var NumboController = cc.Class.extend({
 		}
 
         this.initJumbo();
-		this.initJumboDistribution();
 	},
 
     initJumbo: function() {
@@ -35,13 +35,6 @@ var NumboController = cc.Class.extend({
         this.distribution = jumbo.numberList;
         this.spawnTime = jumbo.spawnTime;
     },
-
-	initJumboDistribution: function(){
-		for (var key in NJ.jumbos.data.jumbos) {
-            if(NJ.jumbos.data.jumbos.hasOwnProperty(key))
-			    this.jumboDistribution.push({key: key, weight: NJ.jumbos.data.jumbos[key].weight});
-		}
-	},
 
 	/////////////////////////////
 	// SELECTION FUNCTIONALITY //
@@ -55,7 +48,7 @@ var NumboController = cc.Class.extend({
 	    var block = this._numboLevel.getBlock(col, row);
 		var lastBlock = null;
 
-	    if(!block)
+	    if(block === null)
 			return null;
 
 	    // TODO: possible optimization
@@ -64,7 +57,7 @@ var NumboController = cc.Class.extend({
 
 	    // make sure this block is adjacent to the block before it
 	    if (this._selectedBlocks.length > 0){
-			lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
+			lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
 			if (!this._numboLevel.isAdjBlocks(block, lastBlock) )
 				return null;
 	    }
@@ -73,6 +66,9 @@ var NumboController = cc.Class.extend({
 
 	    if(NJ.settings.sounds)
 			cc.audioEngine.playEffect(res.plopSound);
+
+        //if(lastBlock !== null)
+            //cc.log(lastBlock.val);
 
 		return {
 			numSelectedBlocks: this._selectedBlocks.length,
@@ -100,25 +96,19 @@ var NumboController = cc.Class.extend({
 	// deselect all currently selected blocks, removing their highlights
 	deselectAllBlocks: function() {
 	    for (var i = 0; i < this._selectedBlocks.length; ++i)
-		this._selectedBlocks[i].clearHighlight();
+			this._selectedBlocks[i].clearHighlight();
 
 	    this._selectedBlocks = [];
 	},
 
 	// activate currently selected blocks
 	// shifts all blocks down to remove gaps and drops them accordingly
-	// returns blocks that were cleared or null otherwise
+	// returns the list of blocks that were cleared
 	activateSelectedBlocks: function() {
 		var clearedBlocks = null;
 
-	    var selectedBlockCount = 0;
 	    if(this.isSelectedClearable()) {
-			// TODO: What is this?
-			this._knownPath = [];
-
-			NJ.gameState.addBlocksCleared(selectedBlockCount);
-			if(selectedBlockCount > NJ.stats.maxComboLength)
-			    NJ.stats.maxComboLength = selectedBlockCount;
+			var lastCol = this._selectedBlocks[this._selectedBlocks.length - 1].col;
 
 			if(NJ.settings.sounds)
 			    cc.audioEngine.playEffect(res.plipSound);
@@ -127,10 +117,10 @@ var NumboController = cc.Class.extend({
 			for(var i = 0; i < this._selectedBlocks.length; ++i)
 			    this._numboLevel.killBlock(this._selectedBlocks[i]);
 
-            var lastCol = this._selectedBlocks[selectedBlockCount - 1].col;
+
 			this._numboLevel.collapseColumnsToward(lastCol);
 
-            clearedBlocks = this._selectedBlocks;
+			clearedBlocks = this._selectedBlocks;
 	    }
 
 	    this.deselectAllBlocks();
@@ -156,9 +146,15 @@ var NumboController = cc.Class.extend({
 			cc.audioEngine.playEffect(res.clickSound);
 	    }
 
-		var powerup = NJ.gameState.powerupMode && (Math.random() < 0.05); // 5% chance
+		var powerup = null;
+		if  (NJ.gameState.isPowerupMode() && this.nextBlockPowerup ) {// 5% chance
+			//powerup = 'clearAndSpawn';
+			powerup = 'bonusOneMania';
+			this.nextBlockPowerup = false;
+		}
+
 		if (powerup) {
-			var path = this.meanderSearch(col, this._numboLevel.blocks[col].length,
+			var path = this.meanderSearch(col, this._numboLevel.getNumBlocksInColumn(col),
 				this.pathAtLeastTwoWithNoiseCriteria, []);
 			if (path && path.length > 0) {
 				var sum = 0;
@@ -214,14 +210,17 @@ var NumboController = cc.Class.extend({
 		var tries = 50; // try no more than 50 times
 		while (tries > 0 && this._knownPath.length == 0) {
 			var block = this._numboLevel.getRandomBlock();
-			this._knownPath = this.meanderSearch(block.col, block.row, this.sumsToCriteria, [block]);
+			if(block)
+				this._knownPath = this.meanderSearch(block.col, block.row, this.sumsToCriteria, [block]);
 
 			--tries;
 		}
 
-		cc.log("tries: " + (50 - tries));
-
 		return this._knownPath;
+	},
+
+	resetKnownPath: function(){
+		this._knownPath = [];
 	},
 
 	////////////
@@ -229,8 +228,12 @@ var NumboController = cc.Class.extend({
 	////////////
 
 	updateRandomJumbo: function() {
-	 	NJ.chooseJumbo(NJ.weightedRandom(this.jumboDistribution));
-		var jumbo = NJ.getJumbo();
+		//console.log(NJ.jumbos.jumboDistribution);
+		var butt = NJ.weightedRandom(NJ.jumbos.getJumboDistribution());
+		console.log(butt);
+	 	NJ.gameState.chooseJumbo(butt);
+
+		var jumbo = NJ.gameState.getJumbo();
 		this.distribution = jumbo.numberList;
 		this.spawnTime = jumbo.spawnTime;
 	},
@@ -277,8 +280,6 @@ var NumboController = cc.Class.extend({
 			// Update the blocks currently on the board.
 			this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
 			this._numboLevel.multiplyBlocksBy(factor);
-            // TODO: What the flying fuck is this????
-			//NJ.gameState.currentLevel = factor;
 		}
 	},
 
@@ -311,17 +312,14 @@ var NumboController = cc.Class.extend({
 	getSpawnConst: function() {
 		var L = NJ.gameState.getLevel();
 		return 0.3 + 2/Math.pow(L, 1/2);
-	    //return 1 + 2/L;
 	},
 
 	getNumBlocks: function(){
 		return this._numboLevel.getNumBlocks();
 	},
 
-	// checks if the current selected blocks can be activated (their equation is valid)
-	getColLength: function(col) {
-	    cc.assert(0 <= col && col < NJ.NUM_COLS, "Invalid column");
-	    return this._numboLevel.blocks[col].length;
+	getNumBlocksInColumn: function(col) {
+		return this._numboLevel.getNumBlocksInColumn(col);
 	},
 
 	getSelectedBlocks: function() {
@@ -343,17 +341,49 @@ var NumboController = cc.Class.extend({
 
 		var selectedBlocksLength = this._selectedBlocks.length;
 
-		// all blocks must be sequentially adjacent
-
 		var sum = 0;
+		var max = 0;
 
-		for (var i = 0; i < selectedBlocksLength - 1; ++i) {
-		    if (!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
-			return false;
+		var i = 0;
 
-		    sum += this._selectedBlocks[i].val;
+		for(; i < selectedBlocksLength - 1; ++i) {
+			if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
+				return false;
 		}
 
-		return sum == this._selectedBlocks[selectedBlocksLength - 1].val;
+		for(i = 0; i < selectedBlocksLength; ++i)
+			sum += this._selectedBlocks[i].val;
+
+
+		for(i = 0; i < selectedBlocksLength; ++i) {
+			if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val)
+				return true;
+		}
+
+		return false;//sum == this._selectedBlocks[selectedBlocksLength - 1].val;
+	},
+
+	requestPowerup: function() {
+		this.nextBlockPowerup = true;
+	},
+
+	initiateOneManiaBonus: function() {
+		NJ.gameState.chooseJumbo("one-mania");
+
+		var jumbo = NJ.gameState.getJumbo();
+		this.distribution = jumbo.numberList;
+		this.spawnTime = jumbo.spawnTime;
+	},
+
+	copyBoard: function() {
+		return this._numboLevel.getBlocks();
+	},
+
+	recallBoard: function(jumbo, blockSize) {
+		NJ.gameState.chooseJumbo(jumbo.id);
+		var id = jumbo.id;
+		var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
+		this.distribution = heldJumbo.numberList;
+		this.spawnTime = heldJumbo.spawnTime;
 	}
 });

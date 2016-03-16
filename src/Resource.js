@@ -18,8 +18,12 @@ var res = {
         src: resRoot + "Fonts/NunitoLight.ttf"
     },
 
-	// images
+	// UI
     buttonImage: resRoot + "Images/Button.png",
+    pauseImage: resRoot + "Images/ic_pause/ic_pause_2x.png",
+    playImage: resRoot + "Images/ic_play/ic_play_2x.png",
+
+    // ingame
     backgroundImage: resRoot + "Images/normal/middle.png",
     glowImage: resRoot + "Images/Glow.png",
     blockImage: resRoot + "Images/block.png",
@@ -60,9 +64,12 @@ var b_getFontName = function(fontRes) {
 
 // resources for the main menu of the game
 var g_menu = [
-    // images
-    res.backgroundImage,
+    // ui
+    res.playImage,
     res.buttonImage,
+
+    // scene
+    res.backgroundImage,
 
     // sounds
     res.clickSound,
@@ -75,11 +82,13 @@ var g_menu = [
 
 // resources for ingame
 var g_game = [
-    // images
+    // UI
+    res.buttonImage,
+
+    // Scene
     res.powerupImage,
     res.glowImage,
     res.blockImage,
-    res.buttonImage,
     res.alertImage,
 
     // sounds
