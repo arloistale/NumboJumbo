@@ -43,31 +43,31 @@ var NumboMenuLayer = (function() {
         var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
         var buttonSize = cc.size(refDim * NJ.buttonSizes.play, refDim * NJ.buttonSizes.play);
 
-        var playButton = new NJButton(buttonSize, onPlay.bind(this), this);
+        var playButton = new NJMenuButton(buttonSize, onPlay.bind(this), this);
         playButton.setImageRes(res.playImage);
         menu.addChild(playButton);
 
         buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
 
-        var instructionsButton = new NJButton(buttonSize, onInstructions.bind(this), this);
+        var instructionsButton = new NJMenuButton(buttonSize, onInstructions.bind(this), this);
         instructionsButton.setImageRes(res.buttonImage);
         menu.addChild(instructionsButton);
 
-        loginButton = new NJButton(buttonSize, onLogin.bind(this), this);
+        loginButton = new NJMenuButton(buttonSize, onLogin.bind(this), this);
         loginButton.setImageRes(res.buttonImage);
         toggleLoginButton();
 
         menu.addChild(loginButton);
 
-        var scoresButton = new NJButton(buttonSize, onScores.bind(this), this);
+        var scoresButton = new NJMenuButton(buttonSize, onScores.bind(this), this);
         scoresButton.setImageRes(res.buttonImage);
         //menu.addChild(scoresButton);
 /*
-        var shopButton = new NJButton("Jumbos", onShop.bind(this), this);
+        var shopButton = new NJMenuButton("Jumbos", onShop.bind(this), this);
         shopButton.setImageRes(res.buttonImage);
         menu.addChild(shopButton);
 */
-        var settingsButton = new NJButton(buttonSize, onSettings.bind(this), this);
+        var settingsButton = new NJMenuButton(buttonSize, onSettings.bind(this), this);
         settingsButton.setImageRes(res.buttonImage);
         menu.addChild(settingsButton);
 

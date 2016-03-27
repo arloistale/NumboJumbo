@@ -41,12 +41,13 @@ var res = {
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
 
+    /*
     backBG: resRoot + "Images/normal/BG.png",
     backBottom: resRoot + "Images/normal/bottom.png",
     backMiddle: resRoot + "Images/normal/middle.png",
     backTop: resRoot + "Images/normal/Top.png",
     backVeryTop: resRoot + "Images/normal/verytop.png",
-    backStars: resRoot + "Images/normal/stars.png"
+    backStars: resRoot + "Images/normal/stars.png"*/
 };
 
 // returns proper font name based on platform
@@ -69,7 +70,7 @@ var g_menu = [
     res.buttonImage,
 
     // scene
-    res.backgroundImage,
+    //res.backgroundImage,
 
     // sounds
     res.clickSound,
@@ -100,8 +101,8 @@ var g_game = [
 
     // fonts
     res.mainFont.src,
-
+/*
     res.backBottom,
     res.backMiddle,
-    res.backTop
+    res.backTop*/
 ];

@@ -1,119 +1,123 @@
-var NumboHeaderLayer = cc.Layer.extend({
+var NumboHeaderLayer = (function() {
 
-    statsMenu: null,
-    buttonsMenu: null,
+    // Touch Events
 
-    scoreValueLabel: null,
+    var onPause = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
 
-    multiplierLabel: null,
+        if(this.onPauseCallback)
+            this.onPauseCallback();
+    };
 
-    // callback
-    onPauseCallback: null,
+    return cc.Layer.extend({
 
-    draw: null,
+        statsMenu: null,
+        buttonsMenu: null,
 
-    ctor: function() {
-        this._super();
+        scoreValueLabel: null,
 
-        var headerSize = cc.size(cc.visibleRect.width, NJ.HEADER_HEIGHT);
-        this.setContentSize(headerSize.width, headerSize.height);
-        this.attr({
-            x: cc.visibleRect.topLeft.x,
-            y: cc.visibleRect.topLeft.y
-        });
+        multiplierLabel: null,
 
-        this.initLabels();
-        this.initButtons();
+        // callback
+        onPauseCallback: null,
 
-        var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - headerSize.height));
-        this.runAction(moveTo);
-    },
+        draw: null,
 
-    // Create the labels used to communicate game state with text.
-    initLabels: function() {
-        contentSize = this.getContentSize();
+        ctor: function() {
+            this._super();
 
-        // Score Labels
-        var scoreStartPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.5);
+            var headerSize = cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.HEADER_HEIGHT);
+            this.setContentSize(headerSize.width, headerSize.height);
+            this.attr({
+                x: cc.visibleRect.topLeft.x,
+                y: cc.visibleRect.topLeft.y
+            });
 
-        var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
-        scoreTitleLabel.attr({
-            scale: 1.0,
-            anchorX: 0,
-            anchorY: 0.5 + NJ.anchorOffsetY,
-            x: scoreStartPos.x,
-            y: scoreStartPos.y
-        });
-        scoreTitleLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-        scoreTitleLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(scoreTitleLabel);
+            this.initLabels();
+            this.initButtons();
 
-        this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.header2);
-        this.scoreValueLabel.attr({
-            scale: 1.0,
-            anchorX: 0,
-            anchorY: 0.5 + NJ.anchorOffsetY,
-            x: scoreStartPos.x + scoreTitleLabel.getContentSize().width,
-            y: scoreStartPos.y
-        });
-        this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-        this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.scoreValueLabel);
-        
-        this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
-        this.multiplierLabel.attr({
-            scale: 1.0 / NJ.fontScalingFactor,
-            anchorX: 0.5,
-            anchorY: 0.5 + NJ.anchorOffsetY,
-            x: contentSize.width / 2,
-            y: contentSize.height / 2
-        });
-        this.multiplierLabel.enableStroke(cc.color(0, 0, 255, 255), 6);
-        this.multiplierLabel.setColor(cc.color(255, 255, 255, 255));
-        this.addChild(this.multiplierLabel);
-    },
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - headerSize.height));
+            this.runAction(moveTo);
+        },
 
-    initButtons: function() {
-        var that = this;
+        // Create the labels used to communicate game state with text.
+        initLabels: function() {
+            contentSize = this.getContentSize();
 
-        var contentSize = this.getContentSize();
+            // Score Labels
+            var scoreStartPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.5);
 
-        // initialize pause button
-        var button = new ccui.Button();
+            var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
+            scoreTitleLabel.attr({
+                scale: 1.0,
+                anchorX: 0,
+                anchorY: 0.5 + NJ.anchorOffsetY,
+                x: scoreStartPos.x,
+                y: scoreStartPos.y
+            });
+            scoreTitleLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
+            scoreTitleLabel.setColor(cc.color(255, 255, 255, 255));
+            this.addChild(scoreTitleLabel);
 
-        //button.setTitleFontName(b_getFontName(res.mainFont));
-        //button.setTitleFontSize(NJ.fontScalingFactor * NJ.fontSizes.buttonMedium);
-        //button.setTitleText("Pause");
-        //var titleSize = button.getTitleRenderer().getContentSize();
-        var buttonSize = cc.size(contentSize.height * 0.9, contentSize.height * 0.9);
-        button.setContentSize(buttonSize.width, buttonSize.height);
-        button.ignoreContentAdaptWithSize(false);
-        button.loadTextureNormal(res.buttonImage);
-        button.setPosition(contentSize.width - buttonSize.width / 2 * 1.1, contentSize.height / 2);
-        button.setColor(cc.color("#424242"));
-        button.addTouchEventListener(function (ref, touchEventType) {
-            if(touchEventType === ccui.Widget.TOUCH_ENDED)
-                that.onPauseCallback();
-        }, this);
+            this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.header2);
+            this.scoreValueLabel.attr({
+                scale: 1.0,
+                anchorX: 0,
+                anchorY: 0.5 + NJ.anchorOffsetY,
+                x: scoreStartPos.x + scoreTitleLabel.getContentSize().width,
+                y: scoreStartPos.y
+            });
+            this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
+            this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
+            this.addChild(this.scoreValueLabel);
 
-        button.addChild(new cc.Sprite(res.pauseImage));
+            this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
+            this.multiplierLabel.attr({
+                scale: 1.0 / NJ.fontScalingFactor,
+                anchorX: 0.5,
+                anchorY: 0.5 + NJ.anchorOffsetY,
+                x: contentSize.width / 2,
+                y: contentSize.height / 2
+            });
+            this.multiplierLabel.enableStroke(cc.color(0, 0, 255, 255), 6);
+            this.multiplierLabel.setColor(cc.color(255, 255, 255, 255));
+            this.addChild(this.multiplierLabel);
+        },
 
-        this.addChild(button);
-    },
+        initButtons: function() {
+            var that = this;
+
+            var contentSize = this.getContentSize();
+
+            var buttonSize = cc.size(contentSize.height, contentSize.height);
+
+            // initialize pause button
+            var menu = new cc.Menu();
+            menu.attr({
+                x: contentSize.width - buttonSize.width / 2,
+                y: contentSize.height / 2
+            });
+            var pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
+            pauseButton.setImageRes(res.pauseImage);
+            menu.addChild(pauseButton);
+
+            this.addChild(menu);
+        },
 
 ////////////////
 // UI setters //
 ////////////////
 
-    updateValues: function() {
-        this.scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
-
-        this.multiplierLabel.setString("x" + NJ.gameState.getMultiplier());
-    },
+        updateValues: function() {
+            this.scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
+            this.multiplierLabel.setString("x" + NJ.gameState.getMultiplier());
+        },
 
 // UI callbacks //
 
-    setOnPauseCallback: function(callback) {
-        this.onPauseCallback = callback;
-    }
-});
+        setOnPauseCallback: function(callback) {
+            this.onPauseCallback = callback;
+        }
+    });
+}());

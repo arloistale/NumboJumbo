@@ -55,14 +55,14 @@ var GameOverMenuLayer = cc.LayerColor.extend({
         var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
         var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
 
-        var retryButton = new NJButton(buttonSize, function() {
+        var retryButton = new NJMenuButton(buttonSize, function() {
             that.onRetry();
         }, this);
         retryButton.setImageRes(res.buttonImage);
 
         buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
 
-        var menuButton = new NJButton(buttonSize, function() {
+        var menuButton = new NJMenuButton(buttonSize, function() {
             that.onMenu();
         }, this);
         menuButton.setImageRes(res.buttonImage);

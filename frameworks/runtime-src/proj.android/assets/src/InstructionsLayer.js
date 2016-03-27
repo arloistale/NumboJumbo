@@ -54,11 +54,11 @@ var InstructionsLayer = cc.LayerColor.extend({
         var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
         var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
 
-        var backButton = new NJButton(buttonSize, function () {
+        var backButton = new NJMenuButton(buttonSize, function () {
             that.onBack();
         }, this);
 
-        var nextButton = new NJButton(buttonSize, function () {
+        var nextButton = new NJMenuButton(buttonSize, function () {
 
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
@@ -99,14 +99,14 @@ var InstructionsLayer = cc.LayerColor.extend({
         var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
         var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
 
-        var backButton = new NJButton(buttonSize, function () {
+        var backButton = new NJMenuButton(buttonSize, function () {
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             that.presentControlsSlide();
         }, this);
 
-        var nextButton = new NJButton(buttonSize, function () {
+        var nextButton = new NJMenuButton(buttonSize, function () {
             that.onBack();
         }, this);
 

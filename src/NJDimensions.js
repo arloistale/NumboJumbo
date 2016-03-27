@@ -15,12 +15,12 @@ NJ.fontSizes = {
     numbo: 24
 };
 
-// relative to reference dimension (the minimum of the visible width and height)
+// button sizes as a percentage of reference dimension (the minimum of the visible width and height)
 NJ.buttonSizes = {
-    play: 0.2,
-    back: 0.07,
-    opt: 0.07
+    play: 0.35,
+    back: 0.15,
+    opt: 0.15
 };
 
 // UI
-NJ.HEADER_HEIGHT = NJ.fontSizes.header2 * 1.5;
+NJ.HEADER_HEIGHT = 0.1;

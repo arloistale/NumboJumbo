@@ -321,12 +321,13 @@ var NumboGameLayer = cc.Layer.extend({
 	// NOTE: This is the function you should be using to put new blocks into the game
 	// TODO: Improve structure (don't check game over state here for improved separation of concerns)
 	spawnDropRandomBlock: function() {
+		var blockSize = cc.size(this._levelCellSize.width * 0.92, this._levelCellSize.height * 0.92);
+
 	    if(this._numboController.isGameOver()) {
 			if(this.pausedJumbo != null) {
 				this.clearBlocks();
 				NJ.gameState.setStage("normal");
 				this._backgroundLayer.updateBackgroundColor(new cc.color(0, 0, 0, 255));
-				var blockSize = cc.size(this._levelCellSize.width * 0.75, this._levelCellSize.height * 0.75);
 				this._numboController.recallBoard(this.pausedJumbo, blockSize);
 				this.spawnNBlocks(this.pausedJumbo.numBlocks);
 				this.pausedJumbo = null;
@@ -346,7 +347,6 @@ var NumboGameLayer = cc.Layer.extend({
 				this._feedbackLayer.clearDoomsayer();
 		}
 
-		var blockSize = cc.size(this._levelCellSize.width * 0.75, this._levelCellSize.height * 0.75);
 	    var spawnBlock = this._numboController.spawnDropRandomBlock(blockSize);
 	    var blockX = this._levelBounds.x + this._levelCellSize.width * (spawnBlock.col + 0.5);
 	    spawnBlock.setPosition(blockX, cc.visibleRect.top.y + this._levelCellSize.height / 2);
@@ -735,7 +735,7 @@ var NumboGameLayer = cc.Layer.extend({
             var row = Math.floor((point.y - this._levelBounds.y) / this._levelCellSize.height);
 
             // return only if coordinates in certain radius of the block.
-            var radius = 0.75 * this._levelCellSize.width / 2;
+            var radius = 0.7 * this._levelCellSize.width / 2;
 
 			var cellCenter = cc.p(this._levelBounds.x + (col + 0.5) * this._levelCellSize.width,
 				this._levelBounds.y + (row + 0.5) * this._levelCellSize.height);

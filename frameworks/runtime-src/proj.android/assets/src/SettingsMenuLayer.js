@@ -56,7 +56,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
         var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
         var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
 
-        var backButton = new NJButton(buttonSize, function () {
+        var backButton = new NJMenuButton(buttonSize, function () {
             that.onBack();
         }, this);
 
@@ -68,7 +68,7 @@ var SettingsMenuLayer = cc.LayerColor.extend({
             this._menu.alignItemsInColumns(1, 2, 2, 1);
         } else {
             buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
-            var menuButton = new NJButton(buttonSize, function () {
+            var menuButton = new NJMenuButton(buttonSize, function () {
                 that.onMenu();
             }, this);
 
