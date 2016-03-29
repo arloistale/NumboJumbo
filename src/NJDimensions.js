@@ -16,11 +16,12 @@ NJ.fontSizes = {
 };
 
 // button sizes as a percentage of reference dimension (the minimum of the visible width and height)
-NJ.buttonSizes = {
-    play: 0.35,
-    back: 0.15,
-    opt: 0.15
-};
+NJ.uiSizes = {
+    // elements
+    headerBar: 0.1,
 
-// UI
-NJ.HEADER_HEIGHT = 0.1;
+    // buttons
+    playButton: 0.35,
+    optionButton: 0.15,
+    textButton: 0.075
+};

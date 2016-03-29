@@ -583,22 +583,22 @@ var NumboGameLayer = (function() {
 
 			// make sure something actually happened
 			if(clearedBlocks) {
+				var comboLength = clearedBlocks.length;
+
 				if(NJ.gameState.isPowerupMode()) {
-					if (this._progressBar.update(clearedBlocks.length)) {
+					if (this._progressBar.update(comboLength)) {
 						this._progressBar.reset(Math.floor(this._progressBar.denom * 1.5));
 						this._numboController.requestPowerup();
 					}
 				}
 
 				var powerupValues = [];
-				var blockSum = 0;
-				var block;
 
+				var block;
 				var i;
 
-				for (i = 0; i < clearedBlocks.length; i++) {
+				for (i = 0; i < comboLength; i++) {
 					block = clearedBlocks[i];
-					blockSum += block.val;
 					if (block.powerup)
 						powerupValues.push(block.powerup);
 				}
@@ -610,12 +610,32 @@ var NumboGameLayer = (function() {
 						this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 				}
 
-				var scoreDifference = NJ.gameState.addScore({blockCount: clearedBlocks.length});
+				NJ.gameState.addBlocksCleared(comboLength);
+
+				var scoreDifference = NJ.gameState.addScore({blockCount: comboLength});
 				var differenceThreshold = 5000;
 
-				NJ.gameState.addBlocksCleared(clearedBlocks.length);
+				// launch feedback for combo threshold title snippet
+				if(comboLength > 3) {
+					var threshold = NJ.comboThresholds.get(comboLength);
+					cc.log(threshold.title);
+					cc.log(threshold.color);
+					cc.assert(threshold, "Combo Threshold + Length mismatch (probably did not define something for this length");
 
-				// launch feedback for combo
+					var distance = _levelBounds.height / 6;
+					var targetVector = cc.pMult(NJ.getRandomUnitVector(), distance);
+					this._feedbackLayer.launchSnippet({
+						title: threshold.title,
+						color: threshold.color,
+						x: touchPosition.x,
+						y: touchPosition.y,
+						targetX: touchPosition.x + targetVector.x,
+						targetY: touchPosition.y + targetVector.y,
+						targetScale: 1 + scoreDifference / differenceThreshold * 3
+					});
+				}
+
+				// launch feedback for gained score
 				this._feedbackLayer.launchSnippet({
 					title: "+" + scoreDifference,
 					x: touchPosition.x,
@@ -626,7 +646,7 @@ var NumboGameLayer = (function() {
 				});
 
 				// Check for a powerup.
-				if (powerupValues.length > 0){
+				if (powerupValues.length > 0) {
 					//cc.log(data.powerupValues);
 					if (powerupValues[0] == 'clearAndSpawn') {
 						this.clearBlocks();
@@ -681,13 +701,6 @@ var NumboGameLayer = (function() {
 							targetY: _levelBounds.y + Math.random() * _levelBounds.height
 						});
 					}
-				}
-
-				// banner for a long combo
-				if (clearedBlocks.length > 3) {
-					this._feedbackLayer.launchFallingBanner({
-						targetY: cc.visibleRect.center.y * 1.5
-					});
 				}
 
 				// we made a new combo, record the combo time in game state

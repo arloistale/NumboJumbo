@@ -22,6 +22,12 @@ var res = {
     buttonImage: resRoot + "Images/Button.png",
     pauseImage: resRoot + "Images/ic_pause/ic_pause_2x.png",
     playImage: resRoot + "Images/ic_play/ic_play_2x.png",
+    backImage: resRoot + "Images/ic_back/ic_back_2x.png",
+    nextImage: resRoot + "Images/ic_next/ic_next_2x.png",
+    helpImage: resRoot + "Images/ic_help/ic_help_2x.png",
+    homeImage: resRoot + "Images/ic_home/ic_home_2x.png",
+    settingsImage: resRoot + "Images/ic_settings/ic_settings_2x.png",
+    retryImage: resRoot + "Images/ic_retry/ic_retry_2x.png",
 
     // ingame
     backgroundImage: resRoot + "Images/normal/middle.png",
@@ -67,6 +73,10 @@ var b_getFontName = function(fontRes) {
 var g_menu = [
     // ui
     res.playImage,
+    res.settingsImage,
+    res.backImage,
+    res.nextImage,
+    res.helpImage,
     res.buttonImage,
 
     // scene
@@ -85,6 +95,10 @@ var g_menu = [
 var g_game = [
     // UI
     res.buttonImage,
+    res.backImage,
+    res.homeImage,
+    res.pauseImage,
+    res.retryImage,
 
     // Scene
     res.powerupImage,

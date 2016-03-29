@@ -10,3 +10,10 @@ NJ.raycastCircleTest = function(origin, end, testPoint, testRadius) {
 
     cc.log("d: " + d + " | f: " + f);
 };
+
+NJ.getRandomUnitVector = function() {
+    var angle = Math.random() * 2 * Math.PI;
+    var x = Math.cos(angle);
+    var y = Math.sin(angle);
+    return cc.p(x, y);
+};

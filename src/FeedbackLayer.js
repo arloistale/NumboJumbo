@@ -19,16 +19,6 @@ var FeedbackLayer = cc.Layer.extend({
 	ctor: function() {
 		this._super();
 
-	    this.feedbackText = ["yahoo!", "yay!", "good job!", "cowabunga!",
-            "keep it up!", "whoa!", "dang!",
-            "gosh golly!", "booya!", "oh wow!",
-            "oh jeez!", "so good!", "astonishing!",
-            "jackpot!", "nice execution!",
-            "winner!", "combo master!", "fabulous!", "moving up!",
-            "nice work!", "wonderful!", "that's how it's done!",
-            "mind blowing!", "stupendous moves!", "breathtaking!",
-            "fantastic!", "crushing the competition!", "masterful!"];
-
         var feedback = null;
         var i = 0;
 
@@ -38,14 +28,14 @@ var FeedbackLayer = cc.Layer.extend({
         // initialize banner pool with entities
         for(; i < BANNER_POOL_SIZE; i++) {
             feedback = new Banner();
-                                    feedback.retain();
+            feedback.retain();
             this.bannerPool.push(feedback);
         }
 
         // initialize snippet pool with entities
         for(i = 0; i < SNIPPET_POOL_SIZE; i++) {
             feedback = new Snippet();
-                                    feedback.retain();
+            feedback.retain();
             this.snippetPool.push(feedback);
         }
 
@@ -131,7 +121,7 @@ var FeedbackLayer = cc.Layer.extend({
 
         var that = this;
 
-        var titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)];
+        var titleStr = "Default String";
 
         if(data) {
             if(typeof data.title !== 'undefined')
@@ -172,8 +162,9 @@ var FeedbackLayer = cc.Layer.extend({
 
         var that = this;
 
-        var titleStr = this.feedbackText[Math.floor(Math.random()*this.feedbackText.length)],
+        var titleStr = "Default String",
             x = 0, y = 0,
+            color = cc.color("#ffffff"),
             targetX = 0, targetY = 0,
             targetScale = 1;
 
@@ -187,6 +178,9 @@ var FeedbackLayer = cc.Layer.extend({
             if(typeof data.y !== 'undefined')
                 y = data.y;
 
+            if(typeof data.color !== 'undefined')
+                color = data.color;
+
             if(typeof data.targetX !== 'undefined')
                 targetX = data.targetX;
 
@@ -197,6 +191,7 @@ var FeedbackLayer = cc.Layer.extend({
                 targetScale = data.targetScale;
         }
 
+        snippet.setColor(color);
         snippet.setText(titleStr);
         snippet.setScale(0.01, 0.01);
         snippet.setPosition(x, y);

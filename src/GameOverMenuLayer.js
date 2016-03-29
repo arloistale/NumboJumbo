@@ -76,12 +76,12 @@ var GameOverMenuLayer = (function() {
             this._menu.addChild(this._currencyLabel);
 
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-            var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
+            var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
             var retryButton = new NJMenuButton(buttonSize, onRetry.bind(this), this);
             retryButton.setImageRes(res.retryImage);
 
-            buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
+            buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
             var menuButton = new NJMenuButton(buttonSize, onMenu.bind(this), this);
             menuButton.setImageRes(res.homeImage);

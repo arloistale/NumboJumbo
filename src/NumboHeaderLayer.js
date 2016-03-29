@@ -27,7 +27,7 @@ var NumboHeaderLayer = (function() {
         ctor: function() {
             this._super();
 
-            var headerSize = cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.HEADER_HEIGHT);
+            var headerSize = cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar);
             this.setContentSize(headerSize.width, headerSize.height);
             this.attr({
                 x: cc.visibleRect.topLeft.x,

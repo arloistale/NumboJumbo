@@ -34,10 +34,42 @@ NJ.tags = {
     PAUSABLE: 9001
 };
 
-// blocks
-NJ.BLOCK_TYPE = {
-    NORMAL: 0
-};
+// combo thresholds
+NJ.comboThresholds = (function() {
+    var data = [
+        {
+            lengthThreshold: 4,
+            title: "Nice!",
+            color: cc.color("#11ff11"),
+            scoreBonus: 400
+        },
+        {
+            lengthThreshold: 6,
+            title: "Amazing!",
+            color: cc.color("#ffee11"),
+            scoreBonus: 1200
+        },
+        {
+            lengthThreshold: 9,
+            title: "Holy SHIT!!!",
+            color: cc.color("ff0011"),
+            scoreBonus: 3600
+        }
+    ];
+
+    return {
+        get: function(comboLength) {
+            var curr = null;
+
+            for(var i = 0; i < data.length; i++) {
+                if(comboLength >= data[i].lengthThreshold)
+                    curr = data[i];
+            }
+
+            return curr;
+        }
+    }
+}());
 
 // game settings
 NJ.DANGER_THRESHOLD = 0.75;

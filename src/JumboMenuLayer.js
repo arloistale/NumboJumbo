@@ -84,7 +84,7 @@ var JumboMenuLayer = (function() {
             }
 
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-            var buttonSize = cc.size(refDim * NJ.buttonSizes.back, refDim * NJ.buttonSizes.back);
+            var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
             var backButton = new NJMenuButton(buttonSize, onBack.bind(this), this);
             backButton.setImageRes(res.backImage);

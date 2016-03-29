@@ -40,6 +40,10 @@ var Feedback = cc.Sprite.extend({
         });
     },
 
+    setColor: function(color) {
+        this.label.setColor(color);
+    },
+
     setText: function(text) {
         this.label.setString(text);
     },

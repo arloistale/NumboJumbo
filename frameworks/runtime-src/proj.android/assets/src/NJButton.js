@@ -54,7 +54,7 @@ var NJButton = (function() {
         };
     };
 
-    return cc.MenuItemSprite.extend({
+    return cc.Sprite.extend({
 
         _spriteStates: null,
         _titleStates: null,

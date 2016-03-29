@@ -29,8 +29,8 @@ var NumboMenuLayer = (function() {
         this.addChild(backgroundSprite, 10, 1);
         */
 
-        var rotatePoint = new cc.RotateBy(250, 360); // <- Rotate the node by 360 degrees in 5 seconds.
-        var rotateForever = new cc.RepeatForever(rotatePoint); // <- Keeps the node rotating forever.
+        //var rotatePoint = new cc.RotateBy(250, 360); // <- Rotate the node by 360 degrees in 5 seconds.
+        //var rotateForever = new cc.RepeatForever(rotatePoint); // <- Keeps the node rotating forever.
         //backgroundSprite.runAction(rotateForever);
     };
 
@@ -41,35 +41,38 @@ var NumboMenuLayer = (function() {
         var that = this;
 
         var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-        var buttonSize = cc.size(refDim * NJ.buttonSizes.play, refDim * NJ.buttonSizes.play);
+        var buttonSize = cc.size(refDim * NJ.uiSizes.playButton, refDim * NJ.uiSizes.playButton);
 
         var playButton = new NJMenuButton(buttonSize, onPlay.bind(this), this);
         playButton.setImageRes(res.playImage);
         menu.addChild(playButton);
 
-        buttonSize = cc.size(refDim * NJ.buttonSizes.opt, refDim * NJ.buttonSizes.opt);
+        buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
         var instructionsButton = new NJMenuButton(buttonSize, onInstructions.bind(this), this);
-        instructionsButton.setImageRes(res.buttonImage);
-        menu.addChild(instructionsButton);
+        instructionsButton.setImageRes(res.helpImage);
+
+        var settingsButton = new NJMenuButton(buttonSize, onSettings.bind(this), this);
+        settingsButton.setImageRes(res.settingsImage);
+
+        buttonSize = cc.size(refDim * 0.75, refDim * NJ.uiSizes.textButton);
 
         loginButton = new NJMenuButton(buttonSize, onLogin.bind(this), this);
-        loginButton.setImageRes(res.buttonImage);
+        loginButton.setBackgroundColor(cc.color("#3b5998"));
         toggleLoginButton();
 
         menu.addChild(loginButton);
+        menu.addChild(instructionsButton);
+        menu.addChild(settingsButton);
 
-        var scoresButton = new NJMenuButton(buttonSize, onScores.bind(this), this);
-        scoresButton.setImageRes(res.buttonImage);
+        //var scoresButton = new NJMenuButton(buttonSize, onScores.bind(this), this);
+        //scoresButton.setImageRes(res.buttonImage);
         //menu.addChild(scoresButton);
 /*
         var shopButton = new NJMenuButton("Jumbos", onShop.bind(this), this);
         shopButton.setImageRes(res.buttonImage);
         menu.addChild(shopButton);
 */
-        var settingsButton = new NJMenuButton(buttonSize, onSettings.bind(this), this);
-        settingsButton.setImageRes(res.buttonImage);
-        menu.addChild(settingsButton);
 
         menu.alignItemsVerticallyWithPadding(15);
 
