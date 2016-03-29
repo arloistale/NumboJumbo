@@ -82,7 +82,7 @@ var NumboHeaderLayer = (function() {
             });
             this.multiplierLabel.enableStroke(cc.color(0, 0, 255, 255), 6);
             this.multiplierLabel.setColor(cc.color(255, 255, 255, 255));
-            this.addChild(this.multiplierLabel);
+            //this.addChild(this.multiplierLabel);
         },
 
         initButtons: function() {
@@ -111,7 +111,7 @@ var NumboHeaderLayer = (function() {
 
         updateValues: function() {
             this.scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
-            this.multiplierLabel.setString("x" + NJ.gameState.getMultiplier());
+            //this.multiplierLabel.setString("x" + NJ.gameState.getMultiplier());
         },
 
 // UI callbacks //

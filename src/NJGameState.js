@@ -142,7 +142,7 @@ NJ.gameState = (function() {
             if (data && typeof data.blockCount !== 'undefined') {
                 var blockCount = data.blockCount;
                 var clearedScoreValue = 10 * (Math.floor(0.5 * blockCount * blockCount + blockCount) );
-                scoreDifference = clearedScoreValue * multiplier;
+                scoreDifference = clearedScoreValue;
 
                 var threshold = NJ.comboThresholds.get(blockCount);
                 if(threshold)

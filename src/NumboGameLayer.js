@@ -743,7 +743,7 @@ var NumboGameLayer = (function() {
 				second = selectedBlocks[i + 1];
 
 				this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(first.col, first.row),
-					convertLevelCoordsToPoint(second.col, second.row), 2, cc.color("#ffffff"));
+					convertLevelCoordsToPoint(second.col, second.row), 1, cc.color("#ffffff"));
 			}
 		}
 	});
