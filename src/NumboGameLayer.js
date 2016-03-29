@@ -317,13 +317,15 @@ var NumboGameLayer = (function() {
 		// Block Spawning //
 		////////////////////
 
-		// Move scene block sprite into place.S
+		// Move scene block sprite into place.
 		moveBlockIntoPlace: function(moveBlock) {
 			var blockTargetY = _levelBounds.y + _levelCellSize.height * (moveBlock.row + 0.5);
 			var blockTargetX = _levelBounds.x + _levelCellSize.width * (moveBlock.col + 0.5);
 
-			var duration = 0.5;
-			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY));
+			var duration = 0.7;
+			var easing = cc.easeQuinticActionInOut();
+
+			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing[0]);
 			moveAction.setTag(42);
 			//block.stopAllActions();
 			moveBlock.stopActionByTag(42);
