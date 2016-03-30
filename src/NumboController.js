@@ -231,7 +231,6 @@ var NumboController = (function() {
 		updateRandomJumbo: function() {
 			//console.log(NJ.jumbos.jumboDistribution);
 			var butt = NJ.weightedRandom(NJ.jumbos.getJumboDistribution());
-			console.log(butt);
 			NJ.gameState.chooseJumbo(butt);
 
 			var jumbo = NJ.gameState.getJumbo();
