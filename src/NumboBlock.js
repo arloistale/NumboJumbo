@@ -55,8 +55,11 @@ var NumboBlock = (function() {
 
     var blink = function() {
         this._colorIndex += 1;
+        var blockSize = this.getContentSize();
         this._colorIndex %= selectionColors.length;
-        this._backgroundSprite.setColor(selectionColors[this._colorIndex]);
+        // TODO: Use shaders here!!!!
+        this._circleNode.setDrawColor(selectionColors[this._colorIndex]);
+        this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1);
     };
 
     return cc.Sprite.extend({
@@ -95,7 +98,7 @@ var NumboBlock = (function() {
             this.addChild(this._backgroundSprite, -2);
 */
             this._circleNode = cc.DrawNode.create();
-            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 100, false, 2, cc.color("#ffffff"));
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1, cc.color("#ffffff"));
             this.addChild(this._circleNode, -2);
 
             // initialize highlight
@@ -162,10 +165,11 @@ var NumboBlock = (function() {
                 cc.color("#FFCA1B")
             ];
 
-            var size = this.getContentSize();
-            var chosen = colors[Math.floor(Math.max(0, (this.val - 1)) % colors.length)];
+            var blockSize = this.getContentSize();
             this._circleNode.clear();
-            this._circleNode.drawCircle(cc.p(size.width / 2, size.height / 2), size.width / 2 * 0.7, 0, 8, false, 1, chosen);
+            var chosen = colors[Math.floor(Math.max(0, (this.val - 1)) % colors.length)];
+            this._circleNode.setDrawColor(chosen);
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1);
         },
 
         removePowerUp: function() {

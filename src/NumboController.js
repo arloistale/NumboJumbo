@@ -132,6 +132,11 @@ var NumboController = (function() {
 			this._numboLevel.clearBottomRows(num);
 		},
 
+		killAllBlocks: function() {
+			this.deselectAllBlocks();
+			this._numboLevel.killAllBlocks();
+		},
+
 		// drop block into random column with random value
 		// must define block size in terms of world coordinates
 		// returns dropped block

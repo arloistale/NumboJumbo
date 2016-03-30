@@ -114,7 +114,7 @@ var NumboGameLayer = (function() {
 		initProgressBar: function() {
 			this._progressBar = new ProgressBarLayer(_levelBounds, 20);
 			this.addChild(this._progressBar);
-			this.schedule(this.shrinkProgress, .1);
+			this.schedule(this.shrinkProgress, 0.1);
 		},
 
 		shrinkProgress: function() {
@@ -381,8 +381,8 @@ var NumboGameLayer = (function() {
 			this.schedule(this.spawnDropRandomBlock, 0.1, N);
 		},
 
-		clearBlocks: function(){
-			this._numboController._numboLevel.killAllBlocks();
+		clearBlocks: function() {
+			this._numboController.killAllBlocks();
 		},
 
 		///////////////////////
@@ -584,11 +584,24 @@ var NumboGameLayer = (function() {
 			if(clearedBlocks) {
 				var comboLength = clearedBlocks.length;
 
-				if(NJ.gameState.isPowerupMode()) {
-					if (this._progressBar.update(comboLength)) {
-						this._progressBar.reset(Math.floor(this._progressBar.denom * 1.5));
+                var scoreBonus = 0;
+
+				if (this._progressBar.update(comboLength)) {
+					this._progressBar.reset(Math.floor(this._progressBar.denom * 1.5));
+
+					if(NJ.gameState.isPowerupMode()) {
 						this._numboController.requestPowerup();
 					}
+
+                    this._feedbackLayer.launchFallingBanner({
+                        title: "SPEED BONUS",
+                        color: threshold ? threshold.color : cc.color("#ffffff"),
+                        targetY: cc.visibleRect.center.y * 1.3,
+                        easing: cc.easeElasticOut()
+                    });
+
+                    // give flat bonus for speed
+                    scoreBonus += 5000;
 				}
 
 				var powerupValues = [];
@@ -611,21 +624,27 @@ var NumboGameLayer = (function() {
 
 				NJ.gameState.addBlocksCleared(comboLength);
 
-				var scoreDifference = NJ.gameState.addScore({blockCount: comboLength});
+                var threshold = NJ.comboThresholds.get(comboLength);
+                if(threshold)
+                    scoreBonus += threshold.scoreBonus;
+
+				var scoreDifference = NJ.gameState.addScore({
+                    blockCount: comboLength,
+                    bonus: scoreBonus
+                });
 				var differenceThreshold = 30000;
 
 				// launch feedback for combo threshold title snippet
 				if(comboLength >= 5) {
-					var overflow = comboLength - 5;
 					var title = "WOMBO COMBO";
 
 					this._feedbackLayer.launchFallingBanner({
 						title: title,
-						targetY: cc.visibleRect.center.y
+                        color: threshold ? threshold.color : cc.color("#ffffff"),
+						targetY: cc.visibleRect.center.y * 1.3,
+                        easing: cc.easeElasticOut()
 					});
 				}
-
-				var threshold = NJ.comboThresholds.get(comboLength);
 
 				// launch feedback for gained score
 				this._feedbackLayer.launchSnippet({
