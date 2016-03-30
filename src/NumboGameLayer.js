@@ -614,7 +614,7 @@ var NumboGameLayer = (function() {
 				NJ.gameState.addBlocksCleared(comboLength);
 
 				var scoreDifference = NJ.gameState.addScore({blockCount: comboLength});
-				var differenceThreshold = 5000;
+				var differenceThreshold = 30000;
 
 				// launch feedback for combo threshold title snippet
 				if(comboLength >= 5) {
