@@ -62,8 +62,8 @@ var NumboBlock = (function() {
     return cc.Sprite.extend({
         // exposed public properties
 
-        // UI properties
-        _backgroundSprite: null,
+        // Display
+        _circleNode: null,
         _highlightSprite: null,
         _valueLabel: null,
 
@@ -83,8 +83,8 @@ var NumboBlock = (function() {
 
             this.setTag(NJ.tags.PAUSABLE);
 
+            /*
             this._backgroundSprite = new cc.Sprite(res.blockImage);
-            var backgroundSize = this._backgroundSprite.getContentSize();
             this._backgroundSprite.setScale(blockSize.width / backgroundSize.width, blockSize.height / backgroundSize.height);
             this._backgroundSprite.attr({
                 anchorX: 0.5,
@@ -93,17 +93,12 @@ var NumboBlock = (function() {
                 y: blockSize.height / 2
             });
             this.addChild(this._backgroundSprite, -2);
+*/
+            this._circleNode = cc.DrawNode.create();
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 100, false, 2, cc.color("#ffffff"));
+            this.addChild(this._circleNode, -2);
 
-            var outlineSprite = new cc.Sprite(res.blockImage);
-            outlineSprite.setScale(blockSize.width / backgroundSize.width * 1.1, blockSize.height / backgroundSize.height * 1.1);
-            outlineSprite.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: blockSize.width / 2,
-                y: blockSize.height / 2
-            });
-            //this.addChild(outlineSprite, -3);
-
+            // initialize highlight
             this._highlightSprite = new cc.Sprite(res.glowImage);
             var highlightSize = this._highlightSprite.getContentSize();
             this._highlightSprite.setScale(blockSize.width / highlightSize.width * 1.1, blockSize.height / highlightSize.height * 1.1);
@@ -116,6 +111,7 @@ var NumboBlock = (function() {
             });
             this.addChild(this._highlightSprite, -1);
 
+            // initialize number label
             this._valueLabel = cc.LabelTTF.create("label test", b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.numbo);
             this._valueLabel.attr({
                 scale: 1.0 / NJ.fontScalingFactor,
@@ -144,13 +140,11 @@ var NumboBlock = (function() {
             }
 
             if (this.powerup == 'clearAndSpawn'){
-                //this.backgroundSprite.setTexture(res.powerupImage);
                 this.schedule(this.removePowerUp, 10);
                 this._valueLabel.enableStroke(cc.color(0, 255, 255, 255), 1);
                 this._valueLabel.setColor(cc.color(255, 0, 0));
             }
             if (this.powerup == 'changeJumbo'){
-                //this.backgroundSprite.setTexture(res.powerupImage);
                 this.schedule(this.removePowerUp, 10);
                 this._valueLabel.enableStroke(cc.color(0, 255, 255), 1);
                 this._valueLabel.setColor(cc.color(0, 255, 255));
@@ -168,15 +162,16 @@ var NumboBlock = (function() {
                 cc.color("#FFCA1B")
             ];
 
+            var size = this.getContentSize();
             var chosen = colors[Math.floor(Math.max(0, (this.val - 1)) % colors.length)];
-            this._backgroundSprite.setColor(chosen);
+            this._circleNode.clear();
+            this._circleNode.drawCircle(cc.p(size.width / 2, size.height / 2), size.width / 2 * 0.7, 0, 8, false, 1, chosen);
         },
 
-        removePowerUp: function(){
+        removePowerUp: function() {
             this.powerup = false;
             this.unschedule(this.blink);
             this.clearHighlight();
-            this._backgroundSprite.setTexture(res.blockImage);
             this._valueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             this._valueLabel.setColor(cc.color(255, 255, 255));
         },
@@ -185,11 +180,13 @@ var NumboBlock = (function() {
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
         kill: function() {
             var block = this;
+            var scaleAction = cc.scaleTo(0.7, 1.5, 1.5).easing(cc.easeExponentialOut());
             var fadeAction = cc.fadeTo(0.2, 0);
             var removeAction = cc.callFunc(function() {
                 block.removeFromParent(true);
             });
             this.stopAllActions();
+            this.runAction(scaleAction);
             this.runAction(cc.sequence(fadeAction, removeAction));
         },
 

@@ -38,22 +38,22 @@ NJ.tags = {
 NJ.comboThresholds = (function() {
     var data = [
         {
-            lengthThreshold: 4,
+            lengthThreshold: 5,
             title: "Nice!",
             color: cc.color("#11ff11"),
-            scoreBonus: 400
+            scoreBonus: 250
         },
         {
             lengthThreshold: 6,
             title: "Amazing!",
             color: cc.color("#ffee11"),
-            scoreBonus: 1200
+            scoreBonus: 1000
         },
         {
-            lengthThreshold: 9,
+            lengthThreshold: 7,
             title: "Holy SHIT!!!",
             color: cc.color("ff0011"),
-            scoreBonus: 3600
+            scoreBonus: 5000
         }
     ];
 
