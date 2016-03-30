@@ -98,11 +98,11 @@ var NumboGameLayer = (function() {
 			this.schedule(this.scheduleSpawn, 0.1*20);
 
 			// begin searching for hints
-			this.schedule(this.searchForHint, 0.1, true, 0);
+			this.schedule(this.searchForHint, 0.1);
 
 			// begin scheduling hint jiggles
-			this.unschedule(this.jiggleHintBlocks);
-			this.schedule(this.jiggleHintBlocks, 5, true, 8);
+			//this.unschedule(this.jiggleHintBlocks);
+			this.schedule(this.jiggleHintBlocks, 5);
 		},
 
 		// initialize the powerup mode variable
@@ -317,13 +317,14 @@ var NumboGameLayer = (function() {
 		// Block Spawning //
 		////////////////////
 
-		// Move scene block sprite into place.S
+		// Move scene block sprite into place.
 		moveBlockIntoPlace: function(moveBlock) {
 			var blockTargetY = _levelBounds.y + _levelCellSize.height * (moveBlock.row + 0.5);
 			var blockTargetX = _levelBounds.x + _levelCellSize.width * (moveBlock.col + 0.5);
 
-			var duration = 0.5;
-			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY));
+			var duration = 0.7;
+			var easing = cc.easeQuinticActionInOut();
+			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 			moveAction.setTag(42);
 			//block.stopAllActions();
 			moveBlock.stopActionByTag(42);
@@ -401,11 +402,6 @@ var NumboGameLayer = (function() {
 
 		searchForHint: function(){
 			var hint = this._numboController.findHint();
-			var pathString = "path: ";
-			for (var i in hint) {
-				if(hint.hasOwnProperty(i))
-					pathString += hint[i].getValue() + ", "
-			}
 		},
 
 		jiggleHintBlocks: function(){
@@ -414,6 +410,8 @@ var NumboGameLayer = (function() {
 				if(hint.hasOwnProperty(i))
 					hint[i].jiggleSprite();
 			}
+			this.unschedule(this.jiggleHintBlocks);
+			this.schedule(this.jiggleHintBlocks, 5);
 		},
 
 		///////////////////////
@@ -528,6 +526,8 @@ var NumboGameLayer = (function() {
 					this.redrawSelectedLines();
 				}
 			}
+			// Prevent any hint during a touch.
+			this.unschedule(this.jiggleHintBlocks);
 		},
 
 		// On touch moved, selects additional blocks as the touch is held and moved using raycasting
@@ -616,36 +616,30 @@ var NumboGameLayer = (function() {
 				NJ.gameState.addBlocksCleared(comboLength);
 
 				var scoreDifference = NJ.gameState.addScore({blockCount: comboLength});
-				var differenceThreshold = 5000;
+				var differenceThreshold = 30000;
 
 				// launch feedback for combo threshold title snippet
-				if(comboLength > 3) {
-					var threshold = NJ.comboThresholds.get(comboLength);
-					cc.log(threshold.title);
-					cc.log(threshold.color);
-					cc.assert(threshold, "Combo Threshold + Length mismatch (probably did not define something for this length");
+				if(comboLength >= 5) {
+					var overflow = comboLength - 5;
+					var title = "WOMBO COMBO";
 
-					var distance = _levelBounds.height / 6;
-					var targetVector = cc.pMult(NJ.getRandomUnitVector(), distance);
-					this._feedbackLayer.launchSnippet({
-						title: threshold.title,
-						color: threshold.color,
-						x: touchPosition.x,
-						y: touchPosition.y,
-						targetX: touchPosition.x + targetVector.x,
-						targetY: touchPosition.y + targetVector.y,
-						targetScale: 1 + scoreDifference / differenceThreshold * 3
+					this._feedbackLayer.launchFallingBanner({
+						title: title,
+						targetY: cc.visibleRect.center.y
 					});
 				}
 
+				var threshold = NJ.comboThresholds.get(comboLength);
+
 				// launch feedback for gained score
 				this._feedbackLayer.launchSnippet({
-					title: "+" + scoreDifference,
+					title: "+" + NJ.prettifier.formatNumber(scoreDifference),
+					color: threshold ? threshold.color : cc.color("#ffffff"),
 					x: touchPosition.x,
 					y: touchPosition.y,
 					targetX: touchPosition.x,
 					targetY: touchPosition.y + _levelBounds.height / 6,
-					targetScale: 1 + scoreDifference / differenceThreshold
+					targetScale: 1 + 0.125 * Math.min(1, scoreDifference / differenceThreshold)
 				});
 
 				// Check for a powerup.
@@ -715,10 +709,12 @@ var NumboGameLayer = (function() {
 				// increment score, and update header labels
 				this._numboHeaderLayer.updateValues();
 
-				// schedule a hint
-				this.unschedule(this.jiggleHintBlocks);
-				this.schedule(this.jiggleHintBlocks, 5, true, 4);
+				// Allow controller to look for new hint.
+				this._numboController.resetKnownPath();
 			}
+
+			// schedule a hint
+			this.schedule(this.jiggleHintBlocks, 5);
 		},
 		/*
 		 pauseSpawn: function(time) {
@@ -756,13 +752,19 @@ var NumboGameLayer = (function() {
 			this._selectedLinesNode.clear();
 
 			var selectedBlocks = this._numboController.getSelectedBlocks();
+			var selectedBlockSum = 0;
+			for (var i in selectedBlocks){
+				var block = selectedBlocks[i];
+				selectedBlockSum += block.val;
+			}
+			var highlightColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
 			var first, second;
 			for(var i = 0; i < selectedBlocks.length - 1; i++) {
 				first = selectedBlocks[i];
 				second = selectedBlocks[i + 1];
 
 				this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(first.col, first.row),
-					convertLevelCoordsToPoint(second.col, second.row), 1, cc.color("#ffffff"));
+					convertLevelCoordsToPoint(second.col, second.row), 1, highlightColor);
 			}
 		}
 	});

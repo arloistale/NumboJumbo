@@ -137,11 +137,13 @@ var NumboBlock = (function() {
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
         kill: function() {
             var block = this;
+            var scaleAction = cc.scaleTo(0.7, 1.5, 1.5).easing(cc.easeExponentialOut());
             var fadeAction = cc.fadeTo(0.2, 0);
             var removeAction = cc.callFunc(function() {
                 block.removeFromParent(true);
             });
             this.stopAllActions();
+            this.runAction(scaleAction);
             this.runAction(cc.sequence(fadeAction, removeAction));
         },
 

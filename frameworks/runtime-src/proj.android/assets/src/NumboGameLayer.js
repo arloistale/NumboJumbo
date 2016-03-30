@@ -317,13 +317,14 @@ var NumboGameLayer = (function() {
 		// Block Spawning //
 		////////////////////
 
-		// Move scene block sprite into place.S
+		// Move scene block sprite into place.
 		moveBlockIntoPlace: function(moveBlock) {
 			var blockTargetY = _levelBounds.y + _levelCellSize.height * (moveBlock.row + 0.5);
 			var blockTargetX = _levelBounds.x + _levelCellSize.width * (moveBlock.col + 0.5);
 
-			var duration = 0.5;
-			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY));
+			var duration = 0.7;
+			var easing = cc.easeQuinticActionInOut();
+			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 			moveAction.setTag(42);
 			//block.stopAllActions();
 			moveBlock.stopActionByTag(42);
@@ -613,36 +614,30 @@ var NumboGameLayer = (function() {
 				NJ.gameState.addBlocksCleared(comboLength);
 
 				var scoreDifference = NJ.gameState.addScore({blockCount: comboLength});
-				var differenceThreshold = 5000;
+				var differenceThreshold = 30000;
 
 				// launch feedback for combo threshold title snippet
-				if(comboLength > 3) {
-					var threshold = NJ.comboThresholds.get(comboLength);
-					cc.log(threshold.title);
-					cc.log(threshold.color);
-					cc.assert(threshold, "Combo Threshold + Length mismatch (probably did not define something for this length");
+				if(comboLength >= 5) {
+					var overflow = comboLength - 5;
+					var title = "WOMBO COMBO";
 
-					var distance = _levelBounds.height / 6;
-					var targetVector = cc.pMult(NJ.getRandomUnitVector(), distance);
-					this._feedbackLayer.launchSnippet({
-						title: threshold.title,
-						color: threshold.color,
-						x: touchPosition.x,
-						y: touchPosition.y,
-						targetX: touchPosition.x + targetVector.x,
-						targetY: touchPosition.y + targetVector.y,
-						targetScale: 1 + scoreDifference / differenceThreshold * 3
+					this._feedbackLayer.launchFallingBanner({
+						title: title,
+						targetY: cc.visibleRect.center.y
 					});
 				}
 
+				var threshold = NJ.comboThresholds.get(comboLength);
+
 				// launch feedback for gained score
 				this._feedbackLayer.launchSnippet({
-					title: "+" + scoreDifference,
+					title: "+" + NJ.prettifier.formatNumber(scoreDifference),
+					color: threshold ? threshold.color : cc.color("#ffffff"),
 					x: touchPosition.x,
 					y: touchPosition.y,
 					targetX: touchPosition.x,
 					targetY: touchPosition.y + _levelBounds.height / 6,
-					targetScale: 1 + scoreDifference / differenceThreshold
+					targetScale: 1 + 0.125 * Math.min(1, scoreDifference / differenceThreshold)
 				});
 
 				// Check for a powerup.
@@ -743,7 +738,7 @@ var NumboGameLayer = (function() {
 				second = selectedBlocks[i + 1];
 
 				this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(first.col, first.row),
-					convertLevelCoordsToPoint(second.col, second.row), 2, cc.color("#ffffff"));
+					convertLevelCoordsToPoint(second.col, second.row), 1, cc.color("#ffffff"));
 			}
 		}
 	});
