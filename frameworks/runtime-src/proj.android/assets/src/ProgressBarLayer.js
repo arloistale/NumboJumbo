@@ -26,17 +26,16 @@ var ProgressBarLayer = cc.Layer.extend({
         var h = this.gridSize.height;
 
         this.draw.clear();
-        this.draw.drawPoly([cc.p(x, y), cc.p(x+w, y), cc.p(x+w, y+h), cc.p(x, y+h)],
-            cc.color(77, 77, 77, 100), 1, cc.color(0, 0, 0, 255));
+        this.draw.drawPoly([cc.p(x, y), cc.p(x + w, y), cc.p(x + w, y + h), cc.p(x, y + h)],
+            cc.color(77, 77, 77, 100), 0, cc.color("#000000"));
         //this.draw.drawPoly([cc.p(x, y), cc.p(x+w, y), cc.p(x+w, y+(this.prog/this.denom*h)), cc.p(x, y+(this.prog/this.denom*h))],
         //    cc.color(0, 0, 255, 100), 1, cc.color(0, 0, 0, 255));
 
-        var progW = this.prog/this.denom*w/2;
-        var progH = this.prog/this.denom*h/2;
+        var progH = this.prog / this.denom * h;
 
         var newColor = cc.color(0,0,0,100);
         if(NJ.gameState.getStage() == "normal") {
-            newColor = cc.color(20 * NJ.gameState.getMultiplier(), 20 * NJ.gameState.getMultiplier(), 255, 100);
+            newColor = cc.color(20 * NJ.gameState.getMultiplier(), 20 * NJ.gameState.getMultiplier(), 166, 100);
             this.prog = Math.max(0, this.prog + progress);
         }
         else if(NJ.gameState.getStage() == "bonus") {
@@ -44,18 +43,19 @@ var ProgressBarLayer = cc.Layer.extend({
         }
         else console.log("NO STAGE");
 
-        this.draw.drawPoly([cc.p(x+(w/2)-progW, y+(h/2)+progH), cc.p(x+(w/2)+progW, y+(h/2)+progH),
-            cc.p(x+(w/2)+progW, y+(h/2)-progH), cc.p(x+(w/2)-progW, y+(h/2)-progH)],
-            newColor, 1, cc.color(0, 0, 0, 255));
+        this.draw.drawPoly([cc.p(x, y), cc.p(x + w, y),
+            cc.p(x + w, y + progH), cc.p(x, y + progH)],
+            newColor, 0, cc.color("#000000"));
 
-        if (this.prog/this.denom >= 1)
+        if (this.prog / this.denom >= 1)
             return true;
+
         return false;
     },
 
     reset: function(newDenom) {
         this.denom = newDenom;
-        this.prog = this.denom/2;
+        this.prog = 0;
         this.update(0);
     },
 

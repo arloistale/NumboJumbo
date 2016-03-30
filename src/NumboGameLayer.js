@@ -518,9 +518,10 @@ var NumboGameLayer = (function() {
 				var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 				if(data) {
-					var currBlock = data.currBlock, lastBlock = data.lastBlock;
-					var color = NJ.selectionColors.getNextColor(data.numSelectedBlocks);
-					currBlock.highlight(color);
+					//var currBlock = data.currBlock, lastBlock = data.lastBlock;
+					//var color = NJ.selectionColors.getNextColor(data.numSelectedBlocks);
+					//currBlock.highlight(color);
+					this.highlightSelectedBlocks();
 					this.redrawSelectedLines();
 				}
 			}
@@ -549,9 +550,10 @@ var NumboGameLayer = (function() {
 					data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 					if(data) {
-						currBlock = data.currBlock;
-						lastBlock = data.lastBlock;
-						currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+						//currBlock = data.currBlock;
+						//lastBlock = data.lastBlock;
+						//currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+						this.highlightSelectedBlocks();
 						this.redrawSelectedLines();
 					}
 				}
@@ -563,9 +565,10 @@ var NumboGameLayer = (function() {
 				data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 				if(data) {
-					currBlock = data.currBlock;
-					lastBlock = data.lastBlock;
-					currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+					//currBlock = data.currBlock;
+					//lastBlock = data.lastBlock;
+					//currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+					this.highlightSelectedBlocks();
 					this.redrawSelectedLines();
 				}
 			}
@@ -746,18 +749,40 @@ var NumboGameLayer = (function() {
 // Drawing //
 /////////////
 
+
+		highlightSelectedBlocks: function(){
+			var selectedBlockSum = 0;
+			var selectedBlocks = this._numboController.getSelectedBlocks();
+			for (var i in selectedBlocks){
+				var block = selectedBlocks[i];
+				selectedBlockSum += block.val;
+			}
+			var highlightColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
+
+			for (var i in selectedBlocks){
+				var block = selectedBlocks[i];
+				block.highlight(highlightColor);
+			}
+		},
+
 		// redraw lines indicating selected blocks
 		redrawSelectedLines: function() {
 			this._selectedLinesNode.clear();
 
 			var selectedBlocks = this._numboController.getSelectedBlocks();
+			var selectedBlockSum = 0;
+			for (var i in selectedBlocks){
+				var block = selectedBlocks[i];
+				selectedBlockSum += block.val;
+			}
+			var highlightColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
 			var first, second;
 			for(var i = 0; i < selectedBlocks.length - 1; i++) {
 				first = selectedBlocks[i];
 				second = selectedBlocks[i + 1];
 
 				this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(first.col, first.row),
-					convertLevelCoordsToPoint(second.col, second.row), 1, cc.color("#ffffff"));
+					convertLevelCoordsToPoint(second.col, second.row), 1, highlightColor);
 			}
 		}
 	});

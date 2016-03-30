@@ -90,19 +90,18 @@ var NumboGameLayer = (function() {
 			this.initAudio();
 
 			this.initPowerups();
-			if(NJ.gameState.isPowerupMode())
-				this.initProgressBar();
+			this.initProgressBar();
 
 			// Begin scheduling block drops.
 			this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
 			this.schedule(this.scheduleSpawn, 0.1*20);
 
 			// begin searching for hints
-			this.schedule(this.searchForHint, 0.1, true, 0);
+			this.schedule(this.searchForHint, 0.1);
 
 			// begin scheduling hint jiggles
-			this.unschedule(this.jiggleHintBlocks);
-			this.schedule(this.jiggleHintBlocks, 5, true, 8);
+			//this.unschedule(this.jiggleHintBlocks);
+			this.schedule(this.jiggleHintBlocks, 5);
 		},
 
 		// initialize the powerup mode variable
@@ -115,7 +114,7 @@ var NumboGameLayer = (function() {
 		initProgressBar: function() {
 			this._progressBar = new ProgressBarLayer(_levelBounds, 20);
 			this.addChild(this._progressBar);
-			this.schedule(this.shrinkProgress, .1);
+			this.schedule(this.shrinkProgress, 0.1);
 		},
 
 		shrinkProgress: function() {
@@ -382,8 +381,8 @@ var NumboGameLayer = (function() {
 			this.schedule(this.spawnDropRandomBlock, 0.1, N);
 		},
 
-		clearBlocks: function(){
-			this._numboController._numboLevel.killAllBlocks();
+		clearBlocks: function() {
+			this._numboController.killAllBlocks();
 		},
 
 		///////////////////////
@@ -402,11 +401,6 @@ var NumboGameLayer = (function() {
 
 		searchForHint: function(){
 			var hint = this._numboController.findHint();
-			var pathString = "path: ";
-			for (var i in hint) {
-				if(hint.hasOwnProperty(i))
-					pathString += hint[i].getValue() + ", "
-			}
 		},
 
 		jiggleHintBlocks: function(){
@@ -415,6 +409,8 @@ var NumboGameLayer = (function() {
 				if(hint.hasOwnProperty(i))
 					hint[i].jiggleSprite();
 			}
+			this.unschedule(this.jiggleHintBlocks);
+			this.schedule(this.jiggleHintBlocks, 5);
 		},
 
 		///////////////////////
@@ -522,12 +518,15 @@ var NumboGameLayer = (function() {
 				var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 				if(data) {
-					var currBlock = data.currBlock, lastBlock = data.lastBlock;
-					var color = NJ.selectionColors.getNextColor(data.numSelectedBlocks);
-					currBlock.highlight(color);
+					//var currBlock = data.currBlock, lastBlock = data.lastBlock;
+					//var color = NJ.selectionColors.getNextColor(data.numSelectedBlocks);
+					//currBlock.highlight(color);
+					this.highlightSelectedBlocks();
 					this.redrawSelectedLines();
 				}
 			}
+			// Prevent any hint during a touch.
+			this.unschedule(this.jiggleHintBlocks);
 		},
 
 		// On touch moved, selects additional blocks as the touch is held and moved using raycasting
@@ -551,9 +550,10 @@ var NumboGameLayer = (function() {
 					data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 					if(data) {
-						currBlock = data.currBlock;
-						lastBlock = data.lastBlock;
-						currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+						//currBlock = data.currBlock;
+						//lastBlock = data.lastBlock;
+						//currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+						this.highlightSelectedBlocks();
 						this.redrawSelectedLines();
 					}
 				}
@@ -565,9 +565,10 @@ var NumboGameLayer = (function() {
 				data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 				if(data) {
-					currBlock = data.currBlock;
-					lastBlock = data.lastBlock;
-					currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+					//currBlock = data.currBlock;
+					//lastBlock = data.lastBlock;
+					//currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+					this.highlightSelectedBlocks();
 					this.redrawSelectedLines();
 				}
 			}
@@ -586,11 +587,24 @@ var NumboGameLayer = (function() {
 			if(clearedBlocks) {
 				var comboLength = clearedBlocks.length;
 
-				if(NJ.gameState.isPowerupMode()) {
-					if (this._progressBar.update(comboLength)) {
-						this._progressBar.reset(Math.floor(this._progressBar.denom * 1.5));
+                var scoreBonus = 0;
+
+				if (this._progressBar.update(comboLength)) {
+					this._progressBar.reset(Math.floor(this._progressBar.denom * 1.5));
+
+					if(NJ.gameState.isPowerupMode()) {
 						this._numboController.requestPowerup();
 					}
+
+                    this._feedbackLayer.launchFallingBanner({
+                        title: "SPEED BONUS",
+                        color: threshold ? threshold.color : cc.color("#ffffff"),
+                        targetY: cc.visibleRect.center.y * 1.3,
+                        easing: cc.easeElasticOut()
+                    });
+
+                    // give flat bonus for speed
+                    scoreBonus += 5000;
 				}
 
 				var powerupValues = [];
@@ -613,21 +627,27 @@ var NumboGameLayer = (function() {
 
 				NJ.gameState.addBlocksCleared(comboLength);
 
-				var scoreDifference = NJ.gameState.addScore({blockCount: comboLength});
+                var threshold = NJ.comboThresholds.get(comboLength);
+                if(threshold)
+                    scoreBonus += threshold.scoreBonus;
+
+				var scoreDifference = NJ.gameState.addScore({
+                    blockCount: comboLength,
+                    bonus: scoreBonus
+                });
 				var differenceThreshold = 30000;
 
 				// launch feedback for combo threshold title snippet
 				if(comboLength >= 5) {
-					var overflow = comboLength - 5;
 					var title = "WOMBO COMBO";
 
 					this._feedbackLayer.launchFallingBanner({
 						title: title,
-						targetY: cc.visibleRect.center.y
+                        color: threshold ? threshold.color : cc.color("#ffffff"),
+						targetY: cc.visibleRect.center.y * 1.3,
+                        easing: cc.easeElasticOut()
 					});
 				}
-
-				var threshold = NJ.comboThresholds.get(comboLength);
 
 				// launch feedback for gained score
 				this._feedbackLayer.launchSnippet({
@@ -707,10 +727,12 @@ var NumboGameLayer = (function() {
 				// increment score, and update header labels
 				this._numboHeaderLayer.updateValues();
 
-				// schedule a hint
-				this.unschedule(this.jiggleHintBlocks);
-				this.schedule(this.jiggleHintBlocks, 5, true, 4);
+				// Allow controller to look for new hint.
+				this._numboController.resetKnownPath();
 			}
+
+			// schedule a hint
+			this.schedule(this.jiggleHintBlocks, 5);
 		},
 		/*
 		 pauseSpawn: function(time) {
@@ -727,18 +749,40 @@ var NumboGameLayer = (function() {
 // Drawing //
 /////////////
 
+
+		highlightSelectedBlocks: function(){
+			var selectedBlockSum = 0;
+			var selectedBlocks = this._numboController.getSelectedBlocks();
+			for (var i in selectedBlocks){
+				var block = selectedBlocks[i];
+				selectedBlockSum += block.val;
+			}
+			var highlightColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
+
+			for (var i in selectedBlocks){
+				var block = selectedBlocks[i];
+				block.highlight(highlightColor);
+			}
+		},
+
 		// redraw lines indicating selected blocks
 		redrawSelectedLines: function() {
 			this._selectedLinesNode.clear();
 
 			var selectedBlocks = this._numboController.getSelectedBlocks();
+			var selectedBlockSum = 0;
+			for (var i in selectedBlocks){
+				var block = selectedBlocks[i];
+				selectedBlockSum += block.val;
+			}
+			var highlightColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
 			var first, second;
 			for(var i = 0; i < selectedBlocks.length - 1; i++) {
 				first = selectedBlocks[i];
 				second = selectedBlocks[i + 1];
 
 				this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(first.col, first.row),
-					convertLevelCoordsToPoint(second.col, second.row), 1, cc.color("#ffffff"));
+					convertLevelCoordsToPoint(second.col, second.row), 1, highlightColor);
 			}
 		}
 	});
