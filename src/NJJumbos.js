@@ -35,6 +35,7 @@ NJ.jumbos = (function() {
                         highscoreThreshold: data.jumbos[key].highscoreThreshold,
                         currencyThreshold: data.jumbos[key].currencyThreshold,
                         color: data.jumbos[key].color,
+                        blockColorString: data.jumbos[key].blockColorString,
                         difficulty: data.jumbos[key].difficulty,
                         spawnTime: data.jumbos[key].spawnTime,
                         numberList: data.jumbos[key].numberList,
