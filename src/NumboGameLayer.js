@@ -97,11 +97,11 @@ var NumboGameLayer = (function() {
 			this.schedule(this.scheduleSpawn, 0.1*20);
 
 			// begin searching for hints
-			this.schedule(this.searchForHint, 0.1, true, 0);
+			this.schedule(this.searchForHint, 0.1);
 
 			// begin scheduling hint jiggles
-			this.unschedule(this.jiggleHintBlocks);
-			this.schedule(this.jiggleHintBlocks, 5, true, 8);
+			//this.unschedule(this.jiggleHintBlocks);
+			this.schedule(this.jiggleHintBlocks, 5);
 		},
 
 		// initialize the powerup mode variable
@@ -401,11 +401,6 @@ var NumboGameLayer = (function() {
 
 		searchForHint: function(){
 			var hint = this._numboController.findHint();
-			var pathString = "path: ";
-			for (var i in hint) {
-				if(hint.hasOwnProperty(i))
-					pathString += hint[i].getValue() + ", "
-			}
 		},
 
 		jiggleHintBlocks: function(){
@@ -414,6 +409,8 @@ var NumboGameLayer = (function() {
 				if(hint.hasOwnProperty(i))
 					hint[i].jiggleSprite();
 			}
+			this.unschedule(this.jiggleHintBlocks);
+			this.schedule(this.jiggleHintBlocks, 5);
 		},
 
 		///////////////////////
@@ -527,6 +524,8 @@ var NumboGameLayer = (function() {
 					this.redrawSelectedLines();
 				}
 			}
+			// Prevent any hint during a touch.
+			this.unschedule(this.jiggleHintBlocks);
 		},
 
 		// On touch moved, selects additional blocks as the touch is held and moved using raycasting
@@ -706,10 +705,12 @@ var NumboGameLayer = (function() {
 				// increment score, and update header labels
 				this._numboHeaderLayer.updateValues();
 
-				// schedule a hint
-				this.unschedule(this.jiggleHintBlocks);
-				this.schedule(this.jiggleHintBlocks, 5, true, 4);
+				// Allow controller to look for new hint.
+				this._numboController.resetKnownPath();
 			}
+
+			// schedule a hint
+			this.schedule(this.jiggleHintBlocks, 5);
 		},
 		/*
 		 pauseSpawn: function(time) {
