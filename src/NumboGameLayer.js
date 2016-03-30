@@ -90,8 +90,7 @@ var NumboGameLayer = (function() {
 			this.initAudio();
 
 			this.initPowerups();
-			if(NJ.gameState.isPowerupMode())
-				this.initProgressBar();
+			this.initProgressBar();
 
 			// Begin scheduling block drops.
 			this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
