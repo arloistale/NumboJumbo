@@ -162,8 +162,20 @@ var NumboBlock = (function() {
                 cc.color("#FFCA1B")
             ];
 
+            var colors2 = [
+                cc.color("#F0F0F0"),
+                cc.color("#00FF00"),
+                cc.color("#0000FF"),
+                cc.color("#FFFF00"),
+                cc.color("#00FFFF"),
+                cc.color("#990099"),
+                cc.color("#FF4D94"),
+                cc.color("#FF6600"),
+                cc.color("#FF0000")
+            ]
+
             var size = this.getContentSize();
-            var chosen = colors[Math.floor(Math.max(0, (this.val - 1)) % colors.length)];
+            var chosen = colors2[Math.floor(Math.max(0, (this.val - 1)) % colors2.length)];
             this._circleNode.clear();
             this._circleNode.drawCircle(cc.p(size.width / 2, size.height / 2), size.width / 2 * 0.7, 0, 8, false, 1, chosen);
         },
