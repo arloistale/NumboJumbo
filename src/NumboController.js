@@ -1,5 +1,22 @@
 var NumboController = (function() {
-	//var _numboLevel = null;
+
+	// list of search filter functions for meander search
+	var meanderSearchCriteria = {
+
+		// search one of two kinds of paths randomly, either greater than 4 blocks or greater than 2 blocks
+		pathAtLeastTwoWithNoise: function(path){
+			return path.length >= 4 || path.length >= 2 && Math.random() > 0.5;
+		},
+
+		// search for a path of 3 or more blocks that sums to the last element
+		sumsToLast: function(path) {
+			var sum = 0;
+			for (var i = 0; i < path.length - 1; ++i)
+				sum += path[i].val;
+
+			return path.length > 2 && sum == path[path.length - 1].val;
+		}
+	};
 
 	return cc.Class.extend({
 		distribution: [],
@@ -152,7 +169,7 @@ var NumboController = (function() {
 			}
 
 			var powerup = null;
-			if  (NJ.gameState.isPowerupMode() && this.nextBlockPowerup ) {// 5% chance
+			if  (NJ.gameState.isPowerupMode() && this.nextBlockPowerup) {// 5% chance
 				//powerup = 'clearAndSpawn';
 				powerup = 'bonusOneMania';
 				this.nextBlockPowerup = false;
@@ -160,7 +177,7 @@ var NumboController = (function() {
 
 			if (powerup) {
 				var path = this.meanderSearch(col, this._numboLevel.getNumBlocksInColumn(col),
-					this.pathAtLeastTwoWithNoiseCriteria, []);
+					meanderSearchCriteria.pathAtLeastTwoWithNoise, []);
 				if (path && path.length > 0) {
 					var sum = 0;
 					for (var i in path) {
@@ -176,33 +193,17 @@ var NumboController = (function() {
 			return this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
 		},
 
-		pathLengthIsTwoCriteria: function(path) {
-			return path.length == 2;
-		},
-
-		pathAtLeastTwoWithNoiseCriteria: function(path){
-			return path.length >= 4 || path.length >= 2 && Math.random() > 0.5;
-		},
-
-		sumsToCriteria: function(path) {
-			var sum = 0;
-			for (var i = 0; i < path.length - 1; ++i)
-				sum += path[i].val;
-			return path.length > 2 && sum == path[path.length - 1].val;
-		},
-
 		meanderSearch: function(col, row, criteria, path) {
 			var neighbors = this._numboLevel.getNeighbors(col, row);
-			neighbors = NJ.shuffleArray(neighbors);
+			NJ.shuffleArray(neighbors);
 
 			if (criteria(path))
 				return path;
 
-			for (var i in neighbors){
-				if(!neighbors.hasOwnProperty(i))
-					continue;
+			var block;
+			for (var i = 0; i < neighbors.length; i++) {
+				block = neighbors[i];
 
-				var block = neighbors[i];
 				if (block && path.indexOf(block) < 0) {
 					var newPath = path.slice(0);
 					newPath.push(block);
@@ -213,13 +214,17 @@ var NumboController = (function() {
 			return [];
 		},
 
+        depthLimitedSearch: function(col, row) {
+
+        },
+
 		findHint: function() {
 			var tries = 50; // try no more than 50 times
 			while (tries > 0 && this._knownPath.length == 0) {
 				var block = this._numboLevel.getRandomBlock();
 				//cc.log(block);
 				if(block)
-					this._knownPath = this.meanderSearch(block.col, block.row, this.sumsToCriteria, [block]);
+					this._knownPath = this.meanderSearch(block.col, block.row, meanderSearchCriteria.sumsToLast, [block]);
 
 				--tries;
 			}

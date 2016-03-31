@@ -597,7 +597,7 @@ var NumboGameLayer = (function() {
                     this._feedbackLayer.launchFallingBanner({
                         title: "SPEED BONUS",
                         color: threshold ? threshold.color : cc.color("#ffffff"),
-                        targetY: cc.visibleRect.center.y * 1.3,
+                        targetY: cc.visibleRect.center.y,
                         easing: cc.easeElasticOut()
                     });
 
@@ -642,7 +642,7 @@ var NumboGameLayer = (function() {
 					this._feedbackLayer.launchFallingBanner({
 						title: title,
                         color: threshold ? threshold.color : cc.color("#ffffff"),
-						targetY: cc.visibleRect.center.y * 1.3,
+						targetY: cc.visibleRect.center.y,
                         easing: cc.easeElasticOut()
 					});
 				}
