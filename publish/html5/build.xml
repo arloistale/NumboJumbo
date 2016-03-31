@@ -289,7 +289,7 @@
 
             </sources>
             <sources dir="${basedir}">
-                <file name="src/DateExtensions.js"/>
+                <file name="src/Extensions.js"/>
                 <file name="src/Resource.js"/>
                 <file name="src/NJJumbos.js"/>
                 <file name="src/ScoresLayer.js"/>

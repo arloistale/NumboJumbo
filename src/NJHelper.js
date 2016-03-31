@@ -26,16 +26,16 @@ NJ.weightedRandom = function(pairsList) {
     return -1;
 };
 
-NJ.shuffleArray = function(array) {
-    var length = array.length;
-    var temp;
 
-    for (var i = 0; i < length; ++i) {
-        var j = Math.floor(Math.random() * (length - i) + i);
-        temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+NJ.shuffleArray = function() {
+    var i = this.length, j, temp;
+    if(i == 0) return this;
+    while(--i) {
+        j = Math.floor(Math.random() * (i + 1));
+        temp = this[i];
+        this[i] = this[j];
+        this[j] = temp;
     }
 
-    return array;
+    return this;
 };

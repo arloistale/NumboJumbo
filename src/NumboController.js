@@ -192,7 +192,9 @@ var NumboController = (function() {
 		},
 
 		meanderSearch: function(col, row, criteria, path) {
-			var neighbors = NJ.shuffleArray(this._numboLevel.getNeighbors(col, row) );
+			var neighbors = this._numboLevel.getNeighbors(col, row);
+			neighbors = NJ.shuffleArray(neighbors);
+
 			if (criteria(path))
 				return path;
 
