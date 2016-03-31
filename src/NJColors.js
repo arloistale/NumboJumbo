@@ -69,7 +69,7 @@ NJ.neonColors = [
     cc.color("#228DFF"), // blue
     cc.color("#00FFF2"), // cyan
     cc.color("#00FF4D"), // aqua
-    cc.color("#04C714"), // darker green
+    cc.color("#27B500"), // darker green
     cc.color("#F7FF00"), // yellow
     cc.color("#FF7C0A"), // orange
     cc.color("#FF0000"), // red
