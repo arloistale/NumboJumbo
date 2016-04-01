@@ -326,7 +326,7 @@ ccs.TextureFrame = ccs.Frame.extend({
     },
 
     /**
-     * Set the node element to draw texture
+     * Set the node element to _barNode texture
      * @param {cc.Node} node
      */
     setNode: function(node){

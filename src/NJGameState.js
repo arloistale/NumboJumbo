@@ -12,6 +12,7 @@ NJ.gameState = (function() {
     var currentJumboId = "";
 
     // in game metric tracking
+    var blocksNeededForLevelup = 0;
     var blocksCleared = 0;
     var currentLevel = 1;
     var currentScore = 0;
@@ -31,6 +32,18 @@ NJ.gameState = (function() {
             multiplier = 1;
     };
 
+    // returns the number of blocks left needed to get to the next level.
+    // this is quadratic in the current level L, ie, aL^2 + bL + c.
+    // values for a, b, c can (and should!) be tuned regularly :)
+    var calculateBlocksNeededForLevelup = function (level) {
+        var a = 1.0;
+        var b = 20;
+        var c = 0.0;
+        var L = level;
+
+        return Math.round(a * L * L + b * L + c);
+    };
+
     return {
 
         ////////////////////
@@ -48,6 +61,7 @@ NJ.gameState = (function() {
         // reset game state
         // DOES NOT reset the chosen jumbo!
         reset: function () {
+            blocksNeededForLevelup = 0;
             currentScore = 0;
             currentLevel = 1;
             randomJumbos = false;
@@ -81,7 +95,8 @@ NJ.gameState = (function() {
 
         // add to number of blocks cleared
         addBlocksCleared: function (count) {
-            return blocksCleared += count;
+            blocksCleared += count;
+            return blocksCleared;
         },
 
         // get the time this session started
@@ -92,6 +107,10 @@ NJ.gameState = (function() {
         // get the number of blocks cleared so far
         getBlocksCleared: function() {
             return blocksCleared;
+        },
+
+        getBlocksNeededForLevelup: function() {
+            return blocksNeededForLevelup;
         },
 
         //////////////////
@@ -106,25 +125,15 @@ NJ.gameState = (function() {
             // level up
             var levelUpCount = 0;
 
-            while (this.getBlocksLeftForLevelUp() <= 0) {
+            while (blocksCleared >= blocksNeededForLevelup) {
                 currentLevel++;
                 levelUpCount++;
+
+                // recalculate blocks needed for level up
+                blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             }
 
             return levelUpCount;
-        },
-
-        // returns the number of blocks left needed to get to the next level.
-        // this is quadratic in the current level L, ie, aL^2 + bL + c.
-        // values for a, b, c can (and should!) be tuned regularly :)
-        getBlocksLeftForLevelUp: function () {
-            var a = 1.0;
-            var b = 20;
-            var c = 0.0;
-            var L = currentLevel;
-
-            var totalBlocksToLevelUp = Math.round(a * L * L + b * L + c);
-            return totalBlocksToLevelUp - blocksCleared;
         },
 
         // get the current level

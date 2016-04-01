@@ -8,13 +8,13 @@ var NumboController = (function() {
 			return path.length >= 4 || path.length >= 2 && Math.random() > 0.5;
 		},
 
-		// search for a path of 3 or more blocks that sums to the last element
-		sumsToLast: function(path) {
+		// search for a path of 3 blocks that sums to the last element
+		threeBlocksSumsToLast: function(path) {
 			var sum = 0;
 			for (var i = 0; i < path.length - 1; ++i)
 				sum += path[i].val;
 
-			return path.length > 2 && sum == path[path.length - 1].val;
+			return path.length >= 3 && path.length <= 4 && sum == path[path.length - 1].val;
 		}
 	};
 
@@ -132,10 +132,7 @@ var NumboController = (function() {
 
 				// remove any affected block sprite objects:
 				for(var i = 0; i < this._selectedBlocks.length; ++i)
-					this._numboLevel.killBlock(this._selectedBlocks[i]);
-
-
-				this._numboLevel.collapseColumnsToward(lastCol);
+					this.killBlock(this._selectedBlocks[i]);
 
 				clearedBlocks = this._selectedBlocks;
 			}
@@ -147,6 +144,10 @@ var NumboController = (function() {
 
 		clearRows: function(num) {
 			this._numboLevel.clearBottomRows(num);
+		},
+
+		killBlock: function(block) {
+			this._numboLevel.killBlock(block);
 		},
 
 		killAllBlocks: function() {
@@ -177,7 +178,9 @@ var NumboController = (function() {
 
 			if (powerup) {
 				var path = this.meanderSearch(col, this._numboLevel.getNumBlocksInColumn(col),
-					meanderSearchCriteria.pathAtLeastTwoWithNoise, []);
+					meanderSearchCriteria.pathAtLeastTwoWithNoise);
+				path.shift();
+				cc.log(path);
 				if (path && path.length > 0) {
 					var sum = 0;
 					for (var i in path) {
@@ -193,44 +196,93 @@ var NumboController = (function() {
 			return this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
 		},
 
-		meanderSearch: function(col, row, criteria, path) {
-			var neighbors = this._numboLevel.getNeighbors(col, row);
-			NJ.shuffleArray(neighbors);
-
-			if (criteria(path))
-				return path;
-
-			var block;
-			for (var i = 0; i < neighbors.length; i++) {
-				block = neighbors[i];
-
-				if (block && path.indexOf(block) < 0) {
-					var newPath = path.slice(0);
-					newPath.push(block);
-					return this.meanderSearch(block.col, block.row, criteria, newPath);
-				}
-			}
-
-			return [];
-		},
-
-        depthLimitedSearch: function(col, row) {
-
-        },
-
 		findHint: function() {
 			var tries = 50; // try no more than 50 times
 			while (tries > 0 && this._knownPath.length == 0) {
 				var block = this._numboLevel.getRandomBlock();
-				//cc.log(block);
-				if(block)
-					this._knownPath = this.meanderSearch(block.col, block.row, meanderSearchCriteria.sumsToLast, [block]);
+
+				if(block) {
+					this._knownPath = this.meanderSearch(block.col, block.row, meanderSearchCriteria.threeBlocksSumsToLast);
+				}
 
 				--tries;
 			}
 
 			return this._knownPath;
 		},
+
+		/**
+		 * Meander search generates a path randomly until the criteria boolean expression is met.
+		 * @param col
+		 * @param row
+		 * @param criteria Criteria boolean expression
+         * @returns {*}
+         */
+		meanderSearch: function(col, row, criteria) {
+			var i;
+
+			var searchStack = [];
+			var path = [];
+
+			var firstBlock = this._numboLevel.getBlock(col, row);
+			searchStack.push(firstBlock);
+			path.push(firstBlock);
+
+			var neighbors;
+			var block, neighbor;
+			while(searchStack.length > 0) {
+				block = searchStack.pop();
+
+				neighbors = this._numboLevel.getNeighbors(col, row);
+				neighbors = NJ.shuffleArray(neighbors);
+
+				for(i = 0; i < neighbors.length; i++) {
+					neighbor = neighbors[i];
+					cc.assert(neighbor, "Get neighbors returned a null -.-");
+					if(neighbor != firstBlock && path.indexOf(neighbor) < 0) {
+						searchStack.push(neighbor);
+						path.push(neighbor);
+
+						if (criteria(path)) {
+							return path;
+						}
+					}
+				}
+			}
+
+			return [];
+		},
+
+		/**
+		 * DLS returns blocks within a certain radius.
+		 * @param col
+		 * @param row
+         * @param depth
+         */
+        depthLimitedSearch: function(col, row, depth) {
+			var currBlock = this._numboLevel.getBlock(col, row);
+			if(depth <= 0) {
+				return currBlock ? [currBlock] : [];
+			}
+
+			var result = [];
+			var neighbors = this._numboLevel.getNeighbors(col, row);
+
+			var block;
+			for (var i = 0; i < neighbors.length; i++) {
+				block = neighbors[i];
+
+				result.push(block);
+
+				cc.log(block);
+
+				if (block) {
+					result = result.concat(this.depthLimitedSearch(block.col, block.row, depth - 1));
+				}
+			}
+
+			return result;
+        },
 
 		resetKnownPath: function(){
 			this._knownPath = [];

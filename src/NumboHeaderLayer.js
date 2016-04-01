@@ -20,7 +20,7 @@ var NumboHeaderLayer = (function() {
         // callback
         onPauseCallback: null,
 
-        draw: null,
+        _barNode: null,
 
         ctor: function() {
             this._super();

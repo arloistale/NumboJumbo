@@ -2,8 +2,8 @@
  * Created by The Dylan on 3/8/2016.
  */
 var ProgressBarLayer = cc.Layer.extend({
-    gridSize: null,
-    draw: null,
+    _gridSize: null,
+    _barNode: null,
     prog: 0,
     denom: 0,
 
@@ -11,24 +11,24 @@ var ProgressBarLayer = cc.Layer.extend({
         this._super();
         this.setTag(NJ.tags.PAUSABLE);
 
-        this.gridSize = gridSize;
+        this._gridSize = gridSize;
         this.denom = denom;
-        this.draw = new cc.DrawNode.create();
-        this.addChild(this.draw);
+        this._barNode = new cc.DrawNode.create();
+        this.addChild(this._barNode);
 
         this.update(0);
     },
 
     update: function(progress) {
-        var x = this.gridSize.x;
-        var y = this.gridSize.y;
-        var w = this.gridSize.width;
-        var h = this.gridSize.height;
+        var x = this._gridSize.x;
+        var y = this._gridSize.y;
+        var w = this._gridSize.width;
+        var h = this._gridSize.height;
 
-        this.draw.clear();
-        this.draw.drawPoly([cc.p(x, y), cc.p(x + w, y), cc.p(x + w, y + h), cc.p(x, y + h)],
+        this._barNode.clear();
+        this._barNode.drawPoly([cc.p(x, y), cc.p(x + w, y), cc.p(x + w, y + h), cc.p(x, y + h)],
             cc.color(77, 77, 77, 100), 0, cc.color("#000000"));
-        //this.draw.drawPoly([cc.p(x, y), cc.p(x+w, y), cc.p(x+w, y+(this.prog/this.denom*h)), cc.p(x, y+(this.prog/this.denom*h))],
+        //this._barNode.drawPoly([cc.p(x, y), cc.p(x+w, y), cc.p(x+w, y+(this.prog/this.denom*h)), cc.p(x, y+(this.prog/this.denom*h))],
         //    cc.color(0, 0, 255, 100), 1, cc.color(0, 0, 0, 255));
 
         var progH = this.prog / this.denom * h;
@@ -43,7 +43,7 @@ var ProgressBarLayer = cc.Layer.extend({
         }
         else console.log("NO STAGE");
 
-        this.draw.drawPoly([cc.p(x, y), cc.p(x + w, y),
+        this._barNode.drawPoly([cc.p(x, y), cc.p(x + w, y),
             cc.p(x + w, y + progH), cc.p(x, y + progH)],
             newColor, 0, cc.color("#000000"));
 

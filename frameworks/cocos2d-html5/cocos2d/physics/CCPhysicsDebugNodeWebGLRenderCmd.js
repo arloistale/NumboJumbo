@@ -42,7 +42,7 @@
         node._space.eachShape(cc.DrawShape.bind(node));
         node._space.eachConstraint(cc.DrawConstraint.bind(node));
 
-        //cc.DrawNode.prototype.draw.call(node);
+        //cc.DrawNode.prototype._barNode.call(node);
         cc.glBlendFunc(node._blendFunc.src, node._blendFunc.dst);
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);

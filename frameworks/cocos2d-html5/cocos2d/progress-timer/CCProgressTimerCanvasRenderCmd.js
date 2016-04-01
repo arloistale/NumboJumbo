@@ -88,7 +88,7 @@
             context.closePath();
         }
 
-        //draw sprite
+        //_barNode sprite
         var image = locSprite._texture.getHtmlElementObj();
         if (locSprite._colorized) {
             context.drawImage(image,

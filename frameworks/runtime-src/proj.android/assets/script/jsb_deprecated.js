@@ -92,7 +92,7 @@ var cc = cc || {};
     };
 
     cc.Menu.prototype.setHandlerPriority = function() {
-        cc.log("cc.Menu.setHandlerPriority was deprecated, 3.0 uses new event dispatcher to dispatch touch event based on draw order, so setHandlerPriority is not needed now.");
+        cc.log("cc.Menu.setHandlerPriority was deprecated, 3.0 uses new event dispatcher to dispatch touch event based on _barNode order, so setHandlerPriority is not needed now.");
     };
 
     cc.Layer.prototype.setKeypadEnabled = function() {

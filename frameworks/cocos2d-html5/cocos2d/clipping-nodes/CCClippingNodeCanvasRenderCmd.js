@@ -46,7 +46,7 @@
 
         this._node._stencil = stencil;
 
-        // For shape stencil, rewrite the draw of stencil ,only init the clip path and draw nothing.
+        // For shape stencil, rewrite the _barNode of stencil ,only init the clip path and _barNode nothing.
         //else
         if (stencil instanceof cc.DrawNode) {
             if(stencil._buffer){
@@ -186,7 +186,7 @@
         this._clipElemType = !(!this._cangodhelpme() && node._stencil instanceof cc.DrawNode);
         if (!node._stencil || !node._stencil.visible) {
             if (this.inverted)
-                cc.Node.CanvasRenderCmd.prototype.visit.call(this, parentCmd);   // draw everything
+                cc.Node.CanvasRenderCmd.prototype.visit.call(this, parentCmd);   // _barNode everything
             return;
         }
 

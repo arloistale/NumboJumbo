@@ -1560,10 +1560,10 @@ cc.TransitionCrossFade = cc.TransitionScene.extend(/** @lends cc.TransitionCross
     },
 
     /**
-     * overide draw
+     * overide _barNode
      */
     draw:function () {
-        // override draw since both scenes (textures) are rendered in 1 scene
+        // override _barNode since both scenes (textures) are rendered in 1 scene
     }
 });
 

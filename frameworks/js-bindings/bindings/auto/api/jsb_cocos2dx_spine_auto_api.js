@@ -333,7 +333,7 @@ func
 },
 
 /**
- * @method update
+ * @method setProgress
  * @param {float} arg0
  */
 update : function (

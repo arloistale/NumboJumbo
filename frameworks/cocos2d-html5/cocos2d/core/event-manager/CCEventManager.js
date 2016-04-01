@@ -645,7 +645,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
      * if the parameter "nodeOrPriority" is a Number, it means to add a event listener for a specified event with the fixed priority.                          <br/>
      * </p>
      * @param {cc.EventListener|Object} listener The listener of a specified event or a object of some event parameters.
-     * @param {cc.Node|Number} nodeOrPriority The priority of the listener is based on the draw order of this node or fixedPriority The fixed priority of the listener.
+     * @param {cc.Node|Number} nodeOrPriority The priority of the listener is based on the _barNode order of this node or fixedPriority The fixed priority of the listener.
      * @note  The priority of scene graph will be fixed value 0. So the order of listener item in the vector will be ' <0, scene graph (0 priority), >0'.
      *         A lower priority will be called before the ones that have a higher value. 0 priority is forbidden for fixed priority since it's used for scene graph based priority.
      *         The listener must be a cc.EventListener object when adding a fixed priority listener, because we can't remove a fixed priority listener without the listener handler,

@@ -65,7 +65,7 @@ cc.ColorForBody = function (body) {
 };
 
 /**
- * draw shape
+ * _barNode shape
  * @param {cp.Shape} shape
  * @param renderer
  */
@@ -91,7 +91,7 @@ cc.DrawShape = function (shape, renderer) {
 };
 
 /**
- * draw constraint
+ * _barNode constraint
  * @param {cp.Constraint} constraint
  * @param renderer
  */
@@ -128,7 +128,7 @@ cc.DrawConstraint = function (constraint, renderer) {
     } else if (constraint instanceof cp.DampedSpring) {
         // TODO
     } else {
-        //printf("Cannot draw constraint\n");
+        //printf("Cannot _barNode constraint\n");
     }
 };
 
@@ -180,7 +180,7 @@ cc.PhysicsDebugNode = cc.DrawNode.extend({
     },
 
     /**
-     * draw
+     * _barNode
      * @param {object} context
      */
     draw:function (context) {
@@ -189,7 +189,7 @@ cc.PhysicsDebugNode = cc.DrawNode.extend({
 
         this._space.eachShape(cc.DrawShape.bind(this));
         this._space.eachConstraint(cc.DrawConstraint.bind(this));
-        cc.DrawNode.prototype.draw.call(this);
+        cc.DrawNode.prototype._barNode.call(this);
         this.clear();
     },
 

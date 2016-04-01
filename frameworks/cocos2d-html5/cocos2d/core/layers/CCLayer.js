@@ -57,7 +57,7 @@ cc.Layer = cc.Node.extend(/** @lends cc.Layer# */{
     },
 
     /**
-     * Sets the layer to cache all of children to a bake sprite, and draw itself by bake sprite. recommend using it in UI.<br/>
+     * Sets the layer to cache all of children to a bake sprite, and _barNode itself by bake sprite. recommend using it in UI.<br/>
      * This is useful only in html5 engine
      * @function
      * @see cc.Layer#unbake

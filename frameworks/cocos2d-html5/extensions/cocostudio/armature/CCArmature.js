@@ -420,7 +420,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
     },
 
     /**
-     * draw contour
+     * _barNode contour
      */
     drawContour: function () {
         cc._drawingUtil.setDrawColor(255, 255, 255, 255);
