@@ -39,6 +39,7 @@ var res = {
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
+    electroSwingTrack: resRoot + "Sounds/Caravan_Palace_-_Clash.mp3",
     alertSound: resRoot + "Sounds/alert.mp3",
     plipSound: resRoot + "Sounds/plipSound.wav",
     plopSound: resRoot + "Sounds/Plop.wav",
