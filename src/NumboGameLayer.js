@@ -23,7 +23,7 @@ var NumboGameLayer = (function() {
 			var row = Math.floor((point.y - _levelBounds.y) / _levelCellSize.height);
 
 			// return only if coordinates in certain radius of the block.
-			var radius = 0.7 * _levelCellSize.width / 2;
+			var radius = 0.5 * _levelCellSize.width / 2;
 
 			var cellCenter = cc.p(_levelBounds.x + (col + 0.5) * _levelCellSize.width,
 				_levelBounds.y + (row + 0.5) * _levelCellSize.height);
@@ -90,7 +90,6 @@ var NumboGameLayer = (function() {
 			this.initAudio();
 
 			this.initPowerups();
-			this.initProgressBar();
 
 			// Begin scheduling block drops.
 			this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
@@ -99,6 +98,7 @@ var NumboGameLayer = (function() {
 			// begin scheduling hint jiggles
 			//this.unschedule(this.jiggleHintBlocks);
 			this.schedule(this.jiggleHintBlocks, 5);
+
 		},
 
 		// initialize the powerup mode variable
@@ -106,11 +106,6 @@ var NumboGameLayer = (function() {
 			if (NJ.gameState.getJumbo().name == "Powerups!") {
 				NJ.gameState.setPowerupMode();
 			}
-		},
-
-		initProgressBar: function() {
-			this._progressBar = new ProgressBarLayer(_levelBounds);
-			this.addChild(this._progressBar);
 		},
 
 		// Initialize input depending on the device.
@@ -188,6 +183,15 @@ var NumboGameLayer = (function() {
 			this._feedbackLayer.launchFallingBanner({
 				title: "Level " + NJ.gameState.getLevel()
 			});
+
+			var progressRect = cc.rect({
+				x: cc.visibleRect.bottomLeft.x,
+				y: cc.visibleRect.bottomLeft.y,
+				width: cc.visibleRect.width,
+				height: cc.visibleRect.height
+			})
+			this._progressBar = new ProgressBarLayer(progressRect);
+			this.addChild(this._progressBar);
 		},
 
 		// Initialize dimensions and geometry
@@ -324,7 +328,20 @@ var NumboGameLayer = (function() {
 			this.unschedule(this.scheduleSpawn);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
 
-			this.spawnDropRandomBlock();
+			// don't make a hint unless they haven't made a move, AND a move exists
+			if (NJ.gameState.getBlocksCleared() == 0) {
+				if (this._numboController.getKnownPathLength() > 0) {
+					this._feedbackLayer.launchHelperBanner({
+						title: "swipe an equation!"
+					});
+				}
+				else {
+					this.spawnDropRandomBlock();
+				}
+			}
+			else {
+				this.spawnDropRandomBlock();
+			}
 		},
 
 		// Spawns a block and drops the spawned block into place.
@@ -384,14 +401,15 @@ var NumboGameLayer = (function() {
 		// Hint Finding //
 		//////////////////
 
-		jiggleHintBlocks: function(){
+		jiggleHintBlocks: function() {
 			var hint = this._numboController.findHint();
 			for (var i in hint) {
-				if(hint.hasOwnProperty(i))
+				if (hint.hasOwnProperty(i))
 					hint[i].jiggleSprite();
 			}
 			this.unschedule(this.jiggleHintBlocks);
 			this.schedule(this.jiggleHintBlocks, 5);
+
 		},
 
 		///////////////////////
@@ -402,6 +420,7 @@ var NumboGameLayer = (function() {
 		onGameOver: function() {
 			NJ.stats.addCurrency(NJ.gameState.getScore());
 			NJ.stats.offerHighscore(NJ.gameState.getScore());
+			NJ.stats.offerHighlevel(NJ.gameState.getLevel());
 
 			NJ.stats.save();
 
@@ -550,6 +569,9 @@ var NumboGameLayer = (function() {
 
 		// On touch ended, activates all selected blocks once touch is released.
 		onTouchEnded: function(touchPosition) {
+			// special case for if this is the very first combo:
+			var isFirstCombo = NJ.gameState.getBlocksCleared() == 0; // bool
+
 			// Activate any selected blocks.
 			var clearedBlocks = this._numboController.activateSelectedBlocks();
 
@@ -568,7 +590,7 @@ var NumboGameLayer = (function() {
 					for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
 						this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 				}
-				
+	
 				// add to number of blocks cleared
 				var totalBlocks = NJ.gameState.addBlocksCleared(comboLength);
 				
@@ -583,10 +605,42 @@ var NumboGameLayer = (function() {
                     blockCount: comboLength,
                     bonus: scoreBonus
                 });
+
 				var differenceThreshold = 30000;
 
+				// launch 'yay' helper snippet if this was the first combo
+				if (isFirstCombo) {
+					// TODO: send the timestamp for first move off to goggle analytics
+					var helperText = "";
+					var maxIndex = 0;
+					for (var i = 0; i < clearedBlocks.length; ++i) {
+						cc.log("i = " + i + " : " + clearedBlocks[i].val);
+						if (clearedBlocks[i].val > clearedBlocks[maxIndex].val) {
+							maxIndex = i;
+						}
+					}
+					cc.log("max i:" + maxIndex + " = " + clearedBlocks[maxIndex].val)
+					for (var i = 0; i < clearedBlocks.length; ++i) {
+						if (i != maxIndex){
+							if (helperText == ""){
+								helperText += clearedBlocks[i].val;
+							}
+							else {
+								helperText += " + " + clearedBlocks[i].val;
+							}
+						}
+					}
+					helperText += " = " + clearedBlocks[maxIndex].val;
+
+					this._feedbackLayer.launchHelperBanner({
+						title: helperText,
+						targetY: cc.visibleRect.center.y * 1,
+						timeout: 3.0
+					});
+				}
+
 				// launch feedback for combo threshold title snippet
-				if(comboLength >= 5) {
+				if(comboLength >= 5 && isFirstCombo == false) {
 					var title = "WOMBO COMBO";
 
 					this._feedbackLayer.launchFallingBanner({

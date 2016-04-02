@@ -16,6 +16,7 @@ var NumboHeaderLayer = (function() {
         buttonsMenu: null,
 
         scoreValueLabel: null,
+        levelValueLabel: null,
 
         // callback
         onPauseCallback: null,
@@ -44,15 +45,15 @@ var NumboHeaderLayer = (function() {
             contentSize = this.getContentSize();
 
             // Score Labels
-            var scoreStartPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.5);
+            var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.75);
 
             var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
             scoreTitleLabel.attr({
                 scale: 1.0,
                 anchorX: 0,
                 anchorY: 0.5 + NJ.anchorOffsetY,
-                x: scoreStartPos.x,
-                y: scoreStartPos.y
+                x: startPos.x,
+                y: startPos.y
             });
             scoreTitleLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             scoreTitleLabel.setColor(cc.color(255, 255, 255, 255));
@@ -63,12 +64,38 @@ var NumboHeaderLayer = (function() {
                 scale: 1.0,
                 anchorX: 0,
                 anchorY: 0.5 + NJ.anchorOffsetY,
-                x: scoreStartPos.x + scoreTitleLabel.getContentSize().width,
-                y: scoreStartPos.y
+                x: startPos.x + scoreTitleLabel.getContentSize().width,
+                y: startPos.y
             });
             this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
             this.addChild(this.scoreValueLabel);
+            
+            startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.25);
+
+            var levelTitleLabel = new cc.LabelTTF("Level: ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
+            levelTitleLabel.attr({
+                scale: 1.0,
+                anchorX: 0,
+                anchorY: 0.5 + NJ.anchorOffsetY,
+                x: startPos.x,
+                y: startPos.y
+            });
+            levelTitleLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
+            levelTitleLabel.setColor(cc.color(255, 255, 255, 255));
+            this.addChild(levelTitleLabel);
+
+            this.levelValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.header2);
+            this.levelValueLabel.attr({
+                scale: 1.0,
+                anchorX: 0,
+                anchorY: 0.5 + NJ.anchorOffsetY,
+                x: startPos.x + levelTitleLabel.getContentSize().width,
+                y: startPos.y
+            });
+            this.levelValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
+            this.levelValueLabel.setColor(cc.color(255, 255, 255, 255));
+            this.addChild(this.levelValueLabel);
         },
 
         initButtons: function() {
@@ -97,6 +124,7 @@ var NumboHeaderLayer = (function() {
 
         updateValues: function() {
             this.scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
+            this.levelValueLabel.setString(NJ.gameState.getLevel())
         },
 
 // UI callbacks //
