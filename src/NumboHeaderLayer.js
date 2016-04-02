@@ -55,7 +55,6 @@ var NumboHeaderLayer = (function() {
                 x: startPos.x,
                 y: startPos.y
             });
-            scoreTitleLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             scoreTitleLabel.setColor(cc.color(255, 255, 255, 255));
             this.addChild(scoreTitleLabel);
 
@@ -67,7 +66,6 @@ var NumboHeaderLayer = (function() {
                 x: startPos.x + scoreTitleLabel.getContentSize().width,
                 y: startPos.y
             });
-            this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
             this.addChild(this.scoreValueLabel);
             
@@ -81,7 +79,6 @@ var NumboHeaderLayer = (function() {
                 x: startPos.x,
                 y: startPos.y
             });
-            levelTitleLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             levelTitleLabel.setColor(cc.color(255, 255, 255, 255));
             this.addChild(levelTitleLabel);
 
@@ -93,7 +90,6 @@ var NumboHeaderLayer = (function() {
                 x: startPos.x + levelTitleLabel.getContentSize().width,
                 y: startPos.y
             });
-            this.levelValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             this.levelValueLabel.setColor(cc.color(255, 255, 255, 255));
             this.addChild(this.levelValueLabel);
         },
