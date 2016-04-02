@@ -12,6 +12,7 @@ NJ.gameState = (function() {
     var currentJumboId = "";
 
     // in game metric tracking
+    var prevBlocksNeededForLevelup = 0;
     var blocksNeededForLevelup = 0;
     var blocksCleared = 0;
     var currentLevel = 1;
@@ -61,9 +62,10 @@ NJ.gameState = (function() {
         // reset game state
         // DOES NOT reset the chosen jumbo!
         reset: function () {
-            blocksNeededForLevelup = 0;
             currentScore = 0;
             currentLevel = 1;
+            prevBlocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel - 1);
+            blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             randomJumbos = false;
             powerupMode = false;
             blocksCleared = 0;
@@ -112,6 +114,13 @@ NJ.gameState = (function() {
         getBlocksNeededForLevelup: function() {
             return blocksNeededForLevelup;
         },
+        
+        getLevelupProgress: function() {
+            var dist = blocksNeededForLevelup - prevBlocksNeededForLevelup;
+            var curr = blocksCleared - prevBlocksNeededForLevelup;
+            
+            return curr / dist;
+        },
 
         //////////////////
         // Levels Logic //
@@ -130,6 +139,7 @@ NJ.gameState = (function() {
                 levelUpCount++;
 
                 // recalculate blocks needed for level up
+                prevBlocksNeededForLevelup = blocksNeededForLevelup;
                 blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             }
 

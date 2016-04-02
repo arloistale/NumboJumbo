@@ -566,34 +566,21 @@ var NumboGameLayer = (function() {
 				var comboLength = clearedBlocks.length;
 				var lastBlock = clearedBlocks[comboLength - 1];
 
-				var i;
-
-                var scoreBonus = 0;
-
-				var totalBlocks = NJ.gameState.addBlocksCleared(comboLength);
-				this._progressBar.setProgress(totalBlocks / NJ.gameState.getBlocksNeededForLevelup());
-
-				/*
-				if(NJ.gameState.isPowerupMode()) {
-					this._numboController.requestPowerup();
-				}*/
-
-				var powerupValues = [];
-
-				var block;
-
-				for (i = 0; i < comboLength; i++) {
-					block = clearedBlocks[i];
-					if (block.powerup)
-						powerupValues.push(block.powerup);
-				}
-
+				// initiate iterator variables here because we use them a lot
+				var i, block;
+				
 				// TODO: Really do not like how this is done
 				// Gaps may be created; shift all affected blocks down.
 				for (var col = 0; col < NJ.NUM_COLS; ++col) {
 					for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
 						this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 				}
+				
+				// add to number of blocks cleared
+				var totalBlocks = NJ.gameState.addBlocksCleared(comboLength);
+				
+				// begin calculating data related to score\
+                var scoreBonus = 0;
 
                 var threshold = NJ.comboThresholds.get(comboLength);
                 if(threshold)
@@ -627,6 +614,19 @@ var NumboGameLayer = (function() {
 					targetY: touchPosition.y + _levelBounds.height / 6,
 					targetScale: 1 + 0.125 * Math.min(1, scoreDifference / differenceThreshold)
 				});
+				
+				/*
+				if(NJ.gameState.isPowerupMode()) {
+					this._numboController.requestPowerup();
+				}*/
+
+				var powerupValues = [];
+
+				for (i = 0; i < comboLength; i++) {
+					block = clearedBlocks[i];
+					if (block.powerup)
+						powerupValues.push(block.powerup);
+				}
 
 				// Check for a powerup.
 				if (powerupValues.length > 0) {
@@ -671,8 +671,8 @@ var NumboGameLayer = (function() {
 					this._feedbackLayer.launchFallingBanner({
 						title: "Level " + NJ.gameState.getLevel()
 					});
-
 				}
+				
 				// bonus for clearing screen
 				if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2)) {
 					this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
@@ -701,8 +701,11 @@ var NumboGameLayer = (function() {
 				this.schedule(this.resetMultiplier, 5, 1);
 
 				NJ.gameState.offerComboForMultiplier();
+				
+				// show level progress
+				this._progressBar.setProgress(NJ.gameState.getLevelupProgress());
 
-				// increment score, and update header labels
+				// show player data
 				this._numboHeaderLayer.updateValues();
 
 				// Allow controller to look for new hint.
@@ -728,17 +731,19 @@ var NumboGameLayer = (function() {
 /////////////
 
 
-		highlightSelectedBlocks: function(){
+		highlightSelectedBlocks: function() {
+			var i, block;
+			
 			var selectedBlockSum = 0;
 			var selectedBlocks = this._numboController.getSelectedBlocks();
-			for (var i in selectedBlocks){
-				var block = selectedBlocks[i];
+			for (i = 0; i < selectedBlocks.length; i++) {
+				block = selectedBlocks[i];
 				selectedBlockSum += block.val;
 			}
 			var highlightColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
 
-			for (var i in selectedBlocks){
-				var block = selectedBlocks[i];
+			for (i = 0; i < selectedBlocks.length; i++) {
+				block = selectedBlocks[i];
 				block.highlight(highlightColor);
 			}
 		},
@@ -746,16 +751,18 @@ var NumboGameLayer = (function() {
 		// redraw lines indicating selected blocks
 		redrawSelectedLines: function() {
 			this._selectedLinesNode.clear();
+			
+			var i;
 
 			var selectedBlocks = this._numboController.getSelectedBlocks();
 			var selectedBlockSum = 0;
-			for (var i in selectedBlocks){
+			for (i = 0; i < selectedBlocks.length; i++) {
 				var block = selectedBlocks[i];
 				selectedBlockSum += block.val;
 			}
 			var highlightColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
 			var first, second;
-			for(var i = 0; i < selectedBlocks.length - 1; i++) {
+			for(i = 0; i < selectedBlocks.length - 1; i++) {
 				first = selectedBlocks[i];
 				second = selectedBlocks[i + 1];
 
