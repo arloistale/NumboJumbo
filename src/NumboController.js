@@ -119,22 +119,37 @@ var NumboController = (function() {
 		},
 
 		// activate currently selected blocks
+		// explodes blocks if needed
 		// shifts all blocks down to remove gaps and drops them accordingly
 		// returns the list of blocks that were cleared
 		activateSelectedBlocks: function() {
 			var clearedBlocks = null;
 
 			if(this.isSelectedClearable()) {
-				var lastCol = this._selectedBlocks[this._selectedBlocks.length - 1].col;
-
 				if(NJ.settings.sounds)
 					cc.audioEngine.playEffect(res.plipSound);
+					
+				var selectedBlocks = this._selectedBlocks;
+				var lastBlock = selectedBlocks[selectedBlocks.length - 1]
+					
+				var i;	
+				/*
+				var explodeBlocks = this.depthLimitedSearch(lastBlock.col, lastBlock.row, 1);
+				explodeBlocks.filter(function(val) {
+ 					return selectedBlocks.indexOf(val) == -1;
+				});
+				var explodeBlock;
+				cc.log(explodeBlocks.length);
+				for(i = 0; i < explodeBlocks.length; i++) {
+					explodeBlock = explodeBlocks[i];
+					this.killBlock(explodeBlock);
+				}*/
 
 				// remove any affected block sprite objects:
-				for(var i = 0; i < this._selectedBlocks.length; ++i)
-					this.killBlock(this._selectedBlocks[i]);
+				for(i = 0; i < selectedBlocks.length; ++i)
+					this.killBlock(selectedBlocks[i]);
 
-				clearedBlocks = this._selectedBlocks;
+				clearedBlocks = selectedBlocks;
 			}
 
 			this.deselectAllBlocks();

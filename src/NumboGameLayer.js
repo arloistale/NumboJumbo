@@ -499,9 +499,6 @@ var NumboGameLayer = (function() {
 				var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 				if(data) {
-					//var currBlock = data.currBlock, lastBlock = data.lastBlock;
-					//var color = NJ.selectionColors.getNextColor(data.numSelectedBlocks);
-					//currBlock.highlight(color);
 					this.highlightSelectedBlocks();
 					this.redrawSelectedLines();
 				}
@@ -519,7 +516,7 @@ var NumboGameLayer = (function() {
 			var currLength = 0;
 			var currPosition = null;
 
-			var touchCoords, data, currBlock, lastBlock;
+			var touchCoords, data, currBlock;
 
 			for(var i = 0; currLength < touchDistance; i++) {
 				currLength = testLength * (i + 1);
@@ -531,9 +528,6 @@ var NumboGameLayer = (function() {
 					data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 					if(data) {
-						//currBlock = data.currBlock;
-						//lastBlock = data.lastBlock;
-						//currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
 						this.highlightSelectedBlocks();
 						this.redrawSelectedLines();
 					}
@@ -564,7 +558,6 @@ var NumboGameLayer = (function() {
 			// make sure something actually happened
 			if(clearedBlocks) {
 				var comboLength = clearedBlocks.length;
-				var lastBlock = clearedBlocks[comboLength - 1];
 
 				// initiate iterator variables here because we use them a lot
 				var i, block;
@@ -652,15 +645,6 @@ var NumboGameLayer = (function() {
 
 				// Level up with feedback if needed
 				if (NJ.gameState.levelUpIfNeeded()) {
-					/*
-					var explodeBlocks = this._numboController.depthLimitedSearch(lastBlock.col, lastBlock.row, 1);
-					var explodeBlock;
-					cc.log(explodeBlocks);
-					for(i = 0; i < explodeBlocks.length; i++) {
-						explodeBlock = explodeBlocks[i];
-						this._numboController.killBlock(explodeBlock);
-						cc.log(explodeBlock);
-					}*/
 
 					// Check for Jumbo Swap
 					if (NJ.gameState.currentJumboId == "multiple-progression") {
