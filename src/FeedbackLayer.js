@@ -120,12 +120,22 @@ var FeedbackLayer = cc.Layer.extend({
         var that = this;
         var banner = this.popBannerPool();
         var titleStr = "Default String";
+        var easing = cc.easeQuinticActionOut();
+        var color = cc.color("#ffffff")
+
         if(data) {
             if(typeof data.title !== 'undefined')
                 titleStr = data.title;
+
+            if(typeof data.easing != 'undefined')
+                easing = data.easing;
+
+            if(typeof data.color != 'undefined')
+                color = data.color;
         }
 
         banner.setText(titleStr);
+        banner.setColor(color);
 
         // spawn off-screen
         banner.setPosition(cc.visibleRect.center.x, cc.visibleRect.top.y * 1.1);
@@ -137,8 +147,7 @@ var FeedbackLayer = cc.Layer.extend({
 
         // start moving the banner
         var moveDuration = 0.5;
-        var moveAction = cc.moveTo(moveDuration, cc.p(targetX, targetY));
-        moveAction.easing(cc.easeOut(2.0));
+        var moveAction = cc.moveTo(moveDuration, cc.p(targetX, targetY)).easing(easing);
         var delayAction = cc.delayTime(0.8);
         var fadeOutAction = cc.fadeTo(0.2, 0);
         var removeAction = cc.callFunc(function() {
@@ -165,7 +174,7 @@ var FeedbackLayer = cc.Layer.extend({
         cc.log(titleStr);
 
         var targetX = data && typeof data.targetX !== 'undefined' ? data.targetX : cc.visibleRect.center.x;
-        var targetY = data && typeof data.targetY !== 'undefined' ? data.targetY : cc.visibleRect.center.y * 1.3;
+        var targetY = data && typeof data.targetY !== 'undefined' ? data.targetY : cc.visibleRect.center.y * 1.2;
 
         var timeout = data&& typeof data.timeout !== 'undefined' ? data.timeout : 1.0;
 

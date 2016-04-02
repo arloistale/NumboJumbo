@@ -384,7 +384,7 @@
             node._arrayMakeObjectsPerformSelector(node._children, cc.Node._stateCallbackType.updateTransform);
 
         /*if (cc.SPRITE_DEBUG_DRAW) {               //TODO
-            // draw bounding box
+            // _barNode bounding box
             var vertices = [
                 cc.p(_t._quad.bl.vertices.x, _t._quad.bl.vertices.y),
                 cc.p(_t._quad.br.vertices.x, _t._quad.br.vertices.y),
@@ -420,7 +420,7 @@
             return;
 
         var gl = ctx || cc._renderContext ;
-        //cc.assert(!_t._batchNode, "If cc.Sprite is being rendered by cc.SpriteBatchNode, cc.Sprite#draw SHOULD NOT be called");
+        //cc.assert(!_t._batchNode, "If cc.Sprite is being rendered by cc.SpriteBatchNode, cc.Sprite#_barNode SHOULD NOT be called");
 
         if (locTexture) {
             if (locTexture._textureLoaded) {
@@ -471,7 +471,7 @@
         cc.current_stack.top = this._stackMatrix;
 
         if (cc.SPRITE_DEBUG_DRAW === 1 || node._showNode) {
-            // draw bounding box
+            // _barNode bounding box
             var locQuad = this._quad;
             var verticesG1 = [
                 cc.p(locQuad.tl.vertices.x, locQuad.tl.vertices.y),
@@ -481,7 +481,7 @@
             ];
             cc._drawingUtil.drawPoly(verticesG1, 4, true);
         } else if (cc.SPRITE_DEBUG_DRAW === 2) {
-            // draw texture box
+            // _barNode texture box
             var drawRectG2 = node.getTextureRect();
             var offsetPixG2 = node.getOffsetPosition();
             var verticesG2 = [cc.p(offsetPixG2.x, offsetPixG2.y), cc.p(offsetPixG2.x + drawRectG2.width, offsetPixG2.y),

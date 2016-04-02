@@ -132,6 +132,11 @@ var NumboController = (function() {
 			this._numboLevel.clearBottomRows(num);
 		},
 
+		killAllBlocks: function() {
+			this.deselectAllBlocks();
+			this._numboLevel.killAllBlocks();
+		},
+
 		// drop block into random column with random value
 		// must define block size in terms of world coordinates
 		// returns dropped block
@@ -231,7 +236,6 @@ var NumboController = (function() {
 		updateRandomJumbo: function() {
 			//console.log(NJ.jumbos.jumboDistribution);
 			var butt = NJ.weightedRandom(NJ.jumbos.getJumboDistribution());
-			console.log(butt);
 			NJ.gameState.chooseJumbo(butt);
 
 			var jumbo = NJ.gameState.getJumbo();

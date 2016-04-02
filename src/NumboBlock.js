@@ -10,8 +10,11 @@ var NumboBlock = (function() {
 
     var blink = function() {
         this._colorIndex += 1;
+        var blockSize = this.getContentSize();
         this._colorIndex %= NJ.purpleColors.length;
-        this._backgroundSprite.setColor(NJ.purpleColors[this._colorIndex]);
+        // TODO: Use shaders here!!!!
+        this._circleNode.setDrawColor(NJ.purpleColors[this._colorIndex]);
+        this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1);
     };
 
     return cc.Sprite.extend({
@@ -50,7 +53,7 @@ var NumboBlock = (function() {
             this.addChild(this._backgroundSprite, -2);
 */
             this._circleNode = cc.DrawNode.create();
-            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 100, false, 2, cc.color("#ffffff"));
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1, cc.color("#ffffff"));
             this.addChild(this._circleNode, -2);
 
             // initialize highlight
@@ -117,12 +120,13 @@ var NumboBlock = (function() {
                 cc.color("#FFCA1B")
             ];
 
-            var size = this.getContentSize();
-            //var chosen = NJ.getColor(NJ.gameState.getJumbo().highscoreThreshold, 1);
-            var chosen = NJ.getColor(NJ.gameState.getJumbo().blockColorString, this.val);
-            //var chosen = colors[Math.floor(Math.max(0, (this.val - 1)) % colors.length)];
+            var blockSize = this.getContentSize();
             this._circleNode.clear();
-            this._circleNode.drawCircle(cc.p(size.width / 2, size.height / 2), size.width / 2 * 0.7, 0, 8, false, 5, chosen);
+            var jumbo = NJ.gameState.getJumbo();
+            var chosen = NJ.getColor(jumbo.blockColorString, this.val);
+            chosen = chosen || cc.color("#ffffff");
+            this._circleNode.setDrawColor(chosen);
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1);
         },
 
         removePowerUp: function() {

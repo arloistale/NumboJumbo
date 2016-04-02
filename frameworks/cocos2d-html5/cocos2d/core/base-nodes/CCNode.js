@@ -418,7 +418,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      *     Sets the Z order which stands for the drawing order, and reorder this node in its parent's children array.     <br/>
      *                                                                                                                    <br/>
      *      The Z order of node is relative to its "brothers": children of the same parent.                               <br/>
-     *      It's nothing to do with OpenGL's z vertex. This one only affects the draw order of nodes in cocos2d.          <br/>
+     *      It's nothing to do with OpenGL's z vertex. This one only affects the _barNode order of nodes in cocos2d.          <br/>
      *      The larger number it is, the later this node will be drawn in each message loop.                              <br/>
      *      Please refer to setVertexZ(float) for the difference.
      * </p>
@@ -1492,8 +1492,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      */
     draw: function (ctx) {
         // override me
-        // Only use- this function to draw your staff.
-        // DON'T draw your stuff outside this method
+        // Only use- this function to _barNode your staff.
+        // DON'T _barNode your stuff outside this method
     },
 
     // Internal use only, do not call it by yourself,
@@ -2108,7 +2108,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     grid: null,
 
     /**
-     * Recursive method that visit its children and draw them
+     * Recursive method that visit its children and _barNode them
      * @function
      * @param {cc.Node.RenderCmd} parentCmd
      */

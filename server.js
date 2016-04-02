@@ -7,7 +7,7 @@ app.use('/res', express.static(__dirname + '/res'));
 app.use('/public', express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
-    res.sendfile(__dirname + '/release.html');
+    res.sendfile(__dirname + '/index.html');
 });
 
 app.listen(process.env.PORT || 8081, function() {

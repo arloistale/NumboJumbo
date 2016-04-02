@@ -87,7 +87,7 @@
         wrapper.setGlobalAlpha(alpha);
 
         var locCacheCanvas = this._cacheCanvas;
-        //direct draw image by canvas drawImage
+        //direct _barNode image by canvas drawImage
         if (locCacheCanvas && locCacheCanvas.width !== 0 && locCacheCanvas.height !== 0) {
             wrapper.setTransform(this._realWorldTransform, scaleX, scaleY);
             var locCanvasHeight = locCacheCanvas.height * scaleY;
@@ -160,7 +160,7 @@
             context.clearRect(0, 0, locCanvas.width, locCanvas.height);
             //set the wrapper's offset
 
-            //draw to cache canvas
+            //_barNode to cache canvas
             renderer._renderingToCacheCanvas(wrapper, instanceID);
             //wrapper.restore();                           //todo: it can be reserve.
             this._cacheDirty = false

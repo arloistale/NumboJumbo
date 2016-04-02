@@ -67,6 +67,23 @@ var NumboLevel = (function() {
 		}
 	};
 
+	// takes in the index of a column in bricks[][].
+	// moves all non-empty columns toward that col
+	// (cols to the left of col move rightward, and vice-versa)
+	var collapseColumnsToward = function (col) {
+		cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
+		collapseLeftSideToward(col);
+		collapseRightSideToward(col);
+
+		for (var i = 0; i < NJ.NUM_COLS; ++i){
+			for (var j = 0; j < blocks[i].length; ++j){
+				if (blocks[i][j]) {
+					blocks[i][j].col = i;
+				}
+			}
+		}
+	};
+
 	return cc.Class.extend({
 
 		////////////////////
@@ -113,9 +130,14 @@ var NumboLevel = (function() {
 			blocks[col].splice(row, 1);
 			numBlocks--;
 
-			// update internal row index to reflect new indices
-			for (var j = row; j < blocks[col].length; ++j) {
-				blocks[col][j].row = j;
+			if(blocks[col].length > 0) {
+				// update internal row index to reflect new indices
+				for (var j = row; j < blocks[col].length; ++j) {
+					blocks[col][j].row = j;
+				}
+			} else {
+				// collapse columns inward if we have cleared a column
+				collapseColumnsToward(col);
 			}
 		},
 
@@ -129,7 +151,7 @@ var NumboLevel = (function() {
 
 		killAllBlocks: function() {
 			for (var col = 0; col < NJ.NUM_COLS; ++col){
-				for (var row = blocks[col].length-1; row >= 0; --row){
+				for (var row = blocks[col].length - 1; row >= 0; --row){
 					var block = blocks[col][row];
 					this.killBlock(block);
 				}
@@ -166,23 +188,6 @@ var NumboLevel = (function() {
 			}
 
 			this.collapseColumnsToward(Math.floor(NJ.NUM_COLS/2));
-		},
-
-		// takes in the index of a column in bricks[][].
-		// moves all non-empty columns toward that col
-		// (cols to the left of col move rightward, and vice-versa)
-		collapseColumnsToward: function (col) {
-			cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
-			collapseLeftSideToward(col);
-			collapseRightSideToward(col);
-
-			for (var i = 0; i < NJ.NUM_COLS; ++i){
-				for (var j = 0; j < blocks[i].length; ++j){
-					if (blocks[i][j]) {
-						blocks[i][j].col = i;
-					}
-				}
-			}
 		},
 
 		/////////////
@@ -317,7 +322,7 @@ var NumboLevel = (function() {
 			}
 
 			var col = NJ.weightedRandom(cols);
-			if(col) {
+			if(blocks[col] && blocks[col].length) {
 				var row = Math.floor(Math.random() * blocks[col].length);
 				return this.getBlock(col, row);
 			}
@@ -347,25 +352,27 @@ var NumboLevel = (function() {
 
 		// returns a list of neighbors adjacent to this block
 		// takes in an object either containing a block variable or a col/row pair
-		getNeighbors: function(col, row){
+		getNeighbors: function(col, row) {
 			var neighbors = [];
+
+			var numRowsInColumn = blocks[col].length;
 
 			if (col > 0) { // grab blocks in column to the left
 				if (row > 0 && this.getBlock(col-1, row-1))
-					neighbors.push(this.getBlock(col-1, row-1))
-				if (row < NJ.NUM_ROWS - 1 && this.getBlock(col-1, row+1))
+					neighbors.push(this.getBlock(col-1, row-1));
+				if (row < numRowsInColumn - 1 && this.getBlock(col-1, row+1))
 					neighbors.push(this.getBlock(col-1, row+1));
 				if (this.getBlock(col-1, row))
 					neighbors.push(this.getBlock(col-1, row));
 			}
 			if (row > 0 && this.getBlock(col, row-1)) // grab block below
 				neighbors.push(this.getBlock(col, row-1));
-			if (row < NJ.NUM_ROWS - 1 && this.getBlock(col, row+1)) // grab block above
-				neighbors.push(this.getBlock(col, row+1))
+			if (row < numRowsInColumn - 1 && this.getBlock(col, row+1)) // grab block above
+				neighbors.push(this.getBlock(col, row+1));
 			if (col < NJ.NUM_COLS - 1) { // grab blocks in column to the right
 				if (row > 0 && this.getBlock(col+1, row-1))
-					neighbors.push(this.getBlock(col+1, row-1))
-				if (row < NJ.NUM_ROWS - 1 && this.getBlock(col+1, row+1))
+					neighbors.push(this.getBlock(col+1, row-1));
+				if (row < numRowsInColumn - 1 && this.getBlock(col+1, row+1))
 					neighbors.push(this.getBlock(col+1, row+1));
 				if (this.getBlock(col+1, row))
 					neighbors.push(this.getBlock(col+1, row));
@@ -377,14 +384,10 @@ var NumboLevel = (function() {
 		// returns whether a block exists at given coords
 		getBlock: function(col, row) {
 			cc.assert(0 <= col && col < NJ.NUM_COLS &&
-				0 <= row && row < NJ.NUM_ROWS,
+				0 <= row && NJ.NUM_ROWS,
 				"block coordinates out of bounds! (col: " + col + ", row: " + row + ")");
 
-			if (row < blocks[col].length)
-				return blocks[col][row];
-			else
-				return null;
-
+			return row < blocks[col].length ? blocks[col][row] : null;
 		},
 
 		getNumBlocksInColumn: function(col) {

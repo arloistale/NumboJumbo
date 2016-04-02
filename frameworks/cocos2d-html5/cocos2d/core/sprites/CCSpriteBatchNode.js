@@ -594,7 +594,7 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
     },
 
     /**
-     * Sort all children nodes (override draw of cc.Node)
+     * Sort all children nodes (override _barNode of cc.Node)
      */
     sortAllChildren: function () {
         if (this._reorderChildDirty) {

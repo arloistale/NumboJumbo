@@ -125,7 +125,7 @@
             return;
 
         if (cc.SPRITE_DEBUG_DRAW === 1 || node._showNode) {
-            // draw bounding box
+            // _barNode bounding box
             var locQuad = this._quad;
             var verticesG1 = [
                 cc.p(locQuad.tl.vertices.x, locQuad.tl.vertices.y),
@@ -135,7 +135,7 @@
             ];
             cc._drawingUtil.drawPoly(verticesG1, 4, true);
         } else if (cc.SPRITE_DEBUG_DRAW === 2) {
-            // draw texture box
+            // _barNode texture box
             var drawRectG2 = node.getTextureRect();
             var offsetPixG2 = node.getOffsetPosition();
             var verticesG2 = [cc.p(offsetPixG2.x, offsetPixG2.y), cc.p(offsetPixG2.x + drawRectG2.width, offsetPixG2.y),

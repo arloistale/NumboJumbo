@@ -98,7 +98,7 @@ NJ.getColor = function (colorString, index) {
     }
 
     return null;
-}
+};
 
 
 NJ.selectionColors = (function() {

@@ -65,7 +65,7 @@
         currentStack.stack.push(currentStack.top);
         this._syncStatus(parentCmd);
         currentStack.top = this._stackMatrix;
-        //this.draw(ctx);
+        //this._barNode(ctx);
         cc.renderer.pushRenderCommand(this);
 
         this._dirtyFlag = 0;

@@ -1492,13 +1492,13 @@ ccui.Layout.create = function () {
  */
 ccui.Layout.BG_COLOR_NONE = 0;
 /**
- * The solid of ccui.Layout's background color type, it will use a LayerColor to draw the background.
+ * The solid of ccui.Layout's background color type, it will use a LayerColor to _barNode the background.
  * @constant
  * @type {number}
  */
 ccui.Layout.BG_COLOR_SOLID = 1;
 /**
- * The gradient of ccui.Layout's background color type, it will use a LayerGradient to draw the background.
+ * The gradient of ccui.Layout's background color type, it will use a LayerGradient to _barNode the background.
  * @constant
  * @type {number}
  */

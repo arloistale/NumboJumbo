@@ -2,6 +2,8 @@
  * Created by jonathanlu on 2/10/16.
  */
 
+// Extensions
+
 Date.prototype.formatAMPM = function() {
     var hours = this.getHours();
     var minutes = this.getMinutes();

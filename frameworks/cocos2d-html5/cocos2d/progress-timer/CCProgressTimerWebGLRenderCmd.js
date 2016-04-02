@@ -73,7 +73,7 @@
             else {
                 context.drawArrays(context.TRIANGLE_STRIP, 0, this._vertexDataCount / 2);
                 context.drawArrays(context.TRIANGLE_STRIP, 4, this._vertexDataCount / 2);
-                // 2 draw calls
+                // 2 _barNode calls
                 cc.g_NumberOfDraws++;
             }
         }

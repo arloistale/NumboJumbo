@@ -209,12 +209,12 @@
             }
             ctx.save();
 
-            // draw a channel with alpha of the original image
+            // _barNode a channel with alpha of the original image
             ctx.globalCompositeOperation = 'source-over';
             //ctx.globalAlpha = 1;
             ctx.drawImage(tintedImgCache[2], rect.x, rect.y, w, h, 0, 0, w, h);
 
-            // draw a rect of specified color
+            // _barNode a rect of specified color
             ctx.globalCompositeOperation = 'source-in';
             ctx.fillStyle = 'rgba(' + Math.round(color.r) + ',' + Math.round(color.g) + ',' + Math.round(color.b) + ',1)';
             ctx.fillRect(0, 0, w, h);

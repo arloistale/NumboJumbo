@@ -71,7 +71,7 @@ cc.TextFieldDelegate = cc.Class.extend(/** @lends cc.TextFieldDelegate# */{
     },
 
     /**
-     * If doesn't want draw sender as default, return true.
+     * If doesn't want _barNode sender as default, return true.
      * @param {cc.TextFieldTTF} sender
      * @return {Boolean}
      */
@@ -293,11 +293,11 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         if (this.delegate && this.delegate.onDraw(this))
             return;
 
-        cc.LabelTTF.prototype.draw.call(this, context);
+        cc.LabelTTF.prototype._barNode.call(this, context);
     },
 
     /**
-     * Recursive method that visit its children and draw them.
+     * Recursive method that visit its children and _barNode them.
      * @param {CanvasRenderingContext2D|WebGLRenderingContext} ctx
      */
     visit: function(ctx){
