@@ -224,6 +224,7 @@ var NumboController = (function() {
 			this._knownPath = [];
 		},
 
+
 		////////////
 		// COMBOS //
 		////////////
@@ -332,6 +333,10 @@ var NumboController = (function() {
 
 		getSpawnTime: function() {
 			return this.getSpawnConst() * this.spawnTime;
+		},
+
+		getKnownPathLength: function(){
+			return this._knownPath.length;
 		},
 
 		// checks if the current selected blocks can be activated (their equation is valid)

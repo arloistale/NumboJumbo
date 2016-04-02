@@ -103,6 +103,7 @@ var NumboGameLayer = (function() {
 			// begin scheduling hint jiggles
 			//this.unschedule(this.jiggleHintBlocks);
 			this.schedule(this.jiggleHintBlocks, 5);
+
 		},
 
 		// initialize the powerup mode variable
@@ -201,6 +202,8 @@ var NumboGameLayer = (function() {
 			this._feedbackLayer.launchFallingBanner({
 				title: "Level " + NJ.gameState.getLevel()
 			});
+
+
 		},
 
 		// Initialize dimensions and geometry
@@ -337,7 +340,20 @@ var NumboGameLayer = (function() {
 			this.unschedule(this.scheduleSpawn);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
 
-			this.spawnDropRandomBlock();
+			// don't make a hint unless they haven't made a move, AND a move exists
+			if (NJ.gameState.getBlocksCleared() == 0) {
+				if (this._numboController.getKnownPathLength() > 0) {
+					this._feedbackLayer.launchHelperBanner({
+						title: "swipe an equation!"
+					});
+				}
+				else {
+					this.spawnDropRandomBlock();
+				}
+			}
+			else {
+				this.spawnDropRandomBlock();
+			}
 		},
 
 		// Spawns a block and drops the spawned block into place.
@@ -402,14 +418,15 @@ var NumboGameLayer = (function() {
 			var hint = this._numboController.findHint();
 		},
 
-		jiggleHintBlocks: function(){
+		jiggleHintBlocks: function() {
 			var hint = this._numboController.findHint();
 			for (var i in hint) {
-				if(hint.hasOwnProperty(i))
+				if (hint.hasOwnProperty(i))
 					hint[i].jiggleSprite();
 			}
 			this.unschedule(this.jiggleHintBlocks);
 			this.schedule(this.jiggleHintBlocks, 5);
+
 		},
 
 		///////////////////////
@@ -577,6 +594,9 @@ var NumboGameLayer = (function() {
 
 		// On touch ended, activates all selected blocks once touch is released.
 		onTouchEnded: function(touchPosition) {
+			// special case for if this is the very first combo:
+			var isFirstCombo = NJ.gameState.getBlocksCleared() == 0; // bool
+
 			// Activate any selected blocks.
 			var clearedBlocks = this._numboController.activateSelectedBlocks();
 
@@ -611,13 +631,45 @@ var NumboGameLayer = (function() {
 						this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 				}
 
+				// handle scoring & bookkeeping
 				NJ.gameState.addBlocksCleared(comboLength);
-
 				var scoreDifference = NJ.gameState.addScore({blockCount: comboLength});
 				var differenceThreshold = 30000;
 
+				// launch 'yay' helper snippet if this was the first combo
+				if (isFirstCombo) {
+					// TODO: send the timestamp for first move off to goggle analytics
+					var helperText = "right! because \n";
+					var maxIndex = 0;
+					for (var i = 0; i < clearedBlocks.length; ++i) {
+						cc.log("i = " + i + " : " + clearedBlocks[i].val);
+						if (clearedBlocks[i].val > clearedBlocks[maxIndex].val) {
+							maxIndex = i;
+						}
+					}
+					cc.log("max i:" + maxIndex + " = " + clearedBlocks[maxIndex].val)
+					for (var i = 0; i < clearedBlocks.length; ++i) {
+						if (i != maxIndex){
+							if (helperText == "right! because \n"){
+								helperText += clearedBlocks[i].val;
+							}
+							else {
+								helperText += " + " + clearedBlocks[i].val;
+							}
+						}
+					}
+					helperText += " = " + clearedBlocks[maxIndex].val + " !";
+
+
+					this._feedbackLayer.launchHelperBanner({
+						title: helperText,
+						targetY: cc.visibleRect.center.y * 1,
+						timeout: 3.0
+					});
+				}
+
 				// launch feedback for combo threshold title snippet
-				if(comboLength >= 5) {
+				if(comboLength >= 5 && isFirstCombo == false) {
 					var overflow = comboLength - 5;
 					var title = "WOMBO COMBO";
 
