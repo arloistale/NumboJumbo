@@ -544,7 +544,6 @@ var NumboGameLayer = (function() {
 				touchCoords = convertPointToLevelCoords(currPosition);
 
 				if (touchCoords) {
-					var oldNumSelected = this._numboController.getSelectedBlocks().length;
 					data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 					if(data) {

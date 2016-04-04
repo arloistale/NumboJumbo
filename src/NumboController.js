@@ -74,46 +74,30 @@ var NumboController = (function() {
 			if (block === null)
 				return null;
 			if(this._selectedBlocks.length >= 2) {
-				/*if(block == this._selectedBlocks[this._selectedBlocks.length-2]) {
+				if(block == this._selectedBlocks[this._selectedBlocks.length-2]) {
 					deletedBlock = this._selectedBlocks[this._selectedBlocks.length-1];
 					deletedBlock.clearHighlight();
-					this._selectedBlocks.splice(this._selectedBlocks[length-1], 1);
-				}*/
-			}
-			if(deletedBlock) {
-				return {
-					numSelectedBlocks: this._selectedBlocks.length,
-					currBlock: block-1,
-					lastBlock: lastBlock-2
-				};
-			}
-			/*
-			if (this._selectedBlocks.length > 1) {
-				if (block == this._selectedBlocks[this._selectedBlocks.length - 2]) {
-					console.log("HELLO");
-
-
-					block.clearHighlight();
 					this._selectedBlocks.splice(this._selectedBlocks.length-1, 1);
-					block = this._selectedBlocks[this._selectedBlocks.length-1];
-					lastBlock = this._selectedBlocks[this._selectedBlocks.length-2];
+					return {
+						numSelectedBlocks: this._selectedBlocks.length,
+						currBlock: block-1,
+						lastBlock: lastBlock-2
+					};
 				}
 			}
-			*/
-			//else {
-				// TODO: possible optimization
-				if (this._selectedBlocks.indexOf(block) >= 0)
+			// TODO: possible optimization
+			if (this._selectedBlocks.indexOf(block) >= 0)
+				return null;
+
+			// make sure this block is adjacent to the block before it
+			if (this._selectedBlocks.length > 0) {
+				lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
+				if (!this._numboLevel.isAdjBlocks(block, lastBlock))
 					return null;
+			}
 
-				// make sure this block is adjacent to the block before it
-				if (this._selectedBlocks.length > 0) {
-					lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
-					if (!this._numboLevel.isAdjBlocks(block, lastBlock))
-						return null;
-				}
+			this._selectedBlocks.push(block);
 
-				this._selectedBlocks.push(block);
-			//}
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(plops[Math.min(this._selectedBlocks.length, plops.length-1)]);
 
