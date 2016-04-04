@@ -78,6 +78,8 @@ var NumboController = (function() {
 					deletedBlock = this._selectedBlocks[this._selectedBlocks.length-1];
 					deletedBlock.clearHighlight();
 					this._selectedBlocks.splice(this._selectedBlocks.length-1, 1);
+					if(NJ.settings.sounds)
+						cc.audioEngine.playEffect(plops[Math.max(this._selectedBlocks.length-3, 0)]);
 					return {
 						numSelectedBlocks: this._selectedBlocks.length,
 						currBlock: block-1,
