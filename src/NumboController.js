@@ -209,7 +209,7 @@ var NumboController = (function() {
 				var path = this.meanderSearch(col, this._numboLevel.getNumBlocksInColumn(col),
 					meanderSearchCriteria.pathAtLeastTwoWithNoise);
 				path.shift();
-				cc.log(path);
+
 				if (path && path.length > 0) {
 					var sum = 0;
 					for (var i in path) {
@@ -302,8 +302,6 @@ var NumboController = (function() {
 				block = neighbors[i];
 
 				result.push(block);
-
-				cc.log(block);
 
 				if (block) {
 					result = result.concat(this.depthLimitedSearch(block.col, block.row, depth - 1));

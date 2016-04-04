@@ -183,15 +183,6 @@ var NumboGameLayer = (function() {
 			this._feedbackLayer.launchFallingBanner({
 				title: "Level " + NJ.gameState.getLevel()
 			});
-
-			var progressRect = cc.rect({
-				x: cc.visibleRect.bottomLeft.x,
-				y: cc.visibleRect.bottomLeft.y,
-				width: cc.visibleRect.width,
-				height: cc.visibleRect.height
-			});
-			this._progressBar = new ProgressBarLayer(progressRect);
-			this.addChild(this._progressBar);
 		},
 
 		// Initialize dimensions and geometry
@@ -222,6 +213,9 @@ var NumboGameLayer = (function() {
 
 			this._selectedLinesNode = cc.DrawNode.create();
 			this.addChild(this._selectedLinesNode);
+
+			this._progressBar = new ProgressBarLayer(_levelBounds);
+			this.addChild(this._progressBar);
 		},
 
 		// Initialize the Numbo Controller, which controls the level.
@@ -614,12 +608,11 @@ var NumboGameLayer = (function() {
 					var helperText = "";
 					var maxIndex = 0;
 					for (i = 0; i < clearedBlocks.length; ++i) {
-						cc.log("i = " + i + " : " + clearedBlocks[i].val);
 						if (clearedBlocks[i].val > clearedBlocks[maxIndex].val) {
 							maxIndex = i;
 						}
 					}
-					cc.log("max i:" + maxIndex + " = " + clearedBlocks[maxIndex].val);
+
 					for (i = 0; i < clearedBlocks.length; ++i) {
 						if (i != maxIndex){
 							if (helperText == ""){
@@ -647,7 +640,7 @@ var NumboGameLayer = (function() {
 						title: title,
                         color: threshold ? threshold.color : cc.color("#ffffff"),
 						targetY: cc.visibleRect.center.y,
-                        easing: cc.easeElasticOut()
+                        easing: cc.easeQuinticActionOut()
 					});
 				}
 
@@ -661,11 +654,6 @@ var NumboGameLayer = (function() {
 					targetY: touchPosition.y + _levelBounds.height / 6,
 					targetScale: 1 + 0.125 * Math.min(1, scoreDifference / differenceThreshold)
 				});
-				
-				/*
-				if(NJ.gameState.isPowerupMode()) {
-					this._numboController.requestPowerup();
-				}*/
 
 				var powerupValues = [];
 
@@ -675,9 +663,10 @@ var NumboGameLayer = (function() {
 						powerupValues.push(block.powerup);
 				}
 
+				//cc.log(powerupValues.length);
+
 				// Check for a powerup.
 				if (powerupValues.length > 0) {
-					//cc.log(data.powerupValues);
 					if (powerupValues[0] == 'clearAndSpawn') {
 						this.clearBlocks();
 						this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
@@ -699,6 +688,10 @@ var NumboGameLayer = (function() {
 
 				// Level up with feedback if needed
 				if (NJ.gameState.levelUpIfNeeded()) {
+
+					if(NJ.gameState.isPowerupMode()) {
+						this._numboController.requestPowerup();
+					}
 
 					// Check for Jumbo Swap
 					if (NJ.gameState.currentJumboId == "multiple-progression") {
