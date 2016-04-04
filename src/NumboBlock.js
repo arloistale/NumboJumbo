@@ -119,7 +119,7 @@ var NumboBlock = (function() {
                 cc.color("#BA01FF"),
                 cc.color("#FFCA1B")
             ];
-
+            var size = this.getContentSize();
             var blockSize = this.getContentSize();
             this._circleNode.clear();
             var jumbo = NJ.gameState.getJumbo();
@@ -169,6 +169,10 @@ var NumboBlock = (function() {
             var scaleUpAction = cc.scaleTo(0.2, 1.0);
 
             this.runAction(cc.sequence(scaleDownAction, scaleUpAction, scaleDownAction, scaleUpAction));
+        },
+
+        getValue: function() {
+            return this.val;
         }
     });
 }());

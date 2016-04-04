@@ -43,6 +43,17 @@ var res = {
     alertSound: resRoot + "Sounds/alert.mp3",
     plipSound: resRoot + "Sounds/plipSound.wav",
     plopSound: resRoot + "Sounds/Plop.wav",
+    plopSound4: resRoot + "Sounds/Plop4.wav",
+    plopSound5: resRoot + "Sounds/Plop5.wav",
+    plopSound6: resRoot + "Sounds/Plop6.wav",
+    plopSound7: resRoot + "Sounds/Plop7.wav",
+    plopSound8: resRoot + "Sounds/Plop8.wav",
+    plopSound9: resRoot + "Sounds/Plop9.wav",
+    plopSound10: resRoot + "Sounds/Plop10.wav",
+    plopSound11: resRoot + "Sounds/Plop11.wav",
+    plopSound12: resRoot + "Sounds/Plop12.wav",
+    plopSound13: resRoot + "Sounds/Plop13.wav",
+    plopSound14: resRoot + "Sounds/Plop14.wav",
     clickSound: resRoot + "Sounds/clickSound.wav",
     
     // jsons
@@ -92,6 +103,10 @@ var g_menu = [
     //res.markerFont.firefoxSrc
 ];
 
+var plops = [res.plopSound, res.plopSound4, res.plopSound5,
+    res.plopSound6, res.plopSound7, res.plopSound8, res.plopSound9, res.plopSound10, res.plopSound11,
+    res.plopSound12, res.plopSound13, res.plopSound14];
+
 // resources for ingame
 var g_game = [
     // UI
@@ -111,11 +126,22 @@ var g_game = [
     res.alertSound,
     res.clickSound,
     res.plipSound,
-    res.plopSound,
     res.backgroundTrack,
+    res.plopSound,
+    res.plopSound4,
+    res.plopSound5,
+    res.plopSound6,
+    res.plopSound7,
+    res.plopSound8,
+    res.plopSound9,
+    res.plopSound10,
+    res.plopSound11,
+    res.plopSound12,
+    res.plopSound13,
+    res.plopSound14,
 
     // fonts
-    res.mainFont.src,
+    res.mainFont.src
 /*
     res.backBottom,
     res.backMiddle,
