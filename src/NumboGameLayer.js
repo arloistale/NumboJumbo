@@ -189,7 +189,7 @@ var NumboGameLayer = (function() {
 				y: cc.visibleRect.bottomLeft.y,
 				width: cc.visibleRect.width,
 				height: cc.visibleRect.height
-			})
+			});
 			this._progressBar = new ProgressBarLayer(progressRect);
 			this.addChild(this._progressBar);
 		},
@@ -613,14 +613,14 @@ var NumboGameLayer = (function() {
 					// TODO: send the timestamp for first move off to goggle analytics
 					var helperText = "";
 					var maxIndex = 0;
-					for (var i = 0; i < clearedBlocks.length; ++i) {
+					for (i = 0; i < clearedBlocks.length; ++i) {
 						cc.log("i = " + i + " : " + clearedBlocks[i].val);
 						if (clearedBlocks[i].val > clearedBlocks[maxIndex].val) {
 							maxIndex = i;
 						}
 					}
-					cc.log("max i:" + maxIndex + " = " + clearedBlocks[maxIndex].val)
-					for (var i = 0; i < clearedBlocks.length; ++i) {
+					cc.log("max i:" + maxIndex + " = " + clearedBlocks[maxIndex].val);
+					for (i = 0; i < clearedBlocks.length; ++i) {
 						if (i != maxIndex){
 							if (helperText == ""){
 								helperText += clearedBlocks[i].val;
