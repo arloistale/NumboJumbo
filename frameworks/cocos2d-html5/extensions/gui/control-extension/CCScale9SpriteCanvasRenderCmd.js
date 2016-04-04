@@ -117,7 +117,7 @@
         cc.renderer._turnToCacheMode(node.__instanceId);
         node._scale9Image.visit();
 
-        //draw to cache canvas
+        //_barNode to cache canvas
         var selTexture = node._scale9Image.getTexture();
         if(selTexture && this._state === cc.Scale9Sprite.state.GRAY)
             selTexture._switchToGray(true);

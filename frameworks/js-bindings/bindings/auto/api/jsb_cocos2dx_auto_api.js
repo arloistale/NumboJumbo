@@ -2090,7 +2090,7 @@ getGlobalZOrder : function (
 },
 
 /**
- * @method draw
+ * @method _barNode
 * @param {cc.Renderer} renderer
 * @param {mat4_object} mat4
 * @param {unsigned int} int

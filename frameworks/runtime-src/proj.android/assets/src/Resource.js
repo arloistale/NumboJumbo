@@ -112,6 +112,7 @@ var g_game = [
     res.plipSound,
     res.plopSound,
     res.backgroundTrack,
+    res.electroSwingTrack,
 
     // fonts
     res.mainFont.src,

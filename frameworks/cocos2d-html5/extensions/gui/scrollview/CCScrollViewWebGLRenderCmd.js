@@ -84,7 +84,7 @@
 
         if (locChildren && locChildren.length > 0) {
             childrenLen = locChildren.length;
-            // draw children zOrder < 0
+            // _barNode children zOrder < 0
             for (i = 0; i < childrenLen; i++) {
                 selChild = locChildren[i];
                 if (selChild && selChild._localZOrder < 0)
@@ -93,7 +93,7 @@
                     break;
             }
 
-            // draw children zOrder >= 0
+            // _barNode children zOrder >= 0
             for (; i < childrenLen; i++)
                 locChildren[i]._renderCmd.visit();
         }

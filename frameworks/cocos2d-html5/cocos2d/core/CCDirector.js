@@ -229,7 +229,7 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
 
         this._clear();
 
-        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
+        /* to avoid flickr, nextScene MUST be here: after tick and before _barNode.
          XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
         if (this._nextScene) {
             this.setNextScene();
@@ -238,7 +238,7 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
         if (this._beforeVisitScene)
             this._beforeVisitScene();
 
-        // draw the scene
+        // _barNode the scene
         if (this._runningScene) {
             if (renderer.childrenOrderDirty === true) {
                 cc.renderer.clearRenderCommands();
@@ -251,7 +251,7 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
             cc.eventManager.dispatchEvent(this._eventAfterVisit);
         }
 
-        // draw the notifications node
+        // _barNode the notifications node
         if (this._notificationNode)
             this._notificationNode.visit();
 
@@ -826,12 +826,12 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
 cc.Director.EVENT_PROJECTION_CHANGED = "director_projection_changed";
 
 /**
- * The event after draw of cc.Director
+ * The event after _barNode of cc.Director
  * @constant
  * @type {string}
  * @example
  *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_DRAW, function(event) {
- *           cc.log("after draw event.");
+ *           cc.log("after _barNode event.");
  *       });
  */
 cc.Director.EVENT_AFTER_DRAW = "director_after_draw";

@@ -384,7 +384,7 @@ cc.Node.RenderCmd.prototype = {
         var len = children.length;
         if (len > 0) {
             node.sortAllChildren();
-            // draw children zOrder < 0
+            // _barNode children zOrder < 0
             for (i = 0; i < len; i++) {
                 child = children[i];
                 if (child._localZOrder < 0)

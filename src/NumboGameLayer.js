@@ -23,7 +23,7 @@ var NumboGameLayer = (function() {
 			var row = Math.floor((point.y - _levelBounds.y) / _levelCellSize.height);
 
 			// return only if coordinates in certain radius of the block.
-			var radius = 0.7 * _levelCellSize.width / 2;
+			var radius = 0.5 * _levelCellSize.width / 2;
 
 			var cellCenter = cc.p(_levelBounds.x + (col + 0.5) * _levelCellSize.width,
 				_levelBounds.y + (row + 0.5) * _levelCellSize.height);
@@ -90,19 +90,15 @@ var NumboGameLayer = (function() {
 			this.initAudio();
 
 			this.initPowerups();
-			if(NJ.gameState.isPowerupMode())
-				this.initProgressBar();
 
 			// Begin scheduling block drops.
 			this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
 			this.schedule(this.scheduleSpawn, 0.1*20);
 
-			// begin searching for hints
-			this.schedule(this.searchForHint, 0.1);
-
 			// begin scheduling hint jiggles
 			//this.unschedule(this.jiggleHintBlocks);
 			this.schedule(this.jiggleHintBlocks, 5);
+
 		},
 
 		// initialize the powerup mode variable
@@ -110,17 +106,6 @@ var NumboGameLayer = (function() {
 			if (NJ.gameState.getJumbo().name == "Powerups!") {
 				NJ.gameState.setPowerupMode();
 			}
-		},
-
-		initProgressBar: function() {
-			this._progressBar = new ProgressBarLayer(_levelBounds, 20);
-			this.addChild(this._progressBar);
-			this.schedule(this.shrinkProgress, .1);
-		},
-
-		shrinkProgress: function() {
-			if(this.pausedJumbo == null)
-				this._progressBar.decrement();
 		},
 
 		// Initialize input depending on the device.
@@ -180,10 +165,7 @@ var NumboGameLayer = (function() {
 			var that = this;
 
 			// background
-			this._backgroundLayer = new BackgroundLayer([res.backBG], [{image: res.backBottom, dx: 0, dy:.3},
-				{image: res.backMiddle, dx: -.5, dy:.5},
-				{image: res.backTop, dx:.5, dy:.5},
-				{image: res.backVeryTop, dx: 0, dy:.22}]);
+			this._backgroundLayer = new BackgroundLayer();
 			this.addChild(this._backgroundLayer);
 
 			// header
@@ -201,6 +183,15 @@ var NumboGameLayer = (function() {
 			this._feedbackLayer.launchFallingBanner({
 				title: "Level " + NJ.gameState.getLevel()
 			});
+
+			var progressRect = cc.rect({
+				x: cc.visibleRect.bottomLeft.x,
+				y: cc.visibleRect.bottomLeft.y,
+				width: cc.visibleRect.width,
+				height: cc.visibleRect.height
+			})
+			this._progressBar = new ProgressBarLayer(progressRect);
+			this.addChild(this._progressBar);
 		},
 
 		// Initialize dimensions and geometry
@@ -326,9 +317,7 @@ var NumboGameLayer = (function() {
 			var easing = cc.easeQuinticActionInOut();
 			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 			moveAction.setTag(42);
-			//block.stopAllActions();
 			moveBlock.stopActionByTag(42);
-			//block.stopAction(moveAction);
 			moveBlock.runAction(moveAction);
 		},
 
@@ -339,7 +328,20 @@ var NumboGameLayer = (function() {
 			this.unschedule(this.scheduleSpawn);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
 
-			this.spawnDropRandomBlock();
+			// don't make a hint unless they haven't made a move, AND a move exists
+			if (NJ.gameState.getBlocksCleared() == 0) {
+				if (this._numboController.getKnownPathLength() > 0) {
+					this._feedbackLayer.launchHelperBanner({
+						title: "swipe an equation!"
+					});
+				}
+				else {
+					this.spawnDropRandomBlock();
+				}
+			}
+			else {
+				this.spawnDropRandomBlock();
+			}
 		},
 
 		// Spawns a block and drops the spawned block into place.
@@ -355,8 +357,7 @@ var NumboGameLayer = (function() {
 					this.spawnNBlocks(this.pausedJumbo.numBlocks);
 					this.pausedJumbo = null;
 					this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
-				}
-				else {
+				} else {
 					this.onGameOver();
 				}
 				return;
@@ -382,8 +383,8 @@ var NumboGameLayer = (function() {
 			this.schedule(this.spawnDropRandomBlock, 0.1, N);
 		},
 
-		clearBlocks: function(){
-			this._numboController._numboLevel.killAllBlocks();
+		clearBlocks: function() {
+			this._numboController.killAllBlocks();
 		},
 
 		///////////////////////
@@ -400,18 +401,15 @@ var NumboGameLayer = (function() {
 		// Hint Finding //
 		//////////////////
 
-		searchForHint: function(){
-			var hint = this._numboController.findHint();
-		},
-
-		jiggleHintBlocks: function(){
+		jiggleHintBlocks: function() {
 			var hint = this._numboController.findHint();
 			for (var i in hint) {
-				if(hint.hasOwnProperty(i))
+				if (hint.hasOwnProperty(i))
 					hint[i].jiggleSprite();
 			}
 			this.unschedule(this.jiggleHintBlocks);
 			this.schedule(this.jiggleHintBlocks, 5);
+
 		},
 
 		///////////////////////
@@ -422,6 +420,7 @@ var NumboGameLayer = (function() {
 		onGameOver: function() {
 			NJ.stats.addCurrency(NJ.gameState.getScore());
 			NJ.stats.offerHighscore(NJ.gameState.getScore());
+			NJ.stats.offerHighlevel(NJ.gameState.getLevel());
 
 			NJ.stats.save();
 
@@ -519,9 +518,7 @@ var NumboGameLayer = (function() {
 				var data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 				if(data) {
-					var currBlock = data.currBlock, lastBlock = data.lastBlock;
-					var color = NJ.selectionColors.getNextColor(data.numSelectedBlocks);
-					currBlock.highlight(color);
+					this.highlightSelectedBlocks();
 					this.redrawSelectedLines();
 				}
 			}
@@ -538,7 +535,7 @@ var NumboGameLayer = (function() {
 			var currLength = 0;
 			var currPosition = null;
 
-			var touchCoords, data, currBlock, lastBlock;
+			var touchCoords, data, currBlock;
 
 			for(var i = 0; currLength < touchDistance; i++) {
 				currLength = testLength * (i + 1);
@@ -551,9 +548,7 @@ var NumboGameLayer = (function() {
 					data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 					if(data) {
-						currBlock = data.currBlock;
-						lastBlock = data.lastBlock;
-						currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+						this.highlightSelectedBlocks();
 						this.redrawSelectedLines();
 					}
 				}
@@ -565,9 +560,7 @@ var NumboGameLayer = (function() {
 				data = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 				if(data) {
-					currBlock = data.currBlock;
-					lastBlock = data.lastBlock;
-					currBlock.highlight(NJ.selectionColors.getNextColor(data.numSelectedBlocks));
+					this.highlightSelectedBlocks();
 					this.redrawSelectedLines();
 				}
 			}
@@ -577,6 +570,9 @@ var NumboGameLayer = (function() {
 
 		// On touch ended, activates all selected blocks once touch is released.
 		onTouchEnded: function(touchPosition) {
+			// special case for if this is the very first combo:
+			var isFirstCombo = NJ.gameState.getBlocksCleared() == 0; // bool
+
 			// Activate any selected blocks.
 			var clearedBlocks = this._numboController.activateSelectedBlocks();
 
@@ -586,48 +582,75 @@ var NumboGameLayer = (function() {
 			if(clearedBlocks) {
 				var comboLength = clearedBlocks.length;
 
-				if(NJ.gameState.isPowerupMode()) {
-					if (this._progressBar.update(comboLength)) {
-						this._progressBar.reset(Math.floor(this._progressBar.denom * 1.5));
-						this._numboController.requestPowerup();
-					}
-				}
-
-				var powerupValues = [];
-
-				var block;
-				var i;
-
-				for (i = 0; i < comboLength; i++) {
-					block = clearedBlocks[i];
-					if (block.powerup)
-						powerupValues.push(block.powerup);
-				}
-
+				// initiate iterator variables here because we use them a lot
+				var i, block;
+				
 				// TODO: Really do not like how this is done
 				// Gaps may be created; shift all affected blocks down.
 				for (var col = 0; col < NJ.NUM_COLS; ++col) {
 					for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
 						this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 				}
+	
+				// add to number of blocks cleared
+				var totalBlocks = NJ.gameState.addBlocksCleared(comboLength);
+				
+				// begin calculating data related to score\
+                var scoreBonus = 0;
 
-				NJ.gameState.addBlocksCleared(comboLength);
+                var threshold = NJ.comboThresholds.get(comboLength);
+                if(threshold)
+                    scoreBonus += threshold.scoreBonus;
 
-				var scoreDifference = NJ.gameState.addScore({blockCount: comboLength});
+				var scoreDifference = NJ.gameState.addScore({
+                    blockCount: comboLength,
+                    bonus: scoreBonus
+                });
+
 				var differenceThreshold = 30000;
 
+				// launch 'yay' helper snippet if this was the first combo
+				if (isFirstCombo) {
+					// TODO: send the timestamp for first move off to goggle analytics
+					var helperText = "";
+					var maxIndex = 0;
+					for (var i = 0; i < clearedBlocks.length; ++i) {
+						cc.log("i = " + i + " : " + clearedBlocks[i].val);
+						if (clearedBlocks[i].val > clearedBlocks[maxIndex].val) {
+							maxIndex = i;
+						}
+					}
+					cc.log("max i:" + maxIndex + " = " + clearedBlocks[maxIndex].val)
+					for (var i = 0; i < clearedBlocks.length; ++i) {
+						if (i != maxIndex){
+							if (helperText == ""){
+								helperText += clearedBlocks[i].val;
+							}
+							else {
+								helperText += " + " + clearedBlocks[i].val;
+							}
+						}
+					}
+					helperText += " = " + clearedBlocks[maxIndex].val;
+
+					this._feedbackLayer.launchHelperBanner({
+						title: helperText,
+						targetY: cc.visibleRect.center.y * 1,
+						timeout: 3.0
+					});
+				}
+
 				// launch feedback for combo threshold title snippet
-				if(comboLength >= 5) {
-					var overflow = comboLength - 5;
+				if(comboLength >= 5 && isFirstCombo == false) {
 					var title = "WOMBO COMBO";
 
 					this._feedbackLayer.launchFallingBanner({
 						title: title,
-						targetY: cc.visibleRect.center.y
+                        color: threshold ? threshold.color : cc.color("#ffffff"),
+						targetY: cc.visibleRect.center.y,
+                        easing: cc.easeElasticOut()
 					});
 				}
-
-				var threshold = NJ.comboThresholds.get(comboLength);
 
 				// launch feedback for gained score
 				this._feedbackLayer.launchSnippet({
@@ -639,6 +662,19 @@ var NumboGameLayer = (function() {
 					targetY: touchPosition.y + _levelBounds.height / 6,
 					targetScale: 1 + 0.125 * Math.min(1, scoreDifference / differenceThreshold)
 				});
+				
+				/*
+				if(NJ.gameState.isPowerupMode()) {
+					this._numboController.requestPowerup();
+				}*/
+
+				var powerupValues = [];
+
+				for (i = 0; i < comboLength; i++) {
+					block = clearedBlocks[i];
+					if (block.powerup)
+						powerupValues.push(block.powerup);
+				}
 
 				// Check for a powerup.
 				if (powerupValues.length > 0) {
@@ -656,7 +692,7 @@ var NumboGameLayer = (function() {
 						this.clearBlocks();
 						this._backgroundLayer.updateBackgroundColor(new cc.color(255, 255, 0, 255));
 						NJ.gameState.setStage("bonus");
-						this._progressBar.update();
+						this._progressBar.setProgress(0);
 						this._numboController.initiateOneManiaBonus();
 						this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS *.4));
 					}
@@ -664,6 +700,7 @@ var NumboGameLayer = (function() {
 
 				// Level up with feedback if needed
 				if (NJ.gameState.levelUpIfNeeded()) {
+
 					// Check for Jumbo Swap
 					if (NJ.gameState.currentJumboId == "multiple-progression") {
 						this._numboController.updateMultipleProgression();
@@ -673,8 +710,8 @@ var NumboGameLayer = (function() {
 					this._feedbackLayer.launchFallingBanner({
 						title: "Level " + NJ.gameState.getLevel()
 					});
-
 				}
+				
 				// bonus for clearing screen
 				if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2)) {
 					this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
@@ -686,7 +723,7 @@ var NumboGameLayer = (function() {
 					});
 
 					// give the player 5*999 points and launch 5 random '+999' snippets
-					for (var i = 0; i < 5; ++i) {
+					for (i = 0; i < 5; ++i) {
 						scoreDifference = NJ.gameState.addScore({numPoints: 999});
 						this._feedbackLayer.launchSnippet({
 							title: "+" + scoreDifference,
@@ -703,8 +740,11 @@ var NumboGameLayer = (function() {
 				this.schedule(this.resetMultiplier, 5, 1);
 
 				NJ.gameState.offerComboForMultiplier();
+				
+				// show level progress
+				this._progressBar.setProgress(NJ.gameState.getLevelupProgress());
 
-				// increment score, and update header labels
+				// show player data
 				this._numboHeaderLayer.updateValues();
 
 				// Allow controller to look for new hint.
@@ -729,18 +769,44 @@ var NumboGameLayer = (function() {
 // Drawing //
 /////////////
 
+
+		highlightSelectedBlocks: function() {
+			var i, block;
+			
+			var selectedBlockSum = 0;
+			var selectedBlocks = this._numboController.getSelectedBlocks();
+			for (i = 0; i < selectedBlocks.length; i++) {
+				block = selectedBlocks[i];
+				selectedBlockSum += block.val;
+			}
+			var highlightColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
+
+			for (i = 0; i < selectedBlocks.length; i++) {
+				block = selectedBlocks[i];
+				block.highlight(highlightColor);
+			}
+		},
+
 		// redraw lines indicating selected blocks
 		redrawSelectedLines: function() {
 			this._selectedLinesNode.clear();
+			
+			var i;
 
 			var selectedBlocks = this._numboController.getSelectedBlocks();
+			var selectedBlockSum = 0;
+			for (i = 0; i < selectedBlocks.length; i++) {
+				var block = selectedBlocks[i];
+				selectedBlockSum += block.val;
+			}
+			var highlightColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
 			var first, second;
-			for(var i = 0; i < selectedBlocks.length - 1; i++) {
+			for(i = 0; i < selectedBlocks.length - 1; i++) {
 				first = selectedBlocks[i];
 				second = selectedBlocks[i + 1];
 
 				this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(first.col, first.row),
-					convertLevelCoordsToPoint(second.col, second.row), 1, cc.color("#ffffff"));
+					convertLevelCoordsToPoint(second.col, second.row), 1, highlightColor);
 			}
 		}
 	});

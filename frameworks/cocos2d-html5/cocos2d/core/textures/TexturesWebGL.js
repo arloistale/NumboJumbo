@@ -314,7 +314,7 @@ cc._tmp.WebGLTexture2D = function () {
         },
 
         /**
-         Drawing extensions to make it easy to draw basic quads using a CCTexture2D object.
+         Drawing extensions to make it easy to _barNode basic quads using a CCTexture2D object.
          These functions require gl.TEXTURE_2D and both gl.VERTEX_ARRAY and gl.TEXTURE_COORD_ARRAY client states to be enabled.
          */
 
@@ -817,7 +817,7 @@ cc._tmp.WebGLTextureAtlas = function () {
         //
         //vertices
         //gl.bindBuffer(gl.ARRAY_BUFFER, _t._buffersVBO[0]);
-        // XXX: update is done in draw... perhaps it should be done in a timer
+        // XXX: update is done in _barNode... perhaps it should be done in a timer
         cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, _t._quadsWebBuffer);

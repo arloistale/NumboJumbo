@@ -372,7 +372,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
     },
 
     /**
-     * draw a catmull rom line
+     * _barNode a catmull rom line
      * @param {Array} points
      * @param {Number} segments
      */
@@ -381,7 +381,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
     },
 
     /**
-     * draw a cardinal spline path
+     * _barNode a cardinal spline path
      * @param {Array} config
      * @param {Number} tension
      * @param {Number} segments

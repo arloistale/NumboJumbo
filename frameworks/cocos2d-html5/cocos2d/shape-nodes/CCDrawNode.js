@@ -151,7 +151,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     },
 
     /**
-     * draw color setter
+     * _barNode color setter
      * @param {cc.Color} color
      */
     setDrawColor: function (color) {
@@ -163,7 +163,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     },
 
     /**
-     * draw color getter
+     * _barNode color getter
      * @returns {cc.Color}
      */
     getDrawColor: function () {
@@ -316,7 +316,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     },
 
     /**
-     * draw a CatmullRom curve
+     * _barNode a CatmullRom curve
      * @override
      * @param {Array} points
      * @param {Number} segments
@@ -328,7 +328,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     },
 
     /**
-     * draw a cardinal spline path
+     * _barNode a cardinal spline path
      * @override
      * @param {Array} config
      * @param {Number} tension
@@ -374,7 +374,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     },
 
     /**
-     * draw a dot at a position, with a given radius and color
+     * _barNode a dot at a position, with a given radius and color
      * @param {cc.Point} pos
      * @param {Number} radius
      * @param {cc.Color} color
@@ -408,7 +408,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     },
 
     /**
-     * draw a segment with a radius and color
+     * _barNode a segment with a radius and color
      * @param {cc.Point} from
      * @param {cc.Point} to
      * @param {Number} lineWidth
@@ -429,7 +429,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     },
 
     /**
-     * draw a polygon with a fill color and line color without copying the vertex list
+     * _barNode a polygon with a fill color and line color without copying the vertex list
      * @param {Array} verts
      * @param {cc.Color} fillColor
      * @param {Number} lineWidth
@@ -455,7 +455,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     },
     
     /**
-     * draw a polygon with a fill color and line color, copying the vertex list
+     * _barNode a polygon with a fill color and line color, copying the vertex list
      * @param {Array} verts
      * @param {cc.Color} fillColor
      * @param {Number} lineWidth

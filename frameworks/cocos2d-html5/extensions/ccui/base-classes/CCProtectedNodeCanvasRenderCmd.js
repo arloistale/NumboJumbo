@@ -166,7 +166,7 @@
         node.sortAllProtectedChildren();
 
         var pChild;
-        // draw children zOrder < 0
+        // _barNode children zOrder < 0
         for (i = 0; i < childLen; i++) {
             child = children[i];
             if (child._localZOrder < 0)

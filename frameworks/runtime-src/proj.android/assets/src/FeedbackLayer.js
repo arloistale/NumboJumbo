@@ -122,13 +122,22 @@ var FeedbackLayer = cc.Layer.extend({
         var that = this;
 
         var titleStr = "Default String";
+        var easing = cc.easeQuinticActionOut();
+        var color = cc.color("#ffffff")
 
         if(data) {
             if(typeof data.title !== 'undefined')
                 titleStr = data.title;
+
+            if(typeof data.easing != 'undefined')
+                easing = data.easing;
+
+            if(typeof data.color != 'undefined')
+                color = data.color;
         }
 
         banner.setText(titleStr);
+        banner.setColor(color);
         banner.setPosition(cc.visibleRect.center.x, cc.visibleRect.top.y * 1.1);
 
         this.addChild(banner);
@@ -138,8 +147,7 @@ var FeedbackLayer = cc.Layer.extend({
 
         // start moving the banner
         var moveDuration = 0.5;
-        var moveAction = cc.moveTo(moveDuration, cc.p(targetX, targetY));
-        moveAction.easing(cc.easeOut(2.0));
+        var moveAction = cc.moveTo(moveDuration, cc.p(targetX, targetY)).easing(easing);
         var delayAction = cc.delayTime(0.8);
         var fadeOutAction = cc.fadeTo(0.2, 0);
         var removeAction = cc.callFunc(function() {

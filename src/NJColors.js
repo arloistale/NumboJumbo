@@ -4,6 +4,103 @@
 
 var NJ = NJ || {};
 
+// shades of purple, from white through prurples down to black, then in reverse
+// from http://www.tutorialrepublic.com/html-reference/html-color-picker.php
+// used for showing which blocks are powerups
+NJ.purpleColors = [
+    cc.color("#000000"),
+    cc.color("#0D0511"),
+    cc.color("#1A0A22"),
+    cc.color("#270F33"),
+    cc.color("#351445"),
+    cc.color("#421A56"),
+    cc.color("#4F1F67"),
+    cc.color("#5D2479"),
+    cc.color("#6A298A"),
+    cc.color("#772E9B"),
+    cc.color("#8534AD"),
+    cc.color("#9148B5"),
+    cc.color("#9D5CBD"),
+    cc.color("#A970C5"),
+    cc.color("#B585CD"),
+    cc.color("#C299D6"),
+    cc.color("#CEADDE"),
+    cc.color("#DAC2E6"),
+    cc.color("#E6D6EE"),
+    cc.color("#F2EAF6"),
+    cc.color("#FFFFFF"), // black
+    cc.color("#F2EAF6"),
+    cc.color("#E6D6EE"),
+    cc.color("#DAC2E6"),
+    cc.color("#CEADDE"),
+    cc.color("#C299D6"),
+    cc.color("#B585CD"),
+    cc.color("#A970C5"),
+    cc.color("#9D5CBD"),
+    cc.color("#9148B5"),
+    cc.color("#8534AD"),
+    cc.color("#772E9B"),
+    cc.color("#6A298A"),
+    cc.color("#5D2479"),
+    cc.color("#4F1F67"),
+    cc.color("#421A56"),
+    cc.color("#351445"),
+    cc.color("#270F33"),
+    cc.color("#1A0A22"),
+    cc.color("#0D0511"),
+    cc.color("#000000")
+];
+
+// pastels, pinks & purples
+// from http://www.colourlovers.com/palette/4206184/I_Want_Candy
+NJ.pastelPinkColors = [
+    cc.color("E3E3BD"),
+    cc.color("E5B5AB"),
+    cc.color("C5EDD3"),
+    cc.color("C28897"),
+    cc.color("B8566D"),
+];
+
+// neon palette
+// from http://www.colourlovers.com/palette/55400/Neon_Virus
+NJ.neonColors = [
+
+    cc.color("#BA01FF"), // dark purple
+    cc.color("#228DFF"), // blue
+    cc.color("#00FFF2"), // cyan
+    cc.color("#00FF4D"), // aqua
+    cc.color("#FFFF00"), // yellow
+    cc.color("#FFA200"), // light orange
+    cc.color("#FF4D00"), // deep orange
+    cc.color("#FF0000"), // red
+    cc.color("#FF0092"), // magenta
+
+];
+
+NJ.getColor = function (colorString, index) {
+    var colorArray = null;
+    if (colorString == "neon")
+        colorArray = NJ.neonColors;
+    else if (colorString == "purple")
+        colorArray = NJ.purpleColors;
+    else if (colorString == "pastelPink")
+        colorArray = NJ.pastelPinkColors;
+
+    if (colorArray) {
+        index = index || Math.floor(Math.random() * colorArray.length);
+
+        index %= colorArray.length;
+        if (index < 0) {
+            index = (index + colorArray.length) % colorArray.length;
+        }
+
+        return colorArray[index];
+    }
+
+    return null;
+};
+
+
 NJ.selectionColors = (function() {
     var data = [
         // color palette from: http://www.color-hex.com/color-palette/8075

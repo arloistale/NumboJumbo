@@ -115,7 +115,7 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
         locLabelCanvas.height = height;
         if (flag) locContext.clearRect(0, 0, width, height);
 
-        //draw text to labelCanvas
+        //_barNode text to labelCanvas
         this._drawTTFInCanvas(locContext);
         node._texture && node._texture.handleLoadedTexture();
 

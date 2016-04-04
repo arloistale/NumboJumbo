@@ -80,14 +80,14 @@
 
         // if stencil buffer disabled
         if (cc.stencilBits < 1) {
-            // draw everything, as if there where no stencil
+            // _barNode everything, as if there where no stencil
             cc.Node.WebGLRenderCmd.prototype.visit.call(this, parentCmd);
             return;
         }
 
         if (!node._stencil || !node._stencil.visible) {
             if (node.inverted)
-                cc.Node.WebGLRenderCmd.prototype.visit.call(this, parentCmd);   // draw everything
+                cc.Node.WebGLRenderCmd.prototype.visit.call(this, parentCmd);   // _barNode everything
             return;
         }
 
@@ -97,7 +97,7 @@
                 cc.log("Nesting more than " + cc.stencilBits + "stencils is not supported. Everything will be drawn without stencil for this node and its children.");
                 cc.ClippingNode.WebGLRenderCmd._visit_once = false;
             }
-            // draw everything, as if there where no stencil
+            // _barNode everything, as if there where no stencil
             cc.Node.WebGLRenderCmd.prototype.visit.call(this, parentCmd);
             return;
         }
@@ -115,12 +115,12 @@
 
         cc.renderer.pushRenderCommand(this._afterDrawStencilCmd);
 
-        // draw (according to the stencil test func) this node and its children
+        // _barNode (according to the stencil test func) this node and its children
         var locChildren = node._children;
         if (locChildren && locChildren.length > 0) {
             var childLen = locChildren.length;
             node.sortAllChildren();
-            // draw children zOrder < 0
+            // _barNode children zOrder < 0
             for (var i = 0; i < childLen; i++) {
                 locChildren[i]._renderCmd.visit(this);
             }
@@ -143,7 +143,7 @@
     };
 
     proto._drawFullScreenQuadClearStencil = function () {
-        // draw a fullscreen solid rectangle to clear the stencil buffer
+        // _barNode a fullscreen solid rectangle to clear the stencil buffer
         var projStack = cc.projection_matrix_stack;
         //cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
         //cc.kmGLPushMatrix();

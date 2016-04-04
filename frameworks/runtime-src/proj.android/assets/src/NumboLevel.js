@@ -317,7 +317,7 @@ var NumboLevel = (function() {
 			}
 
 			var col = NJ.weightedRandom(cols);
-			if(col) {
+			if(blocks[col] && blocks[col].length) {
 				var row = Math.floor(Math.random() * blocks[col].length);
 				return this.getBlock(col, row);
 			}

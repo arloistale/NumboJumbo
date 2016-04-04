@@ -16,13 +16,12 @@ var NumboHeaderLayer = (function() {
         buttonsMenu: null,
 
         scoreValueLabel: null,
-
-        multiplierLabel: null,
+        levelValueLabel: null,
 
         // callback
         onPauseCallback: null,
 
-        draw: null,
+        _barNode: null,
 
         ctor: function() {
             this._super();
@@ -46,17 +45,16 @@ var NumboHeaderLayer = (function() {
             contentSize = this.getContentSize();
 
             // Score Labels
-            var scoreStartPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.5);
+            var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.75);
 
             var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
             scoreTitleLabel.attr({
                 scale: 1.0,
                 anchorX: 0,
                 anchorY: 0.5 + NJ.anchorOffsetY,
-                x: scoreStartPos.x,
-                y: scoreStartPos.y
+                x: startPos.x,
+                y: startPos.y
             });
-            scoreTitleLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             scoreTitleLabel.setColor(cc.color(255, 255, 255, 255));
             this.addChild(scoreTitleLabel);
 
@@ -65,24 +63,35 @@ var NumboHeaderLayer = (function() {
                 scale: 1.0,
                 anchorX: 0,
                 anchorY: 0.5 + NJ.anchorOffsetY,
-                x: scoreStartPos.x + scoreTitleLabel.getContentSize().width,
-                y: scoreStartPos.y
+                x: startPos.x + scoreTitleLabel.getContentSize().width,
+                y: startPos.y
             });
-            this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
             this.addChild(this.scoreValueLabel);
+            
+            startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.25);
 
-            this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
-            this.multiplierLabel.attr({
-                scale: 1.0 / NJ.fontScalingFactor,
-                anchorX: 0.5,
+            var levelTitleLabel = new cc.LabelTTF("Level: ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
+            levelTitleLabel.attr({
+                scale: 1.0,
+                anchorX: 0,
                 anchorY: 0.5 + NJ.anchorOffsetY,
-                x: contentSize.width / 2,
-                y: contentSize.height / 2
+                x: startPos.x,
+                y: startPos.y
             });
-            this.multiplierLabel.enableStroke(cc.color(0, 0, 255, 255), 6);
-            this.multiplierLabel.setColor(cc.color(255, 255, 255, 255));
-            //this.addChild(this.multiplierLabel);
+            levelTitleLabel.setColor(cc.color(255, 255, 255, 255));
+            this.addChild(levelTitleLabel);
+
+            this.levelValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.header2);
+            this.levelValueLabel.attr({
+                scale: 1.0,
+                anchorX: 0,
+                anchorY: 0.5 + NJ.anchorOffsetY,
+                x: startPos.x + levelTitleLabel.getContentSize().width,
+                y: startPos.y
+            });
+            this.levelValueLabel.setColor(cc.color(255, 255, 255, 255));
+            this.addChild(this.levelValueLabel);
         },
 
         initButtons: function() {
@@ -90,12 +99,12 @@ var NumboHeaderLayer = (function() {
 
             var contentSize = this.getContentSize();
 
-            var buttonSize = cc.size(contentSize.height, contentSize.height);
+            var buttonSize = cc.size(contentSize.height * 0.75, contentSize.height * 0.75);
 
             // initialize pause button
             var menu = new cc.Menu();
             menu.attr({
-                x: contentSize.width - buttonSize.width / 2,
+                x: contentSize.width - contentSize.height / 2,
                 y: contentSize.height / 2
             });
             var pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
@@ -111,7 +120,7 @@ var NumboHeaderLayer = (function() {
 
         updateValues: function() {
             this.scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
-            //this.multiplierLabel.setString("x" + NJ.gameState.getMultiplier());
+            this.levelValueLabel.setString(NJ.gameState.getLevel())
         },
 
 // UI callbacks //

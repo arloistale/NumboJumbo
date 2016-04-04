@@ -167,7 +167,7 @@
         if (locChildren && locChildren.length > 0) {
             var childLen = locChildren.length;
             node.sortAllChildren();
-            // draw children zOrder < 0
+            // _barNode children zOrder < 0
             for (i = 0; i < childLen; i++) {
                 if (locChildren[i] && locChildren[i]._localZOrder < 0)
                     locChildren[i]._renderCmd.visit(this);
@@ -176,7 +176,7 @@
             }
 
             cc.renderer.pushRenderCommand(this);
-            // draw children zOrder >= 0
+            // _barNode children zOrder >= 0
             for (; i < childLen; i++) {
                 if (locChildren[i])
                     locChildren[i]._renderCmd.visit(this);

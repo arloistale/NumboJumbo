@@ -42,7 +42,7 @@
         var locString = node._string || "";
         var n = locString.length;
         var texture = this._texture;
-        var locItemWidth = node._itemWidth , locItemHeight = node._itemHeight;     //needn't multiply cc.contentScaleFactor(), because sprite's draw will do this
+        var locItemWidth = node._itemWidth , locItemHeight = node._itemHeight;     //needn't multiply cc.contentScaleFactor(), because sprite's _barNode will do this
 
         for (var i = 0; i < n; i++) {
             var a = locString.charCodeAt(i) - node._mapStartChar.charCodeAt(0);

@@ -17,12 +17,10 @@ var NumboHeaderLayer = (function() {
 
         scoreValueLabel: null,
 
-        multiplierLabel: null,
-
         // callback
         onPauseCallback: null,
 
-        draw: null,
+        _barNode: null,
 
         ctor: function() {
             this._super();
@@ -71,18 +69,6 @@ var NumboHeaderLayer = (function() {
             this.scoreValueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
             this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
             this.addChild(this.scoreValueLabel);
-
-            this.multiplierLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.header2);
-            this.multiplierLabel.attr({
-                scale: 1.0 / NJ.fontScalingFactor,
-                anchorX: 0.5,
-                anchorY: 0.5 + NJ.anchorOffsetY,
-                x: contentSize.width / 2,
-                y: contentSize.height / 2
-            });
-            this.multiplierLabel.enableStroke(cc.color(0, 0, 255, 255), 6);
-            this.multiplierLabel.setColor(cc.color(255, 255, 255, 255));
-            //this.addChild(this.multiplierLabel);
         },
 
         initButtons: function() {
@@ -90,12 +76,12 @@ var NumboHeaderLayer = (function() {
 
             var contentSize = this.getContentSize();
 
-            var buttonSize = cc.size(contentSize.height, contentSize.height);
+            var buttonSize = cc.size(contentSize.height * 0.75, contentSize.height * 0.75);
 
             // initialize pause button
             var menu = new cc.Menu();
             menu.attr({
-                x: contentSize.width - buttonSize.width / 2,
+                x: contentSize.width - contentSize.height / 2,
                 y: contentSize.height / 2
             });
             var pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
@@ -111,7 +97,6 @@ var NumboHeaderLayer = (function() {
 
         updateValues: function() {
             this.scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
-            //this.multiplierLabel.setString("x" + NJ.gameState.getMultiplier());
         },
 
 // UI callbacks //

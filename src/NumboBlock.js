@@ -8,55 +8,13 @@ Definition for falling blocks.
 
 var NumboBlock = (function() {
 
-    var selectionColors = [
-        cc.color("#000000"),
-        cc.color("#0D0511"),
-        cc.color("#1A0A22"),
-        cc.color("#270F33"),
-        cc.color("#351445"),
-        cc.color("#421A56"),
-        cc.color("#4F1F67"),
-        cc.color("#5D2479"),
-        cc.color("#6A298A"),
-        cc.color("#772E9B"),
-        cc.color("#8534AD"),
-        cc.color("#9148B5"),
-        cc.color("#9D5CBD"),
-        cc.color("#A970C5"),
-        cc.color("#B585CD"),
-        cc.color("#C299D6"),
-        cc.color("#CEADDE"),
-        cc.color("#DAC2E6"),
-        cc.color("#E6D6EE"),
-        cc.color("#F2EAF6"),
-        cc.color("#FFFFFF"),
-
-        cc.color("#F2EAF6"),
-        cc.color("#E6D6EE"),
-        cc.color("#DAC2E6"),
-        cc.color("#CEADDE"),
-        cc.color("#C299D6"),
-        cc.color("#B585CD"),
-        cc.color("#A970C5"),
-        cc.color("#9D5CBD"),
-        cc.color("#9148B5"),
-        cc.color("#8534AD"),
-        cc.color("#772E9B"),
-        cc.color("#6A298A"),
-        cc.color("#5D2479"),
-        cc.color("#4F1F67"),
-        cc.color("#421A56"),
-        cc.color("#351445"),
-        cc.color("#270F33"),
-        cc.color("#1A0A22"),
-        cc.color("#0D0511"),
-        cc.color("#000000")
-    ];
-
     var blink = function() {
         this._colorIndex += 1;
-        this._colorIndex %= selectionColors.length;
-        this._backgroundSprite.setColor(selectionColors[this._colorIndex]);
+        var blockSize = this.getContentSize();
+        this._colorIndex %= NJ.purpleColors.length;
+        // TODO: Use shaders here!!!!
+        this._circleNode.setDrawColor(NJ.purpleColors[this._colorIndex]);
+        this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1);
     };
 
     return cc.Sprite.extend({
@@ -95,7 +53,7 @@ var NumboBlock = (function() {
             this.addChild(this._backgroundSprite, -2);
 */
             this._circleNode = cc.DrawNode.create();
-            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 100, false, 2, cc.color("#ffffff"));
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1, cc.color("#ffffff"));
             this.addChild(this._circleNode, -2);
 
             // initialize highlight
@@ -161,23 +119,14 @@ var NumboBlock = (function() {
                 cc.color("#BA01FF"),
                 cc.color("#FFCA1B")
             ];
-
-            var colors2 = [
-                cc.color("#F0F0F0"),
-                cc.color("#00FF00"),
-                cc.color("#0000FF"),
-                cc.color("#FFFF00"),
-                cc.color("#00FFFF"),
-                cc.color("#990099"),
-                cc.color("#FF4D94"),
-                cc.color("#FF6600"),
-                cc.color("#FF0000")
-            ]
-
             var size = this.getContentSize();
-            var chosen = colors2[Math.floor(Math.max(0, (this.val - 1)) % colors2.length)];
+            var blockSize = this.getContentSize();
             this._circleNode.clear();
-            this._circleNode.drawCircle(cc.p(size.width / 2, size.height / 2), size.width / 2 * 0.7, 0, 8, false, 1, chosen);
+            var jumbo = NJ.gameState.getJumbo();
+            var chosen = NJ.getColor(jumbo.blockColorString, this.val);
+            chosen = chosen || cc.color("#ffffff");
+            this._circleNode.setDrawColor(chosen);
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1);
         },
 
         removePowerUp: function() {
