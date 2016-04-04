@@ -121,7 +121,7 @@ var FeedbackLayer = cc.Layer.extend({
         var banner = this.popBannerPool();
         var titleStr = "Default String";
         var easing = cc.easeQuinticActionOut();
-        var color = cc.color("#ffffff")
+        var color = cc.color("#ffffff");
 
         if(data) {
             if(typeof data.title !== 'undefined')
