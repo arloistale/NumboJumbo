@@ -219,6 +219,10 @@ var NumboBlock = (function() {
             var scaleUpAction = cc.scaleTo(0.2, 1.0);
 
             this.runAction(cc.sequence(scaleDownAction, scaleUpAction, scaleDownAction, scaleUpAction));
+        },
+
+        getValue: function() {
+            return this.val;
         }
     });
 }());
