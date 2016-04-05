@@ -13,7 +13,7 @@ var ProgressBarLayer = cc.Layer.extend({
         this._barNode = new cc.DrawNode.create();
         this.addChild(this._barNode);
 
-        this.update(0);
+        this.setProgress(0);
     },
 
     setProgress: function(progress) {
@@ -24,19 +24,16 @@ var ProgressBarLayer = cc.Layer.extend({
 
         this._barNode.clear();
 
-        var progH = progress * h;
+        var progW = progress * w;
 
         var newColor = cc.color(0,0,0,100);
-        if(NJ.gameState.getStage() == "normal") {
+        if(NJ.gameState.getStage() == "normal")
             newColor = cc.color(20, 20, 166, 100);
-            this.prog = Math.max(0, this.prog + progress);
-        }
-        else if(NJ.gameState.getStage() == "bonus") {
+        else if(NJ.gameState.getStage() == "bonus")
             newColor = cc.color(255, 255, 0, 100);
-        }
 
-        this._barNode.drawPoly([cc.p(x, y), cc.p(x + w, y),
-            cc.p(x + w, y + progH), cc.p(x, y + progH)],
+        this._barNode.drawPoly([cc.p(x, y), cc.p(x + progW, y),
+            cc.p(x + progW, y + h), cc.p(x, y + h)],
             newColor, 0, cc.color("#000000"));
 
         return true;

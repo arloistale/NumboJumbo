@@ -63,7 +63,7 @@ var NumboController = (function() {
 		/////////////////////////////
 
 		// select a block in the level, adding it to the selectedBlocks collection
-		// returns an object containing { currentSelectedBlock, lastSelectedBlock }, or null if there was no block
+		// returns the new selected blocks list
 		selectBlock: function(col, row) {
 			cc.assert(0 <= col && col < NJ.NUM_COLS && 0 <= row && row < NJ.NUM_ROWS, "Invalid coords");
 
@@ -73,6 +73,7 @@ var NumboController = (function() {
 
 			if (block === null)
 				return null;
+
 			if(this._selectedBlocks.length >= 2) {
 				if(block == this._selectedBlocks[this._selectedBlocks.length-2]) {
 					deletedBlock = this._selectedBlocks[this._selectedBlocks.length-1];
@@ -80,13 +81,10 @@ var NumboController = (function() {
 					this._selectedBlocks.splice(this._selectedBlocks.length-1, 1);
 					if(NJ.settings.sounds)
 						cc.audioEngine.playEffect(plops[Math.max(this._selectedBlocks.length-3, 0)]);
-					return {
-						numSelectedBlocks: this._selectedBlocks.length,
-						currBlock: block-1,
-						lastBlock: lastBlock-2
-					};
+					return this._selectedBlocks;
 				}
 			}
+
 			// TODO: possible optimization
 			if (this._selectedBlocks.indexOf(block) >= 0)
 				return null;
@@ -103,11 +101,7 @@ var NumboController = (function() {
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(plops[Math.min(this._selectedBlocks.length, plops.length-1)]);
 
-			return {
-				numSelectedBlocks: this._selectedBlocks.length,
-				currBlock: block,
-				lastBlock: lastBlock
-			};
+			return this._selectedBlocks;
 		},
 
 		// deselect a single block, removing its highlight
