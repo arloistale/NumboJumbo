@@ -575,10 +575,15 @@ var NumboGameLayer = (function() {
 				this.redrawSelectedLines(selectedBlocks, color);
 
 				lastSelectedBlock = selectedBlocks[selectedBlocks.length - 1];
-				// draw a line from last selected to our finger
+				// draw a line from last selected to our finger if we are outside of the range of the block
 				if(lastSelectedBlock) {
-					this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(lastSelectedBlock.col, lastSelectedBlock.row),
-						touchPosition, 1, color);
+					var lastBlockPos = convertLevelCoordsToPoint(lastSelectedBlock.col, lastSelectedBlock.row);
+					var diff = cc.pSub(touchPosition, lastBlockPos);
+					var radius = 0.5 * _levelCellSize.width / 2;
+					if(cc.pDot(diff, diff) >= radius * radius) {
+						this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(lastSelectedBlock.col, lastSelectedBlock.row),
+							touchPosition, 1, color);
+					}
 				}
 			}
 
