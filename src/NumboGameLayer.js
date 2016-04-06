@@ -10,6 +10,8 @@ var NumboGameLayer = (function() {
 
 	var _blockSize = null;
 
+	var jiggleCount = 0;
+
 	/////////////
 	// Helpers //
 	/////////////
@@ -402,7 +404,9 @@ var NumboGameLayer = (function() {
 					hint[i].jiggleSprite();
 			}
 			this.unschedule(this.jiggleHintBlocks);
-			this.schedule(this.jiggleHintBlocks, 5);
+			this.jiggleCount++;
+			if(this.jiggleCount < 2 || NJ.gameState.getBlocksCleared() == 0)
+				this.schedule(this.jiggleHintBlocks, 5);
 
 		},
 
@@ -773,10 +777,11 @@ var NumboGameLayer = (function() {
 
 				// Allow controller to look for new hint.
 				this._numboController.resetKnownPath();
+				this.jiggleCount = 0;
 			}
 
 			// schedule a hint
-			this.schedule(this.jiggleHintBlocks, 5);
+			this.schedule(this.jiggleHintBlocks, 12);
 		},
 		/*
 		 pauseSpawn: function(time) {
