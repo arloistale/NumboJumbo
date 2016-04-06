@@ -25,3 +25,6 @@ NJ.uiSizes = {
     optionButton: 0.15,
     textButton: 0.075
 };
+
+// the size of blocks in the game as a percentage of each level grid cell size
+NJ.blockCellSize = 0.75;

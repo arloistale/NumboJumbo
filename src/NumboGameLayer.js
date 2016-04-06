@@ -22,8 +22,8 @@ var NumboGameLayer = (function() {
 			var col = Math.floor((point.x - _levelBounds.x) / _levelCellSize.width);
 			var row = Math.floor((point.y - _levelBounds.y) / _levelCellSize.height);
 
-			// return only if coordinates in certain radius of the block.
-			var radius = 0.5 * _levelCellSize.width / 2;
+			// return only if coordinates within block size
+			var radius = 0.5 * _blockSize.width;
 
 			var cellCenter = cc.p(_levelBounds.x + (col + 0.5) * _levelCellSize.width,
 				_levelBounds.y + (row + 0.5) * _levelCellSize.height);
@@ -204,7 +204,7 @@ var NumboGameLayer = (function() {
 			_levelCellSize = cc.size(cellSize, cellSize);
 			_levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
 
-			_blockSize = cc.size(_levelCellSize.width * 0.92, _levelCellSize.height * 0.92);
+			_blockSize = cc.size(_levelCellSize.width * NJ.blockCellSize, _levelCellSize.height * NJ.blockCellSize);
 
 			// initialize rectangle around level
 			var levelNode = cc.DrawNode.create();
@@ -541,20 +541,23 @@ var NumboGameLayer = (function() {
 			var touchCoords, selectedBlocks, lastSelectedBlock;
 
 			for(var i = 0; currLength < touchDistance; i++) {
-				currLength = testLength * (i + 1);
 				currPosition = cc.pAdd(this._lastTouchPosition, cc.pMult(touchDirection, currLength));
 
 				touchCoords = convertPointToLevelCoords(currPosition);
 
-				if (touchCoords) {
+				if (touchCoords)
 					selectedBlocks = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
-				}
+
+				currLength = testLength * (i + 1);
 			}
 
 			touchCoords = convertPointToLevelCoords(touchPosition);
 
+			// we only look for additional touch coords if we currently touched a block
 			if (touchCoords) {
-				selectedBlocks = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+				var lastCoords = touchCoords;
+
+				selectedBlocks = this._numboController.selectBlock(lastCoords.col, lastCoords.row);
 			}
 
 			// only
@@ -579,10 +582,10 @@ var NumboGameLayer = (function() {
 				if(lastSelectedBlock) {
 					var lastBlockPos = convertLevelCoordsToPoint(lastSelectedBlock.col, lastSelectedBlock.row);
 					var diff = cc.pSub(touchPosition, lastBlockPos);
-					var radius = 0.5 * _levelCellSize.width / 2;
+					var radius = 0.5 * _blockSize.width;
 					if(cc.pDot(diff, diff) >= radius * radius) {
 						this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(lastSelectedBlock.col, lastSelectedBlock.row),
-							touchPosition, 1, color);
+							touchPosition, 3, color);
 					}
 				}
 			}
@@ -817,7 +820,7 @@ var NumboGameLayer = (function() {
 				second = selectedBlocks[i + 1];
 
 				this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(first.col, first.row),
-					convertLevelCoordsToPoint(second.col, second.row), 1, color);
+					convertLevelCoordsToPoint(second.col, second.row), 3, color);
 			}
 		}
 	});
