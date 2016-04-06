@@ -64,13 +64,17 @@ NJ.pastelPinkColors = [
 // neon palette
 // from http://www.colourlovers.com/palette/55400/Neon_Virus
 NJ.neonColors = [
-    cc.color("#04C714"), // darker green
-    cc.color("#BA01FF"), // blue
-    cc.color("#228DFF"), // magenta
-    cc.color("#FF0092"), // orange
-    cc.color("#FFCA1B"), // purple
-    cc.color("#B6FF00"), // lime green
-    cc.color("#F0F000"), // gold
+
+    cc.color("#BA01FF"), // dark purple
+    cc.color("#228DFF"), // blue
+    cc.color("#00FFF2"), // cyan
+    cc.color("#00FF4D"), // aqua
+    cc.color("#FFFF00"), // yellow
+    cc.color("#FFA200"), // light orange
+    cc.color("#FF4D00"), // deep orange
+    cc.color("#FF0000"), // red
+    cc.color("#FF0092"), // magenta
+
 ];
 
 NJ.getColor = function (colorString, index) {

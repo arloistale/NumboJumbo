@@ -72,4 +72,4 @@ NJ.comboThresholds = (function() {
 }());
 
 // game settings
-NJ.DANGER_THRESHOLD = 0.9;
+NJ.DANGER_THRESHOLD = 0.85;

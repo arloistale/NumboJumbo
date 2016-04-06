@@ -117,13 +117,11 @@ var FeedbackLayer = cc.Layer.extend({
      * Usage: launchFallingBanner({ title: 'Hello' })
      */
     launchFallingBanner: function(data) {
-        var banner = this.popBannerPool();
-
         var that = this;
-
+        var banner = this.popBannerPool();
         var titleStr = "Default String";
         var easing = cc.easeQuinticActionOut();
-        var color = cc.color("#ffffff")
+        var color = cc.color("#ffffff");
 
         if(data) {
             if(typeof data.title !== 'undefined')
@@ -138,6 +136,8 @@ var FeedbackLayer = cc.Layer.extend({
 
         banner.setText(titleStr);
         banner.setColor(color);
+
+        // spawn off-screen
         banner.setPosition(cc.visibleRect.center.x, cc.visibleRect.top.y * 1.1);
 
         this.addChild(banner);
@@ -157,6 +157,40 @@ var FeedbackLayer = cc.Layer.extend({
         });
 
         banner.runAction(cc.sequence(moveAction, delayAction, fadeOutAction, removeAction));
+    },
+
+    launchHelperBanner: function(data){
+        var that = this;
+        var banner = this.popBannerPool();
+        this.addChild(banner);
+
+        var titleStr = "Default String";
+        if(data) {
+            if(typeof data.title !== 'undefined')
+                titleStr = data.title;
+        }
+        banner.setText(titleStr);
+
+        cc.log(titleStr);
+
+        var targetX = data && typeof data.targetX !== 'undefined' ? data.targetX : cc.visibleRect.center.x;
+        var targetY = data && typeof data.targetY !== 'undefined' ? data.targetY : cc.visibleRect.center.y * 1.2;
+
+        var timeout = data&& typeof data.timeout !== 'undefined' ? data.timeout : 1.0;
+
+        banner.setPosition(targetX, targetY);
+        banner.setOpacity(0);
+        var fadeOutAction = cc.fadeTo(.25, 0.0*255);
+        var fadeInAction = cc.fadeTo(.25, 1.0*255);
+        var delayAction = cc.delayTime(timeout);
+        var removeAction = cc.callFunc(function() {
+            that.pushBannerPool(banner);
+            banner.stopAllActions();
+            banner.removeFromParent(true);
+        });
+
+        banner.runAction(cc.sequence(fadeInAction, delayAction, fadeOutAction, removeAction));
+        //cc.repeatForever(actions);
     },
 
     /*
@@ -224,9 +258,9 @@ var FeedbackLayer = cc.Layer.extend({
 
     runDoomsayer: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.alertSound);
+            cc.audioEngine.playEffect(res.tickSound);
 
-        this.alertOverlay.setOpacity(255);
+        this.alertOverlay.setOpacity(0.5);
         var fadeAction = cc.fadeTo(0.5, 0);
         this.alertOverlay.runAction(fadeAction);
     },

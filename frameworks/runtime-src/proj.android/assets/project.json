@@ -11,13 +11,12 @@
     "modules": ["cocos2d", "extensions"],
 
     "jsList": [
-        "src/DateExtensions.js",
+        "src/Extensions.js",
         "src/NJPrettifier.js",
         "src/Resource.js",
         "src/ScoresLayer.js",
         "src/NumboMenuLayer.js",
         "src/ShopMenuLayer.js",
-        "src/InstructionsLayer.js",
         "src/JumboMenuLayer.js",
         "src/SettingsMenuLayer.js",
         "src/NumboGameLayer.js",

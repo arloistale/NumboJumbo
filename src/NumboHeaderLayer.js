@@ -12,16 +12,18 @@ var NumboHeaderLayer = (function() {
 
     return cc.Layer.extend({
 
-        statsMenu: null,
+        // menu for buttons in the header
         buttonsMenu: null,
 
-        scoreValueLabel: null,
-        levelValueLabel: null,
+        // labels
+        _scoreValueLabel: null,
+        _levelValueLabel: null,
+
+        // progress bar for level progress
+        progressBarLayer: null,
 
         // callback
         onPauseCallback: null,
-
-        _barNode: null,
 
         ctor: function() {
             this._super();
@@ -34,6 +36,7 @@ var NumboHeaderLayer = (function() {
             });
 
             this.initLabels();
+            this.initProgressBar();
             this.initButtons();
 
             var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - headerSize.height));
@@ -45,7 +48,7 @@ var NumboHeaderLayer = (function() {
             contentSize = this.getContentSize();
 
             // Score Labels
-            var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.75);
+            var startPos = cc.p(contentSize.width * 0.04, contentSize.height / 2);
 
             var scoreTitleLabel = new cc.LabelTTF("Score: ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
             scoreTitleLabel.attr({
@@ -58,16 +61,16 @@ var NumboHeaderLayer = (function() {
             scoreTitleLabel.setColor(cc.color(255, 255, 255, 255));
             this.addChild(scoreTitleLabel);
 
-            this.scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.header2);
-            this.scoreValueLabel.attr({
+            this._scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.sub);
+            this._scoreValueLabel.attr({
                 scale: 1.0,
                 anchorX: 0,
                 anchorY: 0.5 + NJ.anchorOffsetY,
                 x: startPos.x + scoreTitleLabel.getContentSize().width,
                 y: startPos.y
             });
-            this.scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
-            this.addChild(this.scoreValueLabel);
+            this._scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
+            this.addChild(this._scoreValueLabel);
             
             startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.25);
 
@@ -80,20 +83,28 @@ var NumboHeaderLayer = (function() {
                 y: startPos.y
             });
             levelTitleLabel.setColor(cc.color(255, 255, 255, 255));
-            this.addChild(levelTitleLabel);
+            //this.addChild(levelTitleLabel);
 
-            this.levelValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.header2);
-            this.levelValueLabel.attr({
+            this._levelValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.sub);
+            this._levelValueLabel.attr({
                 scale: 1.0,
                 anchorX: 0,
                 anchorY: 0.5 + NJ.anchorOffsetY,
                 x: startPos.x + levelTitleLabel.getContentSize().width,
                 y: startPos.y
             });
-            this.levelValueLabel.setColor(cc.color(255, 255, 255, 255));
-            this.addChild(this.levelValueLabel);
+            this._levelValueLabel.setColor(cc.color(255, 255, 255, 255));
+            //this.addChild(this._levelValueLabel);
         },
 
+        initProgressBar: function() {
+            var contentSize = this.getContentSize();
+
+            this._progressBar = new ProgressBarLayer(cc.rect(contentSize.width * 0.33, contentSize.height * 0.25, contentSize.width * 0.33, contentSize.height * 0.5));
+            this.addChild(this._progressBar, -2);
+        },
+
+        // create buttons (probably the only button will be pause button but w/e)
         initButtons: function() {
             var that = this;
 
@@ -119,8 +130,9 @@ var NumboHeaderLayer = (function() {
 ////////////////
 
         updateValues: function() {
-            this.scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
-            this.levelValueLabel.setString(NJ.gameState.getLevel())
+            this._scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
+            this._levelValueLabel.setString(NJ.gameState.getLevel());
+            this._progressBar.setProgress(NJ.gameState.getLevelupProgress());
         },
 
 // UI callbacks //

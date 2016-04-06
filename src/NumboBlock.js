@@ -14,7 +14,7 @@ var NumboBlock = (function() {
         this._colorIndex %= NJ.purpleColors.length;
         // TODO: Use shaders here!!!!
         this._circleNode.setDrawColor(NJ.purpleColors[this._colorIndex]);
-        this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1);
+        this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 1);
     };
 
     return cc.Sprite.extend({
@@ -53,7 +53,7 @@ var NumboBlock = (function() {
             this.addChild(this._backgroundSprite, -2);
 */
             this._circleNode = cc.DrawNode.create();
-            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1, cc.color("#ffffff"));
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 1, cc.color("#ffffff"));
             this.addChild(this._circleNode, -2);
 
             // initialize highlight
@@ -119,14 +119,14 @@ var NumboBlock = (function() {
                 cc.color("#BA01FF"),
                 cc.color("#FFCA1B")
             ];
-
+            var size = this.getContentSize();
             var blockSize = this.getContentSize();
             this._circleNode.clear();
             var jumbo = NJ.gameState.getJumbo();
             var chosen = NJ.getColor(jumbo.blockColorString, this.val);
             chosen = chosen || cc.color("#ffffff");
             this._circleNode.setDrawColor(chosen);
-            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2 * 0.7, 0, 8, false, 1);
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 1);
         },
 
         removePowerUp: function() {
@@ -140,6 +140,7 @@ var NumboBlock = (function() {
         // kill the block
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
         kill: function() {
+            cc.log(this);
             var block = this;
             var scaleAction = cc.scaleTo(0.7, 1.5, 1.5).easing(cc.easeExponentialOut());
             var fadeAction = cc.fadeTo(0.2, 0);
@@ -168,6 +169,10 @@ var NumboBlock = (function() {
             var scaleUpAction = cc.scaleTo(0.2, 1.0);
 
             this.runAction(cc.sequence(scaleDownAction, scaleUpAction, scaleDownAction, scaleUpAction));
+        },
+
+        getValue: function() {
+            return this.val;
         }
     });
 }());
