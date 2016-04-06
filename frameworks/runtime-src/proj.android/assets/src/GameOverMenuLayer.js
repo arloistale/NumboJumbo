@@ -30,7 +30,9 @@ var GameOverMenuLayer = (function() {
         // UI Data
         _menu: null,
         _scoreLabel: null,
+        _levelLabel: null,
         _bestLabel: null,
+        _bestLevelLabel: null,
         _currencyLabel: null,
 
         // Callbacks Data
@@ -55,19 +57,32 @@ var GameOverMenuLayer = (function() {
             this._menu = new cc.Menu();
 
             var headerLabel = this.generateLabel(NJ.gameState.getJumbo().name, NJ.fontSizes.header);
-            this._menu.addChild(headerLabel);
 
             var scoreTitleLabel = this.generateLabel("Score");
             this._scoreLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.gameState.getScore()) + "", NJ.fontSizes.header2);
-
-            this._menu.addChild(scoreTitleLabel);
-            this._menu.addChild(this._scoreLabel);
+            
+            var levelTitleLabel = this.generateLabel("Level");
+            this._levelLabel = this.generateLabel(NJ.gameState.getLevel() + "", NJ.fontSizes.header2);
 
             var bestTitleLabel = this.generateLabel("Best");
             this._bestLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getHighscore()) + "", NJ.fontSizes.header2);
+            
+            var bestLevelTitleLabel = this.generateLabel("Best Level");
+            this._bestLevelLabel = this.generateLabel(NJ.stats.getHighlevel() + "", NJ.fontSizes.header2);
 
+            this._menu.addChild(headerLabel);
+            
+            this._menu.addChild(scoreTitleLabel);
+            this._menu.addChild(levelTitleLabel);
+            
+            this._menu.addChild(this._scoreLabel);
+            this._menu.addChild(this._levelLabel);
+            
             this._menu.addChild(bestTitleLabel);
+            this._menu.addChild(bestLevelTitleLabel);
+            
             this._menu.addChild(this._bestLabel);
+            this._menu.addChild(this._bestLevelLabel);
 
             var currencyTitleLabel = this.generateLabel("Currency");
             this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
@@ -89,7 +104,7 @@ var GameOverMenuLayer = (function() {
             this._menu.addChild(retryButton);
             this._menu.addChild(menuButton);
 
-            this._menu.alignItemsVerticallyWithPadding(10);
+            this._menu.alignItemsInColumns(1, 2, 2, 2, 2, 1, 1, 1, 1);
             this.addChild(this._menu, 100);
         },
 

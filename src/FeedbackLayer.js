@@ -258,9 +258,9 @@ var FeedbackLayer = cc.Layer.extend({
 
     runDoomsayer: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.alertSound);
+            cc.audioEngine.playEffect(res.tickSound);
 
-        this.alertOverlay.setOpacity(255);
+        this.alertOverlay.setOpacity(0.5);
         var fadeAction = cc.fadeTo(0.5, 0);
         this.alertOverlay.runAction(fadeAction);
     },

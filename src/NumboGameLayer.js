@@ -64,9 +64,6 @@ var NumboGameLayer = (function() {
 		// Selection Data
 		_lastTouchPosition: null,
 
-		// Progress Bar
-		_progressBar: null,
-
 		pausedJumbo: null,
 
 		////////////////////
@@ -208,14 +205,11 @@ var NumboGameLayer = (function() {
 
 			// initialize rectangle around level
 			var levelNode = cc.DrawNode.create();
-			levelNode.drawRect(cc.p(_levelBounds.x, _levelBounds.y), cc.p(_levelBounds.x + _levelBounds.width, _levelBounds.y + _levelBounds.height), cc.color(33, 33, 33, 128), 2, cc.color(173, 216, 230, 255));
+			levelNode.drawRect(cc.p(_levelBounds.x, _levelBounds.y), cc.p(_levelBounds.x + _levelBounds.width, _levelBounds.y + _levelBounds.height), cc.color(33, 33, 33, 128), 1, cc.color("#eeeeee"));
 			this.addChild(levelNode, -1);
 
 			this._selectedLinesNode = cc.DrawNode.create();
 			this.addChild(this._selectedLinesNode, 2);
-
-			this._progressBar = new ProgressBarLayer(_levelBounds);
-			this.addChild(this._progressBar, -2);
 		},
 
 		// Initialize the Numbo Controller, which controls the level.
@@ -326,7 +320,7 @@ var NumboGameLayer = (function() {
 			if (NJ.gameState.getBlocksCleared() == 0) {
 				if (this._numboController.getKnownPathLength() > 0) {
 					this._feedbackLayer.launchHelperBanner({
-						title: "swipe an equation!"
+						title: "swipe some numbers!"
 					});
 				}
 				else {
@@ -379,16 +373,6 @@ var NumboGameLayer = (function() {
 
 		clearBlocks: function() {
 			this._numboController.killAllBlocks();
-		},
-
-		///////////////////////
-		//     Multiplier    //
-		///////////////////////
-
-		resetMultiplier: function() {
-			NJ.gameState.resetMultiplier();
-
-			this._numboHeaderLayer.updateValues();
 		},
 
 		//////////////////
@@ -712,7 +696,6 @@ var NumboGameLayer = (function() {
 						this.clearBlocks();
 						this._backgroundLayer.updateBackgroundColor(new cc.color(255, 255, 0, 255));
 						NJ.gameState.setStage("bonus");
-						this._progressBar.setProgress(0);
 						this._numboController.initiateOneManiaBonus();
 						this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS *.4));
 					}
@@ -727,7 +710,7 @@ var NumboGameLayer = (function() {
 
 					// Check for Jumbo Swap
 					if (NJ.gameState.currentJumboId == "multiple-progression") {
-						this._numboController.updateMultipleProgression();
+						this._numboController.updateProgression();
 					}
 
 					// Display "Level x"
@@ -759,14 +742,7 @@ var NumboGameLayer = (function() {
 					}
 				}
 
-				// we made a new combo, record the combo time in game state
-				this.unschedule(this.resetMultiplier);
-				this.schedule(this.resetMultiplier, 5, 1);
-
 				NJ.gameState.offerComboForMultiplier();
-				
-				// show level progress
-				this._progressBar.setProgress(NJ.gameState.getLevelupProgress());
 
 				// show player data
 				this._numboHeaderLayer.updateValues();

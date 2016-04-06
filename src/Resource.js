@@ -40,7 +40,7 @@ var res = {
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
     electroSwingTrack: resRoot + "Sounds/Caravan_Palace_-_Clash.mp3",
-    alertSound: resRoot + "Sounds/alert.mp3",
+    tickSound: resRoot + "Sounds/tick.mp3",
     plipSound: resRoot + "Sounds/plipSound.wav",
     plopSound: resRoot + "Sounds/Plop.wav",
     plopSound4: resRoot + "Sounds/Plop4.wav",
@@ -123,7 +123,7 @@ var g_game = [
     res.alertImage,
 
     // sounds
-    res.alertSound,
+    res.tickSound,
     res.clickSound,
     res.plipSound,
     res.backgroundTrack,

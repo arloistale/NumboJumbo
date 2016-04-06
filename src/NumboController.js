@@ -1,3 +1,9 @@
+/**
+ * Numbo Controller is the interface between the game view / user interface and the grid based game level.
+ * Provides a lot of functionality related to selecting blocks in the level and spawning blocks and other
+ * kinds of manipulation of the NumboLevel.
+ */
+
 var NumboController = (function() {
 
 	// list of search filter functions for meander search
@@ -29,12 +35,9 @@ var NumboController = (function() {
 
 		nextBlockPowerup: false,
 
-		lastTouch: null,
-
 		////////////////////
 		// INITIALIZATION //
 		////////////////////
-
 
 		// initialize timing, initial mode
 		init: function() {
@@ -311,7 +314,6 @@ var NumboController = (function() {
 			this._knownPath = [];
 		},
 
-
 		////////////
 		// COMBOS //
 		////////////
@@ -327,7 +329,6 @@ var NumboController = (function() {
 		},
 
 		updateJumboTo: function(jumboString){
-
 			NJ.chooseJumbo(jumboString);
 			var jumbo = NJ.getJumbo();
 			this.distribution = jumbo.numberList;
@@ -335,7 +336,7 @@ var NumboController = (function() {
 		},
 
 		// updates the board/distribution given the mode is Multiple Progression
-		updateMultipleProgression: function() {
+		updateProgression: function() {
 			// Get possible factors based on level
 			var possibleFactors = null;
 			var level = NJ.gameState.getLevel();
@@ -371,6 +372,34 @@ var NumboController = (function() {
 			}
 		},
 
+        //////////
+        // MISC //
+        //////////
+
+		requestPowerup: function() {
+			this.nextBlockPowerup = true;
+		},
+
+		initiateOneManiaBonus: function() {
+			NJ.gameState.chooseJumbo("one-mania");
+
+			var jumbo = NJ.gameState.getJumbo();
+			this.distribution = jumbo.numberList;
+			this.spawnTime = jumbo.spawnTime;
+		},
+
+		copyBoard: function() {
+			return this._numboLevel.getBlocks();
+		},
+
+		recallBoard: function(jumbo, blockSize) {
+			NJ.gameState.chooseJumbo(jumbo.id);
+			var id = jumbo.id;
+			var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
+			this.distribution = heldJumbo.numberList;
+			this.spawnTime = heldJumbo.spawnTime;
+		},
+
 		/////////////
 		// GETTERS //
 		/////////////
@@ -399,7 +428,7 @@ var NumboController = (function() {
 		// a scaling factor to reduce spawn time on higher levels
 		getSpawnConst: function() {
 			var L = NJ.gameState.getLevel();
-			return 0.3 + 2/Math.pow(L, 1/2);
+			return 0.5 + 2/Math.pow(L, 1/4);
 		},
 
 		getNumBlocks: function(){
@@ -453,30 +482,6 @@ var NumboController = (function() {
 			}
 
 			return false;//sum == this._selectedBlocks[selectedBlocksLength - 1].val;
-		},
-
-		requestPowerup: function() {
-			this.nextBlockPowerup = true;
-		},
-
-		initiateOneManiaBonus: function() {
-			NJ.gameState.chooseJumbo("one-mania");
-
-			var jumbo = NJ.gameState.getJumbo();
-			this.distribution = jumbo.numberList;
-			this.spawnTime = jumbo.spawnTime;
-		},
-
-		copyBoard: function() {
-			return this._numboLevel.getBlocks();
-		},
-
-		recallBoard: function(jumbo, blockSize) {
-			NJ.gameState.chooseJumbo(jumbo.id);
-			var id = jumbo.id;
-			var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
-			this.distribution = heldJumbo.numberList;
-			this.spawnTime = heldJumbo.spawnTime;
 		}
 	});
 }());
