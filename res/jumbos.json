@@ -29,9 +29,6 @@
 
       ],
 
-      // an associative array whose keys are the intended level,
-      // and whose values are arrays of {key, weight} pairs, as used in numberList
-      // every key/weight pair in the array is added on leveling up
       "thresholdNumbers":{
         "2": [{"key": 5, "weight": 45}, {"key": 6, "weight": 40}],
         "4": [{"key": 7, "weight": 35}],
