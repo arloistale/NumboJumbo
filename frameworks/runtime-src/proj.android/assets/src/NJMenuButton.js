@@ -170,7 +170,7 @@ var NJMenuButton = (function() {
         setBackgroundImage: function(res) {
             var contentSize = this.getContentSize();
 
-            this._backgroundStates = generateScale9States(res, contentSize,
+            this._backgroundStates = generateImageStates(res, contentSize,
                 cc.p(contentSize.width / 2, contentSize.height / 2));
 
             var normalColor = cc.color("#424242");
