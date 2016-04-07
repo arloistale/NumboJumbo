@@ -584,6 +584,7 @@ var NumboGameLayer = (function() {
 
 		// On touch ended, activates all selected blocks once touch is released.
 		onTouchEnded: function(touchPosition) {
+
 			// special case for if this is the very first combo:
 			var isFirstCombo = NJ.gameState.getBlocksCleared() == 0; // bool
 
@@ -708,6 +709,8 @@ var NumboGameLayer = (function() {
 
 				// Level up with feedback if needed
 				if (NJ.gameState.levelUpIfNeeded()) {
+
+					this._numboController.addNewNumbersToJumbo();
 
 					if(NJ.gameState.isPowerupMode()) {
 						this._numboController.requestPowerup();

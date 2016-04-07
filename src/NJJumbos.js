@@ -39,7 +39,8 @@ NJ.jumbos = (function() {
                         difficulty: data.jumbos[key].difficulty,
                         spawnTime: data.jumbos[key].spawnTime,
                         numberList: data.jumbos[key].numberList,
-                        weight: data.jumbos[key].weight
+                        weight: data.jumbos[key].weight,
+                        thresholdNumbers: data.jumbos[key].thresholdNumbers
                     };
 
                     currIndex++;

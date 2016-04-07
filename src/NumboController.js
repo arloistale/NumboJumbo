@@ -330,9 +330,28 @@ var NumboController = (function() {
 
 		updateJumboTo: function(jumboString){
 			NJ.chooseJumbo(jumboString);
-			var jumbo = NJ.getJumbo();
+			var jumbo = NJ.gameState.getJumbo();
 			this.distribution = jumbo.numberList;
 			this.spawnTime = jumbo.spawnTime;
+		},
+
+		addNewNumbersToJumbo: function(){
+			var jumbo = NJ.gameState.getJumbo();
+			if (jumbo.thresholdNumbers){
+				var level = NJ.gameState.getLevel();
+				if (jumbo.thresholdNumbers[level.toString()]) {
+					var newNumbers = jumbo.thresholdNumbers[level.toString()];
+					for (var i = 0; i < newNumbers.length; ++i){
+						this.distribution.push(newNumbers[i]);
+					}
+				}
+				else {
+					cc.log("no new numbers for level " + level);
+				}
+			}
+			else{
+				cc.log("oh crap, this distribution has no extra threshold numbers!");
+			}
 		},
 
 		// updates the board/distribution given the mode is Multiple Progression

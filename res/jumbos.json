@@ -12,62 +12,45 @@
       "numberList": [
         {
           "key": 1,
-          "weight": 2
+          "weight": 100
         },
         {
           "key": 2,
-          "weight": 1
+          "weight": 75
         },
         {
           "key": 3,
-          "weight": 1
+          "weight": 50
         },
         {
           "key": 4,
-          "weight": 1
-        },
-        {
-          "key": 1,
-          "weight": 4
-        },
-        {
-          "key": 2,
-          "weight": 3
-        },
-        {
-          "key": 3,
-          "weight": 3
-        },
-        {
-          "key": 4,
-          "weight": 2
-        },
-        {
-          "key": 5,
-          "weight": 2
-        },
-        {
-          "key": 6,
-          "weight": 1
-        },
-        {
-          "key": 7,
-          "weight": 1
-        },
-        {
-          "key": 8,
-          "weight": 1
-        },
-        {
-          "key": 9,
-          "weight": 1
+          "weight": 50
         }
+
       ],
 
-      "thresholdNumbers": [
-
-      ]
+      // an associative array whose keys are the intended level,
+      // and whose values are arrays of {key, weight} pairs, as used in numberList
+      // every key/weight pair in the array is added on leveling up
+      "thresholdNumbers":{
+        "2": [{"key": 5, "weight": 45}, {"key": 6, "weight": 40}],
+        "4": [{"key": 7, "weight": 35}],
+        "5": [{"key": 8, "weight": 30}],
+        "6": [{"key": 9, "weight": 25}],
+        "7": [{"key": 10, "weight": 20}],
+        "8": [{"key": 11, "weight": 10}],
+        "9": [{"key": 12, "weight": 10}],
+        "10": [{"key": 13, "weight": 10}],
+        "11": [{"key": 14, "weight": 10}],
+        "12": [{"key": 15, "weight": 10}],
+        "13": [{"key": 16, "weight": 5}],
+        "14": [{"key": 17, "weight": 5}],
+        "15": [{"key": 18, "weight": 5}],
+        "16": [{"key": 19, "weight": 5}],
+        "17": [{"key": 20, "weight": 10}]
+      }
     },
+
     "one-mania": {
       "name": "One Mania",
       "highscoreThreshold": 0,
