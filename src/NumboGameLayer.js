@@ -24,8 +24,9 @@ var NumboGameLayer = (function() {
 			var col = Math.floor((point.x - _levelBounds.x) / _levelCellSize.width);
 			var row = Math.floor((point.y - _levelBounds.y) / _levelCellSize.height);
 
-			// return only if coordinates within block size
-			var radius = 0.5 * _blockSize.width;
+			// return only if coordinates in certain radius of the block.
+			var radius = 0.55 * _levelCellSize.width / 2;
+
 
 			var cellCenter = cc.p(_levelBounds.x + (col + 0.5) * _levelCellSize.width,
 				_levelBounds.y + (row + 0.5) * _levelCellSize.height);
