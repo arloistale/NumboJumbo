@@ -323,7 +323,7 @@ var NumboGameLayer = (function() {
 			if (NJ.gameState.getBlocksCleared() == 0) {
 				if (this._numboController.getKnownPathLength() > 0) {
 					this._feedbackLayer.launchHelperBanner({
-						title: "swipe some numbers!"
+						title: "swipe to add blocks!"
 					});
 				}
 				else {

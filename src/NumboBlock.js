@@ -126,7 +126,7 @@ var NumboBlock = (function() {
             var chosen = NJ.getColor(jumbo.blockColorString, this.val);
             chosen = chosen || cc.color("#ffffff");
             this._circleNode.setDrawColor(chosen);
-            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 1);
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 5);
         },
 
         removePowerUp: function() {
