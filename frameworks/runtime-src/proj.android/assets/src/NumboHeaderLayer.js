@@ -59,14 +59,14 @@ var NumboHeaderLayer = (function() {
                 y: startPos.y
             });
             scoreTitleLabel.setColor(cc.color(255, 255, 255, 255));
-            this.addChild(scoreTitleLabel);
+            //this.addChild(scoreTitleLabel);
 
             this._scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.sub);
             this._scoreValueLabel.attr({
                 scale: 1.0,
                 anchorX: 0,
                 anchorY: 0.5 + NJ.anchorOffsetY,
-                x: startPos.x + scoreTitleLabel.getContentSize().width,
+                x: startPos.x,
                 y: startPos.y
             });
             this._scoreValueLabel.setColor(cc.color(255, 255, 255, 255));
@@ -100,7 +100,7 @@ var NumboHeaderLayer = (function() {
         initProgressBar: function() {
             var contentSize = this.getContentSize();
 
-            this._progressBar = new ProgressBarLayer(cc.rect(contentSize.width * 0.33, contentSize.height * 0.25, contentSize.width * 0.33, contentSize.height * 0.5));
+            this._progressBar = new ProgressBarLayer(cc.rect(contentSize.width * 0.25, contentSize.height * 0.25, contentSize.width * 0.5, contentSize.height * 0.5));
             this.addChild(this._progressBar, -2);
         },
 
@@ -131,7 +131,7 @@ var NumboHeaderLayer = (function() {
 
         updateValues: function() {
             this._scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
-            this._levelValueLabel.setString(NJ.gameState.getLevel());
+            //this._levelValueLabel.setString(NJ.gameState.getLevel());
             this._progressBar.setProgress(NJ.gameState.getLevelupProgress());
         },
 

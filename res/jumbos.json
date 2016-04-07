@@ -25,19 +25,7 @@
         {
           "key": 4,
           "weight": 1
-        }
-      ]
-    },
-    "normal": {
-      "name": "Classic",
-      "highscoreThreshold": 0,
-      "currencyThreshold": 0,
-      "color": "#00E676",
-      "blockColorString": "neon",
-      "difficulty": "Normal",
-      "spawnTime": 1.0,
-      "weight": 3.0,
-      "numberList": [
+        },
         {
           "key": 1,
           "weight": 4
@@ -74,6 +62,10 @@
           "key": 9,
           "weight": 1
         }
+      ],
+
+      "thresholdNumbers": [
+
       ]
     },
     "one-mania": {
@@ -282,7 +274,7 @@
     },
 
     "zeroes": {
-      "name": "All Zeroes",
+      "name": "Zeroes (Test)",
       "highscoreThreshold": 0,
       "currencyThreshold": 0,
       "color": "#FF1744",

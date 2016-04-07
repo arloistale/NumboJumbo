@@ -69,4 +69,4 @@ CVS
 */proj.android/obj/
 */proj.android/lint.xml
 
-runtime/
+*.apk
