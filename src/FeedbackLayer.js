@@ -171,8 +171,6 @@ var FeedbackLayer = cc.Layer.extend({
         }
         banner.setText(titleStr);
 
-        cc.log(titleStr);
-
         var targetX = data && typeof data.targetX !== 'undefined' ? data.targetX : cc.visibleRect.center.x;
         var targetY = data && typeof data.targetY !== 'undefined' ? data.targetY : cc.visibleRect.center.y * 1.2;
 

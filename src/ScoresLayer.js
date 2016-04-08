@@ -46,11 +46,11 @@ var ScoresLayer = cc.LayerColor.extend({
                 return b.score - a.score;
             });
             statsList = statsList.slice(0, 8);
-
+/*
             for(var i = 0; i < statsList.length; i++) {
                 cc.log(statsList[i].score);
             }
-
+*/
             var scoreLabel = null;
             var statPackage = null;
             var timestamp, score, level;

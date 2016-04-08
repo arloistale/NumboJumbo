@@ -14,8 +14,8 @@ if(!cc.sys.isNative) {
 var res = {
 
     mainFont: {
-        name: "NunitoLight",
-        src: resRoot + "Fonts/NunitoLight.ttf"
+        name: "OpenSansRegular",
+        src: resRoot + "Fonts/OpenSansRegular.ttf"
     },
 
 	// UI

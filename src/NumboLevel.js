@@ -135,8 +135,9 @@ var NumboLevel = (function() {
 				for (var j = row; j < blocks[col].length; ++j) {
 					blocks[col][j].row = j;
 				}
-			} else {
-				// collapse columns inward if we have cleared a column
+
+			} else if(col > 0 && col < NJ.NUM_COLS - 1 && blocks[col - 1].length && blocks[col + 1].length) {
+				// collapse columns inward if we have cleared a column between two other non empty columns
 				collapseColumnsToward(col);
 			}
 		},

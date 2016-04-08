@@ -25,15 +25,27 @@ var NumboController = (function() {
 	};
 
 	return cc.Class.extend({
-		distribution: [],
-		spawnTime: 1.0,
+
+        // spawn data
+
+        // current range of numbers that can be spawned
+		_spawnDistribution: [],
+
+        // numbers that added to the distribution dynamically
+        _thresholdNumbers: [],
+
+        // factor for how much each number should be multiplied when spawning
+        _spawnScale: 1,
+
+        // frequency for spawning
+		_spawnFrequency: 1.0,
+
+        nextBlockPowerup: false,
 
 		// level data
 		_numboLevel: null,
 		_knownPath: [],
 		_selectedBlocks: [],
-
-		nextBlockPowerup: false,
 
 		////////////////////
 		// INITIALIZATION //
@@ -42,24 +54,16 @@ var NumboController = (function() {
 		// initialize timing, initial mode
 		init: function() {
 			this._selectedBlocks = [];
-			this._numboLevel = new NumboLevel();
-			this._numboLevel.init();
 
-			if(NJ.gameState.currentJumboId == "multiple-progression" && NJ.gameState.currentLevel != 1) {
-				for(var i=0; i < NJ.getJumbo()["numberList"].length; i++) {
-					NJ.getJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
-				}
-				NJ.gameState.currentLevel = 1;
-			}
-
-			this.initJumbo();
+            this._initLevel();
+            cc.log(NJ.gameState.getJumbo());
+            this.updateSpawnDataFromJumbo(NJ.gameState.getJumbo());
 		},
 
-		initJumbo: function() {
-			var jumbo = NJ.gameState.getJumbo();
-			this.distribution = jumbo.numberList;
-			this.spawnTime = jumbo.spawnTime;
-		},
+        _initLevel: function() {
+            this._numboLevel = new NumboLevel();
+            this._numboLevel.init();
+        },
 
 		/////////////////////////////
 		// SELECTION FUNCTIONALITY //
@@ -78,12 +82,12 @@ var NumboController = (function() {
 				return null;
 
 			if(this._selectedBlocks.length >= 2) {
-				if(block == this._selectedBlocks[this._selectedBlocks.length-2]) {
-					deletedBlock = this._selectedBlocks[this._selectedBlocks.length-1];
+				if(block == this._selectedBlocks[this._selectedBlocks.length - 2]) {
+					deletedBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
 					deletedBlock.clearHighlight();
-					this._selectedBlocks.splice(this._selectedBlocks.length-1, 1);
+					this._selectedBlocks.splice(this._selectedBlocks.length - 1, 1);
 					if(NJ.settings.sounds)
-						cc.audioEngine.playEffect(plops[Math.max(this._selectedBlocks.length-3, 0)]);
+						cc.audioEngine.playEffect(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
 					return this._selectedBlocks;
 				}
 			}
@@ -170,18 +174,9 @@ var NumboController = (function() {
 			return clearedBlocks;
 		},
 
-		clearRows: function(num) {
-			this._numboLevel.clearBottomRows(num);
-		},
-
-		killBlock: function(block) {
-			this._numboLevel.killBlock(block);
-		},
-
-		killAllBlocks: function() {
-			this.deselectAllBlocks();
-			this._numboLevel.killAllBlocks();
-		},
+        ////////////////////////////
+        // Spawning Functionality //
+        ////////////////////////////
 
 		// drop block into random column with random value
 		// must define block size in terms of world coordinates
@@ -191,9 +186,9 @@ var NumboController = (function() {
 
 			// Set up val/col
 			var col = NJ.weightedRandom(this._numboLevel.getColWeights());
-			var val = NJ.weightedRandom(this.distribution);
+			var val = NJ.weightedRandom(this._spawnDistribution) * this._spawnScale;
 
-			if(NJ.settings.sounds){
+			if(NJ.settings.sounds) {
 				cc.audioEngine.playEffect(res.clickSound);
 			}
 
@@ -224,6 +219,72 @@ var NumboController = (function() {
 			return this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
 		},
 
+        updateSpawnDataFromJumbo: function(jumbo){
+            this._spawnDistribution = jumbo.numberList;
+            this._spawnFrequency = jumbo.spawnTime;
+            this._thresholdNumbers = jumbo.thresholdNumbers;
+        },
+
+        // updates progression of the game based on the current level
+        updateProgression: function() {
+            var level = NJ.gameState.getLevel();
+
+            // update new threshold numbers
+            var thresholdNumbers = this._thresholdNumbers;
+            if (thresholdNumbers) {
+                var levelKey = level.toString();
+                if (thresholdNumbers[levelKey]) {
+                    var newNumbers = thresholdNumbers[levelKey];
+                    for (var i = 0; i < newNumbers.length; ++i){
+                        this._spawnDistribution.push(newNumbers[i]);
+                    }
+                }
+            }
+        },
+
+        // scale the numbers in the spawn distribution by a factor
+        scaleSpawnDistribution: function() {
+            // Check for Jumbo Swap
+            if (NJ.gameState.currentJumboId == "multiple-progression") {
+
+                // Get possible factors based on level
+                var possibleFactors = null;
+                var level = NJ.gameState.getLevel();
+
+                if (level == 3)
+                    possibleFactors = [2, 3, 4];
+                else if (level == 5)
+                    possibleFactors = [4, 5, 6];
+                else if (level == 7)
+                    possibleFactors = [6, 7, 8, 10];
+                else if (level == 9)
+                    possibleFactors = [8, 9, 10];
+                else if (level == 10)
+                    possibleFactors = [7, 8, 9, 11];
+                else if (level == 11 || level == 12)
+                    possibleFactors = [9, 12, 13];
+                else if (level > 12)
+                    possibleFactors = [12, 13, 14, 15];
+
+                if (possibleFactors != null) {
+                    // Change spawn scale factor
+                    var factor = NJ.gameState.currentLevel;
+                    while (factor == NJ.gameState.currentLevel)
+                        factor = possibleFactors[Math.floor(Math.random() * possibleFactors.length)];
+
+                    this._spawnScale = factor;
+
+                    // Update the blocks currently on the board.
+                    this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
+                    this._numboLevel.multiplyBlocksBy(factor);
+                }
+            }
+        },
+
+        //////////////////
+        // Level Search //
+        //////////////////
+
 		findHint: function() {
 			var tries = 50; // try no more than 50 times
 			while (tries > 0 && this._knownPath.length == 0) {
@@ -238,6 +299,10 @@ var NumboController = (function() {
 
 			return this._knownPath;
 		},
+
+        resetKnownPath: function(){
+            this._knownPath = [];
+        },
 
 		/**
 		 * Meander search generates a path randomly until the criteria boolean expression is met.
@@ -310,101 +375,25 @@ var NumboController = (function() {
 			return result;
         },
 
-		resetKnownPath: function(){
-			this._knownPath = [];
-		},
+        ////////////////////////
+        // Level Manipulation //
+        ////////////////////////
 
-		////////////
-		// COMBOS //
-		////////////
+        clearRows: function(num) {
+            this._numboLevel.clearBottomRows(num);
+        },
 
-		updateRandomJumbo: function() {
-			//console.log(NJ.jumbos.jumboDistribution);
-			var butt = NJ.weightedRandom(NJ.jumbos.getJumboDistribution());
-			NJ.gameState.chooseJumbo(butt);
+        killBlock: function(block) {
+            this._numboLevel.killBlock(block);
+        },
 
-			var jumbo = NJ.gameState.getJumbo();
-			this.distribution = jumbo.numberList;
-			this.spawnTime = jumbo.spawnTime;
-		},
-
-		updateJumboTo: function(jumboString){
-			NJ.chooseJumbo(jumboString);
-			var jumbo = NJ.gameState.getJumbo();
-			this.distribution = jumbo.numberList;
-			this.spawnTime = jumbo.spawnTime;
-		},
-
-		addNewNumbersToJumbo: function(){
-			var jumbo = NJ.gameState.getJumbo();
-			if (jumbo.thresholdNumbers){
-				var level = NJ.gameState.getLevel();
-				if (jumbo.thresholdNumbers[level.toString()]) {
-					var newNumbers = jumbo.thresholdNumbers[level.toString()];
-					for (var i = 0; i < newNumbers.length; ++i){
-						this.distribution.push(newNumbers[i]);
-					}
-				}
-				else {
-					cc.log("no new numbers for level " + level);
-				}
-			}
-			else{
-				cc.log("oh crap, this distribution has no extra threshold numbers!");
-			}
-		},
-
-		// updates the board/distribution given the mode is Multiple Progression
-		updateProgression: function() {
-			// Get possible factors based on level
-			var possibleFactors = null;
-			var level = NJ.gameState.getLevel();
-
-			if(level == 3)
-				possibleFactors = [2,3,4];
-			else if(level == 5)
-				possibleFactors = [4,5,6];
-			else if(level == 7)
-				possibleFactors = [6,7,8,10];
-			else if(level == 9)
-				possibleFactors = [8,9,10];
-			else if(level == 10)
-				possibleFactors = [7,8,9,11];
-			else if(level == 11 || level == 12)
-				possibleFactors = [9,12,13];
-			else if(level > 12)
-				possibleFactors = [12,13,14,15];
-
-			if(possibleFactors != null) {
-				// Change distribution by multiplying by a random factor.
-				var factor = NJ.gameState.currentLevel;
-				while(factor == NJ.gameState.currentLevel)
-					factor = possibleFactors[Math.floor(Math.random()*possibleFactors.length)];
-				for(var i=0; i < NJ.getJumbo()["numberList"].length; i++) {
-					NJ.getJumbo()["numberList"][i].key /= NJ.gameState.currentLevel;
-					NJ.getJumbo()["numberList"][i].key *= factor;
-				}
-
-				// Update the blocks currently on the board.
-				this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
-				this._numboLevel.multiplyBlocksBy(factor);
-			}
-		},
-
-        //////////
-        // MISC //
-        //////////
+        killAllBlocks: function() {
+            this.deselectAllBlocks();
+            this._numboLevel.killAllBlocks();
+        },
 
 		requestPowerup: function() {
 			this.nextBlockPowerup = true;
-		},
-
-		initiateOneManiaBonus: function() {
-			NJ.gameState.chooseJumbo("one-mania");
-
-			var jumbo = NJ.gameState.getJumbo();
-			this.distribution = jumbo.numberList;
-			this.spawnTime = jumbo.spawnTime;
 		},
 
 		copyBoard: function() {
@@ -415,8 +404,8 @@ var NumboController = (function() {
 			NJ.gameState.chooseJumbo(jumbo.id);
 			var id = jumbo.id;
 			var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
-			this.distribution = heldJumbo.numberList;
-			this.spawnTime = heldJumbo.spawnTime;
+			this._spawnDistribution = heldJumbo.numberList;
+			this._spawnFrequency = heldJumbo.spawnTime;
 		},
 
 		/////////////
@@ -444,12 +433,6 @@ var NumboController = (function() {
 			return 0;
 		},
 
-		// a scaling factor to reduce spawn time on higher levels
-		getSpawnConst: function() {
-			var L = NJ.gameState.getLevel();
-			return 0.5 + 2/Math.pow(L, 1/4);
-		},
-
 		getNumBlocks: function(){
 			return this._numboLevel.getNumBlocks();
 		},
@@ -466,8 +449,14 @@ var NumboController = (function() {
 			return this._numboLevel.getBlock(col, row);
 		},
 
+        /**
+         * We get the spawn time by multiplying the frequency (based on current level) times the spawn factor (sped up during level)
+         * @returns {number}
+         */
 		getSpawnTime: function() {
-			return this.getSpawnConst() * this.spawnTime;
+            var L = NJ.gameState.getLevel();
+            var spawnFactor = 1;// + 2/Math.pow(L, 1/4);
+			return spawnFactor * this._spawnFrequency;
 		},
 
 		getKnownPathLength: function(){

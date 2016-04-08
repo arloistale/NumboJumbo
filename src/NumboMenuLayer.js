@@ -61,6 +61,7 @@ var NumboMenuLayer = (function() {
         toggleLoginButton();
 
         menu.addChild(playButton);
+
         menu.addChild(jumbosButton);
         menu.addChild(loginButton);
         menu.addChild(settingsButton);

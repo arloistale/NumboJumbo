@@ -53,7 +53,6 @@ var NumboBlock = (function() {
             this.addChild(this._backgroundSprite, -2);
 */
             this._circleNode = cc.DrawNode.create();
-            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 1, cc.color("#ffffff"));
             this.addChild(this._circleNode, -2);
 
             // initialize highlight
@@ -79,7 +78,7 @@ var NumboBlock = (function() {
                 y: blockSize.height / 2
             });
             //this.valueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-            this._valueLabel.setColor(cc.color("#ffffff"));
+            this._valueLabel.setColor(cc.color("#212121"));
 
             this.addChild(this._valueLabel);
         },
@@ -123,10 +122,11 @@ var NumboBlock = (function() {
             var blockSize = this.getContentSize();
             this._circleNode.clear();
             var jumbo = NJ.gameState.getJumbo();
-            var chosen = NJ.getColor(jumbo.blockColorString, this.val);
+            var chosen = NJ.getColor(jumbo.blockColorString, this.val - 1);
             chosen = chosen || cc.color("#ffffff");
             this._circleNode.setDrawColor(chosen);
-            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 5);
+            this._circleNode.drawDot(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, cc.color("#ffffff"));
+            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 100, false, 10, chosen);
         },
 
         removePowerUp: function() {
@@ -140,7 +140,6 @@ var NumboBlock = (function() {
         // kill the block
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
         kill: function() {
-            cc.log(this);
             var block = this;
             var scaleAction = cc.scaleTo(0.7, 1.5, 1.5).easing(cc.easeExponentialOut());
             var fadeAction = cc.fadeTo(0.2, 0);

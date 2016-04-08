@@ -52,10 +52,10 @@ var NumboController = (function() {
 				NJ.gameState.currentLevel = 1;
 			}
 
-			this.initJumbo();
+			this.initSpawnDistributionFromJumbo();
 		},
 
-		initJumbo: function() {
+		initSpawnDistributionFromJumbo: function() {
 			var jumbo = NJ.gameState.getJumbo();
 			this.distribution = jumbo.numberList;
 			this.spawnTime = jumbo.spawnTime;

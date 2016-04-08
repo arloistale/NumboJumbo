@@ -157,22 +157,15 @@ NJ.gameState = (function() {
 
         // add score based on given data
         addScore: function(data) {
-            var scoreDifference = 0;
-            if (data && typeof data.blockCount !== 'undefined') {
-                var blockCount = data.blockCount;
-                var bonus = data.bonus;
-                scoreDifference = 50 * (Math.floor(Math.pow(2, blockCount - 2) ));
+            cc.assert(data || data.amount, "Must define a non zero amount to add to score in data object");
 
-                if(bonus) {
-                    scoreDifference += bonus;
-                }
-            }
-            else if (data && typeof data.numPoints !== 'undefined') {
-                scoreDifference = data.numPoints;
-            }
+            var amount = (typeof data === "number") ? data : data.amount;
 
-            currentScore += scoreDifference;
-            return scoreDifference;
+            var bonus = data.bonus;
+            if(bonus) amount += bonus;
+
+            currentScore += amount;
+            return amount;
         },
 
         // get the current game score
