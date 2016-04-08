@@ -220,7 +220,7 @@ var NumboController = (function() {
 		},
 
         updateSpawnDataFromJumbo: function(jumbo){
-            this._spawnDistribution = jumbo.numberList;
+            this._spawnDistribution = jumbo.numberList.slice(0);
             this._spawnFrequency = jumbo.spawnTime;
             this._thresholdNumbers = jumbo.thresholdNumbers;
         },
