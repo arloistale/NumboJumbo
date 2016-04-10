@@ -55,7 +55,23 @@ var res = {
     plopSound13: resRoot + "Sounds/Plop13.wav",
     plopSound14: resRoot + "Sounds/Plop14.wav",
     clickSound: resRoot + "Sounds/clickSound.wav",
-    
+
+    progressSound1: resRoot + "Sounds/progress1.wav",
+    progressSound2: resRoot + "Sounds/progress2.wav",
+    progressSound3: resRoot + "Sounds/progress3.wav",
+    progressSound4: resRoot + "Sounds/progress4.wav",
+    progressSound5: resRoot + "Sounds/progress5.wav",
+    progressSound6: resRoot + "Sounds/progress6.wav",
+    progressSound7: resRoot + "Sounds/progress7.wav",
+    progressSound8: resRoot + "Sounds/progress8.wav",
+    progressSound9: resRoot + "Sounds/progress9.wav",
+    progressSound10: resRoot + "Sounds/progress10.wav",
+    progressSound11: resRoot + "Sounds/progress11.wav",
+    progressSound12: resRoot + "Sounds/progress12.wav",
+
+    levelupSound: resRoot + "Sounds/levelup.wav",
+
+
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
 
@@ -107,6 +123,10 @@ var plops = [res.plopSound, res.plopSound4, res.plopSound5,
     res.plopSound6, res.plopSound7, res.plopSound8, res.plopSound9, res.plopSound10, res.plopSound11,
     res.plopSound12, res.plopSound13, res.plopSound14];
 
+var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, res.progressSound4,
+    res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
+    res.progressSound9, res.progressSound10, res.progressSound11, res.progressSound12];
+
 // resources for ingame
 var g_game = [
     // UI
@@ -139,6 +159,20 @@ var g_game = [
     res.plopSound12,
     res.plopSound13,
     res.plopSound14,
+
+    res.progressSound1,
+    res.progressSound2,
+    res.progressSound3,
+    res.progressSound4,
+    res.progressSound5,
+    res.progressSound6,
+    res.progressSound7,
+    res.progressSound8,
+    res.progressSound9,
+    res.progressSound10,
+    res.progressSound11,
+    res.progressSound12,
+
 
     // fonts
     res.mainFont.src

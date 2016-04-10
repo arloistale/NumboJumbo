@@ -72,6 +72,8 @@ var NumboGameLayer = (function() {
 
 		_curtainLayer: null,
 
+		storedBlocks: null,
+
 		////////////////////
 		// Initialization //
 		////////////////////
@@ -373,9 +375,13 @@ var NumboGameLayer = (function() {
 			var spawnBlock = this._numboController.spawnDropRandomBlock(_blockSize);
 			var blockX = _levelBounds.x + _levelCellSize.width * (spawnBlock.col + 0.5);
 			spawnBlock.setPosition(blockX, cc.visibleRect.top.y + _levelCellSize.height / 2);
-			this.addChild(spawnBlock, 2);
+			this.addChild(spawnBlock, 2, 69);
 
 			this.moveBlockIntoPlace(spawnBlock);
+		},
+
+		spawnKnownBlock: function(block, col, row) {
+			console.log("BLOCK val: "+block.getValue()+"  col/row: ("+col+","+row+")");
 		},
 
 		spawnNBlocks: function(N) {
@@ -730,17 +736,25 @@ var NumboGameLayer = (function() {
 						this._numboController.updateMultipleProgression();
 					}
 
-					this.closeCurtain();
-					this.schedule(this.openCurtain, 4);
+					this.schedule(this.closeCurtain,.6);
+					this.unschedule(this.scheduleSpawn);
+					this.schedule(this.openCurtain, 5);
 
 					// Display "Level x"
 					/*this._feedbackLayer.launchFallingBanner({
 						title: "Level " + NJ.gameState.getLevel()
+						title: "Level " + NJ.gameState.getLevel()
 					});*/
+					// Play level up sound
+					if(NJ.settings.sounds)
+						cc.audioEngine.playEffect(res.levelupSound);
 				}
+				// Play progress sound if not a level up
+				else if(NJ.settings.sounds)
+					cc.audioEngine.playEffect(progresses[Math.floor(progresses.length*NJ.gameState.getLevelupProgress())]);
 				
 				// bonus for clearing screen
-				if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2)) {
+				if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2) && this.storedBlocks == null) {
 					this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 					this.unschedule(this.scheduleSpawn);
 					this.schedule(this.scheduleSpawn, 6);
@@ -777,15 +791,22 @@ var NumboGameLayer = (function() {
 		},
 
 		closeCurtain: function() {
+			this.unschedule(this.closeCurtain);
 			this._curtainLayer.animate();
-			this.addChild(this._curtainLayer);
-			this.unschedule(this.scheduleSpawn);
+			this.addChild(this._curtainLayer, 2);
+			this.storedBlocks = this._numboController.getBlocksList();
+			console.log(this.storedBlocks);
+			for(var i in this.storedBlocks)
+				this.removeChild(this.storedBlocks[i]);
 		},
 
 		openCurtain: function() {
 			this.removeChild(this._curtainLayer);
 			this.unschedule(this.openCurtain);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
+			for(var i in this.storedBlocks)
+				this.addChild(this.storedBlocks[i]);
+			this.storedBlocks = null;
 		},
 
 		/*

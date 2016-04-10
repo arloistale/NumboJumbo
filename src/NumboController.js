@@ -143,8 +143,7 @@ var NumboController = (function() {
 			var clearedBlocks = null;
 
 			if(this.isSelectedClearable()) {
-				if(NJ.settings.sounds)
-					cc.audioEngine.playEffect(res.plipSound);
+					//cc.audioEngine.playEffect(res.plipSound);
 					
 				var selectedBlocks = this._selectedBlocks;
 				var lastBlock = selectedBlocks[selectedBlocks.length - 1]
@@ -443,6 +442,10 @@ var NumboController = (function() {
 
 		getSelectedBlocks: function() {
 			return this._selectedBlocks;
+		},
+
+		getBlocksList: function() {
+			return this._numboLevel.getCurrentBlocks();
 		},
 
 		getBlock: function(col, row) {
