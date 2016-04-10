@@ -10,6 +10,7 @@ var NumboGameLayer = (function() {
 
 	var _blockSize = null;
 
+	// Number of times a hint is jiggled.
 	var jiggleCount = 0;
 
 	/////////////
@@ -70,6 +71,8 @@ var NumboGameLayer = (function() {
 		_progressBar: null,
 
 		pausedJumbo: null,
+
+		_curtainLayer: null,
 
 		////////////////////
 		// Initialization //
@@ -218,6 +221,8 @@ var NumboGameLayer = (function() {
 
 			this._progressBar = new ProgressBarLayer(_levelBounds);
 			this.addChild(this._progressBar, -2);
+
+			this._curtainLayer = new CurtainLayer(_levelBounds);
 		},
 
 		// Initialize the Numbo Controller, which controls the level.
@@ -734,10 +739,13 @@ var NumboGameLayer = (function() {
 						this._numboController.updateMultipleProgression();
 					}
 
+					this.closeCurtain();
+					this.schedule(this.openCurtain, 4);
+
 					// Display "Level x"
-					this._feedbackLayer.launchFallingBanner({
+					/*this._feedbackLayer.launchFallingBanner({
 						title: "Level " + NJ.gameState.getLevel()
-					});
+					});*/
 				}
 				
 				// bonus for clearing screen
@@ -783,6 +791,19 @@ var NumboGameLayer = (function() {
 			// schedule a hint
 			this.schedule(this.jiggleHintBlocks, 12);
 		},
+
+		closeCurtain: function() {
+			this._curtainLayer.animate();
+			this.addChild(this._curtainLayer);
+			this.unschedule(this.scheduleSpawn);
+		},
+
+		openCurtain: function() {
+			this.removeChild(this._curtainLayer);
+			this.unschedule(this.openCurtain);
+			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
+		},
+
 		/*
 		 pauseSpawn: function(time) {
 		 this.unschedule(this.scheduleSpawn());

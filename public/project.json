@@ -43,6 +43,7 @@
         "src/NJSettings.js",
         "src/NumboController.js",
         "src/BackgroundLayer.js",
-        "src/ProgressBarLayer.js"
+        "src/ProgressBarLayer.js",
+        "src/CurtainLayer.js"
     ]
 }

@@ -140,7 +140,7 @@ var FeedbackLayer = cc.Layer.extend({
         // spawn off-screen
         banner.setPosition(cc.visibleRect.center.x, cc.visibleRect.top.y * 1.1);
 
-        this.addChild(banner);
+        this.addChild(banner, 4);
 
         var targetX = data && typeof data.targetX !== 'undefined' ? data.targetX : cc.visibleRect.center.x;
         var targetY = data && typeof data.targetY !== 'undefined' ? data.targetY : cc.visibleRect.center.y;
@@ -162,7 +162,7 @@ var FeedbackLayer = cc.Layer.extend({
     launchHelperBanner: function(data){
         var that = this;
         var banner = this.popBannerPool();
-        this.addChild(banner);
+        this.addChild(banner, 4);
 
         var titleStr = "Default String";
         if(data) {
@@ -238,7 +238,7 @@ var FeedbackLayer = cc.Layer.extend({
         snippet.setScale(0.01, 0.01);
         snippet.setPosition(x, y);
 
-        this.addChild(snippet);
+        this.addChild(snippet, 4);
 
         var scaleUpAction = cc.scaleTo(0.2, targetScale, targetScale);
         var moveAction = cc.moveTo(1, cc.p(targetX, targetY));
