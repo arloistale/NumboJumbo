@@ -16,7 +16,7 @@ var BackgroundLayer = cc.LayerColor.extend({
         this._super();
         this.setTag(NJ.tags.PAUSABLE);
                                            
-        this.init(cc.color("#000000"));
+        this.init(cc.color("#1b1b1b"));
 
         /*
         this.initStaticSprites(staticSprites);

@@ -17,7 +17,6 @@
         "src/ScoresLayer.js",
         "src/NumboMenuLayer.js",
         "src/ShopMenuLayer.js",
-        "src/InstructionsLayer.js",
         "src/JumboMenuLayer.js",
         "src/SettingsMenuLayer.js",
         "src/NumboGameLayer.js",

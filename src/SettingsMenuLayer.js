@@ -111,8 +111,8 @@ var SettingsMenuLayer = (function() {
                 var menuButton = new NJMenuButton(buttonSize, onMenu.bind(this), this);
                 menuButton.setImageRes(res.homeImage);
 
-                this._menu.addChild(menuButton);
                 this._menu.addChild(backButton);
+                this._menu.addChild(menuButton);
 
                 this._menu.alignItemsInColumns(1, 2, 2, 1, 1, 1);
             }

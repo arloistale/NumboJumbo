@@ -27,4 +27,4 @@ NJ.uiSizes = {
 };
 
 // the size of blocks in the game as a percentage of each level grid cell size
-NJ.blockCellSize = 0.75;
+NJ.blockCellSize = 0.7;

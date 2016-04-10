@@ -171,8 +171,6 @@ var FeedbackLayer = cc.Layer.extend({
         }
         banner.setText(titleStr);
 
-        cc.log(titleStr);
-
         var targetX = data && typeof data.targetX !== 'undefined' ? data.targetX : cc.visibleRect.center.x;
         var targetY = data && typeof data.targetY !== 'undefined' ? data.targetY : cc.visibleRect.center.y * 1.2;
 
@@ -258,9 +256,9 @@ var FeedbackLayer = cc.Layer.extend({
 
     runDoomsayer: function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.alertSound);
+            cc.audioEngine.playEffect(res.tickSound);
 
-        this.alertOverlay.setOpacity(255);
+        this.alertOverlay.setOpacity(0.5);
         var fadeAction = cc.fadeTo(0.5, 0);
         this.alertOverlay.runAction(fadeAction);
     },

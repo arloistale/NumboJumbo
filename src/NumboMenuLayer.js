@@ -3,7 +3,6 @@ var NumboMenuLayer = (function() {
 
     var menu = null;
     var jumboMenuLayer = null;
-    var instructionsLayer = null;
     var scoresLayer = null;
     var shopLayer = null;
     var settingsMenuLayer = null;
@@ -45,24 +44,26 @@ var NumboMenuLayer = (function() {
 
         var playButton = new NJMenuButton(buttonSize, onPlay.bind(this), this);
         playButton.setImageRes(res.playImage);
-        menu.addChild(playButton);
 
         buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
-
-        var instructionsButton = new NJMenuButton(buttonSize, onInstructions.bind(this), this);
-        instructionsButton.setImageRes(res.helpImage);
 
         var settingsButton = new NJMenuButton(buttonSize, onSettings.bind(this), this);
         settingsButton.setImageRes(res.settingsImage);
 
         buttonSize = cc.size(refDim * 0.75, refDim * NJ.uiSizes.textButton);
 
+        var jumbosButton = new NJMenuButton(buttonSize, onJumbos.bind(this), this);
+        jumbosButton.setBackgroundColor(cc.color("#00E676"));
+        jumbosButton.setTitle("Jumbos");
+
         loginButton = new NJMenuButton(buttonSize, onLogin.bind(this), this);
         loginButton.setBackgroundColor(cc.color("#3b5998"));
         toggleLoginButton();
 
+        menu.addChild(playButton);
+
+        menu.addChild(jumbosButton);
         menu.addChild(loginButton);
-        menu.addChild(instructionsButton);
         menu.addChild(settingsButton);
 
         //var scoresButton = new NJMenuButton(buttonSize, onScores.bind(this), this);
@@ -99,27 +100,32 @@ var NumboMenuLayer = (function() {
         var that = this;
 
         cc.eventManager.pauseTarget(this, true);
-        jumboMenuLayer = new JumboMenuLayer();
-        jumboMenuLayer.setOnCloseCallback(function() {
-            cc.eventManager.resumeTarget(that, true);
-            that.removeChild(jumboMenuLayer);
-        });
-        this.addChild(jumboMenuLayer, 999);
+        cc.LoaderScene.preload(g_game, function () {
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
+
+            // Init stats data.
+            NJ.gameState.chooseJumbo("basic");
+
+            var scene = new cc.Scene();
+            scene.addChild(new NumboGameLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+        }, this);
     };
 
-    var onInstructions = function() {
+    var onJumbos = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
 
         var that = this;
 
         cc.eventManager.pauseTarget(this, true);
-        instructionsLayer = new InstructionsLayer();
-        instructionsLayer.setOnCloseCallback(function() {
+        jumboMenuLayer = new JumboMenuLayer();
+        jumboMenuLayer.setOnCloseCallback(function() {
             cc.eventManager.resumeTarget(that, true);
-            that.removeChild(instructionsLayer);
+            that.removeChild(jumboMenuLayer);
         });
-        this.addChild(instructionsLayer, 999);
+        this.addChild(jumboMenuLayer, 999);
     };
 
     var onLogin = function() {

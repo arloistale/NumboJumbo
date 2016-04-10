@@ -64,8 +64,6 @@ NJ.pastelPinkColors = [
 // neon palette
 // from http://www.colourlovers.com/palette/55400/Neon_Virus
 NJ.neonColors = [
-
-    cc.color("#BA01FF"), // dark purple
     cc.color("#228DFF"), // blue
     cc.color("#00FFF2"), // cyan
     cc.color("#00FF4D"), // aqua
@@ -74,7 +72,15 @@ NJ.neonColors = [
     cc.color("#FF4D00"), // deep orange
     cc.color("#FF0000"), // red
     cc.color("#FF0092"), // magenta
+    cc.color("#BA01FF") // dark purple
+];
 
+NJ.happyColors = [
+    cc.color("#5CACC4"),
+    cc.color("#8CD19D"),
+    cc.color("#CEE879"),
+    cc.color("#FCB653"),
+    cc.color("#FF5254")
 ];
 
 NJ.getColor = function (colorString, index) {
@@ -85,10 +91,10 @@ NJ.getColor = function (colorString, index) {
         colorArray = NJ.purpleColors;
     else if (colorString == "pastelPink")
         colorArray = NJ.pastelPinkColors;
+    else if (colorString == "happy")
+        colorArray = NJ.happyColors;
 
     if (colorArray) {
-        index = index || Math.floor(Math.random() * colorArray.length);
-
         index %= colorArray.length;
         if (index < 0) {
             index = (index + colorArray.length) % colorArray.length;
