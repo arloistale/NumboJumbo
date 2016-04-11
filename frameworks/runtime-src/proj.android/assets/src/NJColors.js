@@ -4,6 +4,236 @@
 
 var NJ = NJ || {};
 
+NJ.themes = (function() {
+
+    var _strokeTypes = {
+        none: 0,
+        circle: 1,
+        geometric: 2
+    };
+
+    var data = [
+        // light theme
+        {
+            backgroundColor: cc.color("#F0EBD0"),
+
+            defaultLabelColor: cc.color("#332F2A"),
+            defaultButtonColor: cc.color("#6C6760"),
+
+            playButtonColor: cc.color("#6C6760"),
+            jumbosButtonColor: cc.color("#4AD87D"),
+            loginButtonColor: cc.color("#5D74C9"),
+            settingsButtonColor: cc.color("#33A5BA"),
+
+            isBlocksFilled: true,
+            strokeType: _strokeTypes.none,
+
+            blockColors: [
+                // aqua
+                cc.color("#33A5BA"),
+
+                // warm yellow
+                cc.color("#F9D74A"),
+
+                // pinkish red
+                cc.color("#E81B58"),
+
+                // warm teal
+                cc.color("#52C9A8"),
+
+                // intense blue
+                cc.color("#5D74C9"),
+
+                // orange
+                cc.color("#F88A2D"),
+
+                // lime
+                cc.color("#C7EA2B"),
+
+                // violent red
+                cc.color("#F02A31"),
+
+                // warm purple
+                cc.color("#C658AC")
+            ]
+        },
+        // dark theme
+        {
+            backgroundColor: cc.color("#332F2A"),
+
+            defaultLabelColor: cc.color("#ffffff"),
+            defaultButtonColor: cc.color("#424242"),
+
+            playButtonColor: cc.color("#424242"),
+            jumbosButtonColor: cc.color("#4AD87D"),
+            loginButtonColor: cc.color("#5D74C9"),
+            settingsButtonColor: cc.color("#33A5BA"),
+
+            isBlocksFilled: true,
+            strokeType: _strokeTypes.none,
+
+            blockColors: [
+                // aqua
+                cc.color("#33A5BA"),
+
+                // warm yellow
+                cc.color("#F9D74A"),
+
+                // pinkish red
+                cc.color("#E81B58"),
+
+                // warm teal
+                cc.color("#52C9A8"),
+
+                // intense blue
+                cc.color("#5D74C9"),
+
+                // orange
+                cc.color("#F88A2D"),
+
+                // lime
+                cc.color("#C7EA2B"),
+
+                // violent red
+                cc.color("#F02A31"),
+
+                // warm purple
+                cc.color("#C658AC")
+            ]
+        },
+        // dark circle stroke theme
+        {
+            backgroundColor: cc.color("#332F2A"),
+
+            defaultLabelColor: cc.color("#ffffff"),
+            defaultButtonColor: cc.color("#424242"),
+
+            playButtonColor: cc.color("#424242"),
+            jumbosButtonColor: cc.color("#4AD87D"),
+            loginButtonColor: cc.color("#5D74C9"),
+            settingsButtonColor: cc.color("#33A5BA"),
+
+            isBlocksFilled: false,
+            strokeType: _strokeTypes.circle,
+
+            blockColors: [
+                // aqua
+                cc.color("#33A5BA"),
+
+                // warm yellow
+                cc.color("#F9D74A"),
+
+                // pinkish red
+                cc.color("#E81B58"),
+
+                // warm teal
+                cc.color("#52C9A8"),
+
+                // intense blue
+                cc.color("#5D74C9"),
+
+                // orange
+                cc.color("#F88A2D"),
+
+                // lime
+                cc.color("#C7EA2B"),
+
+                // violent red
+                cc.color("#F02A31"),
+
+                // warm purple
+                cc.color("#C658AC")
+            ]
+        },
+        // dark geometric stroke theme
+        {
+            backgroundColor: cc.color("#332F2A"),
+
+            defaultLabelColor: cc.color("#ffffff"),
+            defaultButtonColor: cc.color("#424242"),
+
+            playButtonColor: cc.color("#424242"),
+            jumbosButtonColor: cc.color("#4AD87D"),
+            loginButtonColor: cc.color("#5D74C9"),
+            settingsButtonColor: cc.color("#33A5BA"),
+
+            isBlocksFilled: false,
+            strokeType: _strokeTypes.geometric,
+
+            blockColors: [
+                // aqua
+                cc.color("#33A5BA"),
+
+                // warm yellow
+                cc.color("#F9D74A"),
+
+                // pinkish red
+                cc.color("#E81B58"),
+
+                // warm teal
+                cc.color("#52C9A8"),
+
+                // intense blue
+                cc.color("#5D74C9"),
+
+                // orange
+                cc.color("#F88A2D"),
+
+                // lime
+                cc.color("#C7EA2B"),
+
+                // violent red
+                cc.color("#F02A31"),
+
+                // warm purple
+                cc.color("#C658AC")
+            ]
+        }
+    ];
+
+    var main = data[0];
+
+    var _themeIndex = 0;
+
+    return {
+        // expose the stroketypes enum
+        strokeTypes: _strokeTypes,
+
+        // here we expose properties of the current main theme
+        backgroundColor: main.backgroundColor,
+
+        defaultLabelColor: main.defaultLabelColor,
+        defaultButtonColor: main.defaultButtonColor,
+
+        playButtonColor: main.playButtonColor,
+        jumbosButtonColor: main.jumbosButtonColor,
+        loginButtonColor: main.loginButtonColor,
+        settingsButtonColor: main.settingsButtonColor,
+
+        isBlocksFilled: main.isBlocksFilled,
+        strokeType: main.strokeType,
+
+        blockColors: main.blockColors,
+
+        /**
+         * Toggle between themes
+         */
+        toggle: function() {
+            _themeIndex = (_themeIndex + 1) % data.length;
+            main = data[_themeIndex];
+
+            for(var key in this) {
+                if(key == 'toggle' || key == 'strokeTypes')
+                    continue;
+
+                if(this.hasOwnProperty(key)) {
+                    this[key] = main[key];
+                }
+            }
+        }
+    }
+}());
+
 // shades of purple, from white through prurples down to black, then in reverse
 // from http://www.tutorialrepublic.com/html-reference/html-color-picker.php
 // used for showing which blocks are powerups
@@ -64,8 +294,6 @@ NJ.pastelPinkColors = [
 // neon palette
 // from http://www.colourlovers.com/palette/55400/Neon_Virus
 NJ.neonColors = [
-
-    cc.color("#BA01FF"), // dark purple
     cc.color("#228DFF"), // blue
     cc.color("#00FFF2"), // cyan
     cc.color("#00FF4D"), // aqua
@@ -74,7 +302,15 @@ NJ.neonColors = [
     cc.color("#FF4D00"), // deep orange
     cc.color("#FF0000"), // red
     cc.color("#FF0092"), // magenta
+    cc.color("#BA01FF") // dark purple
+];
 
+NJ.happyColors = [
+    cc.color("#5CACC4"),
+    cc.color("#8CD19D"),
+    cc.color("#CEE879"),
+    cc.color("#FCB653"),
+    cc.color("#FF5254")
 ];
 
 NJ.getColor = function (colorString, index) {
@@ -85,10 +321,10 @@ NJ.getColor = function (colorString, index) {
         colorArray = NJ.purpleColors;
     else if (colorString == "pastelPink")
         colorArray = NJ.pastelPinkColors;
+    else if (colorString == "light")
+        colorArray = NJ.themes.blockColors;
 
     if (colorArray) {
-        index = index || Math.floor(Math.random() * colorArray.length);
-
         index %= colorArray.length;
         if (index < 0) {
             index = (index + colorArray.length) % colorArray.length;

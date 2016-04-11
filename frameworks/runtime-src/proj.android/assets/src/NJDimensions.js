@@ -12,13 +12,14 @@ NJ.fontSizes = {
     snippet: 24,
     header2: 22,
     header: 32,
-    numbo: 24
+    numbo: 22
 };
 
 // button sizes as a percentage of reference dimension (the minimum of the visible width and height)
 NJ.uiSizes = {
     // elements
-    headerBar: 0.1,
+    headerBar: 0.09,
+    toolbar: 0.09,
 
     // buttons
     playButton: 0.35,

@@ -87,7 +87,7 @@ cc.SHADER_POSITION_COLOR_VERT =
  * @type {String}
  */
 cc.SHADER_POSITION_COLOR_LENGTH_TEXTURE_FRAG =
-        "// #extension GL_OES_standard_derivatives : enable\n"
+        "//#extension GL_OES_standard_derivatives : enable\n"
         + "varying mediump vec4 v_color;\n"
         + "varying mediump vec2 v_texcoord;\n"
         + "void main()	\n"
