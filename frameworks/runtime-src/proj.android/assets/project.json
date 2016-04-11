@@ -43,6 +43,7 @@
         "src/NumboController.js",
         "src/BackgroundLayer.js",
         "src/ProgressBarLayer.js",
-        "src/ToolbarLayer.js"
+        "src/ToolbarLayer.js",
+        "src/CurtainLayer.js"
     ]
 }

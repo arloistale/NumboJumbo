@@ -316,6 +316,10 @@ var NumboLevel = (function() {
 			return weightObjects;
 		},
 
+		getBlocks: function() {
+			return blocks;
+		},
+
 		// Returns the number of blocks in the level
 		getNumBlocks: function() {
 			return numBlocks;
@@ -397,6 +401,18 @@ var NumboLevel = (function() {
 				"block coordinates out of bounds! (col: " + col + ", row: " + row + ")");
 
 			return row < blocks[col].length ? blocks[col][row] : null;
+		},
+
+		getCurrentBlocks: function() {
+			var currentBlocks = [];
+			for(var i=0; i<NJ.NUM_COLS; i++) {
+				for(var j=0; j<NJ.NUM_ROWS; j++) {
+					var block = this.getBlock(i,j);
+					if(block != null)
+						currentBlocks.push(block);
+				}
+			}
+			return currentBlocks;
 		},
 
 		getNumBlocksInColumn: function(col) {

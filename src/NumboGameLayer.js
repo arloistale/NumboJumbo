@@ -105,6 +105,12 @@ var NumboGameLayer = (function() {
 			this.schedule(this.jiggleHintBlocks, 5);
 
 		},
+                           
+        onExit:function() {
+                           cc.log("exiting game");
+            this._curtainLayer.release();
+            this._super();
+        },
 
 		// initialize the powerup mode variable
 		initPowerups: function() {
@@ -230,6 +236,7 @@ var NumboGameLayer = (function() {
 			this.addChild(this._progressBar, -2);
 
 			this._curtainLayer = new CurtainLayer(_levelBounds);
+            this._curtainLayer.retain();
 		},
 
 		// Initialize the Numbo Controller, which controls the level.
@@ -324,8 +331,8 @@ var NumboGameLayer = (function() {
 			var duration = 0.7;
 			var easing = cc.easeQuinticActionInOut();
 			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
-			moveAction.setTag(42);
-			moveBlock.stopActionByTag(42);
+			moveAction.setTag(NJ.tags.PAUSABLE);
+            moveBlock.stopAllActions();
 			moveBlock.runAction(moveAction);
 		},
 
@@ -817,9 +824,10 @@ var NumboGameLayer = (function() {
 			this._curtainLayer.animate();
 			this.addChild(this._curtainLayer, 2);
 			this.storedBlocks = this._numboController.getBlocksList();
-			console.log(this.storedBlocks);
-			for(var i in this.storedBlocks)
-				this.removeChild(this.storedBlocks[i]);
+			
+			//for(var i in this.storedBlocks)
+				//this.removeChild(this.storedBlocks[i]);
+
 			for (var col = 0; col < NJ.NUM_COLS; ++col) {
 				for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
 					this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
@@ -830,8 +838,8 @@ var NumboGameLayer = (function() {
 			this.removeChild(this._curtainLayer);
 			this.unschedule(this.openCurtain);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
-			for(var i in this.storedBlocks)
-				this.addChild(this.storedBlocks[i]);
+			//for(var i in this.storedBlocks)
+				//this.addChild(this.storedBlocks[i]);
 			this.storedBlocks = null;
 			this.checkClearBonus();
 		},
