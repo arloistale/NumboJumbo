@@ -380,10 +380,6 @@ var NumboGameLayer = (function() {
 			this.moveBlockIntoPlace(spawnBlock);
 		},
 
-		spawnKnownBlock: function(block, col, row) {
-			console.log("BLOCK val: "+block.getValue()+"  col/row: ("+col+","+row+")");
-		},
-
 		spawnNBlocks: function(N) {
 			this.schedule(this.spawnDropRandomBlock, 0.1, N);
 		},
@@ -775,6 +771,7 @@ var NumboGameLayer = (function() {
 			if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2) && this.storedBlocks == null) {
 				if(NJ.settings.sounds)
 					cc.audioEngine.playEffect(res.cheeringSound);
+					cc.audioEngine.playEffect(res.cheeringSound);
 				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 				this.unschedule(this.scheduleSpawn);
 				this.schedule(this.scheduleSpawn, 6);
@@ -804,7 +801,7 @@ var NumboGameLayer = (function() {
 			this._curtainLayer.animate();
 			this.addChild(this._curtainLayer, 2);
 			this.storedBlocks = this._numboController.getBlocksList();
-			console.log(this.storedBlocks);
+
 			for(var i in this.storedBlocks)
 				this.removeChild(this.storedBlocks[i]);
 			for (var col = 0; col < NJ.NUM_COLS; ++col) {
