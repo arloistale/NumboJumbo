@@ -736,7 +736,8 @@ var NumboGameLayer = (function() {
 						this._numboController.updateMultipleProgression();
 					}
 
-					this.schedule(this.closeCurtain,.6);
+					//this.schedule(this.closeCurtain,.6);
+					this.closeCurtain();
 					this.unschedule(this.scheduleSpawn);
 					this.schedule(this.openCurtain, 5);
 
@@ -753,28 +754,7 @@ var NumboGameLayer = (function() {
 				else if(NJ.settings.sounds)
 					cc.audioEngine.playEffect(progresses[Math.floor(progresses.length*NJ.gameState.getLevelupProgress())]);
 				
-				// bonus for clearing screen
-				if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2) && this.storedBlocks == null) {
-					this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
-					this.unschedule(this.scheduleSpawn);
-					this.schedule(this.scheduleSpawn, 6);
-					this._feedbackLayer.launchFallingBanner({
-						title: "Nice Clear!",
-						targetY: cc.visibleRect.center.y * 0.5
-					});
-
-					// give the player 5 * 9 points and launch 5 random '+9' snippets
-					for (i = 0; i < 5; ++i) {
-						scoreDifference = NJ.gameState.addScore(9);
-						this._feedbackLayer.launchSnippet({
-							title: "+" + scoreDifference,
-							x: cc.visibleRect.center.x,
-							y: cc.visibleRect.center.y,
-							targetX: _levelBounds.x + Math.random() * _levelBounds.width,
-							targetY: _levelBounds.y + Math.random() * _levelBounds.height
-						});
-					}
-				}
+				this.checkClearBonus();
 
 				NJ.gameState.offerComboForMultiplier();
 
@@ -790,7 +770,36 @@ var NumboGameLayer = (function() {
 			this.schedule(this.jiggleHintBlocks, 12);
 		},
 
+		checkClearBonus: function() {
+			// bonus for clearing screen
+			if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2) && this.storedBlocks == null) {
+				if(NJ.settings.sounds)
+					cc.audioEngine.playEffect(res.cheeringSound);
+				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+				this.unschedule(this.scheduleSpawn);
+				this.schedule(this.scheduleSpawn, 6);
+				this._feedbackLayer.launchFallingBanner({
+					title: "Nice Clear!",
+					targetY: cc.visibleRect.center.y * 0.5
+				});
+
+				// give the player 5 * 9 points and launch 5 random '+9' snippets
+				for (i = 0; i < 5; ++i) {
+					scoreDifference = NJ.gameState.addScore(9);
+					this._feedbackLayer.launchSnippet({
+						title: "+" + scoreDifference,
+						x: cc.visibleRect.center.x,
+						y: cc.visibleRect.center.y,
+						targetX: _levelBounds.x + Math.random() * _levelBounds.width,
+						targetY: _levelBounds.y + Math.random() * _levelBounds.height
+					});
+				}
+			}
+		},
+
 		closeCurtain: function() {
+			if(NJ.settings.sounds)
+				cc.audioEngine.playEffect(res.applauseSound);
 			this.unschedule(this.closeCurtain);
 			this._curtainLayer.animate();
 			this.addChild(this._curtainLayer, 2);
@@ -798,6 +807,10 @@ var NumboGameLayer = (function() {
 			console.log(this.storedBlocks);
 			for(var i in this.storedBlocks)
 				this.removeChild(this.storedBlocks[i]);
+			for (var col = 0; col < NJ.NUM_COLS; ++col) {
+				for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
+					this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+			}
 		},
 
 		openCurtain: function() {
@@ -807,6 +820,7 @@ var NumboGameLayer = (function() {
 			for(var i in this.storedBlocks)
 				this.addChild(this.storedBlocks[i]);
 			this.storedBlocks = null;
+			this.checkClearBonus();
 		},
 
 		/*

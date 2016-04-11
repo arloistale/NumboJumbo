@@ -71,6 +71,9 @@ var res = {
 
     levelupSound: resRoot + "Sounds/levelup.wav",
 
+    applauseSound: resRoot + "Sounds/applause.wav",
+    cheeringSound: resRoot + "Sounds/cheering.wav",
+
 
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
@@ -173,6 +176,9 @@ var g_game = [
     res.progressSound11,
     res.progressSound12,
 
+    res.levelupSound,
+    res.applauseSound,
+    res.cheeringSound,
 
     // fonts
     res.mainFont.src
