@@ -21,6 +21,7 @@ var NumboBlock = (function() {
         // exposed public properties
 
         // Display
+        _backgroundSprite: null,
         _circleNode: null,
         _highlightSprite: null,
         _valueLabel: null,
@@ -34,6 +35,10 @@ var NumboBlock = (function() {
         row: -1,
         val: -1,
 
+        ////////////////////
+        // Initialization //
+        ////////////////////
+
         ctor: function(blockSize) {
             this._super();
 
@@ -41,19 +46,19 @@ var NumboBlock = (function() {
 
             this.setTag(NJ.tags.PAUSABLE);
 
-            /*
             this._backgroundSprite = new cc.Sprite(res.blockImage);
-            this._backgroundSprite.setScale(blockSize.width / backgroundSize.width, blockSize.height / backgroundSize.height);
+            var backgroundSize = this._backgroundSprite.getContentSize();
+            this._backgroundSprite.setScale(blockSize.width / backgroundSize.width * 1.2, blockSize.height / backgroundSize.height * 1.2);
             this._backgroundSprite.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: blockSize.width / 2,
                 y: blockSize.height / 2
             });
-            this.addChild(this._backgroundSprite, -2);
-*/
+            this._backgroundSprite.retain();
+
             this._circleNode = cc.DrawNode.create();
-            this.addChild(this._circleNode, -2);
+            this._circleNode.retain();
 
             // initialize highlight
             this._highlightSprite = new cc.Sprite(res.glowImage);
@@ -77,10 +82,8 @@ var NumboBlock = (function() {
                 x: blockSize.width / 2,
                 y: blockSize.height / 2
             });
-            //this.valueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-            this._valueLabel.setColor(cc.color("#212121"));
-
-            this.addChild(this._valueLabel);
+            this._valueLabel.setColor(cc.color("#ffffff"));
+            this.addChild(this._valueLabel, 1);
         },
 
         // initialize block values
@@ -96,12 +99,12 @@ var NumboBlock = (function() {
                 this.schedule(blink.bind(this), 0.05);
             }
 
-            if (this.powerup == 'clearAndSpawn'){
+            if (this.powerup == 'clearAndSpawn') {
                 this.schedule(this.removePowerUp, 10);
                 this._valueLabel.enableStroke(cc.color(0, 255, 255, 255), 1);
                 this._valueLabel.setColor(cc.color(255, 0, 0));
             }
-            if (this.powerup == 'changeJumbo'){
+            if (this.powerup == 'changeJumbo') {
                 this.schedule(this.removePowerUp, 10);
                 this._valueLabel.enableStroke(cc.color(0, 255, 255), 1);
                 this._valueLabel.setColor(cc.color(0, 255, 255));
@@ -112,22 +115,12 @@ var NumboBlock = (function() {
                 this._valueLabel.setColor(cc.color(0, 255, 0));
             }
 
-            var colors = [
-                cc.color("#228DFF"),
-                cc.color("#FF0092"),
-                cc.color("#BA01FF"),
-                cc.color("#FFCA1B")
-            ];
-            var size = this.getContentSize();
-            var blockSize = this.getContentSize();
-            this._circleNode.clear();
-            var jumbo = NJ.gameState.getJumbo();
-            var chosen = NJ.getColor(jumbo.blockColorString, this.val - 1);
-            chosen = chosen || cc.color("#ffffff");
-            this._circleNode.setDrawColor(chosen);
-            this._circleNode.drawDot(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, cc.color("#ffffff"));
-            this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 100, false, 10, chosen);
+            this.updateTheme();
         },
+
+        //////////////////
+        // Manipulation //
+        //////////////////
 
         removePowerUp: function() {
             this.powerup = false;
@@ -140,6 +133,9 @@ var NumboBlock = (function() {
         // kill the block
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
         kill: function() {
+            this._backgroundSprite.release();
+            this._circleNode.release();
+                            
             var block = this;
             var scaleAction = cc.scaleTo(0.7, 1.5, 1.5).easing(cc.easeExponentialOut());
             var fadeAction = cc.fadeTo(0.2, 0);
@@ -169,6 +165,48 @@ var NumboBlock = (function() {
 
             this.runAction(cc.sequence(scaleDownAction, scaleUpAction, scaleDownAction, scaleUpAction));
         },
+
+        updateTheme: function() {
+            var blockSize = this.getContentSize();
+
+            var isFilled = NJ.themes.isBlocksFilled;
+            var strokeType = NJ.themes.strokeType;
+
+            var chosen = NJ.getColor(NJ.gameState.getJumbo().blockColorString, this.val - 1);
+            chosen = chosen || cc.color("#ffffff");
+
+            if(isFilled) {
+                if(this.children.indexOf(this._backgroundSprite) < 0)
+                    this.addChild(this._backgroundSprite, -2);
+
+                this._backgroundSprite.setColor(chosen);
+            } else {
+                this.removeChild(this._backgroundSprite);
+            }
+
+            if(strokeType != NJ.themes.strokeTypes.none) {
+                if(this.children.indexOf(this._circleNode) < 0)
+                    this.addChild(this._circleNode, -1);
+
+            } else {
+                this.removeChild(this._circleNode);
+            }
+
+            this._circleNode.clear();
+
+            switch(strokeType) {
+                case NJ.themes.strokeTypes.circle:
+                    this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 100, false, 5, chosen);
+                    break;
+                case NJ.themes.strokeTypes.geometric:
+                    this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 5, chosen);
+                    break;
+            }
+        },
+
+        /////////////
+        // Getters //
+        /////////////
 
         getValue: function() {
             return this.val;

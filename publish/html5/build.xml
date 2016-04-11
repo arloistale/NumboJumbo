@@ -290,26 +290,38 @@
             </sources>
             <sources dir="${basedir}">
                 <file name="src/Extensions.js"/>
+                <file name="src/NJPrettifier.js"/>
                 <file name="src/Resource.js"/>
-                <file name="src/NJJumbos.js"/>
                 <file name="src/ScoresLayer.js"/>
                 <file name="src/NumboMenuLayer.js"/>
-                <file name="src/InstructionsLayer.js"/>
+                <file name="src/ShopMenuLayer.js"/>
                 <file name="src/JumboMenuLayer.js"/>
                 <file name="src/SettingsMenuLayer.js"/>
                 <file name="src/NumboGameLayer.js"/>
                 <file name="src/NumboHeaderLayer.js"/>
                 <file name="src/GameOverMenuLayer.js"/>
+                <file name="src/NJMenuButton.js"/>
                 <file name="src/FeedbackLayer.js"/>
                 <file name="src/Feedback.js"/>
                 <file name="src/Banner.js"/>
                 <file name="src/Snippet.js"/>
                 <file name="src/NumboBlock.js"/>
                 <file name="src/NumboLevel.js"/>
+                <file name="src/NJMath.js"/>
+                <file name="src/NJJumbos.js"/>
                 <file name="src/NJConfig.js"/>
+                <file name="src/NJSocial.js"/>
+                <file name="src/NJAnalytics.js"/>
+                <file name="src/NJStats.js"/>
+                <file name="src/NJDimensions.js"/>
+                <file name="src/NJColors.js"/>
                 <file name="src/NJHelper.js"/>
+                <file name="src/NJGameState.js"/>
+                <file name="src/NJSettings.js"/>
                 <file name="src/NumboController.js"/>
                 <file name="src/BackgroundLayer.js"/>
+                <file name="src/ProgressBarLayer.js"/>
+                <file name="src/ToolbarLayer.js"/>
                 <file name="public/main.js"/>
 
             </sources>

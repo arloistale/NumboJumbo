@@ -173,11 +173,7 @@ var NJMenuButton = (function() {
             this._backgroundStates = generateImageStates(res, contentSize,
                 cc.p(contentSize.width / 2, contentSize.height / 2));
 
-            var normalColor = cc.color("#424242");
-            var pressedColor = cc.color("#212121");
-            this._backgroundStates.normal.setColor(normalColor);
-            this._backgroundStates.selected.setColor(pressedColor);
-            this._backgroundStates.disabled.setColor(pressedColor);
+            this.setBackgroundColor(NJ.themes.defaultButtonColor);
 
             this._spriteStates.normal.addChild(this._backgroundStates.normal, -5);
             this._spriteStates.selected.addChild(this._backgroundStates.selected, -5);

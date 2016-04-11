@@ -104,6 +104,14 @@ var NumboLevel = (function() {
 		// MANIPULATION //
 		//////////////////
 
+		updateTheme: function() {
+			for(var i = 0; i < NJ.NUM_COLS; i++) {
+				for(var j = 0; j < blocks[i].length; j++) {
+					blocks[i][j].updateTheme();
+				}
+			}
+		},
+
 		// spawn and drop block at the given col and value
 		// returns spawned block
 		// DO NOT publicly use directly!!! Use NumboController spawnDropRandomBlock instead

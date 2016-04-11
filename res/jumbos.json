@@ -5,7 +5,7 @@
       "highscoreThreshold": 0,
       "currencyThreshold": 0,
       "color": "#00E676",
-      "blockColorString": "neon",
+      "blockColorString": "light",
       "difficulty": "Normal",
       "spawnTime": 1.0,
       "weight": 1.0,

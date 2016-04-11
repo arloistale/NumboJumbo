@@ -28,6 +28,7 @@ var res = {
     homeImage: resRoot + "Images/ic_home/ic_home_2x.png",
     settingsImage: resRoot + "Images/ic_settings/ic_settings_2x.png",
     retryImage: resRoot + "Images/ic_retry/ic_retry_2x.png",
+    statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
 
     // ingame
     backgroundImage: resRoot + "Images/normal/middle.png",
@@ -109,6 +110,7 @@ var g_menu = [
     res.nextImage,
     res.helpImage,
     res.buttonImage,
+    res.statsImage,
 
     // scene
     //res.backgroundImage,

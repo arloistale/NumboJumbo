@@ -46,7 +46,7 @@ var GameOverMenuLayer = (function() {
         ctor: function() {
             this._super();
 
-            this.init(cc.color(0, 0, 0, 255));
+            this.init(NJ.themes.backgroundColor);
 
             this.initUI();
         },
@@ -129,7 +129,7 @@ var GameOverMenuLayer = (function() {
             cc.MenuItemFont.setFontSize(size || NJ.fontSizes.sub);
             var toggleLabel = new cc.MenuItemFont(title);
             toggleLabel.setEnabled(false);
-            toggleLabel.setColor(cc.color(255, 255, 255, 255));
+            toggleLabel.setColor(NJ.themes.defaultLabelColor);
             return toggleLabel;
         },
 

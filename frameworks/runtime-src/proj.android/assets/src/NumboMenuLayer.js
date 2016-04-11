@@ -27,10 +27,6 @@ var NumboMenuLayer = (function() {
         });
         this.addChild(backgroundSprite, 10, 1);
         */
-
-        //var rotatePoint = new cc.RotateBy(250, 360); // <- Rotate the node by 360 degrees in 5 seconds.
-        //var rotateForever = new cc.RepeatForever(rotatePoint); // <- Keeps the node rotating forever.
-        //backgroundSprite.runAction(rotateForever);
     };
 
     // initialize menu elements
@@ -43,6 +39,7 @@ var NumboMenuLayer = (function() {
         var buttonSize = cc.size(refDim * NJ.uiSizes.playButton, refDim * NJ.uiSizes.playButton);
 
         var playButton = new NJMenuButton(buttonSize, onPlay.bind(this), this);
+        playButton.setBackgroundColor(NJ.themes.playButtonColor);
         playButton.setImageRes(res.playImage);
 
         buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
@@ -50,17 +47,19 @@ var NumboMenuLayer = (function() {
         var settingsButton = new NJMenuButton(buttonSize, onSettings.bind(this), this);
         settingsButton.setImageRes(res.settingsImage);
 
+        loginButton = new NJMenuButton(buttonSize, onLogin.bind(this), this);
+        loginButton.setBackgroundColor(NJ.themes.loginButtonColor);
+        loginButton.setImageRes(res.statsImage);
+        toggleLoginButton();
+
         buttonSize = cc.size(refDim * 0.75, refDim * NJ.uiSizes.textButton);
 
         var jumbosButton = new NJMenuButton(buttonSize, onJumbos.bind(this), this);
-        jumbosButton.setBackgroundColor(cc.color("#00E676"));
+        jumbosButton.setBackgroundColor(NJ.themes.jumbosButtonColor);
         jumbosButton.setTitle("Jumbos");
 
-        loginButton = new NJMenuButton(buttonSize, onLogin.bind(this), this);
-        loginButton.setBackgroundColor(cc.color("#3b5998"));
-        toggleLoginButton();
-
         menu.addChild(playButton);
+
         menu.addChild(jumbosButton);
         menu.addChild(loginButton);
         menu.addChild(settingsButton);
@@ -74,7 +73,7 @@ var NumboMenuLayer = (function() {
         menu.addChild(shopButton);
 */
 
-        menu.alignItemsVerticallyWithPadding(15);
+        menu.alignItemsInColumns(1, 1, 2);
 
         this.addChild(menu, 100);
     };
@@ -204,10 +203,8 @@ var NumboMenuLayer = (function() {
     // toggles login based on whether user is currently connected to facebook
     var toggleLoginButton = function() {
         if(NJ.social.isLoggedIn()) {
-            loginButton.setTitle("Logout");
             loginButton.setCallback(onLogout.bind(this), this);
         } else {
-            loginButton.setTitle("Connect");
             loginButton.setCallback(onLogin.bind(this), this);
         }
     };
@@ -221,7 +218,7 @@ var NumboMenuLayer = (function() {
         ctor: function () {
             this._super();
 
-            this.init(cc.color("#000000"));
+            this.init(NJ.themes.backgroundColor);
 
             /*
              var sp = new cc.Sprite(res.loading_png);

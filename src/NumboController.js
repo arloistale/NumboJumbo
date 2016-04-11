@@ -378,6 +378,10 @@ var NumboController = (function() {
         // Level Manipulation //
         ////////////////////////
 
+		updateTheme: function() {
+			this._numboLevel.updateTheme();
+		},
+
         clearRows: function(num) {
             this._numboLevel.clearBottomRows(num);
         },
@@ -393,10 +397,6 @@ var NumboController = (function() {
 
 		requestPowerup: function() {
 			this.nextBlockPowerup = true;
-		},
-
-		copyBoard: function() {
-			return this._numboLevel.getBlocks();
 		},
 
 		recallBoard: function(jumbo, blockSize) {
@@ -458,7 +458,7 @@ var NumboController = (function() {
          */
 		getSpawnTime: function() {
             var L = NJ.gameState.getLevel();
-            var spawnFactor = 1;// + 2/Math.pow(L, 1/4);
+            var spawnFactor = 0.5 + 2/Math.pow(L, 1/4);
 			return spawnFactor * this._spawnFrequency;
 		},
 

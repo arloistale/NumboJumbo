@@ -9,7 +9,7 @@ var Banner = Feedback.extend({
 
         this.setTag(NJ.tags.PAUSABLE);
 
-        this.label.setFontSize(NJ.fontSizes.header);
+        this.label.setFontSize(NJ.fontSizes.sub);
         this.label.enableStroke(cc.color(0, 0, 0, 255), 5);
 
         this.setContentSize(this.label.getContentSize());

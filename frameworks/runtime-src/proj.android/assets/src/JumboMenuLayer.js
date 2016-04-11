@@ -48,7 +48,7 @@ var JumboMenuLayer = (function() {
         ctor: function() {
             this._super();
 
-            this.init(cc.color(0, 0, 0, 255));
+            this.init(NJ.themes.backgroundColor);
 
             this.initUI();
         },

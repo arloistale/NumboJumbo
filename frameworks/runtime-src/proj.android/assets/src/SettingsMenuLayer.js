@@ -65,7 +65,7 @@ var SettingsMenuLayer = (function() {
         ctor: function(bInGame) {
             this._super();
 
-            this.init(cc.color(0, 0, 0, 255));
+            this.init(NJ.themes.backgroundColor);
 
             this.initUI(bInGame);
         },
@@ -111,8 +111,8 @@ var SettingsMenuLayer = (function() {
                 var menuButton = new NJMenuButton(buttonSize, onMenu.bind(this), this);
                 menuButton.setImageRes(res.homeImage);
 
-                this._menu.addChild(menuButton);
                 this._menu.addChild(backButton);
+                this._menu.addChild(menuButton);
 
                 this._menu.alignItemsInColumns(1, 2, 2, 1, 1, 1);
             }
@@ -141,7 +141,7 @@ var SettingsMenuLayer = (function() {
             cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
             var toggleLabel = new cc.MenuItemFont(title);
             toggleLabel.setEnabled(false);
-            toggleLabel.setColor(cc.color(255, 255, 255, 255));
+            toggleLabel.setColor(NJ.themes.defaultLabelColor);
             return toggleLabel;
         },
 
@@ -150,7 +150,7 @@ var SettingsMenuLayer = (function() {
             cc.MenuItemFont.setFontSize(NJ.fontSizes.paragraph);
             var toggleLabel = new cc.MenuItemFont(title);
             toggleLabel.setEnabled(false);
-            toggleLabel.setColor(cc.color(255, 255, 255, 255));
+            toggleLabel.setColor(NJ.themes.defaultLabelColor);
             return toggleLabel;
         },
 
@@ -161,7 +161,7 @@ var SettingsMenuLayer = (function() {
                 new cc.MenuItemFont("Off")
             );
 
-            toggle.setColor(cc.color(255, 255, 255, 255));
+            toggle.setColor(NJ.themes.defaultLabelColor);
             toggle.setCallback(callback);
 
             return toggle;

@@ -26,8 +26,7 @@ var NumboGameLayer = (function() {
 			var row = Math.floor((point.y - _levelBounds.y) / _levelCellSize.height);
 
 			// return only if coordinates in certain radius of the block.
-			var radius = 0.55 * _levelCellSize.width / 2;
-
+			var radius = 0.5 * _blockSize.width;
 
 			var cellCenter = cc.p(_levelBounds.x + (col + 0.5) * _levelCellSize.width,
 				_levelBounds.y + (row + 0.5) * _levelCellSize.height);
@@ -52,6 +51,7 @@ var NumboGameLayer = (function() {
 	return cc.Layer.extend({
 		// UI Data
 		_numboHeaderLayer: null,
+		_toolbarLayer: null,
 		_settingsMenuLayer: null,
 		_gameOverMenuLayer: null,
 		_feedbackLayer: null,
@@ -181,6 +181,13 @@ var NumboGameLayer = (function() {
 			this.addChild(this._numboHeaderLayer, 999);
 			this._numboHeaderLayer.updateValues();
 
+			// toolbar
+			this._toolbarLayer = new ToolbarLayer();
+			this._toolbarLayer.setOnToggleThemeCallback(function() {
+				that.onToggleTheme();
+			});
+			this.addChild(this._toolbarLayer, 999);
+
 			// feedback overlay
 			this._feedbackLayer = new FeedbackLayer();
 			this.addChild(this._feedbackLayer, 800);
@@ -194,9 +201,9 @@ var NumboGameLayer = (function() {
 		initGeometry: function() {
 			var playableRect = cc.rect({
 				x: cc.visibleRect.bottomLeft.x,
-				y: cc.visibleRect.bottomLeft.y,
+				y: cc.visibleRect.bottomLeft.y + this._toolbarLayer.getContentSize().height,
 				width: cc.visibleRect.width,
-				height: cc.visibleRect.height - this._numboHeaderLayer.getContentSize().height
+				height: cc.visibleRect.height - this._numboHeaderLayer.getContentSize().height - this._toolbarLayer.getContentSize().height
 			});
 
 			var refDim = Math.min(playableRect.width, playableRect.height);
@@ -213,7 +220,7 @@ var NumboGameLayer = (function() {
 
 			// initialize rectangle around level
 			var levelNode = cc.DrawNode.create();
-			levelNode.drawRect(cc.p(_levelBounds.x, _levelBounds.y), cc.p(_levelBounds.x + _levelBounds.width, _levelBounds.y + _levelBounds.height), cc.color(33, 33, 33, 64), 5, cc.color("#eeeeee"));
+			levelNode.drawRect(cc.p(_levelBounds.x, _levelBounds.y), cc.p(_levelBounds.x + _levelBounds.width, _levelBounds.y + _levelBounds.height), cc.color(128, 128, 128, 64), 3, cc.color("#ffffff"));
 			this.addChild(levelNode, -1);
 
 			this._selectedLinesNode = cc.DrawNode.create();
@@ -440,6 +447,16 @@ var NumboGameLayer = (function() {
 		// UI Events //
 		///////////////
 
+		// on toggle theme, change errthang
+		onToggleTheme: function() {
+			NJ.themes.toggle();
+
+			this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
+			this._numboHeaderLayer.updateTheme();
+
+			this._numboController.updateTheme();
+		},
+
 		// On pause, pauses game and opens up the settings menu.
 		onPause: function() {
 			var that = this;
@@ -518,10 +535,8 @@ var NumboGameLayer = (function() {
 						selectedBlockSum += block.val;
 					}
 
-					var color = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum - 1);
-
-					this.highlightSelectedBlocks(selectedBlocks, color);
-					this.redrawSelectedLines(selectedBlocks, color);
+					this.highlightSelectedBlocks(selectedBlocks);
+					this.redrawSelectedLines(selectedBlocks);
 				}
 			}
 			// Prevent any hint during a touch.
@@ -571,10 +586,8 @@ var NumboGameLayer = (function() {
 					selectedBlockSum += block.val;
 				}
 
-				var color = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum);
-
-				this.highlightSelectedBlocks(selectedBlocks, color);
-				this.redrawSelectedLines(selectedBlocks, color);
+				this.highlightSelectedBlocks(selectedBlocks);
+				this.redrawSelectedLines(selectedBlocks);
 
 				lastSelectedBlock = selectedBlocks[selectedBlocks.length - 1];
 				// draw a line from last selected to our finger if we are outside of the range of the block
@@ -584,7 +597,7 @@ var NumboGameLayer = (function() {
 					var radius = 0.5 * _blockSize.width;
 					if(cc.pDot(diff, diff) >= radius * radius) {
 						this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(lastSelectedBlock.col, lastSelectedBlock.row),
-							touchPosition, 3, color);
+							touchPosition, 3, NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum - 1));
 					}
 				}
 			}
@@ -836,7 +849,7 @@ var NumboGameLayer = (function() {
 /////////////
 
 		highlightSelectedBlocks: function(selectedBlocks, color) {
-			if(!selectedBlocks)
+			if(true)//!selectedBlocks)
 				return;
 
 			var i, block;
@@ -848,7 +861,7 @@ var NumboGameLayer = (function() {
 		},
 
 		// redraw lines indicating selected blocks
-		redrawSelectedLines: function(selectedBlocks, color) {
+		redrawSelectedLines: function(selectedBlocks) {
 			this._selectedLinesNode.clear();
 
 			if(!selectedBlocks)
@@ -856,10 +869,16 @@ var NumboGameLayer = (function() {
 			
 			var i;
 
+			var currSum = 0;
+			var color;
 			var first, second;
 			for(i = 0; i < selectedBlocks.length - 1; i++) {
 				first = selectedBlocks[i];
 				second = selectedBlocks[i + 1];
+
+				currSum += first.val;
+
+				color = NJ.getColor(NJ.gameState.getJumbo().blockColorString, currSum - 1);
 
 				this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(first.col, first.row),
 					convertLevelCoordsToPoint(second.col, second.row), 3, color);

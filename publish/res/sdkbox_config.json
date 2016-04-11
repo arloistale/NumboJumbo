@@ -1,0 +1,18 @@
+{
+    "android": {
+        "GoogleAnalytics": {
+            "trackingCode": "UA-72620222-1"
+        }, 
+        "Facebook": {
+            "debug": false
+        }
+    }, 
+    "ios": {
+        "GoogleAnalytics": {
+            "trackingCode": "UA-72620222-1"
+        }, 
+        "Facebook": {
+            "debug": true
+        }
+    }
+}
