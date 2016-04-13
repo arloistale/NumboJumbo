@@ -118,6 +118,7 @@ var NumboGameLayer = (function() {
 			}
 		},
 
+
 		// Initialize input depending on the device.
 		initInput: function() {
 			if ('mouse' in cc.sys.capabilities) {
@@ -549,8 +550,11 @@ var NumboGameLayer = (function() {
 					this.redrawSelectedLines(selectedBlocks);
 				}
 			}
+
 			// Prevent any hint during a touch.
 			this.unschedule(this.jiggleHintBlocks);
+
+
 		},
 
 		// On touch moved, selects additional blocks as the touch is held and moved using raycasting
