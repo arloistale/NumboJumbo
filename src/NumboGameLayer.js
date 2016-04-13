@@ -332,8 +332,8 @@ var NumboGameLayer = (function() {
 			var duration = 0.7;
 			var easing = cc.easeQuinticActionInOut();
 			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
-			moveAction.setTag(NJ.tags.PAUSABLE);
-            moveBlock.stopAllActions();
+			moveAction.setTag(42);
+            moveBlock.stopActionByTag(42);
 			moveBlock.runAction(moveAction);
 		},
 
