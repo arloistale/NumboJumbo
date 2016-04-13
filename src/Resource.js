@@ -37,6 +37,9 @@ var res = {
     powerupImage: resRoot + "Images/powerup.png",
     alertImage: resRoot + "Images/alertOverlay.png",
 
+    // Particles
+    particleImage: resRoot + "Images/particle.png",
+
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
@@ -140,6 +143,9 @@ var g_game = [
     res.homeImage,
     res.pauseImage,
     res.retryImage,
+
+    // Particles
+    res.particleImage,
 
     // Scene
     res.powerupImage,
