@@ -462,7 +462,7 @@ var NumboController = (function() {
 		getSpawnTime: function() {
             var L = NJ.gameState.getLevel();
 			//cc.log("LEVEL "+Math.pow(L,1/5)+"  BLOCKS "+(this.blocksDropped/40));
-			return 1/(Math.pow(L, 1/5)+this.blocksDropped/10) * this._spawnFrequency;
+			return 2/(Math.pow(L, 1/5)+Math.pow(this.blocksDropped, 1/5)) * this._spawnFrequency;
 		},
 
 		getKnownPathLength: function(){
