@@ -133,11 +133,13 @@ var NumboBlock = (function() {
             var texture = cc.textureCache.addImage(res.particleImage);
             this._particleSystem.setTexture(texture);
             this._particleSystem.setStartSize(2);
-            this._particleSystem.setEndSize(4);
+            this._particleSystem.setEndSize(40);
             this._particleSystem.setPosition(this.width/2, this.height/2);
             this._particleSystem.setStartColor(this._backgroundSprite.getColor());
             this._particleSystem.setVisible(false);
             this._particleSystem.setPositionType(1);
+            this._particleSystem.setScale(1.15);
+
         },
 
         //////////////////
@@ -175,6 +177,7 @@ var NumboBlock = (function() {
             });
             var startParticleAction = cc.callFunc(function(){
                 block._particleSystem.setVisible(true);
+                //block._particleSystem.setParticleCount(2);
             });
             var stopParticleAction = cc.callFunc(function(){
                 block._particleSystem.setVisible(false);
