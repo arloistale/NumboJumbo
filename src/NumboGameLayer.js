@@ -118,7 +118,6 @@ var NumboGameLayer = (function() {
 			}
 		},
 
-
 		// Initialize input depending on the device.
 		initInput: function() {
 			if ('mouse' in cc.sys.capabilities) {
