@@ -47,6 +47,8 @@ var NumboController = (function() {
 		_knownPath: [],
 		_selectedBlocks: [],
 
+		blocksDropped: 0,
+
 		////////////////////
 		// INITIALIZATION //
 		////////////////////
@@ -214,7 +216,7 @@ var NumboController = (function() {
 					powerup = false;
 				}
 			}
-
+			this.blocksDropped++;
 			return this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
 		},
 
@@ -227,6 +229,7 @@ var NumboController = (function() {
         // updates progression of the game based on the current level
         updateProgression: function() {
             var level = NJ.gameState.getLevel();
+			this.blocksDropped = 0;
 
             // update new threshold numbers
             var thresholdNumbers = this._thresholdNumbers;
@@ -458,8 +461,8 @@ var NumboController = (function() {
          */
 		getSpawnTime: function() {
             var L = NJ.gameState.getLevel();
-            var spawnFactor = 0.5 + 2/Math.pow(L, 1/4);
-			return spawnFactor * this._spawnFrequency;
+			//cc.log("LEVEL "+Math.pow(L,1/5)+"  BLOCKS "+(this.blocksDropped/40));
+			return 2/(Math.pow(L, 1/5)+Math.pow(this.blocksDropped, 1/5)) * this._spawnFrequency;
 		},
 
 		getKnownPathLength: function(){
