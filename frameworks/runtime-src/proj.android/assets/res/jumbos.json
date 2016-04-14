@@ -30,7 +30,8 @@
       ],
 
       "thresholdNumbers":{
-        "2": [{"key": 5, "weight": 45}, {"key": 6, "weight": 40}],
+        "2": [{"key": 5, "weight": 45}],
+        "3": [{"key": 6, "weight": 40}],
         "4": [{"key": 7, "weight": 35}],
         "5": [{"key": 8, "weight": 30}],
         "6": [{"key": 9, "weight": 25}],
@@ -42,7 +43,9 @@
         "12": [{"key": 15, "weight": 10}],
         "13": [{"key": 16, "weight": 5}],
         "14": [{"key": 17, "weight": 5}],
-        "15": [{"key": 18, "weight": 5}]
+        "15": [{"key": 18, "weight": 5}],
+        "16": [{"key": 19, "weight": 5}],
+        "17": [{"key": 20, "weight": 10}]
       }
     },
 
