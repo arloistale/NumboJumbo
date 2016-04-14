@@ -37,7 +37,7 @@ NJ.gameState = (function() {
     // this is quadratic in the current level L, ie, aL^2 + bL + c.
     // values for a, b, c can (and should!) be tuned regularly :)
     var calculateBlocksNeededForLevelup = function (level) {
-        var a = 1.0;
+        var a = 2.0;
         var b = 20;
         var c = 0.0;
         var L = level;
