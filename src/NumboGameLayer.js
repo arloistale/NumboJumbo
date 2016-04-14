@@ -345,7 +345,7 @@ var NumboGameLayer = (function() {
 			// PROBABLY because we pause, but then it schedules another one after
 			this.unschedule(this.scheduleSpawn);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
-			console.log("SpawnTime: " + this._numboController.getSpawnTime());
+			//console.log("SpawnTime: " + this._numboController.getSpawnTime());
 
 			// don't make a hint unless they haven't made a move, AND a move exists
 			if (NJ.gameState.getBlocksCleared() == 0) {
