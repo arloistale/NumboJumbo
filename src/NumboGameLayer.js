@@ -86,15 +86,13 @@ var NumboGameLayer = (function() {
 			NJ.gameState.init();
 
 			// Init game logic
-			this.initNumboController();
 			this.initInput();
+			this.initNumboController();
 
 			// Init game visuals and audio
 			this.initUI();
 			this.initGeometry();
 			this.initAudio();
-
-			this.initPowerups();
 
 			// Begin scheduling block drops.
 			this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
@@ -110,13 +108,6 @@ var NumboGameLayer = (function() {
             this._curtainLayer.release();
             this._super();
         },
-
-		// initialize the powerup mode variable
-		initPowerups: function() {
-			if (NJ.gameState.getJumbo().name == "Powerups!") {
-				NJ.gameState.setPowerupMode();
-			}
-		},
 
 		// Initialize input depending on the device.
 		initInput: function() {
@@ -719,14 +710,7 @@ var NumboGameLayer = (function() {
 					targetScale: 1 + 0.25 * Math.min(1, scoreDifference / differenceThreshold)
 				});
 
-				var powerupValues = [];
-
-				for (i = 0; i < comboLength; i++) {
-					block = clearedBlocks[i];
-					if (block.powerup)
-						powerupValues.push(block.powerup);
-				}
-
+				/*
 				// Check for a powerup.
 				if (powerupValues.length > 0) {
 					if (powerupValues[0] == 'clearAndSpawn') {
@@ -742,16 +726,12 @@ var NumboGameLayer = (function() {
 						this._numboController.updateSpawnDataFromJumbo();
 						this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS *.4));
 					}
-				}
+				}*/
 
 				// Level up with feedback if needed
 				if (NJ.gameState.levelUpIfNeeded()) {
 
 					this._numboController.updateProgression();
-
-					if(NJ.gameState.isPowerupMode()) {
-						this._numboController.requestPowerup();
-					}
 
 					// Check for Jumbo Swap
 					if (NJ.gameState.currentJumboId == "multiple-progression") {
