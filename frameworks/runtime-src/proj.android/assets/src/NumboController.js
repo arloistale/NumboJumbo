@@ -38,7 +38,7 @@ var NumboController = (function() {
         _spawnScale: 1,
 
         // frequency for spawning
-		_spawnFrequency: 1.0,
+		_jumboSpawnDelay: 1.0,
 
         nextBlockPowerup: false,
 
@@ -220,7 +220,7 @@ var NumboController = (function() {
 
         updateSpawnDataFromJumbo: function(jumbo){
             this._spawnDistribution = jumbo.numberList.slice(0);
-            this._spawnFrequency = jumbo.spawnTime;
+            this._jumboSpawnDelay = jumbo.spawnTime;
             this._thresholdNumbers = jumbo.thresholdNumbers;
         },
 
@@ -404,7 +404,7 @@ var NumboController = (function() {
 			var id = jumbo.id;
 			var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
 			this._spawnDistribution = heldJumbo.numberList;
-			this._spawnFrequency = heldJumbo.spawnTime;
+			this._jumboSpawnDelay = heldJumbo.spawnTime;
 		},
 
 		/////////////
@@ -459,7 +459,7 @@ var NumboController = (function() {
 		getSpawnTime: function() {
             var L = NJ.gameState.getLevel();
             var spawnFactor = 0.5 + 2/Math.pow(L, 1/4);
-			return spawnFactor * this._spawnFrequency;
+			return spawnFactor * this._jumboSpawnDelay;
 		},
 
 		getKnownPathLength: function(){

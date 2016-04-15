@@ -72,8 +72,6 @@ var NumboGameLayer = (function() {
 
 		_curtainLayer: null,
 
-		storedBlocks: null,
-
 		levelTransition: false,
 
 		////////////////////
@@ -791,7 +789,7 @@ var NumboGameLayer = (function() {
 
 		checkClearBonus: function() {
 			// bonus for clearing screen
-			if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2) && this.storedBlocks == null) {
+			if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2)) {
 				if(NJ.settings.sounds)
 					cc.audioEngine.playEffect(res.cheeringSound);
 					cc.audioEngine.playEffect(res.cheeringSound);
@@ -821,13 +819,10 @@ var NumboGameLayer = (function() {
 			this.levelTransition = true;
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(res.applauseSound);
+
 			this.unschedule(this.closeCurtain);
 			this._curtainLayer.animate();
 			this.addChild(this._curtainLayer, 2);
-			this.storedBlocks = this._numboController.getBlocksList();
-
-			//for(var i in this.storedBlocks)
-				//this.removeChild(this.storedBlocks[i]);
 
 			for (var col = 0; col < NJ.NUM_COLS; ++col) {
 				for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
@@ -840,9 +835,6 @@ var NumboGameLayer = (function() {
 			this.removeChild(this._curtainLayer);
 			this.unschedule(this.openCurtain);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
-			//for(var i in this.storedBlocks)
-				//this.addChild(this.storedBlocks[i]);
-			this.storedBlocks = null;
 			this.checkClearBonus();
 		},
 

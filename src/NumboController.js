@@ -38,7 +38,7 @@ var NumboController = (function() {
         _spawnScale: 1,
 
         // frequency for spawning
-		_spawnFrequency: 1.0,
+		_jumboSpawnDelay: 1.0,
 
         nextBlockPowerup: false,
 
@@ -222,7 +222,7 @@ var NumboController = (function() {
 
         updateSpawnDataFromJumbo: function(jumbo){
             this._spawnDistribution = jumbo.numberList.slice(0);
-            this._spawnFrequency = jumbo.spawnTime;
+            this._jumboSpawnDelay = jumbo.spawnTime;
             this._thresholdNumbers = jumbo.thresholdNumbers;
         },
 
@@ -407,7 +407,7 @@ var NumboController = (function() {
 			var id = jumbo.id;
 			var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
 			this._spawnDistribution = heldJumbo.numberList;
-			this._spawnFrequency = heldJumbo.spawnTime;
+			this._jumboSpawnDelay = heldJumbo.spawnTime;
 		},
 
 		/////////////
@@ -460,9 +460,18 @@ var NumboController = (function() {
          * @returns {number}
          */
 		getSpawnTime: function() {
+			// the constant spawn delay based on the current jumbo
+			var j = this._jumboSpawnDelay;
+
             var L = NJ.gameState.getLevel();
-			//cc.log("LEVEL "+Math.pow(L,1/5)+"  BLOCKS "+(this.blocksDropped/40));
-			return 2/(Math.pow(L, 1/5)+Math.pow(this.blocksDropped, 1/5)) * this._spawnFrequency;
+			var x = 0.2;
+			var LFactor = 1 / Math.pow(L, x);
+
+			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 2;
+
+			var spawnTime = j * LFactor * BFactor;
+			cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);
+			return spawnTime;
 		},
 
 		getKnownPathLength: function(){
