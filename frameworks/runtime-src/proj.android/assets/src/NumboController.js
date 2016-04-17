@@ -47,6 +47,8 @@ var NumboController = (function() {
 		_knownPath: [],
 		_selectedBlocks: [],
 
+		blocksDropped: 0,
+
 		////////////////////
 		// INITIALIZATION //
 		////////////////////
@@ -214,7 +216,7 @@ var NumboController = (function() {
 					powerup = false;
 				}
 			}
-
+			this.blocksDropped++;
 			return this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
 		},
 
@@ -227,6 +229,7 @@ var NumboController = (function() {
         // updates progression of the game based on the current level
         updateProgression: function() {
             var level = NJ.gameState.getLevel();
+			this.blocksDropped = 0;
 
             // update new threshold numbers
             var thresholdNumbers = this._thresholdNumbers;
@@ -457,9 +460,18 @@ var NumboController = (function() {
          * @returns {number}
          */
 		getSpawnTime: function() {
+			// the constant spawn delay based on the current jumbo
+			var j = this._jumboSpawnDelay;
+
             var L = NJ.gameState.getLevel();
-            var spawnFactor = 0.5 + 2/Math.pow(L, 1/4);
-			return spawnFactor * this._jumboSpawnDelay;
+			var x = 0.2;
+			var LFactor = 1 / Math.pow(L, x);
+
+			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 2;
+
+			var spawnTime = j * LFactor * BFactor;
+			cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);
+			return spawnTime;
 		},
 
 		getKnownPathLength: function(){
