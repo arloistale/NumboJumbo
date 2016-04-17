@@ -183,7 +183,7 @@ var NumboBlock = (function() {
                 block._particleSystem.setVisible(false);
             });
 
-            this.runAction(cc.sequence( startParticleAction, invisibleAction, delayAction, stopParticleAction, removeAction));
+            this.runAction(cc.sequence( growAction, startParticleAction, invisibleAction, delayAction, stopParticleAction, removeAction));
         },
 
         // highlight the sprite indicating selection

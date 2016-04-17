@@ -56,7 +56,7 @@
       "color": "#00E676",
       "blockColorString": "neon",
       "difficulty": "Normal",
-      "spawnTime": 0.3,
+      "spawnTime": 1.0,
       "weight": 2.0,
       "numberList": [
         {
