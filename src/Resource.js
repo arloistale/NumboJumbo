@@ -83,8 +83,7 @@ var res = {
     cheerSound1: resRoot + "Sounds/cheer1.mp3",
     cheerSound2: resRoot + "Sounds/cheer2.wav",
     cheerSound3: resRoot + "Sounds/cheer3.wav",
-    cheerSound4: resRoot + "Sounds/cheer4.flac",
-    cheerSound5: resRoot + "Sounds/cheer5.wav",
+    cheerSound4: resRoot + "Sounds/cheer5.wav",
 
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
@@ -142,7 +141,7 @@ var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, re
     res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
     res.progressSound9, res.progressSound10, res.progressSound11, res.progressSound12];
 
-var cheers = [res.cheerSound1, res.cheerSound2, res.cheerSound3, res.cheerSound4, res.cheerSound5];
+var cheers = [res.cheerSound1, res.cheerSound2, res.cheerSound3, res.cheerSound4];
 
 // resources for ingame
 var g_game = [
@@ -201,6 +200,7 @@ var g_game = [
     res.cheerSound1,
     res.cheerSound2,
     res.cheerSound3,
+    res.cheerSound4,
 
     // fonts
     res.mainFont.src
