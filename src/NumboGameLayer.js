@@ -699,6 +699,8 @@ var NumboGameLayer = (function() {
 							targetY: cc.visibleRect.center.y,
 							easing: cc.easeQuinticActionOut()
 						});
+						if (NJ.settings.sounds)
+							cc.audioEngine.playEffect(cheers[Math.floor(Math.random()*cheers.length)]);
 					}
 
 					// launch feedback for gained score
@@ -755,7 +757,7 @@ var NumboGameLayer = (function() {
 						//this.schedule(this.closeCurtain,.6);
 						this.closeCurtain();
 						this.unschedule(this.scheduleSpawn);
-						this.schedule(this.openCurtain, 5);
+						this.schedule(this.initCurtainDrain, 2.5);
 
 						// Display "Level x"
 						/*this._feedbackLayer.launchFallingBanner({
@@ -828,6 +830,22 @@ var NumboGameLayer = (function() {
 				for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
 					this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 			}
+		},
+
+		initCurtainDrain: function() {
+			this._curtainLayer.initDrain();
+			this.unschedule(this.initCurtainDrain);
+			this.schedule(this.drainCurtainPoints, this._curtainLayer.getTimePerDrain());
+		},
+
+		drainCurtainPoints: function() {
+			this.unschedule(this.drainCurtainPoints);
+			this._curtainLayer.drainPoints();
+			if(this._curtainLayer.isDrainingComplete()) {
+				this.unschedule(this.drainCurtainPoints);
+				this.schedule(this.openCurtain, 1);
+			}
+			else this.schedule(this.drainCurtainPoints, this._curtainLayer.getTimePerDrain());
 		},
 
 		openCurtain: function() {
