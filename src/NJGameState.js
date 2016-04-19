@@ -111,10 +111,12 @@ NJ.gameState = (function() {
             return blocksCleared;
         },
 
+        // total amount needed
         getBlocksNeededForLevelup: function() {
             return blocksNeededForLevelup;
         },
-        
+
+        // ratio how many you have locally versus how many you need
         getLevelupProgress: function() {
             var dist = blocksNeededForLevelup - prevBlocksNeededForLevelup;
             var curr = blocksCleared - prevBlocksNeededForLevelup;

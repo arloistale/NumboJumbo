@@ -26,6 +26,9 @@ var NumboBlock = (function() {
         _highlightSprite: null,
         _valueLabel: null,
 
+        // internal particle system
+        _particleSystem: null,
+
         // block properties
         _colorIndex: 0,
 
@@ -116,6 +119,25 @@ var NumboBlock = (function() {
             }
 
             this.updateTheme();
+
+            this._particleSystem = new cc.ParticleGalaxy();
+            this.addChild(this._particleSystem, 500); // behind UI elements
+            this.initParticleSystem();
+        },
+
+
+        //////////////////////////////////////
+        // block's internal particle system //
+        //////////////////////////////////////
+        initParticleSystem:function(){
+            var texture = cc.textureCache.addImage(res.particleImage);
+            this._particleSystem.setTexture(texture);
+            this._particleSystem.setStartSize(2);
+            this._particleSystem.setEndSize(4);
+            this._particleSystem.setPosition(this.width/2, this.height/2);
+            this._particleSystem.setStartColor(this._backgroundSprite.getColor());
+            this._particleSystem.setVisible(false);
+            this._particleSystem.setPositionType(1);
         },
 
         //////////////////
@@ -130,21 +152,38 @@ var NumboBlock = (function() {
             this._valueLabel.setColor(cc.color(255, 255, 255));
         },
 
+        updateParticleSystem: function(){
+            this._particleSystem.setPosition (this.x, this.y);
+        },
+
         // kill the block
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
         kill: function() {
             this._backgroundSprite.release();
             this._circleNode.release();
-                            
+
             var block = this;
-            var scaleAction = cc.scaleTo(0.7, 1.5, 1.5).easing(cc.easeExponentialOut());
-            var fadeAction = cc.fadeTo(0.2, 0);
+            var growAction = cc.scaleTo(0.25, 1.5, 1.5).easing(cc.easeExponentialOut());
+            var shrinkAction = cc.scaleTo(0.25, 0.1, 0.1).easing(cc.easeExponentialOut());
+            var delayAction = cc.delayTime(1.0);
+
+            var invisibleAction = cc.callFunc(function() {
+                block._backgroundSprite.setVisible(false);
+            });
+
             var removeAction = cc.callFunc(function() {
                 block.removeFromParent(true);
             });
-            this.stopAllActions();
-            this.runAction(scaleAction);
-            this.runAction(cc.sequence(fadeAction, removeAction));
+
+            var startParticleAction = cc.callFunc(function(){
+                block._particleSystem.setVisible(true);
+            });
+
+            var stopParticleAction = cc.callFunc(function(){
+                block._particleSystem.setVisible(false);
+            });
+
+            this.runAction(cc.sequence( growAction, startParticleAction, invisibleAction, delayAction, stopParticleAction, removeAction));
         },
 
         // highlight the sprite indicating selection

@@ -37,9 +37,9 @@ NJ.gameState = (function() {
     // this is quadratic in the current level L, ie, aL^2 + bL + c.
     // values for a, b, c can (and should!) be tuned regularly :)
     var calculateBlocksNeededForLevelup = function (level) {
-        var a = 1.0;
+        var a = 3;
         var b = 20;
-        var c = 0.0;
+        var c = 0;
         var L = level;
 
         return Math.round(a * L * L + b * L + c);
@@ -111,10 +111,12 @@ NJ.gameState = (function() {
             return blocksCleared;
         },
 
+        // total amount needed
         getBlocksNeededForLevelup: function() {
             return blocksNeededForLevelup;
         },
-        
+
+        // ratio how many you have locally versus how many you need
         getLevelupProgress: function() {
             var dist = blocksNeededForLevelup - prevBlocksNeededForLevelup;
             var curr = blocksCleared - prevBlocksNeededForLevelup;

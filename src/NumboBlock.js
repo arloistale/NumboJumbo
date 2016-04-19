@@ -169,21 +169,24 @@ var NumboBlock = (function() {
             var shrinkAction = cc.scaleTo(0.25, 0.1, 0.1).easing(cc.easeExponentialOut());
             var delayAction = cc.delayTime(1.0);
 
-            var invisibleAction = cc.callFunc(function(){
-               block._backgroundSprite.setVisible(false);
+            var invisibleAction = cc.callFunc(function() {
+                block._backgroundSprite.setVisible(false);
             });
+
             var removeAction = cc.callFunc(function() {
                 block.removeFromParent(true);
             });
+
             var startParticleAction = cc.callFunc(function(){
                 block._particleSystem.setVisible(true);
                 //block._particleSystem.setParticleCount(2);
             });
+
             var stopParticleAction = cc.callFunc(function(){
                 block._particleSystem.setVisible(false);
             });
 
-            this.runAction(cc.sequence( startParticleAction, invisibleAction, delayAction, stopParticleAction, removeAction));
+            this.runAction(cc.sequence( growAction, startParticleAction, invisibleAction, delayAction, stopParticleAction, removeAction));
         },
 
         // highlight the sprite indicating selection

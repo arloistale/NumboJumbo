@@ -4,6 +4,22 @@
 
 var NJ = NJ || {};
 
+// browser check
+// Firefox 1.0+
+NJ.isFirefox = typeof InstallTrigger !== 'undefined';
+if(NJ.isFirefox) {
+    NJ.anchorOffsetX = 0.1;
+    NJ.anchorOffsetY = 0.2;
+} else {
+    NJ.anchorOffsetX = 0;
+    NJ.anchorOffsetY = 0;
+}
+
+if(cc.sys.isNative)
+    NJ.fontScalingFactor = 1;
+else
+    NJ.fontScalingFactor = 4;
+
 NJ.fontSizes = {
     buttonSmall: 16,
     buttonMedium: 20,

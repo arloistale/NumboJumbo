@@ -72,8 +72,6 @@ var NumboGameLayer = (function() {
 
 		_curtainLayer: null,
 
-		storedBlocks: null,
-
 		levelTransition: false,
 
 		////////////////////
@@ -88,15 +86,13 @@ var NumboGameLayer = (function() {
 			NJ.gameState.init();
 
 			// Init game logic
-			this.initNumboController();
 			this.initInput();
+			this.initNumboController();
 
 			// Init game visuals and audio
 			this.initUI();
 			this.initGeometry();
 			this.initAudio();
-
-			this.initPowerups();
 
 			// Begin scheduling block drops.
 			this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
@@ -109,18 +105,9 @@ var NumboGameLayer = (function() {
 		},
                            
         onExit:function() {
-                           cc.log("exiting game");
             this._curtainLayer.release();
             this._super();
         },
-
-		// initialize the powerup mode variable
-		initPowerups: function() {
-			if (NJ.gameState.getJumbo().name == "Powerups!") {
-				NJ.gameState.setPowerupMode();
-			}
-		},
-
 
 		// Initialize input depending on the device.
 		initInput: function() {
@@ -712,6 +699,8 @@ var NumboGameLayer = (function() {
 							targetY: cc.visibleRect.center.y,
 							easing: cc.easeQuinticActionOut()
 						});
+						if (NJ.settings.sounds)
+							cc.audioEngine.playEffect(cheers[Math.floor(Math.random()*cheers.length)]);
 					}
 
 					// launch feedback for gained score
@@ -725,6 +714,7 @@ var NumboGameLayer = (function() {
 						targetScale: 1 + 0.25 * Math.min(1, scoreDifference / differenceThreshold)
 					});
 
+					/*
 					var powerupValues = [];
 
 					for (i = 0; i < comboLength; i++) {
@@ -752,15 +742,12 @@ var NumboGameLayer = (function() {
 							this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
 						}
 					}
+					*/
 
 					// Level up with feedback if needed
 					if (NJ.gameState.levelUpIfNeeded()) {
 
 						this._numboController.updateProgression();
-
-						if (NJ.gameState.isPowerupMode()) {
-							this._numboController.requestPowerup();
-						}
 
 						// Check for Jumbo Swap
 						if (NJ.gameState.currentJumboId == "multiple-progression") {
@@ -770,7 +757,7 @@ var NumboGameLayer = (function() {
 						//this.schedule(this.closeCurtain,.6);
 						this.closeCurtain();
 						this.unschedule(this.scheduleSpawn);
-						this.schedule(this.openCurtain, 5);
+						this.schedule(this.initCurtainDrain, 2.5);
 
 						// Display "Level x"
 						/*this._feedbackLayer.launchFallingBanner({
@@ -804,7 +791,7 @@ var NumboGameLayer = (function() {
 
 		checkClearBonus: function() {
 			// bonus for clearing screen
-			if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2) && this.storedBlocks == null) {
+			if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2)) {
 				if(NJ.settings.sounds)
 					cc.audioEngine.playEffect(res.cheeringSound);
 					cc.audioEngine.playEffect(res.cheeringSound);
@@ -834,13 +821,10 @@ var NumboGameLayer = (function() {
 			this.levelTransition = true;
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(res.applauseSound);
+
 			this.unschedule(this.closeCurtain);
 			this._curtainLayer.animate();
 			this.addChild(this._curtainLayer, 2);
-			this.storedBlocks = this._numboController.getBlocksList();
-
-			//for(var i in this.storedBlocks)
-				//this.removeChild(this.storedBlocks[i]);
 
 			for (var col = 0; col < NJ.NUM_COLS; ++col) {
 				for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
@@ -848,14 +832,27 @@ var NumboGameLayer = (function() {
 			}
 		},
 
+		initCurtainDrain: function() {
+			this._curtainLayer.initDrain();
+			this.unschedule(this.initCurtainDrain);
+			this.schedule(this.drainCurtainPoints, this._curtainLayer.getTimePerDrain());
+		},
+
+		drainCurtainPoints: function() {
+			this.unschedule(this.drainCurtainPoints);
+			this._curtainLayer.drainPoints();
+			if(this._curtainLayer.isDrainingComplete()) {
+				this.unschedule(this.drainCurtainPoints);
+				this.schedule(this.openCurtain, 1);
+			}
+			else this.schedule(this.drainCurtainPoints, this._curtainLayer.getTimePerDrain());
+		},
+
 		openCurtain: function() {
 			this.levelTransition = false;
 			this.removeChild(this._curtainLayer);
 			this.unschedule(this.openCurtain);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
-			//for(var i in this.storedBlocks)
-				//this.addChild(this.storedBlocks[i]);
-			this.storedBlocks = null;
 			this.checkClearBonus();
 		},
 
