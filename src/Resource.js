@@ -39,6 +39,9 @@ var res = {
 
     // Particles
     particleImage: resRoot + "Images/particle.png",
+    starImage: resRoot + "Images/star.png",
+    lineParticleOneImage: resRoot + "Images/lineparticle1.png",
+    lineParticleTwoImage: resRoot + "Images/lineparticle2.png",
 
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
@@ -154,6 +157,9 @@ var g_game = [
 
     // Particles
     res.particleImage,
+    res.starImage,
+    res.lineParticleOneImage,
+    res.lineParticleTwoImage,
 
     // Scene
     res.powerupImage,

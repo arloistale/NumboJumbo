@@ -130,16 +130,22 @@ var NumboBlock = (function() {
         // block's internal particle system //
         //////////////////////////////////////
         initParticleSystem:function(){
-            var texture = cc.textureCache.addImage(res.particleImage);
+            var texture = cc.textureCache.addImage(res.lineParticleOneImage);
             this._particleSystem.setTexture(texture);
-            this._particleSystem.setStartSize(2);
-            this._particleSystem.setEndSize(40);
+            this._particleSystem.setStartSize(10);
+            this._particleSystem.setEndSize(3);
             this._particleSystem.setPosition(this.width/2, this.height/2);
             this._particleSystem.setStartColor(this._backgroundSprite.getColor());
             this._particleSystem.setVisible(false);
             this._particleSystem.setPositionType(1);
-            this._particleSystem.setScale(1.15);
-
+            this._particleSystem.setTangentialAccel(0);
+            this._particleSystem.setRadialAccel(-120);
+            this._particleSystem.setRotationIsDir(true);
+            //this._particleSystem.setGravity(cc.p(0, -100));
+            this._particleSystem.setLife(1);
+            this._particleSystem.setLifeVar(0.1);
+            this._particleSystem.setScale(2);
+            //cc.log(tem.getEndSpin(), this._particleSystem.getRotationIsDir());
         },
 
         //////////////////
@@ -165,12 +171,14 @@ var NumboBlock = (function() {
             this._circleNode.release();
 
             var block = this;
-            var growAction = cc.scaleTo(0.25, 1.5, 1.5).easing(cc.easeExponentialOut());
-            var shrinkAction = cc.scaleTo(0.25, 0.1, 0.1).easing(cc.easeExponentialOut());
+            var growAction = cc.scaleTo(0.40, 1.5, 1.5);
+            var shrinkAction = cc.scaleTo(0.15, 0.1, 0.1);
             var delayAction = cc.delayTime(1.0);
 
             var invisibleAction = cc.callFunc(function() {
                 block._backgroundSprite.setVisible(false);
+                block._valueLabel.setVisible(false);
+                block.setScale(1);
             });
 
             var removeAction = cc.callFunc(function() {
@@ -186,7 +194,7 @@ var NumboBlock = (function() {
                 block._particleSystem.setVisible(false);
             });
 
-            this.runAction(cc.sequence( growAction, startParticleAction, invisibleAction, delayAction, stopParticleAction, removeAction));
+            this.runAction(cc.sequence(growAction, shrinkAction, invisibleAction, startParticleAction, delayAction, stopParticleAction, removeAction));
         },
 
         // highlight the sprite indicating selection
