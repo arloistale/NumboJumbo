@@ -352,9 +352,9 @@ var NumboGameLayer = (function() {
 					NJ.gameState.setStage("normal");
 					this._backgroundLayer.updateBackgroundColor(new cc.color(0, 0, 0, 255));
 					this._numboController.recallBoard(this.pausedJumbo, _blockSize);
-					this.spawnNBlocks(this.pausedJumbo.numBlocks);
+					this.spawnRandomBlocks(this.pausedJumbo.numBlocks);
 					this.pausedJumbo = null;
-					this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+					this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 				} else {
 					this.onGameOver();
 				}
@@ -377,7 +377,7 @@ var NumboGameLayer = (function() {
 			this.moveBlockIntoPlace(spawnBlock);
 		},
 
-		spawnNBlocks: function(N) {
+		spawnRandomBlocks: function(N) {
 			this.schedule(this.spawnDropRandomBlock, 0.1, N);
 		},
 
@@ -708,7 +708,7 @@ var NumboGameLayer = (function() {
 				if (powerupValues.length > 0) {
 					if (powerupValues[0] == 'clearAndSpawn') {
 						this.clearBlocks();
-						this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
+						this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
 					}
 					else if(powerupValues[0] == 'bonusOneMania' && this.pausedJumbo == null) {
 						this.pausedJumbo = {id: NJ.gameState.getJumboId(), numBlocks: this._numboController.getNumBlocks()};
@@ -717,7 +717,7 @@ var NumboGameLayer = (function() {
 						NJ.gameState.setStage("bonus");
                         NJ.chooseJumbo("one-mania");
 						this._numboController.updateSpawnDataFromJumbo();
-						this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS *.4));
+						this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS *.4));
 					}
 				}
 
@@ -738,7 +738,7 @@ var NumboGameLayer = (function() {
 				
 				// bonus for clearing screen
 				if (this._numboController.getNumBlocks() < Math.ceil(NJ.NUM_COLS/2)) {
-					this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+					this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 					this.unschedule(this.scheduleSpawn);
 					this.schedule(this.scheduleSpawn, 6);
 					this._feedbackLayer.launchFallingBanner({

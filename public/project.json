@@ -16,7 +16,7 @@
         "src/Resource.js",
         "src/ScoresLayer.js",
         "src/NumboMenuLayer.js",
-        "src/ShopMenuLayer.js",
+        "src/TutorialLayer.js",
         "src/JumboMenuLayer.js",
         "src/SettingsMenuLayer.js",
         "src/NumboGameLayer.js",

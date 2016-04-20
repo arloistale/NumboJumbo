@@ -55,6 +55,9 @@ var NumboGameLayer = (function() {
 		_settingsMenuLayer: null,
 		_gameOverMenuLayer: null,
 		_feedbackLayer: null,
+        _curtainLayer: null,
+        
+        _tutorialLayer: null,
 
 		// Geometry Data
 		_selectedLinesNode: null,
@@ -70,8 +73,6 @@ var NumboGameLayer = (function() {
 
 		pausedJumbo: null,
 
-		_curtainLayer: null,
-
 		levelTransition: false,
 
 		////////////////////
@@ -86,31 +87,56 @@ var NumboGameLayer = (function() {
 			NJ.gameState.init();
 
 			// Init game logic
-			this.initInput();
-			this.initNumboController();
+			this._initInput();
+			this._initController();
 
 			// Init game visuals and audio
-			this.initUI();
-			this.initGeometry();
-			this.initAudio();
+			this._initUI();
+			this._initGeometry();
+			this._initAudio();
 
-			// Begin scheduling block drops.
-			this.schedule(this.spawnDropRandomBlock, 0.1, Math.floor(NJ.NUM_ROWS*NJ.NUM_COLS *.4));
-			this.schedule(this.scheduleSpawn, 0.1*20);
-
-			// begin scheduling hint jiggles
-			//this.unschedule(this.jiggleHintBlocks);
-			this.schedule(this.jiggleHintBlocks, 5);
-
+            // Init tutorial
+            if(true) {
+                this._initTutorial();
+            } else {
+				this._initNormal();
+            }
 		},
                            
-        onExit:function() {
+        onExit: function() {
             this._curtainLayer.release();
             this._super();
         },
 
+        _initTutorial: function() {
+			var that = this;
+
+			NJ.gameState.setStage(NJ.gameState.stages.tutorial);
+
+			this._tutorialLayer = new TutorialLayer();
+			this.addChild(this._tutorialLayer, 999);
+
+            var centerCol = Math.floor((NJ.NUM_COLS - 1) / 2);
+
+			this.runAction(cc.sequence(cc.delayTime(3), cc.callFunc(that.spawnDropBlock(centerCol - 1, 1)),
+                cc.delayTime(0.1), cc.callFunc(that.spawnDropBlock(centerCol, 2)),
+				cc.delayTime(0.1), cc.callFunc(that.spawnDropBlock(centerCol + 1, 3))));
+        },
+
+        _initNormal: function() {
+			NJ.gameState.setStage(NJ.gameState.stages.normal);
+
+            // Begin scheduling block drops.
+            this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS * .4));
+            this.schedule(this.scheduleSpawn, 0.1 * 20);
+
+            // begin scheduling hint jiggles
+            //this.unschedule(this.jiggleHintBlocks);
+            this.schedule(this.jiggleHintBlocks, 5);
+        },
+
 		// Initialize input depending on the device.
-		initInput: function() {
+		_initInput: function() {
 			if ('mouse' in cc.sys.capabilities) {
 				cc.eventManager.addListener({
 					event: cc.EventListener.MOUSE,
@@ -162,7 +188,7 @@ var NumboGameLayer = (function() {
 		},
 
 		// Initialize UI elements
-		initUI: function() {
+		_initUI: function() {
 			var that = this;
 
 			// background
@@ -194,7 +220,7 @@ var NumboGameLayer = (function() {
 		},
 
 		// Initialize dimensions and geometry
-		initGeometry: function() {
+		_initGeometry: function() {
 			var playableRect = cc.rect({
 				x: cc.visibleRect.bottomLeft.x,
 				y: cc.visibleRect.bottomLeft.y + this._toolbarLayer.getContentSize().height,
@@ -230,13 +256,13 @@ var NumboGameLayer = (function() {
 		},
 
 		// Initialize the Numbo Controller, which controls the level.
-		initNumboController: function() {
+		_initController: function() {
 			this._numboController = new NumboController();
 			this._numboController.init();
 		},
 
 		// Initialize audio.
-		initAudio: function() {
+		_initAudio: function() {
 			if(!NJ.settings.music)
 				return;
 
@@ -332,7 +358,30 @@ var NumboGameLayer = (function() {
 			// PROBABLY because we pause, but then it schedules another one after
 			this.unschedule(this.scheduleSpawn);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
-			//console.log("SpawnTime: " + this._numboController.getSpawnTime());
+
+			if(this._numboController.isGameOver()) {
+				if(this.pausedJumbo != null) {
+					this.clearBlocks();
+					NJ.gameState.setStage("normal");
+					this._backgroundLayer.updateBackgroundColor(new cc.color(0, 0, 0, 255));
+					this._numboController.recallBoard(this.pausedJumbo, _blockSize);
+					this.spawnRandomBlocks(this.pausedJumbo.numBlocks);
+					this.pausedJumbo = null;
+					this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+				} else {
+					this.onGameOver();
+				}
+
+				return;
+			}
+
+			if(!this._feedbackLayer.isDoomsayerLaunched()) {
+				if(this._numboController.isInDanger())
+					this._feedbackLayer.launchDoomsayer();
+			} else {
+				if(!this._numboController.isInDanger())
+					this._feedbackLayer.clearDoomsayer();
+			}
 
 			// don't make a hint unless they haven't made a move, AND a move exists
 			if (NJ.gameState.getBlocksCleared() == 0) {
@@ -350,47 +399,37 @@ var NumboGameLayer = (function() {
 			}
 		},
 
-		// Spawns a block and drops the spawned block into place.
-		// NOTE: This is the function you should be using to put new blocks into the game
-		// TODO: Improve structure (don't check game over state here for improved separation of concerns)
-		spawnDropRandomBlock: function() {
-			if(this._numboController.isGameOver()) {
-				if(this.pausedJumbo != null) {
-					this.clearBlocks();
-					NJ.gameState.setStage("normal");
-					this._backgroundLayer.updateBackgroundColor(new cc.color(0, 0, 0, 255));
-					this._numboController.recallBoard(this.pausedJumbo, _blockSize);
-					this.spawnNBlocks(this.pausedJumbo.numBlocks);
-					this.pausedJumbo = null;
-					this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
-				} else {
-					this.onGameOver();
-				}
-				return;
-			}
-
-			if(!this._feedbackLayer.isDoomsayerLaunched()) {
-				if(this._numboController.isInDanger())
-					this._feedbackLayer.launchDoomsayer();
-			} else {
-				if(!this._numboController.isInDanger())
-					this._feedbackLayer.clearDoomsayer();
-			}
-
-			var spawnBlock = this._numboController.spawnDropRandomBlock(_blockSize);
-			var blockX = _levelBounds.x + _levelCellSize.width * (spawnBlock.col + 0.5);
-			spawnBlock.setPosition(blockX, cc.visibleRect.top.y + _levelCellSize.height / 2);
-			this.addChild(spawnBlock, 2, 69);
-
+		// spawns and drops a block with random col and val.
+		spawnDropBlock: function(col, val) {
+			var spawnBlock = new NumboBlock(_blockSize);
+			this._numboController.spawnDropBlock(spawnBlock, col, val);
+			this._instantiateBlock(spawnBlock);
 			this.moveBlockIntoPlace(spawnBlock);
 		},
 
-		spawnNBlocks: function(N) {
-			this.schedule(this.spawnDropRandomBlock, 0.1, N);
+		// Spawns a block with random col and val and drops the spawned block into place.
+		spawnDropRandomBlock: function() {
+			var spawnBlock = new NumboBlock(_blockSize);
+			this._numboController.spawnDropRandomBlock(spawnBlock);
+			this._instantiateBlock(spawnBlock);
+			this.moveBlockIntoPlace(spawnBlock);
 		},
 
+		// spawns a specified amount of blocks every 0.1 seconds until
+		spawnRandomBlocks: function(amount) {
+			this.schedule(this.spawnDropRandomBlock, 0.1, amount);
+		},
+
+		// clear all blocks from screen
 		clearBlocks: function() {
 			this._numboController.killAllBlocks();
+		},
+
+		// helper function to move a spawned block into place, shifting its position based on column
+		_instantiateBlock: function(block) {
+			var blockX = _levelBounds.x + _levelCellSize.width * (block.col + 0.5);
+			block.setPosition(blockX, cc.visibleRect.top.y + _levelCellSize.height / 2);
+			this.addChild(block, 2, 69);
 		},
 
 		//////////////////
@@ -621,7 +660,7 @@ var NumboGameLayer = (function() {
 				this.redrawSelectedLines();
 
 				// make sure something actually happened
-				if (clearedBlocks) {
+				if (clearedBlocks && NJ.gameState.getStage() != NJ.gameState.stages.tutorial) {
 					var clearedNums = clearedBlocks.map(function (b) {
 						return b.val;
 					});
@@ -725,7 +764,7 @@ var NumboGameLayer = (function() {
 					if (powerupValues.length > 0) {
 						if (powerupValues[0] == 'clearAndSpawn') {
 							this.clearBlocks();
-							this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
+							this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
 						}
 						else if (powerupValues[0] == 'bonusOneMania' && this.pausedJumbo == null) {
 							this.pausedJumbo = {
@@ -737,7 +776,7 @@ var NumboGameLayer = (function() {
 							NJ.gameState.setStage("bonus");
 							NJ.chooseJumbo("one-mania");
 							this._numboController.updateSpawnDataFromJumbo();
-							this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
+							this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
 						}
 					}
 					*/
@@ -758,10 +797,10 @@ var NumboGameLayer = (function() {
 						this.schedule(this.openCurtain, 5);
 
 						// Display "Level x"
-						/*this._feedbackLayer.launchFallingBanner({
-						 title: "Level " + NJ.gameState.getLevel()
-						 title: "Level " + NJ.gameState.getLevel()
-						 });*/
+						this._feedbackLayer.launchFallingBanner({
+						    title: "Level " + NJ.gameState.getLevel()
+                        });
+
 						// Play level up sound
 						if (NJ.settings.sounds)
 							cc.audioEngine.playEffect(res.levelupSound);
@@ -793,7 +832,7 @@ var NumboGameLayer = (function() {
 				if(NJ.settings.sounds)
 					cc.audioEngine.playEffect(res.cheeringSound);
 					cc.audioEngine.playEffect(res.cheeringSound);
-				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+				this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 				this.unschedule(this.scheduleSpawn);
 				this.schedule(this.scheduleSpawn, 6);
 				this._feedbackLayer.launchFallingBanner({

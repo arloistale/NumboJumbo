@@ -294,7 +294,7 @@
                 <file name="src/Resource.js"/>
                 <file name="src/ScoresLayer.js"/>
                 <file name="src/NumboMenuLayer.js"/>
-                <file name="src/ShopMenuLayer.js"/>
+                <file name="src/TutorialLayer.js"/>
                 <file name="src/JumboMenuLayer.js"/>
                 <file name="src/SettingsMenuLayer.js"/>
                 <file name="src/NumboGameLayer.js"/>

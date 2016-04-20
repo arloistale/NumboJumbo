@@ -159,17 +159,11 @@ var NumboBlock = (function() {
         // kill the block
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
         kill: function() {
-            this._backgroundSprite.release();
-            this._circleNode.release();
-
             var block = this;
             var growAction = cc.scaleTo(0.25, 1.5, 1.5).easing(cc.easeExponentialOut());
+            var fadeAction = cc.fadeOut(0.25);
             var shrinkAction = cc.scaleTo(0.25, 0.1, 0.1).easing(cc.easeExponentialOut());
             var delayAction = cc.delayTime(1.0);
-
-            var invisibleAction = cc.callFunc(function() {
-                block._backgroundSprite.setVisible(false);
-            });
 
             var removeAction = cc.callFunc(function() {
                 block.removeFromParent(true);
@@ -183,7 +177,12 @@ var NumboBlock = (function() {
                 block._particleSystem.setVisible(false);
             });
 
-            this.runAction(cc.sequence( growAction, startParticleAction, invisibleAction, delayAction, stopParticleAction, removeAction));
+            this.runAction(cc.sequence( growAction, startParticleAction, delayAction, stopParticleAction, removeAction));
+            this._backgroundSprite.runAction(fadeAction);
+            //this._valueLabel.runAction(fadeAction);
+
+            this._backgroundSprite.release();
+            this._circleNode.release();
         },
 
         // highlight the sprite indicating selection
@@ -241,14 +240,6 @@ var NumboBlock = (function() {
                     this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 5, chosen);
                     break;
             }
-        },
-
-        /////////////
-        // Getters //
-        /////////////
-
-        getValue: function() {
-            return this.val;
         }
     });
 }());

@@ -16,7 +16,9 @@ LOCAL_SRC_FILES := hellojavascript/main.cpp \
 ../../Classes/PluginFacebookJS.cpp \
 ../../Classes/PluginFacebookJS.hpp \
 ../../Classes/PluginFacebookJSHelper.cpp \
-../../Classes/PluginFacebookJSHelper.h
+../../Classes/PluginFacebookJSHelper.h \
+../../Classes/PluginReviewJS.cpp \
+../../Classes/PluginReviewJSHelper.cpp
 
 LOCAL_CPPFLAGS := -DSDKBOX_ENABLED
 LOCAL_LDLIBS := -landroid \
@@ -24,7 +26,8 @@ LOCAL_LDLIBS := -landroid \
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_WHOLE_STATIC_LIBRARIES := PluginGoogleAnalytics \
 sdkbox \
-PluginFacebook
+PluginFacebook \
+PluginReview
 
 LOCAL_STATIC_LIBRARIES := cocos_jsb_static
 
@@ -39,3 +42,4 @@ $(call import-module,bindings)
 $(call import-module, ./sdkbox)
 $(call import-module, ./plugingoogleanalytics)
 $(call import-module, ./pluginfacebook)
+$(call import-module, ./pluginreview)

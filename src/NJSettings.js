@@ -9,6 +9,9 @@ NJ.MUSIC_VOLUME = 0.2;
 NJ.SOUNDS_VOLUME = 1;
 
 NJ.settings = {
+    // we store whether this is our first time playing or not
+    hasLoaded: false,
+
     music: true,
     sounds: true
 };

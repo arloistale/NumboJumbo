@@ -29,6 +29,10 @@
 #endif
 
 #ifdef SDKBOX_ENABLED
+#include "PluginReviewJS.hpp"
+#include "PluginReviewJSHelper.h"
+#endif
+#ifdef SDKBOX_ENABLED
 #include "PluginFacebookJS.hpp"
 #include "PluginFacebookJSHelper.h"
 #include "PluginGoogleAnalyticsJS.hpp"
@@ -118,6 +122,10 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(JavascriptJavaBridge::_js_register);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     sc->addRegisterCallback(JavaScriptObjCBridge::_js_register);
+#endif
+#ifdef SDKBOX_ENABLED
+    sc->addRegisterCallback(register_all_PluginReviewJS);
+    sc->addRegisterCallback(register_all_PluginReviewJS_helper);
 #endif
 #ifdef SDKBOX_ENABLED
     sc->addRegisterCallback(register_all_PluginFacebookJS);

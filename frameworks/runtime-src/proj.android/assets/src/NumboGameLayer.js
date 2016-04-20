@@ -360,9 +360,9 @@ var NumboGameLayer = (function() {
 					NJ.gameState.setStage("normal");
 					this._backgroundLayer.updateBackgroundColor(new cc.color(0, 0, 0, 255));
 					this._numboController.recallBoard(this.pausedJumbo, _blockSize);
-					this.spawnNBlocks(this.pausedJumbo.numBlocks);
+					this.spawnRandomBlocks(this.pausedJumbo.numBlocks);
 					this.pausedJumbo = null;
-					this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+					this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 				} else {
 					this.onGameOver();
 				}
@@ -385,7 +385,7 @@ var NumboGameLayer = (function() {
 			this.moveBlockIntoPlace(spawnBlock);
 		},
 
-		spawnNBlocks: function(N) {
+		spawnRandomBlocks: function(N) {
 			this.schedule(this.spawnDropRandomBlock, 0.1, N);
 		},
 
@@ -725,7 +725,7 @@ var NumboGameLayer = (function() {
 					if (powerupValues.length > 0) {
 						if (powerupValues[0] == 'clearAndSpawn') {
 							this.clearBlocks();
-							this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
+							this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
 						}
 						else if (powerupValues[0] == 'bonusOneMania' && this.pausedJumbo == null) {
 							this.pausedJumbo = {
@@ -737,7 +737,7 @@ var NumboGameLayer = (function() {
 							NJ.gameState.setStage("bonus");
 							NJ.chooseJumbo("one-mania");
 							this._numboController.updateSpawnDataFromJumbo();
-							this.spawnNBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
+							this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
 						}
 					}
 					*/
@@ -793,7 +793,7 @@ var NumboGameLayer = (function() {
 				if(NJ.settings.sounds)
 					cc.audioEngine.playEffect(res.cheeringSound);
 					cc.audioEngine.playEffect(res.cheeringSound);
-				this.spawnNBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
+				this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
 				this.unschedule(this.scheduleSpawn);
 				this.schedule(this.scheduleSpawn, 6);
 				this._feedbackLayer.launchFallingBanner({
