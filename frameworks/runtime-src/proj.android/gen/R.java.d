@@ -1,5 +1,35 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/gen/com/numbo/jumbo/R.java \
- : /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/js-bindings/cocos2d-x/cocos/platform/android/java/libs/facebook_lib/res/drawable/com_facebook_button_background.xml \
+ : /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-ar/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-bg/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-ca/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-cs/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-de/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-es/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-fa/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-fr/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-he/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-hr/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-id/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-it/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-ja/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-ko/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-pl/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-pt/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-pt-rBR/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-ru/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-sk/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-sl/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-sr/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-sv/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-th/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-tr/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-uk/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-vi/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-zh/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-zh-rHK/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/plugin_review_res_project/res/values-zh-rTW/strings.xml \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/js-bindings/cocos2d-x/cocos/platform/android/java/libs/facebook_lib/res/drawable/com_facebook_button_background.xml \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/js-bindings/cocos2d-x/cocos/platform/android/java/libs/facebook_lib/res/drawable/com_facebook_button_like_background.xml \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/js-bindings/cocos2d-x/cocos/platform/android/java/libs/facebook_lib/res/drawable/com_facebook_button_login_silver_background.xml \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/js-bindings/cocos2d-x/cocos/platform/android/java/libs/facebook_lib/res/drawable/com_facebook_button_send_background.xml \

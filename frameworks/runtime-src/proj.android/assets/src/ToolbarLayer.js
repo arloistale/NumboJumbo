@@ -18,14 +18,13 @@ var ToolbarLayer = (function() {
         // callback
         _onToggleThemeCallback: null,
 
-        ctor: function() {
+        ctor: function(size) {
             this._super();
 
-            var toolSize = cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.toolbar);
-            this.setContentSize(toolSize.width, toolSize.height);
+            this.setContentSize(size.width, size.height);
             this.attr({
                 x: cc.visibleRect.bottomLeft.x,
-                y: cc.visibleRect.bottomLeft.y - toolSize.height
+                y: cc.visibleRect.bottomLeft.y - size.height
             });
 
             this.initButtons();

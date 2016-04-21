@@ -33,10 +33,14 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$styleable.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$xml.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/sdkbox/plugin/review/R$string.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/sdkbox/plugin/review/R.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-2dd3d08347a2718c7beb11102ebde1b4.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-313dd82c243ca1c0130eb97e82293b26.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-f82b87fe6748082e662726569ed126af.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-259eab8f1b5aac98b045d01d05e92c59.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginReview-2d19ec9eab71111c9660c85c194b5bd3.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/bolts-android-1.1.2-605f1e3a95ca99ae45ed5d1c2a214612.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginFacebook-591cdbb57d694548a5d1e672890eaaa2.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginGoogleAnalytics-cf74162cea8261d045b5600f0e302bd2.jar \

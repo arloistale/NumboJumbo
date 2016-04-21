@@ -9,6 +9,9 @@ NJ.MUSIC_VOLUME = 0.2;
 NJ.SOUNDS_VOLUME = 1;
 
 NJ.settings = {
+    // we store whether this is our first time playing or not
+    hasLoaded: false,
+
     music: true,
     sounds: true
 };
@@ -23,10 +26,10 @@ NJ.loadSettings = function() {
     }
 
     for(var key in NJ.settings) {
-        if(NJ.settings.hasOwnProperty(key)) {
+        if(key !== 'hasLoaded' && NJ.settings.hasOwnProperty(key)) {
             var rawItem = cc.sys.localStorage.getItem(key);
 
-            if(typeof NJ.settings[key] == 'boolean')
+            if(typeof NJ.settings[key] === 'boolean')
                 NJ.settings[key] = (rawItem == 'true');
             else
                 NJ.settings[key] = rawItem;

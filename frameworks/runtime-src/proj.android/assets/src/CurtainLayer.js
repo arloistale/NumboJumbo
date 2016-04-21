@@ -3,6 +3,9 @@ var CurtainLayer = cc.Layer.extend({
     totalLabel: null,
     lastScore: null,
     _levelBounds: null,
+    drainingComplete: null,
+    drainingPoints: null,
+    timePerDrain: null,
 
     ctor: function(levelBounds) {
         this._super();
@@ -10,6 +13,9 @@ var CurtainLayer = cc.Layer.extend({
 
         this._levelBounds = levelBounds;
         this.lastScore = 0;
+        this.drainingComplete = false;
+        this.drainingPoints = 0;
+        this.timePerDrain = 0;
 
         this.animate();
     },
@@ -25,23 +31,22 @@ var CurtainLayer = cc.Layer.extend({
             x: this._levelBounds.x + this._levelBounds.width/2,
             y: this._levelBounds.y + this._levelBounds.height/4 - this._levelBounds.height + 60
         });
-        //this.valueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.levelOverLabel.setColor(cc.color("#ffffff"));
         var moveAction2 = cc.moveTo(1, cc.p(this._levelBounds.x+this._levelBounds.width/2, this._levelBounds.y + this._levelBounds.height/4 + 60));
         this.levelOverLabel.runAction(moveAction2);
         this.addChild(this.levelOverLabel, 6);
 
-        this.totalLabel = cc.LabelTTF.create("Total Score: "+NJ.gameState.getScore(), b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.numbo);
+        this.totalLabel = cc.LabelTTF.create("Total Score: "+this.lastScore, b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.numbo);
         this.totalLabel.attr({
             scale: 1.0 / NJ.fontScalingFactor,
             anchorX: .5,
             anchorY: .5,
             x: this._levelBounds.x + this._levelBounds.width/2,
-            y: this._levelBounds.y + this._levelBounds.height/4 - this._levelBounds.height + 30
+            y: this._levelBounds.y + this._levelBounds.height/4 - this._levelBounds.height
         });
         //this.valueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.totalLabel.setColor(cc.color("#ffffff"));
-        var moveAction3 = cc.moveTo(1, cc.p(this._levelBounds.x+this._levelBounds.width/2, this._levelBounds.y + this._levelBounds.height/4 + 30));
+        var moveAction3 = cc.moveTo(1, cc.p(this._levelBounds.x+this._levelBounds.width/2, this._levelBounds.y + this._levelBounds.height/4));
         this.totalLabel.runAction(moveAction3);
         this.addChild(this.totalLabel, 6);
 
@@ -51,14 +56,41 @@ var CurtainLayer = cc.Layer.extend({
             anchorX: .5,
             anchorY: .5,
             x: this._levelBounds.x + this._levelBounds.width/2,
-            y: this._levelBounds.y + this._levelBounds.height/4 - this._levelBounds.height
+            y: this._levelBounds.y + this._levelBounds.height/4 - this._levelBounds.height + 30
         });
         //this.valueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.roundLabel.setColor(cc.color("#ffffff"));
-        var moveAction4 = cc.moveTo(1, cc.p(this._levelBounds.x+this._levelBounds.width/2, this._levelBounds.y + this._levelBounds.height/4));
+        var moveAction4 = cc.moveTo(1, cc.p(this._levelBounds.x+this._levelBounds.width/2, this._levelBounds.y + this._levelBounds.height/4 + 30));
         this.roundLabel.runAction(moveAction4);
         this.addChild(this.roundLabel, 6);
 
-        this.lastScore = NJ.gameState.getScore();
+        //this.lastScore = NJ.gameState.getScore();
+    },
+
+    initDrain: function() {
+        this.drainingPoints = NJ.gameState.getScore()-this.lastScore;
+        this.drainingComplete = false;
+        this.timePerDrain = .01;
+    },
+
+    drainPoints: function() {
+        this.drainingPoints = Math.max(0, this.drainingPoints - 5);
+        this.lastScore += 5;
+        this.totalLabel.setString("Total Score: " + this.lastScore);
+        this.roundLabel.setString("Round Score: " + this.drainingPoints);
+
+        if (NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.coinSound);
+
+        if (this.drainingPoints == 0)
+            this.drainingComplete = true;
+    },
+
+    isDrainingComplete: function() {
+        return this.drainingComplete;
+    },
+
+    getTimePerDrain: function() {
+        return this.timePerDrain;
     }
 });

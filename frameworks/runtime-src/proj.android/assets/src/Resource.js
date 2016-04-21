@@ -39,6 +39,9 @@ var res = {
 
     // Particles
     particleImage: resRoot + "Images/particle.png",
+    starImage: resRoot + "Images/star.png",
+    lineParticleOneImage: resRoot + "Images/lineparticle1.png",
+    lineParticleTwoImage: resRoot + "Images/lineparticle2.png",
 
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
@@ -78,6 +81,12 @@ var res = {
     applauseSound: resRoot + "Sounds/applause.wav",
     cheeringSound: resRoot + "Sounds/cheering.wav",
 
+    coinSound: resRoot + "Sounds/coin.wav",
+
+    cheerSound1: resRoot + "Sounds/cheer1.mp3",
+    cheerSound2: resRoot + "Sounds/cheer2.wav",
+    cheerSound3: resRoot + "Sounds/cheer3.wav",
+    cheerSound4: resRoot + "Sounds/cheer5.wav",
 
     // jsons
     jumboDistributionsJSON: resRoot + "jumbos.json",
@@ -135,6 +144,8 @@ var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, re
     res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
     res.progressSound9, res.progressSound10, res.progressSound11, res.progressSound12];
 
+var cheers = [res.cheerSound1, res.cheerSound2, res.cheerSound3, res.cheerSound4];
+
 // resources for ingame
 var g_game = [
     // UI
@@ -146,6 +157,9 @@ var g_game = [
 
     // Particles
     res.particleImage,
+    res.starImage,
+    res.lineParticleOneImage,
+    res.lineParticleTwoImage,
 
     // Scene
     res.powerupImage,
@@ -187,11 +201,13 @@ var g_game = [
     res.levelupSound,
     res.applauseSound,
     res.cheeringSound,
+    res.coinSound,
+
+    res.cheerSound1,
+    res.cheerSound2,
+    res.cheerSound3,
+    res.cheerSound4,
 
     // fonts
     res.mainFont.src
-/*
-    res.backBottom,
-    res.backMiddle,
-    res.backTop*/
 ];

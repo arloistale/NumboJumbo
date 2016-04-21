@@ -472,7 +472,7 @@ var NumboController = (function() {
 			var x = 0.2;
 			var LFactor = 1 / Math.pow(L, x);
 
-			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 2;
+			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 1.5;
 
 			var spawnTime = j * LFactor * BFactor;
 			//cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);

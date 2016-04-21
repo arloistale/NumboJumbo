@@ -27,11 +27,10 @@ var NumboHeaderLayer = (function() {
         // callback
         onPauseCallback: null,
 
-        ctor: function() {
+        ctor: function(size) {
             this._super();
 
-            var headerSize = cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar);
-            this.setContentSize(headerSize.width, headerSize.height);
+            this.setContentSize(size.width, size.height);
             this.attr({
                 x: cc.visibleRect.topLeft.x,
                 y: cc.visibleRect.topLeft.y
@@ -41,7 +40,7 @@ var NumboHeaderLayer = (function() {
             this.initProgressBar();
             this.initButtons();
 
-            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - headerSize.height));
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - size.height));
             this.runAction(moveTo);
         },
 

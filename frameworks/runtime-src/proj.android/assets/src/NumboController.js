@@ -58,7 +58,6 @@ var NumboController = (function() {
 			this._selectedBlocks = [];
 
             this._initLevel();
-            cc.log(NJ.gameState.getJumbo());
             this.updateSpawnDataFromJumbo(NJ.gameState.getJumbo());
 		},
 
@@ -179,19 +178,24 @@ var NumboController = (function() {
         // Spawning Functionality //
         ////////////////////////////
 
-		// drop block into random column with random value
-		// must define block size in terms of world coordinates
-		// returns dropped block
-		spawnDropRandomBlock: function(blockSize) {
-			cc.assert(!this.isGameOver(), "Can't drop any more blocks");
-
-			// Set up val/col
-			var col = NJ.weightedRandom(this._numboLevel.getColWeights());
-			var val = NJ.weightedRandom(this._spawnDistribution) * this._spawnScale;
-
+		// instantiate and drop block into specified column and value
+		// return dropped block
+		spawnDropBlock: function(block, col, val) {
 			if(NJ.settings.sounds) {
 				cc.audioEngine.playEffect(res.clickSound);
 			}
+
+			this.blocksDropped++;
+			return this._numboLevel.spawnDropBlock(block, col, val, null);
+		},
+
+		// drop block into random column with random value
+		// must define block size in terms of world coordinates
+		// returns dropped block
+		spawnDropRandomBlock: function(block) {
+			// Set up val/col
+			var col = NJ.weightedRandom(this._numboLevel.getColWeights());
+			var val = NJ.weightedRandom(this._spawnDistribution) * this._spawnScale;
 
 			var powerup = null;
 			if  (NJ.gameState.isPowerupMode() && this.nextBlockPowerup) {// 5% chance
@@ -203,6 +207,7 @@ var NumboController = (function() {
 			if (powerup) {
 				var path = this.meanderSearch(col, this._numboLevel.getNumBlocksInColumn(col),
 					meanderSearchCriteria.pathAtLeastTwoWithNoise);
+
 				path.shift();
 
 				if (path && path.length > 0) {
@@ -216,8 +221,8 @@ var NumboController = (function() {
 					powerup = false;
 				}
 			}
-			this.blocksDropped++;
-			return this._numboLevel.spawnDropBlock(blockSize, col, val, powerup);
+
+			return this.spawnDropBlock(block, col, val);
 		},
 
         updateSpawnDataFromJumbo: function(jumbo){
@@ -467,10 +472,10 @@ var NumboController = (function() {
 			var x = 0.2;
 			var LFactor = 1 / Math.pow(L, x);
 
-			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 2;
+			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 1.5;
 
 			var spawnTime = j * LFactor * BFactor;
-			cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);
+			//cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);
 			return spawnTime;
 		},
 

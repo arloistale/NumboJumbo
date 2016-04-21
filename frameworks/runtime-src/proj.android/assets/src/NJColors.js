@@ -16,6 +16,7 @@ NJ.themes = (function() {
         // light theme
         {
             backgroundColor: cc.color("#F0EBD0"),
+            levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#332F2A"),
             defaultButtonColor: cc.color("#6C6760"),
@@ -60,6 +61,7 @@ NJ.themes = (function() {
         // dark theme
         {
             backgroundColor: cc.color("#332F2A"),
+            levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#ffffff"),
             defaultButtonColor: cc.color("#424242"),
@@ -104,6 +106,7 @@ NJ.themes = (function() {
         // dark circle stroke theme
         {
             backgroundColor: cc.color("#332F2A"),
+            levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#ffffff"),
             defaultButtonColor: cc.color("#424242"),
@@ -148,6 +151,7 @@ NJ.themes = (function() {
         // dark geometric stroke theme
         {
             backgroundColor: cc.color("#332F2A"),
+            levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#ffffff"),
             defaultButtonColor: cc.color("#424242"),
@@ -201,6 +205,7 @@ NJ.themes = (function() {
 
         // here we expose properties of the current main theme
         backgroundColor: main.backgroundColor,
+        levelColor: main.levelColor,
 
         defaultLabelColor: main.defaultLabelColor,
         defaultButtonColor: main.defaultButtonColor,

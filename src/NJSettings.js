@@ -26,10 +26,10 @@ NJ.loadSettings = function() {
     }
 
     for(var key in NJ.settings) {
-        if(NJ.settings.hasOwnProperty(key)) {
+        if(key !== 'hasLoaded' && NJ.settings.hasOwnProperty(key)) {
             var rawItem = cc.sys.localStorage.getItem(key);
 
-            if(typeof NJ.settings[key] == 'boolean')
+            if(typeof NJ.settings[key] === 'boolean')
                 NJ.settings[key] = (rawItem == 'true');
             else
                 NJ.settings[key] = rawItem;

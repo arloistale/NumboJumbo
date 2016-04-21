@@ -120,24 +120,33 @@ var NumboBlock = (function() {
 
             this.updateTheme();
 
-            this._particleSystem = new cc.ParticleGalaxy();
+            this._particleSystem = new cc.ParticleExplosion();
             this.addChild(this._particleSystem, 500); // behind UI elements
             this.initParticleSystem();
         },
-
 
         //////////////////////////////////////
         // block's internal particle system //
         //////////////////////////////////////
         initParticleSystem:function(){
-            var texture = cc.textureCache.addImage(res.particleImage);
+            var texture = cc.textureCache.addImage(res.blockImage);
             this._particleSystem.setTexture(texture);
-            this._particleSystem.setStartSize(2);
-            this._particleSystem.setEndSize(4);
+            //this._particleSystem.setParticleCount(10);
+            this._particleSystem.setStartSize(10);
+            this._particleSystem.setEmissionRate(100);
+            this._particleSystem.setEndSize(3);
             this._particleSystem.setPosition(this.width/2, this.height/2);
             this._particleSystem.setStartColor(this._backgroundSprite.getColor());
-            this._particleSystem.setVisible(false);
+            this._particleSystem.setStartColorVar(this._backgroundSprite.getColor());
+            this._particleSystem.setEndColor(this._backgroundSprite.getColor());
+            this._particleSystem.setEndColorVar(this._backgroundSprite.getColor());
             this._particleSystem.setPositionType(1);
+            this._particleSystem.setRadialAccel(-60);
+            this._particleSystem.setLife(0.5);
+            this._particleSystem.setLifeVar(0.1);
+
+            this._particleSystem.stopSystem();
+            this._particleSystem.setVisible(false);
         },
 
         //////////////////
@@ -160,29 +169,27 @@ var NumboBlock = (function() {
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
         kill: function() {
             var block = this;
-            var growAction = cc.scaleTo(0.25, 1.5, 1.5).easing(cc.easeExponentialOut());
-            var fadeAction = cc.fadeOut(0.25);
-            var shrinkAction = cc.scaleTo(0.25, 0.1, 0.1).easing(cc.easeExponentialOut());
-            var delayAction = cc.delayTime(1.0);
+
+            var growAction = cc.scaleTo(0.15, 1.5, 1.5);
+            var shrinkAction = cc.scaleTo(0.05, 0.0, 0.0);
+            var delayAction = cc.delayTime(1.25);
+
+            var invisibleAction = cc.callFunc(function() {
+                block._backgroundSprite.setVisible(false);
+                block._valueLabel.setVisible(false);
+                block.setScale(1);
+            });
 
             var removeAction = cc.callFunc(function() {
                 block.removeFromParent(true);
             });
 
-            var startParticleAction = cc.callFunc(function(){
+            var startParticleAction = cc.callFunc(function() {
                 block._particleSystem.setVisible(true);
+                block._particleSystem.resetSystem();
             });
 
-            var stopParticleAction = cc.callFunc(function(){
-                block._particleSystem.setVisible(false);
-            });
-
-            this.runAction(cc.sequence( growAction, startParticleAction, delayAction, stopParticleAction, removeAction));
-            this._backgroundSprite.runAction(fadeAction);
-            //this._valueLabel.runAction(fadeAction);
-
-            this._backgroundSprite.release();
-            this._circleNode.release();
+            this.runAction(cc.sequence(growAction, shrinkAction, invisibleAction, startParticleAction, delayAction, removeAction));
         },
 
         // highlight the sprite indicating selection

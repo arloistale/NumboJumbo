@@ -598,6 +598,8 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/AppDelegate.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/network/jsb_websocket.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/network/jsb_socketio.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/platform/android/CCJavascriptJavaBridge.h \
+ jni/../../Classes/PluginReviewJS.hpp \
+ jni/../../Classes/PluginReviewJSHelper.h \
  jni/../../Classes/PluginFacebookJS.hpp \
  jni/../../Classes/PluginFacebookJSHelper.h \
  jni/../../Classes/PluginGoogleAnalyticsJS.hpp
@@ -1799,6 +1801,10 @@ jni/../../Classes/AppDelegate.h:
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/network/jsb_socketio.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/platform/android/CCJavascriptJavaBridge.h:
+
+jni/../../Classes/PluginReviewJS.hpp:
+
+jni/../../Classes/PluginReviewJSHelper.h:
 
 jni/../../Classes/PluginFacebookJS.hpp:
 

@@ -49,20 +49,22 @@ var ProgressBarLayer = cc.Layer.extend({
 
         this._barNode.clear();
 
-        if(progress == 0)
+        // TODO: NOT good
+        if(progress == 0) {
+            this._barNode.drawPoly([cc.p(x, y), cc.p(x, y),
+                    cc.p(x, y), cc.p(x, y)],
+                cc.color(255, 255, 255, 0), 0, cc.color(255, 255, 255, 0));
+
             return;
+        }
 
         var progW = progress * w;
 
-        var newColor = cc.color(0,0,0,100);
-        if(NJ.gameState.getStage() == "normal")
-            newColor = cc.color("#3F51B5");
-        else if(NJ.gameState.getStage() == "bonus")
-            newColor = cc.color(255, 255, 0, 255);
+        var newColor = cc.color("#3F51B5");
 
         this._barNode.drawPoly([cc.p(x, y), cc.p(x + progW, y),
             cc.p(x + progW, y + h), cc.p(x, y + h)],
-            newColor, 0, cc.color("#000000"));
+            newColor, 0, cc.color(255, 255, 255, 0));
 
         // pulse the bar a bit
         var scaleAction = cc.scaleTo(0.5, 1.02, 1.02).easing(cc.easeElasticOut());
