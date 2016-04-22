@@ -14,25 +14,25 @@
         { "key": 2, "weight": 75 },
         { "key": 3, "weight": 50 },
         { "key": 4, "weight": 50 },
-        { "key": 5, "weight": 45 },
-        {"key": 6, "weight": 40},
-        {"key": 7, "weight": 35},
-        {"key": 8, "weight": 30},
-        {"key": 9, "weight": 25}
+        { "key": 5, "weight": 45 }
       ],
 
       "thresholdNumbers": {
-        "5": [{"key": 10, "weight": 20}],
-        "10": [{"key": 11, "weight": 10}],
-        "15": [{"key": 12, "weight": 10}],
-        "20": [{"key": 13, "weight": 10}],
-        "25": [{"key": 14, "weight": 10}],
-        "30": [{"key": 15, "weight": 10}],
-        "35": [{"key": 16, "weight": 5}],
-        "40": [{"key": 17, "weight": 5}],
-        "45": [{"key": 18, "weight": 5}],
-        "50": [{"key": 19, "weight": 5}],
-        "55": [{"key": 20, "weight": 10}]
+        "2": [{"key": 6, "weight": 40}],
+        "3": [{"key": 7, "weight": 35}],
+        "4": [{"key": 8, "weight": 30}],
+        "5": [{"key": 9, "weight": 25}],
+        "6": [{"key": 10, "weight": 20}],
+        "7": [{"key": 11, "weight": 10}],
+        "8": [{"key": 12, "weight": 10}],
+        "9": [{"key": 13, "weight": 10}],
+        "10": [{"key": 14, "weight": 10}],
+        "11": [{"key": 15, "weight": 10}],
+        "12": [{"key": 16, "weight": 5}],
+        "13": [{"key": 17, "weight": 5}],
+        "14": [{"key": 18, "weight": 5}],
+        "15": [{"key": 19, "weight": 5}],
+        "16": [{"key": 20, "weight": 10}]
       }
     },
 
@@ -43,7 +43,7 @@
       "color": "#00E676",
       "blockColorString": "neon",
       "difficulty": "Normal",
-      "spawnTime": 1.0,
+      "spawnTime": 0.75,
       "weight": 2.0,
       "numberList": [
         {

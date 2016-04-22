@@ -71,25 +71,23 @@ var NumboController = (function() {
 		/////////////////////////////
 
 		// select a block in the level, adding it to the selectedBlocks collection
-		// returns the new selected blocks list
+		// returns the block that was selected if any
 		selectBlock: function(col, row) {
 			cc.assert(0 <= col && col < NJ.NUM_COLS && 0 <= row && row < NJ.NUM_ROWS, "Invalid coords");
 
 			var block = this._numboLevel.getBlock(col, row);
 			var lastBlock = null;
-			var deletedBlock = null;
 
 			if (block === null)
 				return null;
 
 			if(this._selectedBlocks.length >= 2) {
 				if(block == this._selectedBlocks[this._selectedBlocks.length - 2]) {
-					deletedBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
-					deletedBlock.clearHighlight();
 					this._selectedBlocks.splice(this._selectedBlocks.length - 1, 1);
 					if(NJ.settings.sounds)
 						cc.audioEngine.playEffect(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
-					return this._selectedBlocks;
+
+					return null;
 				}
 			}
 
@@ -104,12 +102,13 @@ var NumboController = (function() {
 					return null;
 			}
 
+			// TODO: should be done in gamelayer, we make the block highlight itself here for convenience
 			this._selectedBlocks.push(block);
 
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(plops[Math.min(this._selectedBlocks.length, plops.length-1)]);
 
-			return this._selectedBlocks;
+			return block;
 		},
 
 		// deselect a single block, removing its highlight
@@ -121,8 +120,6 @@ var NumboController = (function() {
 			if(!block)
 				return;
 
-			block.clearHighlight();
-
 			var index = this._selectedBlocks.indexOf(block);
 			if(index >= 0)
 				this._selectedBlocks.splice(index, 1);
@@ -130,9 +127,6 @@ var NumboController = (function() {
 
 		// deselect all currently selected blocks, removing their highlights
 		deselectAllBlocks: function() {
-			for (var i = 0; i < this._selectedBlocks.length; ++i)
-				this._selectedBlocks[i].clearHighlight();
-
 			this._selectedBlocks = [];
 		},
 
@@ -472,7 +466,7 @@ var NumboController = (function() {
 			var x = 0.2;
 			var LFactor = 1 / Math.pow(L, x);
 
-			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 1.5;
+			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 2;
 
 			var spawnTime = j * LFactor * BFactor;
 			//cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);

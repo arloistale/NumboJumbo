@@ -133,9 +133,6 @@ var NumboGameLayer = (function() {
             // Begin scheduling block drops.
             this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS * .4));
             this.schedule(this.scheduleSpawn, 0.1 * 20);
-
-            // begin scheduling hint jiggles
-            this.schedule(this.jiggleHintBlocks, 5);
         },
 
 		// Initialize input depending on the device.
@@ -292,7 +289,7 @@ var NumboGameLayer = (function() {
                 case slides.intro:
                     centerCol = Math.floor((NJ.NUM_COLS - 1) / 2);
 
-                    this.runAction(cc.sequence(cc.delayTime(4),
+                    this.runAction(cc.sequence(cc.delayTime(5.5),
                         cc.callFunc(function() {
                             that.spawnDropBlock(centerCol - 1, 2);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
@@ -308,9 +305,9 @@ var NumboGameLayer = (function() {
 
                     this.runAction(cc.sequence(cc.delayTime(4),
                         cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol - 1, 1);
+                            that.spawnDropBlock(centerCol - 1, 3);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol, 3);
+                            that.spawnDropBlock(centerCol, 5);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
                             that.spawnDropBlock(centerCol + 1, 2);
                         })
@@ -333,7 +330,10 @@ var NumboGameLayer = (function() {
                             that.spawnDropBlock(centerCol, 5);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
                             that.spawnDropBlock(centerCol + 1, 2);
-                        })
+                        }), cc.delayTime(0.1), cc.callFunc(function() {
+							// begin scheduling hint jiggles
+							that.schedule(that.jiggleHintBlocks, 5);
+						})
                     ));
 
                     break;
@@ -344,17 +344,15 @@ var NumboGameLayer = (function() {
 
                     this.runAction(cc.sequence(cc.delayTime(4),
                         cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol - 3, 1);
+                            that.spawnDropBlock(centerCol - 2, 1);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol - 2, 4);
-                        }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol - 1, 1);
+                            that.spawnDropBlock(centerCol - 1, 4);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
                             that.spawnDropBlock(centerCol, 1);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol + 1, 3);
+                            that.spawnDropBlock(centerCol + 1, 1);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol + 2, 10);
+                            that.spawnDropBlock(centerCol + 2, 7);
                         })
                     ));
 
@@ -654,15 +652,23 @@ var NumboGameLayer = (function() {
 				var touchCoords = convertPointToLevelCoords(touchPosition);
 
 				if (touchCoords) {
-					var selectedBlocks = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+					var selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+					var selectedBlocks = this._numboController.getSelectedBlocks();
 
-					if (selectedBlocks) {
+					// we know there is at least 1 selected block
+					if (selectedBlocks.length) {
 						var selectedBlockSum = 0;
 						var block;
 						for (i = 0; i < selectedBlocks.length; i++) {
 							block = selectedBlocks[i];
 							selectedBlockSum += block.val;
 						}
+
+						var currColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum - 1);
+
+						// if selected block was returned then we have a new selected block deal with
+						if(selectedBlock)
+							selectedBlock.highlight();
 
 						this.redrawSelectedLines(selectedBlocks);
 					}
@@ -684,7 +690,7 @@ var NumboGameLayer = (function() {
 				var currLength = 0;
 				var currPosition = null;
 
-				var touchCoords, selectedBlocks, lastSelectedBlock;
+				var touchCoords, selectedBlock;
 
 				for (var i = 0; currLength < touchDistance; i++) {
 					currPosition = cc.pAdd(this._lastTouchPosition, cc.pMult(touchDirection, currLength));
@@ -692,7 +698,7 @@ var NumboGameLayer = (function() {
 					touchCoords = convertPointToLevelCoords(currPosition);
 
 					if (touchCoords)
-						selectedBlocks = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+						selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 
 					currLength = testLength * (i + 1);
 				}
@@ -703,14 +709,13 @@ var NumboGameLayer = (function() {
 				if (touchCoords) {
 					var lastCoords = touchCoords;
 
-					selectedBlocks = this._numboController.selectBlock(lastCoords.col, lastCoords.row);
+					selectedBlock = this._numboController.selectBlock(lastCoords.col, lastCoords.row);
 				}
 
-				// only
-				selectedBlocks = selectedBlocks || this._numboController.getSelectedBlocks();
+				var selectedBlocks = this._numboController.getSelectedBlocks();
 
 				// update graphics for selected blocks
-				if (selectedBlocks) {
+				if (selectedBlocks.length) {
 					var selectedBlockSum = 0;
 					var block;
 					for (i = 0; i < selectedBlocks.length; i++) {
@@ -718,18 +723,21 @@ var NumboGameLayer = (function() {
 						selectedBlockSum += block.val;
 					}
 
+					var currColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum - 1);
+
+					// if selected block was returned then we have a new selected block deal with
+					if(selectedBlock)
+						selectedBlock.highlight();
+
 					this.redrawSelectedLines(selectedBlocks);
 
-					lastSelectedBlock = selectedBlocks[selectedBlocks.length - 1];
 					// draw a line from last selected to our finger if we are outside of the range of the block
-					if (lastSelectedBlock) {
-						var lastBlockPos = convertLevelCoordsToPoint(lastSelectedBlock.col, lastSelectedBlock.row);
-						var diff = cc.pSub(touchPosition, lastBlockPos);
-						var radius = 0.5 * _blockSize.width;
-						if (cc.pDot(diff, diff) >= radius * radius) {
-							this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(lastSelectedBlock.col, lastSelectedBlock.row),
-								touchPosition, 3, NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum - 1));
-						}
+					var lastBlockPos = convertLevelCoordsToPoint(block.col, block.row);
+					var diff = cc.pSub(touchPosition, lastBlockPos);
+					var radius = 0.5 * _blockSize.width;
+					if (cc.pDot(diff, diff) >= radius * radius) {
+						this._selectedLinesNode.drawSegment(convertLevelCoordsToPoint(block.col, block.row),
+							touchPosition, 3, currColor);
 					}
 				}
 
@@ -801,7 +809,7 @@ var NumboGameLayer = (function() {
                     });*/
 
                     if (NJ.settings.sounds)
-                        cc.audioEngine.playEffect(cheers[Math.floor(Math.random()*cheers.length)]);
+                        cc.audioEngine.playEffect(cheers[Math.floor(Math.random() * cheers.length)]);
                 }
 
                 // launch feedback for gained score
@@ -829,12 +837,7 @@ var NumboGameLayer = (function() {
                     this.closeCurtain();
                     this.unschedule(this.scheduleSpawn);
                     this.schedule(this.initCurtainDrain, 2.5);
-
-                    // Display "Level x"
-                    this._feedbackLayer.launchFallingBanner({
-                        title: "Level " + NJ.gameState.getLevel()
-                    });
-
+					
                     // Play level up sound instead
                     if (NJ.settings.sounds)
                         activationSound = res.levelupSound;

@@ -78,14 +78,17 @@ var TutorialLayer = (function() {
 
                 switch(that._currSlide) {
                     case slides.intro:
-                        that._titleLabel.setString("Welcome to Numbo Jumbo.");
-                        that._helperLabel.setString("Swipe something!");
+                        that._titleLabel.setString("\"I don't believe in mathematics.\"");
+                        that._helperLabel.setString("- Albert Einstein");
 
                         that._menu.alignItemsVerticallyWithPadding(10);
 
-                        that._titleLabel.runAction(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
+                        that._titleLabel.runAction(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(4), cc.fadeTo(0.25, 0)));
+                        that._helperLabel.runAction(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
-                        that.runAction(cc.sequence(cc.delayTime(8), cc.callFunc(function() {
+                        that.runAction(cc.sequence(cc.delayTime(7), cc.callFunc(function() {
+                            that._helperLabel.setString("Swipe the numbers!");
+                            that._menu.alignItemsVerticallyWithPadding(10);
                             that._helperLabel.setOpacity(0);
                             that._helperLabel.runAction(cc.sequence(cc.fadeTo(0.25, 255)));
                         })));
@@ -94,8 +97,8 @@ var TutorialLayer = (function() {
 
                     case slides.subtraction:
 
-                        that._titleLabel.setString("Nice. You made something!");
-                        that._helperLabel.setString("This works too.");
+                        that._titleLabel.setString("Nice. You made a 3!");
+                        that._helperLabel.setString("The order doesn't matter.");
 
                         that._menu.alignItemsVerticallyWithPadding(10);
 
@@ -109,8 +112,8 @@ var TutorialLayer = (function() {
                         break;
                     case slides.more:
 
-                        that._titleLabel.setString("Awesome. You made another thing!");
-                        that._helperLabel.setString("Try something cooler.");
+                        that._titleLabel.setString("Awesome. You made a 5!");
+                        that._helperLabel.setString("Diagonal moves work too.");
 
                         that._menu.alignItemsVerticallyWithPadding(10);
 
@@ -125,8 +128,8 @@ var TutorialLayer = (function() {
 
                     case slides.wombo:
 
-                        that._titleLabel.setString("Beautiful. You made many things!");
-                        that._helperLabel.setString("One last thing.");
+                        that._titleLabel.setString("Beautiful.");
+                        that._helperLabel.setString("One last thing...");
 
                         that._menu.alignItemsVerticallyWithPadding(10);
 

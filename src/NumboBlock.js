@@ -8,6 +8,8 @@ Definition for falling blocks.
 
 var NumboBlock = (function() {
 
+    var _backgroundScale = null;
+
     var blink = function() {
         this._colorIndex += 1;
         var blockSize = this.getContentSize();
@@ -50,8 +52,17 @@ var NumboBlock = (function() {
             this.setTag(NJ.tags.PAUSABLE);
 
             this._backgroundSprite = new cc.Sprite(res.blockImage);
-            var backgroundSize = this._backgroundSprite.getContentSize();
-            this._backgroundSprite.setScale(blockSize.width / backgroundSize.width * 1.2, blockSize.height / backgroundSize.height * 1.2);
+
+            // if first block initialize backgroundSize
+            if(!_backgroundScale) {
+                _backgroundSize = this._backgroundSprite.getContentSize();
+                _backgroundScale = {
+                    x: blockSize.width / _backgroundSize.width * 1.2,
+                    y:blockSize.height / _backgroundSize.height * 1.2
+                }
+            }
+
+            this._backgroundSprite.setScale(_backgroundScale.x, _backgroundScale.y);
             this._backgroundSprite.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -64,9 +75,7 @@ var NumboBlock = (function() {
             this._circleNode.retain();
 
             // initialize highlight
-            this._highlightSprite = new cc.Sprite(res.glowImage);
-            var highlightSize = this._highlightSprite.getContentSize();
-            this._highlightSprite.setScale(blockSize.width / highlightSize.width * 1.1, blockSize.height / highlightSize.height * 1.1);
+            this._highlightSprite = new cc.Sprite(res.blockImage);
             this._highlightSprite.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -121,7 +130,7 @@ var NumboBlock = (function() {
             this.updateTheme();
 
             this._particleSystem = new cc.ParticleExplosion();
-            this.addChild(this._particleSystem, 500); // behind UI elements
+            this.addChild(this._particleSystem, -3); // behind UI elements
             this.initParticleSystem();
         },
 
@@ -170,15 +179,7 @@ var NumboBlock = (function() {
         kill: function() {
             var block = this;
 
-            var growAction = cc.scaleTo(0.15, 1.5, 1.5);
-            var shrinkAction = cc.scaleTo(0.05, 0.0, 0.0);
             var delayAction = cc.delayTime(1.25);
-
-            var invisibleAction = cc.callFunc(function() {
-                block._backgroundSprite.setVisible(false);
-                block._valueLabel.setVisible(false);
-                block.setScale(1);
-            });
 
             var removeAction = cc.callFunc(function() {
                 block.removeFromParent(true);
@@ -189,24 +190,36 @@ var NumboBlock = (function() {
                 block._particleSystem.resetSystem();
             });
 
-            this.runAction(cc.sequence(growAction, shrinkAction, invisibleAction, startParticleAction, delayAction, removeAction));
+            this._highlightSprite.stopAllActions();
+            this._highlightSprite.setVisible(false);
+
+            this._backgroundSprite.runAction(cc.sequence(cc.scaleBy(0.15, 1.5, 1.5), cc.scaleBy(0.05, 0, 0)));
+            this._valueLabel.runAction(cc.sequence(cc.scaleBy(0.15, 1.5, 1.5), cc.scaleBy(0.05, 0, 0)));
+            this.runAction(cc.sequence(startParticleAction, delayAction, removeAction));
         },
 
         // highlight the sprite indicating selection
         highlight: function(color) {
-            this._highlightSprite.setColor(color);
-            if(!this._highlightSprite.isVisible())
-                this._highlightSprite.setVisible(true);
-        },
 
-        // clear sprite highlight
-        clearHighlight: function() {
-            this._highlightSprite.setVisible(false);
+            var that = this;
+
+            if(color)
+                this._highlightSprite.setColor(color);
+
+            this._highlightSprite.setVisible(true);
+            this._highlightSprite.setOpacity(212);
+
+            this._highlightSprite.setScale(_backgroundScale.x, _backgroundScale.y);
+
+            this._highlightSprite.runAction(cc.scaleBy(0.25, 2, 2));
+            this._highlightSprite.runAction(cc.sequence(cc.fadeTo(0.25, 0), cc.callFunc(function() {
+                that._highlightSprite.setVisible(false);
+            })));
         },
 
         jiggleSprite: function() {
             var scaleDownAction = cc.scaleTo(0.2, 0.5);
-            var scaleUpAction = cc.scaleTo(0.2, 1.0);
+            var scaleUpAction = cc.scaleTo(0.2, 1);
 
             this.runAction(cc.sequence(scaleDownAction, scaleUpAction, scaleDownAction, scaleUpAction));
         },
@@ -219,6 +232,8 @@ var NumboBlock = (function() {
 
             var chosen = NJ.getColor(NJ.gameState.getJumbo().blockColorString, this.val - 1);
             chosen = chosen || cc.color("#ffffff");
+
+            this._highlightSprite.setColor(chosen);
 
             if(isFilled) {
                 if(this.children.indexOf(this._backgroundSprite) < 0)

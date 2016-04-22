@@ -5,6 +5,7 @@ var CurtainLayer = cc.Layer.extend({
     _levelBounds: null,
     drainingComplete: null,
     drainingPoints: null,
+    _drainAmount: 0,
     timePerDrain: null,
 
     ctor: function(levelBounds) {
@@ -68,14 +69,15 @@ var CurtainLayer = cc.Layer.extend({
     },
 
     initDrain: function() {
-        this.drainingPoints = NJ.gameState.getScore()-this.lastScore;
+        this.drainingPoints = NJ.gameState.getScore() - this.lastScore;
+        this._drainAmount = Math.ceil(this.drainingPoints * 0.025);
         this.drainingComplete = false;
-        this.timePerDrain = .01;
+        this.timePerDrain = 0.025;
     },
 
     drainPoints: function() {
-        this.drainingPoints = Math.max(0, this.drainingPoints - 5);
-        this.lastScore += 5;
+        this.drainingPoints = Math.max(0, this.drainingPoints - this._drainAmount);
+        this.lastScore = Math.min(NJ.gameState.getScore(), this.lastScore + this._drainAmount);
         this.totalLabel.setString("Total Score: " + this.lastScore);
         this.roundLabel.setString("Round Score: " + this.drainingPoints);
 

@@ -14,8 +14,8 @@ if(!cc.sys.isNative) {
 var res = {
 
     mainFont: {
-        name: "OpenSansRegular",
-        src: resRoot + "Fonts/OpenSansRegular.ttf"
+        name: "NunitoLight",
+        src: resRoot + "Fonts/NunitoLight.ttf"
     },
 
 	// UI
@@ -32,21 +32,13 @@ var res = {
 
     // ingame
     backgroundImage: resRoot + "Images/normal/middle.png",
-    glowImage: resRoot + "Images/Glow.png",
     blockImage: resRoot + "Images/block.png",
     powerupImage: resRoot + "Images/powerup.png",
     alertImage: resRoot + "Images/alertOverlay.png",
 
-    // Particles
-    particleImage: resRoot + "Images/particle.png",
-    starImage: resRoot + "Images/star.png",
-    lineParticleOneImage: resRoot + "Images/lineparticle1.png",
-    lineParticleTwoImage: resRoot + "Images/lineparticle2.png",
-
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
-    electroSwingTrack: resRoot + "Sounds/Caravan_Palace_-_Clash.mp3",
     tickSound: resRoot + "Sounds/tick.mp3",
     plipSound: resRoot + "Sounds/plipSound.wav",
     plopSound: resRoot + "Sounds/Plop.wav",
@@ -73,8 +65,6 @@ var res = {
     progressSound8: resRoot + "Sounds/progress8.wav",
     progressSound9: resRoot + "Sounds/progress9.wav",
     progressSound10: resRoot + "Sounds/progress10.wav",
-    progressSound11: resRoot + "Sounds/progress11.wav",
-    progressSound12: resRoot + "Sounds/progress12.wav",
 
     levelupSound: resRoot + "Sounds/levelup.wav",
 
@@ -83,21 +73,11 @@ var res = {
 
     coinSound: resRoot + "Sounds/coin.wav",
 
-    cheerSound1: resRoot + "Sounds/cheer1.mp3",
-    cheerSound2: resRoot + "Sounds/cheer2.wav",
-    cheerSound3: resRoot + "Sounds/cheer3.wav",
-    cheerSound4: resRoot + "Sounds/cheer5.wav",
+    cheerSound1: resRoot + "Sounds/cheer1.wav",
+    cheerSound3: resRoot + "Sounds/cheer5.mp3",
 
     // jsons
-    jumboDistributionsJSON: resRoot + "jumbos.json",
-
-    /*
-    backBG: resRoot + "Images/normal/BG.png",
-    backBottom: resRoot + "Images/normal/bottom.png",
-    backMiddle: resRoot + "Images/normal/middle.png",
-    backTop: resRoot + "Images/normal/Top.png",
-    backVeryTop: resRoot + "Images/normal/verytop.png",
-    backStars: resRoot + "Images/normal/stars.png"*/
+    jumboDistributionsJSON: resRoot + "jumbos.json"
 };
 
 // returns proper font name based on platform
@@ -108,7 +88,6 @@ var b_getFontName = function(fontRes) {
 
     if(cc.sys.os == cc.sys.OS_ANDROID)
         return fontRes.src;
-
 
     return fontRes.name;
 };
@@ -142,9 +121,9 @@ var plops = [res.plopSound, res.plopSound4, res.plopSound5,
 
 var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, res.progressSound4,
     res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
-    res.progressSound9, res.progressSound10, res.progressSound11, res.progressSound12];
+    res.progressSound9, res.progressSound10];
 
-var cheers = [res.cheerSound1, res.cheerSound2, res.cheerSound3, res.cheerSound4];
+var cheers = [res.cheerSound1, res.cheerSound3];
 
 // resources for ingame
 var g_game = [
@@ -155,15 +134,8 @@ var g_game = [
     res.pauseImage,
     res.retryImage,
 
-    // Particles
-    res.particleImage,
-    res.starImage,
-    res.lineParticleOneImage,
-    res.lineParticleTwoImage,
-
     // Scene
     res.powerupImage,
-    res.glowImage,
     res.blockImage,
     res.alertImage,
 
@@ -195,8 +167,6 @@ var g_game = [
     res.progressSound8,
     res.progressSound9,
     res.progressSound10,
-    res.progressSound11,
-    res.progressSound12,
 
     res.levelupSound,
     res.applauseSound,
@@ -204,9 +174,7 @@ var g_game = [
     res.coinSound,
 
     res.cheerSound1,
-    res.cheerSound2,
     res.cheerSound3,
-    res.cheerSound4,
 
     // fonts
     res.mainFont.src
