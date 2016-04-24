@@ -6,12 +6,6 @@ var NJ = NJ || {};
 
 NJ.themes = (function() {
 
-    var _strokeTypes = {
-        none: 0,
-        circle: 1,
-        geometric: 2
-    };
-
     var data = [
         // light theme
         {
@@ -25,9 +19,6 @@ NJ.themes = (function() {
             jumbosButtonColor: cc.color("#4AD87D"),
             loginButtonColor: cc.color("#5D74C9"),
             settingsButtonColor: cc.color("#33A5BA"),
-
-            isBlocksFilled: true,
-            strokeType: _strokeTypes.none,
 
             blockColors: [
                 // aqua
@@ -71,99 +62,6 @@ NJ.themes = (function() {
             loginButtonColor: cc.color("#5D74C9"),
             settingsButtonColor: cc.color("#33A5BA"),
 
-            isBlocksFilled: true,
-            strokeType: _strokeTypes.none,
-
-            blockColors: [
-                // aqua
-                cc.color("#33A5BA"),
-
-                // warm yellow
-                cc.color("#F9D74A"),
-
-                // pinkish red
-                cc.color("#E81B58"),
-
-                // warm teal
-                cc.color("#52C9A8"),
-
-                // intense blue
-                cc.color("#5D74C9"),
-
-                // orange
-                cc.color("#F88A2D"),
-
-                // lime
-                cc.color("#C7EA2B"),
-
-                // violent red
-                cc.color("#F02A31"),
-
-                // warm purple
-                cc.color("#C658AC")
-            ]
-        },
-        // dark circle stroke theme
-        {
-            backgroundColor: cc.color("#332F2A"),
-            levelColor: cc.color("#6C6760"),
-
-            defaultLabelColor: cc.color("#ffffff"),
-            defaultButtonColor: cc.color("#424242"),
-
-            playButtonColor: cc.color("#424242"),
-            jumbosButtonColor: cc.color("#4AD87D"),
-            loginButtonColor: cc.color("#5D74C9"),
-            settingsButtonColor: cc.color("#33A5BA"),
-
-            isBlocksFilled: false,
-            strokeType: _strokeTypes.circle,
-
-            blockColors: [
-                // aqua
-                cc.color("#33A5BA"),
-
-                // warm yellow
-                cc.color("#F9D74A"),
-
-                // pinkish red
-                cc.color("#E81B58"),
-
-                // warm teal
-                cc.color("#52C9A8"),
-
-                // intense blue
-                cc.color("#5D74C9"),
-
-                // orange
-                cc.color("#F88A2D"),
-
-                // lime
-                cc.color("#C7EA2B"),
-
-                // violent red
-                cc.color("#F02A31"),
-
-                // warm purple
-                cc.color("#C658AC")
-            ]
-        },
-        // dark geometric stroke theme
-        {
-            backgroundColor: cc.color("#332F2A"),
-            levelColor: cc.color("#6C6760"),
-
-            defaultLabelColor: cc.color("#ffffff"),
-            defaultButtonColor: cc.color("#424242"),
-
-            playButtonColor: cc.color("#424242"),
-            jumbosButtonColor: cc.color("#4AD87D"),
-            loginButtonColor: cc.color("#5D74C9"),
-            settingsButtonColor: cc.color("#33A5BA"),
-
-            isBlocksFilled: false,
-            strokeType: _strokeTypes.geometric,
-
             blockColors: [
                 // aqua
                 cc.color("#33A5BA"),
@@ -200,9 +98,6 @@ NJ.themes = (function() {
     var _themeIndex = 0;
 
     return {
-        // expose the stroketypes enum
-        strokeTypes: _strokeTypes,
-
         // here we expose properties of the current main theme
         backgroundColor: main.backgroundColor,
         levelColor: main.levelColor,
@@ -214,9 +109,6 @@ NJ.themes = (function() {
         jumbosButtonColor: main.jumbosButtonColor,
         loginButtonColor: main.loginButtonColor,
         settingsButtonColor: main.settingsButtonColor,
-
-        isBlocksFilled: main.isBlocksFilled,
-        strokeType: main.strokeType,
 
         blockColors: main.blockColors,
 
@@ -238,85 +130,6 @@ NJ.themes = (function() {
         }
     }
 }());
-
-// shades of purple, from white through prurples down to black, then in reverse
-// from http://www.tutorialrepublic.com/html-reference/html-color-picker.php
-// used for showing which blocks are powerups
-NJ.purpleColors = [
-    cc.color("#000000"),
-    cc.color("#0D0511"),
-    cc.color("#1A0A22"),
-    cc.color("#270F33"),
-    cc.color("#351445"),
-    cc.color("#421A56"),
-    cc.color("#4F1F67"),
-    cc.color("#5D2479"),
-    cc.color("#6A298A"),
-    cc.color("#772E9B"),
-    cc.color("#8534AD"),
-    cc.color("#9148B5"),
-    cc.color("#9D5CBD"),
-    cc.color("#A970C5"),
-    cc.color("#B585CD"),
-    cc.color("#C299D6"),
-    cc.color("#CEADDE"),
-    cc.color("#DAC2E6"),
-    cc.color("#E6D6EE"),
-    cc.color("#F2EAF6"),
-    cc.color("#FFFFFF"), // black
-    cc.color("#F2EAF6"),
-    cc.color("#E6D6EE"),
-    cc.color("#DAC2E6"),
-    cc.color("#CEADDE"),
-    cc.color("#C299D6"),
-    cc.color("#B585CD"),
-    cc.color("#A970C5"),
-    cc.color("#9D5CBD"),
-    cc.color("#9148B5"),
-    cc.color("#8534AD"),
-    cc.color("#772E9B"),
-    cc.color("#6A298A"),
-    cc.color("#5D2479"),
-    cc.color("#4F1F67"),
-    cc.color("#421A56"),
-    cc.color("#351445"),
-    cc.color("#270F33"),
-    cc.color("#1A0A22"),
-    cc.color("#0D0511"),
-    cc.color("#000000")
-];
-
-// pastels, pinks & purples
-// from http://www.colourlovers.com/palette/4206184/I_Want_Candy
-NJ.pastelPinkColors = [
-    cc.color("E3E3BD"),
-    cc.color("E5B5AB"),
-    cc.color("C5EDD3"),
-    cc.color("C28897"),
-    cc.color("B8566D"),
-];
-
-// neon palette
-// from http://www.colourlovers.com/palette/55400/Neon_Virus
-NJ.neonColors = [
-    cc.color("#228DFF"), // blue
-    cc.color("#00FFF2"), // cyan
-    cc.color("#00FF4D"), // aqua
-    cc.color("#FFFF00"), // yellow
-    cc.color("#FFA200"), // light orange
-    cc.color("#FF4D00"), // deep orange
-    cc.color("#FF0000"), // red
-    cc.color("#FF0092"), // magenta
-    cc.color("#BA01FF") // dark purple
-];
-
-NJ.happyColors = [
-    cc.color("#5CACC4"),
-    cc.color("#8CD19D"),
-    cc.color("#CEE879"),
-    cc.color("#FCB653"),
-    cc.color("#FF5254")
-];
 
 NJ.getColor = function (colorString, index) {
     var colorArray = null;

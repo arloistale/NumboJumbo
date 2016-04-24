@@ -19,7 +19,7 @@ var FeedbackLayer = cc.Layer.extend({
 	ctor: function() {
 		this._super();
 
-        var feedback = null;
+        var entity = null;
         var i = 0;
 
         // TODO: Should not have to call this here...
@@ -27,16 +27,16 @@ var FeedbackLayer = cc.Layer.extend({
 
         // initialize banner pool with entities
         for(; i < BANNER_POOL_SIZE; i++) {
-            feedback = new Banner();
-            feedback.retain();
-            this.bannerPool.push(feedback);
+            entity = new Banner();
+            entity.retain();
+            this.bannerPool.push(entity);
         }
 
         // initialize snippet pool with entities
         for(i = 0; i < SNIPPET_POOL_SIZE; i++) {
-            feedback = new Snippet();
-            feedback.retain();
-            this.snippetPool.push(feedback);
+            entity = new Snippet();
+            entity.retain();
+            this.snippetPool.push(entity);
         }
 
         // initialize doomsayer
@@ -74,6 +74,12 @@ var FeedbackLayer = cc.Layer.extend({
 // POOLING //
 /////////////
 
+    // push banner back into banner pool
+    pushBannerPool: function(banner) {
+        cc.assert(this.bannerPool.length < BANNER_POOL_SIZE, "Exceeded pool size for banners: " + (this.bannerPool.length + 1));
+        this.bannerPool.push(banner);
+    },
+
     // pops a banner from the banner pool,
     // NOTE: Allocates a new banner if needed, increase pool size if this happens!
     popBannerPool: function() {
@@ -85,6 +91,12 @@ var FeedbackLayer = cc.Layer.extend({
         return banner;
     },
 
+    // push snippet back into pool
+    pushSnippetPool: function(snippet) {
+        cc.assert(this.snippetPool.length < SNIPPET_POOL_SIZE, "Exceeded pool size for snippets: " + (this.snippetPool.length + 1));
+        this.snippetPool.push(snippet);
+    },
+
     // pops a banner from the banner pool,
     // NOTE: Allocates a new banner if needed, increase pool size if this happens!
     popSnippetPool: function() {
@@ -94,16 +106,6 @@ var FeedbackLayer = cc.Layer.extend({
         snippet.reset();
 
         return snippet;
-    },
-
-    pushBannerPool: function(banner) {
-        cc.assert(this.bannerPool.length < BANNER_POOL_SIZE, "Exceeded pool size for banners: " + (this.bannerPool.length + 1));
-        this.bannerPool.push(banner);
-    },
-
-    pushSnippetPool: function(snippet) {
-        cc.assert(this.snippetPool.length < SNIPPET_POOL_SIZE, "Exceeded pool size for snippets: " + (this.snippetPool.length + 1));
-        this.snippetPool.push(snippet);
     },
 
 ///////////////
@@ -153,7 +155,7 @@ var FeedbackLayer = cc.Layer.extend({
         var removeAction = cc.callFunc(function() {
             that.pushBannerPool(banner);
             banner.stopAllActions();
-            banner.removeFromParent(true);
+            banner.removeFromParent(false);
         });
 
         banner.runAction(cc.sequence(moveAction, delayAction, fadeOutAction, removeAction));
@@ -212,7 +214,7 @@ var FeedbackLayer = cc.Layer.extend({
         var removeAction = cc.callFunc(function() {
             that.pushSnippetPool(snippet);
             snippet.stopAllActions();
-            snippet.removeFromParent(true);
+            snippet.removeFromParent(false);
         });
 
         snippet.runAction(cc.sequence(scaleUpAction, cc.spawn(moveAction, fadeOutAction), removeAction));

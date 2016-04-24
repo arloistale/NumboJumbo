@@ -97,7 +97,7 @@ var TutorialLayer = (function() {
 
                     case slides.subtraction:
 
-                        that._titleLabel.setString("Nice. You made a 3!");
+                        that._titleLabel.setString("Nice. You added up to 3!");
                         that._helperLabel.setString("The order doesn't matter.");
 
                         that._menu.alignItemsVerticallyWithPadding(10);
@@ -112,7 +112,7 @@ var TutorialLayer = (function() {
                         break;
                     case slides.more:
 
-                        that._titleLabel.setString("Awesome. You made a 5!");
+                        that._titleLabel.setString("Awesome. You added up to 5!");
                         that._helperLabel.setString("Diagonal moves work too.");
 
                         that._menu.alignItemsVerticallyWithPadding(10);

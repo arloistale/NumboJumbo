@@ -96,54 +96,6 @@
         }
       ]
     },
-    "random-jumbos": {
-      "name": "Random Jumbos!",
-      "highscoreThreshold": 60000,
-      "currencyThreshold": 540000,
-      "color": "#FFEB3B",
-      "blockColorString": "neon",
-      "difficulty": "Medium",
-      "spawnTime": 1.0,
-      "weight": 0.0,
-      "numberList": [
-        {
-          "key": 1,
-          "weight": 4
-        },
-        {
-          "key": 2,
-          "weight": 3
-        },
-        {
-          "key": 3,
-          "weight": 3
-        },
-        {
-          "key": 4,
-          "weight": 2
-        },
-        {
-          "key": 5,
-          "weight": 2
-        },
-        {
-          "key": 6,
-          "weight": 1
-        },
-        {
-          "key": 7,
-          "weight": 1
-        },
-        {
-          "key": 8,
-          "weight": 1
-        },
-        {
-          "key": 9,
-          "weight": 1
-        }
-      ]
-    },
     "multiple-progression": {
       "name": "Multiples Progression",
       "highscoreThreshold": 500000,

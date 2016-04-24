@@ -57,6 +57,7 @@ var NumboGameLayer = (function() {
 		_toolbarLayer: null,
 		_settingsMenuLayer: null,
 		_gameOverMenuLayer: null,
+		_effectsLayer: null,
 		_feedbackLayer: null,
         _curtainLayer: null,
         
@@ -256,6 +257,10 @@ var NumboGameLayer = (function() {
             // feedback overlay
             this._feedbackLayer = new FeedbackLayer();
             this.addChild(this._feedbackLayer, 800);
+
+			// effects middle layer between background and game elements
+			this._effectsLayer = new EffectsLayer();
+			this.addChild(this._effectsLayer, 24);
 		},
 
 		// Initialize the Numbo Controller, which controls the level.
@@ -515,7 +520,7 @@ var NumboGameLayer = (function() {
 		_instantiateBlock: function(block) {
 			var blockX = _levelBounds.x + _levelCellSize.width * (block.col + 0.5);
 			block.setPosition(blockX, cc.visibleRect.top.y + _levelCellSize.height / 2);
-			this.addChild(block, 2, 69);
+			this.addChild(block, 42, 42);
 		},
 
 		//////////////////
@@ -726,8 +731,16 @@ var NumboGameLayer = (function() {
 					var currColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum - 1);
 
 					// if selected block was returned then we have a new selected block deal with
-					if(selectedBlock)
-						selectedBlock.highlight();
+					if(selectedBlock) {
+                        selectedBlock.highlight();
+
+                        // check if we're hovering over wombo combo
+                        if(selectedBlocks.length >= 5)
+                            this._effectsLayer.launchComboOverlay();
+                    } else {
+                        if(selectedBlocks.length < 5)
+                            this._effectsLayer.clearComboOverlay();
+                    }
 
 					this.redrawSelectedLines(selectedBlocks);
 
@@ -753,19 +766,32 @@ var NumboGameLayer = (function() {
 
 				this.redrawSelectedLines();
 
+                this._effectsLayer.clearComboOverlay();
+
+                // make sure something actually happened
                 if(!clearedBlocks)
                     return;
 
+				// this may change throughout the function
                 var activationSound = progresses[Math.floor(progresses.length * NJ.gameState.getLevelupProgress())];
 
-				// make sure something actually happened
-                var clearedNums = clearedBlocks.map(function (b) {
-                    return b.val;
-                });
                 var comboLength = clearedBlocks.length;
 
-                // initiate iterator variables here because we use them a lot
-                var i, block;
+				// initiate iterator variables here because we use them a lot
+				var i, block, color;
+
+				// cleared blocks deserve particle effects
+				for(i = 0; i < comboLength; i++) {
+					block = clearedBlocks[i];
+
+					color = NJ.getColor(NJ.gameState.getJumbo().blockColorString, block.val - 1) || cc.color("#ffffff");
+
+					this._effectsLayer.launchExplosion({
+						color: color,
+						x: block.x,
+						y: block.y
+					});
+				}
 
                 // TODO: Really do not like how this is done
                 // Gaps may be created; shift all affected blocks down.
@@ -778,6 +804,9 @@ var NumboGameLayer = (function() {
                 NJ.gameState.addBlocksCleared(comboLength);
 
                 // the base score is what we summed to
+                var clearedNums = clearedBlocks.map(function (b) {
+                    return b.val;
+                });
                 var baseScore = Math.max.apply(null, clearedNums) * 10;
 
                 // begin calculating score bonus
@@ -808,8 +837,8 @@ var NumboGameLayer = (function() {
                         easing: cc.easeQuinticActionOut()
                     });*/
 
-                    if (NJ.settings.sounds)
-                        cc.audioEngine.playEffect(cheers[Math.floor(Math.random() * cheers.length)]);
+                    //if (NJ.settings.sounds)
+                      //  cc.audioEngine.playEffect(cheers[Math.floor(Math.random() * cheers.length)]);
                 }
 
                 // launch feedback for gained score
@@ -903,7 +932,7 @@ var NumboGameLayer = (function() {
 
 			this.unschedule(this.closeCurtain);
 			this._curtainLayer.animate();
-			this.addChild(this._curtainLayer, 2);
+			this.addChild(this._curtainLayer, 901);
 
 			for (var col = 0; col < NJ.NUM_COLS; ++col) {
 				for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
