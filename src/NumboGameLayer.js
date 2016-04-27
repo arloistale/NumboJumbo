@@ -92,7 +92,6 @@ var NumboGameLayer = (function() {
 
 			NJ.gameState.init();
 
-
 			// Init game logic
 			this._initInput();
 			this._initController();
@@ -102,7 +101,7 @@ var NumboGameLayer = (function() {
             this._initAudio();
 
             // Init tutorial
-            if(!NJ.settings.hasLoaded) {
+            if(!NJ.settings.hasLoaded && NJ.gameState.getJumboId() != "zeroes") {
                 NJ.settings.hasLoaded = true;
                 this._initTutorial();
             } else {
@@ -241,7 +240,7 @@ var NumboGameLayer = (function() {
 
 			// initialize rectangle around level
 			this._levelNode = cc.DrawNode.create();
-			this._levelNode.drawRect(cc.p(_levelBounds.x, _levelBounds.y), cc.p(_levelBounds.x + _levelBounds.width, _levelBounds.y + _levelBounds.height), NJ.themes.levelColor, 0, cc.color(255, 255, 255, 0));
+			this._levelNode.drawRect(cc.p(_levelBounds.x, _levelBounds.y), cc.p(_levelBounds.x + _levelBounds.width, _levelBounds.y + _levelBounds.height), NJ.themes.levelColor, 0, NJ.themes.levelColor);
 			this.addChild(this._levelNode, -1);
 
             // selected lines
@@ -808,20 +807,16 @@ var NumboGameLayer = (function() {
                     return b.val;
                 });
                 var baseScore = Math.max.apply(null, clearedNums) * 10;
+				var scoreDifference = baseScore;
 
                 // begin calculating score bonus
                 var scoreBonus = 0;
 
                 var threshold = NJ.comboThresholds.get(comboLength);
-                if (threshold) {
-                    var scoreMultiplier = clearedBlocks.length - 3;
-                    scoreBonus += baseScore * scoreMultiplier;
-                }
+				var scoreMultiplier = clearedBlocks.length - 3;
+				scoreDifference = Math.floor(scoreDifference + scoreDifference * scoreMultiplier);
 
-                var scoreDifference = NJ.gameState.addScore({
-                    amount: baseScore,
-                    bonus: scoreBonus
-                });
+                NJ.gameState.addScore(scoreDifference);
 
                 var differenceThreshold = 300;
 
@@ -903,16 +898,17 @@ var NumboGameLayer = (function() {
                     this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
                     this.unschedule(this.scheduleSpawn);
                     this.schedule(this.scheduleSpawn, 6);
+					/*
                     this._feedbackLayer.launchFallingBanner({
                         title: "Nice Clear!",
                         targetY: cc.visibleRect.center.y * 0.5
-                    });
+                    });*/
 
                     // give the player 5 * 9 points and launch 5 random '+9' snippets
                     for (i = 0; i < 5; ++i) {
-                        scoreDifference = NJ.gameState.addScore(9);
+                        NJ.gameState.addScore(9);
                         this._feedbackLayer.launchSnippet({
-                            title: "+" + scoreDifference,
+                            title: "+" + 9,
                             x: cc.visibleRect.center.x,
                             y: cc.visibleRect.center.y,
                             targetX: _levelBounds.x + Math.random() * _levelBounds.width,

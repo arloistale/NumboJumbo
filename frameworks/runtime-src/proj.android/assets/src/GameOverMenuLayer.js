@@ -56,41 +56,38 @@ var GameOverMenuLayer = (function() {
 
             this._menu = new cc.Menu();
 
-            var headerLabel = this.generateLabel(NJ.gameState.getJumbo().name, NJ.fontSizes.header);
+            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
 
-            var scoreTitleLabel = this.generateLabel("Score");
-            this._scoreLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.gameState.getScore()) + "", NJ.fontSizes.header2);
-            
-            var levelTitleLabel = this.generateLabel("Level");
-            this._levelLabel = this.generateLabel(NJ.gameState.getLevel() + "", NJ.fontSizes.header2);
+            var headerLabel = this.generateLabel(NJ.gameState.getJumbo().name, refDim * NJ.uiSizes.header);
 
-            var bestTitleLabel = this.generateLabel("Best");
-            this._bestLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getHighscore()) + "", NJ.fontSizes.header2);
-            
-            var bestLevelTitleLabel = this.generateLabel("Best Level");
-            this._bestLevelLabel = this.generateLabel(NJ.stats.getHighlevel() + "", NJ.fontSizes.header2);
+            var currentLabel = this.generateLabel("Current", refDim * NJ.uiSizes.header2);
+
+            this._scoreLabel = this.generateLabel("Pts: " + NJ.prettifier.formatNumber(NJ.gameState.getScore()), refDim * NJ.uiSizes.header2);
+            this._levelLabel = this.generateLabel("Lv: " + NJ.gameState.getLevel(), refDim * NJ.uiSizes.header2);
+
+            var bestLabel = this.generateLabel("Best", refDim * NJ.uiSizes.header2);
+
+            this._bestLabel = this.generateLabel("Pts: " + NJ.prettifier.formatNumber(NJ.stats.getHighscore()), refDim * NJ.uiSizes.header2);
+            this._bestLevelLabel = this.generateLabel("Lv: " + NJ.stats.getHighlevel(), refDim * NJ.uiSizes.header2);
 
             this._menu.addChild(headerLabel);
             
-            this._menu.addChild(scoreTitleLabel);
-            this._menu.addChild(levelTitleLabel);
+            this._menu.addChild(currentLabel);
             
             this._menu.addChild(this._scoreLabel);
             this._menu.addChild(this._levelLabel);
-            
-            this._menu.addChild(bestTitleLabel);
-            this._menu.addChild(bestLevelTitleLabel);
-            
+
+            this._menu.addChild(bestLabel);
+
             this._menu.addChild(this._bestLabel);
             this._menu.addChild(this._bestLevelLabel);
 
-            var currencyTitleLabel = this.generateLabel("Currency");
-            this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
+            //var currencyTitleLabel = this.generateLabel("Currency");
+            //this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
 
-            this._menu.addChild(currencyTitleLabel);
-            this._menu.addChild(this._currencyLabel);
+            //this._menu.addChild(currencyTitleLabel);
+            //this._menu.addChild(this._currencyLabel);
 
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
             var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
             var retryButton = new NJMenuButton(buttonSize, onRetry.bind(this), this);
@@ -104,7 +101,7 @@ var GameOverMenuLayer = (function() {
             this._menu.addChild(retryButton);
             this._menu.addChild(menuButton);
 
-            this._menu.alignItemsInColumns(1, 2, 2, 2, 2, 1, 1, 1, 1);
+            this._menu.alignItemsInColumns(1, 1, 2, 1, 2, 1, 1);
             this.addChild(this._menu, 100);
         },
 
@@ -125,18 +122,10 @@ var GameOverMenuLayer = (function() {
 ////////////////
 
         generateLabel: function(title, size) {
-            cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
-            cc.MenuItemFont.setFontSize(size || NJ.fontSizes.sub);
-            var toggleLabel = new cc.MenuItemFont(title);
-            toggleLabel.setEnabled(false);
-            toggleLabel.setColor(NJ.themes.defaultLabelColor);
-            return toggleLabel;
-        },
-
-        setScore: function(score) {
-            this._finalScore = Math.floor(score);
-
-            this._scoreLabel.setString(this._finalScore);
+            var toggleItem = new NJMenuItem(size);
+            toggleItem.setTitle(title);
+            toggleItem.setLabelColor(NJ.themes.defaultLabelColor);
+            return toggleItem;
         }
     });
 }());

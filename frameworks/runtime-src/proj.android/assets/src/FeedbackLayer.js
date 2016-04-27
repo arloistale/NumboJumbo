@@ -27,7 +27,7 @@ var FeedbackLayer = cc.Layer.extend({
 
         // initialize banner pool with entities
         for(; i < BANNER_POOL_SIZE; i++) {
-            entity = new Banner();
+            entity = new Snippet();
             entity.retain();
             this.bannerPool.push(entity);
         }
@@ -113,57 +113,7 @@ var FeedbackLayer = cc.Layer.extend({
 ///////////////
 
     /*
-     * Launches a banner onto the feedback layer, usually intended for
-     * level ups and large combos.
-     *
-     * Usage: launchFallingBanner({ title: 'Hello' })
-     */
-    launchFallingBanner: function(data) {
-        var that = this;
-        var banner = this.popBannerPool();
-        var titleStr = "Default String";
-        var easing = cc.easeQuinticActionOut();
-        var color = cc.color("#ffffff");
-
-        if(data) {
-            if(typeof data.title !== 'undefined')
-                titleStr = data.title;
-
-            if(typeof data.easing != 'undefined')
-                easing = data.easing;
-
-            if(typeof data.color != 'undefined')
-                color = data.color;
-        }
-
-        banner.setText(titleStr);
-        banner.setColor(color);
-
-        // spawn off-screen
-        banner.setPosition(cc.visibleRect.center.x, cc.visibleRect.top.y * 1.1);
-
-        this.addChild(banner, 4);
-
-        var targetX = data && typeof data.targetX !== 'undefined' ? data.targetX : cc.visibleRect.center.x;
-        var targetY = data && typeof data.targetY !== 'undefined' ? data.targetY : cc.visibleRect.center.y;
-
-        // start moving the banner
-        var moveDuration = 0.5;
-        var moveAction = cc.moveTo(moveDuration, cc.p(targetX, targetY)).easing(easing);
-        var delayAction = cc.delayTime(0.8);
-        var fadeOutAction = cc.fadeTo(0.2, 0);
-        var removeAction = cc.callFunc(function() {
-            that.pushBannerPool(banner);
-            banner.stopAllActions();
-            banner.removeFromParent(false);
-        });
-
-        banner.runAction(cc.sequence(moveAction, delayAction, fadeOutAction, removeAction));
-    },
-
-    /*
-     * Launches a snippet onto the feedback layer, intended for showing small bits of info
-     * such as score increases.
+     * Launches a snippet onto the feedback layer. Show some text on the screen!
      *
      * Usage: launchSnippet ({ title: 'Hello', x: 500, y: 500, targetX: 400, targetY: 400 })
      */
@@ -178,6 +128,8 @@ var FeedbackLayer = cc.Layer.extend({
             targetX = 0, targetY = 0,
             targetScale = 1;
 
+        var easing = cc.easeQuinticActionOut();
+
         if(data) {
             if(typeof data.title !== 'undefined')
                 titleStr = data.title;
@@ -191,6 +143,9 @@ var FeedbackLayer = cc.Layer.extend({
             if(typeof data.color !== 'undefined')
                 color = data.color;
 
+            if(typeof data.easing != 'undefined')
+                easing = data.easing;
+
             if(typeof data.targetX !== 'undefined')
                 targetX = data.targetX;
 
@@ -201,6 +156,7 @@ var FeedbackLayer = cc.Layer.extend({
                 targetScale = data.targetScale;
         }
 
+        snippet.setLabelSize(Math.min(cc.visibleRect.width, cc.visibleRect.height) * 0.05);
         snippet.setColor(color);
         snippet.setText(titleStr);
         snippet.setScale(0.01, 0.01);
@@ -209,7 +165,7 @@ var FeedbackLayer = cc.Layer.extend({
         this.addChild(snippet, 4);
 
         var scaleUpAction = cc.scaleTo(0.2, targetScale, targetScale);
-        var moveAction = cc.moveTo(1, cc.p(targetX, targetY));
+        var moveAction = cc.moveTo(1, cc.p(targetX, targetY)).easing(easing);
         var fadeOutAction = cc.fadeTo(1, 0);
         var removeAction = cc.callFunc(function() {
             that.pushSnippetPool(snippet);

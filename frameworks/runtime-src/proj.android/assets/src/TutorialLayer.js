@@ -29,8 +29,8 @@ var TutorialLayer = (function() {
         // UI Data
         _menu: null,
 
-        _titleLabel: null,
-        _helperLabel: null,
+        _titleMenuItem: null,
+        _helperMenuItem: null,
 
         // Callbacks Data
         onAdvanceCallback: null,
@@ -53,13 +53,12 @@ var TutorialLayer = (function() {
             this._menu = new cc.Menu();
             this.addChild(this._menu, 100);
 
-            this._titleLabel = this._generateLabel(" ");
-            this._helperLabel = this._generateLabel(" ");
-            this._titleLabel.setOpacity(0);
-            this._helperLabel.setOpacity(0);
+            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+            this._titleMenuItem = new NJMenuItem(cc.size(cc.visibleRect.width, refDim * 0.05));
+            this._helperMenuItem = new NJMenuItem(cc.size(cc.visibleRect.width, refDim * 0.05));
 
-            this._menu.addChild(this._titleLabel);
-            this._menu.addChild(this._helperLabel);
+            this._menu.addChild(this._titleMenuItem);
+            this._menu.addChild(this._helperMenuItem);
 
             this._currSlide = 0;
         },
@@ -78,79 +77,94 @@ var TutorialLayer = (function() {
 
                 switch(that._currSlide) {
                     case slides.intro:
-                        that._titleLabel.setString("\"I don't believe in mathematics.\"");
-                        that._helperLabel.setString("- Albert Einstein");
+                        that._titleMenuItem.setTitle("\"I don't believe in mathematics.\"");
+                        that._helperMenuItem.setTitle("- Albert Einstein");
+
+                        that._titleMenuItem.setChildrenOpacity(0);
+                        that._helperMenuItem.setChildrenOpacity(0);
 
                         that._menu.alignItemsVerticallyWithPadding(10);
 
-                        that._titleLabel.runAction(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(4), cc.fadeTo(0.25, 0)));
-                        that._helperLabel.runAction(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
+                        that._titleMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(4), cc.fadeTo(0.25, 0)));
+                        that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(7), cc.callFunc(function() {
-                            that._helperLabel.setString("Swipe the numbers!");
+                            that._helperMenuItem.setTitle("Connect the numbers into a sum!");
                             that._menu.alignItemsVerticallyWithPadding(10);
-                            that._helperLabel.setOpacity(0);
-                            that._helperLabel.runAction(cc.sequence(cc.fadeTo(0.25, 255)));
+                            that._helperMenuItem.setChildrenOpacity(0);
+                            that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
                         })));
 
                         break;
 
                     case slides.subtraction:
 
-                        that._titleLabel.setString("Nice. You added up to 3!");
-                        that._helperLabel.setString("The order doesn't matter.");
+                        that._titleMenuItem.setTitle("Nice. You summed to 3.");
+                        that._helperMenuItem.setTitle("Subtraction is just addition backwards.");
+
+                        that._titleMenuItem.setChildrenOpacity(0);
+                        that._helperMenuItem.setChildrenOpacity(0);
 
                         that._menu.alignItemsVerticallyWithPadding(10);
 
-                        that._titleLabel.runAction(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
+                        that._titleMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(4.75), cc.callFunc(function() {
-                            that._helperLabel.setOpacity(0);
-                            that._helperLabel.runAction(cc.sequence(cc.fadeTo(0.25, 255)));
+                            that._helperMenuItem.setChildrenOpacity(0);
+                            that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
                         })));
 
                         break;
                     case slides.more:
 
-                        that._titleLabel.setString("Awesome. You added up to 5!");
-                        that._helperLabel.setString("Diagonal moves work too.");
+                        that._titleMenuItem.setTitle("Awesome. You subtracted down to 3!");
+                        that._helperMenuItem.setTitle("Diagonal moves work too.");
+
+                        that._titleMenuItem.setChildrenOpacity(0);
+                        that._helperMenuItem.setChildrenOpacity(0);
 
                         that._menu.alignItemsVerticallyWithPadding(10);
 
-                        that._titleLabel.runAction(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
+                        that._titleMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(4.75), cc.callFunc(function() {
-                            that._helperLabel.setOpacity(0);
-                            that._helperLabel.runAction(cc.sequence(cc.fadeTo(0.25, 255)));
+                            that._helperMenuItem.setChildrenOpacity(0);
+                            that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
                         })));
 
                         break;
 
                     case slides.wombo:
 
-                        that._titleLabel.setString("Beautiful.");
-                        that._helperLabel.setString("One last thing...");
+                        that._titleMenuItem.setTitle("Beautiful.");
+                        that._helperMenuItem.setTitle("One last thing...");
+
+                        that._titleMenuItem.setChildrenOpacity(0);
+                        that._helperMenuItem.setChildrenOpacity(0);
 
                         that._menu.alignItemsVerticallyWithPadding(10);
 
-                        that._titleLabel.runAction(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
+                        that._titleMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(4.75), cc.callFunc(function() {
-                            that._helperLabel.setOpacity(0);
-                            that._helperLabel.runAction(cc.fadeTo(0.25, 255));
+                            that._helperMenuItem.setChildrenOpacity(0);
+                            that._helperMenuItem.runActionOnChildren(cc.fadeTo(0.25, 255));
                         })));
 
                         break;
 
                     case slides.end:
 
-                        that._titleLabel.setString("Wombo Combo!");
-                        that._helperLabel.setString("Welcome to Numbo Jumbo.");
+                        that._titleMenuItem.setTitle("Wombo Combo!");
+                        that._helperMenuItem.setTitle("Welcome to Numbo Jumbo.");
+
+                        that._titleMenuItem.setChildrenOpacity(0);
+                        that._helperMenuItem.setChildrenOpacity(0);
 
                         that._menu.alignItemsVerticallyWithPadding(10);
 
-                        that._titleLabel.runAction(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
-                        that._helperLabel.runAction(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
+                        that._titleMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
+                        that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         break;
                 }
@@ -176,22 +190,12 @@ var TutorialLayer = (function() {
         _fadeOutSlide: function() {
             this.stopAllActions();
 
+            // we assume here that all children of the menu are instances of NJMenuItem
             var children = this._menu.getChildren();
             for (var i = 0; i < children.length; i++) {
-                children[i].stopAllActions();
-                children[i].runAction(cc.sequence(cc.fadeTo(0.25, 0)));
+                children[i].stopAllActionsOnChildren();
+                children[i].runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 0)));
             }
-        },
-
-        _generateLabel: function(title) {
-            cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
-            cc.MenuItemFont.setFontSize( NJ.fontSizes.sub);
-
-            var toggleLabel = new cc.MenuItemFont(title);
-
-            toggleLabel.setEnabled(false);
-            toggleLabel.setColor(cc.color(255, 255, 255, 255));
-            return toggleLabel;
         }
     });
 }());

@@ -133,12 +133,8 @@ NJ.themes = (function() {
 
 NJ.getColor = function (colorString, index) {
     var colorArray = null;
-    if (colorString == "neon")
-        colorArray = NJ.neonColors;
-    else if (colorString == "purple")
-        colorArray = NJ.purpleColors;
-    else if (colorString == "pastelPink")
-        colorArray = NJ.pastelPinkColors;
+    if (colorString == "dark")
+        colorArray = NJ.themes.blockColors;
     else if (colorString == "light")
         colorArray = NJ.themes.blockColors;
 

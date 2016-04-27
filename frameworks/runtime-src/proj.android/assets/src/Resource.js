@@ -15,7 +15,8 @@ var res = {
 
     mainFont: {
         name: "NunitoLight",
-        src: resRoot + "Fonts/NunitoLight.ttf"
+        fnt: resRoot + "Fonts/mainFont.fnt",
+        png: resRoot + "Fonts/mainFont.png"
     },
 
 	// UI
@@ -79,14 +80,7 @@ var res = {
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes) {
-    if(NJ.isFirefox === true) {
-        return fontRes.firefoxName;
-    }
-
-    if(cc.sys.os == cc.sys.OS_ANDROID)
-        return fontRes.src;
-
-    return fontRes.name;
+    return fontRes.fnt;
 };
 
 // resources for the main menu of the game
@@ -105,8 +99,8 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.mainFont.src
-    //res.markerFont.firefoxSrc
+    res.mainFont.fnt,
+    res.mainFont.png
 ];
 
 var plops = [res.plopSound, res.plopSound4, res.plopSound5,
@@ -169,5 +163,6 @@ var g_game = [
     res.cheerSound3,
 
     // fonts
-    res.mainFont.src
+    res.mainFont.fnt,
+    res.mainFont.png
 ];

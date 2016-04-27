@@ -38,23 +38,23 @@ var NumboMenuLayer = (function() {
         var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
         var buttonSize = cc.size(refDim * NJ.uiSizes.playButton, refDim * NJ.uiSizes.playButton);
 
-        var playButton = new NJMenuButton(buttonSize, onPlay.bind(this), this);
+        var playButton = new NJMenuItem(buttonSize, onPlay.bind(this), this);
         playButton.setBackgroundColor(NJ.themes.playButtonColor);
         playButton.setImageRes(res.playImage);
 
         buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
-        var settingsButton = new NJMenuButton(buttonSize, onSettings.bind(this), this);
+        var settingsButton = new NJMenuItem(buttonSize, onSettings.bind(this), this);
         settingsButton.setImageRes(res.settingsImage);
 
-        loginButton = new NJMenuButton(buttonSize, onLogin.bind(this), this);
+        loginButton = new NJMenuItem(buttonSize, onLogin.bind(this), this);
         loginButton.setBackgroundColor(NJ.themes.loginButtonColor);
         loginButton.setImageRes(res.statsImage);
         toggleLoginButton();
 
         buttonSize = cc.size(refDim * 0.75, refDim * NJ.uiSizes.textButton);
 
-        var jumbosButton = new NJMenuButton(buttonSize, onJumbos.bind(this), this);
+        var jumbosButton = new NJMenuItem(buttonSize, onJumbos.bind(this), this);
         jumbosButton.setBackgroundColor(NJ.themes.jumbosButtonColor);
         jumbosButton.setTitle("Jumbos");
 
@@ -64,11 +64,11 @@ var NumboMenuLayer = (function() {
         menu.addChild(loginButton);
         menu.addChild(settingsButton);
 
-        //var scoresButton = new NJMenuButton(buttonSize, onScores.bind(this), this);
+        //var scoresButton = new NJMenuItem(buttonSize, onScores.bind(this), this);
         //scoresButton.setImageRes(res.buttonImage);
         //menu.addChild(scoresButton);
 /*
-        var shopButton = new NJMenuButton("Jumbos", onShop.bind(this), this);
+        var shopButton = new NJMenuItem("Jumbos", onShop.bind(this), this);
         shopButton.setImageRes(res.buttonImage);
         menu.addChild(shopButton);
 */

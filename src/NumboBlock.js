@@ -10,15 +10,6 @@ var NumboBlock = (function() {
 
     var _backgroundScale = null;
 
-    var blink = function() {
-        this._colorIndex += 1;
-        var blockSize = this.getContentSize();
-        this._colorIndex %= NJ.purpleColors.length;
-        // TODO: Use shaders here!!!!
-        this._circleNode.setDrawColor(NJ.purpleColors[this._colorIndex]);
-        this._circleNode.drawCircle(cc.p(blockSize.width / 2, blockSize.height / 2), blockSize.width / 2, 0, 8, false, 1);
-    };
-
     return cc.Sprite.extend({
         // exposed public properties
 
@@ -83,11 +74,12 @@ var NumboBlock = (function() {
             this.addChild(this._highlightSprite, -1);
 
             // initialize number label
-            this._valueLabel = cc.LabelTTF.create("label test", b_getFontName(res.mainFont), NJ.fontScalingFactor * NJ.fontSizes.numbo);
+            this._valueLabel = new cc.LabelBMFont("label test", b_getFontName(res.mainFont));
+            var imageSize = this._valueLabel.getContentSize();
+            this._valueLabel.setScale(blockSize.height * 0.75 / imageSize.height, blockSize.height * 0.75 / imageSize.height);
             this._valueLabel.attr({
-                scale: 1.0 / NJ.fontScalingFactor,
                 anchorX: 0.5,
-                anchorY: 0.5 + NJ.anchorOffsetY,
+                anchorY: 0.5,
                 x: blockSize.width / 2,
                 y: blockSize.height / 2
             });

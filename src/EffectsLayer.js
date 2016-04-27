@@ -56,7 +56,45 @@ var EffectsLayer = cc.Layer.extend({
     },
 
     _generateNumboParticleSystem: function() {
-        var particleSystem = new NumboParticleExplosion();
+        var particleSystem = new cc.ParticleExplosion();
+
+        particleSystem.setDuration(0.1); // Suspicious
+        particleSystem.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+        particleSystem.setGravity(cc.p(0, 0));
+
+        // speed
+        particleSystem.setSpeed(70);
+        particleSystem.setSpeedVar(40);
+
+        // Gravity Mode: radial
+        particleSystem.setRadialAccel(-120);
+        particleSystem.setRadialAccelVar(0);
+
+        // Gravity Mode: tangential
+        particleSystem.setTangentialAccel(0);
+        particleSystem.setTangentialAccelVar(0);
+
+        // angle
+        particleSystem.setAngle(90);
+        particleSystem.setAngleVar(360);
+
+        // life of particles
+        particleSystem.setLife(0.5);
+        particleSystem.setLifeVar(0.1);
+
+        // size, in pixels
+        particleSystem.setStartSize(10.0);
+        particleSystem.setStartSizeVar(10.0);
+        particleSystem.setEndSize(3);
+
+        //particleSystem.setParticlesColor(cc.color("#ffffff"));
+
+        // emits per second
+        particleSystem.setEmissionRate(15 / 0.1);
+
+        // additive
+        particleSystem.setBlendAdditive(false);
+
         particleSystem.setTexture(cc.textureCache.addImage(res.blockImage));
         particleSystem.stopSystem();
         particleSystem.setVisible(false);
@@ -115,7 +153,12 @@ var EffectsLayer = cc.Layer.extend({
                 color = data.color;
         }
 
-        entity.setParticlesColor(color);
+        // color of particles
+        entity.setStartColor(color);
+        entity.setStartColorVar(cc.color(0, 0, 0, 0));
+        entity.setEndColor(color);
+        entity.setEndColorVar(cc.color(0, 0, 0, 0));
+
         entity.setPosition(x, y);
         entity.setVisible(true);
         entity.resetSystem();

@@ -93,12 +93,12 @@ var GameOverMenuLayer = (function() {
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
             var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
-            var retryButton = new NJMenuButton(buttonSize, onRetry.bind(this), this);
+            var retryButton = new NJMenuItem(buttonSize, onRetry.bind(this), this);
             retryButton.setImageRes(res.retryImage);
 
             buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
-            var menuButton = new NJMenuButton(buttonSize, onMenu.bind(this), this);
+            var menuButton = new NJMenuItem(buttonSize, onMenu.bind(this), this);
             menuButton.setImageRes(res.homeImage);
 
             this._menu.addChild(retryButton);
