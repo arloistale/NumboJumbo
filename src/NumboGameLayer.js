@@ -779,9 +779,21 @@ var NumboGameLayer = (function() {
 				// initiate iterator variables here because we use them a lot
 				var i, block, color;
 
-				// cleared blocks deserve particle effects
+				var targetValue = -1;
+				var sumPos = cc.p(0, 0);
+
+				// loop through the blocks, giving each one a particle explosion and also computing some values
 				for(i = 0; i < comboLength; i++) {
 					block = clearedBlocks[i];
+
+					// we need to find the target value which will be the maximum value in the cleared blocks
+					if(block.val > targetValue)
+						targetValue = block.val;
+
+					sumPos.x += block.x;
+					sumPos.y += block.y;
+
+					// we also need to be computing position sums used to calculate the center point of the cleared
 
 					color = NJ.getColor(NJ.gameState.getJumbo().blockColorString, block.val - 1) || cc.color("#ffffff");
 
@@ -803,11 +815,7 @@ var NumboGameLayer = (function() {
                 NJ.gameState.addBlocksCleared(comboLength);
 
                 // the base score is what we summed to
-                var clearedNums = clearedBlocks.map(function (b) {
-                    return b.val;
-                });
-                var baseScore = Math.max.apply(null, clearedNums) * 10;
-				var scoreDifference = baseScore;
+				var scoreDifference = targetValue * 10;
 
                 // begin calculating score bonus
                 var scoreBonus = 0;
@@ -836,14 +844,16 @@ var NumboGameLayer = (function() {
                       //  cc.audioEngine.playEffect(cheers[Math.floor(Math.random() * cheers.length)]);
                 }
 
+				var snippetPos = cc.p(sumPos.x / clearedBlocks.length, sumPos.y / clearedBlocks.length);
+
                 // launch feedback for gained score
                 this._feedbackLayer.launchSnippet({
                     title: "+" + NJ.prettifier.formatNumber(scoreDifference),
                     color: threshold ? threshold.color : cc.color("#ffffff"),
-                    x: touchPosition.x,
-                    y: touchPosition.y,
-                    targetX: touchPosition.x,
-                    targetY: touchPosition.y + _levelBounds.height / 6,
+                    x: snippetPos.x,
+                    y: snippetPos.y,
+                    targetX: snippetPos.x,
+                    targetY: snippetPos.y + _levelBounds.height / 6,
                     targetScale: 1 + 0.25 * Math.min(1, scoreDifference / differenceThreshold)
                 });
 

@@ -463,10 +463,10 @@ var NumboController = (function() {
 			var j = this._jumboSpawnDelay;
 
             var L = NJ.gameState.getLevel();
-			var x = 0.2;
+			var x = 0.3;
 			var LFactor = 1 / Math.pow(L, x);
 
-			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 2;
+			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 4;
 
 			var spawnTime = j * LFactor * BFactor;
 			//cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);

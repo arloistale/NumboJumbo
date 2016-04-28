@@ -183,8 +183,8 @@ var EffectsLayer = cc.Layer.extend({
     ///////////////////
 
     launchComboOverlay: function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.cheerSound3);
+        //if(NJ.settings.sounds)
+            //cc.audioEngine.playEffect(res.cheerSound3);
 
         this._isComboLaunched = true;
         this._comboOverlay.setVisible(true);

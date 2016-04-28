@@ -89,7 +89,7 @@ var TutorialLayer = (function() {
                         that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(7), cc.callFunc(function() {
-                            that._helperMenuItem.setTitle("Connect the numbers into a sum!");
+                            that._helperMenuItem.setTitle("1 + 2 = 3");
                             that._menu.alignItemsVerticallyWithPadding(10);
                             that._helperMenuItem.setChildrenOpacity(0);
                             that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
@@ -117,8 +117,8 @@ var TutorialLayer = (function() {
                         break;
                     case slides.more:
 
-                        that._titleMenuItem.setTitle("Awesome. You subtracted down to 3!");
-                        that._helperMenuItem.setTitle("Diagonal moves work too.");
+                        that._titleMenuItem.setTitle("Right, because 3 + 2 = 5");
+                        that._helperMenuItem.setTitle("You can even move diagonally.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -137,7 +137,7 @@ var TutorialLayer = (function() {
                     case slides.wombo:
 
                         that._titleMenuItem.setTitle("Beautiful.");
-                        that._helperMenuItem.setTitle("One last thing...");
+                        that._helperMenuItem.setTitle("Bigger combos clear more from the board.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
