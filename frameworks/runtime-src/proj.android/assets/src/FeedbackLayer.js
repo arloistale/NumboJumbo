@@ -191,7 +191,7 @@ var FeedbackLayer = cc.Layer.extend({
 
     launchDoomsayer: function() {
         if(!this.bIsDoomsayerLaunched) {
-            this.schedule(this.runDoomsayer, 1);
+            this.schedule(this.runDoomsayer, 0.5);
         }
 
         this.bIsDoomsayerLaunched = true;
