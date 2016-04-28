@@ -183,16 +183,9 @@ NJ.gameState = (function() {
         //////////////////
 
         // add score based on given data
-        addScore: function(data) {
-            cc.assert(data || data.amount, "Must define a non zero amount to add to score in data object");
-
-            var amount = (typeof data === "number") ? data : data.amount;
-
-            var bonus = data.bonus;
-            if(bonus) amount += bonus;
-
+        addScore: function(amount) {
             currentScore += amount;
-            return amount;
+            return currentScore;
         },
 
         // get the current game score

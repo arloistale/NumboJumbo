@@ -75,28 +75,29 @@ var SettingsMenuLayer = (function() {
 
             this._menu = new cc.Menu();
 
-            var headerLabel = this.generateHeaderLabel(bInGame ? "Paused" : "Settings");
+            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
 
-            this._menu.addChild(headerLabel);
+            var headerLabel = this.generateLabel(bInGame ? "Paused" : "Settings", refDim * NJ.uiSizes.header);
 
             // generate music toggle
-            var musicLabel = this.generateLabel("Music");
+            var musicLabel = this.generateLabel("Music", refDim * NJ.uiSizes.header2);
             var musicToggle = this.generateToggle(onMusicControl.bind(this));
             var state = (NJ.settings.music ? 0 : 1);
             musicToggle.setSelectedIndex(state);
 
             // generate sounds toggle
-            var soundsLabel = this.generateLabel("Sounds");
+            var soundsLabel = this.generateLabel("Sounds", refDim * NJ.uiSizes.header2);
             var soundsToggle = this.generateToggle(onSoundsControl.bind(this));
             state = (NJ.settings.sounds ? 0 : 1);
             soundsToggle.setSelectedIndex(state);
 
+            this._menu.addChild(headerLabel);
+
             this._menu.addChild(musicLabel);
-            this._menu.addChild(soundsLabel);
             this._menu.addChild(musicToggle);
+            this._menu.addChild(soundsLabel);
             this._menu.addChild(soundsToggle);
 
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
             var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
             var backButton = new NJMenuButton(buttonSize, onBack.bind(this), this);
@@ -105,7 +106,7 @@ var SettingsMenuLayer = (function() {
             if(!bInGame) {
                 this._menu.addChild(backButton);
 
-                this._menu.alignItemsInColumns(1, 2, 2, 1);
+                this._menu.alignItemsVerticallyWithPadding(10);
             } else {
                 buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
                 var menuButton = new NJMenuButton(buttonSize, onMenu.bind(this), this);
@@ -114,7 +115,7 @@ var SettingsMenuLayer = (function() {
                 this._menu.addChild(backButton);
                 this._menu.addChild(menuButton);
 
-                this._menu.alignItemsInColumns(1, 2, 2, 1, 1, 1);
+                this._menu.alignItemsVerticallyWithPadding(10);
             }
 
             this.addChild(this._menu, 100);
@@ -136,32 +137,26 @@ var SettingsMenuLayer = (function() {
 // UI Helpers //
 ////////////////
 
-        generateHeaderLabel: function(title) {
-            cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
-            cc.MenuItemFont.setFontSize(NJ.fontSizes.header);
-            var toggleLabel = new cc.MenuItemFont(title);
-            toggleLabel.setEnabled(false);
-            toggleLabel.setColor(NJ.themes.defaultLabelColor);
-            return toggleLabel;
-        },
-
-        generateLabel: function(title) {
-            cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
-            cc.MenuItemFont.setFontSize(NJ.fontSizes.paragraph);
-            var toggleLabel = new cc.MenuItemFont(title);
-            toggleLabel.setEnabled(false);
-            toggleLabel.setColor(NJ.themes.defaultLabelColor);
-            return toggleLabel;
+        generateLabel: function(title, size) {
+            var toggleItem = new NJMenuItem(size);
+            toggleItem.setTitle(title);
+            toggleItem.setLabelColor(NJ.themes.defaultLabelColor);
+            return toggleItem;
         },
 
         generateToggle: function(callback) {
-            cc.MenuItemFont.setFontSize(NJ.fontSizes.buttonSmall);
+            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+            var onItem = new NJMenuItem(refDim * NJ.uiSizes.sub);
+            onItem.setTitle("On");
+            onItem.setLabelColor(NJ.themes.defaultLabelColor);
+            var offItem = new NJMenuItem(refDim * NJ.uiSizes.sub);
+            offItem.setTitle("Off");
+            offItem.setLabelColor(NJ.themes.defaultLabelColor);
             var toggle = new cc.MenuItemToggle(
-                new cc.MenuItemFont("On"),
-                new cc.MenuItemFont("Off")
+                onItem,
+                offItem
             );
 
-            toggle.setColor(NJ.themes.defaultLabelColor);
             toggle.setCallback(callback);
 
             return toggle;

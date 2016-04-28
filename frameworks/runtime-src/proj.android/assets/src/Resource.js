@@ -15,7 +15,8 @@ var res = {
 
     mainFont: {
         name: "NunitoLight",
-        src: resRoot + "Fonts/NunitoLight.ttf"
+        fnt: resRoot + "Fonts/mainFont.fnt",
+        png: resRoot + "Fonts/mainFont.png"
     },
 
 	// UI
@@ -31,9 +32,7 @@ var res = {
     statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
 
     // ingame
-    backgroundImage: resRoot + "Images/normal/middle.png",
     blockImage: resRoot + "Images/block.png",
-    powerupImage: resRoot + "Images/powerup.png",
     alertImage: resRoot + "Images/alertOverlay.png",
 
     // sound
@@ -73,7 +72,6 @@ var res = {
 
     coinSound: resRoot + "Sounds/coin.wav",
 
-    cheerSound1: resRoot + "Sounds/cheer1.wav",
     cheerSound3: resRoot + "Sounds/cheer5.mp3",
 
     // jsons
@@ -82,14 +80,7 @@ var res = {
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes) {
-    if(NJ.isFirefox === true) {
-        return fontRes.firefoxName;
-    }
-
-    if(cc.sys.os == cc.sys.OS_ANDROID)
-        return fontRes.src;
-
-    return fontRes.name;
+    return fontRes.fnt;
 };
 
 // resources for the main menu of the game
@@ -103,16 +94,13 @@ var g_menu = [
     res.buttonImage,
     res.statsImage,
 
-    // scene
-    //res.backgroundImage,
-
     // sounds
     res.clickSound,
     res.menuTrack,
 
     // fonts
-    res.mainFont.src
-    //res.markerFont.firefoxSrc
+    res.mainFont.fnt,
+    res.mainFont.png
 ];
 
 var plops = [res.plopSound, res.plopSound4, res.plopSound5,
@@ -123,7 +111,7 @@ var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, re
     res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
     res.progressSound9, res.progressSound10];
 
-var cheers = [res.cheerSound1, res.cheerSound3];
+var cheers = [res.cheerSound3];
 
 // resources for ingame
 var g_game = [
@@ -135,7 +123,6 @@ var g_game = [
     res.retryImage,
 
     // Scene
-    res.powerupImage,
     res.blockImage,
     res.alertImage,
 
@@ -173,9 +160,9 @@ var g_game = [
     res.cheeringSound,
     res.coinSound,
 
-    res.cheerSound1,
     res.cheerSound3,
 
     // fonts
-    res.mainFont.src
+    res.mainFont.fnt,
+    res.mainFont.png
 ];

@@ -6,32 +6,30 @@
       "currencyThreshold": 0,
       "color": "#00E676",
       "blockColorString": "light",
-      "difficulty": "Normal",
       "spawnTime": 2.0,
-      "weight": 1.0,
       "numberList": [
         { "key": 1, "weight": 100 },
         { "key": 2, "weight": 75 },
         { "key": 3, "weight": 50 },
         { "key": 4, "weight": 50 },
-        { "key": 5, "weight": 45 }
+        { "key": 5, "weight": 50 }
       ],
 
       "thresholdNumbers": {
         "2": [{"key": 6, "weight": 40}],
-        "3": [{"key": 7, "weight": 35}],
-        "4": [{"key": 8, "weight": 30}],
-        "5": [{"key": 9, "weight": 25}],
+        "3": [{"key": 7, "weight": 40}],
+        "4": [{"key": 8, "weight": 40}],
+        "5": [{"key": 9, "weight": 40}],
         "6": [{"key": 10, "weight": 20}],
-        "7": [{"key": 11, "weight": 10}],
-        "8": [{"key": 12, "weight": 10}],
-        "9": [{"key": 13, "weight": 10}],
-        "10": [{"key": 14, "weight": 10}],
-        "11": [{"key": 15, "weight": 10}],
-        "12": [{"key": 16, "weight": 5}],
-        "13": [{"key": 17, "weight": 5}],
-        "14": [{"key": 18, "weight": 5}],
-        "15": [{"key": 19, "weight": 5}],
+        "7": [{"key": 11, "weight": 20}],
+        "8": [{"key": 12, "weight": 20}],
+        "9": [{"key": 13, "weight": 20}],
+        "10": [{"key": 14, "weight": 20}],
+        "11": [{"key": 15, "weight": 20}],
+        "12": [{"key": 16, "weight": 20}],
+        "13": [{"key": 17, "weight": 10}],
+        "14": [{"key": 18, "weight": 10}],
+        "15": [{"key": 19, "weight": 10}],
         "16": [{"key": 20, "weight": 10}]
       }
     },
@@ -41,10 +39,8 @@
       "highscoreThreshold": 0,
       "currencyThreshold": 0,
       "color": "#00E676",
-      "blockColorString": "neon",
-      "difficulty": "Normal",
+      "blockColorString": "dark",
       "spawnTime": 0.75,
-      "weight": 2.0,
       "numberList": [
         {
           "key": 1,
@@ -68,126 +64,28 @@
         }
       ]
     },
-    "fives": {
-      "name": "Fives",
-      "highscoreThreshold": 15000,
-      "currencyThreshold": 50000,
-      "color": "#FFEB3B",
-      "blockColorString": "neon",
-      "difficulty": "Medium",
-      "spawnTime": 0.7,
-      "weight": 3.0,
-      "numberList": [
-        {
-          "key": 5,
-          "weight": 3
-        },
-        {
-          "key": 10,
-          "weight": 2
-        },
-        {
-          "key": 25,
-          "weight": 2
-        },
-        {
-          "key": 50,
-          "weight": 1
-        }
-      ]
-    },
-    "random-jumbos": {
-      "name": "Random Jumbos!",
-      "highscoreThreshold": 60000,
-      "currencyThreshold": 540000,
-      "color": "#FFEB3B",
-      "blockColorString": "neon",
-      "difficulty": "Medium",
-      "spawnTime": 1.0,
-      "weight": 0.0,
-      "numberList": [
-        {
-          "key": 1,
-          "weight": 4
-        },
-        {
-          "key": 2,
-          "weight": 3
-        },
-        {
-          "key": 3,
-          "weight": 3
-        },
-        {
-          "key": 4,
-          "weight": 2
-        },
-        {
-          "key": 5,
-          "weight": 2
-        },
-        {
-          "key": 6,
-          "weight": 1
-        },
-        {
-          "key": 7,
-          "weight": 1
-        },
-        {
-          "key": 8,
-          "weight": 1
-        },
-        {
-          "key": 9,
-          "weight": 1
-        }
-      ]
-    },
     "multiple-progression": {
       "name": "Multiples Progression",
       "highscoreThreshold": 500000,
       "currencyThreshold": 10000000,
       "color": "#FF1744",
-      "blockColorString": "neon",
-      "difficulty": "Hard",
+      "blockColorString": "light",
       "spawnTime": 1.0,
-      "weight": 0.0,
       "numberList": [
         {
           "key": 1,
-          "weight": 4
+          "weight": 15
         },
         {
           "key": 2,
-          "weight": 3
-        },
-        {
-          "key": 3,
-          "weight": 3
-        },
-        {
-          "key": 4,
-          "weight": 2
+          "weight": 5
         },
         {
           "key": 5,
           "weight": 2
         },
         {
-          "key": 6,
-          "weight": 1
-        },
-        {
-          "key": 7,
-          "weight": 1
-        },
-        {
-          "key": 8,
-          "weight": 1
-        },
-        {
-          "key": 9,
+          "key": 10,
           "weight": 1
         }
       ]
@@ -198,10 +96,8 @@
       "highscoreThreshold": 0,
       "currencyThreshold": 0,
       "color": "#FF1744",
-      "blockColorString": "neon",
-      "difficulty": "Test",
+      "blockColorString": "dark",
       "spawnTime": 0.75,
-      "weight": 1.0,
       "numberList": [
         {
           "key": 0,

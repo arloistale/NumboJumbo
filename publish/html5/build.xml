@@ -300,7 +300,7 @@
                 <file name="src/NumboGameLayer.js"/>
                 <file name="src/NumboHeaderLayer.js"/>
                 <file name="src/GameOverMenuLayer.js"/>
-                <file name="src/NJMenuButton.js"/>
+                <file name="src/NJMenuItem.js"/>
                 <file name="src/FeedbackLayer.js"/>
                 <file name="src/Feedback.js"/>
                 <file name="src/Banner.js"/>

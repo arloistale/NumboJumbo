@@ -65,7 +65,9 @@ var JumboMenuLayer = (function() {
 
             this._menu = new cc.Menu();
 
-            var jumboTitleLabel = this.generateLabel("Pick your Jumbo...");
+            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+
+            var jumboTitleLabel = this.generateLabel("Game Modes", refDim * NJ.uiSizes.header);
             this._menu.addChild(jumboTitleLabel);
 
             // get possible jumbos
@@ -83,7 +85,6 @@ var JumboMenuLayer = (function() {
                 this._menu.addChild(jumboButton);
             }
 
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
             var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
             var backButton = new NJMenuButton(buttonSize, onBack.bind(this), this);
@@ -107,44 +108,41 @@ var JumboMenuLayer = (function() {
 // UI Helpers //
 ////////////////
 
-        generateLabel: function(title) {
-            cc.MenuItemFont.setFontName(b_getFontName(res.mainFont));
-            cc.MenuItemFont.setFontSize( NJ.fontSizes.header);
+        generateLabel: function(title, size) {
+            var toggleLabel = new NJMenuItem(size);
+            toggleLabel.setTitle(title);
+            toggleLabel.setLabelColor(NJ.themes.defaultLabelColor);
 
-            var toggleLabel = new cc.MenuItemFont(title);
-
-            toggleLabel.setEnabled(false);
-            toggleLabel.setColor(cc.color(255, 255, 255, 255));
             return toggleLabel;
         },
 
         // TODO: for some reason, the increase font size / decrease scale trick does not work here
         generateJumboButton: function(jumbo, callback) {
+            var contentSize = this.getContentSize();
+
             var title = jumbo.name;
             var color = jumbo.color;
             var highscoreThreshold = jumbo.highscoreThreshold;
             var currencyThreshold = jumbo.currencyThreshold;
 
-            var label = new cc.LabelTTF(title, b_getFontName(res.mainFont), NJ.fontSizes.buttonSmall);
+            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+            var elementSize = cc.size(refDim * 0.75, refDim * NJ.uiSizes.header2 * 1.1);
 
-            //label.setFontSize (NJ.fontScalingFactor * NJ.fontSizes.buttonSmall);
-            //label.setScale(1.0 / NJ.fontScalingFactor);
-
-            var jumboMenuItem;
+            var button = new NJMenuItem(elementSize, callback, this);
+            button.setEnabled(true);
+            button.setTitle(title);
 
             if(NJ.stats.getHighscore() < highscoreThreshold && NJ.stats.getCurrency() < currencyThreshold) {
-                label.setString(title + " (" + NJ.prettifier.formatNumber(highscoreThreshold) + " best or " +
-                    NJ.prettifier.formatNumber(currencyThreshold) + " gold)");
+                //button.setTitle(title + " (" + NJ.prettifier.formatNumber(highscoreThreshold) + " best or " +
+                    //NJ.prettifier.formatNumber(currencyThreshold) + " gold)");
 
-                label.setColor(cc.color("#ffffff"));
-                jumboMenuItem = new cc.MenuItemLabel(label, callback);
-                jumboMenuItem.setEnabled(false);
+                button.setLabelColor(cc.color("#424242"));
+                button.setEnabled(false);
             } else {
-                label.setColor(cc.color(color));
-                jumboMenuItem = new cc.MenuItemLabel(label, callback);
+                button.setLabelColor(cc.color(color));
             }
 
-            return jumboMenuItem;
+            return button;
         }
     });
 }());

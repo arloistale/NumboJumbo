@@ -99,7 +99,7 @@ var SettingsMenuLayer = (function() {
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
             var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
-            var backButton = new NJMenuButton(buttonSize, onBack.bind(this), this);
+            var backButton = new NJMenuItem(buttonSize, onBack.bind(this), this);
             backButton.setImageRes(res.backImage);
 
             if(!bInGame) {
@@ -108,7 +108,7 @@ var SettingsMenuLayer = (function() {
                 this._menu.alignItemsInColumns(1, 2, 2, 1);
             } else {
                 buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
-                var menuButton = new NJMenuButton(buttonSize, onMenu.bind(this), this);
+                var menuButton = new NJMenuItem(buttonSize, onMenu.bind(this), this);
                 menuButton.setImageRes(res.homeImage);
 
                 this._menu.addChild(backButton);

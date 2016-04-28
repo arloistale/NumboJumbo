@@ -1,7 +1,10 @@
 var NumboHeaderLayer = (function() {
 
-    // Touch Events
+    // Label prefixes
+    var scorePrefix = "Pts: ";
+    var levelPrefix = "Lv: ";
 
+    // Touch Events
     var onPause = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
@@ -16,10 +19,8 @@ var NumboHeaderLayer = (function() {
         buttonsMenu: null,
 
         // labels
-        _scoreTitleLabel: null,
-        _scoreValueLabel: null,
-        _levelTitleLabel: null,
-        _levelValueLabel: null,
+        _scoreLabel: null,
+        _levelLabel: null,
 
         // progress bar for level progress
         progressBarLayer: null,
@@ -50,52 +51,33 @@ var NumboHeaderLayer = (function() {
 
             // Score Labels
             var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.75);
+            var elementSize = cc.size(contentSize.width * 0.2, contentSize.height * 0.5);
+            var spriteSize;
 
-            this._scoreTitleLabel = new cc.LabelTTF("Pts ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
-            this._scoreTitleLabel.attr({
-                scale: 1.0,
+            this._scoreLabel = new cc.LabelBMFont(scorePrefix, b_getFontName(res.mainFont));
+            spriteSize = this._scoreLabel.getContentSize();
+            this._scoreLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
+            this._scoreLabel.attr({
                 anchorX: 0,
-                anchorY: 0.5 + NJ.anchorOffsetY,
+                anchorY: 0.5,
                 x: startPos.x,
                 y: startPos.y
             });
-            this._scoreTitleLabel.setColor(NJ.themes.defaultLabelColor);
-            this.addChild(this._scoreTitleLabel);
+            this._scoreLabel.setColor(NJ.themes.defaultLabelColor);
+            this.addChild(this._scoreLabel);
 
-            this._scoreValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.sub);
-            this._scoreValueLabel.attr({
-                scale: 1.0,
-                anchorX: 0,
-                anchorY: 0.5 + NJ.anchorOffsetY,
-                x: startPos.x + this._scoreTitleLabel.getContentSize().width,
-                y: startPos.y
-            });
-            this._scoreValueLabel.setColor(NJ.themes.defaultLabelColor);
-            this.addChild(this._scoreValueLabel);
-            
             startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.25);
 
-            this._levelTitleLabel = new cc.LabelTTF("Lv ", b_getFontName(res.mainFont), NJ.fontSizes.sub);
-            this._levelTitleLabel.attr({
-                scale: 1.0,
+            this._levelLabel = new cc.LabelBMFont(levelPrefix, b_getFontName(res.mainFont));
+            this._levelLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
+            this._levelLabel.attr({
                 anchorX: 0,
-                anchorY: 0.5 + NJ.anchorOffsetY,
+                anchorY: 0.5,
                 x: startPos.x,
                 y: startPos.y
             });
-            this._levelTitleLabel.setColor(NJ.themes.defaultLabelColor);
-            this.addChild(this._levelTitleLabel);
-
-            this._levelValueLabel = new cc.LabelTTF("Default String", b_getFontName(res.mainFont), NJ.fontSizes.sub);
-            this._levelValueLabel.attr({
-                scale: 1.0,
-                anchorX: 0,
-                anchorY: 0.5 + NJ.anchorOffsetY,
-                x: startPos.x + this._levelTitleLabel.getContentSize().width,
-                y: startPos.y
-            });
-            this._levelValueLabel.setColor(NJ.themes.defaultLabelColor);
-            this.addChild(this._levelValueLabel);
+            this._levelLabel.setColor(NJ.themes.defaultLabelColor);
+            this.addChild(this._levelLabel);
         },
 
         initProgressBar: function() {
@@ -131,16 +113,14 @@ var NumboHeaderLayer = (function() {
 ////////////////
 
         updateValues: function() {
-            this._scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
-            this._levelValueLabel.setString(NJ.gameState.getLevel());
+            this._scoreLabel.setString(scorePrefix + NJ.prettifier.formatNumber(NJ.gameState.getScore()));
+            this._levelLabel.setString(levelPrefix + NJ.gameState.getLevel());
             this._progressBar.setProgress(NJ.gameState.getLevelupProgress());
         },
 
         updateTheme: function() {
-            this._scoreTitleLabel.setColor(NJ.themes.defaultLabelColor);
-            this._scoreValueLabel.setColor(NJ.themes.defaultLabelColor);
-            this._levelTitleLabel.setColor(NJ.themes.defaultLabelColor);
-            this._levelValueLabel.setColor(NJ.themes.defaultLabelColor);
+            this._scoreLabel.setColor(NJ.themes.defaultLabelColor);
+            this._levelLabel.setColor(NJ.themes.defaultLabelColor);
         },
 
 // UI callbacks //

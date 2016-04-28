@@ -48,7 +48,7 @@ cc.ControlButton = cc.Control.extend(/** @lends cc.ControlButton# */{
     _labelAnchorPoint: null,
     _currentTitle: null,
     _currentTitleColor: null,
-    _titleLabel: null,
+    _titleMenuItem: null,
     _backgroundSprite: null,
     _opacity: 0,
     _isPushed: false,

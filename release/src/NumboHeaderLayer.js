@@ -120,7 +120,7 @@ var NumboHeaderLayer = (function() {
                 x: contentSize.width - contentSize.height / 2,
                 y: contentSize.height / 2
             });
-            var pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
+            var pauseButton = new NJMenuItem(buttonSize, onPause.bind(this), this);
             pauseButton.setImageRes(res.pauseImage);
             menu.addChild(pauseButton);
 

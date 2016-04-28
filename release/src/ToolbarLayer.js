@@ -48,7 +48,7 @@ var ToolbarLayer = (function() {
                 x: contentSize.width - contentSize.height / 2,
                 y: contentSize.height / 2
             });
-            var toggleButton = new NJMenuButton(buttonSize, onToggleTheme.bind(this), this);
+            var toggleButton = new NJMenuItem(buttonSize, onToggleTheme.bind(this), this);
             //pauseButton.setImageRes(res.pauseImage);
             menu.addChild(toggleButton);
 

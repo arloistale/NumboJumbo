@@ -19,7 +19,7 @@ var FeedbackLayer = cc.Layer.extend({
 	ctor: function() {
 		this._super();
 
-        var feedback = null;
+        var entity = null;
         var i = 0;
 
         // TODO: Should not have to call this here...
@@ -27,16 +27,16 @@ var FeedbackLayer = cc.Layer.extend({
 
         // initialize banner pool with entities
         for(; i < BANNER_POOL_SIZE; i++) {
-            feedback = new Banner();
-            feedback.retain();
-            this.bannerPool.push(feedback);
+            entity = new Snippet();
+            entity.retain();
+            this.bannerPool.push(entity);
         }
 
         // initialize snippet pool with entities
         for(i = 0; i < SNIPPET_POOL_SIZE; i++) {
-            feedback = new Snippet();
-            feedback.retain();
-            this.snippetPool.push(feedback);
+            entity = new Snippet();
+            entity.retain();
+            this.snippetPool.push(entity);
         }
 
         // initialize doomsayer
@@ -74,6 +74,12 @@ var FeedbackLayer = cc.Layer.extend({
 // POOLING //
 /////////////
 
+    // push banner back into banner pool
+    pushBannerPool: function(banner) {
+        cc.assert(this.bannerPool.length < BANNER_POOL_SIZE, "Exceeded pool size for banners: " + (this.bannerPool.length + 1));
+        this.bannerPool.push(banner);
+    },
+
     // pops a banner from the banner pool,
     // NOTE: Allocates a new banner if needed, increase pool size if this happens!
     popBannerPool: function() {
@@ -83,6 +89,12 @@ var FeedbackLayer = cc.Layer.extend({
         banner.reset();
 
         return banner;
+    },
+
+    // push snippet back into pool
+    pushSnippetPool: function(snippet) {
+        cc.assert(this.snippetPool.length < SNIPPET_POOL_SIZE, "Exceeded pool size for snippets: " + (this.snippetPool.length + 1));
+        this.snippetPool.push(snippet);
     },
 
     // pops a banner from the banner pool,
@@ -96,72 +108,12 @@ var FeedbackLayer = cc.Layer.extend({
         return snippet;
     },
 
-    pushBannerPool: function(banner) {
-        cc.assert(this.bannerPool.length < BANNER_POOL_SIZE, "Exceeded pool size for banners: " + (this.bannerPool.length + 1));
-        this.bannerPool.push(banner);
-    },
-
-    pushSnippetPool: function(snippet) {
-        cc.assert(this.snippetPool.length < SNIPPET_POOL_SIZE, "Exceeded pool size for snippets: " + (this.snippetPool.length + 1));
-        this.snippetPool.push(snippet);
-    },
-
 ///////////////
 // LAUNCHING //
 ///////////////
 
     /*
-     * Launches a banner onto the feedback layer, usually intended for
-     * level ups and large combos.
-     *
-     * Usage: launchFallingBanner({ title: 'Hello' })
-     */
-    launchFallingBanner: function(data) {
-        var that = this;
-        var banner = this.popBannerPool();
-        var titleStr = "Default String";
-        var easing = cc.easeQuinticActionOut();
-        var color = cc.color("#ffffff");
-
-        if(data) {
-            if(typeof data.title !== 'undefined')
-                titleStr = data.title;
-
-            if(typeof data.easing != 'undefined')
-                easing = data.easing;
-
-            if(typeof data.color != 'undefined')
-                color = data.color;
-        }
-
-        banner.setText(titleStr);
-        banner.setColor(color);
-
-        // spawn off-screen
-        banner.setPosition(cc.visibleRect.center.x, cc.visibleRect.top.y * 1.1);
-
-        this.addChild(banner, 4);
-
-        var targetX = data && typeof data.targetX !== 'undefined' ? data.targetX : cc.visibleRect.center.x;
-        var targetY = data && typeof data.targetY !== 'undefined' ? data.targetY : cc.visibleRect.center.y;
-
-        // start moving the banner
-        var moveDuration = 0.5;
-        var moveAction = cc.moveTo(moveDuration, cc.p(targetX, targetY)).easing(easing);
-        var delayAction = cc.delayTime(0.8);
-        var fadeOutAction = cc.fadeTo(0.2, 0);
-        var removeAction = cc.callFunc(function() {
-            that.pushBannerPool(banner);
-            banner.stopAllActions();
-            banner.removeFromParent(true);
-        });
-
-        banner.runAction(cc.sequence(moveAction, delayAction, fadeOutAction, removeAction));
-    },
-
-    /*
-     * Launches a snippet onto the feedback layer, intended for showing small bits of info
-     * such as score increases.
+     * Launches a snippet onto the feedback layer. Show some text on the screen!
      *
      * Usage: launchSnippet ({ title: 'Hello', x: 500, y: 500, targetX: 400, targetY: 400 })
      */
@@ -176,6 +128,8 @@ var FeedbackLayer = cc.Layer.extend({
             targetX = 0, targetY = 0,
             targetScale = 1;
 
+        var easing = cc.easeQuinticActionOut();
+
         if(data) {
             if(typeof data.title !== 'undefined')
                 titleStr = data.title;
@@ -189,6 +143,9 @@ var FeedbackLayer = cc.Layer.extend({
             if(typeof data.color !== 'undefined')
                 color = data.color;
 
+            if(typeof data.easing != 'undefined')
+                easing = data.easing;
+
             if(typeof data.targetX !== 'undefined')
                 targetX = data.targetX;
 
@@ -199,6 +156,7 @@ var FeedbackLayer = cc.Layer.extend({
                 targetScale = data.targetScale;
         }
 
+        snippet.setLabelSize(Math.min(cc.visibleRect.width, cc.visibleRect.height) * 0.05);
         snippet.setColor(color);
         snippet.setText(titleStr);
         snippet.setScale(0.01, 0.01);
@@ -207,12 +165,12 @@ var FeedbackLayer = cc.Layer.extend({
         this.addChild(snippet, 4);
 
         var scaleUpAction = cc.scaleTo(0.2, targetScale, targetScale);
-        var moveAction = cc.moveTo(1, cc.p(targetX, targetY));
+        var moveAction = cc.moveTo(1, cc.p(targetX, targetY)).easing(easing);
         var fadeOutAction = cc.fadeTo(1, 0);
         var removeAction = cc.callFunc(function() {
             that.pushSnippetPool(snippet);
             snippet.stopAllActions();
-            snippet.removeFromParent(true);
+            snippet.removeFromParent(false);
         });
 
         snippet.runAction(cc.sequence(scaleUpAction, cc.spawn(moveAction, fadeOutAction), removeAction));
