@@ -295,11 +295,11 @@ var NumboGameLayer = (function() {
 
                     this.runAction(cc.sequence(cc.delayTime(5.5),
                         cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol - 1, 2);
+                            that.spawnDropBlock(centerCol , 2);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol, 1);
+                            that.spawnDropBlock(centerCol + 1, 1);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol + 1, 3);
+                            that.spawnDropBlock(centerCol + 2, 3);
                         })
                     ));
 
@@ -350,14 +350,29 @@ var NumboGameLayer = (function() {
                         cc.callFunc(function() {
                             that.spawnDropBlock(centerCol - 2, 1);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol - 1, 4);
-                        }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol, 1);
-                        }), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol - 1, 4);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol, 1);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
                             that.spawnDropBlock(centerCol + 1, 1);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol + 2, 7);
-                        })
+							that.spawnDropBlock(centerCol + 2, 7);
+						})
+
+
+						// spawn some extra 7's to demonstrate the wombo combo explosion
+						, cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol - 3, 7);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol - 2, 7);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol - 1, 7);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol, 7);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol + 1, 7);
+						})
+
                     ));
 
                     break;
@@ -892,7 +907,7 @@ var NumboGameLayer = (function() {
                     cc.audioEngine.playEffect(activationSound);
 
 				// schedule a hint
-				this.schedule(this.jiggleHintBlocks, 12);
+				this.schedule(this.jiggleHintBlocks, 7);
 			}
 		},
 
