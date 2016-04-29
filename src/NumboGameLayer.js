@@ -251,7 +251,7 @@ var NumboGameLayer = (function() {
 
             // curtain layer between levels
 			this._curtainLayer = new CurtainLayer(_levelBounds);
-            this._curtainLayer.retain();
+            //this._curtainLayer.retain();
 
             // feedback overlay
             this._feedbackLayer = new FeedbackLayer();
@@ -869,7 +869,6 @@ var NumboGameLayer = (function() {
                     //this.schedule(this.closeCurtain,.6);
                     this.closeCurtain();
                     this.unschedule(this.scheduleSpawn);
-                    this.schedule(this.initCurtainDrain, 2.5);
 					
                     // Play level up sound instead
                     if (NJ.settings.sounds)
@@ -934,8 +933,9 @@ var NumboGameLayer = (function() {
 			this.levelTransition = true;
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(res.applauseSound);
-
 			this.unschedule(this.closeCurtain);
+
+			this._curtainLayer.initLabels();
 			this._curtainLayer.animate();
 			this.addChild(this._curtainLayer, 901);
 
@@ -943,22 +943,21 @@ var NumboGameLayer = (function() {
 				for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
 					this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 			}
+
+			this.schedule(this.checkOpenCurtain,2);
 		},
 
-		initCurtainDrain: function() {
-			this._curtainLayer.initDrain();
-			this.unschedule(this.initCurtainDrain);
-			this.schedule(this.drainCurtainPoints, this._curtainLayer.getTimePerDrain());
-		},
+		checkOpenCurtain: function() {
+			this.unschedule(this.checkOpenCurtain);
 
-		drainCurtainPoints: function() {
-			this.unschedule(this.drainCurtainPoints);
-			this._curtainLayer.drainPoints();
-			if(this._curtainLayer.isDrainingComplete()) {
-				this.unschedule(this.drainCurtainPoints);
-				this.schedule(this.openCurtain, 1);
+			if(this._curtainLayer.isCurtainComplete()) {
+				this.openCurtain();
 			}
-			else this.schedule(this.drainCurtainPoints, this._curtainLayer.getTimePerDrain());
+			else {
+				this.schedule(this.checkOpenCurtain,.5);
+			}
+
+
 		},
 
 		openCurtain: function() {
