@@ -804,13 +804,6 @@ var NumboGameLayer = (function() {
 					});
 				}
 
-                // TODO: Really do not like how this is done
-                // Gaps may be created; shift all affected blocks down.
-                for (var col = 0; col < NJ.NUM_COLS; ++col) {
-                    for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
-                        this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-                }
-
                 // add to number of blocks cleared
                 NJ.gameState.addBlocksCleared(comboLength);
 
@@ -843,6 +836,12 @@ var NumboGameLayer = (function() {
                     //if (NJ.settings.sounds)
                       //  cc.audioEngine.playEffect(cheers[Math.floor(Math.random() * cheers.length)]);
                 }
+
+				// Gaps may be created; shift all affected blocks down.
+				for (var col = 0; col < NJ.NUM_COLS; ++col) {
+					for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
+						this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+				}
 
 				var snippetPos = cc.p(sumPos.x / clearedBlocks.length, sumPos.y / clearedBlocks.length);
 

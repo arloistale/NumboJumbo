@@ -361,6 +361,20 @@ var NumboLevel = (function() {
 			return this.isAdjCoords(block1.col, block1.row, block2.col, block2.row);
 		},
 
+		// returns a list of all blocks with the given value
+		getBlocksWithValue: function(value) {
+			var result = [];
+
+			for(var i = 0; i < NJ.NUM_COLS; ++i) {
+				for(var j = 0; j < blocks[i].length; ++j) {
+					if(blocks[i][j].val == value)
+						result.push(blocks[i][j]);
+				}
+			}
+
+			return result;
+		},
+
 		// returns a list of neighbors adjacent to this block
 		// takes in an object either containing a block variable or a col/row pair
 		getNeighbors: function(col, row) {
@@ -404,7 +418,7 @@ var NumboLevel = (function() {
 		getCurrentBlocks: function() {
 			var currentBlocks = [];
 			for(var i=0; i<NJ.NUM_COLS; i++) {
-				for(var j=0; j<NJ.NUM_ROWS; j++) {
+				for(var j=0; j< NJ.NUM_ROWS; j++) {
 					var block = this.getBlock(i,j);
 					if(block != null)
 						currentBlocks.push(block);
