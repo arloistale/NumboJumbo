@@ -133,6 +133,8 @@ var NumboGameLayer = (function() {
             // Begin scheduling block drops.
             this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS * .4));
             this.schedule(this.scheduleSpawn, 0.1 * 20);
+			
+
         },
 
 		// Initialize input depending on the device.
@@ -470,6 +472,13 @@ var NumboGameLayer = (function() {
 			moveBlock.runAction(moveAction);
 		},
 
+		checkGameOver: function(){
+			if (this._numboController.isGameOver() ) {
+				this.onGameOver();
+			}
+
+		},
+
 		// Spawns a block and calls itself in a loop.
 		scheduleSpawn: function() {
 			// TODO: Order matters when scheduling, must schedule before spawning WHY?
@@ -478,6 +487,9 @@ var NumboGameLayer = (function() {
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
 
 			if(this._numboController.isGameOver()) {
+
+				// this block looks deprecated to me -- commenting out to be safe. - Brett 4/29
+				/*
 				if(this.pausedJumbo != null) {
 					this.clearBlocks();
 					NJ.gameState.setStage("normal");
@@ -489,6 +501,8 @@ var NumboGameLayer = (function() {
 				} else {
 					this.onGameOver();
 				}
+				*/
+				this.onGameOver();
 
 				return;
 			}

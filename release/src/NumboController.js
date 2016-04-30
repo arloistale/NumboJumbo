@@ -182,7 +182,7 @@ var NumboController = (function() {
 		// must define block size in terms of world coordinates
 		// returns dropped block
 		spawnDropRandomBlock: function(blockSize) {
-			cc.assert(!this.isGameOver(), "Can't drop any more blocks");
+			cc.assert(!this.levelIsFull(), "Can't drop any more blocks");
 
 			// Set up val/col
 			var col = NJ.weightedRandom(this._numboLevel.getColWeights());
@@ -416,7 +416,7 @@ var NumboController = (function() {
 			return this._numboLevel.getNumBlocks() / this._numboLevel.getCapacity() >= NJ.DANGER_THRESHOLD;
 		},
 
-		isGameOver: function() {
+		levelIsFull: function() {
 			return this._numboLevel.isFull();
 		},
 

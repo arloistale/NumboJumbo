@@ -477,7 +477,7 @@ var NumboGameLayer = (function() {
 			this.unschedule(this.scheduleSpawn);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
 
-			if(this._numboController.isGameOver()) {
+			if(this._numboController.levelIsFull()) {
 				if(this.pausedJumbo != null) {
 					this.clearBlocks();
 					NJ.gameState.setStage("normal");

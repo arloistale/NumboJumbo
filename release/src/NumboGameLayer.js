@@ -346,7 +346,7 @@ var NumboGameLayer = (function() {
 		// NOTE: This is the function you should be using to put new blocks into the game
 		// TODO: Improve structure (don't check game over state here for improved separation of concerns)
 		spawnDropRandomBlock: function() {
-			if(this._numboController.isGameOver()) {
+			if(this._numboController.levelIsFull()) {
 				if(this.pausedJumbo != null) {
 					this.clearBlocks();
 					NJ.gameState.setStage("normal");

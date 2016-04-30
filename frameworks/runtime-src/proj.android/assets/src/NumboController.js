@@ -418,7 +418,7 @@ var NumboController = (function() {
 			return this._numboLevel.getNumBlocks() / this._numboLevel.getCapacity() >= NJ.DANGER_THRESHOLD;
 		},
 
-		isGameOver: function() {
+		levelIsFull: function() {
 			return this._numboLevel.isFull();
 		},
 

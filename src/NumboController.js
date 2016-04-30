@@ -46,7 +46,6 @@ var NumboController = (function() {
 		_numboLevel: null,
 		_knownPath: [],
 		_selectedBlocks: [],
-
 		blocksDropped: 0,
 
 		////////////////////
@@ -426,8 +425,18 @@ var NumboController = (function() {
 			return this._numboLevel.getNumBlocks() / this._numboLevel.getCapacity() >= NJ.DANGER_THRESHOLD;
 		},
 
-		isGameOver: function() {
+		isGameOver: function(){
+			return this.timeIsExhausted();
+		},
+
+		levelIsFull: function() {
 			return this._numboLevel.isFull();
+		},
+
+		timeIsExhausted: function(){
+			var timeFraction = 1 - (Date.now() - NJ.gameState.getStartTime() ) / 100000;
+
+			return timeFraction < 0;
 		},
 
 		getRowsToClearAfterLevelup: function() {
