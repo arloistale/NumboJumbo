@@ -1,7 +1,7 @@
 {
   "jumbos": {
     "basic": {
-      "name": "Basic",
+      "name": "Minute Madness",
       "highscoreThreshold": 0,
       "currencyThreshold": 0,
       "color": "#00E676",
@@ -39,7 +39,7 @@
       "highscoreThreshold": 0,
       "currencyThreshold": 0,
       "color": "#00E676",
-      "blockColorString": "dark",
+      "blockColorString": "light",
       "spawnTime": 0.75,
       "numberList": [
         {

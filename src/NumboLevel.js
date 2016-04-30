@@ -68,20 +68,9 @@ var NumboLevel = (function() {
 			var row = block.row;
 			block.kill();
 
-			// naturally the this._blocks collection for this column will rearrange itself
-			this._blocks[col].splice(row, 1);
-			this._numBlocks--;
-
-			if(this._blocks[col].length > 0) {
-				// update internal row index to reflect new indices
-				for (var j = row; j < this._blocks[col].length; ++j) {
-					this._blocks[col][j].row = j;
-				}
-
-			} else if(col > 0 && col < NJ.NUM_COLS - 1 && this._blocks[col - 1].length && this._blocks[col + 1].length) {
-				// collapse columns inward if we have cleared a column between two other non empty columns
-				this._collapseColumnsToward(col);
-			}
+			// mark this block as null
+			// later when we update rows and columns we will remove from the array
+			this._blocks[col][row] = null;
 		},
 
 		// kill block at given coordinates
@@ -234,6 +223,15 @@ var NumboLevel = (function() {
 
 		// returns whether level is currently full of this._blocks
 		isFull: function() {
+            var count = 0;
+            for(var i = 0; i < NJ.NUM_COLS; ++i) {
+                for(var j = 0; j < NJ.NUM_ROWS; ++j) {
+                    if(this._blocks[i][j]) {
+                        count++;
+                    }
+                }
+            }
+
 			return this._numBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
 		},
 
@@ -320,9 +318,43 @@ var NumboLevel = (function() {
 			return this._blocks[col].length;
 		},
 
-		/////////////////////////////
-		// Column Collapse Helpers //
-		/////////////////////////////
+		//////////////////////
+		// Collapse Helpers //
+		//////////////////////
+
+		// each block's row and column must be updated
+		updateRowsAndColumns: function() {
+			var i = 0, j = 0;
+
+			// drop all affected blocks down
+			for(i = 0; i < NJ.NUM_COLS; ++i) {
+				for (j = 0; j < this._blocks[i].length; ++j) {
+					if(this._blocks[i][j] == null) {
+						this._blocks[i].splice(j, 1);
+						j--;
+						this._numBlocks--;
+					}
+				}
+			}
+
+			// collapse columns if there is an empty middle column
+			for(i = 1; i < NJ.NUM_COLS - 1; ++i) {
+				if(this._blocks[i].length == 0 && this._blocks[i - 1].length && this._blocks[i + 1].length) {
+					this._collapseColumnsToward(i);
+					break;
+				}
+			}
+
+			var block;
+
+			for(i = 0; i < NJ.NUM_COLS; ++i) {
+				for (j = 0; j < this._blocks[i].length; ++j) {
+					block = this._blocks[i][j];
+					block.col = i;
+					block.row = j;
+				}
+			}
+		},
 
 		// takes in the indeces of two columns in blocks[] and swaps them.
 		// does not fix the internal block.col values;
@@ -378,14 +410,6 @@ var NumboLevel = (function() {
 			cc.assert(0 <= col && col < NJ.NUM_COLS, "invalid column! " + col);
 			this._collapseLeftSideToward(col);
 			this._collapseRightSideToward(col);
-
-			for (var i = 0; i < NJ.NUM_COLS; ++i){
-				for (var j = 0; j < this._blocks[i].length; ++j){
-					if (this._blocks[i][j]) {
-						this._blocks[i][j].col = i;
-					}
-				}
-			}
 		}
 	});
 }());

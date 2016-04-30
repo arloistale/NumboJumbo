@@ -101,7 +101,7 @@ var NumboGameLayer = (function() {
             this._initAudio();
 
             // Init tutorial
-            if(!NJ.settings.hasLoaded && NJ.gameState.getJumboId() != "zeroes") {
+            if(false) {
                 NJ.settings.hasLoaded = true;
                 this._initTutorial();
             } else {
@@ -746,18 +746,37 @@ var NumboGameLayer = (function() {
 
 					// if selected block was returned then we have a new selected block deal with
 					if(selectedBlock) {
+						var highlightBlocks = [selectedBlock];
+
 						var isCombo = this._numboController.isSelectedClearable();
 
-                        // check if we're hovering over wombo combo
-                        if(selectedBlocks.length >= 5 && isCombo) {
-							var valBlocks = this._numboController.getBlocksWithValue(this._numboController.getSelectedTargetValue());
-							for(i = 0; i < valBlocks.length; ++i) {
-								valBlocks[i].highlight();
-							}
+						if(isCombo) {
+							highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
 
-							this._effectsLayer.launchComboOverlay();
-						} else
-							selectedBlock.highlight();
+							// check if we're hovering over wombo combo
+							if (selectedBlocks.length >= 5) {
+
+								for (i = 0; i < selectedBlocks.length; ++i) {
+									highlightBlocks = highlightBlocks.concat(this._numboController.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1));
+								}
+
+								this._effectsLayer.launchComboOverlay();
+							} else
+								selectedBlock.highlight();
+						}
+
+						// remove duplicates
+						for (i = 0; i < highlightBlocks.length; ++i) {
+							for (var j = i + 1; j < highlightBlocks.length; ++j) {
+								if (highlightBlocks[i] === highlightBlocks[j])
+									highlightBlocks.splice(j--, 1);
+							}
+						}
+
+						// highlight all blocks to be potentially cleared
+						for (i = 0; i < highlightBlocks.length; ++i) {
+							highlightBlocks[i].highlight();
+						}
                     } else {
                         if(selectedBlocks.length < 5)
                             this._effectsLayer.clearComboOverlay();
