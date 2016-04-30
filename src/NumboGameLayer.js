@@ -131,8 +131,12 @@ var NumboGameLayer = (function() {
             this._initUI();
 
             // Begin scheduling block drops.
-            this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS * .4));
-            this.schedule(this.scheduleSpawn, 0.1 * 20);
+			if(NJ.gameState.getJumboId() == 'basic') {
+				this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+			} else {
+				this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS * .4));
+				this.schedule(this.scheduleSpawn, 0.1 * 20);
+			}
         },
 
 		// Initialize input depending on the device.
@@ -522,7 +526,10 @@ var NumboGameLayer = (function() {
 
 		// spawns a specified amount of blocks every 0.1 seconds until
 		spawnRandomBlocks: function(amount) {
-			this.schedule(this.spawnDropRandomBlock, 0.1, amount);
+			//this.schedule(this.spawnDropRandomBlock, 0.1, amount);
+			for(var i = 0; i < amount; i++) {
+				this.spawnDropRandomBlock();
+			}
 		},
 
 		// clear all blocks from screen
@@ -852,6 +859,8 @@ var NumboGameLayer = (function() {
 				if(NJ.gameState.getStage() != NJ.gameState.stages.tutorial)
                 	NJ.gameState.addBlocksCleared(comboLength);
 
+				this.spawnRandomBlocks(comboLength);
+
                 // the base score is what we summed to
 				var scoreDifference = targetValue * targetValueCount;
 
@@ -894,23 +903,25 @@ var NumboGameLayer = (function() {
                 });*/
 
                 // Level up with feedback if needed
-                if (NJ.gameState.levelUpIfNeeded()) {
+				if(NJ.gameState.getJumboId() != 'basic') {
+					if (NJ.gameState.levelUpIfNeeded()) {
 
-                    this._numboController.updateProgression();
+						this._numboController.updateProgression();
 
-                    // Check for Jumbo Swap
-                    if (NJ.gameState.currentJumboId == "multiple-progression") {
-                        this._numboController.updateMultipleProgression();
-                    }
+						// Check for Jumbo Swap
+						if (NJ.gameState.currentJumboId == "multiple-progression") {
+							this._numboController.updateMultipleProgression();
+						}
 
-                    //this.schedule(this.closeCurtain,.6);
-                    //this.closeCurtain();
-                    //this.unschedule(this.scheduleSpawn);
-					
-                    // Play level up sound instead
-                    if (NJ.settings.sounds)
-                        activationSound = res.levelupSound;
-                }
+						//this.schedule(this.closeCurtain,.6);
+						//this.closeCurtain();
+						//this.unschedule(this.scheduleSpawn);
+
+						// Play level up sound instead
+						if (NJ.settings.sounds)
+							activationSound = res.levelupSound;
+					}
+				}
 
                 this.checkClearBonus();
 
@@ -924,8 +935,8 @@ var NumboGameLayer = (function() {
                 this._numboController.resetKnownPath();
                 this.jiggleCount = 0;
 
-                if(NJ.settings.sounds)
-                    cc.audioEngine.playEffect(activationSound);
+                //if(NJ.settings.sounds)
+                    //cc.audioEngine.playEffect(activationSound);
 
 				// schedule a hint
 				this.schedule(this.jiggleHintBlocks, 7);

@@ -78,6 +78,9 @@ var NumboHeaderLayer = (function() {
             });
             this._levelLabel.setColor(NJ.themes.defaultLabelColor);
             this.addChild(this._levelLabel);
+            if(NJ.gameState.getJumboId() == 'basic') {
+                this._levelLabel.setVisible(false);
+            }
         },
 
         initProgressBar: function() {
