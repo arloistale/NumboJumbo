@@ -156,7 +156,7 @@ var TutorialLayer = (function() {
                     case slides.end:
 
                         that._titleMenuItem.setTitle("Wombo Combo!");
-                        that._helperMenuItem.setTitle("Welcome to Numbo Jumbo.");
+                        that._helperMenuItem.setTitle("Score as much as you can in 60 seconds.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
