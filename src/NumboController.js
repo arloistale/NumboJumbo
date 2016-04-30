@@ -160,8 +160,9 @@ var NumboController = (function() {
 				var i;
 
 				// remove any affected block sprite objects:
-				for(i = 0; i < clearedBlocks.length; ++i)
+				for(i = 0; i < clearedBlocks.length; ++i) {
 					this.killBlock(clearedBlocks[i]);
+				}
 			}
 
 			this.deselectAllBlocks();
@@ -384,10 +385,6 @@ var NumboController = (function() {
 		updateTheme: function() {
 			this._numboLevel.updateTheme();
 		},
-
-        clearRows: function(num) {
-            this._numboLevel.clearBottomRows(num);
-        },
 
         killBlock: function(block) {
             this._numboLevel.killBlock(block);
