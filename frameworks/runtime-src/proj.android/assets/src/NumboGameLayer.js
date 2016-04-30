@@ -251,7 +251,7 @@ var NumboGameLayer = (function() {
 
             // curtain layer between levels
 			this._curtainLayer = new CurtainLayer(_levelBounds);
-            this._curtainLayer.retain();
+            //this._curtainLayer.retain();
 
             // feedback overlay
             this._feedbackLayer = new FeedbackLayer();
@@ -295,11 +295,11 @@ var NumboGameLayer = (function() {
 
                     this.runAction(cc.sequence(cc.delayTime(5.5),
                         cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol - 1, 2);
+                            that.spawnDropBlock(centerCol , 2);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol, 1);
+                            that.spawnDropBlock(centerCol + 1, 1);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol + 1, 3);
+                            that.spawnDropBlock(centerCol + 2, 3);
                         })
                     ));
 
@@ -350,14 +350,29 @@ var NumboGameLayer = (function() {
                         cc.callFunc(function() {
                             that.spawnDropBlock(centerCol - 2, 1);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol - 1, 4);
-                        }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol, 1);
-                        }), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol - 1, 4);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol, 1);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
                             that.spawnDropBlock(centerCol + 1, 1);
                         }), cc.delayTime(0.1), cc.callFunc(function() {
-                            that.spawnDropBlock(centerCol + 2, 7);
-                        })
+							that.spawnDropBlock(centerCol + 2, 7);
+						})
+
+
+						// spawn some extra 7's to demonstrate the wombo combo explosion
+						, cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol - 3, 7);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol - 2, 7);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol - 1, 7);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol, 7);
+						}), cc.delayTime(0.1), cc.callFunc(function() {
+							that.spawnDropBlock(centerCol + 1, 7);
+						})
+
                     ));
 
                     break;
@@ -731,11 +746,18 @@ var NumboGameLayer = (function() {
 
 					// if selected block was returned then we have a new selected block deal with
 					if(selectedBlock) {
-                        selectedBlock.highlight();
+						var isCombo = this._numboController.isSelectedClearable();
 
                         // check if we're hovering over wombo combo
-                        if(selectedBlocks.length >= 5)
-                            this._effectsLayer.launchComboOverlay();
+                        if(selectedBlocks.length >= 5 && isCombo) {
+							var valBlocks = this._numboController.getBlocksWithValue(this._numboController.getSelectedTargetValue());
+							for(i = 0; i < valBlocks.length; ++i) {
+								valBlocks[i].highlight();
+							}
+
+							this._effectsLayer.launchComboOverlay();
+						} else
+							selectedBlock.highlight();
                     } else {
                         if(selectedBlocks.length < 5)
                             this._effectsLayer.clearComboOverlay();
@@ -761,25 +783,26 @@ var NumboGameLayer = (function() {
 		onTouchEnded: function(touchPosition) {
 			if(!this.levelTransition) {
 				// Activate any selected blocks.
+				var targetValue = this._numboController.getSelectedTargetValue();
 				var clearedBlocks = this._numboController.activateSelectedBlocks();
 
 				this.redrawSelectedLines();
 
                 this._effectsLayer.clearComboOverlay();
 
+				var comboLength = clearedBlocks.length;
+
                 // make sure something actually happened
-                if(!clearedBlocks)
+                if(!comboLength)
                     return;
 
 				// this may change throughout the function
                 var activationSound = progresses[Math.floor(progresses.length * NJ.gameState.getLevelupProgress())];
 
-                var comboLength = clearedBlocks.length;
-
 				// initiate iterator variables here because we use them a lot
 				var i, block, color;
 
-				var targetValue = -1;
+				var targetValueCount = 0;
 				var sumPos = cc.p(0, 0);
 
 				// loop through the blocks, giving each one a particle explosion and also computing some values
@@ -787,8 +810,10 @@ var NumboGameLayer = (function() {
 					block = clearedBlocks[i];
 
 					// we need to find the target value which will be the maximum value in the cleared blocks
-					if(block.val > targetValue)
-						targetValue = block.val;
+					if(block.val == targetValue)
+						++targetValueCount;
+
+					// also count how many extra of the target we cleared
 
 					sumPos.x += block.x;
 					sumPos.y += block.y;
@@ -804,49 +829,41 @@ var NumboGameLayer = (function() {
 					});
 				}
 
-                // TODO: Really do not like how this is done
-                // Gaps may be created; shift all affected blocks down.
-                for (var col = 0; col < NJ.NUM_COLS; ++col) {
-                    for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
-                        this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-                }
-
                 // add to number of blocks cleared
-                NJ.gameState.addBlocksCleared(comboLength);
+				if(NJ.gameState.getStage() != NJ.gameState.stages.tutorial)
+                	NJ.gameState.addBlocksCleared(comboLength);
 
                 // the base score is what we summed to
-				var scoreDifference = targetValue * 10;
+				var scoreDifference = targetValue * targetValueCount;
 
                 // begin calculating score bonus
                 var scoreBonus = 0;
 
                 var threshold = NJ.comboThresholds.get(comboLength);
 				var scoreMultiplier = clearedBlocks.length - 3;
-				scoreDifference = Math.floor(scoreDifference + scoreDifference * scoreMultiplier);
+				//scoreDifference = Math.floor(scoreDifference + scoreDifference * scoreMultiplier);
 
-                NJ.gameState.addScore(scoreDifference);
+				NJ.gameState.addScore(scoreDifference);
 
                 var differenceThreshold = 300;
 
                 // launch feedback for combo threshold title snippet
                 if (comboLength >= 5) {
-                    /*
-                    var title = "WOMBO COMBO";
-
-                    this._feedbackLayer.launchFallingBanner({
-                        title: title,
-                        color: threshold ? threshold.color : cc.color("#ffffff"),
-                        targetY: cc.visibleRect.center.y,
-                        easing: cc.easeQuinticActionOut()
-                    });*/
 
                     //if (NJ.settings.sounds)
                       //  cc.audioEngine.playEffect(cheers[Math.floor(Math.random() * cheers.length)]);
                 }
 
+				// Gaps may be created; shift all affected blocks down.
+				for (var col = 0; col < NJ.NUM_COLS; ++col) {
+					for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
+						this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+				}
+
 				var snippetPos = cc.p(sumPos.x / clearedBlocks.length, sumPos.y / clearedBlocks.length);
 
                 // launch feedback for gained score
+				/*
                 this._feedbackLayer.launchSnippet({
                     title: "+" + NJ.prettifier.formatNumber(scoreDifference),
                     color: threshold ? threshold.color : cc.color("#ffffff"),
@@ -855,7 +872,7 @@ var NumboGameLayer = (function() {
                     targetX: snippetPos.x,
                     targetY: snippetPos.y + _levelBounds.height / 6,
                     targetScale: 1 + 0.25 * Math.min(1, scoreDifference / differenceThreshold)
-                });
+                });*/
 
                 // Level up with feedback if needed
                 if (NJ.gameState.levelUpIfNeeded()) {
@@ -868,9 +885,8 @@ var NumboGameLayer = (function() {
                     }
 
                     //this.schedule(this.closeCurtain,.6);
-                    this.closeCurtain();
-                    this.unschedule(this.scheduleSpawn);
-                    this.schedule(this.initCurtainDrain, 2.5);
+                    //this.closeCurtain();
+                    //this.unschedule(this.scheduleSpawn);
 					
                     // Play level up sound instead
                     if (NJ.settings.sounds)
@@ -893,7 +909,7 @@ var NumboGameLayer = (function() {
                     cc.audioEngine.playEffect(activationSound);
 
 				// schedule a hint
-				this.schedule(this.jiggleHintBlocks, 12);
+				this.schedule(this.jiggleHintBlocks, 7);
 			}
 		},
 
@@ -935,8 +951,9 @@ var NumboGameLayer = (function() {
 			this.levelTransition = true;
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(res.applauseSound);
-
 			this.unschedule(this.closeCurtain);
+
+			this._curtainLayer.initLabels();
 			this._curtainLayer.animate();
 			this.addChild(this._curtainLayer, 901);
 
@@ -944,22 +961,21 @@ var NumboGameLayer = (function() {
 				for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
 					this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
 			}
+
+			this.schedule(this.checkOpenCurtain,2);
 		},
 
-		initCurtainDrain: function() {
-			this._curtainLayer.initDrain();
-			this.unschedule(this.initCurtainDrain);
-			this.schedule(this.drainCurtainPoints, this._curtainLayer.getTimePerDrain());
-		},
+		checkOpenCurtain: function() {
+			this.unschedule(this.checkOpenCurtain);
 
-		drainCurtainPoints: function() {
-			this.unschedule(this.drainCurtainPoints);
-			this._curtainLayer.drainPoints();
-			if(this._curtainLayer.isDrainingComplete()) {
-				this.unschedule(this.drainCurtainPoints);
-				this.schedule(this.openCurtain, 1);
+			if(this._curtainLayer.isCurtainComplete()) {
+				this.openCurtain();
 			}
-			else this.schedule(this.drainCurtainPoints, this._curtainLayer.getTimePerDrain());
+			else {
+				this.schedule(this.checkOpenCurtain,.5);
+			}
+
+
 		},
 
 		openCurtain: function() {

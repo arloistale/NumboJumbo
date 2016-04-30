@@ -133,34 +133,35 @@ var NumboController = (function() {
 		// activate currently selected blocks
 		// explodes blocks if needed
 		// shifts all blocks down to remove gaps and drops them accordingly
+		// checks if we got a wombo combo, removes all numbers of the same value as target
 		// returns the list of blocks that were cleared
 		activateSelectedBlocks: function() {
-			var clearedBlocks = null;
+			var clearedBlocks = [];
 
 			if(this.isSelectedClearable()) {
 					//cc.audioEngine.playEffect(res.plipSound);
 					
 				var selectedBlocks = this._selectedBlocks;
-				var lastBlock = selectedBlocks[selectedBlocks.length - 1]
-					
-				var i;	
-				/*
-				var explodeBlocks = this.depthLimitedSearch(lastBlock.col, lastBlock.row, 1);
-				explodeBlocks.filter(function(val) {
- 					return selectedBlocks.indexOf(val) == -1;
+				var selectedNums = this._selectedBlocks.map(function(b) {
+					return b.val;
 				});
-				var explodeBlock;
-				cc.log(explodeBlocks.length);
-				for(i = 0; i < explodeBlocks.length; i++) {
-					explodeBlock = explodeBlocks[i];
-					this.killBlock(explodeBlock);
-				}*/
+
+				var targetNum = Math.max.apply(null, selectedNums);
+
+				// wombo comboo clear blocks of value
+				if(selectedBlocks.length >= 5) {
+					var blocksWithVal = this._numboLevel.getBlocksWithValue(targetNum);
+
+					clearedBlocks = clearedBlocks.concat(blocksWithVal);
+				}
+
+				clearedBlocks = clearedBlocks.concat(selectedBlocks);
+					
+				var i;
 
 				// remove any affected block sprite objects:
-				for(i = 0; i < selectedBlocks.length; ++i)
-					this.killBlock(selectedBlocks[i]);
-
-				clearedBlocks = selectedBlocks;
+				for(i = 0; i < clearedBlocks.length; ++i)
+					this.killBlock(clearedBlocks[i]);
 			}
 
 			this.deselectAllBlocks();
@@ -446,6 +447,10 @@ var NumboController = (function() {
 			return this._selectedBlocks;
 		},
 
+		getBlocksWithValue: function(value) {
+			return this._numboLevel.getBlocksWithValue(value);
+		},
+
 		getBlocksList: function() {
 			return this._numboLevel.getCurrentBlocks();
 		},
@@ -475,6 +480,14 @@ var NumboController = (function() {
 
 		getKnownPathLength: function(){
 			return this._knownPath.length;
+		},
+
+		getSelectedTargetValue: function() {
+			var selectedNums = this._selectedBlocks.map(function(b) {
+				return b.val;
+			});
+
+			return Math.max.apply(null, selectedNums);
 		},
 
 		// checks if the current selected blocks can be activated (their equation is valid)

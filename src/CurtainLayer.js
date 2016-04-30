@@ -77,7 +77,6 @@ var CurtainLayer = cc.Layer.extend({
             y: this._levelBounds.y + this._levelBounds.height/4 + this._levelBounds.height
         });
 
-        //this.valueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
         this.totalLabel.setColor(cc.color("#ffffff"));
         //var moveAction3 = cc.moveTo(1, cc.p(this._levelBounds.x+this._levelBounds.width/2, this._levelBounds.y + this._levelBounds.height/4));
         //this.totalLabel.runAction(moveAction3);

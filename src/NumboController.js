@@ -136,7 +136,7 @@ var NumboController = (function() {
 		// checks if we got a wombo combo, removes all numbers of the same value as target
 		// returns the list of blocks that were cleared
 		activateSelectedBlocks: function() {
-			var clearedBlocks = null;
+			var clearedBlocks = [];
 
 			if(this.isSelectedClearable()) {
 					//cc.audioEngine.playEffect(res.plipSound);
@@ -152,10 +152,9 @@ var NumboController = (function() {
 				if(selectedBlocks.length >= 5) {
 					var blocksWithVal = this._numboLevel.getBlocksWithValue(targetNum);
 
-					clearedBlocks = blocksWithVal;
+					clearedBlocks = clearedBlocks.concat(blocksWithVal);
 				}
 
-				clearedBlocks = clearedBlocks || [];
 				clearedBlocks = clearedBlocks.concat(selectedBlocks);
 					
 				var i;
@@ -448,6 +447,10 @@ var NumboController = (function() {
 			return this._selectedBlocks;
 		},
 
+		getBlocksWithValue: function(value) {
+			return this._numboLevel.getBlocksWithValue(value);
+		},
+
 		getBlocksList: function() {
 			return this._numboLevel.getCurrentBlocks();
 		},
@@ -477,6 +480,14 @@ var NumboController = (function() {
 
 		getKnownPathLength: function(){
 			return this._knownPath.length;
+		},
+
+		getSelectedTargetValue: function() {
+			var selectedNums = this._selectedBlocks.map(function(b) {
+				return b.val;
+			});
+
+			return Math.max.apply(null, selectedNums);
 		},
 
 		// checks if the current selected blocks can be activated (their equation is valid)

@@ -89,7 +89,7 @@ var TutorialLayer = (function() {
                         that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(7), cc.callFunc(function() {
-                            that._helperMenuItem.setTitle("1 + 2 = 3");
+                            that._helperMenuItem.setTitle("Try swiping 2 + 1 = 3!");
                             that._menu.alignItemsVerticallyWithPadding(10);
                             that._helperMenuItem.setChildrenOpacity(0);
                             that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
@@ -99,8 +99,8 @@ var TutorialLayer = (function() {
 
                     case slides.subtraction:
 
-                        that._titleMenuItem.setTitle("Nice. You summed to 3.");
-                        that._helperMenuItem.setTitle("Subtraction is just addition backwards.");
+                        that._titleMenuItem.setTitle("Nice! You added up to 3.");
+                        that._helperMenuItem.setTitle("You can add to 5 here,\n order doesn't matter.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -137,7 +137,7 @@ var TutorialLayer = (function() {
                     case slides.wombo:
 
                         that._titleMenuItem.setTitle("Beautiful.");
-                        that._helperMenuItem.setTitle("Bigger combos clear more from the board.");
+                        that._helperMenuItem.setTitle("Longer combos can explode more blocks!");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);

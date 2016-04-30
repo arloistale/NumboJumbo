@@ -292,7 +292,6 @@
                 <file name="src/Extensions.js"/>
                 <file name="src/NJPrettifier.js"/>
                 <file name="src/Resource.js"/>
-                <file name="src/ScoresLayer.js"/>
                 <file name="src/NumboMenuLayer.js"/>
                 <file name="src/TutorialLayer.js"/>
                 <file name="src/JumboMenuLayer.js"/>
@@ -301,9 +300,9 @@
                 <file name="src/NumboHeaderLayer.js"/>
                 <file name="src/GameOverMenuLayer.js"/>
                 <file name="src/NJMenuItem.js"/>
+                <file name="src/NJMenuButton.js"/>
+                <file name="src/EffectsLayer.js"/>
                 <file name="src/FeedbackLayer.js"/>
-                <file name="src/Feedback.js"/>
-                <file name="src/Banner.js"/>
                 <file name="src/Snippet.js"/>
                 <file name="src/NumboBlock.js"/>
                 <file name="src/NumboLevel.js"/>
@@ -322,6 +321,7 @@
                 <file name="src/BackgroundLayer.js"/>
                 <file name="src/ProgressBarLayer.js"/>
                 <file name="src/ToolbarLayer.js"/>
+                <file name="src/CurtainLayer.js"/>
                 <file name="public/main.js"/>
 
             </sources>
