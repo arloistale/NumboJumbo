@@ -195,10 +195,10 @@ var FeedbackLayer = cc.Layer.extend({
         }
 
         this.bIsDoomsayerLaunched = true;
-        this.addChild(this.alertOverlay);
-        this.alertOverlay.setPosition(cc.visibleRect.center.x, cc.visibleRect.center.y);
-        var contentSize = this.alertOverlay.getContentSize();
-        this.alertOverlay.setScale(cc.visibleRect.width / contentSize.width, cc.visibleRect.height / contentSize.height);
+        //this.addChild(this.alertOverlay);
+        //this.alertOverlay.setPosition(cc.visibleRect.center.x, cc.visibleRect.center.y);
+        //var contentSize = this.alertOverlay.getContentSize();
+        //this.alertOverlay.setScale(cc.visibleRect.width / contentSize.width, cc.visibleRect.height / contentSize.height);
 
         this.runDoomsayer();
     },

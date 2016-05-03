@@ -90,8 +90,6 @@ var NumboGameLayer = (function() {
 
 			this.setTag(NJ.tags.PAUSABLE);
 
-			NJ.gameState.init();
-
 			// Init game logic
 			this._initInput();
 			this._initController();
@@ -101,7 +99,7 @@ var NumboGameLayer = (function() {
             this._initAudio();
 
             // Init tutorial
-            if(!NJ.settings.hasLoaded && NJ.gameState.getJumboId() != "zeroes") {
+            if(!NJ.settings.hasLoaded) {
                 NJ.settings.hasLoaded = true;
                 this._initTutorial();
             } else {
@@ -128,11 +126,25 @@ var NumboGameLayer = (function() {
             NJ.gameState.setStage(NJ.gameState.stages.normal);
             NJ.gameState.reset();
 
-            this._initUI();
-
             // Begin scheduling block drops.
-            this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS * .4));
-            this.schedule(this.scheduleSpawn, 0.1 * 20);
+			if(NJ.gameState.getJumboId() == 'basic') {
+				this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+
+				var that = this;
+				this.schedule(function() {
+
+					NJ.gameState.init();
+					this._initUI();
+
+					this.schedule(function() {
+						that._numboHeaderLayer.updateValues();
+						that.checkGameOver();
+					}, 1);
+				}, 1, false)
+			} else {
+				this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS * .4));
+				this.schedule(this.scheduleSpawn, 0.1 * 20);
+			}
         },
 
 		// Initialize input depending on the device.
@@ -470,6 +482,17 @@ var NumboGameLayer = (function() {
 			moveBlock.runAction(moveAction);
 		},
 
+		checkGameOver: function(){
+			var closenessToDeath = 1 - (Date.now() - NJ.gameState.getStartTime() ) / 100000;
+
+			if(closenessToDeath < 0.1)
+				this._feedbackLayer.launchDoomsayer();
+
+			if (this._numboController.isGameOver() ) {
+				this.onGameOver();
+			}
+		},
+
 		// Spawns a block and calls itself in a loop.
 		scheduleSpawn: function() {
 			// TODO: Order matters when scheduling, must schedule before spawning WHY?
@@ -477,7 +500,10 @@ var NumboGameLayer = (function() {
 			this.unschedule(this.scheduleSpawn);
 			this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
 
-			if(this._numboController.levelIsFull()) {
+			if(this._numboController.isGameOver()) {
+
+				// this block looks deprecated to me -- commenting out to be safe. - Brett 4/29
+				/*
 				if(this.pausedJumbo != null) {
 					this.clearBlocks();
 					NJ.gameState.setStage("normal");
@@ -489,6 +515,8 @@ var NumboGameLayer = (function() {
 				} else {
 					this.onGameOver();
 				}
+				*/
+				this.onGameOver();
 
 				return;
 			}
@@ -522,7 +550,13 @@ var NumboGameLayer = (function() {
 
 		// spawns a specified amount of blocks every 0.1 seconds until
 		spawnRandomBlocks: function(amount) {
-			this.schedule(this.spawnDropRandomBlock, 0.1, amount);
+			//this.schedule(this.spawnDropRandomBlock, 0.1, amount);
+
+			for(var i = 0; i < amount; i++) {
+				this.spawnDropRandomBlock();
+			}
+
+			//this.schedule(this.spawnDropRandomBlock, 0.05, amount - 1);
 		},
 
 		// clear all blocks from screen
@@ -746,18 +780,37 @@ var NumboGameLayer = (function() {
 
 					// if selected block was returned then we have a new selected block deal with
 					if(selectedBlock) {
+						var highlightBlocks = [selectedBlock];
+
 						var isCombo = this._numboController.isSelectedClearable();
 
-                        // check if we're hovering over wombo combo
-                        if(selectedBlocks.length >= 5 && isCombo) {
-							var valBlocks = this._numboController.getBlocksWithValue(this._numboController.getSelectedTargetValue());
-							for(i = 0; i < valBlocks.length; ++i) {
-								valBlocks[i].highlight();
-							}
+						if(isCombo) {
+							highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
 
-							this._effectsLayer.launchComboOverlay();
-						} else
-							selectedBlock.highlight();
+							// check if we're hovering over wombo combo
+							if (selectedBlocks.length >= 5) {
+
+								for (i = 0; i < selectedBlocks.length; ++i) {
+									highlightBlocks = highlightBlocks.concat(this._numboController.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1));
+								}
+
+								this._effectsLayer.launchComboOverlay();
+							} else
+								selectedBlock.highlight();
+						}
+
+						// remove duplicates
+						for (i = 0; i < highlightBlocks.length; ++i) {
+							for (var j = i + 1; j < highlightBlocks.length; ++j) {
+								if (highlightBlocks[i] === highlightBlocks[j])
+									highlightBlocks.splice(j--, 1);
+							}
+						}
+
+						// highlight all blocks to be potentially cleared
+						for (i = 0; i < highlightBlocks.length; ++i) {
+							highlightBlocks[i].highlight();
+						}
                     } else {
                         if(selectedBlocks.length < 5)
                             this._effectsLayer.clearComboOverlay();
@@ -797,21 +850,20 @@ var NumboGameLayer = (function() {
                     return;
 
 				// this may change throughout the function
-                var activationSound = progresses[Math.floor(progresses.length * NJ.gameState.getLevelupProgress())];
+                var activationSound = progresses[0];//progresses[Math.floor(progresses.length * NJ.gameState.getLevelupProgress())];
 
 				// initiate iterator variables here because we use them a lot
 				var i, block, color;
-
-				var targetValueCount = 0;
 				var sumPos = cc.p(0, 0);
+
+				var scoreDifference = 0;
 
 				// loop through the blocks, giving each one a particle explosion and also computing some values
 				for(i = 0; i < comboLength; i++) {
 					block = clearedBlocks[i];
 
 					// we need to find the target value which will be the maximum value in the cleared blocks
-					if(block.val == targetValue)
-						++targetValueCount;
+					scoreDifference += block.val;
 
 					// also count how many extra of the target we cleared
 
@@ -830,11 +882,10 @@ var NumboGameLayer = (function() {
 				}
 
                 // add to number of blocks cleared
-				if(NJ.gameState.getStage() != NJ.gameState.stages.tutorial)
-                	NJ.gameState.addBlocksCleared(comboLength);
-
-                // the base score is what we summed to
-				var scoreDifference = targetValue * targetValueCount;
+				if(NJ.gameState.getStage() != NJ.gameState.stages.tutorial) {
+					NJ.gameState.addBlocksCleared(comboLength);
+					this.spawnRandomBlocks(comboLength);
+				}
 
                 // begin calculating score bonus
                 var scoreBonus = 0;
@@ -850,8 +901,8 @@ var NumboGameLayer = (function() {
                 // launch feedback for combo threshold title snippet
                 if (comboLength >= 5) {
 
-                    //if (NJ.settings.sounds)
-                      //  cc.audioEngine.playEffect(cheers[Math.floor(Math.random() * cheers.length)]);
+                    if (NJ.settings.sounds)
+                        cc.audioEngine.playEffect(res.applauseSound);
                 }
 
 				// Gaps may be created; shift all affected blocks down.
@@ -875,23 +926,25 @@ var NumboGameLayer = (function() {
                 });*/
 
                 // Level up with feedback if needed
-                if (NJ.gameState.levelUpIfNeeded()) {
+				if(NJ.gameState.getJumboId() != 'basic') {
+					if (NJ.gameState.levelUpIfNeeded()) {
 
-                    this._numboController.updateProgression();
+						this._numboController.updateProgression();
 
-                    // Check for Jumbo Swap
-                    if (NJ.gameState.currentJumboId == "multiple-progression") {
-                        this._numboController.updateMultipleProgression();
-                    }
+						// Check for Jumbo Swap
+						if (NJ.gameState.currentJumboId == "multiple-progression") {
+							this._numboController.updateMultipleProgression();
+						}
 
-                    //this.schedule(this.closeCurtain,.6);
-                    //this.closeCurtain();
-                    //this.unschedule(this.scheduleSpawn);
-					
-                    // Play level up sound instead
-                    if (NJ.settings.sounds)
-                        activationSound = res.levelupSound;
-                }
+						//this.schedule(this.closeCurtain,.6);
+						//this.closeCurtain();
+						//this.unschedule(this.scheduleSpawn);
+
+						// Play level up sound instead
+						if (NJ.settings.sounds)
+							activationSound = res.levelupSound;
+					}
+				}
 
                 this.checkClearBonus();
 
@@ -916,8 +969,8 @@ var NumboGameLayer = (function() {
 		checkClearBonus: function() {
 			// bonus for clearing screen
 			if (this._numboController.getNumBlocks() < 3) {
-                if (NJ.settings.sounds)
-                    cc.audioEngine.playEffect(res.cheeringSound);
+                //if (NJ.settings.sounds)
+                    //cc.audioEngine.playEffect(res.cheeringSound);
 
                 if (NJ.gameState.getStage() != NJ.gameState.stages.tutorial) {
 
@@ -972,10 +1025,8 @@ var NumboGameLayer = (function() {
 				this.openCurtain();
 			}
 			else {
-				this.schedule(this.checkOpenCurtain,.5);
+				this.schedule(this.checkOpenCurtain, .5);
 			}
-
-
 		},
 
 		openCurtain: function() {

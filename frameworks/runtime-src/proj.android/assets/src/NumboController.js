@@ -46,7 +46,6 @@ var NumboController = (function() {
 		_numboLevel: null,
 		_knownPath: [],
 		_selectedBlocks: [],
-
 		blocksDropped: 0,
 
 		////////////////////
@@ -139,6 +138,8 @@ var NumboController = (function() {
 			var clearedBlocks = [];
 
 			if(this.isSelectedClearable()) {
+				var i;
+
 					//cc.audioEngine.playEffect(res.plipSound);
 					
 				var selectedBlocks = this._selectedBlocks;
@@ -150,18 +151,28 @@ var NumboController = (function() {
 
 				// wombo comboo clear blocks of value
 				if(selectedBlocks.length >= 5) {
-					var blocksWithVal = this._numboLevel.getBlocksWithValue(targetNum);
-
-					clearedBlocks = clearedBlocks.concat(blocksWithVal);
+					for(i = 0; i < selectedBlocks.length; ++i) {
+						var explodeBlocks = this.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1);
+						clearedBlocks = clearedBlocks.concat(explodeBlocks);
+					}
 				}
 
 				clearedBlocks = clearedBlocks.concat(selectedBlocks);
-					
-				var i;
+
+				// remove duplicates
+				for(i = 0; i < clearedBlocks.length; ++i) {
+					for(var j = i + 1; j < clearedBlocks.length; ++j) {
+						if(clearedBlocks[i] === clearedBlocks[j])
+							clearedBlocks.splice(j--, 1);
+					}
+				}
 
 				// remove any affected block sprite objects:
-				for(i = 0; i < clearedBlocks.length; ++i)
+				for(i = 0; i < clearedBlocks.length; ++i) {
 					this.killBlock(clearedBlocks[i]);
+				}
+
+				this._numboLevel.updateRowsAndColumns();
 			}
 
 			this.deselectAllBlocks();
@@ -385,10 +396,6 @@ var NumboController = (function() {
 			this._numboLevel.updateTheme();
 		},
 
-        clearRows: function(num) {
-            this._numboLevel.clearBottomRows(num);
-        },
-
         killBlock: function(block) {
             this._numboLevel.killBlock(block);
         },
@@ -418,8 +425,18 @@ var NumboController = (function() {
 			return this._numboLevel.getNumBlocks() / this._numboLevel.getCapacity() >= NJ.DANGER_THRESHOLD;
 		},
 
+		isGameOver: function(){
+			return this.timeIsExhausted();
+		},
+
 		levelIsFull: function() {
 			return this._numboLevel.isFull();
+		},
+
+		timeIsExhausted: function(){
+			var timeFraction = 1 - (Date.now() - NJ.gameState.getStartTime() ) / 100000;
+
+			return timeFraction < 0;
 		},
 
 		getRowsToClearAfterLevelup: function() {
