@@ -850,7 +850,8 @@ var NumboGameLayer = (function() {
                     return;
 
 				// this may change throughout the function
-                var activationSound = progresses[0];//progresses[Math.floor(progresses.length * NJ.gameState.getLevelupProgress())];
+                //var activationSound = progresses[0];//progresses[Math.floor(progresses.length * NJ.gameState.getLevelupProgress())];
+				var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
 
 				// initiate iterator variables here because we use them a lot
 				var i, block, color;
