@@ -32,22 +32,17 @@ var NumboHeaderLayer = (function() {
             this._super();
 
             this.setContentSize(size.width, size.height);
-            this.attr({
-                x: cc.visibleRect.topLeft.x,
-                y: cc.visibleRect.topLeft.y
-            });
 
             this.initLabels();
             this.initProgressBar();
             this.initButtons();
 
-            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - size.height));
-            this.runAction(moveTo);
+            this.reset();
         },
 
         // Create the labels used to communicate game state with text.
         initLabels: function() {
-            contentSize = this.getContentSize();
+            var contentSize = this.getContentSize();
 
             // Score Labels
             var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.75);
@@ -78,6 +73,7 @@ var NumboHeaderLayer = (function() {
             });
             this._levelLabel.setColor(NJ.themes.defaultLabelColor);
             this.addChild(this._levelLabel);
+
             if(NJ.gameState.getJumboId() == 'basic') {
                 this._levelLabel.setVisible(false);
             }
@@ -111,6 +107,23 @@ var NumboHeaderLayer = (function() {
             this.addChild(menu);
         },
 
+        // resets all elements
+        reset: function() {
+            var size = this.getContentSize();
+
+            this.attr({
+                x: cc.visibleRect.topLeft.x,
+                y: cc.visibleRect.topLeft.y
+            });
+
+            this._scoreLabel.setString(" ");
+            this._levelLabel.setString(" ");
+            this._progressBar.setProgress(0);
+
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - size.height));
+            this.runAction(moveTo);
+        },
+
 ////////////////
 // UI setters //
 ////////////////
@@ -119,8 +132,8 @@ var NumboHeaderLayer = (function() {
             this._scoreLabel.setString(scorePrefix + NJ.gameState.getScore());
             this._levelLabel.setString(levelPrefix + NJ.gameState.getLevel());
 
-            var timeFraction = 1 - (Date.now() - NJ.gameState.getStartTime() ) / 100000;
-            cc.log("TIME THINGY: ", timeFraction);
+            var elapsedTime = (Date.now() - NJ.gameState.getStartTime()) / 1000;
+            var timeFraction = 1 - elapsedTime / 10;
             this._progressBar.setProgress( timeFraction);
         },
 

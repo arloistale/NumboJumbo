@@ -128,7 +128,7 @@ var JumboMenuLayer = (function() {
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
             var elementSize = cc.size(refDim * 0.75, refDim * NJ.uiSizes.header2 * 1.1);
 
-            var button = new NJMenuItem(elementSize, callback, this);
+            var button = new NJMenuButton(elementSize, callback, this);
             button.setEnabled(true);
             button.setTitle(title);
 
@@ -136,10 +136,10 @@ var JumboMenuLayer = (function() {
                 //button.setTitle(title + " (" + NJ.prettifier.formatNumber(highscoreThreshold) + " best or " +
                     //NJ.prettifier.formatNumber(currencyThreshold) + " gold)");
 
-                button.setLabelColor(cc.color("#424242"));
+                button.setBackgroundColor(cc.color("#424242"));
                 button.setEnabled(false);
             } else {
-                button.setLabelColor(cc.color(color));
+                button.setBackgroundColor(cc.color(color));
             }
 
             return button;

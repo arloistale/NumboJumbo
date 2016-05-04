@@ -78,6 +78,9 @@ var NumboHeaderLayer = (function() {
             });
             this._levelLabel.setColor(NJ.themes.defaultLabelColor);
             this.addChild(this._levelLabel);
+            if(NJ.gameState.getJumboId() == 'basic') {
+                this._levelLabel.setVisible(false);
+            }
         },
 
         initProgressBar: function() {
@@ -113,9 +116,12 @@ var NumboHeaderLayer = (function() {
 ////////////////
 
         updateValues: function() {
-            this._scoreLabel.setString(scorePrefix + NJ.prettifier.formatNumber(NJ.gameState.getScore()));
+            this._scoreLabel.setString(scorePrefix + NJ.gameState.getScore());
             this._levelLabel.setString(levelPrefix + NJ.gameState.getLevel());
-            this._progressBar.setProgress(NJ.gameState.getLevelupProgress());
+
+            var timeFraction = 1 - (Date.now() - NJ.gameState.getStartTime() ) / 100000;
+            cc.log("TIME THINGY: ", timeFraction);
+            this._progressBar.setProgress( timeFraction);
         },
 
         updateTheme: function() {

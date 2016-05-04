@@ -113,8 +113,13 @@ var NumboBlock = (function() {
 
         // kill the block
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
-        kill: function() {
+        kill: function(clean) {
             var block = this;
+
+            if(clean) {
+                block.removeFromParent(true);
+                return;
+            }
 
             var delayAction = cc.delayTime(1.25);
 

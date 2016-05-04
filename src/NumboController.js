@@ -65,6 +65,10 @@ var NumboController = (function() {
             this._numboLevel.init();
         },
 
+		reset: function() {
+			this._numboLevel.reset();
+		},
+
 		/////////////////////////////
 		// SELECTION FUNCTIONALITY //
 		/////////////////////////////
@@ -202,31 +206,6 @@ var NumboController = (function() {
 			// Set up val/col
 			var col = NJ.weightedRandom(this._numboLevel.getColWeights());
 			var val = NJ.weightedRandom(this._spawnDistribution) * this._spawnScale;
-
-			var powerup = null;
-			if  (NJ.gameState.isPowerupMode() && this.nextBlockPowerup) {// 5% chance
-				//powerup = 'clearAndSpawn';
-				powerup = 'bonusOneMania';
-				this.nextBlockPowerup = false;
-			}
-
-			if (powerup) {
-				var path = this.meanderSearch(col, this._numboLevel.getNumBlocksInColumn(col),
-					meanderSearchCriteria.pathAtLeastTwoWithNoise);
-
-				path.shift();
-
-				if (path && path.length > 0) {
-					var sum = 0;
-					for (var i in path) {
-						sum += path[i].val;
-					}
-					val = sum;
-				}
-				else {
-					powerup = false;
-				}
-			}
 
 			return this.spawnDropBlock(block, col, val);
 		},
@@ -425,18 +404,8 @@ var NumboController = (function() {
 			return this._numboLevel.getNumBlocks() / this._numboLevel.getCapacity() >= NJ.DANGER_THRESHOLD;
 		},
 
-		isGameOver: function(){
-			return this.timeIsExhausted();
-		},
-
 		levelIsFull: function() {
 			return this._numboLevel.isFull();
-		},
-
-		timeIsExhausted: function(){
-			var timeFraction = 1 - (Date.now() - NJ.gameState.getStartTime() ) / 100000;
-
-			return timeFraction < 0;
 		},
 
 		getRowsToClearAfterLevelup: function() {
