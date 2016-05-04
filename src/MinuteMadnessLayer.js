@@ -5,7 +5,7 @@
 var MinuteMadnessLayer = BaseGameLayer.extend({
 
 	// time limit for minute madness
-	_elapsedTimeLimit: 10,
+	_elapsedTimeLimit: 60,
 
 	////////////////////
 	// Initialization //
@@ -57,7 +57,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 
 		this.spawnRandomBlocks(comboLength);
 
-		var activationSound = progresses[0];
+		var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
 
 		// launch feedback for combo threshold title snippet
 		if (comboLength >= 5) {

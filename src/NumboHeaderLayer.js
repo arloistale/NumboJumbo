@@ -36,8 +36,6 @@ var NumboHeaderLayer = (function() {
             this.initLabels();
             this.initProgressBar();
             this.initButtons();
-
-            this.reset();
         },
 
         // Create the labels used to communicate game state with text.
@@ -133,7 +131,7 @@ var NumboHeaderLayer = (function() {
             this._levelLabel.setString(levelPrefix + NJ.gameState.getLevel());
 
             var elapsedTime = (Date.now() - NJ.gameState.getStartTime()) / 1000;
-            var timeFraction = 1 - elapsedTime / 10;
+            var timeFraction = 1 - elapsedTime / 60;
             this._progressBar.setProgress( timeFraction);
         },
 
