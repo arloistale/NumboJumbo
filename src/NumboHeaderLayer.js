@@ -36,8 +36,6 @@ var NumboHeaderLayer = (function() {
             this.initLabels();
             this.initProgressBar();
             this.initButtons();
-
-            this.reset();
         },
 
         // Create the labels used to communicate game state with text.
