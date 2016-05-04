@@ -2,7 +2,7 @@
  * Created by jonathanlu on 1/18/16.
  */
 
-var NumboGameLayer = cc.Layer.extend({
+var BaseGameLayer = cc.Layer.extend({
 
 	// Level Data
 	_levelBounds: null,
@@ -13,8 +13,9 @@ var NumboGameLayer = cc.Layer.extend({
 
 	_blockSize: null,
 
-	// Number of times a hint is jiggled.
-	_jiggleCount: 0,
+    // Hint Data
+    // Number of times a hint is jiggled.
+    _jiggleCount: 0,
 
 	// UI Data
 	_numboHeaderLayer: null,
@@ -23,9 +24,9 @@ var NumboGameLayer = cc.Layer.extend({
 	_gameOverMenuLayer: null,
 	_effectsLayer: null,
 	_feedbackLayer: null,
-	_curtainLayer: null,
 
-	_tutorialLayer: null,
+    // Audio Data
+    _backgroundTrack: null,
 
 	// Geometry Data
 	_backgroundLayer: null,
@@ -38,10 +39,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Selection Data
 	_lastTouchPosition: null,
-
-	pausedJumbo: null,
-
-	levelTransition: false,
 
 	////////////////////
 	// Initialization //
@@ -62,53 +59,34 @@ var NumboGameLayer = cc.Layer.extend({
 		this._initGeometry();
 		this._initAudio();
 
-		// Init tutorial
-		if(!NJ.settings.hasLoaded) {
-			NJ.settings.hasLoaded = true;
-			this._initTutorial();
-		} else {
-			this._initNormal();
-		}
+        this._initUI();
+
+		// extranneous initialization
+		this._reset();
 	},
 
 	onExit: function() {
-		this._curtainLayer.release();
-
 		this._super();
 	},
 
-	_initTutorial: function() {
-		NJ.gameState.setStage(NJ.gameState.stages.tutorial);
+	// Override this for extranneous
+	_reset: function() {
+        NJ.gameState.init();
 
-		this._tutorialLayer = new TutorialLayer();
-		this.addChild(this._tutorialLayer, 999);
+        this.unscheduleAllCallbacks();
+        this.stopAllActions();
 
-		this._advanceTutorialSlide();
-	},
+        this._selectedLinesNode.clear();
 
-	_initNormal: function() {
-		NJ.gameState.setStage(NJ.gameState.stages.normal);
-		NJ.gameState.reset();
+        this._numboHeaderLayer.reset();
+        this._numboHeaderLayer.updateValues();
 
-		// Begin scheduling block drops.
-		if(NJ.gameState.getJumboId() == 'basic') {
-			this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+        this._numboController.reset();
+        this._feedbackLayer.reset();
+        this._effectsLayer.reset();
 
-			var that = this;
-			this.schedule(function() {
-
-				NJ.gameState.init();
-				this._initUI();
-
-				this.schedule(function() {
-					that._numboHeaderLayer.updateValues();
-					that.checkGameOver();
-				}, 1);
-			}, 1, false)
-		} else {
-			this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS * .4));
-			this.schedule(this.scheduleSpawn, 0.1 * 20);
-		}
+        if(NJ.settings.music)
+            cc.audioEngine.playMusic(this._backgroundTrack, true);
 	},
 
 	// Initialize input depending on the device.
@@ -225,10 +203,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 		this.redrawSelectedLines(null);
 
-		// curtain layer between levels
-		this._curtainLayer = new CurtainLayer(this._levelBounds);
-		//this._curtainLayer.retain();
-
 		// feedback overlay
 		this._feedbackLayer = new FeedbackLayer();
 		this.addChild(this._feedbackLayer, 800);
@@ -246,127 +220,28 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Initialize audio.
 	_initAudio: function() {
-		if(!NJ.settings.music)
-			return;
-
 		// start the music
-		cc.audioEngine.playMusic(res.backgroundTrack, true);
+        this._backgroundTrack = res.backgroundTrack;
 	},
 
-	//////////////
-	// Tutorial //
-	//////////////
+	/////////////////////////
+	// Game State Handling //
+	/////////////////////////
 
-	_advanceTutorialSlide: function() {
-		var that = this;
+    // checks whether the game has ended and performs actions appropriately
+    checkGameOver: function() {
+        if (this.isGameOver() ) {
+            this.onGameOver();
+        }
+    },
 
-		var currSlide = this._tutorialLayer.advanceSlide();
-		var slides = this._tutorialLayer.slides;
+    // IMPORTANT: You must override this function for all children
+    // Determines whether the game session has ended
+    isGameOver: function() {
+        cc.assert(false, "isGameOver: abstract function");
 
-		var centerCol;
-
-		switch(currSlide) {
-			case slides.intro:
-				centerCol = Math.floor((NJ.NUM_COLS - 1) / 2);
-
-				this.runAction(cc.sequence(cc.delayTime(5.5),
-					cc.callFunc(function() {
-						that.spawnDropBlock(centerCol , 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 2, 3);
-					})
-				));
-
-				break;
-			case slides.subtraction:
-				centerCol = Math.floor((NJ.NUM_COLS) / 2);
-
-				this.runAction(cc.sequence(cc.delayTime(4),
-					cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 3);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 5);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 2);
-					})
-				));
-
-				break;
-			case slides.more:
-				centerCol = Math.floor((NJ.NUM_COLS) / 2);
-
-				this.runAction(cc.sequence(cc.delayTime(4),
-					cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 6);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 3);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 4);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 5);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						// begin scheduling hint jiggles
-						that.schedule(that.jiggleHintBlocks, 5);
-					})
-				));
-
-				break;
-
-			case slides.wombo:
-
-				centerCol = Math.floor((NJ.NUM_COLS) / 2);
-
-				this.runAction(cc.sequence(cc.delayTime(4),
-					cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 4);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 2, 7);
-					})
-
-
-					// spawn some extra 7's to demonstrate the wombo combo explosion
-					, cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 3, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 7);
-					})
-
-				));
-
-				break;
-
-			case slides.end:
-
-				this.runAction(cc.sequence(cc.delayTime(4), cc.callFunc(function() {
-					that.removeChild(that._tutorialLayer);
-					that._initNormal();
-				})));
-
-				break;
-		}
-	},
-
-	/////////////////////////////
-	// GAME STATE MANIPULATION //
-	/////////////////////////////
+        return true;
+    },
 
 	// Pauses the game, halting all actions and schedulers.
 	pauseGame: function() {
@@ -400,10 +275,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// Unpauses game, resuming all actions and schedulers.
 	resumeGame: function() {
-		// resume doomsayer if needed
-		if(this._numboController.isInDanger())
-			this._feedbackLayer.launchDoomsayer();
-
 		cc.eventManager.resumeTarget(this, true);
 
 		// use breadth first search to resume all valid children
@@ -446,56 +317,6 @@ var NumboGameLayer = cc.Layer.extend({
 		moveBlock.runAction(moveAction);
 	},
 
-	checkGameOver: function(){
-		var closenessToDeath = 1 - (Date.now() - NJ.gameState.getStartTime() ) / 100000;
-
-		if(closenessToDeath < 0.1)
-			this._feedbackLayer.launchDoomsayer();
-
-		if (this._numboController.isGameOver() ) {
-			this.onGameOver();
-		}
-	},
-
-	// Spawns a block and calls itself in a loop.
-	scheduleSpawn: function() {
-		// TODO: Order matters when scheduling, must schedule before spawning WHY?
-		// PROBABLY because we pause, but then it schedules another one after
-		this.unschedule(this.scheduleSpawn);
-		this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
-
-		if(this._numboController.isGameOver()) {
-
-			// this block looks deprecated to me -- commenting out to be safe. - Brett 4/29
-			/*
-			if(this.pausedJumbo != null) {
-				this.clearBlocks();
-				NJ.gameState.setStage("normal");
-				this._backgroundLayer.updateBackgroundColor(new cc.color(0, 0, 0, 255));
-				this._numboController.recallBoard(this.pausedJumbo,  this._blockSize);
-				this.spawnRandomBlocks(this.pausedJumbo.numBlocks);
-				this.pausedJumbo = null;
-				this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
-			} else {
-				this.onGameOver();
-			}
-			*/
-			this.onGameOver();
-
-			return;
-		}
-
-		if(!this._feedbackLayer.isDoomsayerLaunched()) {
-			if(this._numboController.isInDanger())
-				this._feedbackLayer.launchDoomsayer();
-		} else {
-			if(!this._numboController.isInDanger())
-				this._feedbackLayer.clearDoomsayer();
-		}
-
-		this.spawnDropRandomBlock();
-	},
-
 	// spawns and drops a block with random col and val.
 	spawnDropBlock: function(col, val) {
 		var spawnBlock = new NumboBlock( this._blockSize);
@@ -514,19 +335,83 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// spawns a specified amount of blocks every 0.1 seconds until
 	spawnRandomBlocks: function(amount) {
-		//this.schedule(this.spawnDropRandomBlock, 0.1, amount);
-
 		for(var i = 0; i < amount; i++) {
 			this.spawnDropRandomBlock();
 		}
-
-		//this.schedule(this.spawnDropRandomBlock, 0.05, amount - 1);
 	},
 
-	// clear all blocks from screen
-	clearBlocks: function() {
-		this._numboController.killAllBlocks();
-	},
+    // Interface to NumboController activate selected blocks.
+    // Activates all blocks and performs needed sprite removals.
+    // Override to make this even more awesome!
+    // Returns the blocks that were cleared
+    activateSelectedBlocks: function() {
+        // Activate any selected blocks.
+        var clearedBlocks = this._numboController.activateSelectedBlocks();
+
+        this.redrawSelectedLines();
+
+        this._effectsLayer.clearComboOverlay();
+
+        var comboLength = clearedBlocks.length;
+
+        // make sure something actually happened
+        if(!comboLength)
+            return clearedBlocks;
+
+        // initiate iterator variables here because we use them a lot
+        var i, block, color;
+        var sumPos = cc.p(0, 0);
+
+        var scoreDifference = 0;
+
+        // loop through the blocks, giving each one a particle explosion and also computing some values
+        for(i = 0; i < comboLength; i++) {
+            block = clearedBlocks[i];
+
+            // we need to find the target value which will be the maximum value in the cleared blocks
+            scoreDifference += block.val;
+
+            // also count how many extra of the target we cleared
+
+            sumPos.x += block.x;
+            sumPos.y += block.y;
+
+            // we also need to be computing position sums used to calculate the center point of the cleared
+
+            color = NJ.getColor(NJ.gameState.getJumbo().blockColorString, block.val - 1) || cc.color("#ffffff");
+
+            this._effectsLayer.launchExplosion({
+                color: color,
+                x: block.x,
+                y: block.y
+            });
+        }
+
+        // add to number of blocks cleared
+        NJ.gameState.addBlocksCleared(comboLength);
+
+        // add to score
+        NJ.gameState.addScore(scoreDifference);
+
+        // Gaps may be created; shift all affected blocks down.
+        for (var col = 0; col < NJ.NUM_COLS; ++col) {
+            for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
+                this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+        }
+
+        // show player data
+        if(this._numboHeaderLayer)
+            this._numboHeaderLayer.updateValues();
+
+        // Allow controller to look for new hint.
+        this._numboController.resetKnownPath();
+        this.jiggleCount = 0;
+
+        // schedule a hint
+        this.schedule(this.jiggleHintBlocks, 7);
+
+        return clearedBlocks;
+    },
 
 	// helper function to move a spawned block into place, shifting its position based on column
 	_instantiateBlock: function(block) {
@@ -618,6 +503,10 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// On closing previously opened settings menu we resume.
 	onResume: function() {
+        // resume doomsayer if needed
+        if(this._numboController.isInDanger())
+            this._feedbackLayer.launchDoomsayer();
+
 		this.resumeGame();
 
 		this.removeChild(this._settingsMenuLayer);
@@ -629,18 +518,13 @@ var NumboGameLayer = cc.Layer.extend({
 
 	// On game over when player chooses to go to menu we return to menu.
 	onRetry: function() {
-		// reset necessary modules
-		this._feedbackLayer.reset();
+        this.removeChild(this._gameOverMenuLayer);
 
-		this.unscheduleAllCallbacks();
+        this.unscheduleAllCallbacks();
+        this.stopAllActions();
+        this.resumeGame();
 
-		//load resources
-		cc.LoaderScene.preload(g_game, function () {
-			cc.audioEngine.stopMusic();
-			var scene = new cc.Scene();
-			scene.addChild(new NumboGameLayer());
-			cc.director.runScene(new cc.TransitionFade(0.5, scene));
-		}, this);
+		this._reset();
 	},
 
 	// On game over when player chooses to go to menu we return to menu.
@@ -693,7 +577,6 @@ var NumboGameLayer = cc.Layer.extend({
 
 			// Prevent any hint during a touch.
 			this.unschedule(this.jiggleHintBlocks);
-
 		}
 	},
 
@@ -797,208 +680,9 @@ var NumboGameLayer = cc.Layer.extend({
 	},
 
 	// On touch ended, activates all selected blocks once touch is released.
+    // Returns the cleared blocks.
 	onTouchEnded: function(touchPosition) {
-		if(!this.levelTransition) {
-			// Activate any selected blocks.
-			var targetValue = this._numboController.getSelectedTargetValue();
-			var clearedBlocks = this._numboController.activateSelectedBlocks();
-
-			this.redrawSelectedLines();
-
-			this._effectsLayer.clearComboOverlay();
-
-			var comboLength = clearedBlocks.length;
-
-			// make sure something actually happened
-			if(!comboLength)
-				return;
-
-			// this may change throughout the function
-			var activationSound = progresses[0];//progresses[Math.floor(progresses.length * NJ.gameState.getLevelupProgress())];
-
-			// initiate iterator variables here because we use them a lot
-			var i, block, color;
-			var sumPos = cc.p(0, 0);
-
-			var scoreDifference = 0;
-
-			// loop through the blocks, giving each one a particle explosion and also computing some values
-			for(i = 0; i < comboLength; i++) {
-				block = clearedBlocks[i];
-
-				// we need to find the target value which will be the maximum value in the cleared blocks
-				scoreDifference += block.val;
-
-				// also count how many extra of the target we cleared
-
-				sumPos.x += block.x;
-				sumPos.y += block.y;
-
-				// we also need to be computing position sums used to calculate the center point of the cleared
-
-				color = NJ.getColor(NJ.gameState.getJumbo().blockColorString, block.val - 1) || cc.color("#ffffff");
-
-				this._effectsLayer.launchExplosion({
-					color: color,
-					x: block.x,
-					y: block.y
-				});
-			}
-
-			// add to number of blocks cleared
-			if(NJ.gameState.getStage() != NJ.gameState.stages.tutorial) {
-				NJ.gameState.addBlocksCleared(comboLength);
-				this.spawnRandomBlocks(comboLength);
-			}
-
-			// begin calculating score bonus
-			var scoreBonus = 0;
-
-			var threshold = NJ.comboThresholds.get(comboLength);
-			var scoreMultiplier = clearedBlocks.length - 3;
-			//scoreDifference = Math.floor(scoreDifference + scoreDifference * scoreMultiplier);
-
-			NJ.gameState.addScore(scoreDifference);
-
-			var differenceThreshold = 300;
-
-			// launch feedback for combo threshold title snippet
-			if (comboLength >= 5) {
-
-				if (NJ.settings.sounds)
-					cc.audioEngine.playEffect(res.applauseSound);
-			}
-
-			// Gaps may be created; shift all affected blocks down.
-			for (var col = 0; col < NJ.NUM_COLS; ++col) {
-				for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
-					this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-			}
-
-			var snippetPos = cc.p(sumPos.x / clearedBlocks.length, sumPos.y / clearedBlocks.length);
-
-			// launch feedback for gained score
-			/*
-			this._feedbackLayer.launchSnippet({
-				title: "+" + NJ.prettifier.formatNumber(scoreDifference),
-				color: threshold ? threshold.color : cc.color("#ffffff"),
-				x: snippetPos.x,
-				y: snippetPos.y,
-				targetX: snippetPos.x,
-				targetY: snippetPos.y + this._levelBounds.height / 6,
-				targetScale: 1 + 0.25 * Math.min(1, scoreDifference / differenceThreshold)
-			});*/
-
-			// Level up with feedback if needed
-			if(NJ.gameState.getJumboId() != 'basic') {
-				if (NJ.gameState.levelUpIfNeeded()) {
-
-					this._numboController.updateProgression();
-
-					// Check for Jumbo Swap
-					if (NJ.gameState.currentJumboId == "multiple-progression") {
-						this._numboController.updateMultipleProgression();
-					}
-
-					//this.schedule(this.closeCurtain,.6);
-					//this.closeCurtain();
-					//this.unschedule(this.scheduleSpawn);
-
-					// Play level up sound instead
-					if (NJ.settings.sounds)
-						activationSound = res.levelupSound;
-				}
-			}
-
-			this.checkClearBonus();
-
-			NJ.gameState.offerComboForMultiplier();
-
-			// show player data
-			if(this._numboHeaderLayer)
-				this._numboHeaderLayer.updateValues();
-
-			// Allow controller to look for new hint.
-			this._numboController.resetKnownPath();
-			this.jiggleCount = 0;
-
-			if(NJ.settings.sounds)
-				cc.audioEngine.playEffect(activationSound);
-
-			// schedule a hint
-			this.schedule(this.jiggleHintBlocks, 7);
-		}
-	},
-
-	checkClearBonus: function() {
-		// bonus for clearing screen
-		if (this._numboController.getNumBlocks() < 3) {
-			//if (NJ.settings.sounds)
-				//cc.audioEngine.playEffect(res.cheeringSound);
-
-			if (NJ.gameState.getStage() != NJ.gameState.stages.tutorial) {
-
-				this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
-				this.unschedule(this.scheduleSpawn);
-				this.schedule(this.scheduleSpawn, 6);
-				/*
-				this._feedbackLayer.launchFallingBanner({
-					title: "Nice Clear!",
-					targetY: cc.visibleRect.center.y * 0.5
-				});*/
-
-				// give the player 5 * 9 points and launch 5 random '+9' snippets
-				for (i = 0; i < 5; ++i) {
-					NJ.gameState.addScore(9);
-					this._feedbackLayer.launchSnippet({
-						title: "+" + 9,
-						x: cc.visibleRect.center.x,
-						y: cc.visibleRect.center.y,
-						targetX: this._levelBounds.x + Math.random() * this._levelBounds.width,
-						targetY: this._levelBounds.y + Math.random() * this._levelBounds.height
-					});
-				}
-			} else {
-				this._advanceTutorialSlide();
-			}
-		}
-	},
-
-	closeCurtain: function() {
-		this.levelTransition = true;
-		if(NJ.settings.sounds)
-			cc.audioEngine.playEffect(res.applauseSound);
-		this.unschedule(this.closeCurtain);
-
-		this._curtainLayer.initLabels();
-		this._curtainLayer.animate();
-		this.addChild(this._curtainLayer, 901);
-
-		for (var col = 0; col < NJ.NUM_COLS; ++col) {
-			for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
-				this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-		}
-
-		this.schedule(this.checkOpenCurtain,2);
-	},
-
-	checkOpenCurtain: function() {
-		this.unschedule(this.checkOpenCurtain);
-
-		if(this._curtainLayer.isCurtainComplete()) {
-			this.openCurtain();
-		}
-		else {
-			this.schedule(this.checkOpenCurtain, .5);
-		}
-	},
-
-	openCurtain: function() {
-		this.levelTransition = false;
-		this.removeChild(this._curtainLayer);
-		this.unschedule(this.openCurtain);
-		this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
-		this.checkClearBonus();
+        return this.activateSelectedBlocks();
 	},
 
 /////////////

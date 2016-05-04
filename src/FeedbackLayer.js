@@ -1,11 +1,11 @@
 
-var BANNER_POOL_SIZE = 5;
 var SNIPPET_POOL_SIZE = 10;
 
 var FeedbackLayer = cc.Layer.extend({
 
+    _snippetTag: 56,
+
     // feedback object pools
-	bannerPool: [],
     snippetPool: [],
 
     // feedback doomsayer
@@ -23,18 +23,12 @@ var FeedbackLayer = cc.Layer.extend({
         var i = 0;
 
         // TODO: Should not have to call this here...
-        this.reset();
-
-        // initialize banner pool with entities
-        for(; i < BANNER_POOL_SIZE; i++) {
-            entity = new Snippet();
-            entity.retain();
-            this.bannerPool.push(entity);
-        }
+        //this.reset();
 
         // initialize snippet pool with entities
         for(i = 0; i < SNIPPET_POOL_SIZE; i++) {
             entity = new Snippet();
+            entity.setTag(this._snippetTag);
             entity.retain();
             this.snippetPool.push(entity);
         }
@@ -50,46 +44,27 @@ var FeedbackLayer = cc.Layer.extend({
         this.alertOverlay.retain();
 	},
 
+    // TODO: Memory leaks???
+
     reset: function() {
-        var i = 0;
-        for(; i < this.bannerPool.length; i++) {
-            this.bannerPool[i].stopAllActions();
-            this.bannerPool[i].release();
+        this.clearDoomsayer();
+
+        var children = this.getChildren();
+        var entity = null;
+
+        for(var i = 0; i < children.length; ++i) {
+            entity = children[i];
+            if(entity.getTag() == this._snippetTag) {
+                this.pushSnippetPool(entity);
+                entity.stopAllActions();
+                entity.removeFromParent(false);
+            }
         }
-
-        this.bannerPool = [];
-
-        for(i = 0; i < this.snippetPool.length; i++) {
-            this.snippetPool[i].stopAllActions();
-            this.snippetPool[i].release();
-        }
-
-        this.snippetPool = [];
-                                    
-        if(this.alertOverlay)
-            this.alertOverlay.release();
     },
 
 /////////////
 // POOLING //
 /////////////
-
-    // push banner back into banner pool
-    pushBannerPool: function(banner) {
-        cc.assert(this.bannerPool.length < BANNER_POOL_SIZE, "Exceeded pool size for banners: " + (this.bannerPool.length + 1));
-        this.bannerPool.push(banner);
-    },
-
-    // pops a banner from the banner pool,
-    // NOTE: Allocates a new banner if needed, increase pool size if this happens!
-    popBannerPool: function() {
-        cc.assert (this.bannerPool.length > 0, "error: trying to create too many banners!");
-
-        var banner = this.bannerPool.pop();
-        banner.reset();
-
-        return banner;
-    },
 
     // push snippet back into pool
     pushSnippetPool: function(snippet) {
@@ -97,8 +72,8 @@ var FeedbackLayer = cc.Layer.extend({
         this.snippetPool.push(snippet);
     },
 
-    // pops a banner from the banner pool,
-    // NOTE: Allocates a new banner if needed, increase pool size if this happens!
+    // pops a snippet from the pool
+    // NOTE: Allocates a new snippet if needed, increase pool size if this happens!
     popSnippetPool: function() {
         cc.assert (this.snippetPool.length > 0, "error: trying to create too many snippets!");
 
@@ -195,10 +170,6 @@ var FeedbackLayer = cc.Layer.extend({
         }
 
         this.bIsDoomsayerLaunched = true;
-        //this.addChild(this.alertOverlay);
-        //this.alertOverlay.setPosition(cc.visibleRect.center.x, cc.visibleRect.center.y);
-        //var contentSize = this.alertOverlay.getContentSize();
-        //this.alertOverlay.setScale(cc.visibleRect.width / contentSize.width, cc.visibleRect.height / contentSize.height);
 
         this.runDoomsayer();
     },

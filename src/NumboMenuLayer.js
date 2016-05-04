@@ -106,7 +106,7 @@ var NumboMenuLayer = (function() {
             NJ.gameState.chooseJumbo("basic");
 
             var scene = new cc.Scene();
-            scene.addChild(new NumboGameLayer());
+            scene.addChild(new MinuteMadnessLayer());
             cc.director.runScene(new cc.TransitionFade(0.5, scene));
         }, this);
     };

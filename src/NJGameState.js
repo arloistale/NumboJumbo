@@ -9,19 +9,9 @@ var NJ = NJ || {};
 // USE the given getters and setters
 NJ.gameState = (function() {
 
-    var stages = {
-        tutorial: 1,
-        normal: 2
-    };
-
     // meta data
     var startTime = 0;
     var currentJumboId = "";
-
-    var currStage = 0;
-
-    var randomJumbos = false;
-    var powerupMode = false;
 
     // in game metric tracking
     var prevBlocksNeededForLevelup = 0;
@@ -54,9 +44,6 @@ NJ.gameState = (function() {
 
     return {
 
-        // possible stages of the game
-        stages: stages,
-
         ////////////////////
         // Initialization //
         ////////////////////
@@ -72,14 +59,10 @@ NJ.gameState = (function() {
         // reset game state
         // DOES NOT reset the chosen jumbo!
         reset: function () {
-            currStage = 0;
-
             currentScore = 0;
             currentLevel = 1;
             prevBlocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel - 1);
             blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
-            randomJumbos = false;
-            powerupMode = false;
             blocksCleared = 0;
 
             this.resetMultiplier();
@@ -88,14 +71,6 @@ NJ.gameState = (function() {
         ////////////////
         // Meta Logic //
         ////////////////
-
-        setStage: function(newStage) {
-            currStage = newStage;
-        },
-
-        getStage: function() {
-            return currStage;
-        },
 
         //////////////////
         // Jumbos Logic //
@@ -218,14 +193,6 @@ NJ.gameState = (function() {
 
         getMultiplier: function() {
             return multiplier;
-        },
-
-        isPowerupMode: function() {
-            return powerupMode;
-        },
-
-        setPowerupMode: function() {
-            powerupMode = true;
         }
     }
 }());
