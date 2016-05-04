@@ -53,7 +53,8 @@ var EffectsLayer = cc.Layer.extend({
         var entity = null;
 
         for(i = 0; i < children.length; i++) {
-            if(children[i].getTag() == this._explosionTag) {
+            entity = children[i];
+            if(entity.getTag() == this._explosionTag) {
                 this.pushExplosionPool(entity);
 
                 entity.stopAllActions();
@@ -126,7 +127,7 @@ var EffectsLayer = cc.Layer.extend({
     // NOTE: Allocates a new banner if needed, increase pool size if this happens!
     popExplosionPool: function() {
         cc.assert (this._explosionPool.length > 0, "error: trying to create too many explosions!");
-
+        
         var explosion = this._explosionPool.pop();
         explosion.stopAllActions();
         explosion.stopSystem();

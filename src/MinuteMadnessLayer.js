@@ -5,7 +5,7 @@
 var MinuteMadnessLayer = BaseGameLayer.extend({
 
 	// time limit for minute madness
-	_elapsedTimeLimit: 10,
+	_elapsedTimeLimit: 60,
 
 	////////////////////
 	// Initialization //
