@@ -121,6 +121,11 @@ var NumboHeaderLayer = (function() {
             this._scoreLabel.setString(" ");
             this._levelLabel.setString(" ");
             this._progressBar.setProgress(0);
+        },
+
+        // makes the header transition into the visible area
+        enter: function() {
+            var size = this.getContentSize();
 
             var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - size.height));
             this.runAction(moveTo);

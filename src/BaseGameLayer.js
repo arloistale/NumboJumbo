@@ -47,6 +47,7 @@ var BaseGameLayer = cc.Layer.extend({
 	ctor: function () {
 		this._super();
 
+		this.unscheduleAllCallbacks();
 		this.stopAllActions();
 
 		this.setTag(NJ.tags.PAUSABLE);
@@ -63,6 +64,9 @@ var BaseGameLayer = cc.Layer.extend({
 
 		// extranneous initialization
 		this._reset();
+
+		// cause UI elements to fall in
+		this._enter();
 	},
 
 	onExit: function() {
@@ -87,6 +91,12 @@ var BaseGameLayer = cc.Layer.extend({
 
         if(NJ.settings.music)
             cc.audioEngine.playMusic(this._backgroundTrack, true);
+	},
+
+	// cause UI elements to fall in
+	_enter: function() {
+		this._numboHeaderLayer.enter();
+		this._toolbarLayer.enter();
 	},
 
 	// Initialize input depending on the device.
@@ -146,7 +156,7 @@ var BaseGameLayer = cc.Layer.extend({
 		var that = this;
 
 		// header
-		this._numboHeaderLayer = new NumboHeaderLayer( this._headerSize);
+		this._numboHeaderLayer = new NumboHeaderLayer(this._headerSize);
 		this._numboHeaderLayer.setOnPauseCallback(function() {
 			that.onPause();
 		});
@@ -190,7 +200,7 @@ var BaseGameLayer = cc.Layer.extend({
 		this._levelCellSize = cc.size(cellSize, cellSize);
 		this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
 
-		 this._blockSize = cc.size( this._levelCellSize.width * NJ.blockCellSize,  this._levelCellSize.height * NJ.blockCellSize);
+		this._blockSize = cc.size( this._levelCellSize.width * NJ.blockCellSize,  this._levelCellSize.height * NJ.blockCellSize);
 
 		// initialize rectangle around level
 		this._levelNode = cc.DrawNode.create();
@@ -525,6 +535,9 @@ var BaseGameLayer = cc.Layer.extend({
         this.resumeGame();
 
 		this._reset();
+
+		// cause UI elements to fall in
+		this._enter();
 	},
 
 	// On game over when player chooses to go to menu we return to menu.

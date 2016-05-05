@@ -22,13 +22,22 @@ var ToolbarLayer = (function() {
             this._super();
 
             this.setContentSize(size.width, size.height);
+
+            this.initButtons();
+
+            this.reset();
+        },
+
+        reset: function() {
+            var size = this.getContentSize();
+
             this.attr({
                 x: cc.visibleRect.bottomLeft.x,
                 y: cc.visibleRect.bottomLeft.y - size.height
             });
+        },
 
-            this.initButtons();
-
+        enter: function() {
             var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y));
             this.runAction(moveTo);
         },

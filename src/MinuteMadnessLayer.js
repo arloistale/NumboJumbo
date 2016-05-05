@@ -57,7 +57,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 
 		this.spawnRandomBlocks(comboLength);
 
-		var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
+		var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
 
 		// launch feedback for combo threshold title snippet
 		if (comboLength >= 5) {

@@ -53,7 +53,8 @@ var EffectsLayer = cc.Layer.extend({
         var entity = null;
 
         for(i = 0; i < children.length; i++) {
-            if(children[i].getTag() == this._explosionTag) {
+            entity = children[i];
+            if(entity.getTag() == this._explosionTag) {
                 this.pushExplosionPool(entity);
 
                 entity.stopAllActions();
