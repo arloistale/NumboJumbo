@@ -24,6 +24,8 @@ var EffectsLayer = cc.Layer.extend({
         // TODO: Should not have to call this here...
         this.reset();
 
+        this._explosionPool = [];
+
         // initialize explosion pool
         for(i = 0; i < EXPLOSION_POOL_SIZE; i++) {
             entity = this._generateNumboParticleSystem();

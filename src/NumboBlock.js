@@ -162,7 +162,7 @@ var NumboBlock = (function() {
         },
 
         updateTheme: function() {
-            var chosen = NJ.getColor(NJ.gameState.getJumbo().blockColorString, this.val - 1);
+            var chosen = NJ.getColor(this.val - 1);
             chosen = chosen || cc.color("#ffffff");
 
             this._highlightSprite.setColor(chosen);

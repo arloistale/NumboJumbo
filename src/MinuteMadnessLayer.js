@@ -14,8 +14,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	_reset: function() {
 		this._super();
 
-		// fill the board with blocks initially
-		this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+		this._numboController.initDistributionFromJumbo(NJ.gameState.getJumbo());
 
 		// next we wait until the blocks have been spawned to init the game
 		var that = this;
@@ -23,6 +22,12 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 			that._numboHeaderLayer.updateValues();
 			that.checkGameOver();
 		}, 1);
+
+		// cause UI elements to fall in
+		this._enter();
+
+		// fill the board with blocks initially
+		this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
 	},
 
 	// Initialize audio.

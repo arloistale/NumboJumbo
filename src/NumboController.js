@@ -57,7 +57,11 @@ var NumboController = (function() {
 			this._selectedBlocks = [];
 
             this._initLevel();
-            this.updateSpawnDataFromJumbo(NJ.gameState.getJumbo());
+		},
+
+		initDistributionFromJumbo: function(jumbo) {
+			this._spawnDistribution = jumbo.numberList.slice(0);
+			this._thresholdNumbers = jumbo.thresholdNumbers;
 		},
 
         _initLevel: function() {
@@ -209,12 +213,6 @@ var NumboController = (function() {
 
 			return this.spawnDropBlock(block, col, val);
 		},
-
-        updateSpawnDataFromJumbo: function(jumbo){
-            this._spawnDistribution = jumbo.numberList.slice(0);
-            this._jumboSpawnDelay = jumbo.spawnTime;
-            this._thresholdNumbers = jumbo.thresholdNumbers;
-        },
 
         // updates progression of the game based on the current level
         updateProgression: function() {
@@ -404,6 +402,10 @@ var NumboController = (function() {
 			return this._numboLevel.getNumBlocks() / this._numboLevel.getCapacity() >= NJ.DANGER_THRESHOLD;
 		},
 
+		levelIsClear: function() {
+			return this._numboLevel.isClear();
+		},
+
 		levelIsFull: function() {
 			return this._numboLevel.isFull();
 		},
@@ -484,25 +486,23 @@ var NumboController = (function() {
 			var selectedBlocksLength = this._selectedBlocks.length;
 
 			var sum = 0;
-			var max = 0;
 
 			var i = 0;
-
-			for(; i < selectedBlocksLength - 1; ++i) {
-				if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
-					return false;
-			}
 
 			for(i = 0; i < selectedBlocksLength; ++i)
 				sum += this._selectedBlocks[i].val;
 
+			var isValid = false;
 
+			/*
 			for(i = 0; i < selectedBlocksLength; ++i) {
 				if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val)
-					return true;
-			}
+					isValid = true;
+			}*/
 
-			return false;//sum == this._selectedBlocks[selectedBlocksLength - 1].val;
+			isValid = (sum - this._selectedBlocks[i - 1].val == this._selectedBlocks[i - 1].val);
+
+			return isValid;
 		}
 	});
 }());

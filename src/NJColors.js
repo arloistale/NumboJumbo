@@ -131,12 +131,8 @@ NJ.themes = (function() {
     }
 }());
 
-NJ.getColor = function (colorString, index) {
-    var colorArray = null;
-    if (colorString == "dark")
-        colorArray = NJ.themes.blockColors;
-    else if (colorString == "light")
-        colorArray = NJ.themes.blockColors;
+NJ.getColor = function (index) {
+    var colorArray = NJ.themes.blockColors;
 
     if (colorArray) {
         index %= colorArray.length;

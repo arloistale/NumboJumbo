@@ -234,10 +234,3 @@ var NumboMenuLayer = (function() {
         }
     });
 }());
-
-NumboMenuLayer.scene = function () {
-    var scene = new cc.Scene();
-    var layer = new NumboMenuLayer();
-    scene.addChild(layer);
-    return scene;
-};

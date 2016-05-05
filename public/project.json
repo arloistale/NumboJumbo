@@ -19,6 +19,7 @@
         "src/JumboMenuLayer.js",
         "src/SettingsMenuLayer.js",
         "src/BaseGameLayer.js",
+        "src/TutorialDriverLayer.js",
         "src/MinuteMadnessLayer.js",
         "src/NumboHeaderLayer.js",
         "src/GameOverMenuLayer.js",

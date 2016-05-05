@@ -296,7 +296,7 @@
                 <file name="src/TutorialLayer.js"/>
                 <file name="src/JumboMenuLayer.js"/>
                 <file name="src/SettingsMenuLayer.js"/>
-                <file name="src/NumboGameLayer.js"/>
+                <file name="src/TutorialLayer.js"/>
                 <file name="src/NumboHeaderLayer.js"/>
                 <file name="src/GameOverMenuLayer.js"/>
                 <file name="src/NJMenuItem.js"/>

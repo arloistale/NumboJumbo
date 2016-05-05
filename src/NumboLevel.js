@@ -227,17 +227,12 @@ var NumboLevel = (function() {
 			return NJ.NUM_COLS * NJ.NUM_ROWS;
 		},
 
+		isClear: function() {
+			return this._numBlocks == 0;
+		},
+
 		// returns whether level is currently full of this._blocks
 		isFull: function() {
-            var count = 0;
-            for(var i = 0; i < NJ.NUM_COLS; ++i) {
-                for(var j = 0; j < NJ.NUM_ROWS; ++j) {
-                    if(this._blocks[i][j]) {
-                        count++;
-                    }
-                }
-            }
-
 			return this._numBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
 		},
 

@@ -64,9 +64,6 @@ var BaseGameLayer = cc.Layer.extend({
 
 		// extranneous initialization
 		this._reset();
-
-		// cause UI elements to fall in
-		this._enter();
 	},
 
 	onExit: function() {
@@ -388,7 +385,7 @@ var BaseGameLayer = cc.Layer.extend({
 
             // we also need to be computing position sums used to calculate the center point of the cleared
 
-            color = NJ.getColor(NJ.gameState.getJumbo().blockColorString, block.val - 1) || cc.color("#ffffff");
+            color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
 
             this._effectsLayer.launchExplosion({
                 color: color,
@@ -535,9 +532,6 @@ var BaseGameLayer = cc.Layer.extend({
         this.resumeGame();
 
 		this._reset();
-
-		// cause UI elements to fall in
-		this._enter();
 	},
 
 	// On game over when player chooses to go to menu we return to menu.
@@ -578,7 +572,7 @@ var BaseGameLayer = cc.Layer.extend({
 						selectedBlockSum += block.val;
 					}
 
-					var currColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum - 1);
+					var currColor = NJ.getColor(selectedBlockSum - 1);
 
 					// if selected block was returned then we have a new selected block deal with
 					if(selectedBlock)
@@ -636,7 +630,7 @@ var BaseGameLayer = cc.Layer.extend({
 					selectedBlockSum += block.val;
 				}
 
-				var currColor = NJ.getColor(NJ.gameState.getJumbo().blockColorString, selectedBlockSum - 1);
+				var currColor = NJ.getColor(selectedBlockSum - 1);
 
 				// if selected block was returned then we have a new selected block deal with
 				if(selectedBlock) {
@@ -723,7 +717,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 			currSum += first.val;
 
-			color = NJ.getColor(NJ.gameState.getJumbo().blockColorString, currSum - 1);
+			color = NJ.getColor(currSum - 1);
 
 			this._selectedLinesNode.drawSegment(this._convertLevelCoordsToPoint(first.col, first.row),
 				this._convertLevelCoordsToPoint(second.col, second.row), 3, color);
