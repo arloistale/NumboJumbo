@@ -24,7 +24,8 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		}, 1);
 
 		// cause UI elements to fall in
-		this._enter();
+		this._numboHeaderLayer.enter();
+		this._toolbarLayer.enter();
 
 		// fill the board with blocks initially
 		this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));

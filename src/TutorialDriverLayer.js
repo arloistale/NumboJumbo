@@ -15,6 +15,9 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 		this._initTutorial();
 
+		// cause UI elements to fall in
+		this._toolbarLayer.enter();
+
 		this._advanceTutorialSlide();
 	},
 
@@ -61,17 +64,23 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 2);
+						that.spawnDropBlock(centerCol - 2, 4);
+					}), cc.delayTime(0.1), cc.callFunc(function() {
+						that.spawnDropBlock(centerCol - 1, 7);
+					}), cc.delayTime(0.1), cc.callFunc(function() {
+						that.spawnDropBlock(centerCol, 5);
+					}), cc.delayTime(0.1), cc.callFunc(function() {
+						that.spawnDropBlock(centerCol + 1, 8);
+					}), cc.callFunc(function() {
+						that.spawnDropBlock(centerCol + 2, 2);
+					}), cc.delayTime(0.1), cc.callFunc(function() {
+						that.spawnDropBlock(centerCol - 2, 3);
+					}), cc.delayTime(0.1), cc.callFunc(function() {
+						that.spawnDropBlock(centerCol - 1, 4);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 3);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 5);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 6);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 7);
+						that.spawnDropBlock(centerCol + 2, 2);
 					})
 				));
 

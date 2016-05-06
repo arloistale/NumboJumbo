@@ -89,7 +89,7 @@ var TutorialLayer = (function() {
                         that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(7), cc.callFunc(function() {
-                            that._helperMenuItem.setTitle("Try adding 2 + 1 = 3!");
+                            that._helperMenuItem.setTitle("Try adding to 3.");
                             that._menu.alignItemsVerticallyWithPadding(10);
                             that._helperMenuItem.setChildrenOpacity(0);
                             that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));

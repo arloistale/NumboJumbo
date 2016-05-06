@@ -15,6 +15,8 @@ var ToolbarLayer = (function() {
         // menu for buttons in the header
         buttonsMenu: null,
 
+        _equationLabel: null,
+
         // callback
         _onToggleThemeCallback: null,
 
@@ -23,27 +25,38 @@ var ToolbarLayer = (function() {
 
             this.setContentSize(size.width, size.height);
 
-            this.initButtons();
+            this._initButtons();
+
+            this._initLabels();
 
             this.reset();
         },
 
-        reset: function() {
-            var size = this.getContentSize();
+        _initLabels: function() {
+            var contentSize = this.getContentSize();
 
-            this.attr({
-                x: cc.visibleRect.bottomLeft.x,
-                y: cc.visibleRect.bottomLeft.y - size.height
+            // Score Labels
+            var startPos = cc.p(contentSize.width / 2, contentSize.height / 2);
+            var elementSize = cc.size(contentSize.width * 0.5, contentSize.height * 0.5);
+            var spriteSize;
+
+            this._equationLabel = new cc.LabelBMFont("Default Text", b_getFontName(res.mainFont));
+            spriteSize = this._equationLabel.getContentSize();
+            this._equationLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
+            this._equationLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: startPos.x,
+                y: startPos.y
             });
-        },
+            this._equationLabel.setColor(NJ.themes.defaultLabelColor);
+            this.addChild(this._equationLabel);
 
-        enter: function() {
-            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y));
-            this.runAction(moveTo);
+            this._equationLabel.setString(" ");
         },
 
         // create buttons (probably the only button will be pause button but w/e)
-        initButtons: function() {
+        _initButtons: function() {
             var that = this;
 
             var contentSize = this.getContentSize();
@@ -61,6 +74,53 @@ var ToolbarLayer = (function() {
             menu.addChild(toggleButton);
 
             this.addChild(menu);
+        },
+
+        //////////////////
+        // Manipulation //
+        //////////////////
+
+        reset: function() {
+            var size = this.getContentSize();
+
+            this.attr({
+                x: cc.visibleRect.bottomLeft.x,
+                y: cc.visibleRect.bottomLeft.y - size.height
+            });
+        },
+
+        enter: function() {
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y));
+            this.runAction(moveTo);
+        },
+
+        setEquation: function(nums) {
+            var equationStr = " ";
+
+            if(nums.length > 0) {
+                equationStr = nums[0] + "";
+
+                var sumSoFar = nums[0];
+
+                for (var i = 1; i < nums.length - 1; ++i) {
+                    equationStr += " + " + nums[i];
+                    sumSoFar += nums[i];
+                }
+
+                if (nums.length > 1) {
+                    if (sumSoFar != nums[i] || nums.length <= 2) {
+                        equationStr += " + " + nums[i];
+                    } else {
+                        equationStr += " = " + nums[i];
+                        cc.log("hi");
+                        // pulse the bar a bit
+                        this._equationLabel.stopAllActions();
+                        this._equationLabel.runAction(cc.sequence(cc.scaleBy(0.15, 1.5, 1.5), cc.scaleBy(0.05, 1 / 1.5, 1 / 1.5)));
+                    }
+                }
+            }
+
+            this._equationLabel.setString(equationStr);
         },
 
 // UI callbacks //

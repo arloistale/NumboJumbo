@@ -90,12 +90,6 @@ var BaseGameLayer = cc.Layer.extend({
             cc.audioEngine.playMusic(this._backgroundTrack, true);
 	},
 
-	// cause UI elements to fall in
-	_enter: function() {
-		this._numboHeaderLayer.enter();
-		this._toolbarLayer.enter();
-	},
-
 	// Initialize input depending on the device.
 	_initInput: function() {
 		if ('mouse' in cc.sys.capabilities) {
@@ -357,6 +351,8 @@ var BaseGameLayer = cc.Layer.extend({
 
         this.redrawSelectedLines();
 
+		this._toolbarLayer.setEquation([]);
+
         this._effectsLayer.clearComboOverlay();
 
         var comboLength = clearedBlocks.length;
@@ -575,8 +571,15 @@ var BaseGameLayer = cc.Layer.extend({
 					var currColor = NJ.getColor(selectedBlockSum - 1);
 
 					// if selected block was returned then we have a new selected block deal with
-					if(selectedBlock)
+					if(selectedBlock) {
 						selectedBlock.highlight();
+
+						// gotta update the equation
+						var selectedNums = selectedBlocks.map(function(b) {
+							return b.val;
+						});
+						this._toolbarLayer.setEquation(selectedNums);
+					}
 
 					this.redrawSelectedLines(selectedBlocks);
 				}
@@ -597,15 +600,25 @@ var BaseGameLayer = cc.Layer.extend({
 			var currLength = 0;
 			var currPosition = null;
 
-			var touchCoords, selectedBlock;
+			var touchCoords, touchBlock, selectedBlock, deselectedBlock;
+
+			var penultimate = this._numboController.getPenultimateSelectedBlock();
 
 			for (var i = 0; currLength < touchDistance; i++) {
 				currPosition = cc.pAdd(this._lastTouchPosition, cc.pMult(touchDirection, currLength));
 
 				touchCoords = this._convertPointToLevelCoords(currPosition);
 
-				if (touchCoords)
-					selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+				// if we have valid touch coordinates then we either select or deselect the block based on
+				// whether it is already selected and is the last selected block
+				if (touchCoords) {
+					touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
+					if(touchBlock === penultimate) {
+						deselectedBlock = this._numboController.deselectBlock(touchCoords.col, touchCoords.row);
+					} else {
+						selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+					}
+				}
 
 				currLength = testLength * (i + 1);
 			}
@@ -614,12 +627,24 @@ var BaseGameLayer = cc.Layer.extend({
 
 			// we only look for additional touch coords if we currently touched a block
 			if (touchCoords) {
-				var lastCoords = touchCoords;
+				touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
 
-				selectedBlock = this._numboController.selectBlock(lastCoords.col, lastCoords.row);
+				if(touchBlock === penultimate) {
+					deselectedBlock = this._numboController.deselectBlock(touchCoords.col, touchCoords.row);
+				} else {
+					selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+				}
 			}
 
 			var selectedBlocks = this._numboController.getSelectedBlocks();
+
+			if(selectedBlock || deselectedBlock) {
+				// also update the equation
+				var selectedNums = selectedBlocks.map(function (b) {
+					return b.val;
+				});
+				this._toolbarLayer.setEquation(selectedNums);
+			}
 
 			// update graphics for selected blocks
 			if (selectedBlocks.length) {

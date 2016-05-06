@@ -56,6 +56,8 @@ cc.game.onStart = function() {
     NJ.jumbos.load(function(error) {
         cc.assert(!error, "Problem loading jumbos");
 
+        NJ.settings.hasLoaded = false;
+
         if(!NJ.settings.hasLoaded) {
             // load resources
             cc.LoaderScene.preload(g_game, function () {
