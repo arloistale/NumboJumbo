@@ -36,6 +36,12 @@ var NumboLevel = (function() {
 				this._blocks.push([]);
 		},
 
+		reset: function() {
+			this.killAllBlocks(true);
+
+			this.init();
+		},
+
 		//////////////////
 		// MANIPULATION //
 		//////////////////
@@ -61,12 +67,12 @@ var NumboLevel = (function() {
 		},
 
 		// kill given block
-		killBlock: function(block) {
+		killBlock: function(block, clean) {
 			cc.assert(block, "Invalid block");
 
 			var col = block.col;
 			var row = block.row;
-			block.kill();
+			block.kill(clean);
 
 			// mark this block as null
 			// later when we update rows and columns we will remove from the array
@@ -81,11 +87,11 @@ var NumboLevel = (function() {
 				this.killBlock(this._blocks[col][row]);
 		},
 
-		killAllBlocks: function() {
+		killAllBlocks: function(clean) {
 			for (var col = 0; col < NJ.NUM_COLS; ++col){
 				for (var row = this._blocks[col].length - 1; row >= 0; --row){
 					var block = this._blocks[col][row];
-					this.killBlock(block);
+					this.killBlock(block, clean);
 				}
 			}
 		},
@@ -221,17 +227,12 @@ var NumboLevel = (function() {
 			return NJ.NUM_COLS * NJ.NUM_ROWS;
 		},
 
+		isClear: function() {
+			return this._numBlocks == 0;
+		},
+
 		// returns whether level is currently full of this._blocks
 		isFull: function() {
-            var count = 0;
-            for(var i = 0; i < NJ.NUM_COLS; ++i) {
-                for(var j = 0; j < NJ.NUM_ROWS; ++j) {
-                    if(this._blocks[i][j]) {
-                        count++;
-                    }
-                }
-            }
-
 			return this._numBlocks >= NJ.NUM_COLS * NJ.NUM_ROWS;
 		},
 

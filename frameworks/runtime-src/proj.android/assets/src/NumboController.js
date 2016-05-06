@@ -57,13 +57,21 @@ var NumboController = (function() {
 			this._selectedBlocks = [];
 
             this._initLevel();
-            this.updateSpawnDataFromJumbo(NJ.gameState.getJumbo());
+		},
+
+		initDistributionFromJumbo: function(jumbo) {
+			this._spawnDistribution = jumbo.numberList.slice(0);
+			this._thresholdNumbers = jumbo.thresholdNumbers;
 		},
 
         _initLevel: function() {
             this._numboLevel = new NumboLevel();
             this._numboLevel.init();
         },
+
+		reset: function() {
+			this._numboLevel.reset();
+		},
 
 		/////////////////////////////
 		// SELECTION FUNCTIONALITY //
@@ -80,24 +88,14 @@ var NumboController = (function() {
 			if (block === null)
 				return null;
 
-			if(this._selectedBlocks.length >= 2) {
-				if(block == this._selectedBlocks[this._selectedBlocks.length - 2]) {
-					this._selectedBlocks.splice(this._selectedBlocks.length - 1, 1);
-					if(NJ.settings.sounds)
-						cc.audioEngine.playEffect(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
-
-					return null;
-				}
-			}
-
 			// TODO: possible optimization
 			if (this._selectedBlocks.indexOf(block) >= 0)
 				return null;
 
 			// make sure this block is adjacent to the block before it
 			if (this._selectedBlocks.length > 0) {
-				lastBlock = this._selectedBlocks[this._selectedBlocks.length - 1];
-				if (!this._numboLevel.isAdjBlocks(block, lastBlock))
+				lastBlock = this.getLastSelectedBlock();
+				if (lastBlock && !this._numboLevel.isAdjBlocks(block, lastBlock))
 					return null;
 			}
 
@@ -105,7 +103,7 @@ var NumboController = (function() {
 			this._selectedBlocks.push(block);
 
 			if(NJ.settings.sounds)
-				cc.audioEngine.playEffect(plops[Math.min(this._selectedBlocks.length, plops.length-1)]);
+				cc.audioEngine.playEffect(plops[Math.min(this._selectedBlocks.length, plops.length - 1)]);
 
 			return block;
 		},
@@ -122,6 +120,12 @@ var NumboController = (function() {
 			var index = this._selectedBlocks.indexOf(block);
 			if(index >= 0)
 				this._selectedBlocks.splice(index, 1);
+
+			this._selectedBlocks.splice(this._selectedBlocks.length - 1, 1);
+			if(NJ.settings.sounds)
+				cc.audioEngine.playEffect(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
+
+
 		},
 
 		// deselect all currently selected blocks, removing their highlights
@@ -203,39 +207,8 @@ var NumboController = (function() {
 			var col = NJ.weightedRandom(this._numboLevel.getColWeights());
 			var val = NJ.weightedRandom(this._spawnDistribution) * this._spawnScale;
 
-			var powerup = null;
-			if  (NJ.gameState.isPowerupMode() && this.nextBlockPowerup) {// 5% chance
-				//powerup = 'clearAndSpawn';
-				powerup = 'bonusOneMania';
-				this.nextBlockPowerup = false;
-			}
-
-			if (powerup) {
-				var path = this.meanderSearch(col, this._numboLevel.getNumBlocksInColumn(col),
-					meanderSearchCriteria.pathAtLeastTwoWithNoise);
-
-				path.shift();
-
-				if (path && path.length > 0) {
-					var sum = 0;
-					for (var i in path) {
-						sum += path[i].val;
-					}
-					val = sum;
-				}
-				else {
-					powerup = false;
-				}
-			}
-
 			return this.spawnDropBlock(block, col, val);
 		},
-
-        updateSpawnDataFromJumbo: function(jumbo){
-            this._spawnDistribution = jumbo.numberList.slice(0);
-            this._jumboSpawnDelay = jumbo.spawnTime;
-            this._thresholdNumbers = jumbo.thresholdNumbers;
-        },
 
         // updates progression of the game based on the current level
         updateProgression: function() {
@@ -425,31 +398,26 @@ var NumboController = (function() {
 			return this._numboLevel.getNumBlocks() / this._numboLevel.getCapacity() >= NJ.DANGER_THRESHOLD;
 		},
 
-		isGameOver: function(){
-			return this.timeIsExhausted();
+		levelIsClear: function() {
+			return this._numboLevel.isClear();
 		},
 
 		levelIsFull: function() {
 			return this._numboLevel.isFull();
 		},
 
-		timeIsExhausted: function(){
-			var timeFraction = 1 - (Date.now() - NJ.gameState.getStartTime() ) / 100000;
+		getPenultimateSelectedBlock: function() {
+			if(this._selectedBlocks.length > 1)
+				return this._selectedBlocks[this._selectedBlocks.length - 2];
 
-			return timeFraction < 0;
+			return null;
 		},
 
-		getRowsToClearAfterLevelup: function() {
-			var numBlocks = this._numboLevel.getNumBlocks();
-			if(numBlocks < NJ.NUM_COLS)
-				return 2;
-			else if(numBlocks < NJ.NUM_COLS*2)
-				return 1;
-			else if(numBlocks > NJ.NUM_COLS*5)
-				return -2;
-			else if(numBlocks > NJ.NUM_COLS*4)
-				return -1;
-			return 0;
+		getLastSelectedBlock: function() {
+			if(this._selectedBlocks.length > 0)
+				return this._selectedBlocks[this._selectedBlocks.length - 1];
+
+			return null;
 		},
 
 		getNumBlocks: function(){
@@ -515,25 +483,23 @@ var NumboController = (function() {
 			var selectedBlocksLength = this._selectedBlocks.length;
 
 			var sum = 0;
-			var max = 0;
 
 			var i = 0;
-
-			for(; i < selectedBlocksLength - 1; ++i) {
-				if(!this._numboLevel.isAdjBlocks(this._selectedBlocks[i], this._selectedBlocks[i + 1]))
-					return false;
-			}
 
 			for(i = 0; i < selectedBlocksLength; ++i)
 				sum += this._selectedBlocks[i].val;
 
+			var isValid = false;
 
+			/*
 			for(i = 0; i < selectedBlocksLength; ++i) {
 				if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val)
-					return true;
-			}
+					isValid = true;
+			}*/
 
-			return false;//sum == this._selectedBlocks[selectedBlocksLength - 1].val;
+			isValid = (sum - this._selectedBlocks[i - 1].val == this._selectedBlocks[i - 1].val);
+
+			return isValid;
 		}
 	});
 }());

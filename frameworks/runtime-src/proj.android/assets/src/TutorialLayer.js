@@ -89,7 +89,7 @@ var TutorialLayer = (function() {
                         that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(7), cc.callFunc(function() {
-                            that._helperMenuItem.setTitle("Try swiping 2 + 1 = 3!");
+                            that._helperMenuItem.setTitle("Try adding to 3.");
                             that._menu.alignItemsVerticallyWithPadding(10);
                             that._helperMenuItem.setChildrenOpacity(0);
                             that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
@@ -99,8 +99,8 @@ var TutorialLayer = (function() {
 
                     case slides.subtraction:
 
-                        that._titleMenuItem.setTitle("Nice! You added up to 3.");
-                        that._helperMenuItem.setTitle("You can add to 5 here,\n order doesn't matter.");
+                        that._titleMenuItem.setTitle("Nice! You added to 3.");
+                        that._helperMenuItem.setTitle("There are many possible Combos.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -117,7 +117,7 @@ var TutorialLayer = (function() {
                         break;
                     case slides.more:
 
-                        that._titleMenuItem.setTitle("Right, because 3 + 2 = 5");
+                        that._titleMenuItem.setTitle("Great!");
                         that._helperMenuItem.setTitle("You can even move diagonally.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
@@ -156,7 +156,7 @@ var TutorialLayer = (function() {
                     case slides.end:
 
                         that._titleMenuItem.setTitle("Wombo Combo!");
-                        that._helperMenuItem.setTitle("Score as much as you can in 60 seconds.");
+                        that._helperMenuItem.setTitle("Welcome to Numbo Jumbo.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);

@@ -196,7 +196,7 @@ var BaseGameLayer = cc.Layer.extend({
 		// initialize rectangle around level
 		this._levelNode = cc.DrawNode.create();
 		this._levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), NJ.themes.levelColor, 0, NJ.themes.levelColor);
-		this.addChild(this._levelNode, -1);
+		//this.addChild(this._levelNode, -1);
 
 		// selected lines
 		this._selectedLinesNode = cc.DrawNode.create();

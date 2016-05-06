@@ -4,6 +4,8 @@
 
 var TutorialDriverLayer = BaseGameLayer.extend({
 
+	_handIndicator: null,
+
 	_tutorialLayer: null,
 
 	////////////////////
@@ -35,6 +37,34 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	//////////////
 	// Tutorial //
 	//////////////
+
+	/**
+	 * Usage:
+	 * @param data Number x-position for hand or Object with data about hand
+	 * @param y y position of spawn point if using data as x-position
+     * @private
+     */
+	_startHand: function(data, y) {
+		if(!this._handIndicator) {
+			this._handIndicator = new cc.Sprite(res.handImage);
+			this._handIndicator.attr({
+				anchorX: 0.5,
+				anchorY: 0.5
+			})
+		}
+
+		var spawnX = cc.visibleRect.center.x, spawnY = cc.visibleRect.center.y;
+
+		if(typeof data !== 'number') {
+			spawnX = data.x;
+			spawnY = data.y;
+		} else {
+			spawnX = data;
+			spawnY = y;
+		}
+
+
+	},
 
 	_advanceTutorialSlide: function() {
 		var that = this;

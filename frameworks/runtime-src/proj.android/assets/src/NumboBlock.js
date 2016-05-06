@@ -113,8 +113,13 @@ var NumboBlock = (function() {
 
         // kill the block
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead
-        kill: function() {
+        kill: function(clean) {
             var block = this;
+
+            if(clean) {
+                block.removeFromParent(true);
+                return;
+            }
 
             var delayAction = cc.delayTime(1.25);
 
@@ -157,7 +162,7 @@ var NumboBlock = (function() {
         },
 
         updateTheme: function() {
-            var chosen = NJ.getColor(NJ.gameState.getJumbo().blockColorString, this.val - 1);
+            var chosen = NJ.getColor(this.val - 1);
             chosen = chosen || cc.color("#ffffff");
 
             this._highlightSprite.setColor(chosen);

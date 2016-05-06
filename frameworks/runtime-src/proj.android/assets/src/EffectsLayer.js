@@ -2,6 +2,8 @@ var EXPLOSION_POOL_SIZE = 40;
 
 var EffectsLayer = cc.Layer.extend({
 
+    _explosionTag: 55,
+
     // object pools
     _explosionPool: [],
 
@@ -21,6 +23,8 @@ var EffectsLayer = cc.Layer.extend({
 
         // TODO: Should not have to call this here...
         this.reset();
+
+        this._explosionPool = [];
 
         // initialize explosion pool
         for(i = 0; i < EXPLOSION_POOL_SIZE; i++) {
@@ -43,20 +47,29 @@ var EffectsLayer = cc.Layer.extend({
         this.addChild(this._comboOverlay);
 	},
 
+    // TODO: Memory leaks!!
+
     reset: function() {
         var i = 0;
+        var children = this.getChildren();
+        var entity = null;
 
-        for(i = 0; i < this._explosionPool.length; i++) {
-            this._explosionPool[i].stopSystem();
-            this._explosionPool[i].stopAllActions();
-            this._explosionPool[i].release();
+        for(i = 0; i < children.length; i++) {
+            entity = children[i];
+            if(entity.getTag() == this._explosionTag) {
+                this.pushExplosionPool(entity);
+
+                entity.stopAllActions();
+                entity.stopSystem();
+                entity.removeFromParent(false);
+            }
         }
-
-        this._explosionPool = [];
     },
 
     _generateNumboParticleSystem: function() {
         var particleSystem = new cc.ParticleExplosion();
+
+        particleSystem.setTag(this._explosionTag);
 
         particleSystem.setDuration(0.1); // Suspicious
         particleSystem.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);

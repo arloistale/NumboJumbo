@@ -34,6 +34,7 @@ var res = {
     // ingame
     blockImage: resRoot + "Images/block.png",
     alertImage: resRoot + "Images/alertOverlay.png",
+    handImage: resRoot + "Images/ic_hand_2x.png",
 
     // sound
     menuTrack: resRoot + "Sounds/Track2.mp3",
