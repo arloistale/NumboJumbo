@@ -62,8 +62,6 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 			spawnX = data;
 			spawnY = y;
 		}
-
-
 	},
 
 	_advanceTutorialSlide: function() {
