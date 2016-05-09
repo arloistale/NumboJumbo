@@ -230,7 +230,7 @@ var BaseGameLayer = cc.Layer.extend({
 	/////////////////////////
 
     // checks whether the game has ended and performs actions appropriately
-    checkGameOver: function() {
+    checkGameOver: function() {console.log(this.isGameOver());
         if (this.isGameOver() ) {
             this.onGameOver();
         }

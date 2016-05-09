@@ -21,6 +21,7 @@
         "src/BaseGameLayer.js",
         "src/TutorialDriverLayer.js",
         "src/MinuteMadnessLayer.js",
+        "src/TurnBasedFillUpGameLayer.js",
         "src/NumboHeaderLayer.js",
         "src/GameOverMenuLayer.js",
         "src/NJMenuItem.js",
