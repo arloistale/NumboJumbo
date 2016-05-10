@@ -134,10 +134,10 @@ var NumboHeaderLayer = (function() {
         updateValues: function() {
             this._scoreLabel.setString(scorePrefix + NJ.gameState.getScore());
             this._levelLabel.setString(levelPrefix + NJ.gameState.getLevel());
+        },
 
-            var elapsedTime = (Date.now() - NJ.gameState.getStartTime()) / 1000;
-            var timeFraction = 1 - elapsedTime / 60;
-            this._progressBar.setProgress( timeFraction);
+        setProgress: function(progress){
+            this._progressBar.setProgress(progress);
         },
 
         updateTheme: function() {

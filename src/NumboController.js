@@ -445,24 +445,15 @@ var NumboController = (function() {
 			return this._numboLevel.getBlock(col, row);
 		},
 
+		getJumboSpawnDelay: function(){
+			return this._jumboSpawnDelay;
+		},
+
         /**
          * We get the spawn time by multiplying the frequency (based on current level) times the spawn factor (sped up during level)
          * @returns {number}
          */
-		getSpawnTime: function() {
-			// the constant spawn delay based on the current jumbo
-			var j = this._jumboSpawnDelay;
 
-            var L = NJ.gameState.getLevel();
-			var x = 0.3;
-			var LFactor = 1 / Math.pow(L, x);
-
-			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 4;
-
-			var spawnTime = j * LFactor * BFactor;
-			//cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);
-			return spawnTime;
-		},
 
 		getKnownPathLength: function(){
 			return this._knownPath.length;

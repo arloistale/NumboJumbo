@@ -106,7 +106,8 @@ var NumboMenuLayer = (function() {
             NJ.gameState.chooseJumbo("basic");
 
             var scene = new cc.Scene();
-            scene.addChild(new MinuteMadnessLayer());
+            //scene.addChild(new MinuteMadnessLayer());
+            scene.addChild(new SurvivalGameLayer());
             cc.director.runScene(new cc.TransitionFade(0.5, scene));
         }, this);
     };

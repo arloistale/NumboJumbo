@@ -465,23 +465,7 @@ var NumboGameLayer = cc.Layer.extend({
 		this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
 
 		if(this._numboController.isGameOver()) {
-
-			// this block looks deprecated to me -- commenting out to be safe. - Brett 4/29
-			/*
-			if(this.pausedJumbo != null) {
-				this.clearBlocks();
-				NJ.gameState.setStage("normal");
-				this._backgroundLayer.updateBackgroundColor(new cc.color(0, 0, 0, 255));
-				this._numboController.recallBoard(this.pausedJumbo,  this._blockSize);
-				this.spawnRandomBlocks(this.pausedJumbo.numBlocks);
-				this.pausedJumbo = null;
-				this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS*NJ.NUM_ROWS *.4));
-			} else {
-				this.onGameOver();
-			}
-			*/
 			this.onGameOver();
-
 			return;
 		}
 
@@ -512,15 +496,11 @@ var NumboGameLayer = cc.Layer.extend({
 		this.moveBlockIntoPlace(spawnBlock);
 	},
 
-	// spawns a specified amount of blocks every 0.1 seconds until
+	// spawns a specified amount of blocks
 	spawnRandomBlocks: function(amount) {
-		//this.schedule(this.spawnDropRandomBlock, 0.1, amount);
-
 		for(var i = 0; i < amount; i++) {
 			this.spawnDropRandomBlock();
 		}
-
-		//this.schedule(this.spawnDropRandomBlock, 0.05, amount - 1);
 	},
 
 	// clear all blocks from screen

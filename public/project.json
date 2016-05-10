@@ -20,6 +20,7 @@
         "src/SettingsMenuLayer.js",
         "src/BaseGameLayer.js",
         "src/MinuteMadnessLayer.js",
+        "src/SurvivalGameLayer.js",
         "src/NumboHeaderLayer.js",
         "src/GameOverMenuLayer.js",
         "src/NJMenuItem.js",
