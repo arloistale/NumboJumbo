@@ -17,8 +17,8 @@ var MovesLayer = BaseGameLayer.extend({
 		{ key: 9, weight: 40 }
 	],
 
-	// time limit for minute madness
-	_movesLimit: 5,
+	// maximum number of moves allowed
+	_movesLimit: 20,
 
 	////////////////////
 	// Initialization //
@@ -92,6 +92,6 @@ var MovesLayer = BaseGameLayer.extend({
 		this._numboHeaderLayer.updateValues();
 
 		var movesRatio = NJ.gameState.getMovesMade() / this._movesLimit;
-		this._numboHeaderLayer.setProgress(movesRatio);
+		this._numboHeaderLayer.setProgress(1 - movesRatio);
 	}
 });
