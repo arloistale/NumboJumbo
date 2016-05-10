@@ -2,7 +2,7 @@
  * Created by jonathanlu on 1/18/16.
  */
 
-var MinuteMadnessLayer = BaseGameLayer.extend({
+var MovesLayer = BaseGameLayer.extend({
 
 	// domain of spawning
 	_numberList: [
@@ -18,7 +18,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	],
 
 	// time limit for minute madness
-	_elapsedTimeLimit: 60,
+	_movesLimit: 5,
 
 	////////////////////
 	// Initialization //
@@ -35,16 +35,6 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 
 		this._numboController.initDistribution(this._numberList);
 
-		// next we wait until the blocks have been spawned to init the game
-		var that = this;
-		this.schedule(function() {
-			var elapsedTime = (Date.now() - NJ.gameState.getStartTime()) / 1000;
-			var timeFraction = 1 - elapsedTime / 60;
-
-			that._numboHeaderLayer.setProgress(timeFraction);
-			that.checkGameOver();
-		}, 1);
-
 		// cause UI elements to fall in
 		this._numboHeaderLayer.enter();
 		this._toolbarLayer.enter();
@@ -56,7 +46,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	// Initialize audio.
 	_initAudio: function() {
 		// start the music
-		this._backgroundTrack = res.backgroundTrack;
+		this._backgroundTrack = res.trackA;
 	},
 
 	/////////////////////////
@@ -65,9 +55,8 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 
 	// whether the game is over or not
 	isGameOver: function() {
-		var timeElapsed = (Date.now() - NJ.gameState.getStartTime()) / 1000;
-
-		return timeElapsed >= this._elapsedTimeLimit;
+		var movesMade = NJ.gameState.getMovesMade();
+		return movesMade >= this._movesLimit;
 	},
 
 //////////////////
@@ -97,7 +86,12 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		if(NJ.settings.sounds)
 			cc.audioEngine.playEffect(activationSound);
 
-		// show player data
+		if(this.checkGameOver())
+			return;
+
 		this._numboHeaderLayer.updateValues();
+
+		var movesRatio = NJ.gameState.getMovesMade() / this._movesLimit;
+		this._numboHeaderLayer.setProgress(movesRatio);
 	}
 });

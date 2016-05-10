@@ -63,7 +63,7 @@ var NumboController = (function() {
 			this._spawnDistribution = numberList.slice(0);
 
 			if(thresholdNumbers)
-				this._thresholdNumbers = thresholdNumbers.slice(0);
+				this._thresholdNumbers = thresholdNumbers;
 		},
 
         _initLevel: function() {

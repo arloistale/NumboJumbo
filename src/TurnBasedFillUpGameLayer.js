@@ -40,7 +40,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     // Initialize audio.
     _initAudio: function() {
         // start the music
-        this._backgroundTrack = res.backgroundTrack;
+        this._backgroundTrack = res.trackA;
     },
 
     /////////////////////////
@@ -82,6 +82,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
             this._blocksToDrop++;
         }
 
+        this._numboHeaderLayer.updateValues();
         this._numboHeaderLayer.setProgress(NJ.gameState.getLevelupProgress());
 
         this.checkGameOver();

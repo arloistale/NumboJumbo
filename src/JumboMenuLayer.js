@@ -31,7 +31,35 @@ var JumboMenuLayer = (function() {
             cc.audioEngine.stopAllEffects();
 
             var scene = new cc.Scene();
+            scene.addChild(new MovesLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+        }, this);
+    };
+
+    var onChooseTurnBased = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        cc.LoaderScene.preload(g_game, function () {
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
+
+            var scene = new cc.Scene();
             scene.addChild(new TurnBasedFillUpGameLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+        }, this);
+    };
+
+    var onChooseSurvival = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        cc.LoaderScene.preload(g_game, function () {
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
+
+            var scene = new cc.Scene();
+            scene.addChild(new SurvivalGameLayer());
             cc.director.runScene(new cc.TransitionFade(0.5, scene));
         }, this);
     };
@@ -82,10 +110,14 @@ var JumboMenuLayer = (function() {
 
             // here we create a callback for each button and bind the associated jumbo id to the callback
             var minuteMadnessButton = this.generateJumboButton("Minute Madness", cc.color(NJ.themes.blockColors[0]), onChooseMinuteMadness.bind(this));
-            var movesButton = this.generateJumboButton("Moves", cc.color(NJ.themes.blockColors[0]), onChooseMoves.bind(this));
+            var movesButton = this.generateJumboButton("Moves", cc.color(NJ.themes.blockColors[1]), onChooseMoves.bind(this));
+            var turnBasedButton = this.generateJumboButton("Turn Based", cc.color(NJ.themes.blockColors[2]), onChooseTurnBased.bind(this));
+            var survivalButton = this.generateJumboButton("Survive", cc.color(NJ.themes.blockColors[3]), onChooseSurvival.bind(this));
 
             this._menu.addChild(minuteMadnessButton);
             this._menu.addChild(movesButton);
+            this._menu.addChild(turnBasedButton);
+            this._menu.addChild(survivalButton);
 
             var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 

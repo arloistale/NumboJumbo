@@ -4,9 +4,6 @@ var EffectsLayer = cc.Layer.extend({
 
     _explosionTag: 55,
 
-    // object pools
-    _explosionPool: [],
-
     // feedback doomsayer
     _comboOverlay: null,
     _isComboLaunched: false,
@@ -23,15 +20,6 @@ var EffectsLayer = cc.Layer.extend({
 
         // TODO: Should not have to call this here...
         this.reset();
-
-        this._explosionPool = [];
-
-        // initialize explosion pool
-        for(i = 0; i < EXPLOSION_POOL_SIZE; i++) {
-            entity = this._generateNumboParticleSystem();
-            entity.retain();
-            this._explosionPool.push(entity);
-        }
 
         // initialize combo overlay
         this._comboOverlay = new cc.Sprite(res.alertImage);
@@ -53,17 +41,6 @@ var EffectsLayer = cc.Layer.extend({
         var i = 0;
         var children = this.getChildren();
         var entity = null;
-
-        for(i = 0; i < children.length; i++) {
-            entity = children[i];
-            if(entity.getTag() == this._explosionTag) {
-                this.pushExplosionPool(entity);
-
-                entity.stopAllActions();
-                entity.stopSystem();
-                entity.removeFromParent(false);
-            }
-        }
     },
 
     _generateNumboParticleSystem: function() {
@@ -115,22 +92,11 @@ var EffectsLayer = cc.Layer.extend({
         return particleSystem;
     },
 
-/////////////
-// POOLING //
-/////////////
-
-    // push explosion into pool
-    pushExplosionPool: function(entity) {
-        cc.assert(this._explosionPool.length < EXPLOSION_POOL_SIZE, "Exceeded pool size for explosions: " + (this._explosionPool.length + 1));
-        this._explosionPool.push(entity);
-    },
-
     // pops a banner from the banner pool,
     // NOTE: Allocates a new banner if needed, increase pool size if this happens!
     popExplosionPool: function() {
-        cc.assert (this._explosionPool.length > 0, "error: trying to create too many explosions!");
 
-        var explosion = this._explosionPool.pop();
+        var explosion = this._generateNumboParticleSystem();
         explosion.stopAllActions();
         explosion.stopSystem();
         explosion.setVisible(false);
@@ -179,11 +145,9 @@ var EffectsLayer = cc.Layer.extend({
         this.addChild(entity, 4);
 
         var removeAction = cc.callFunc(function() {
-            that.pushExplosionPool(entity);
-
             entity.stopAllActions();
             entity.stopSystem();
-            entity.removeFromParent(false);
+            entity.removeFromParent(true);
         });
 
         // TODO: we hard code an expected particle system lifespan of 1 second

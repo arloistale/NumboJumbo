@@ -318,6 +318,43 @@ var BaseGameLayer = cc.Layer.extend({
 		moveBlock.runAction(moveAction);
 	},
 
+<<<<<<< HEAD:frameworks/runtime-src/proj.android/assets/src/BaseGameLayer.js
+=======
+	checkGameOver: function(){
+		var closenessToDeath = 1 - (Date.now() - NJ.gameState.getStartTime() ) / 100000;
+
+		if(closenessToDeath < 0.1)
+			this._feedbackLayer.launchDoomsayer();
+
+		if (this._numboController.isGameOver() ) {
+			this.onGameOver();
+		}
+	},
+
+	// Spawns a block and calls itself in a loop.
+	scheduleSpawn: function() {
+		// TODO: Order matters when scheduling, must schedule before spawning WHY?
+		// PROBABLY because we pause, but then it schedules another one after
+		this.unschedule(this.scheduleSpawn);
+		this.schedule(this.scheduleSpawn, this._numboController.getSpawnTime());
+
+		if(this._numboController.isGameOver()) {
+			this.onGameOver();
+			return;
+		}
+
+		if(!this._feedbackLayer.isDoomsayerLaunched()) {
+			if(this._numboController.isInDanger())
+				this._feedbackLayer.launchDoomsayer();
+		} else {
+			if(!this._numboController.isInDanger())
+				this._feedbackLayer.clearDoomsayer();
+		}
+
+		this.spawnDropRandomBlock();
+	},
+
+>>>>>>> f56032d49c3541478ee632d390049ff27da56bab:src/NumboGameLayer.js
 	// spawns and drops a block with random col and val.
 	spawnDropBlock: function(col, val) {
 		var spawnBlock = new NumboBlock( this._blockSize);
@@ -334,7 +371,7 @@ var BaseGameLayer = cc.Layer.extend({
 		this.moveBlockIntoPlace(spawnBlock);
 	},
 
-	// spawns a specified amount of blocks every 0.1 seconds until
+	// spawns a specified amount of blocks
 	spawnRandomBlocks: function(amount) {
 		for(var i = 0; i < amount; i++) {
 			this.spawnDropRandomBlock();
