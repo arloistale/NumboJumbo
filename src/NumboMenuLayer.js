@@ -102,12 +102,8 @@ var NumboMenuLayer = (function() {
             cc.audioEngine.stopMusic();
             cc.audioEngine.stopAllEffects();
 
-            // Init stats data.
-            NJ.gameState.chooseJumbo("basic-turn-based");
-
             var scene = new cc.Scene();
-            //scene.addChild(new MinuteMadnessLayer());
-            scene.addChild(new TurnBasedFillUpGameLayer());
+            scene.addChild(new MinuteMadnessLayer());
             cc.director.runScene(new cc.TransitionFade(0.5, scene));
         }, this);
     };

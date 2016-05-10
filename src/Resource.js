@@ -36,9 +36,14 @@ var res = {
     alertImage: resRoot + "Images/alertOverlay.png",
     handImage: resRoot + "Images/ic_hand_2x.png",
 
-    // sound
+    // music
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
+
+    trackA: resRoot + "Sounds/TrackA.mp3",
+    trackB: resRoot + "Sounds/TrackB.mp3",
+
+    // audio
     tickSound: resRoot + "Sounds/tick.mp3",
     plipSound: resRoot + "Sounds/plipSound.wav",
     plopSound: resRoot + "Sounds/Plop.wav",
@@ -68,15 +73,9 @@ var res = {
 
     levelupSound: resRoot + "Sounds/levelup.wav",
 
-    applauseSound: resRoot + "Sounds/applause.wav",
     cheeringSound: resRoot + "Sounds/cheering.wav",
 
-    coinSound: resRoot + "Sounds/coin.wav",
-
-    cheerSound3: resRoot + "Sounds/cheer5.mp3",
-
-    // jsons
-    jumboDistributionsJSON: resRoot + "jumbos.json"
+    coinSound: resRoot + "Sounds/coin.wav"
 };
 
 // returns proper font name based on platform
@@ -127,11 +126,13 @@ var g_game = [
     res.blockImage,
     res.alertImage,
 
+    // music
+    res.trackA,
+
     // sounds
     res.tickSound,
     res.clickSound,
     res.plipSound,
-    res.backgroundTrack,
     res.plopSound,
     res.plopSound4,
     res.plopSound5,
@@ -157,11 +158,8 @@ var g_game = [
     res.progressSound10,
 
     res.levelupSound,
-    res.applauseSound,
     res.cheeringSound,
     res.coinSound,
-
-    res.cheerSound3,
 
     // fonts
     res.mainFont.fnt,

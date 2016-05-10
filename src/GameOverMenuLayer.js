@@ -58,7 +58,7 @@ var GameOverMenuLayer = (function() {
 
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
 
-            var headerLabel = this.generateLabel(NJ.gameState.getJumbo().name, refDim * NJ.uiSizes.header);
+            var headerLabel = this.generateLabel("Stats", refDim * NJ.uiSizes.header);
 
             var currentLabel = this.generateLabel("Current", refDim * NJ.uiSizes.header2);
 

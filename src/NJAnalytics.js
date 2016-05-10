@@ -11,7 +11,7 @@ NJ.initAnalytics = function() {
 };
 
 // send relevant stats over to Google Analytics
-NJ.sendAnalytics = function() {
+NJ.sendAnalytics = function(label) {
     // prepare the stats package to send to GA
     var sessionLength = (Date.now() - NJ.gameState.getStartTime()) / 1000;
 
@@ -20,12 +20,10 @@ NJ.sendAnalytics = function() {
         return v.toString(16);
     });
 
-    var jumboName = NJ.gameState.getJumbo().name;
-
     // now send over relevant stats data to GA
     if(!cc.sys.isNative) {
         ga('set', 'dimension1', rid);
-        ga('set', 'dimension2', jumboName);
+        ga('set', 'dimension2', label);
         ga('set', 'metric1', NJ.gameState.getBlocksCleared());
         ga('set', 'metric2', sessionLength);
         //ga('set', 'metric3', NJ.stats.maxComboLength);
@@ -35,7 +33,7 @@ NJ.sendAnalytics = function() {
         ga('send', 'event', 'Game', 'end', 'Game Session Data', 42);
     } else {
         sdkbox.PluginGoogleAnalytics.setDimension(1, rid);
-        sdkbox.PluginGoogleAnalytics.setDimension(2, jumboName);
+        sdkbox.PluginGoogleAnalytics.setDimension(2, label);
         sdkbox.PluginGoogleAnalytics.setMetric(1, NJ.gameState.getBlocksCleared());
         sdkbox.PluginGoogleAnalytics.setMetric(2, sessionLength);
         //sdkbox.PluginGoogleAnalytics.setMetric(3, NJ.stats.maxComboLength);

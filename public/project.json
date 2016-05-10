@@ -32,7 +32,6 @@
         "src/NumboBlock.js",
         "src/NumboLevel.js",
         "src/NJMath.js",
-        "src/NJJumbos.js",
         "src/NJConfig.js",
         "src/NJSocial.js",
         "src/NJAnalytics.js",

@@ -230,7 +230,7 @@ var BaseGameLayer = cc.Layer.extend({
 	/////////////////////////
 
     // checks whether the game has ended and performs actions appropriately
-    checkGameOver: function() {console.log(this.isGameOver());
+    checkGameOver: function() {
         if (this.isGameOver() ) {
             this.onGameOver();
         }
@@ -341,81 +341,6 @@ var BaseGameLayer = cc.Layer.extend({
 		}
 	},
 
-    // Interface to NumboController activate selected blocks.
-    // Activates all blocks and performs needed sprite removals.
-    // Override to make this even more awesome!
-    // Returns the blocks that were cleared
-    activateSelectedBlocks: function() {
-        // Activate any selected blocks.
-        var clearedBlocks = this._numboController.activateSelectedBlocks();
-
-        this.redrawSelectedLines();
-
-		this._toolbarLayer.setEquation([]);
-
-        this._effectsLayer.clearComboOverlay();
-
-        var comboLength = clearedBlocks.length;
-
-        // make sure something actually happened
-        if(!comboLength)
-            return clearedBlocks;
-
-        // initiate iterator variables here because we use them a lot
-        var i, block, color;
-        var sumPos = cc.p(0, 0);
-
-        var scoreDifference = 0;
-
-        // loop through the blocks, giving each one a particle explosion and also computing some values
-        for(i = 0; i < comboLength; i++) {
-            block = clearedBlocks[i];
-
-            // we need to find the target value which will be the maximum value in the cleared blocks
-            scoreDifference += block.val;
-
-            // also count how many extra of the target we cleared
-
-            sumPos.x += block.x;
-            sumPos.y += block.y;
-
-            // we also need to be computing position sums used to calculate the center point of the cleared
-
-            color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
-
-            this._effectsLayer.launchExplosion({
-                color: color,
-                x: block.x,
-                y: block.y
-            });
-        }
-
-        // add to number of blocks cleared
-        NJ.gameState.addBlocksCleared(comboLength);
-
-        // add to score
-        NJ.gameState.addScore(scoreDifference);
-
-        // Gaps may be created; shift all affected blocks down.
-        for (var col = 0; col < NJ.NUM_COLS; ++col) {
-            for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
-                this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-        }
-
-        // show player data
-        if(this._numboHeaderLayer)
-            this._numboHeaderLayer.updateValues();
-
-        // Allow controller to look for new hint.
-        this._numboController.resetKnownPath();
-        this.jiggleCount = 0;
-
-        // schedule a hint
-        this.schedule(this.jiggleHintBlocks, 7);
-
-        return clearedBlocks;
-    },
-
 	// helper function to move a spawned block into place, shifting its position based on column
 	_instantiateBlock: function(block) {
 		var blockX = this._levelBounds.x +  this._levelCellSize.width * (block.col + 0.5);
@@ -453,7 +378,7 @@ var BaseGameLayer = cc.Layer.extend({
 		NJ.stats.save();
 
 		// first send the analytics for the current game session
-		NJ.sendAnalytics();
+		NJ.sendAnalytics("Default");
 
 		var that = this;
 
@@ -714,7 +639,71 @@ var BaseGameLayer = cc.Layer.extend({
 	// On touch ended, activates all selected blocks once touch is released.
     // Returns the cleared blocks.
 	onTouchEnded: function(touchPosition) {
-        return this.activateSelectedBlocks();
+		// Activate any selected blocks.
+		var clearedBlocks = this._numboController.activateSelectedBlocks();
+
+		this.redrawSelectedLines();
+
+		this._toolbarLayer.setEquation([]);
+
+		this._effectsLayer.clearComboOverlay();
+
+		var comboLength = clearedBlocks.length;
+
+		// make sure something actually happened
+		if(!comboLength)
+			return clearedBlocks;
+
+		// initiate iterator variables here because we use them a lot
+		var i, block, color;
+		var sumPos = cc.p(0, 0);
+
+		var scoreDifference = 0;
+
+		// loop through the blocks, giving each one a particle explosion and also computing some values
+		for(i = 0; i < comboLength; i++) {
+			block = clearedBlocks[i];
+
+			// we need to find the target value which will be the maximum value in the cleared blocks
+			scoreDifference += block.val;
+
+			// also count how many extra of the target we cleared
+			sumPos.x += block.x;
+			sumPos.y += block.y;
+
+			color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
+
+			this._effectsLayer.launchExplosion({
+				color: color,
+				x: block.x,
+				y: block.y
+			});
+		}
+
+		// add to number of blocks cleared
+		NJ.gameState.addBlocksCleared(comboLength);
+
+		// add to score
+		NJ.gameState.addScore(scoreDifference);
+
+		// Gaps may be created; shift all affected blocks down.
+		for (var col = 0; col < NJ.NUM_COLS; ++col) {
+			for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
+				this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+		}
+
+		// show player data
+		if(this._numboHeaderLayer)
+			this._numboHeaderLayer.updateValues();
+
+		// Allow controller to look for new hint.
+		this._numboController.resetKnownPath();
+		this.jiggleCount = 0;
+
+		// schedule a hint
+		this.schedule(this.jiggleHintBlocks, 7);
+
+		return clearedBlocks;
 	},
 
 /////////////

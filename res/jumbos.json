@@ -1,73 +1,5 @@
 {
   "jumbos": {
-    "basic": {
-      "name": "Minute Madness",
-      "highscoreThreshold": 0,
-      "currencyThreshold": 0,
-      "color": "#00E676",
-      "blockColorString": "light",
-      "spawnTime": 2.0,
-      "numberList": [
-        { "key": 1, "weight": 100 },
-        { "key": 2, "weight": 75 },
-        { "key": 3, "weight": 50 },
-        { "key": 4, "weight": 50 },
-        { "key": 5, "weight": 50 },
-        { "key": 6, "weight": 40 },
-        { "key": 7, "weight": 40 },
-        { "key": 8, "weight": 40 },
-        { "key": 9, "weight": 40 }
-      ],
-
-      "thresholdNumbers": {
-        "6": [{"key": 10, "weight": 20}],
-        "7": [{"key": 11, "weight": 20}],
-        "8": [{"key": 12, "weight": 20}],
-        "9": [{"key": 13, "weight": 20}],
-        "10": [{"key": 14, "weight": 20}],
-        "11": [{"key": 15, "weight": 20}],
-        "12": [{"key": 16, "weight": 20}],
-        "13": [{"key": 17, "weight": 10}],
-        "14": [{"key": 18, "weight": 10}],
-        "15": [{"key": 19, "weight": 10}],
-        "16": [{"key": 20, "weight": 10}]
-      }
-    },
-
-    "basic-turn-based": {
-      "name": "Turn Based Fill Up",
-      "highscoreThreshold": 0,
-      "currencyThreshold": 0,
-      "color": "#00E676",
-      "blockColorString": "light",
-      "spawnTime": 2.0,
-      "numberList": [
-        { "key": 1, "weight": 100 },
-        { "key": 2, "weight": 75 },
-        { "key": 3, "weight": 50 },
-        { "key": 4, "weight": 50 },
-        { "key": 5, "weight": 50 },
-        { "key": 6, "weight": 40 },
-        { "key": 7, "weight": 40 },
-        { "key": 8, "weight": 40 },
-        { "key": 9, "weight": 40 }
-      ],
-
-      "thresholdNumbers": {
-        "6": [{"key": 10, "weight": 20}],
-        "7": [{"key": 11, "weight": 20}],
-        "8": [{"key": 12, "weight": 20}],
-        "9": [{"key": 13, "weight": 20}],
-        "10": [{"key": 14, "weight": 20}],
-        "11": [{"key": 15, "weight": 20}],
-        "12": [{"key": 16, "weight": 20}],
-        "13": [{"key": 17, "weight": 10}],
-        "14": [{"key": 18, "weight": 10}],
-        "15": [{"key": 19, "weight": 10}],
-        "16": [{"key": 20, "weight": 10}]
-      }
-    },
-
     "one-mania": {
       "name": "One Mania",
       "highscoreThreshold": 0,
@@ -120,21 +52,6 @@
         },
         {
           "key": 10,
-          "weight": 1
-        }
-      ]
-    },
-
-    "zeroes": {
-      "name": "Zeroes (Test)",
-      "highscoreThreshold": 0,
-      "currencyThreshold": 0,
-      "color": "#FF1744",
-      "blockColorString": "dark",
-      "spawnTime": 0.75,
-      "numberList": [
-        {
-          "key": 0,
           "weight": 1
         }
       ]

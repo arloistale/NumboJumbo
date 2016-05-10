@@ -37,9 +37,6 @@ var NumboController = (function() {
         // factor for how much each number should be multiplied when spawning
         _spawnScale: 1,
 
-        // frequency for spawning
-		_jumboSpawnDelay: 1.0,
-
         nextBlockPowerup: false,
 
 		// level data
@@ -59,9 +56,14 @@ var NumboController = (function() {
             this._initLevel();
 		},
 
-		initDistributionFromJumbo: function(jumbo) {
-			this._spawnDistribution = jumbo.numberList.slice(0);
-			this._thresholdNumbers = jumbo.thresholdNumbers;
+		initDistribution: function(numberList, thresholdNumbers) {
+			cc.assert(numberList, "Must initialize with numberlist");
+
+			// copy the list since we will potentially modify the distribution
+			this._spawnDistribution = numberList.slice(0);
+
+			if(thresholdNumbers)
+				this._thresholdNumbers = thresholdNumbers.slice(0);
 		},
 
         _initLevel: function() {
@@ -378,18 +380,6 @@ var NumboController = (function() {
             this._numboLevel.killAllBlocks();
         },
 
-		requestPowerup: function() {
-			this.nextBlockPowerup = true;
-		},
-
-		recallBoard: function(jumbo, blockSize) {
-			NJ.gameState.chooseJumbo(jumbo.id);
-			var id = jumbo.id;
-			var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
-			this._spawnDistribution = heldJumbo.numberList;
-			this._jumboSpawnDelay = heldJumbo.spawnTime;
-		},
-
 		/////////////
 		// GETTERS //
 		/////////////
@@ -442,25 +432,6 @@ var NumboController = (function() {
 
 		getBlock: function(col, row) {
 			return this._numboLevel.getBlock(col, row);
-		},
-
-        /**
-         * We get the spawn time by multiplying the frequency (based on current level) times the spawn factor (sped up during level)
-         * @returns {number}
-         */
-		getSpawnTime: function() {
-			// the constant spawn delay based on the current jumbo
-			var j = this._jumboSpawnDelay;
-
-            var L = NJ.gameState.getLevel();
-			var x = 0.3;
-			var LFactor = 1 / Math.pow(L, x);
-
-			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 4;
-
-			var spawnTime = j * LFactor * BFactor;
-			//cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);
-			return spawnTime;
 		},
 
 		getKnownPathLength: function(){

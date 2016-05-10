@@ -4,6 +4,19 @@
 
 var MinuteMadnessLayer = BaseGameLayer.extend({
 
+	// domain of spawning
+	_numberList: [
+		{ key: 1, weight: 100 },
+		{ key: 2, weight: 75 },
+		{ key: 3, weight: 50 },
+		{ key: 4, weight: 50 },
+		{ key: 5, weight: 50 },
+		{ key: 6, weight: 40 },
+		{ key: 7, weight: 40 },
+		{ key: 8, weight: 40 },
+		{ key: 9, weight: 40 }
+	],
+
 	// time limit for minute madness
 	_elapsedTimeLimit: 60,
 
@@ -11,15 +24,24 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	// Initialization //
 	////////////////////
 
+	_ctor: function() {
+		this._super();
+
+		this._numboHeaderLayer.hideLevelLabel(true);
+	},
+
 	_reset: function() {
 		this._super();
 
-		this._numboController.initDistributionFromJumbo(NJ.gameState.getJumbo());
+		this._numboController.initDistribution(this._numberList);
 
 		// next we wait until the blocks have been spawned to init the game
 		var that = this;
 		this.schedule(function() {
-			that._numboHeaderLayer.updateValues();
+			var elapsedTime = (Date.now() - NJ.gameState.getStartTime()) / 1000;
+			var timeFraction = 1 - elapsedTime / 60;
+
+			that._numboHeaderLayer.setProgress(timeFraction);
 			that.checkGameOver();
 		}, 1);
 
