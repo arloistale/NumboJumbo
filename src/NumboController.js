@@ -111,23 +111,15 @@ var NumboController = (function() {
 		},
 
 		// deselect a single block, removing its highlight
-		deselectBlock: function(col, row) {
-			cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
-
-			var block = this._numboLevel.getBlock(col, row);
-
-			if(!block)
-				return;
-
-			var index = this._selectedBlocks.indexOf(block);
-			if(index >= 0)
-				this._selectedBlocks.splice(index, 1);
+		deselectLastBlock: function() {
+			var lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
 
 			this._selectedBlocks.splice(this._selectedBlocks.length - 1, 1);
+
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
 
-
+			return lastBlock;
 		},
 
 		// deselect all currently selected blocks, removing their highlights
