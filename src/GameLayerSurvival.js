@@ -7,6 +7,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     // time limit for minute madness
     _elapsedTimeLimit: 60,
     _spawnTime: 1.0,
+    _curtainLayer: null,
 
     // domain of spawning
     _numberList: [
@@ -81,6 +82,12 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         this._backgroundTrack = res.backgroundTrack;
     },
 
+    _initGeometry: function() {
+        this._super();
+        // curtain layer between levels
+        this._curtainLayer = new CurtainLayer(this._levelBounds);
+    },
+
     /////////////////////////
     // Game State Handling //
     /////////////////////////
@@ -148,6 +155,45 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         }
     },
 
+    // Curtain
+
+    closeCurtain: function() {
+        this.levelTransition = true;
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.applauseSound);
+        this.unschedule(this.closeCurtain);
+
+        this._curtainLayer.initLabels();
+        this._curtainLayer.animate();
+        this.addChild(this._curtainLayer, 901);
+
+        for (var col = 0; col < NJ.NUM_COLS; ++col) {
+            for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
+                this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+        }
+
+        this.schedule(this.checkOpenCurtain,2);
+    },
+
+    checkOpenCurtain: function() {
+        this.unschedule(this.checkOpenCurtain);
+
+        if(this._curtainLayer.isCurtainComplete()) {
+            this.openCurtain();
+        }
+        else {
+            this.schedule(this.checkOpenCurtain, .5);
+        }
+    },
+
+    openCurtain: function() {
+        this.levelTransition = false;
+        this.removeChild(this._curtainLayer);
+        this.unschedule(this.openCurtain);
+        this.schedule(this.scheduleSpawn, this._getSpawnTime());
+        this.checkClearBonus();
+    },
+
 
 //////////////////
 // Touch Events //
@@ -170,6 +216,9 @@ var SurvivalGameLayer = BaseGameLayer.extend({
             activationSound = res.levelupSound;
 
             progress = NJ.gameState.getLevelupProgress();
+
+            this.closeCurtain();
+            this.unschedule(this.scheduleSpawn);
         } else {
             progress = NJ.gameState.getLevelupProgress();
             // choose and play a sound depending on how many blocks until levelup
@@ -185,5 +234,10 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
         this._numboHeaderLayer.updateValues();
         this._numboHeaderLayer.setProgress(progress);
+    },
+
+    onExit: function() {
+        this._super();
+        this._curtainLayer.release();
     }
 });
