@@ -47,6 +47,7 @@ var GameOverMenuLayer = (function() {
             this._super();
 
             var backgroundColor = NJ.themes.backgroundColor;
+
             this.init(backgroundColor);
 
             this.initUI();

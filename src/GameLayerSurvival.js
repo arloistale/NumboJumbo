@@ -7,6 +7,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     // time limit for minute madness
     _elapsedTimeLimit: 60,
     _spawnTime: 1.0,
+    _curtainLayer: null,
 
     // domain of spawning
     _numberList: [
@@ -14,15 +15,15 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         { key: 2, weight: 75 },
         { key: 3, weight: 50 },
         { key: 4, weight: 50 },
-        { key: 5, weight: 50 },
-        { key: 6, weight: 40 },
-        { key: 7, weight: 40 },
-        { key: 8, weight: 40 },
-        { key: 9, weight: 40 }
+        { key: 5, weight: 50 }
     ],
 
     _thresholdNumbers: {
-        "2": [{"key": 10, "weight": 20}],
+        "2": [{"key": 6, "weight": 20}],
+        "3": [{"key": 7, "weight": 20}],
+        "4": [{"key": 8, "weight": 20}],
+        "5": [{"key": 9, "weight": 20}],
+        "6": [{"key": 10, "weight": 20}],
         "7": [{"key": 11, "weight": 20}],
         "8": [{"key": 12, "weight": 20}],
         "9": [{"key": 13, "weight": 20}],
@@ -32,7 +33,17 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         "13": [{"key": 17, "weight": 10}],
         "14": [{"key": 18, "weight": 10}],
         "15": [{"key": 19, "weight": 10}],
-        "16": [{"key": 20, "weight": 10}]
+        "16": [{"key": 20, "weight": 10}],
+        "17": [{"key": 21, "weight": 10}],
+        "18": [{"key": 22, "weight": 10}],
+        "19": [{"key": 23, "weight": 10}],
+        "20": [{"key": 24, "weight": 10}],
+        "21": [{"key": 25, "weight": 10}],
+        "22": [{"key": 26, "weight": 10}],
+        "23": [{"key": 27, "weight": 10}],
+        "24": [{"key": 28, "weight": 10}],
+        "25": [{"key": 29, "weight": 10}],
+        "26": [{"key": 30, "weight": 10}]
     },
 
     ////////////////////
@@ -69,6 +80,12 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     _initAudio: function() {
         // start the music
         this._backgroundTrack = res.backgroundTrack;
+    },
+
+    _initGeometry: function() {
+        this._super();
+        // curtain layer between levels
+        this._curtainLayer = new CurtainLayer(this._levelBounds);
     },
 
     /////////////////////////
@@ -138,6 +155,45 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         }
     },
 
+    // Curtain
+
+    closeCurtain: function() {
+        this.levelTransition = true;
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.applauseSound);
+        this.unschedule(this.closeCurtain);
+
+        this._curtainLayer.initLabels();
+        this._curtainLayer.animate();
+        this.addChild(this._curtainLayer, 901);
+
+        for (var col = 0; col < NJ.NUM_COLS; ++col) {
+            for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
+                this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+        }
+
+        this.schedule(this.checkOpenCurtain,2);
+    },
+
+    checkOpenCurtain: function() {
+        this.unschedule(this.checkOpenCurtain);
+
+        if(this._curtainLayer.isCurtainComplete()) {
+            this.openCurtain();
+        }
+        else {
+            this.schedule(this.checkOpenCurtain, .5);
+        }
+    },
+
+    openCurtain: function() {
+        this.levelTransition = false;
+        this.removeChild(this._curtainLayer);
+        this.unschedule(this.openCurtain);
+        this.schedule(this.scheduleSpawn, this._getSpawnTime());
+        this.checkClearBonus();
+    },
+
 
 //////////////////
 // Touch Events //
@@ -160,6 +216,9 @@ var SurvivalGameLayer = BaseGameLayer.extend({
             activationSound = res.levelupSound;
 
             progress = NJ.gameState.getLevelupProgress();
+
+            this.closeCurtain();
+            this.unschedule(this.scheduleSpawn);
         } else {
             progress = NJ.gameState.getLevelupProgress();
             // choose and play a sound depending on how many blocks until levelup
@@ -175,5 +234,10 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
         this._numboHeaderLayer.updateValues();
         this._numboHeaderLayer.setProgress(progress);
+    },
+
+    onExit: function() {
+        this._super();
+        this._curtainLayer.release();
     }
 });

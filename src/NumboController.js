@@ -111,23 +111,15 @@ var NumboController = (function() {
 		},
 
 		// deselect a single block, removing its highlight
-		deselectBlock: function(col, row) {
-			cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
-
-			var block = this._numboLevel.getBlock(col, row);
-
-			if(!block)
-				return;
-
-			var index = this._selectedBlocks.indexOf(block);
-			if(index >= 0)
-				this._selectedBlocks.splice(index, 1);
+		deselectLastBlock: function() {
+			var lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
 
 			this._selectedBlocks.splice(this._selectedBlocks.length - 1, 1);
+
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
 
-
+			return lastBlock;
 		},
 
 		// deselect all currently selected blocks, removing their highlights
@@ -451,26 +443,41 @@ var NumboController = (function() {
 			if (!this._selectedBlocks.length || this._selectedBlocks.length < 3)
 				return false;
 
-			var selectedBlocksLength = this._selectedBlocks.length;
 
+			// "order-less"
+			//return this.sumToHighest();
+
+			// "order matters"
+			 return this.sumToLast();
+		},
+
+		sumToLast: function(){
+			var selectedBlocksLength = this._selectedBlocks.length;
 			var sum = 0;
 
-			var i = 0;
-
-			for(i = 0; i < selectedBlocksLength; ++i)
+			for(var i = 0; i < selectedBlocksLength; ++i) {
 				sum += this._selectedBlocks[i].val;
+			}
 
-			var isValid = false;
+			return (sum - this._selectedBlocks[i - 1].val == this._selectedBlocks[i - 1].val);
+		},
 
-			/*
-			for(i = 0; i < selectedBlocksLength; ++i) {
-				if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val)
-					isValid = true;
-			}*/
+		sumToHighest: function(){
+			var sum = 0;
 
-			isValid = (sum - this._selectedBlocks[i - 1].val == this._selectedBlocks[i - 1].val);
+			var selectedBlocksLength = this._selectedBlocks.length;
+			for(var i = 0; i < selectedBlocksLength; ++i) {
+				sum += this._selectedBlocks[i].val;
+			}
 
-			return isValid;
+			for(var i = 0; i < selectedBlocksLength; ++i) {
+				if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val) {
+					return true;
+				}
+			}
+
+			return false;
+
 		}
 	});
 }());

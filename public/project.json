@@ -18,12 +18,15 @@
         "src/TutorialLayer.js",
         "src/JumboMenuLayer.js",
         "src/SettingsMenuLayer.js",
-        "src/BaseGameLayer.js",
+
+        "src/GameLayerBase.js",
+        "src/GameLayerMinuteMadness.js",
+        "src/GameLayerTurnBased.js",
+        "src/GameLayerSurvival.js",
+        "src/GameLayerMoves.js",
+
         "src/TutorialDriverLayer.js",
-        "src/MinuteMadnessLayer.js",
-        "src/MovesLayer.js",
-        "src/TurnBasedFillUpGameLayer.js",
-        "src/SurvivalGameLayer.js",
+
         "src/NumboHeaderLayer.js",
         "src/GameOverMenuLayer.js",
         "src/NJMenuItem.js",
