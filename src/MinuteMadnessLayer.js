@@ -24,7 +24,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	// Initialization //
 	////////////////////
 
-	_ctor: function() {
+	ctor: function() {
 		this._super();
 
 		this._numboHeaderLayer.hideLevelLabel(true);
