@@ -102,9 +102,6 @@ var NumboMenuLayer = (function() {
             cc.audioEngine.stopMusic();
             cc.audioEngine.stopAllEffects();
 
-            // Init stats data.
-            NJ.gameState.chooseJumbo("basic");
-
             var scene = new cc.Scene();
             scene.addChild(new MinuteMadnessLayer());
             cc.director.runScene(new cc.TransitionFade(0.5, scene));

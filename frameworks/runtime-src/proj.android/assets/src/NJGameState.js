@@ -11,24 +11,14 @@ NJ.gameState = (function() {
 
     // meta data
     var startTime = 0;
-    var currentJumboId = "";
 
     // in game metric tracking
     var prevBlocksNeededForLevelup = 0;
     var blocksNeededForLevelup = 0;
     var blocksCleared = 0;
+    var movesMade = 0;
     var currentLevel = 1;
     var currentScore = 0;
-
-    var comboRecords = [];
-    var multiplier = 1;
-
-    var updateMultiplier = function() {
-        if(comboRecords.length > 2)
-            multiplier = 1 + (comboRecords.length - 2) * 0.5;
-        else
-            multiplier = 1;
-    };
 
     // returns the number of blocks left needed to get to the next level.
     // this is quadratic in the current level L, ie, aL^2 + bL + c.
@@ -59,36 +49,12 @@ NJ.gameState = (function() {
         // reset game state
         // DOES NOT reset the chosen jumbo!
         reset: function () {
+            movesMade = 0;
             currentScore = 0;
             currentLevel = 1;
             prevBlocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel - 1);
             blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             blocksCleared = 0;
-
-            this.resetMultiplier();
-        },
-
-        ////////////////
-        // Meta Logic //
-        ////////////////
-
-        //////////////////
-        // Jumbos Logic //
-        //////////////////
-
-        // sets the current jumbo
-        chooseJumbo: function (jumboId) {
-            currentJumboId = jumboId;
-        },
-
-        // get the currentJumbo
-        getJumbo: function () {
-            return NJ.jumbos.getJumboDataWithKey(currentJumboId);
-        },
-
-        // get the current jumbo ID
-        getJumboId: function() {
-            return currentJumboId;
         },
 
         ///////////////////
@@ -114,6 +80,19 @@ NJ.gameState = (function() {
         // total amount needed
         getBlocksNeededForLevelup: function() {
             return blocksNeededForLevelup;
+        },
+
+        // add moves made
+        addMovesMade: function(delta) {
+            if(typeof delta === 'undefined')
+                movesMade++;
+            else
+                movesMade += delta;
+        },
+
+        // get moves made
+        getMovesMade: function() {
+            return movesMade;
         },
 
         // ratio of level progress based on blocks cleared vs blocks needed this level
@@ -166,33 +145,6 @@ NJ.gameState = (function() {
         // get the current game score
         getScore: function() {
             return currentScore;
-        },
-
-        //////////////////////
-        // Multiplier Logic //
-        //////////////////////
-
-        // record a new combo to increase the multiplier
-        // this function also updates the multiplier if needed
-        offerComboForMultiplier: function(data) {
-            // construct a result to push into combo records
-            // by concatenating to given data
-            var result = data || {};
-            result.time = Date.now();
-
-            comboRecords.push(result);
-
-            updateMultiplier();
-        },
-
-        resetMultiplier: function() {
-            comboRecords = [];
-
-            updateMultiplier();
-        },
-
-        getMultiplier: function() {
-            return multiplier;
         }
     }
 }());

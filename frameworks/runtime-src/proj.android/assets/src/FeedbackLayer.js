@@ -90,6 +90,7 @@ var FeedbackLayer = cc.Layer.extend({
     /*
      * Launches a snippet onto the feedback layer. Show some text on the screen!
      *
+     *
      * Usage: launchSnippet ({ title: 'Hello', x: 500, y: 500, targetX: 400, targetY: 400 })
      */
     launchSnippet: function(data) {

@@ -31,7 +31,7 @@ var BaseGameLayer = cc.Layer.extend({
 	// Geometry Data
 	_backgroundLayer: null,
 
-	_levelNode: null,
+	_levelSprite: null,
 	_selectedLinesNode: null,
 
 	// Controller Data
@@ -194,9 +194,17 @@ var BaseGameLayer = cc.Layer.extend({
 		this._blockSize = cc.size( this._levelCellSize.width * NJ.blockCellSize,  this._levelCellSize.height * NJ.blockCellSize);
 
 		// initialize rectangle around level
-		this._levelNode = cc.DrawNode.create();
-		this._levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), NJ.themes.levelColor, 0, NJ.themes.levelColor);
-		this.addChild(this._levelNode, -1);
+		this._levelSprite = new cc.Sprite(res.levelImage);
+		var spriteSize = this._levelSprite.getContentSize();
+		this._levelSprite.setColor(NJ.themes.levelColor);
+		this._levelSprite.setScale(levelDims.width / spriteSize.width, levelDims.height / spriteSize.height);
+		this._levelSprite.attr({
+			anchorX: 0.5,
+			anchorY: 0.5,
+			x: cc.visibleRect.center.x,
+			y: cc.visibleRect.center.y
+		});
+		this.addChild(this._levelSprite, -1);
 
 		// selected lines
 		this._selectedLinesNode = cc.DrawNode.create();
@@ -410,8 +418,8 @@ var BaseGameLayer = cc.Layer.extend({
 		NJ.themes.toggle();
 
 		this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
-		this._levelNode.clear();
-		this._levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), NJ.themes.levelColor, 0, cc.color(255, 255, 255, 0));
+		this._levelSprite.clear();
+		this._levelSprite.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), NJ.themes.levelColor, 0, cc.color(255, 255, 255, 0));
 
 		this._numboHeaderLayer.updateTheme();
 

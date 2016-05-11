@@ -99,7 +99,7 @@ var NJMenuItem = (function() {
         normalImage = new cc.Scale9Sprite(imageRes);
         selectedImage = new cc.Scale9Sprite(imageRes);
         disabledImage = new cc.Scale9Sprite(imageRes);
-
+// try not doing this
         normalImage.setContentSize(size);
         selectedImage.setContentSize(size);
         disabledImage.setContentSize(size);

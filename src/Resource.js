@@ -35,6 +35,7 @@ var res = {
     blockImage: resRoot + "Images/block.png",
     alertImage: resRoot + "Images/alertOverlay.png",
     handImage: resRoot + "Images/ic_hand_2x.png",
+    levelImage: resRoot + "Images/levelImage.png",
 
     // music
     menuTrack: resRoot + "Sounds/Track2.mp3",
@@ -125,6 +126,7 @@ var g_game = [
     // Scene
     res.blockImage,
     res.alertImage,
+    res.levelImage,
 
     // music
     res.trackA,

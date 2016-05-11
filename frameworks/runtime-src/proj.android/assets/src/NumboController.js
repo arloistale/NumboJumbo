@@ -37,9 +37,6 @@ var NumboController = (function() {
         // factor for how much each number should be multiplied when spawning
         _spawnScale: 1,
 
-        // frequency for spawning
-		_jumboSpawnDelay: 1.0,
-
         nextBlockPowerup: false,
 
 		// level data
@@ -59,9 +56,14 @@ var NumboController = (function() {
             this._initLevel();
 		},
 
-		initDistributionFromJumbo: function(jumbo) {
-			this._spawnDistribution = jumbo.numberList.slice(0);
-			this._thresholdNumbers = jumbo.thresholdNumbers;
+		initDistribution: function(numberList, thresholdNumbers) {
+			cc.assert(numberList, "Must initialize with numberlist");
+
+			// copy the list since we will potentially modify the distribution
+			this._spawnDistribution = numberList.slice(0);
+
+			if(thresholdNumbers)
+				this._thresholdNumbers = thresholdNumbers;
 		},
 
         _initLevel: function() {
@@ -109,23 +111,15 @@ var NumboController = (function() {
 		},
 
 		// deselect a single block, removing its highlight
-		deselectBlock: function(col, row) {
-			cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
-
-			var block = this._numboLevel.getBlock(col, row);
-
-			if(!block)
-				return;
-
-			var index = this._selectedBlocks.indexOf(block);
-			if(index >= 0)
-				this._selectedBlocks.splice(index, 1);
+		deselectLastBlock: function() {
+			var lastBlock = this._selectedBlocks[this._selectedBlocks.length-1];
 
 			this._selectedBlocks.splice(this._selectedBlocks.length - 1, 1);
+
 			if(NJ.settings.sounds)
 				cc.audioEngine.playEffect(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
 
-
+			return lastBlock;
 		},
 
 		// deselect all currently selected blocks, removing their highlights
@@ -378,18 +372,6 @@ var NumboController = (function() {
             this._numboLevel.killAllBlocks();
         },
 
-		requestPowerup: function() {
-			this.nextBlockPowerup = true;
-		},
-
-		recallBoard: function(jumbo, blockSize) {
-			NJ.gameState.chooseJumbo(jumbo.id);
-			var id = jumbo.id;
-			var heldJumbo = NJ.jumbos.getJumboDataWithKey(jumbo.id);
-			this._spawnDistribution = heldJumbo.numberList;
-			this._jumboSpawnDelay = heldJumbo.spawnTime;
-		},
-
 		/////////////
 		// GETTERS //
 		/////////////
@@ -444,25 +426,6 @@ var NumboController = (function() {
 			return this._numboLevel.getBlock(col, row);
 		},
 
-        /**
-         * We get the spawn time by multiplying the frequency (based on current level) times the spawn factor (sped up during level)
-         * @returns {number}
-         */
-		getSpawnTime: function() {
-			// the constant spawn delay based on the current jumbo
-			var j = this._jumboSpawnDelay;
-
-            var L = NJ.gameState.getLevel();
-			var x = 0.3;
-			var LFactor = 1 / Math.pow(L, x);
-
-			var BFactor = 1 - NJ.gameState.getLevelupProgress() / 4;
-
-			var spawnTime = j * LFactor * BFactor;
-			//cc.log(spawnTime + " : " + j + " : " + LFactor + " : " + BFactor);
-			return spawnTime;
-		},
-
 		getKnownPathLength: function(){
 			return this._knownPath.length;
 		},
@@ -480,26 +443,41 @@ var NumboController = (function() {
 			if (!this._selectedBlocks.length || this._selectedBlocks.length < 3)
 				return false;
 
-			var selectedBlocksLength = this._selectedBlocks.length;
 
+			// "order-less"
+			//return this.sumToHighest();
+
+			// "order matters"
+			 return this.sumToLast();
+		},
+
+		sumToLast: function(){
+			var selectedBlocksLength = this._selectedBlocks.length;
 			var sum = 0;
 
-			var i = 0;
-
-			for(i = 0; i < selectedBlocksLength; ++i)
+			for(var i = 0; i < selectedBlocksLength; ++i) {
 				sum += this._selectedBlocks[i].val;
+			}
 
-			var isValid = false;
+			return (sum - this._selectedBlocks[i - 1].val == this._selectedBlocks[i - 1].val);
+		},
 
-			/*
-			for(i = 0; i < selectedBlocksLength; ++i) {
-				if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val)
-					isValid = true;
-			}*/
+		sumToHighest: function(){
+			var sum = 0;
 
-			isValid = (sum - this._selectedBlocks[i - 1].val == this._selectedBlocks[i - 1].val);
+			var selectedBlocksLength = this._selectedBlocks.length;
+			for(var i = 0; i < selectedBlocksLength; ++i) {
+				sum += this._selectedBlocks[i].val;
+			}
 
-			return isValid;
+			for(var i = 0; i < selectedBlocksLength; ++i) {
+				if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val) {
+					return true;
+				}
+			}
+
+			return false;
+
 		}
 	});
 }());
