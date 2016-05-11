@@ -15,7 +15,7 @@
 		1AD7E0A818C9DB93004817A6 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AD7E0A918C9DBE3004817A6 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AE159EC18C9DF3600FCA372 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A081B18C9DF05005C6854 /* project.json */; };
-		2286CDF91CC9878500227CE0 /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2286CDF81CC9878500227CE0 /* Icon@3x.png */; };
+		221A48921CE2E17C0052D721 /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 221A48911CE2E17C0052D721 /* Icon@3x.png */; };
 		2B2240D1B845D4EE4E8714BB /* PluginGoogleAnalyticsJS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 387941B68C3E774DB0EC2605 /* PluginGoogleAnalyticsJS.cpp */; };
 		502380DC17EBB88200990C9B /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 502380DB17EBB88200990C9B /* libcurl.dylib */; };
 		509D4A8117EBB24E00697056 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4545215156E28EF00887EB5 /* AppDelegate.cpp */; };
@@ -146,8 +146,8 @@
 		1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		1A96A4F2174A3432008653A9 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "../../js-bindings/cocos2d-x/cocos2dx/platform/third_party/ios/libraries/libcurl.a"; sourceTree = "<group>"; };
 		1AC6FB34180E9ACB004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = "../../js-bindings/cocos2d-x/build/cocos2d_libs.xcodeproj"; sourceTree = "<group>"; };
+		221A48911CE2E17C0052D721 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
 		226D450BBA11EA66AC6A335A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = SOURCE_ROOT; };
-		2286CDF81CC9878500227CE0 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
 		2D3245848D9B1AF51B89583B /* ar */ = {isa = PBXFileReference; lastKnownFileType = "?"; name = ar; path = plugin_review_res_bundle/ar.lproj/SdkboxReviewResLocalizable.strings; sourceTree = SOURCE_ROOT; };
 		387941B68C3E774DB0EC2605 /* PluginGoogleAnalyticsJS.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginGoogleAnalyticsJS.cpp; path = ../Classes/PluginGoogleAnalyticsJS.cpp; sourceTree = SOURCE_ROOT; };
 		3C0A4F7FB862287D8E3EA9E8 /* PluginFacebook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PluginFacebook.framework; sourceTree = SOURCE_ROOT; };
@@ -288,7 +288,7 @@
 		5091732E17ECDF8A00D62437 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				2286CDF81CC9878500227CE0 /* Icon@3x.png */,
+				221A48911CE2E17C0052D721 /* Icon@3x.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -556,7 +556,7 @@
 			files = (
 				BAF426FB19484B3E002B22EF /* script in Resources */,
 				1AE159EC18C9DF3600FCA372 /* project.json in Resources */,
-				2286CDF91CC9878500227CE0 /* Icon@3x.png in Resources */,
+				221A48921CE2E17C0052D721 /* Icon@3x.png in Resources */,
 				1AD7E0A818C9DB93004817A6 /* main.js in Resources */,
 				509D4ABE17EBB2AB00697056 /* Default.png in Resources */,
 				C03780EB18BEE0E400FE4F13 /* src in Resources */,

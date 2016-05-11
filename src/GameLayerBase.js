@@ -559,26 +559,13 @@ var BaseGameLayer = cc.Layer.extend({
 				if (touchCoords) {
 					touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
 					if(touchBlock === penultimate) {
-						deselectedBlock = this._numboController.deselectBlock(touchCoords.col, touchCoords.row);
+						deselectedBlock = this._numboController.deselectLastBlock();
 					} else {
 						selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 					}
 				}
 
 				currLength = testLength * (i + 1);
-			}
-
-			touchCoords = this._convertPointToLevelCoords(touchPosition);
-
-			// we only look for additional touch coords if we currently touched a block
-			if (touchCoords) {
-				touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
-
-				if(touchBlock === penultimate) {
-					deselectedBlock = this._numboController.deselectBlock(touchCoords.col, touchCoords.row);
-				} else {
-					selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
-				}
 			}
 
 			var selectedBlocks = this._numboController.getSelectedBlocks();
