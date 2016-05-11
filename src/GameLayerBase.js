@@ -59,6 +59,7 @@ var BaseGameLayer = cc.Layer.extend({
 		// Init game visuals and audio
 		this._initGeometry();
 		this._initAudio();
+		this._initParticles();
 
         this._initUI();
 
@@ -88,6 +89,20 @@ var BaseGameLayer = cc.Layer.extend({
 
         if(NJ.settings.music)
             cc.audioEngine.playMusic(this._backgroundTrack, true);
+	},
+
+	_initParticles: function(){
+		for (var col = 0; col < NJ.NUM_COLS; ++col){
+			for (var row = 0; row < NJ.NUM_ROWS; ++row) {
+				var coords = this._convertLevelCoordsToPoint(col, row);
+				this._effectsLayer.initializeParticleSystemAt({
+					x: coords.x,
+					y: coords.y,
+					col: col,
+					row: row
+				});
+			}
+		}
 	},
 
 	// Initialize input depending on the device.
@@ -672,12 +687,8 @@ var BaseGameLayer = cc.Layer.extend({
 			sumPos.y += block.y;
 
 			color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
-
-			this._effectsLayer.launchExplosion({
-				color: color,
-				x: block.x,
-				y: block.y
-			});
+			var coords = this._convertPointToLevelCoords({x: block.x, y: block.y});
+			this._effectsLayer.launchExplosion(coords.col, coords.row, color);
 		}
 
 		// add to number of blocks cleared
