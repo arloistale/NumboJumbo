@@ -14,15 +14,15 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         { key: 2, weight: 75 },
         { key: 3, weight: 50 },
         { key: 4, weight: 50 },
-        { key: 5, weight: 50 },
-        { key: 6, weight: 40 },
-        { key: 7, weight: 40 },
-        { key: 8, weight: 40 },
-        { key: 9, weight: 40 }
+        { key: 5, weight: 50 }
     ],
 
     _thresholdNumbers: {
-        "2": [{"key": 10, "weight": 20}],
+        "2": [{"key": 6, "weight": 20}],
+        "3": [{"key": 7, "weight": 20}],
+        "4": [{"key": 8, "weight": 20}],
+        "5": [{"key": 9, "weight": 20}],
+        "6": [{"key": 10, "weight": 20}],
         "7": [{"key": 11, "weight": 20}],
         "8": [{"key": 12, "weight": 20}],
         "9": [{"key": 13, "weight": 20}],
@@ -32,7 +32,17 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         "13": [{"key": 17, "weight": 10}],
         "14": [{"key": 18, "weight": 10}],
         "15": [{"key": 19, "weight": 10}],
-        "16": [{"key": 20, "weight": 10}]
+        "16": [{"key": 20, "weight": 10}],
+        "17": [{"key": 21, "weight": 10}],
+        "18": [{"key": 22, "weight": 10}],
+        "19": [{"key": 23, "weight": 10}],
+        "20": [{"key": 24, "weight": 10}],
+        "21": [{"key": 25, "weight": 10}],
+        "22": [{"key": 26, "weight": 10}],
+        "23": [{"key": 27, "weight": 10}],
+        "24": [{"key": 28, "weight": 10}],
+        "25": [{"key": 29, "weight": 10}],
+        "26": [{"key": 30, "weight": 10}]
     },
 
     ////////////////////

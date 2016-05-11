@@ -451,26 +451,42 @@ var NumboController = (function() {
 			if (!this._selectedBlocks.length || this._selectedBlocks.length < 3)
 				return false;
 
-			var selectedBlocksLength = this._selectedBlocks.length;
 
+			// "order-less"
+			return this.sumToHighest();
+
+			// "order matters"
+			// return this.sumToLast();
+		},
+
+		sumToLast: function(){
+			var selectedBlocksLength = this._selectedBlocks.length;
 			var sum = 0;
 
-			var i = 0;
-
-			for(i = 0; i < selectedBlocksLength; ++i)
+			for(var i = 0; i < selectedBlocksLength; ++i) {
 				sum += this._selectedBlocks[i].val;
+			}
 
-			var isValid = false;
+			return (sum - this._selectedBlocks[i - 1].val == this._selectedBlocks[i - 1].val);
 
-			/*
-			for(i = 0; i < selectedBlocksLength; ++i) {
-				if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val)
-					isValid = true;
-			}*/
+		},
 
-			isValid = (sum - this._selectedBlocks[i - 1].val == this._selectedBlocks[i - 1].val);
+		sumToHighest: function(){
+			var sum = 0;
 
-			return isValid;
+			var selectedBlocksLength = this._selectedBlocks.length;
+			for(var i = 0; i < selectedBlocksLength; ++i) {
+				sum += this._selectedBlocks[i].val;
+			}
+
+			for(var i = 0; i < selectedBlocksLength; ++i) {
+				if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val) {
+					return true;
+				}
+			}
+
+			return false;
+
 		}
 	});
 }());
