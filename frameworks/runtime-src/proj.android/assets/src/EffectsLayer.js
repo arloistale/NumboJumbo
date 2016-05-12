@@ -99,11 +99,11 @@ var EffectsLayer = cc.Layer.extend({
 
         // size, in pixels
         particleSystem.setStartSize(10.0);
-        particleSystem.setStartSizeVar(5.0);
+        particleSystem.setStartSizeVar(10.0);
         particleSystem.setEndSize(3.0);
 
         // emits per second
-        particleSystem.setEmissionRate(12 / 0.1);
+        particleSystem.setEmissionRate(10 / 0.1);
 
         // additive
         particleSystem.setBlendAdditive(false);
@@ -121,8 +121,6 @@ var EffectsLayer = cc.Layer.extend({
     // LAUNCHING //
     ///////////////
 
-
-    // TODO: WHYYYYYYYYYYYYYYYYYY IS THIS BROKEN WHY
     launchExplosion: function(col, row, color){
         var that = this;
         var particleSystem = this._explosionGrid[col][row];
@@ -141,7 +139,6 @@ var EffectsLayer = cc.Layer.extend({
         });
 
         particleSystem.runAction(cc.sequence(cc.delayTime(1), invisibleAction));
-
     },
 
     ///////////////////
