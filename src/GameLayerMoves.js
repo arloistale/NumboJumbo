@@ -33,14 +33,18 @@ var MovesLayer = BaseGameLayer.extend({
 	_reset: function() {
 		this._super();
 
+		var that = this;
+
 		this._numboController.initDistribution(this._numberList);
 
-		// cause UI elements to fall in
-		this._numboHeaderLayer.enter();
-		this._toolbarLayer.enter();
-
-		// fill the board with blocks initially
-		this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+		this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
+			// cause UI elements to fall in
+			that._numboHeaderLayer.enter();
+			that._toolbarLayer.enter();
+		}), cc.delayTime(0.5), cc.callFunc(function() {
+			// fill the board with blocks initially
+			that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+		})));
 	},
 
 	// Initialize audio.
@@ -59,9 +63,9 @@ var MovesLayer = BaseGameLayer.extend({
 		return movesMade >= this._movesLimit;
 	},
 
-//////////////////
-// Touch Events //
-//////////////////
+	//////////////////
+	// Touch Events //
+	//////////////////
 
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
@@ -72,7 +76,7 @@ var MovesLayer = BaseGameLayer.extend({
 		if(!comboLength)
 			return;
 
-		this.spawnRandomBlocks(comboLength);
+		this.spawnDropRandomBlocks(comboLength);
 
 		var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
 

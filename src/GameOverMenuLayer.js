@@ -64,12 +64,12 @@ var GameOverMenuLayer = (function() {
 
             var currentLabel = this.generateLabel("Current", refDim * NJ.uiSizes.header2);
 
-            this._scoreLabel = this.generateLabel("Pts: " + NJ.prettifier.formatNumber(NJ.gameState.getScore()), refDim * NJ.uiSizes.header2);
+            this._scoreLabel = this.generateLabel("Pts: " + NJ.gameState.getScore(), refDim * NJ.uiSizes.header2);
             this._levelLabel = this.generateLabel("Lv: " + NJ.gameState.getLevel(), refDim * NJ.uiSizes.header2);
 
             var bestLabel = this.generateLabel("Best", refDim * NJ.uiSizes.header2);
 
-            this._bestLabel = this.generateLabel("Pts: " + NJ.prettifier.formatNumber(NJ.stats.getHighscore()), refDim * NJ.uiSizes.header2);
+            this._bestLabel = this.generateLabel("Pts: " + NJ.stats.getHighscore(), refDim * NJ.uiSizes.header2);
             this._bestLevelLabel = this.generateLabel("Lv: " + NJ.stats.getHighlevel(), refDim * NJ.uiSizes.header2);
 
             this._menu.addChild(headerLabel);

@@ -340,7 +340,7 @@ var BaseGameLayer = cc.Layer.extend({
 	},
 
 	// spawns a specified amount of blocks every 0.1 seconds until
-	spawnRandomBlocks: function(amount) {
+	spawnDropRandomBlocks: function(amount) {
 		for(var i = 0; i < amount; i++) {
 			this.spawnDropRandomBlock();
 		}

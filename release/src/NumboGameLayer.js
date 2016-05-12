@@ -377,7 +377,7 @@ var NumboGameLayer = (function() {
 			this.moveBlockIntoPlace(spawnBlock);
 		},
 
-		spawnRandomBlocks: function(N) {
+		spawnDropRandomBlocks: function(N) {
 			this.schedule(this.spawnDropRandomBlock, 0.1, N);
 		},
 

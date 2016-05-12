@@ -53,14 +53,19 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     _reset: function() {
         this._super();
 
+        var that = this;
+
         this._numboController.initDistribution(this._numberList, this._thresholdNumbers);
 
-        // spawn blocks until the board is 1/3 full initially fill the board with blocks initially
-        this.spawnInitialBlocks();
+        this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
+            // cause UI elements to fall in
+            that._numboHeaderLayer.enter();
+            that._toolbarLayer.enter();
+        }), cc.delayTime(0.5), cc.callFunc(function() {
 
-        // cause UI elements to fall in
-        this._numboHeaderLayer.enter();
-        this._toolbarLayer.enter();
+            // spawn blocks until the board is 1/3 full initially fill the board with blocks initially
+            that.spawnInitialBlocks();
+        })));
     },
 
     _getSpawnTime: function() {
@@ -72,7 +77,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         // linear blocks-cleared-this-level factor
         var BFactor = 1 - NJ.gameState.getLevelupProgress() / 3;
 
-        var spawnTime = 2 * LFactor * BFactor;
+        var spawnTime = 1.5 * LFactor * BFactor;
         return spawnTime;
     },
 
@@ -100,7 +105,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     spawnInitialBlocks: function(){
         var that = this;
 
-        var firstBlocksAction = cc.callFunc(function() {that.spawnRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);});
+        var firstBlocksAction = cc.callFunc(function() {that.spawnDropRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);});
 
         var delayAction = cc.delayTime(2.0);
         var scheduleAction = cc.callFunc(function(){that.scheduleSpawn();})
@@ -115,14 +120,6 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
         this.unschedule(this.scheduleSpawn);
         this.schedule(this.scheduleSpawn, this._getSpawnTime());
-
-        if(!this._feedbackLayer.isDoomsayerLaunched()) {
-            if(this._numboController.isInDanger())
-                this._feedbackLayer.launchDoomsayer();
-        } else {
-            if(!this._numboController.isInDanger())
-                this._feedbackLayer.clearDoomsayer();
-        }
 
         this.spawnDropRandomBlock();
     },
@@ -194,10 +191,32 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         this.checkClearBonus();
     },
 
+    ///////////////////
+    // Virtual Stuff //
+    ///////////////////
 
-//////////////////
-// Touch Events //
-//////////////////
+    checkGameOver: function() {
+        if(this._super())
+            return true;
+
+        if(this.isInDanger()) {
+            if(!this._feedbackLayer.isDoomsayerLaunched())
+                this._feedbackLayer.launchDoomsayer();
+        } else {
+            if(this._feedbackLayer.isDoomsayerLaunched())
+                this._feedbackLayer.clearDoomsayer();
+        }
+
+        return false;
+    },
+
+    isInDanger: function() {
+        return this._numboController.getNumBlocks() / this._numboController.getCapacity() >= NJ.DANGER_THRESHOLD;
+    },
+
+    //////////////////
+    // Touch Events //
+    //////////////////
 
     // On touch ended, activates all selected blocks once touch is released.
     onTouchEnded: function(touchPosition) {

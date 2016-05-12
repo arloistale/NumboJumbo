@@ -50,7 +50,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		this._toolbarLayer.enter();
 
 		// fill the board with blocks initially
-		this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+		this.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
 	},
 
 	// Initialize audio.
@@ -83,7 +83,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		if(!comboLength)
 			return;
 
-		this.spawnRandomBlocks(comboLength);
+		this.spawnDropRandomBlocks(comboLength);
 
 		var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
 

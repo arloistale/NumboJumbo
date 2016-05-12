@@ -27,14 +27,18 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     _reset: function() {
         this._super();
 
+        var that = this;
+
         this._numboController.initDistribution(this._numberList);
 
-        // fill the board with blocks initially
-        this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2));
-
-        // cause UI elements to fall in
-        this._numboHeaderLayer.enter();
-        this._toolbarLayer.enter();
+        this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
+            // cause UI elements to fall in
+            that._numboHeaderLayer.enter();
+            that._toolbarLayer.enter();
+        }), cc.delayTime(0.5), cc.callFunc(function() {
+            // fill the board with blocks initially
+            that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2));
+        })));
     },
 
     // Initialize audio.
@@ -53,7 +57,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     },
 
     addMoreBlocks: function() {
-        this.spawnRandomBlocks(this._blocksToDrop);
+        this.spawnDropRandomBlocks(this._blocksToDrop);
     },
 
 //////////////////
@@ -69,7 +73,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         if(!comboLength)
             return;
 
-        this.spawnRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
+        this.spawnDropRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
 
         var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
 

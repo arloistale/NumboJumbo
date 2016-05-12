@@ -100,7 +100,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     spawnInitialBlocks: function(){
         var that = this;
 
-        var firstBlocksAction = cc.callFunc(function() {that.spawnRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);});
+        var firstBlocksAction = cc.callFunc(function() {that.spawnDropRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);});
 
         var delayAction = cc.delayTime(2.0);
         var scheduleAction = cc.callFunc(function(){that.scheduleSpawn();})

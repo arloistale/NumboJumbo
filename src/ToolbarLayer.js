@@ -89,8 +89,21 @@ var ToolbarLayer = (function() {
             });
         },
 
+        // transition in
         enter: function() {
-            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y));
+            var easing = cc.easeBackInOut();
+
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y)).easing(easing);
+            this.runAction(moveTo);
+        },
+
+        // transition out
+        leave: function() {
+            var size = this.getContentSize();
+
+            var easing = cc.easeBackOut();
+
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y - size.height)).easing(easing);
             this.runAction(moveTo);
         },
 
@@ -112,7 +125,6 @@ var ToolbarLayer = (function() {
                         equationStr += " + " + nums[i];
                     } else {
                         equationStr += " = " + nums[i];
-                        cc.log("hi");
                         // pulse the bar a bit
                         this._equationLabel.stopAllActions();
                         this._equationLabel.runAction(cc.sequence(cc.scaleBy(0.15, 1.5, 1.5), cc.scaleBy(0.05, 1 / 1.5, 1 / 1.5)));
@@ -123,10 +135,14 @@ var ToolbarLayer = (function() {
             this._equationLabel.setString(equationStr);
         },
 
-// UI callbacks //
+        // UI callbacks //
 
         setOnToggleThemeCallback: function(callback) {
             this._onToggleThemeCallback = callback;
+        },
+
+        updateTheme: function() {
+            this._equationLabel.setColor(NJ.themes.defaultLabelColor);
         }
     });
 }());

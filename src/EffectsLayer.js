@@ -94,24 +94,21 @@ var EffectsLayer = cc.Layer.extend({
         particleSystem.setAngleVar(360);
 
         // life of particles
-        particleSystem.setLife(0.75);
-        particleSystem.setLifeVar(0.15);
+        particleSystem.setLife(0.5);
+        particleSystem.setLifeVar(0.1);
 
         // size, in pixels
-        particleSystem.setStartSize(15.0);
+        particleSystem.setStartSize(10.0);
         particleSystem.setStartSizeVar(5.0);
         particleSystem.setEndSize(3.0);
-        particleSystem.setEndSizeVar(1.0);
-
 
         // emits per second
-        particleSystem.setEmissionRate(15 / 0.1);
+        particleSystem.setEmissionRate(12 / 0.1);
 
         // additive
         particleSystem.setBlendAdditive(false);
 
         particleSystem.setTexture(cc.textureCache.addImage(res.blockImage));
-
         particleSystem.stopSystem();
         particleSystem.setVisible(false);
 

@@ -30,7 +30,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         this._numboController.initDistribution(this._numberList);
 
         // fill the board with blocks initially
-        this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2));
+        this.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2));
 
         // cause UI elements to fall in
         this._numboHeaderLayer.enter();
@@ -53,7 +53,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     },
 
     addMoreBlocks: function() {
-        this.spawnRandomBlocks(this._blocksToDrop);
+        this.spawnDropRandomBlocks(this._blocksToDrop);
     },
 
 //////////////////
@@ -69,7 +69,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         if(!comboLength)
             return;
 
-        this.spawnRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
+        this.spawnDropRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
 
         var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
 
