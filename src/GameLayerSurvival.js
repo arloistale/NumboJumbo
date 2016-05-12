@@ -153,7 +153,6 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     },
 
     // Curtain
-
     closeCurtain: function() {
         this.levelTransition = true;
         if(NJ.settings.sounds)
