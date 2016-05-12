@@ -37,8 +37,6 @@ var NumboController = (function() {
         // factor for how much each number should be multiplied when spawning
         _spawnScale: 1,
 
-        nextBlockPowerup: false,
-
 		// level data
 		_numboLevel: null,
 		_knownPath: [],
@@ -185,10 +183,6 @@ var NumboController = (function() {
 		// instantiate and drop block into specified column and value
 		// return dropped block
 		spawnDropBlock: function(block, col, val) {
-			if(NJ.settings.sounds) {
-				cc.audioEngine.playEffect(res.clickSound);
-			}
-
 			this.blocksDropped++;
 			return this._numboLevel.spawnDropBlock(block, col, val, null);
 		},
@@ -376,10 +370,6 @@ var NumboController = (function() {
 		// GETTERS //
 		/////////////
 
-		isInDanger: function() {
-			return this._numboLevel.getNumBlocks() / this._numboLevel.getCapacity() >= NJ.DANGER_THRESHOLD;
-		},
-
 		levelIsClear: function() {
 			return this._numboLevel.isClear();
 		},
@@ -400,6 +390,10 @@ var NumboController = (function() {
 				return this._selectedBlocks[this._selectedBlocks.length - 1];
 
 			return null;
+		},
+
+		getCapacity: function() {
+			return this._numboLevel.getCapacity();
 		},
 
 		getNumBlocks: function(){

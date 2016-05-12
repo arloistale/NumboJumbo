@@ -437,13 +437,20 @@ var BaseGameLayer = cc.Layer.extend({
 
 		var that = this;
 
+		this._feedbackLayer.clearDoomsayer();
+		this.pauseInput();
+		this.unscheduleAllCallbacks();
+
+		cc.log("game over");
+		if(NJ.settings.sounds)
+			cc.audioEngine.playEffect(res.overSound);
+
 		cc.audioEngine.stopMusic();
 
 		this.runAction(cc.sequence(cc.callFunc(function() {
-			that.pauseInput();
 			that._numboHeaderLayer.leave();
 			that._toolbarLayer.leave();
-		}), cc.delayTime(1), cc.callFunc(function() {
+		}), cc.delayTime(2), cc.callFunc(function() {
 			that.pauseGame();
 
 			that._gameOverMenuLayer = new GameOverMenuLayer();

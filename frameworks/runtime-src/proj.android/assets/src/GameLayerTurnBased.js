@@ -27,14 +27,18 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     _reset: function() {
         this._super();
 
+        var that = this;
+
         this._numboController.initDistribution(this._numberList);
 
-        // fill the board with blocks initially
-        this.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2));
-
-        // cause UI elements to fall in
-        this._numboHeaderLayer.enter();
-        this._toolbarLayer.enter();
+        this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
+            // cause UI elements to fall in
+            that._numboHeaderLayer.enter();
+            that._toolbarLayer.enter();
+        }), cc.delayTime(0.5), cc.callFunc(function() {
+            // fill the board with blocks initially
+            that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2));
+        })));
     },
 
     // Initialize audio.

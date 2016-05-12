@@ -93,7 +93,7 @@ var ToolbarLayer = (function() {
         enter: function() {
             var easing = cc.easeBackInOut();
 
-            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y)).easing(easing);
+            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y)).easing(easing);
             this.runAction(moveTo);
         },
 
@@ -103,7 +103,7 @@ var ToolbarLayer = (function() {
 
             var easing = cc.easeBackOut();
 
-            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y - size.height)).easing(easing);
+            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y - size.height)).easing(easing);
             this.runAction(moveTo);
         },
 

@@ -37,8 +37,6 @@ var NumboController = (function() {
         // factor for how much each number should be multiplied when spawning
         _spawnScale: 1,
 
-        nextBlockPowerup: false,
-
 		// level data
 		_numboLevel: null,
 		_knownPath: [],

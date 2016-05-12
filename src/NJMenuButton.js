@@ -7,7 +7,7 @@ var NJMenuButton = NJMenuItem.extend({
     ctor: function(size, callback, target) {
         this._super(size, callback, target);
 
-        this.setBackgroundImage(res.buttonImage);
+        this.setBackgroundImage(res.blockImage);
 
         this.setEnabled(true);
     }
