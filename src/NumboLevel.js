@@ -57,10 +57,10 @@ var NumboLevel = (function() {
 		// spawn and drop block at the given col and value
 		// returns spawned block
 		// DO NOT publicly use directly!!! Use NumboController spawnDropRandomBlock instead
-		spawnDropBlock: function(block, col, val, powerup) {
+		spawnDropBlock: function(block, col, val) {
 			cc.assert(0 <= col && col < NJ.NUM_COLS && this._blocks[col].length < NJ.NUM_ROWS, "Invalid coords");
 
-			block.init(col, this._blocks[col].length, val, powerup);
+			block.init(col, this._blocks[col].length, val);
 			this._blocks[col].push(block);
 			this._numBlocks++;
 			return block;

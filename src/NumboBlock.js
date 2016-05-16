@@ -20,10 +20,6 @@ var NumboBlock = (function() {
         _valueLabel: null,
 
         // block properties
-        _colorIndex: 0,
-
-        powerup: false,
-
         col: -1,
         row: -1,
         val: -1,
@@ -45,8 +41,8 @@ var NumboBlock = (function() {
             if(!_backgroundScale) {
                 _backgroundSize = this._backgroundSprite.getContentSize();
                 _backgroundScale = {
-                    x: blockSize.width / _backgroundSize.width * 1.2,
-                    y:blockSize.height / _backgroundSize.height * 1.2
+                    x: blockSize.width / _backgroundSize.width,
+                    y: blockSize.height / _backgroundSize.height
                 }
             }
 
@@ -88,11 +84,10 @@ var NumboBlock = (function() {
         },
 
         // initialize block values
-        init: function(colVal, rowVal, valVal, powerupVal) {
+        init: function(colVal, rowVal, valVal) {
             this.col = colVal;
             this.row = rowVal;
             this.val = valVal;
-            this.powerup = powerupVal;
 
             this._valueLabel.setString(this.val + "");
 
@@ -102,14 +97,6 @@ var NumboBlock = (function() {
         //////////////////
         // Manipulation //
         //////////////////
-
-        removePowerUp: function() {
-            this.powerup = false;
-            this.unschedule(this.blink);
-            this.clearHighlight();
-            this._valueLabel.enableStroke(cc.color(0, 0, 255, 255), 1);
-            this._valueLabel.setColor(cc.color(255, 255, 255));
-        },
 
         // kill the block
         // NOTE: DO NOT call directly, call kill block in NumboLevel instead

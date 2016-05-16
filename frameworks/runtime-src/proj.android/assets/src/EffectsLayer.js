@@ -4,6 +4,8 @@ var EffectsLayer = cc.Layer.extend({
 
     _explosionTag: 55,
 
+    _explosionGrid: null,
+
     // feedback doomsayer
     _comboOverlay: null,
     _isComboLaunched: false,
@@ -14,12 +16,6 @@ var EffectsLayer = cc.Layer.extend({
 
 	ctor: function() {
 		this._super();
-
-        var entity = null;
-        var i = 0;
-
-        // TODO: Should not have to call this here...
-        this.reset();
 
         // initialize combo overlay
         this._comboOverlay = new cc.Sprite(res.alertImage);
@@ -33,18 +29,47 @@ var EffectsLayer = cc.Layer.extend({
             visible: false
         });
         this.addChild(this._comboOverlay);
+
+
+        this._explosionGrid = new Array(NJ.NUM_COLS);
+        // initialize particle systems
+        for (var col = 0; col < NJ.NUM_COLS; ++col){
+
+            this._explosionGrid[col] = new Array(NJ.NUM_ROWS);
+            for (var row = 0; row < NJ.NUM_ROWS; ++row){
+                // stick a placeholder value in there -- call initializeParticleSystemAt from the gameLayer on each one
+                this._explosionGrid[col][row] = "this should be initialized to a particleSystem!";
+            }
+        }
 	},
 
-    // TODO: Memory leaks!!
+    // to be called by the gameLayer during its initialization
+    // (this seems weird, but the gameLayer knows where the x/y coordinates are,
+    // so it is kinda the only way to do it)
+    //
+    // takes in an object containing the col/row indeces AND the x/y coordinates
+    // and creates a new particle system there
+    initializeParticleSystemAt: function (data) {
+        cc.assert(typeof data.x == 'number' && typeof data.y == 'number'
+            && typeof data.col == 'number' && typeof data.row == 'number',
+            "error in initializeParticleSystemAt: non-number params");
 
-    reset: function() {
-        var i = 0;
-        var children = this.getChildren();
-        var entity = null;
+        if (0 <= data.col && data.col < NJ.NUM_COLS && 0 <= data.row && data.row < NJ.NUM_ROWS) {
+            var particleSystem = this._generateNumboParticleSystem(data);
+            this._explosionGrid[data.col][data.row] = particleSystem;
+        }
     },
 
-    _generateNumboParticleSystem: function() {
+    reset: function(){
+        // not sure why this exists -- maybe we should delete old particle systems? idk
+    },
+
+    _generateNumboParticleSystem: function(data) {
         var particleSystem = new cc.ParticleExplosion();
+
+        if (data.x && data.y) {
+            particleSystem.setPosition(cc.p(data.x, data.y));
+        }
 
         particleSystem.setTag(this._explosionTag);
 
@@ -75,12 +100,10 @@ var EffectsLayer = cc.Layer.extend({
         // size, in pixels
         particleSystem.setStartSize(10.0);
         particleSystem.setStartSizeVar(10.0);
-        particleSystem.setEndSize(3);
-
-        //particleSystem.setParticlesColor(cc.color("#ffffff"));
+        particleSystem.setEndSize(3.0);
 
         // emits per second
-        particleSystem.setEmissionRate(15 / 0.1);
+        particleSystem.setEmissionRate(10 / 0.1);
 
         // additive
         particleSystem.setBlendAdditive(false);
@@ -89,70 +112,33 @@ var EffectsLayer = cc.Layer.extend({
         particleSystem.stopSystem();
         particleSystem.setVisible(false);
 
+        this.addChild(particleSystem, 4);
+
         return particleSystem;
-    },
-
-    // pops a banner from the banner pool,
-    // NOTE: Allocates a new banner if needed, increase pool size if this happens!
-    popExplosionPool: function() {
-
-        var explosion = this._generateNumboParticleSystem();
-        explosion.stopAllActions();
-        explosion.stopSystem();
-        explosion.setVisible(false);
-
-        return explosion;
     },
 
     ///////////////
     // LAUNCHING //
     ///////////////
 
-    /*
-     * Launches a explosion onto the feedback layer.
-     *
-     * Usage: launchExplosion ({ color: cc.color("#ffffff"), x: 500, y: 500 })
-     */
-    launchExplosion: function(data) {
-        var entity = this.popExplosionPool();
-
+    launchExplosion: function(col, row, color){
         var that = this;
+        var particleSystem = this._explosionGrid[col][row];
 
-        var x = 0, y = 0,
-            color = cc.color("#ffffff");
+        // initialize colors to have no variance and no change
+        particleSystem.setStartColor(color);
+        particleSystem.setStartColorVar(cc.color(0, 0, 0, 0));
+        particleSystem.setEndColor(color);
+        particleSystem.setEndColorVar(cc.color(0, 0, 0, 0));
 
-        if(data) {
-            if(typeof data.x !== 'undefined')
-                x = data.x;
+        particleSystem.setVisible(true);
+        particleSystem.resetSystem();
 
-            if(typeof data.y !== 'undefined')
-                y = data.y;
-
-            if(typeof data.color !== 'undefined')
-                color = data.color;
-        }
-
-        // color of particles
-        entity.setStartColor(color);
-        entity.setStartColorVar(cc.color(0, 0, 0, 0));
-        entity.setEndColor(color);
-        entity.setEndColorVar(cc.color(0, 0, 0, 0));
-
-        entity.setPosition(x, y);
-        entity.setVisible(true);
-        entity.resetSystem();
-
-        this.addChild(entity, 4);
-
-        var removeAction = cc.callFunc(function() {
-            entity.stopAllActions();
-            entity.stopSystem();
-            entity.removeFromParent(true);
+        var invisibleAction = cc.callFunc(function(){
+            particleSystem.setVisible(false);
         });
 
-        // TODO: we hard code an expected particle system lifespan of 1 second
-        // maybe make this more flexible
-        entity.runAction(cc.sequence(cc.delayTime(1), removeAction));
+        particleSystem.runAction(cc.sequence(cc.delayTime(1), invisibleAction));
     },
 
     ///////////////////
