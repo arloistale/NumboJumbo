@@ -647,16 +647,15 @@ var BaseGameLayer = cc.Layer.extend({
 					if(isCombo) {
 						highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
 
-						// check if we're hovering over wombo combo
-						if (selectedBlocks.length >= 5) {
-
+							/*
+							// grab each block adjacent to this combo:
 							for (i = 0; i < selectedBlocks.length; ++i) {
 								highlightBlocks = highlightBlocks.concat(this._numboController.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1));
 							}
+							*/
 
-							this._effectsLayer.launchComboOverlay();
-						} else
-							selectedBlock.highlight();
+						this._effectsLayer.launchComboOverlay();
+						selectedBlock.highlight();
 					}
 
 					// remove duplicates
