@@ -2,7 +2,7 @@
 #include "cocos2d_specifics.hpp"
 #include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"
 #include "SDKBoxJSHelper.h"
-#include "sdkbox/sdkbox.h"
+#include "sdkbox/Sdkbox.h"
 
 
 #if defined(MOZJS_MAJOR_VERSION)

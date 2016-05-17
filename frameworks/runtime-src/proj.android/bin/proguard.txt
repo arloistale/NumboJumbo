@@ -1,19 +1,16 @@
-# view AndroidManifest.xml #generated:27
--keep class com.facebook.FacebookActivity { <init>(...); }
+# view AndroidManifest.xml #generated:28
+-keep class com.google.android.gms.ads.AdActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:29
--keep class com.facebook.FacebookContentProvider { <init>(...); }
-
-# view AndroidManifest.xml #generated:15
+# view AndroidManifest.xml #generated:16
 -keep class com.google.android.gms.analytics.AnalyticsReceiver { <init>(...); }
 
-# view AndroidManifest.xml #generated:20
+# view AndroidManifest.xml #generated:21
 -keep class com.google.android.gms.analytics.AnalyticsService { <init>(...); }
 
-# view AndroidManifest.xml #generated:21
+# view AndroidManifest.xml #generated:22
 -keep class com.google.android.gms.analytics.CampaignTrackingReceiver { <init>(...); }
 
-# view AndroidManifest.xml #generated:26
+# view AndroidManifest.xml #generated:27
 -keep class com.google.android.gms.analytics.CampaignTrackingService { <init>(...); }
 
 # view AndroidManifest.xml #generated:7

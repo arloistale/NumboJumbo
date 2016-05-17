@@ -600,8 +600,8 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/AppDelegate.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/platform/android/CCJavascriptJavaBridge.h \
  jni/../../Classes/PluginReviewJS.hpp \
  jni/../../Classes/PluginReviewJSHelper.h \
- jni/../../Classes/PluginFacebookJS.hpp \
- jni/../../Classes/PluginFacebookJSHelper.h \
+ jni/../../Classes/PluginSdkboxPlayJS.hpp \
+ jni/../../Classes/PluginSdkboxPlayJSHelper.h \
  jni/../../Classes/PluginGoogleAnalyticsJS.hpp
 
 jni/../../Classes/AppDelegate.h:
@@ -1806,8 +1806,8 @@ jni/../../Classes/PluginReviewJS.hpp:
 
 jni/../../Classes/PluginReviewJSHelper.h:
 
-jni/../../Classes/PluginFacebookJS.hpp:
+jni/../../Classes/PluginSdkboxPlayJS.hpp:
 
-jni/../../Classes/PluginFacebookJSHelper.h:
+jni/../../Classes/PluginSdkboxPlayJSHelper.h:
 
 jni/../../Classes/PluginGoogleAnalyticsJS.hpp:

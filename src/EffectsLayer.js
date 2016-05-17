@@ -100,7 +100,7 @@ var EffectsLayer = cc.Layer.extend({
         // size, in pixels
         particleSystem.setStartSize(10.0);
         particleSystem.setStartSizeVar(10.0);
-        particleSystem.setEndSize(3.0);
+        particleSystem.setEndSize(0.0);
 
         // emits per second
         particleSystem.setEmissionRate(10 / 0.1);

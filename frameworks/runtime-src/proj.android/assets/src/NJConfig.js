@@ -18,6 +18,14 @@ NJ.tags = {
     PAUSABLE: 9001
 };
 
+// modes
+NJ.modekeys = {
+    minuteMadness: "mm",
+    moves: "mov",
+    react: "re",
+    infinite: "inf"
+};
+
 // combo thresholds
 NJ.comboThresholds = (function() {
     var data = [

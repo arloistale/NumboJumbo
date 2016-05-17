@@ -31,10 +31,10 @@
 #ifdef SDKBOX_ENABLED
 #include "PluginReviewJS.hpp"
 #include "PluginReviewJSHelper.h"
-#endif
-#ifdef SDKBOX_ENABLED
-#include "PluginFacebookJS.hpp"
-#include "PluginFacebookJSHelper.h"
+
+#include "PluginSdkboxPlayJS.hpp"
+#include "PluginSdkboxPlayJSHelper.h"
+
 #include "PluginGoogleAnalyticsJS.hpp"
 //#include "PluginGoogleAnalyticsJSHelper.h"
 #endif
@@ -64,9 +64,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-        glview = cocos2d::GLViewImpl::create("NumboJumbo");
+        glview = cocos2d::GLViewImpl::create("Numbo Jumbo");
 #else
-        glview = cocos2d::GLViewImpl::createWithRect("NumboJumbo", Rect(0,0,900,640));
+        glview = cocos2d::GLViewImpl::createWithRect("Numbo Jumbo", Rect(0,0,900,640));
 #endif
         director->setOpenGLView(glview);
 }
@@ -83,40 +83,16 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(register_all_cocos2dx_extension);
     sc->addRegisterCallback(register_all_cocos2dx_extension_manual);
 
-    // chipmunk can be commented out to reduce the package
-    sc->addRegisterCallback(jsb_register_chipmunk);
     // opengl can be commented out to reduce the package
     sc->addRegisterCallback(JSB_register_opengl);
     
-    // builder can be commented out to reduce the package
-    sc->addRegisterCallback(register_all_cocos2dx_builder);
-    sc->addRegisterCallback(register_CCBuilderReader);
-    
     // ui can be commented out to reduce the package, attension studio need ui module
-    sc->addRegisterCallback(register_all_cocos2dx_ui);
-    sc->addRegisterCallback(register_all_cocos2dx_ui_manual);
+    //sc->addRegisterCallback(register_all_cocos2dx_ui);
+    //sc->addRegisterCallback(register_all_cocos2dx_ui_manual);
 
     // studio can be commented out to reduce the package, 
-    sc->addRegisterCallback(register_all_cocos2dx_studio);
-    sc->addRegisterCallback(register_all_cocos2dx_studio_manual);
-    
-    // spine can be commented out to reduce the package
-    sc->addRegisterCallback(register_all_cocos2dx_spine);
-    sc->addRegisterCallback(register_all_cocos2dx_spine_manual);
-    
-    // XmlHttpRequest can be commented out to reduce the package
-    sc->addRegisterCallback(MinXmlHttpRequest::_js_register);
-    // websocket can be commented out to reduce the package
-    sc->addRegisterCallback(register_jsb_websocket);
-    // sokcet io can be commented out to reduce the package
-    sc->addRegisterCallback(register_jsb_socketio);
-
-    // 3d can be commented out to reduce the package
-    sc->addRegisterCallback(register_all_cocos2dx_3d);
-    sc->addRegisterCallback(register_all_cocos2dx_3d_manual);
-    
-    // 3d extension can be commented out to reduce the package
-    sc->addRegisterCallback(register_all_cocos2dx_3d_extension);
+    //sc->addRegisterCallback(register_all_cocos2dx_studio);
+    //sc->addRegisterCallback(register_all_cocos2dx_studio_manual);
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     sc->addRegisterCallback(JavascriptJavaBridge::_js_register);
@@ -126,12 +102,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 #ifdef SDKBOX_ENABLED
     sc->addRegisterCallback(register_all_PluginReviewJS);
     sc->addRegisterCallback(register_all_PluginReviewJS_helper);
-#endif
-#ifdef SDKBOX_ENABLED
-    sc->addRegisterCallback(register_all_PluginFacebookJS);
-    sc->addRegisterCallback(register_all_PluginFacebookJS_helper);
-#endif
-#ifdef SDKBOX_ENABLED
+    sc->addRegisterCallback(register_all_PluginSdkboxPlayJS);
+    sc->addRegisterCallback(register_all_PluginSdkboxPlayJS_helper);
     sc->addRegisterCallback(register_all_PluginGoogleAnalyticsJS);
 //    sc->addRegisterCallback(register_all_PluginGoogleAnalyticsJS_helper);
 #endif

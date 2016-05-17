@@ -11,14 +11,40 @@
             "LaunchForReminding": 2, 
             "UserEventLimit": 0
         }, 
-        "Facebook": {
-            "debug": false
+        "sdkboxplay": {
+            "leaderboards": [
+                {
+                    "id": "CgkIjJ-toeEIEAIQAg",
+                    "name": "ldb-mm"
+                },
+                {
+                    "id": "CgkIjJ-toeEIEAIQBQ",
+                    "name": "ldb-mov"
+                },
+                {
+                    "id": "CgkIjJ-toeEIEAIQBA",
+                    "name": "ldb-re"
+                },
+                {
+                    "id": "CgkIjJ-toeEIEAIQAw",
+                    "name": "ldb-inf"
+                }
+            ], 
+            "achievements": [
+                {
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQAQ",
+                    "name": "layman"
+                }
+            ], 
+            "connect_on_start": true,
+            "debug": true
         }
     }, 
     "ios": {
         "GoogleAnalytics": {
             "trackingCode": "UA-72620222-1"
-        }, 
+        },
         "Review": {
             "LaunchLimit": 3, 
             "DayForReminding": 1, 
@@ -28,7 +54,36 @@
             "LaunchForReminding": 2, 
             "UserEventLimit": 0
         }, 
-        "Facebook": {
+        "sdkboxplay": {
+            "leaderboards": [
+                {
+                    "id": "ldb1", 
+                    "name": "ldb1"
+                }
+            ], 
+            "achievements": [
+                {
+                    "incremental": false, 
+                    "id": "tengames", 
+                    "name": "ten-games"
+                }, 
+                {
+                    "incremental": false, 
+                    "id": "hunter", 
+                    "name": "hunter"
+                }, 
+                {
+                    "incremental": false, 
+                    "id": "craftsman", 
+                    "name": "craftsman"
+                }, 
+                {
+                    "incremental": true, 
+                    "id": "CgkI0sux8sMWEAIQBQ", 
+                    "name": "incremental"
+                }
+            ], 
+            "connect_on_start": true,
             "debug": true
         }
     }
