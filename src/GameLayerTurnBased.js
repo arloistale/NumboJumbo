@@ -71,7 +71,8 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
 
         this.spawnRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
 
-        var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
+        //var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
+        var activationSound = plangs[Math.min(comboLength-2, plangs.length - 1)];
 
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(activationSound);

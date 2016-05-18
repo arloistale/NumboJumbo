@@ -222,8 +222,10 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         } else {
             progress = NJ.gameState.getLevelupProgress();
             // choose and play a sound depending on how many blocks until levelup
-            var soundProgressIndex = Math.floor((progresses.length - 1) * progress);
-            activationSound = progresses[soundProgressIndex];
+            //var soundProgressIndex = Math.floor((progresses.length - 1) * progress);
+            //activationSound = progresses[soundProgressIndex];
+            var soundProgressIndex = Math.floor((plangs.length-1) * progress);
+            activationSound = plangs[soundProgressIndex];
         }
 
         if (NJ.settings.sounds)

@@ -148,12 +148,12 @@ var NumboController = (function() {
 				var targetNum = Math.max.apply(null, selectedNums);
 
 				// wombo comboo clear blocks of value
-				if(selectedBlocks.length >= 5) {
+				/*if(selectedBlocks.length >= 5) {
 					for(i = 0; i < selectedBlocks.length; ++i) {
 						var explodeBlocks = this.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1);
 						clearedBlocks = clearedBlocks.concat(explodeBlocks);
 					}
-				}
+				}*/
 
 				clearedBlocks = clearedBlocks.concat(selectedBlocks);
 
@@ -445,10 +445,10 @@ var NumboController = (function() {
 
 
 			// "order-less"
-			//return this.sumToHighest();
+			return this.sumToHighest();
 
 			// "order matters"
-			 return this.sumToLast();
+			// return this.sumToLast();
 		},
 
 		sumToLast: function(){

@@ -85,7 +85,77 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 
 		this.spawnRandomBlocks(comboLength);
 
-		var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
+		var activationSounds = [];
+		for(var i=0; i<comboLength-2; i++) {
+			activationSounds.push(bloops[i]);
+		}
+
+		this.schedule(function() {
+			cc.audioEngine.playEffect(activationSounds[0]);
+		},.05, false);
+
+		if(activationSounds.length == 2) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .2, false);
+		}
+		else if(activationSounds.length == 3) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .17, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .29, false);
+		}
+		else if(activationSounds.length == 4) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .15, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .25, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[3]);
+			}, .35, false);
+		}
+		else if(activationSounds.length == 5) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .12, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .19, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[3]);
+			}, .26, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[4]);
+			}, .33, false);
+		}
+		else if(activationSounds.length > 5) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .11, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .17, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[3]);
+			}, .23, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[4]);
+			}, .29, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[5]);
+			}, .35, false);
+		}
+
+		/*var timeElapsed = 0;
+		var timeBetweenSounds = 1.0/activationSounds.length;
+		for(var i=1; i<Math.min(activationSounds.length, 6); i++) {
+			timeElapsed += timeBetweenSounds;
+			this.schedule(function() { cc.audioEngine.playEffect(activationSounds[i]);}, timeElapsed, false);
+		}*/
 
 		// launch feedback for combo threshold title snippet
 		if (comboLength >= 5) {
@@ -94,9 +164,10 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 				//cc.audioEngine.playEffect(res.applauseSound);
 		}
 
-		if(NJ.settings.sounds)
-			cc.audioEngine.playEffect(activationSound);
-
+		//if(NJ.settings.sounds) {
+		//	for(var i=0; i<activationSounds.length; i++)
+		//		cc.audioEngine.playEffect(activationSounds[i]);
+		//}
 		// show player data
 		this._numboHeaderLayer.updateValues();
 	}

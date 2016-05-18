@@ -71,6 +71,28 @@ var res = {
     progressSound9: resRoot + "Sounds/progress9.wav",
     progressSound10: resRoot + "Sounds/progress10.wav",
 
+    plangSound1: resRoot + "Sounds/plang1.wav",
+    plangSound2: resRoot + "Sounds/plang2.wav",
+    plangSound3: resRoot + "Sounds/plang3.wav",
+    plangSound4: resRoot + "Sounds/plang4.wav",
+    plangSound5: resRoot + "Sounds/plang5.wav",
+    plangSound6: resRoot + "Sounds/plang6.wav",
+    plangSound7: resRoot + "Sounds/plang7.wav",
+    plangSound8: resRoot + "Sounds/plang8.wav",
+
+    bloopSound1: resRoot + "Sounds/boop1.wav",
+    bloopSound2: resRoot + "Sounds/boop2.wav",
+    bloopSound3: resRoot + "Sounds/boop3.wav",
+    bloopSound4: resRoot + "Sounds/boop4.wav",
+    bloopSound5: resRoot + "Sounds/boop5.wav",
+    bloopSound6: resRoot + "Sounds/boop6.wav",
+    bloopSound7: resRoot + "Sounds/boop7.wav",
+    bloopSound8: resRoot + "Sounds/boop8.wav",
+    bloopSound9: resRoot + "Sounds/boop9.wav",
+    bloopSound10: resRoot + "Sounds/boop10.wav",
+
+
+
     levelupSound: resRoot + "Sounds/levelup.wav",
 
     cheeringSound: resRoot + "Sounds/cheering.wav",
@@ -110,6 +132,12 @@ var plops = [res.plopSound, res.plopSound4, res.plopSound5,
 var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, res.progressSound4,
     res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
     res.progressSound9, res.progressSound10];
+
+var plangs = [res.plangSound1, res.plangSound2, res.plangSound3, res.plangSound4,
+    res.plangSound5, res.plangSound6, res.plangSound7, res.plangSound8];
+
+var bloops = [res.bloopSound1, res.bloopSound2, res.bloopSound3, res.bloopSound4, res.bloopSound5,
+    res.bloopSound6, res.bloopSound7, res.bloopSound8, res.bloopSound9, res.bloopSound10];
 
 var cheers = [res.cheerSound3];
 
@@ -156,6 +184,28 @@ var g_game = [
     res.progressSound8,
     res.progressSound9,
     res.progressSound10,
+
+    res.plangSound1,
+    res.plangSound2,
+    res.plangSound3,
+    res.plangSound4,
+    res.plangSound5,
+    res.plangSound6,
+    res.plangSound7,
+    res.plangSound8,
+
+    res.bloopSound1,
+    res.bloopSound2,
+    res.bloopSound3,
+    res.bloopSound4,
+    res.bloopSound5,
+    res.bloopSound6,
+    res.bloopSound7,
+    res.bloopSound8,
+    res.bloopSound9,
+    res.bloopSound10,
+
+
 
     res.levelupSound,
     res.cheeringSound,
