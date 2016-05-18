@@ -342,6 +342,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 	// Move scene block sprite into place.
 	moveBlockIntoPlace: function(moveBlock) {
+
 		var blockTargetY = this._levelBounds.y +  this._levelCellSize.height * (moveBlock.row + 0.5);
 		var blockTargetX = this._levelBounds.x +  this._levelCellSize.width * (moveBlock.col + 0.5);
 
@@ -711,40 +712,11 @@ var BaseGameLayer = cc.Layer.extend({
 		if(!comboLength)
 			return clearedBlocks;
 
-		// initiate iterator variables here because we use them a lot
-		var i, block, color;
-		var sumPos = cc.p(0, 0);
-
-		var scoreDifference = 0;
-
-		// loop through the blocks, giving each one a particle explosion and also computing some values
-		for(i = 0; i < comboLength; i++) {
-			block = clearedBlocks[i];
-
-			// we need to find the target value which will be the maximum value in the cleared blocks
-			scoreDifference += block.val;
-
-			// also count how many extra of the target we cleared
-			sumPos.x += block.x;
-			sumPos.y += block.y;
-
-			color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
-			var coords = this._convertPointToLevelCoords({x: block.x, y: block.y});
-			this._effectsLayer.launchExplosion(coords.col, coords.row, color);
-		}
-
-		// add to number of blocks cleared
-		NJ.gameState.addBlocksCleared(comboLength);
-
-		// add to score
-		NJ.gameState.addScore(scoreDifference);
-
-		// add moves made
-		NJ.gameState.addMovesMade();
+		this.scoreBlocksMakeParticles(clearedBlocks, comboLength);
 
 		this.relocateBlocks();
 
-		//this.killBlocksAfterDelay(bonusBlocks, 1.0);
+		this.killBlocksAfterDelay(bonusBlocks, 0.4);
 
 		// Allow controller to look for new hint.
 		this._numboController.resetKnownPath();
@@ -756,23 +728,81 @@ var BaseGameLayer = cc.Layer.extend({
 		return clearedBlocks;
 	},
 
+	scoreBlocksMakeParticles: function(blocks, comboLength){
+		// initiate iterator variables here because we use them a lot
+		var i, block, color;
+		var sumPos = cc.p(0, 0);
+
+		var scoreDifference = 0;
+
+		// loop through the blocks, giving each one a particle explosion and also computing some values
+		for(i = 0; i < blocks.length; i++) {
+			block = blocks[i];
+			// we need to find the target value which will be the maximum value in the cleared blocks
+			scoreDifference += block.val;
+
+			// also count how many extra of the target we cleared
+			sumPos.x += block.x;
+			sumPos.y += block.y;
+
+			color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
+			if (block) {
+				var coords = this._convertPointToLevelCoords({x: block.x, y: block.y});
+				if (coords) {
+					this._effectsLayer.launchExplosion(coords.col, coords.row, color);
+				}
+			}
+		}
+
+		// add to number of blocks cleared
+		NJ.gameState.addBlocksCleared(comboLength);
+
+		cc.log(scoreDifference);
+		// add to score
+		NJ.gameState.addScore(scoreDifference);
+
+		// add moves made
+		NJ.gameState.addMovesMade();
+
+		this._numboHeaderLayer.updateValues();
+
+	},
+
 	killBlocksAfterDelay: function(blocks, delay){
 		var that = this;
-		cc.log(blocks);
-		for (var i = 0; i < blocks.length; ++i){
-			this.schedule(cc.callFunc(that._numboController.killBlock(blocks[i])), 0, 0, delay);
-		}
-		this.schedule(this.relocateBlocks, 0, 0, 2*delay);
+
+		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
+			that.scoreBlocksMakeParticles(blocks, 0);
+			for (var i = 0; i < blocks.length; ++i){
+				that._numboController.killBlock(blocks[i]);
+			}
+			that._numboController._numboLevel.updateRowsAndColumns();
+
+			that.relocateBlocks();
+
+		})));
+	},
+
+	spawnBlocksAfterDelay: function(count, delay){
+		var that = this;
+
+		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
+			that.spawnDropRandomBlocks(count);
+
+			that.relocateBlocks();
+
+		})));
 	},
 
 	relocateBlocks: function (){
-	// Gaps may be created; shift all affected blocks down.
-	for (var col = 0; col < NJ.NUM_COLS; ++col) {
-		for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
-			this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-	}
+		// Gaps may be created; shift all affected blocks down.
 
-},
+		var blocks = this._numboController.getBlocksList();
+		for (var i = 0; i < blocks.length; ++i){
+			this.moveBlockIntoPlace(blocks[i]);
+		}
+
+	},
 
 /////////////
 // Drawing //

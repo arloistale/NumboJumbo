@@ -77,15 +77,10 @@ var MovesLayer = BaseGameLayer.extend({
 			return;
 
 		this.spawnDropRandomBlocks(comboLength);
+		var numBonusBlocks = this._numboController.getNumBonusBlocks(comboLength);
+		this.spawnBlocksAfterDelay(numBonusBlocks, 0.4);
 
 		var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
-
-		// launch feedback for combo threshold title snippet
-		if (comboLength >= 5) {
-
-			//if (NJ.settings.sounds)
-				//cc.audioEngine.playEffect(res.applauseSound);
-		}
 
 		if(NJ.settings.sounds)
 			cc.audioEngine.playEffect(activationSound);

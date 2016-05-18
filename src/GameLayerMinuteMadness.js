@@ -109,6 +109,8 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 			return;
 
 		this.spawnDropRandomBlocks(comboLength);
+		var numBonusBlocks = this._numboController.getNumBonusBlocks(comboLength);
+		this.spawnBlocksAfterDelay(numBonusBlocks, 0.4);
 
 		var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
 

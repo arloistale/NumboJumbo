@@ -162,7 +162,7 @@ var NumboController = (function() {
 
 				var numBonus = this.getNumBonusBlocks(selectedBlocks.length);
 				var bonusBlocks = this.getNRandomFreeBlocks(numBonus);
-				clearedBlocks = clearedBlocks.concat(bonusBlocks);
+				//clearedBlocks = clearedBlocks.concat(bonusBlocks);
 
 				// remove duplicates
 				for(i = 0; i < clearedBlocks.length; ++i) {
