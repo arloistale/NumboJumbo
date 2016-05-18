@@ -695,7 +695,9 @@ var BaseGameLayer = cc.Layer.extend({
     // Returns the cleared blocks.
 	onTouchEnded: function(touchPosition) {
 		// Activate any selected blocks.
-		var clearedBlocks = this._numboController.activateSelectedBlocks();
+		var clearedAndBonusBlocks = this._numboController.activateSelectedBlocks();
+		var clearedBlocks = clearedAndBonusBlocks.clearedBlocks;
+		var bonusBlocks = clearedAndBonusBlocks.bonusBlocks;
 
 		this.redrawSelectedLines();
 
@@ -740,11 +742,9 @@ var BaseGameLayer = cc.Layer.extend({
 		// add moves made
 		NJ.gameState.addMovesMade();
 
-		// Gaps may be created; shift all affected blocks down.
-		for (var col = 0; col < NJ.NUM_COLS; ++col) {
-			for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
-				this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-		}
+		this.relocateBlocks();
+
+		//this.killBlocksAfterDelay(bonusBlocks, 1.0);
 
 		// Allow controller to look for new hint.
 		this._numboController.resetKnownPath();
@@ -755,6 +755,24 @@ var BaseGameLayer = cc.Layer.extend({
 
 		return clearedBlocks;
 	},
+
+	killBlocksAfterDelay: function(blocks, delay){
+		var that = this;
+		cc.log(blocks);
+		for (var i = 0; i < blocks.length; ++i){
+			this.schedule(cc.callFunc(that._numboController.killBlock(blocks[i])), 0, 0, delay);
+		}
+		this.schedule(this.relocateBlocks, 0, 0, 2*delay);
+	},
+
+	relocateBlocks: function (){
+	// Gaps may be created; shift all affected blocks down.
+	for (var col = 0; col < NJ.NUM_COLS; ++col) {
+		for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
+			this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+	}
+
+},
 
 /////////////
 // Drawing //

@@ -133,7 +133,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     checkClearBonus: function() {
         if (this._numboController.getNumBlocks() < 3) {
             if (NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.cheeringSound);
+                cc.audioEngine.playEffect(res.coinSound);
             this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
             this.unschedule(this.scheduleSpawn);
             this.schedule(this.scheduleSpawn, 6);

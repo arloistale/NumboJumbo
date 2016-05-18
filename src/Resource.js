@@ -46,7 +46,11 @@ var res = {
 
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
+    levelupSound: resRoot + "Sounds/levelup.wav",
+    overSound: resRoot + "Sounds/over.mp3",
+    coinSound: resRoot + "Sounds/coin.wav",
     plipSound: resRoot + "Sounds/plipSound.mp3",
+
     plopSound: resRoot + "Sounds/Plop.wav",
     plopSound4: resRoot + "Sounds/Plop4.wav",
     plopSound5: resRoot + "Sounds/Plop5.wav",
@@ -72,10 +76,6 @@ var res = {
     progressSound9: resRoot + "Sounds/progress9.wav",
     progressSound10: resRoot + "Sounds/progress10.wav",
 
-    levelupSound: resRoot + "Sounds/levelup.wav",
-    overSound: resRoot + "Sounds/over.mp3",
-
-    coinSound: resRoot + "Sounds/coin.wav"
 };
 
 // returns proper font name based on platform
@@ -112,7 +112,6 @@ var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, re
     res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
     res.progressSound9, res.progressSound10];
 
-var cheers = [res.cheerSound3];
 
 // resources for ingame
 var g_game = [
