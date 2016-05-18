@@ -1114,6 +1114,22 @@ bool js_pluginx_protocols_ProtocolSocial_showLeaderboard(JSContext *cx, uint32_t
     JS_ReportError(cx, "js_pluginx_protocols_ProtocolSocial_showLeaderboard : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
+bool js_pluginx_protocols_ProtocolSocial_showAllLeaderboards(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+        JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+        js_proxy_t *proxy = jsb_get_js_proxy(obj);
+        cocos2d::plugin::ProtocolSocial* cobj = (cocos2d::plugin::ProtocolSocial *)(proxy ? proxy->ptr : NULL);
+        JSB_PRECONDITION2( cobj, cx, false, "js_pluginx_protocols_ProtocolSocial_showAllLeaderboards : Invalid Native Object");
+        if (argc == 0) {
+            cobj->showAllLeaderboards();
+            args.rval().setUndefined();
+            return true;
+        }
+
+        JS_ReportError(cx, "js_pluginx_protocols_ProtocolSocial_showAchievements : wrong number of arguments: %d, was expecting %d", argc, 0);
+        return false;
+}
 bool js_pluginx_protocols_ProtocolSocial_showAchievements(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -1207,6 +1223,7 @@ void js_register_pluginx_protocols_ProtocolSocial(JSContext *cx, JS::HandleObjec
 
     static JSFunctionSpec funcs[] = {
         JS_FN("showLeaderboard", js_pluginx_protocols_ProtocolSocial_showLeaderboard, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("showAllLeaderboards", js_pluginx_protocols_ProtocolSocial_showAllLeaderboards, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("showAchievements", js_pluginx_protocols_ProtocolSocial_showAchievements, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getCallback", js_pluginx_protocols_ProtocolSocial_getCallback, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("configDeveloperInfo", js_pluginx_protocols_ProtocolSocial_configDeveloperInfo, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),

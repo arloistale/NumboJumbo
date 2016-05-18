@@ -54,7 +54,7 @@ NJ.social = (function() {
                 if(!isLoggedIn)
                     return;
 
-                sdkbox.PluginSdkboxPlay.showLeaderboard(leaderboardPrefix + NJ.modekeys.minuteMadness);
+                sdkbox.PluginSdkboxPlay.showAllLeaderboards();
             }
         },
 

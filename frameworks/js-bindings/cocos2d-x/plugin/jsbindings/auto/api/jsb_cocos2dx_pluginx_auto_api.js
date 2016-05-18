@@ -347,6 +347,14 @@ char
 },
 
 /**
+ * @method showAllLeaderboards
+ */
+showAllLeaderboards : function (
+)
+{
+},
+
+/**
  * @method showAchievements
  */
 showAchievements : function (

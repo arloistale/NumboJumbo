@@ -89,6 +89,7 @@ void js_pluginx_protocols_ProtocolSocial_finalize(JSContext *cx, JSObject *obj);
 void js_register_pluginx_protocols_ProtocolSocial(JSContext *cx, JS::HandleObject global);
 void register_all_pluginx_protocols(JSContext* cx, JS::HandleObject obj);
 bool js_pluginx_protocols_ProtocolSocial_showLeaderboard(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_pluginx_protocols_ProtocolSocial_showAllLeaderboards(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_pluginx_protocols_ProtocolSocial_showAchievements(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_pluginx_protocols_ProtocolSocial_getCallback(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_pluginx_protocols_ProtocolSocial_configDeveloperInfo(JSContext *cx, uint32_t argc, jsval *vp);

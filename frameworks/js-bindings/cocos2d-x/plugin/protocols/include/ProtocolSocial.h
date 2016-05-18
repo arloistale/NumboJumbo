@@ -75,6 +75,7 @@ public:
     void submitScore(const char* leadboardID, long score);
     void submitScore(const char* leadboardID, long score, ProtocolSocialCallback cb);
     void showLeaderboard(const char* leaderboardID);
+    void showAllLeaderboards();
 
     /**
      * @brief methods of achievement feature

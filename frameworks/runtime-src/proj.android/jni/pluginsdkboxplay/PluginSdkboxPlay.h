@@ -7,6 +7,10 @@
 #ifndef _PLUGIN_SDKBOXPLAY_H_
 #define _PLUGIN_SDKBOXPLAY_H_
 
+#include "cocos2d.h"
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+
 #include <string>
 
 namespace sdkbox {
@@ -87,6 +91,15 @@ namespace sdkbox {
          * to global or you google play's friends results.
          */
         static void showLeaderboard( const std::string& leaderboard_name );
+
+        static void showAllLeaderboards() {
+            cocos2d::JniMethodInfo t;
+
+            if(cocos2d::JniHelper::getStaticMethodInfo(t, "com/sdkbox/plugin/PluginSdkboxPlay", "showLeaderboard", "(Ljava/lang/String;)V")) {
+                t.env->CallStaticVoidMethod(t.classID, t.methodID, "ldb-mm");
+                t.env->DeleteLocalRef(t.classID);
+            }
+        }
         
         /**
          * Request to unlock an achievement defined by its name.

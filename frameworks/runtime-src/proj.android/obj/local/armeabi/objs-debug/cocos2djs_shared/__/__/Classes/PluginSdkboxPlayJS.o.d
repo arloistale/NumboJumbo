@@ -489,6 +489,7 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/PluginSdkboxPlayJS.o
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/mozilla/Maybe.h \
  jni/PluginSdkboxPlay/PluginSdkboxPlay.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../platform/android/jni/JniHelper.h \
  jni/../../Classes/SDKBoxJSHelper.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h \
  jni/sdkbox/Sdkbox.h
@@ -1470,6 +1471,8 @@ jni/../../Classes/PluginSdkboxPlayJS.hpp:
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/mozilla/Maybe.h:
 
 jni/PluginSdkboxPlay/PluginSdkboxPlay.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../platform/android/jni/JniHelper.h:
 
 jni/../../Classes/SDKBoxJSHelper.h:
 

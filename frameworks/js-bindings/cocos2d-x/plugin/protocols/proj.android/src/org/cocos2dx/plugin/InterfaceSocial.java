@@ -31,6 +31,7 @@ public interface InterfaceSocial {
     public void configDeveloperInfo(Hashtable<String, String> cpInfo);
     public void submitScore(String leaderboardID, long score);
     public void showLeaderboard(String leaderboardID);
+    public void showAllLeaderboards();
     public void unlockAchievement(Hashtable<String, String> achInfo);
     public void showAchievements();
     public void setDebugMode(boolean debug);

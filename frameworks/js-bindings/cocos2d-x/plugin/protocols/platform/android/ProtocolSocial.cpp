@@ -139,6 +139,10 @@ void ProtocolSocial::showLeaderboard(const char* leaderboardID)
     }
 }
 
+void ProtocolSocial::showAllLeaderboards() {
+    PluginUtils::callJavaFunctionWithName(this, "showAllLeaderboards");
+}
+
 void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo)
 {
     if (achInfo.empty())
