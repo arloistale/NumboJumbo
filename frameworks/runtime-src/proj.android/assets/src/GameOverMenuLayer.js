@@ -39,48 +39,65 @@ var GameOverMenuLayer = (function() {
         onRetryCallback: null,
         onMenuCallback: null,
 
+        // Data
+        _shouldDisplayLevel: false,
+        _modeKey: null,
+
 ////////////////////
 // Initialization //
 ////////////////////
 
-        ctor: function() {
+        ctor: function(modeKey, shouldDisplayLevel) {
             this._super();
 
-            this.init(NJ.themes.backgroundColor);
+            // mode key is used to retrieve high score data
+            this._modeKey = modeKey;
+            this._shouldDisplayLevel = shouldDisplayLevel;
+
+            // init background
+            var backgroundColor = NJ.themes.backgroundColor;
+            this.init(backgroundColor);
 
             this.initUI();
         },
 
         initUI: function() {
-            var that = this;
+            var key = this._modeKey;
+            var shouldDisplayLevel = this._shouldDisplayLevel;
+
+            var columnCount = shouldDisplayLevel ? 2 : 1;
 
             this._menu = new cc.Menu();
 
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
 
-            var headerLabel = this.generateLabel(NJ.gameState.getJumbo().name, refDim * NJ.uiSizes.header);
+            var headerLabel = this.generateLabel("Stats", refDim * NJ.uiSizes.header);
 
             var currentLabel = this.generateLabel("Current", refDim * NJ.uiSizes.header2);
 
-            this._scoreLabel = this.generateLabel("Pts: " + NJ.prettifier.formatNumber(NJ.gameState.getScore()), refDim * NJ.uiSizes.header2);
+            this._scoreLabel = this.generateLabel("Pts: " + NJ.gameState.getScore(), refDim * NJ.uiSizes.header2);
             this._levelLabel = this.generateLabel("Lv: " + NJ.gameState.getLevel(), refDim * NJ.uiSizes.header2);
 
             var bestLabel = this.generateLabel("Best", refDim * NJ.uiSizes.header2);
 
-            this._bestLabel = this.generateLabel("Pts: " + NJ.prettifier.formatNumber(NJ.stats.getHighscore()), refDim * NJ.uiSizes.header2);
-            this._bestLevelLabel = this.generateLabel("Lv: " + NJ.stats.getHighlevel(), refDim * NJ.uiSizes.header2);
+            this._bestLabel = this.generateLabel("Pts: " + NJ.stats.getHighscore(key), refDim * NJ.uiSizes.header2);
+            this._bestLevelLabel = this.generateLabel("Lv: " + NJ.stats.getHighlevel(key), refDim * NJ.uiSizes.header2);
 
             this._menu.addChild(headerLabel);
             
             this._menu.addChild(currentLabel);
             
             this._menu.addChild(this._scoreLabel);
-            this._menu.addChild(this._levelLabel);
+
+            if(shouldDisplayLevel)
+                this._menu.addChild(this._levelLabel);
 
             this._menu.addChild(bestLabel);
 
             this._menu.addChild(this._bestLabel);
-            this._menu.addChild(this._bestLevelLabel);
+
+            if(shouldDisplayLevel)
+                this._menu.addChild(this._bestLevelLabel);
 
             //var currencyTitleLabel = this.generateLabel("Currency");
             //this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
@@ -101,7 +118,7 @@ var GameOverMenuLayer = (function() {
             this._menu.addChild(retryButton);
             this._menu.addChild(menuButton);
 
-            this._menu.alignItemsInColumns(1, 1, 2, 1, 2, 1, 1);
+            this._menu.alignItemsInColumns(1, 1, columnCount, 1, columnCount, 1, 1);
             this.addChild(this._menu, 100);
         },
 

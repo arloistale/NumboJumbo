@@ -33,24 +33,28 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	_reset: function() {
 		this._super();
 
+		var that = this;
+
 		this._numboController.initDistribution(this._numberList);
 
-		// next we wait until the blocks have been spawned to init the game
-		var that = this;
-		this.schedule(function() {
-			var elapsedTime = (Date.now() - NJ.gameState.getStartTime()) / 1000;
-			var timeFraction = 1 - elapsedTime / 60;
+		// here is our schedule
 
-			that._numboHeaderLayer.setProgress(timeFraction);
-			that.checkGameOver();
-		}, 1);
+		this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
+			// cause UI elements to fall in
+			that._numboHeaderLayer.enter();
+			that._toolbarLayer.enter();
+		}), cc.delayTime(0.5), cc.callFunc(function() {
+			// fill the board with blocks initially
+			that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
 
-		// cause UI elements to fall in
-		this._numboHeaderLayer.enter();
-		this._toolbarLayer.enter();
+			that.schedule(function() {
+				var elapsedTime = (Date.now() - NJ.gameState.getStartTime()) / 1000;
+				var timeFraction = 1 - elapsedTime / 60;
 
-		// fill the board with blocks initially
-		this.spawnRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+				that._numboHeaderLayer.setProgress(timeFraction);
+				that.checkGameOver();
+			}, 1);
+		})));
 	},
 
 	// Initialize audio.
@@ -63,16 +67,73 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	// Game State Handling //
 	/////////////////////////
 
-	// whether the game is over or not
-	isGameOver: function() {
-		var timeElapsed = (Date.now() - NJ.gameState.getStartTime()) / 1000;
+	onGameOver: function() {
+		this._super();
 
-		return timeElapsed >= this._elapsedTimeLimit;
+		var that = this;
+
+		NJ.stats.addCurrency(NJ.gameState.getScore());
+
+		var key = NJ.modekeys.minuteMadness;
+		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
+
+		if(highscoreAccepted) {
+			NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+		}
+
+		NJ.stats.save();
+
+		// first send the analytics for the current game session
+		NJ.sendAnalytics("Default");
+
+		this.runAction(cc.sequence(cc.callFunc(function() {
+			that._numboHeaderLayer.leave();
+			that._toolbarLayer.leave();
+		}), cc.delayTime(2), cc.callFunc(function() {
+			that.pauseGame();
+
+			that._gameOverMenuLayer = new GameOverMenuLayer(key, false);
+			that._gameOverMenuLayer.setOnRetryCallback(function() {
+				that.onRetry();
+			});
+			that._gameOverMenuLayer.setOnMenuCallback(function() {
+				that.onMenu();
+			});
+			that.addChild(that._gameOverMenuLayer, 999);
+		})));
 	},
 
-//////////////////
-// Touch Events //
-//////////////////
+	checkGameOver: function() {
+		if(this._super())
+			return true;
+
+		if(this.isInDanger()) {
+			if(!this._feedbackLayer.isDoomsayerLaunched())
+				this._feedbackLayer.launchDoomsayer();
+		} else {
+			if(this._feedbackLayer.isDoomsayerLaunched())
+				this._feedbackLayer.clearDoomsayer();
+		}
+
+		return false;
+	},
+
+	// whether the game is over or not
+	isGameOver: function() {
+		return this._getElapsedTime() >= this._elapsedTimeLimit;
+	},
+
+	///////////////////
+	// Virtual Stuff //
+	///////////////////
+
+	isInDanger: function() {
+		return this._getElapsedTime() / this._elapsedTimeLimit > 0.9;
+	},
+
+	//////////////////
+	// Touch Events //
+	//////////////////
 
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
@@ -83,7 +144,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		if(!comboLength)
 			return;
 
-		this.spawnRandomBlocks(comboLength);
+		this.spawnDropRandomBlocks(comboLength);
 
 		var activationSounds = [];
 		for(var i=0; i<comboLength-2; i++) {
@@ -170,5 +231,13 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		//}
 		// show player data
 		this._numboHeaderLayer.updateValues();
+	},
+
+	/////////////
+	// Helpers //
+	/////////////
+
+	_getElapsedTime: function () {
+		return (Date.now() - NJ.gameState.getStartTime()) / 1000;
 	}
 });

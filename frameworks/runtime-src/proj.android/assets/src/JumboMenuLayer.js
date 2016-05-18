@@ -8,7 +8,7 @@ var JumboMenuLayer = (function() {
     // UI Events //
     ///////////////
 
-    var onChoose = function(jumboId) {
+    var onChooseMinuteMadness = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
 
@@ -16,11 +16,50 @@ var JumboMenuLayer = (function() {
             cc.audioEngine.stopMusic();
             cc.audioEngine.stopAllEffects();
 
-            // Init stats data.
-            NJ.gameState.chooseJumbo(jumboId);
+            var scene = new cc.Scene();
+            scene.addChild(new MinuteMadnessLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+        }, this);
+    };
+
+    var onChooseMoves = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        cc.LoaderScene.preload(g_game, function () {
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
 
             var scene = new cc.Scene();
-            scene.addChild(new NumboGameLayer());
+            scene.addChild(new MovesLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+        }, this);
+    };
+
+    var onChooseTurnBased = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        cc.LoaderScene.preload(g_game, function () {
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
+
+            var scene = new cc.Scene();
+            scene.addChild(new TurnBasedFillUpGameLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+        }, this);
+    };
+
+    var onChooseSurvival = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        cc.LoaderScene.preload(g_game, function () {
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
+
+            var scene = new cc.Scene();
+            scene.addChild(new SurvivalGameLayer());
             cc.director.runScene(new cc.TransitionFade(0.5, scene));
         }, this);
     };
@@ -67,23 +106,18 @@ var JumboMenuLayer = (function() {
 
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
 
-            var jumboTitleLabel = this.generateLabel("Game Modes", refDim * NJ.uiSizes.header);
-            this._menu.addChild(jumboTitleLabel);
+            this._menu.addChild(this.generateLabel("Game Modes", refDim * NJ.uiSizes.header));
 
-            // get possible jumbos
-            var jumbosList = NJ.jumbos.getJumbosList();
-            var jumbo;
-            var jumboButton = null;
-            for(var i = 0; i < jumbosList.length; i++) {
-                jumbo = jumbosList[i];
+            // here we create a callback for each button and bind the associated jumbo id to the callback
+            var minuteMadnessButton = this.generateJumboButton("Minute Madness", cc.color(NJ.themes.blockColors[0]), onChooseMinuteMadness.bind(this));
+            var movesButton = this.generateJumboButton("Moves", cc.color(NJ.themes.blockColors[1]), onChooseMoves.bind(this));
+            var turnBasedButton = this.generateJumboButton("Turn Based", cc.color(NJ.themes.blockColors[2]), onChooseTurnBased.bind(this));
+            var survivalButton = this.generateJumboButton("Infinite", cc.color(NJ.themes.blockColors[3]), onChooseSurvival.bind(this));
 
-                // here we create a callback for each button and bind the associated jumbo id to the callback
-                jumboButton = this.generateJumboButton(jumbo, (function(jumboId) {
-                    return function() { onChoose.bind(this)(jumboId) };
-                })(jumbo.key));
-
-                this._menu.addChild(jumboButton);
-            }
+            this._menu.addChild(minuteMadnessButton);
+            this._menu.addChild(movesButton);
+            this._menu.addChild(turnBasedButton);
+            this._menu.addChild(survivalButton);
 
             var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
 
@@ -117,14 +151,7 @@ var JumboMenuLayer = (function() {
         },
 
         // TODO: for some reason, the increase font size / decrease scale trick does not work here
-        generateJumboButton: function(jumbo, callback) {
-            var contentSize = this.getContentSize();
-
-            var title = jumbo.name;
-            var color = jumbo.color;
-            var highscoreThreshold = jumbo.highscoreThreshold;
-            var currencyThreshold = jumbo.currencyThreshold;
-
+        generateJumboButton: function(title, color, callback) {
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
             var elementSize = cc.size(refDim * 0.75, refDim * NJ.uiSizes.header2 * 1.1);
 
@@ -132,15 +159,7 @@ var JumboMenuLayer = (function() {
             button.setEnabled(true);
             button.setTitle(title);
 
-            if(NJ.stats.getHighscore() < highscoreThreshold && NJ.stats.getCurrency() < currencyThreshold) {
-                //button.setTitle(title + " (" + NJ.prettifier.formatNumber(highscoreThreshold) + " best or " +
-                    //NJ.prettifier.formatNumber(currencyThreshold) + " gold)");
-
-                button.setBackgroundColor(cc.color("#424242"));
-                button.setEnabled(false);
-            } else {
-                button.setBackgroundColor(cc.color(color));
-            }
+            button.setBackgroundColor(color);
 
             return button;
         }

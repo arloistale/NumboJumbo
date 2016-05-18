@@ -6,10 +6,9 @@ var NJ = NJ || {};
 
 NJ.stats = (function() {
     var currency = 0;
-    var highscore = 0;
-    var highlevel = 0;
 
-    var maxComboLength = 0;
+    // stats data for every mode
+    var modeData = {};
 
     return {
 
@@ -18,23 +17,30 @@ NJ.stats = (function() {
         ///////////////////
 
         load: function() {
-            var localHighscore = parseInt(cc.sys.localStorage.getItem('highscore'));
-            var localHighlevel = parseInt(cc.sys.localStorage.getItem('highlevel'));
-            var localCurrency = parseInt(cc.sys.localStorage.getItem('currency'));
+            for(var key in NJ.modekeys) {
+                if(!NJ.modekeys.hasOwnProperty(key))
+                    continue;
 
-            if(!isNaN(localHighscore))
-                highscore = localHighscore;
-                
-            if(!isNaN(localHighlevel))
-                highlevel = localHighlevel;
+                modeData[NJ.modekeys[key]] = {
+                    highscore: parseInt(cc.sys.localStorage.getItem('highscore-' + NJ.modekeys[key])) || 0,
+                    highlevel: parseInt(cc.sys.localStorage.getItem('highlevel-' + NJ.modekeys[key])) || 0
+                }
+            }
 
-            if(!isNaN(localCurrency))
-                currency = localCurrency;
+            cc.log(modeData);
+
+            currency = parseInt(cc.sys.localStorage.getItem('currency')) || 0;
         },
 
         save: function() {
-            cc.sys.localStorage.setItem('highscore', JSON.stringify(highscore));
-            cc.sys.localStorage.setItem('highlevel', JSON.stringify(highlevel));
+            for(var key in NJ.modekeys) {
+                if(!NJ.modekeys.hasOwnProperty(key))
+                    continue;
+
+                cc.sys.localStorage.setItem('highscore-' + NJ.modekeys[key], JSON.stringify(modeData[NJ.modekeys[key]].highscore));
+                cc.sys.localStorage.setItem('highlevel-' + NJ.modekeys[key], JSON.stringify(modeData[NJ.modekeys[key]].highlevel));
+            }
+
             cc.sys.localStorage.setItem('currency', JSON.stringify(currency));
         },
 
@@ -42,31 +48,34 @@ NJ.stats = (function() {
         // Getters & Setters //
         ///////////////////////
 
+        // offers a highscore to the leaderboard identified with key
+        // each leaderboard corresponds to a game mode
         // returns whether the score was accepted as highscore
-        offerHighscore: function(value) {
-            if(value > highscore) {
-                highscore = value;
+        offerHighscore: function(key, value) {
+            if(value > modeData[key].highscore) {
+                modeData[key].highscore = value;
                 return true;
             }
 
             return false;
         },
 
-        getHighscore: function() {
-            return highscore;
+        // get highscore from specified leaderboard
+        getHighscore: function(key) {
+            return modeData[key].highscore;
         },
-        
-        offerHighlevel: function(value) {
-            if(value > highlevel) {
-                highlevel = value;
+
+        offerHighlevel: function(key, value) {
+            if(value > modeData[key].highlevel) {
+                modeData[key].highlevel = value;
                 return true;
             }
             
             return false;
         },
         
-        getHighlevel: function() {
-            return highlevel;
+        getHighlevel: function(key) {
+            return modeData[key].highlevel;
         },
 
         setCurrency: function(value) {

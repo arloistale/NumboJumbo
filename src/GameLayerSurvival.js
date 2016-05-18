@@ -53,14 +53,19 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     _reset: function() {
         this._super();
 
+        var that = this;
+
         this._numboController.initDistribution(this._numberList, this._thresholdNumbers);
 
-        // spawn blocks until the board is 1/3 full initially fill the board with blocks initially
-        this.spawnInitialBlocks();
+        this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
+            // cause UI elements to fall in
+            that._numboHeaderLayer.enter();
+            that._toolbarLayer.enter();
+        }), cc.delayTime(0.5), cc.callFunc(function() {
 
-        // cause UI elements to fall in
-        this._numboHeaderLayer.enter();
-        this._toolbarLayer.enter();
+            // spawn blocks until the board is 1/3 full initially fill the board with blocks initially
+            that.spawnInitialBlocks();
+        })));
     },
 
     _getSpawnTime: function() {
@@ -72,7 +77,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         // linear blocks-cleared-this-level factor
         var BFactor = 1 - NJ.gameState.getLevelupProgress() / 3;
 
-        var spawnTime = 2 * LFactor * BFactor;
+        var spawnTime = 1.5 * LFactor * BFactor;
         return spawnTime;
     },
 
@@ -92,6 +97,45 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     // Game State Handling //
     /////////////////////////
 
+    onGameOver: function() {
+        this._super();
+
+        var that = this;
+
+        NJ.stats.addCurrency(NJ.gameState.getScore());
+
+        var key = NJ.modekeys.infinite;
+        var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
+        var highlevelAccepted = NJ.stats.offerHighlevel(key, NJ.gameState.getLevel());
+
+        if(highscoreAccepted)
+            NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+
+        if(highlevelAccepted)
+            NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
+
+        NJ.stats.save();
+
+        // first send the analytics for the current game session
+        NJ.sendAnalytics("Default");
+
+        this.runAction(cc.sequence(cc.callFunc(function() {
+            that._numboHeaderLayer.leave();
+            that._toolbarLayer.leave();
+        }), cc.delayTime(2), cc.callFunc(function() {
+            that.pauseGame();
+
+            that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
+            that._gameOverMenuLayer.setOnRetryCallback(function() {
+                that.onRetry();
+            });
+            that._gameOverMenuLayer.setOnMenuCallback(function() {
+                that.onMenu();
+            });
+            that.addChild(that._gameOverMenuLayer, 999);
+        })));
+    },
+
     // whether the game is over or not
     isGameOver: function() {
         return this._numboController.levelIsFull();
@@ -100,7 +144,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     spawnInitialBlocks: function(){
         var that = this;
 
-        var firstBlocksAction = cc.callFunc(function() {that.spawnRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);});
+        var firstBlocksAction = cc.callFunc(function() {that.spawnDropRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);});
 
         var delayAction = cc.delayTime(2.0);
         var scheduleAction = cc.callFunc(function(){that.scheduleSpawn();})
@@ -115,14 +159,6 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
         this.unschedule(this.scheduleSpawn);
         this.schedule(this.scheduleSpawn, this._getSpawnTime());
-
-        if(!this._feedbackLayer.isDoomsayerLaunched()) {
-            if(this._numboController.isInDanger())
-                this._feedbackLayer.launchDoomsayer();
-        } else {
-            if(!this._numboController.isInDanger())
-                this._feedbackLayer.clearDoomsayer();
-        }
 
         this.spawnDropRandomBlock();
     },
@@ -156,7 +192,6 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     },
 
     // Curtain
-
     closeCurtain: function() {
         this.levelTransition = true;
         if(NJ.settings.sounds)
@@ -194,10 +229,32 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         this.checkClearBonus();
     },
 
+    ///////////////////
+    // Virtual Stuff //
+    ///////////////////
 
-//////////////////
-// Touch Events //
-//////////////////
+    checkGameOver: function() {
+        if(this._super())
+            return true;
+
+        if(this.isInDanger()) {
+            if(!this._feedbackLayer.isDoomsayerLaunched())
+                this._feedbackLayer.launchDoomsayer();
+        } else {
+            if(this._feedbackLayer.isDoomsayerLaunched())
+                this._feedbackLayer.clearDoomsayer();
+        }
+
+        return false;
+    },
+
+    isInDanger: function() {
+        return this._numboController.getNumBlocks() / this._numboController.getCapacity() >= NJ.DANGER_THRESHOLD;
+    },
+
+    //////////////////
+    // Touch Events //
+    //////////////////
 
     // On touch ended, activates all selected blocks once touch is released.
     onTouchEnded: function(touchPosition) {

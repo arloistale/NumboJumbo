@@ -32,9 +32,10 @@ var res = {
     statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
 
     // ingame
-    blockImage: resRoot + "Images/block.png",
+    blockImage: resRoot + "Images/blockImage.png",
     alertImage: resRoot + "Images/alertOverlay.png",
     handImage: resRoot + "Images/ic_hand_2x.png",
+    levelImage: resRoot + "Images/levelImage.png",
 
     // music
     menuTrack: resRoot + "Sounds/Track2.mp3",
@@ -45,7 +46,7 @@ var res = {
 
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
-    plipSound: resRoot + "Sounds/plipSound.wav",
+    plipSound: resRoot + "Sounds/plipSound.mp3",
     plopSound: resRoot + "Sounds/Plop.wav",
     plopSound4: resRoot + "Sounds/Plop4.wav",
     plopSound5: resRoot + "Sounds/Plop5.wav",
@@ -94,8 +95,7 @@ var res = {
 
 
     levelupSound: resRoot + "Sounds/levelup.wav",
-
-    cheeringSound: resRoot + "Sounds/cheering.wav",
+    overSound: resRoot + "Sounds/over.mp3",
 
     coinSound: resRoot + "Sounds/coin.wav"
 };
@@ -115,6 +115,7 @@ var g_menu = [
     res.helpImage,
     res.buttonImage,
     res.statsImage,
+    res.blockImage,
 
     // sounds
     res.clickSound,
@@ -139,8 +140,6 @@ var plangs = [res.plangSound1, res.plangSound2, res.plangSound3, res.plangSound4
 var bloops = [res.bloopSound1, res.bloopSound2, res.bloopSound3, res.bloopSound4, res.bloopSound5,
     res.bloopSound6, res.bloopSound7, res.bloopSound8, res.bloopSound9, res.bloopSound10];
 
-var cheers = [res.cheerSound3];
-
 // resources for ingame
 var g_game = [
     // UI
@@ -153,6 +152,7 @@ var g_game = [
     // Scene
     res.blockImage,
     res.alertImage,
+    res.levelImage,
 
     // music
     res.trackA,
@@ -205,10 +205,9 @@ var g_game = [
     res.bloopSound9,
     res.bloopSound10,
 
-
-
+    
+    res.overSound,
     res.levelupSound,
-    res.cheeringSound,
     res.coinSound,
 
     // fonts

@@ -491,7 +491,7 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/PluginGoogleAnalytic
  jni/PluginGoogleAnalytics/PluginGoogleAnalytics.h \
  jni/../../Classes/SDKBoxJSHelper.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h \
- jni/sdkbox/sdkbox.h
+ jni/sdkbox/Sdkbox.h
 
 jni/../../Classes/PluginGoogleAnalyticsJS.hpp:
 
@@ -1475,4 +1475,4 @@ jni/../../Classes/SDKBoxJSHelper.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h:
 
-jni/sdkbox/sdkbox.h:
+jni/sdkbox/Sdkbox.h:

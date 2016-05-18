@@ -31,7 +31,7 @@ var BaseGameLayer = cc.Layer.extend({
 	// Geometry Data
 	_backgroundLayer: null,
 
-	_levelNode: null,
+	_levelSprite: null,
 	_selectedLinesNode: null,
 
 	// Controller Data
@@ -59,6 +59,7 @@ var BaseGameLayer = cc.Layer.extend({
 		// Init game visuals and audio
 		this._initGeometry();
 		this._initAudio();
+		this._initParticles();
 
         this._initUI();
 
@@ -88,6 +89,20 @@ var BaseGameLayer = cc.Layer.extend({
 
         if(NJ.settings.music)
             cc.audioEngine.playMusic(this._backgroundTrack, true);
+	},
+
+	_initParticles: function(){
+		for (var col = 0; col < NJ.NUM_COLS; ++col){
+			for (var row = 0; row < NJ.NUM_ROWS; ++row) {
+				var coords = this._convertLevelCoordsToPoint(col, row);
+				this._effectsLayer.initializeParticleSystemAt({
+					x: coords.x,
+					y: coords.y,
+					col: col,
+					row: row
+				});
+			}
+		}
 	},
 
 	// Initialize input depending on the device.
@@ -194,9 +209,17 @@ var BaseGameLayer = cc.Layer.extend({
 		this._blockSize = cc.size( this._levelCellSize.width * NJ.blockCellSize,  this._levelCellSize.height * NJ.blockCellSize);
 
 		// initialize rectangle around level
-		this._levelNode = cc.DrawNode.create();
-		this._levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), NJ.themes.levelColor, 0, NJ.themes.levelColor);
-		this.addChild(this._levelNode, -1);
+		this._levelSprite = new cc.Sprite(res.levelImage);
+		var spriteSize = this._levelSprite.getContentSize();
+		this._levelSprite.setColor(NJ.themes.levelColor);
+		this._levelSprite.setScale(levelDims.width / spriteSize.width, levelDims.height / spriteSize.height);
+		this._levelSprite.attr({
+			anchorX: 0.5,
+			anchorY: 0.5,
+			x: cc.visibleRect.center.x,
+			y: cc.visibleRect.center.y
+		});
+		//this.addChild(this._levelSprite, -1);
 
 		// selected lines
 		this._selectedLinesNode = cc.DrawNode.create();
@@ -230,6 +253,7 @@ var BaseGameLayer = cc.Layer.extend({
 	/////////////////////////
 
     // checks whether the game has ended and performs actions appropriately
+	// this function also triggers the doom sayer if in danger
 	// returns whether the game is over
     checkGameOver: function() {
         if (this.isGameOver() ) {
@@ -249,17 +273,24 @@ var BaseGameLayer = cc.Layer.extend({
         return true;
     },
 
+	pauseInput: function() {
+		cc.eventManager.pauseTarget(this, true);
+	},
+
+	resumeInput: function() {
+		cc.eventManager.resumeTarget(this, true);
+	},
+
 	// Pauses the game, halting all actions and schedulers.
 	pauseGame: function() {
 		// halt the doomsayer
 		this._feedbackLayer.clearDoomsayer();
 
-		cc.eventManager.pauseTarget(this, true);
-
 		// use breadth first search to pause all valid children
 		var children = [this];
 		var visited = [this];
 
+		this.pauseInput();
 		this.pause();
 
 		var child, i, newChildren;
@@ -281,13 +312,12 @@ var BaseGameLayer = cc.Layer.extend({
 
 	// Unpauses game, resuming all actions and schedulers.
 	resumeGame: function() {
-		cc.eventManager.resumeTarget(this, true);
-
 		// use breadth first search to resume all valid children
 		var children = [this];
 		var visited = [this];
 
 		this.resume();
+		this.resumeInput();
 
 		var child, i, newChildren;
 		while(children.length > 0) {
@@ -324,25 +354,45 @@ var BaseGameLayer = cc.Layer.extend({
 	},
 
 	// spawns and drops a block with random col and val.
+	// plays appropriate sound
 	spawnDropBlock: function(col, val) {
 		var spawnBlock = new NumboBlock( this._blockSize);
 		this._numboController.spawnDropBlock(spawnBlock, col, val);
 		this._instantiateBlock(spawnBlock);
 		this.moveBlockIntoPlace(spawnBlock);
+
+		if(NJ.settings.sounds) {
+			cc.audioEngine.playEffect(res.clickSound);
+		}
 	},
 
 	// Spawns a block with random col and val and drops the spawned block into place.
+	// plays appropriate sound
 	spawnDropRandomBlock: function() {
 		var spawnBlock = new NumboBlock( this._blockSize);
 		this._numboController.spawnDropRandomBlock(spawnBlock);
 		this._instantiateBlock(spawnBlock);
 		this.moveBlockIntoPlace(spawnBlock);
+
+		if(NJ.settings.sounds) {
+			cc.audioEngine.playEffect(res.clickSound);
+		}
 	},
 
-	// spawns a specified amount of blocks every 0.1 seconds until
-	spawnRandomBlocks: function(amount) {
+	// spawns a specified amount of blocks randomly
+	// plays the drop random blocks sound
+	spawnDropRandomBlocks: function(amount) {
+		var spawnBlock;
+
 		for(var i = 0; i < amount; i++) {
-			this.spawnDropRandomBlock();
+			spawnBlock = new NumboBlock( this._blockSize);
+			this._numboController.spawnDropRandomBlock(spawnBlock);
+			this._instantiateBlock(spawnBlock);
+			this.moveBlockIntoPlace(spawnBlock);
+		}
+
+		if(NJ.settings.sounds) {
+			cc.audioEngine.playEffect(res.plipSound);
 		}
 	},
 
@@ -374,31 +424,16 @@ var BaseGameLayer = cc.Layer.extend({
 	// Game State Events //
 	///////////////////////
 
-	// Halts game, switches to game over, sends data.
+	// Halts game, children must handle what to do afterwards in terms of going to game over screen
 	onGameOver: function() {
-		NJ.stats.addCurrency(NJ.gameState.getScore());
-		NJ.stats.offerHighscore(NJ.gameState.getScore());
-		NJ.stats.offerHighlevel(NJ.gameState.getLevel());
+		this._feedbackLayer.clearDoomsayer();
+		this.pauseInput();
+		this.unscheduleAllCallbacks();
 
-		NJ.stats.save();
-
-		// first send the analytics for the current game session
-		NJ.sendAnalytics("Default");
-
-		var that = this;
+		if(NJ.settings.sounds)
+			cc.audioEngine.playEffect(res.overSound);
 
 		cc.audioEngine.stopMusic();
-
-		this.pauseGame();
-
-		this._gameOverMenuLayer = new GameOverMenuLayer();
-		this._gameOverMenuLayer.setOnRetryCallback(function() {
-			that.onRetry();
-		});
-		this._gameOverMenuLayer.setOnMenuCallback(function() {
-			that.onMenu();
-		});
-		this.addChild(this._gameOverMenuLayer, 999);
 	},
 
 	///////////////
@@ -410,8 +445,7 @@ var BaseGameLayer = cc.Layer.extend({
 		NJ.themes.toggle();
 
 		this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
-		this._levelNode.clear();
-		this._levelNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x + this._levelBounds.width, this._levelBounds.y + this._levelBounds.height), NJ.themes.levelColor, 0, cc.color(255, 255, 255, 0));
+		this._levelSprite.setColor(NJ.themes.levelColor);
 
 		this._numboHeaderLayer.updateTheme();
 
@@ -421,6 +455,8 @@ var BaseGameLayer = cc.Layer.extend({
 	// On pause, pauses game and opens up the settings menu.
 	onPause: function() {
 		var that = this;
+
+		this._feedbackLayer.clearDoomsayer();
 
 		this.pauseGame();
 
@@ -436,9 +472,9 @@ var BaseGameLayer = cc.Layer.extend({
 
 	// On closing previously opened settings menu we resume.
 	onResume: function() {
-        // resume doomsayer if needed
-        if(this._numboController.isInDanger())
-            this._feedbackLayer.launchDoomsayer();
+		// resume doomsayer if needed
+		if(this.isInDanger())
+			this._feedbackLayer.launchDoomsayer();
 
 		this.resumeGame();
 
@@ -583,16 +619,15 @@ var BaseGameLayer = cc.Layer.extend({
 					if(isCombo) {
 						highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
 
-						// check if we're hovering over wombo combo
-						if (selectedBlocks.length >= 5) {
-
+							/*
+							// grab each block adjacent to this combo:
 							for (i = 0; i < selectedBlocks.length; ++i) {
 								highlightBlocks = highlightBlocks.concat(this._numboController.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1));
 							}
+							*/
 
-							this._effectsLayer.launchComboOverlay();
-						} else
-							selectedBlock.highlight();
+						this._effectsLayer.launchComboOverlay();
+						selectedBlock.highlight();
 					}
 
 					// remove duplicates
@@ -664,12 +699,8 @@ var BaseGameLayer = cc.Layer.extend({
 			sumPos.y += block.y;
 
 			color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
-
-			this._effectsLayer.launchExplosion({
-				color: color,
-				x: block.x,
-				y: block.y
-			});
+			var coords = this._convertPointToLevelCoords({x: block.x, y: block.y});
+			this._effectsLayer.launchExplosion(coords.col, coords.row, color);
 		}
 
 		// add to number of blocks cleared
@@ -727,6 +758,14 @@ var BaseGameLayer = cc.Layer.extend({
 			this._selectedLinesNode.drawSegment(this._convertLevelCoordsToPoint(first.col, first.row),
 				this._convertLevelCoordsToPoint(second.col, second.row), 3, color);
 		}
+	},
+
+	/////////////
+	// Virtual //
+	/////////////
+
+	isInDanger: function() {
+		return true;
 	},
 
 	/////////////

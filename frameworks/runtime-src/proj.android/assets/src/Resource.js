@@ -32,14 +32,21 @@ var res = {
     statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
 
     // ingame
-    blockImage: resRoot + "Images/block.png",
+    blockImage: resRoot + "Images/blockImage.png",
     alertImage: resRoot + "Images/alertOverlay.png",
+    handImage: resRoot + "Images/ic_hand_2x.png",
+    levelImage: resRoot + "Images/levelImage.png",
 
-    // sound
+    // music
     menuTrack: resRoot + "Sounds/Track2.mp3",
     backgroundTrack: resRoot + "Sounds/Track1.mp3",
+
+    trackA: resRoot + "Sounds/TrackA.mp3",
+    trackB: resRoot + "Sounds/TrackB.mp3",
+
+    // audio
     tickSound: resRoot + "Sounds/tick.mp3",
-    plipSound: resRoot + "Sounds/plipSound.wav",
+    plipSound: resRoot + "Sounds/plipSound.mp3",
     plopSound: resRoot + "Sounds/Plop.wav",
     plopSound4: resRoot + "Sounds/Plop4.wav",
     plopSound5: resRoot + "Sounds/Plop5.wav",
@@ -66,16 +73,9 @@ var res = {
     progressSound10: resRoot + "Sounds/progress10.wav",
 
     levelupSound: resRoot + "Sounds/levelup.wav",
+    overSound: resRoot + "Sounds/over.mp3",
 
-    applauseSound: resRoot + "Sounds/applause.wav",
-    cheeringSound: resRoot + "Sounds/cheering.wav",
-
-    coinSound: resRoot + "Sounds/coin.wav",
-
-    cheerSound3: resRoot + "Sounds/cheer5.mp3",
-
-    // jsons
-    jumboDistributionsJSON: resRoot + "jumbos.json"
+    coinSound: resRoot + "Sounds/coin.wav"
 };
 
 // returns proper font name based on platform
@@ -93,6 +93,7 @@ var g_menu = [
     res.helpImage,
     res.buttonImage,
     res.statsImage,
+    res.blockImage,
 
     // sounds
     res.clickSound,
@@ -125,12 +126,15 @@ var g_game = [
     // Scene
     res.blockImage,
     res.alertImage,
+    res.levelImage,
+
+    // music
+    res.trackA,
 
     // sounds
     res.tickSound,
     res.clickSound,
     res.plipSound,
-    res.backgroundTrack,
     res.plopSound,
     res.plopSound4,
     res.plopSound5,
@@ -155,12 +159,9 @@ var g_game = [
     res.progressSound9,
     res.progressSound10,
 
+    res.overSound,
     res.levelupSound,
-    res.applauseSound,
-    res.cheeringSound,
     res.coinSound,
-
-    res.cheerSound3,
 
     // fonts
     res.mainFont.fnt,

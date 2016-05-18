@@ -53,27 +53,23 @@ cc.game.onStart = function() {
 
     // load jumbos then we're good to go
     var that = this;
-    NJ.jumbos.load(function(error) {
-        cc.assert(!error, "Problem loading jumbos");
+    NJ.settings.hasLoaded = true;
 
-        NJ.settings.hasLoaded = false;
-
-        if(!NJ.settings.hasLoaded) {
-            // load resources
-            cc.LoaderScene.preload(g_game, function () {
-                var scene = new cc.Scene();
-                scene.addChild(new TutorialDriverLayer());
-                cc.director.runScene(scene);
-            }, that);
-        } else {
-            // load resources
-            cc.LoaderScene.preload(g_menu, function () {
-                var scene = new cc.Scene();
-                scene.addChild(new NumboMenuLayer());
-                cc.director.runScene(scene);
-            }, that);
-        }
-    });
+    if(!NJ.settings.hasLoaded) {
+        // load resources
+        cc.LoaderScene.preload(g_game, function () {
+            var scene = new cc.Scene();
+            scene.addChild(new TutorialDriverLayer());
+            cc.director.runScene(scene);
+        }, that);
+    } else {
+        // load resources
+        cc.LoaderScene.preload(g_menu, function () {
+            var scene = new cc.Scene();
+            scene.addChild(new NumboMenuLayer());
+            cc.director.runScene(scene);
+        }, that);
+    }
 };
 
 cc.game.run();

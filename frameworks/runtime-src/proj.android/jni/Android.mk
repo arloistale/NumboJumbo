@@ -13,12 +13,10 @@ LOCAL_SRC_FILES := hellojavascript/main.cpp \
 ../../Classes/PluginGoogleAnalyticsJS.hpp \
 ../../Classes/SDKBoxJSHelper.cpp \
 ../../Classes/SDKBoxJSHelper.h \
-../../Classes/PluginFacebookJS.cpp \
-../../Classes/PluginFacebookJS.hpp \
-../../Classes/PluginFacebookJSHelper.cpp \
-../../Classes/PluginFacebookJSHelper.h \
 ../../Classes/PluginReviewJS.cpp \
-../../Classes/PluginReviewJSHelper.cpp
+../../Classes/PluginReviewJSHelper.cpp \
+../../Classes/PluginSdkboxPlayJS.cpp \
+../../Classes/PluginSdkboxPlayJSHelper.cpp
 
 LOCAL_CPPFLAGS := -DSDKBOX_ENABLED
 LOCAL_LDLIBS := -landroid \
@@ -27,7 +25,8 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_WHOLE_STATIC_LIBRARIES := PluginGoogleAnalytics \
 sdkbox \
 PluginFacebook \
-PluginReview
+PluginReview \
+PluginSdkboxPlay
 
 LOCAL_STATIC_LIBRARIES := cocos_jsb_static
 
@@ -41,5 +40,5 @@ $(call import-add-path,$(LOCAL_PATH))
 $(call import-module,bindings)
 $(call import-module, ./sdkbox)
 $(call import-module, ./plugingoogleanalytics)
-$(call import-module, ./pluginfacebook)
 $(call import-module, ./pluginreview)
+$(call import-module, ./pluginsdkboxplay)

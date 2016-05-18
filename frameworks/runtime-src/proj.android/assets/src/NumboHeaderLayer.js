@@ -71,10 +71,6 @@ var NumboHeaderLayer = (function() {
             });
             this._levelLabel.setColor(NJ.themes.defaultLabelColor);
             this.addChild(this._levelLabel);
-
-            if(NJ.gameState.getJumboId() == 'basic') {
-                this._levelLabel.setVisible(false);
-            }
         },
 
         initProgressBar: function() {
@@ -123,7 +119,17 @@ var NumboHeaderLayer = (function() {
         enter: function() {
             var size = this.getContentSize();
 
-            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - size.height));
+            var easing = cc.easeBackInOut();
+
+            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - size.height)).easing(easing);
+            this.runAction(moveTo);
+        },
+
+        // transition out
+        leave: function() {
+            var easing = cc.easeBackOut();
+
+            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y)).easing(easing);
             this.runAction(moveTo);
         },
 
@@ -131,13 +137,21 @@ var NumboHeaderLayer = (function() {
 // UI setters //
 ////////////////
 
+        hideLevelLabel: function(flag) {
+            if(flag) {
+                this._levelLabel.setVisible(true);
+            } else {
+                this._levelLabel.setVisible(false);
+            }
+        },
+
         updateValues: function() {
             this._scoreLabel.setString(scorePrefix + NJ.gameState.getScore());
             this._levelLabel.setString(levelPrefix + NJ.gameState.getLevel());
+        },
 
-            var elapsedTime = (Date.now() - NJ.gameState.getStartTime()) / 1000;
-            var timeFraction = 1 - elapsedTime / 60;
-            this._progressBar.setProgress( timeFraction);
+        setProgress: function(progress) {
+            this._progressBar.setProgress(progress);
         },
 
         updateTheme: function() {

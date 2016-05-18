@@ -56,6 +56,8 @@ var TutorialLayer = (function() {
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
             this._titleMenuItem = new NJMenuItem(cc.size(cc.visibleRect.width, refDim * 0.05));
             this._helperMenuItem = new NJMenuItem(cc.size(cc.visibleRect.width, refDim * 0.05));
+            this._titleMenuItem.setLabelColor(NJ.themes.defaultLabelColor);
+            this._helperMenuItem.setLabelColor(NJ.themes.defaultLabelColor);
 
             this._menu.addChild(this._titleMenuItem);
             this._menu.addChild(this._helperMenuItem);
@@ -89,7 +91,7 @@ var TutorialLayer = (function() {
                         that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(7), cc.callFunc(function() {
-                            that._helperMenuItem.setTitle("Try adding to 3.");
+                            that._helperMenuItem.setTitle("Connect numbers to add them ");
                             that._menu.alignItemsVerticallyWithPadding(10);
                             that._helperMenuItem.setChildrenOpacity(0);
                             that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
