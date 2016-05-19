@@ -2,51 +2,75 @@ var NJ = NJ || {};
 
 NJ.social = (function() {
 
-    var id = 0;
+    var leaderboardPrefix = "ldb-";
 
     return {
         init: function() {
             if(cc.sys.isNative) {
-                sdkbox.PluginFacebook.init();
+                sdkbox.PluginSdkboxPlay.init();
 
-                id = sdkbox.PluginFacebook.getUserID();
+                sdkbox.PluginSdkboxPlay.setListener({
+                    onConnectionStatusChanged : function( status ) {
+                        cc.log(status);
+                    }
+                });
+            }
+        },
+             
+        login: function() {
+            if(cc.sys.isNative) {
+                sdkbox.PluginSdkboxPlay.signin();
             }
         },
 
         isLoggedIn: function() {
-            return id;
-        },
-
-        facebookLogin: function(callback) {
-            cc.assert(callback, "Callback for login must be defined");
-
-            var that = this;
-
+            // TODO: There is a problem when the user signs out using Settings option, will still be connected
             if(cc.sys.isNative) {
-                sdkbox.PluginFacebook.setListener({
-                    onLogin: function(isLogin, message) {
-                        cc.log("Login attempt: " + isLogin + " | " + message);
-
-                        if(isLogin) {
-                            id = sdkbox.PluginFacebook.getUserID();
-
-                            cc.log("logged in with user id: " + id);
-
-                            callback(null, sdkbox.PluginFacebook.getUserID())
-                        } else {
-                            callback(message);
-                        }
-                    }
-                });
-                sdkbox.PluginFacebook.login();
+                return sdkbox.PluginSdkboxPlay.isConnected();
             }
         },
 
-        facebookLogout: function() {
-            if(cc.sys.isNative) {
-                sdkbox.PluginFacebook.logout();
+        ///////////////////////
+        // Scores and levels //
+        ///////////////////////
 
-                id = sdkbox.PluginFacebook.getUserID();
+        // submits score data to the leaderboard defined by the given game mode key
+        submitScore: function(key, score) {
+            if(cc.sys.isNative) {
+                sdkbox.PluginSdkboxPlay.submitScore(leaderboardPrefix + key, score);
+            }
+        },
+
+        // submits level data to the leaderboard defined by the given game mode key
+        submitLevel: function(key, score) {
+            if(cc.sys.isNative) {
+                //sdkbox.PluginSdkboxPlay.submitScore(leaderboardPrefix + key, score);
+            }
+        },
+
+        showLeaderboard: function() {
+            if(cc.sys.isNative) {
+                var isLoggedIn = this.isLoggedIn();
+                if(!isLoggedIn)
+                    return;
+
+                sdkbox.PluginSdkboxPlay.showLeaderboard(leaderboardPrefix + NJ.modekeys.minuteMadness);
+            }
+        },
+
+        //////////////////
+        // Achievements //
+        //////////////////
+
+        unlockAchievement: function() {
+            if(cc.sys.isNative) {
+                sdkbox.PluginSdkboxPlay.unlockAchievement("layman");
+            }
+        },
+
+        showAchievement: function() {
+            if(cc.sys.isNative) {
+                sdkbox.PluginSdkboxPlay.showAchievements();
             }
         }
     }

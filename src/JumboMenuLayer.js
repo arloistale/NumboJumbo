@@ -112,7 +112,7 @@ var JumboMenuLayer = (function() {
             var minuteMadnessButton = this.generateJumboButton("Minute Madness", cc.color(NJ.themes.blockColors[0]), onChooseMinuteMadness.bind(this));
             var movesButton = this.generateJumboButton("Moves", cc.color(NJ.themes.blockColors[1]), onChooseMoves.bind(this));
             var turnBasedButton = this.generateJumboButton("Turn Based", cc.color(NJ.themes.blockColors[2]), onChooseTurnBased.bind(this));
-            var survivalButton = this.generateJumboButton("Survive", cc.color(NJ.themes.blockColors[3]), onChooseSurvival.bind(this));
+            var survivalButton = this.generateJumboButton("Infinite", cc.color(NJ.themes.blockColors[3]), onChooseSurvival.bind(this));
 
             this._menu.addChild(minuteMadnessButton);
             this._menu.addChild(movesButton);

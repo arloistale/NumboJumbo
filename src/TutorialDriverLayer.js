@@ -196,31 +196,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	///////////////////////
 
 	// Halts game, switches to game over, sends data.
-	onGameOver: function() {
-		NJ.stats.addCurrency(NJ.gameState.getScore());
-		NJ.stats.offerHighscore(NJ.gameState.getScore());
-		NJ.stats.offerHighlevel(NJ.gameState.getLevel());
-
-		NJ.stats.save();
-
-		// first send the analytics for the current game session
-		NJ.sendAnalytics();
-
-		var that = this;
-
-		cc.audioEngine.stopMusic();
-
-		this.pauseGame();
-
-		this._gameOverMenuLayer = new GameOverMenuLayer();
-		this._gameOverMenuLayer.setOnRetryCallback(function() {
-			that.onRetry();
-		});
-		this._gameOverMenuLayer.setOnMenuCallback(function() {
-			that.onMenu();
-		});
-		this.addChild(this._gameOverMenuLayer, 999);
-	},
+	onGameOver: function() { },
 
 	///////////////
 	// UI Events //

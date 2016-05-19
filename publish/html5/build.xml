@@ -296,7 +296,12 @@
                 <file name="src/TutorialLayer.js"/>
                 <file name="src/JumboMenuLayer.js"/>
                 <file name="src/SettingsMenuLayer.js"/>
-                <file name="src/TutorialLayer.js"/>
+                <file name="src/GameLayerBase.js"/>
+                <file name="src/GameLayerMinuteMadness.js"/>
+                <file name="src/GameLayerTurnBased.js"/>
+                <file name="src/GameLayerSurvival.js"/>
+                <file name="src/GameLayerMoves.js"/>
+                <file name="src/TutorialDriverLayer.js"/>
                 <file name="src/NumboHeaderLayer.js"/>
                 <file name="src/GameOverMenuLayer.js"/>
                 <file name="src/NJMenuItem.js"/>
@@ -307,7 +312,6 @@
                 <file name="src/NumboBlock.js"/>
                 <file name="src/NumboLevel.js"/>
                 <file name="src/NJMath.js"/>
-                <file name="src/NJJumbos.js"/>
                 <file name="src/NJConfig.js"/>
                 <file name="src/NJSocial.js"/>
                 <file name="src/NJAnalytics.js"/>

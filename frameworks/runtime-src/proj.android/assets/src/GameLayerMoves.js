@@ -57,6 +57,42 @@ var MovesLayer = BaseGameLayer.extend({
 	// Game State Handling //
 	/////////////////////////
 
+	onGameOver: function() {
+		this._super();
+
+		var that = this;
+
+		NJ.stats.addCurrency(NJ.gameState.getScore());
+
+		var key = NJ.modekeys.moves;
+		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
+
+		if(highscoreAccepted) {
+			NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+		}
+
+		NJ.stats.save();
+
+		// first send the analytics for the current game session
+		NJ.sendAnalytics("Default");
+
+		this.runAction(cc.sequence(cc.callFunc(function() {
+			that._numboHeaderLayer.leave();
+			that._toolbarLayer.leave();
+		}), cc.delayTime(2), cc.callFunc(function() {
+			that.pauseGame();
+
+			that._gameOverMenuLayer = new GameOverMenuLayer(key, false);
+			that._gameOverMenuLayer.setOnRetryCallback(function() {
+				that.onRetry();
+			});
+			that._gameOverMenuLayer.setOnMenuCallback(function() {
+				that.onMenu();
+			});
+			that.addChild(that._gameOverMenuLayer, 999);
+		})));
+	},
+
 	// whether the game is over or not
 	isGameOver: function() {
 		var movesMade = NJ.gameState.getMovesMade();

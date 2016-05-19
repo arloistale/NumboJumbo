@@ -148,22 +148,20 @@ var NumboController = (function() {
 				var targetNum = Math.max.apply(null, selectedNums);
 
 				// wombo comboo clear blocks of value
-				//if(selectedBlocks.length >= 5) {
+				/*if(selectedBlocks.length >= 5) {
 
 					// clear all blocks adjacent to current combo:
-
-					/*
 					for(i = 0; i < selectedBlocks.length; ++i) {
 						var explodeBlocks = this.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1);
 						clearedBlocks = clearedBlocks.concat(explodeBlocks);
 					}
-					*/
-				//}
+				}*/
 
 				var numBonus = this.getNumBonusBlocks(selectedBlocks.length);
 				var bonusBlocks = this.getNRandomFreeBlocks(numBonus);
-				//clearedBlocks = clearedBlocks.concat(bonusBlocks);
 
+				//clearedBlocks = clearedBlocks.concat(bonusBlocks);
+                
 				// remove duplicates
 				for(i = 0; i < clearedBlocks.length; ++i) {
 					for(var j = i + 1; j < clearedBlocks.length; ++j) {

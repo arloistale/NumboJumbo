@@ -425,44 +425,16 @@ var BaseGameLayer = cc.Layer.extend({
 	// Game State Events //
 	///////////////////////
 
-	// Halts game, switches to game over, sends data.
+	// Halts game, children must handle what to do afterwards in terms of going to game over screen
 	onGameOver: function() {
-		NJ.stats.addCurrency(NJ.gameState.getScore());
-		NJ.stats.offerHighscore(NJ.gameState.getScore());
-		NJ.stats.offerHighlevel(NJ.gameState.getLevel());
-
-		NJ.stats.save();
-
-		// first send the analytics for the current game session
-		NJ.sendAnalytics("Default");
-
-		var that = this;
-
 		this._feedbackLayer.clearDoomsayer();
 		this.pauseInput();
 		this.unscheduleAllCallbacks();
 
-		cc.log("game over");
 		if(NJ.settings.sounds)
 			cc.audioEngine.playEffect(res.overSound);
 
 		cc.audioEngine.stopMusic();
-
-		this.runAction(cc.sequence(cc.callFunc(function() {
-			that._numboHeaderLayer.leave();
-			that._toolbarLayer.leave();
-		}), cc.delayTime(2), cc.callFunc(function() {
-			that.pauseGame();
-
-			that._gameOverMenuLayer = new GameOverMenuLayer();
-			that._gameOverMenuLayer.setOnRetryCallback(function() {
-				that.onRetry();
-			});
-			that._gameOverMenuLayer.setOnMenuCallback(function() {
-				that.onMenu();
-			});
-			that.addChild(that._gameOverMenuLayer, 999);
-		})));
 	},
 
 	///////////////
@@ -727,6 +699,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 		return clearedBlocks;
 	},
+
 
 	scoreBlocksMakeParticles: function(blocks, comboLength){
 		// initiate iterator variables here because we use them a lot
