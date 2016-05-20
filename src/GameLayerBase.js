@@ -343,15 +343,27 @@ var BaseGameLayer = cc.Layer.extend({
 	// Move scene block sprite into place.
 	moveBlockIntoPlace: function(moveBlock) {
 
+		var previousMoveAction = moveBlock.getActionByTag(42);
+
 		var blockTargetY = this._levelBounds.y +  this._levelCellSize.height * (moveBlock.row + 0.5);
 		var blockTargetX = this._levelBounds.x +  this._levelCellSize.width * (moveBlock.col + 0.5);
 
 		var duration = 0.7;
 		var easing = cc.easeQuinticActionInOut();
+
 		var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 		moveAction.setTag(42);
-		moveBlock.stopActionByTag(42);
-		moveBlock.runAction(moveAction);
+
+		if (previousMoveAction){
+			cc.log("prev: ", previousMoveAction._endPosition, ", new: ", moveAction._endPosition);
+		}
+
+		if (previousMoveAction == null
+			|| previousMoveAction._endPosition.x != moveAction._endPosition.x
+			|| previousMoveAction._endPosition.y != moveAction._endPosition.y) {
+			moveBlock.stopActionByTag(42);
+			moveBlock.runAction(moveAction);
+		}
 	},
 
 	// spawns and drops a block with random col and val.
