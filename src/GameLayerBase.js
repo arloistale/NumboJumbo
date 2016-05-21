@@ -536,7 +536,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 			var touchCoords = this._convertPointToLevelCoords(touchPosition);
 
-			if (touchCoords) {
+			if (this._isPointWithinCoordsDistanceThreshold(touchPosition, touchCoords.col, touchCoords.row)) {
 				var selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 				var selectedBlocks = this._numboController.getSelectedBlocks();
 
@@ -585,14 +585,14 @@ var BaseGameLayer = cc.Layer.extend({
 
 			var penultimate = this._numboController.getPenultimateSelectedBlock();
 
-			for (var i = 0; currLength < touchDistance; i++) {
+			for (var i = 0; currLength <= touchDistance; i++) {
 				currPosition = cc.pAdd(this._lastTouchPosition, cc.pMult(touchDirection, currLength));
 
 				touchCoords = this._convertPointToLevelCoords(currPosition);
 
 				// if we have valid touch coordinates then we either select or deselect the block based on
 				// whether it is already selected and is the last selected block
-				if (touchCoords) {
+				if (this._isPointWithinCoordsDistanceThreshold(currPosition, touchCoords.col, touchCoords.row)) {
 					touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
 					if(touchBlock === penultimate) {
 						deselectedBlock = this._numboController.deselectLastBlock();
@@ -787,6 +787,20 @@ var BaseGameLayer = cc.Layer.extend({
 	// Helpers //
 	/////////////
 
+	_isPointWithinCoordsDistanceThreshold: function(point, col, row) {
+		// return only if coordinates in certain radius of the block.
+		var radius = 0.5 *  this._blockSize.width;
+
+		var cellCenter = cc.p(this._levelBounds.x + (col + 0.5) *  this._levelCellSize.width,
+			this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);
+
+		var diff = cc.pSub(point, cellCenter);
+		var distSq = cc.pDot(diff, diff);
+
+		// check distance
+		return distSq <= radius * radius;
+	},
+
 	// Attempt to convert point to location on grid.
 	_convertPointToLevelCoords: function(point) {
 		if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
@@ -795,18 +809,7 @@ var BaseGameLayer = cc.Layer.extend({
 			var col = Math.floor((point.x - this._levelBounds.x) /  this._levelCellSize.width);
 			var row = Math.floor((point.y - this._levelBounds.y) /  this._levelCellSize.height);
 
-			// return only if coordinates in certain radius of the block.
-			var radius = 0.5 *  this._blockSize.width;
-
-			var cellCenter = cc.p(this._levelBounds.x + (col + 0.5) *  this._levelCellSize.width,
-				this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);
-
-			var diff = cc.pSub(point, cellCenter);
-			var distSq = cc.pDot(diff, diff);
-
-			// check distance
-			if (distSq <= radius * radius)
-				return {col: col, row: row};
+			return { col: col, row: row };
 		}
 
 		return null;

@@ -39,29 +39,33 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	//////////////
 
 	/**
-	 * Usage:
-	 * @param data Number x-position for hand or Object with data about hand
-	 * @param y y position of spawn point if using data as x-position
+	 * Usage: provide pivot point and target point (both must be of cc.Point)
+	 * pivot
      * @private
      */
-	_startHand: function(data, y) {
+	_startHand: function(pivot, target) {
 		if(!this._handIndicator) {
 			this._handIndicator = new cc.Sprite(res.handImage);
 			this._handIndicator.attr({
 				anchorX: 0.5,
-				anchorY: 0.5
-			})
+				anchorY: 1
+			});
+			this._handIndicator.setColor(NJ.themes.defaultLabelColor);
+			this.addChild(this._handIndicator, 56);
 		}
 
-		var spawnX = cc.visibleRect.center.x, spawnY = cc.visibleRect.center.y;
+		var that = this;
 
-		if(typeof data !== 'number') {
-			spawnX = data.x;
-			spawnY = data.y;
-		} else {
-			spawnX = data;
-			spawnY = y;
-		}
+		pivot = pivot || cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y);
+		target = target || cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y);
+
+		this._handIndicator.setVisible(true);
+		this._handIndicator.setPosition(pivot);
+		cc.log(pivot.x + " : " + pivot.y);
+
+		this._handIndicator.runAction(cc.sequence(cc.moveTo(1, target).easing(cc.easeBackInOut()), cc.delayTime(0.5), cc.callFunc(function() {
+			that._handIndicator.setPosition(pivot);
+		})).repeatForever());
 	},
 
 	_advanceTutorialSlide: function() {
@@ -78,11 +82,13 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				this.runAction(cc.sequence(cc.delayTime(5.5),
 					cc.callFunc(function() {
-						that.spawnDropBlock(centerCol , 2);
+						that.spawnDropBlock(centerCol, 2);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 1, 1);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 2, 3);
+					}), cc.delayTime(0.5), cc.callFunc(function() {
+						that._startHand(that._convertLevelCoordsToPoint(centerCol, 0), that._convertLevelCoordsToPoint(centerCol + 2, 0));
 					})
 				));
 
@@ -157,10 +163,6 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 					// spawn some extra 7's to demonstrate the wombo combo explosion
 					, cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 3, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol - 1, 7);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 7);
@@ -216,7 +218,70 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		if(!comboLength)
 			return;
 
-		var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
+		var activationSounds = [];
+		for(var i=0; i<comboLength-2; i++) {
+			activationSounds.push(bloops[i]);
+		}
+
+		this.schedule(function() {
+			cc.audioEngine.playEffect(activationSounds[0]);
+		},.05, false);
+
+		if(activationSounds.length == 2) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .2, false);
+		}
+		else if(activationSounds.length == 3) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .17, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .29, false);
+		}
+		else if(activationSounds.length == 4) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .15, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .25, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[3]);
+			}, .35, false);
+		}
+		else if(activationSounds.length == 5) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .12, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .19, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[3]);
+			}, .26, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[4]);
+			}, .33, false);
+		}
+		else if(activationSounds.length > 5) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .11, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .17, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[3]);
+			}, .23, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[4]);
+			}, .29, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[5]);
+			}, .35, false);
+		}
 
 		// launch feedback for combo threshold title snippet
 		if (comboLength >= 5) {
@@ -224,9 +289,6 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 			//if (NJ.settings.sounds)
 			//cc.audioEngine.playEffect(res.applauseSound);
 		}
-
-		if(NJ.settings.sounds)
-			cc.audioEngine.playEffect(activationSound);
 
 		if(this._numboController.levelIsClear()) {
 			this._advanceTutorialSlide();

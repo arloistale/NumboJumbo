@@ -35,7 +35,7 @@ var res = {
     // ingame
     blockImage: resRoot + "Images/blockImage.png",
     alertImage: resRoot + "Images/alertOverlay.png",
-    handImage: resRoot + "Images/ic_hand_2x.png",
+    handImage: resRoot + "Images/ic_hand/ic_hand_2x.png",
     levelImage: resRoot + "Images/levelImage.png",
 
     // music
@@ -148,6 +148,7 @@ var g_game = [
     res.homeImage,
     res.pauseImage,
     res.retryImage,
+    res.handImage,
 
     // Scene
     res.blockImage,

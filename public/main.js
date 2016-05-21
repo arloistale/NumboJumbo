@@ -53,7 +53,7 @@ cc.game.onStart = function() {
 
     // load jumbos then we're good to go
     var that = this;
-    NJ.settings.hasLoaded = true;
+    NJ.settings.hasLoaded = false;
 
     if(!NJ.settings.hasLoaded) {
         // load resources
