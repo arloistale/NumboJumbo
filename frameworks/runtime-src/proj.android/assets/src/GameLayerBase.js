@@ -425,6 +425,7 @@ var BaseGameLayer = cc.Layer.extend({
 	///////////////////////
 
 	// Halts game, children must handle what to do afterwards in terms of going to game over screen
+	// also increments number of times played overall
 	onGameOver: function() {
 		this._feedbackLayer.clearDoomsayer();
 		this.pauseInput();
@@ -434,6 +435,20 @@ var BaseGameLayer = cc.Layer.extend({
 			cc.audioEngine.playEffect(res.overSound);
 
 		cc.audioEngine.stopMusic();
+
+		var numGames = NJ.stats.incrementNumGamesCompleted();
+
+		if(numGames == 1) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played1);
+		} else if(numGames == 5) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played2);
+		} else if(numGames == 10) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played3);
+		} else if(numGames == 25) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played4);
+		} else if(numGames == 50) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played5);
+		}
 	},
 
 	///////////////
@@ -445,7 +460,7 @@ var BaseGameLayer = cc.Layer.extend({
 		NJ.themes.toggle();
 
 		this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
-		this._levelSprite.setColor(NJ.themes.levelColor);
+		//this._levelSprite.setColor(NJ.themes.levelColor);
 
 		this._numboHeaderLayer.updateTheme();
 
@@ -619,16 +634,15 @@ var BaseGameLayer = cc.Layer.extend({
 					if(isCombo) {
 						highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
 
-						// check if we're hovering over wombo combo
-						if (selectedBlocks.length >= 5) {
-
+							/*
+							// grab each block adjacent to this combo:
 							for (i = 0; i < selectedBlocks.length; ++i) {
 								highlightBlocks = highlightBlocks.concat(this._numboController.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1));
 							}
+							*/
 
-							this._effectsLayer.launchComboOverlay();
-						} else
-							selectedBlock.highlight();
+						this._effectsLayer.launchComboOverlay();
+						selectedBlock.highlight();
 					}
 
 					// remove duplicates

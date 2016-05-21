@@ -62,11 +62,31 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
         var highlevelAccepted = NJ.stats.offerHighlevel(key, NJ.gameState.getLevel());
 
-        if(highscoreAccepted)
-            NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+        // only submit score after all desired achievements have been pushed
+        // because the achievement
+        if(highscoreAccepted) {
+            var highscore = NJ.stats.getHighscore(key);
+            NJ.social.submitScore(key, highscore);
 
-        if(highlevelAccepted)
-            NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
+            if(highscore >= 500) {
+                NJ.social.unlockAchievement(NJ.social.achievementKeys.re1);
+
+                if(highscore >= 1000) {
+                    NJ.social.unlockAchievement(NJ.social.achievementKeys.re2);
+
+                    if(highscore >= 1500) {
+                        NJ.social.unlockAchievement(NJ.social.achievementKeys.re3);
+
+                        if(highscore >= 2000) {
+                            NJ.social.unlockAchievement(NJ.social.achievementKeys.re4);
+                        }
+                    }
+                }
+            }
+        }
+
+        //if(highlevelAccepted)
+          //  NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
 
         NJ.stats.save();
 
@@ -114,7 +134,8 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
 
         this.spawnDropRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
 
-        var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
+        //var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
+        var activationSound = plangs[Math.min(comboLength-2, plangs.length - 1)];
 
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(activationSound);

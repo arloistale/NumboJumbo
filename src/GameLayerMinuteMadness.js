@@ -78,7 +78,24 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
 
 		if(highscoreAccepted) {
-			NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+			var highscore = NJ.stats.getHighscore(key);
+			NJ.social.submitScore(key, highscore);
+
+			if(highscore >= 64) {
+				NJ.social.unlockAchievement(NJ.social.achievementKeys.mm1);
+
+				if(highscore >= 128) {
+					NJ.social.unlockAchievement(NJ.social.achievementKeys.mm2);
+
+					if(highscore >= 256) {
+						NJ.social.unlockAchievement(NJ.social.achievementKeys.mm3);
+
+						if(highscore >= 512) {
+							NJ.social.unlockAchievement(NJ.social.achievementKeys.mm4);
+						}
+					}
+				}
+			}
 		}
 
 		NJ.stats.save();

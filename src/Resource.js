@@ -30,6 +30,7 @@ var res = {
     settingsImage: resRoot + "Images/ic_settings/ic_settings_2x.png",
     retryImage: resRoot + "Images/ic_retry/ic_retry_2x.png",
     statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
+    trophyImage: resRoot + "Images/ic_trophy/ic_trophy_2x.png",
 
     // ingame
     blockImage: resRoot + "Images/blockImage.png",
@@ -92,8 +93,6 @@ var res = {
     bloopSound9: resRoot + "Sounds/boop9.wav",
     bloopSound10: resRoot + "Sounds/boop10.wav",
 
-
-
     levelupSound: resRoot + "Sounds/levelup.wav",
     overSound: resRoot + "Sounds/over.mp3",
 
@@ -116,6 +115,7 @@ var g_menu = [
     res.buttonImage,
     res.statsImage,
     res.blockImage,
+    res.trophyImage,
 
     // sounds
     res.clickSound,

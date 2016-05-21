@@ -108,11 +108,29 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
         var highlevelAccepted = NJ.stats.offerHighlevel(key, NJ.gameState.getLevel());
 
-        if(highscoreAccepted)
-            NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+        if(highscoreAccepted) {
+            var highscore = NJ.stats.getHighscore(key);
+            NJ.social.submitScore(key, highscore);
 
-        if(highlevelAccepted)
-            NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
+            if(highscore >= 500) {
+                NJ.social.unlockAchievement(NJ.social.achievementKeys.inf1);
+
+                if(highscore >= 1000) {
+                    NJ.social.unlockAchievement(NJ.social.achievementKeys.inf2);
+
+                    if(highscore >= 1500) {
+                        NJ.social.unlockAchievement(NJ.social.achievementKeys.inf3);
+
+                        if(highscore >= 2000) {
+                            NJ.social.unlockAchievement(NJ.social.achievementKeys.inf4);
+                        }
+                    }
+                }
+            }
+        }
+
+        //if(highlevelAccepted)
+          //  NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
 
         NJ.stats.save();
 
@@ -171,8 +189,8 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     // bonus for clearing screen
     checkClearBonus: function() {
         if (this._numboController.getNumBlocks() < 3) {
-            if (NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.cheeringSound);
+            //if (NJ.settings.sounds)
+              //  cc.audioEngine.playEffect(res);
             this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
             this.unschedule(this.scheduleSpawn);
             this.schedule(this.scheduleSpawn, 6);
@@ -194,8 +212,8 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     // Curtain
     closeCurtain: function() {
         this.levelTransition = true;
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.applauseSound);
+        //if(NJ.settings.sounds)
+            //cc.audioEngine.playEffect(res.applauseSound);
         this.unschedule(this.closeCurtain);
 
         this._curtainLayer.initLabels();
