@@ -108,19 +108,21 @@ var MovesLayer = BaseGameLayer.extend({
 		var clearedBlocks = this._super(touchPosition);
 
 		var comboLength = clearedBlocks.length;
-
 		if(!comboLength)
 			return;
-
 		this.spawnDropRandomBlocks(comboLength);
+
 		var numBonusBlocks = this._numboController.getNumBonusBlocks(comboLength);
-		this.spawnBlocksAfterDelay(numBonusBlocks, 0.4);
+		cc.log("spawnDelay: ", this._spawnDelay);
+		this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);
 
-		//var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
-		var activationSound = bloops[Math.min(comboLength-2, bloops.length - 1)];
 
-		if(NJ.settings.sounds)
+		if(NJ.settings.sounds) {
+			//var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
+			var activationSound = bloops[Math.min(comboLength-2, bloops.length - 1)];
+
 			cc.audioEngine.playEffect(activationSound);
+		}
 
 		if(this.checkGameOver())
 			return;

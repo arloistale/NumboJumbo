@@ -112,13 +112,10 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         if(!comboLength)
             return;
 
-        this.spawnDropRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
-
-        //var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
-        var activationSound = bloops[Math.min(comboLength-2, bloops.length - 1)];
-
-        if(NJ.settings.sounds)
+        if(NJ.settings.sounds) {
+            var activationSound = bloops[Math.min(comboLength - 2, bloops.length - 1)];
             cc.audioEngine.playEffect(activationSound);
+        }
 
         var levelUpCount = NJ.gameState.levelUpIfNeeded();
 
@@ -128,7 +125,13 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
 
         this._numboHeaderLayer.updateValues();
         this._numboHeaderLayer.setProgress(NJ.gameState.getLevelupProgress());
+        var that = this;
+        var blocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
+        this.spawnBlocksAfterDelay(blocksToSpawn, this._spawnDelay, function() {
+            that.checkGameOver();
+        });
 
-        this.checkGameOver();
+
     }
+
 });
