@@ -57,14 +57,14 @@ cc.game.onStart = function() {
 
     if(!NJ.settings.hasLoaded) {
         // load resources
-        cc.LoaderScene.preload(g_game, function () {
+        NumboLoaderScene.preload(g_game, function () {
             var scene = new cc.Scene();
             scene.addChild(new TutorialDriverLayer());
             cc.director.runScene(scene);
         }, that);
     } else {
         // load resources
-        cc.LoaderScene.preload(g_menu, function () {
+        NumboLoaderScene.preload(g_menu, function () {
             var scene = new cc.Scene();
             scene.addChild(new NumboMenuLayer());
             cc.director.runScene(scene);

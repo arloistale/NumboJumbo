@@ -63,9 +63,14 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		this._handIndicator.setPosition(pivot);
 		cc.log(pivot.x + " : " + pivot.y);
 
-		this._handIndicator.runAction(cc.sequence(cc.moveTo(1, target).easing(cc.easeBackInOut()), cc.delayTime(0.5), cc.callFunc(function() {
+		this._handIndicator.runAction(cc.sequence(cc.moveTo(1.2, target).easing(cc.easeBackInOut()), cc.delayTime(0.5), cc.callFunc(function() {
 			that._handIndicator.setPosition(pivot);
 		})).repeatForever());
+	},
+
+	_clearHand: function() {
+		this._handIndicator.stopAllActions();
+		this._handIndicator.setVisible(false);
 	},
 
 	_advanceTutorialSlide: function() {
@@ -87,7 +92,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 						that.spawnDropBlock(centerCol + 1, 1);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 2, 3);
-					}), cc.delayTime(0.5), cc.callFunc(function() {
+					}), cc.delayTime(1), cc.callFunc(function() {
 						that._startHand(that._convertLevelCoordsToPoint(centerCol, 0), that._convertLevelCoordsToPoint(centerCol + 2, 0));
 					})
 				));
@@ -95,6 +100,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 				break;
 			case slides.subtraction:
 				centerCol = Math.floor((NJ.NUM_COLS) / 2);
+
+				this._clearHand();
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {

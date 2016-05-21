@@ -19,6 +19,9 @@ var res = {
         png: resRoot + "Fonts/mainFont.png"
     },
 
+    // Loader
+    logoImage: resRoot + "Images/logo.png",
+
 	// UI
     buttonImage: resRoot + "Images/Button.png",
     pauseImage: resRoot + "Images/ic_pause/ic_pause_2x.png",

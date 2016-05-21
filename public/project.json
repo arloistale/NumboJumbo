@@ -11,6 +11,8 @@
     "modules": ["cocos2d", "extensions"],
 
     "jsList": [
+        "src/NumboLoaderScene.js",
+
         "src/Extensions.js",
         "src/NJPrettifier.js",
         "src/Resource.js",

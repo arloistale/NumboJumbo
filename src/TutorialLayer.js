@@ -90,7 +90,7 @@ var TutorialLayer = (function() {
                         that._titleMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(4), cc.fadeTo(0.25, 0)));
                         that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
-                        that.runAction(cc.sequence(cc.delayTime(7), cc.callFunc(function() {
+                        that.runAction(cc.sequence(cc.delayTime(6), cc.callFunc(function() {
                             that._helperMenuItem.setTitle("Connect the numbers that add together!");
                             that._menu.alignItemsVerticallyWithPadding(10);
                             that._helperMenuItem.setChildrenOpacity(0);
