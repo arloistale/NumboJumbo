@@ -744,7 +744,6 @@ var BaseGameLayer = cc.Layer.extend({
 		// add to number of blocks cleared
 		NJ.gameState.addBlocksCleared(comboLength);
 
-		cc.log(scoreDifference);
 		// add to score
 		NJ.gameState.addScore(scoreDifference);
 
@@ -772,10 +771,6 @@ var BaseGameLayer = cc.Layer.extend({
 
 	spawnBlocksAfterDelay: function(count, delay, callback){
 		var that = this;
-
-		cc.log("calling base::spawnblocksafterdelay()! count: ", count, ", delay: ", delay);
-
-		cc.log(this);
 
 		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
 			that.spawnDropRandomBlocks(count);

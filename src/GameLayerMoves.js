@@ -113,7 +113,7 @@ var MovesLayer = BaseGameLayer.extend({
 		this.spawnDropRandomBlocks(comboLength);
 
 		var numBonusBlocks = this._numboController.getNumBonusBlocks(comboLength);
-		cc.log("spawnDelay: ", this._spawnDelay);
+
 		this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);
 
 
