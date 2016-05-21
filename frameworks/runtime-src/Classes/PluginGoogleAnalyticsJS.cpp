@@ -319,8 +319,17 @@ JSBool js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_dispatchPeriodically(JSC
 bool js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_init(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
     if (argc == 0) {
         sdkbox::PluginGoogleAnalytics::init();
+        args.rval().setUndefined();
+        return true;
+    }
+    if (argc == 1) {
+        const char* arg0;
+        std::string arg0_tmp; ok &= jsval_to_std_string(cx, args.get(0), &arg0_tmp); arg0 = arg0_tmp.c_str();
+        JSB_PRECONDITION2(ok, cx, false, "js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_init : Error processing arguments");
+        sdkbox::PluginGoogleAnalytics::init(arg0);
         args.rval().setUndefined();
         return true;
     }
@@ -330,8 +339,18 @@ bool js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_init(JSContext *cx, uint32
 #elif defined(JS_VERSION)
 JSBool js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_init(JSContext *cx, uint32_t argc, jsval *vp)
 {
+    jsval *argv = JS_ARGV(cx, vp);
+    JSBool ok = JS_TRUE;
     if (argc == 0) {
         sdkbox::PluginGoogleAnalytics::init();
+        JS_SET_RVAL(cx, vp, JSVAL_VOID);
+        return JS_TRUE;
+    }
+    if (argc == 1) {
+        const char* arg0;
+        std::string arg0_tmp; ok &= jsval_to_std_string(cx, argv[0], &arg0_tmp); arg0 = arg0_tmp.c_str();
+        JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+        sdkbox::PluginGoogleAnalytics::init(arg0);
         JS_SET_RVAL(cx, vp, JSVAL_VOID);
         return JS_TRUE;
     }

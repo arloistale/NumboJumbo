@@ -2,40 +2,9 @@ var NJ = NJ || {};
 
 NJ.social = (function() {
 
-    var states = {
-        neutral: 0,
-        reap: 1
-    };
-
     var leaderboardPrefix = "ldb-";
 
-    // command queue
-    // { "unlock", "played1" }
-    // { "submit", "500" }
-    var _commandQueue = [];
-
-    var _state = states.neutral;
-
     // helper functions
-
-    var _executeCommand = function(command) {
-        var data = command.data;
-        cc.log("TODO: The suspicion is that listener is being freed somehow once callback, so we are assigning listener every time");
-
-        switch(command.key) {
-            case "submit":
-                var leaderboardKey = data.leaderboardKey;
-                var score = data.score;
-                cc.log("Executing command submit: " + leaderboardKey + ", " + score);
-                sdkbox.PluginSdkboxPlay.submitScore(leaderboardPrefix + leaderboardKey, score);
-                break;
-            case "unlock":
-                var achievementKey = data.achievementKey;
-                cc.log("Executing command unlock: " + achievementKey);
-                sdkbox.PluginSdkboxPlay.unlockAchievement(achievementKey);
-                break;
-        }
-    };
 
     return {
         // expose achievement keys
@@ -79,25 +48,10 @@ NJ.social = (function() {
 
                     onScoreSubmitted: function (leaderboard_name, score, is_maxScoreAllTime, is_maxScoreWeek, is_maxScoreToday) {
                         cc.log("Score submitted!");
-                        /*
-                        if (_commandQueue.length > 0) {
-                            _executeCommand(_commandQueue.shift());
-                        } else {
-                            cc.log("finished reaping");
-                            _state = states.neutral;
-                        }*/
                     },
 
                     onAchievementUnlocked: function (achievement_name, newlyUnlocked) {
                         cc.log("achievement unlocked!");
-                        /*
-                        if (_commandQueue.length > 0) {
-                            _executeCommand(_commandQueue.shift());
-                        } else {
-                            cc.log("finished reaping");
-                            _state = states.neutral;
-                        }
-                        */
                     }
                 });
             }
@@ -124,34 +78,8 @@ NJ.social = (function() {
         // callback usage: function( leaderboard_name, score, is_maxScoreAllTime, is_maxScoreWeek, is_maxScoreToday )
         submitScore: function (key, score) {
             if (cc.sys.isNative) {
-                _executeCommand({
-                    key: "submit",
-                    data: {
-                        leaderboardKey: key,
-                        score: score
-                    }
-                });
-                /*
-                _commandQueue.push({
-                    key: "submit",
-                    data: {
-                        leaderboardKey: key,
-                        score: score
-                    }
-                });
-                */
-
-                cc.log("Pushed Submit command with data: " + key + ", " + score);
-/*
-                if(_state != states.reap) {
-                    this._reapCommandQueue();
-                }
-*/
-                // TODO: Check we need to have a check at the beginning of the game to do this
-                // if the score has not been synced in the last game sessions.
-                // Extreme case: Player gets a new high score, the game starts syncing but the player shuts off the app
-                // Player turns on game next time, checks online high score and it was not updated
-                // Score then will not update until player gets an even higher score = BS
+                cc.log("Executing command submit: " + key + ", " + score);
+                sdkbox.PluginSdkboxPlay.submitScore(leaderboardPrefix + key, score);
             }
         },
 
@@ -179,53 +107,14 @@ NJ.social = (function() {
         unlockAchievement: function (key) {
             if (cc.sys.isNative) {
 
-                _executeCommand({
-                    key: "unlock",
-                    data: {
-                        achievementKey: key
-                    }
-                });
-                /*
-                _commandQueue.push({
-                    key: "unlock",
-                    data: {
-                        achievementKey: key
-                    }
-                });*/
-
-                cc.log("Pushed Unlock command with data: " + key);
-/*
-                if(_state != states.reap) {
-                    this._reapCommandQueue();
-                }
-*/
-                // TODO: Check we need to have a check at the beginning of the game to do this
-                // if the score has not been synced in the last game sessions.
-                // Extreme case: Player gets a new high score, the game starts syncing but the player shuts off the app
-                // Player turns on game next time, checks online high score and it was not updated
-                // Score then will not update until player gets an even higher score = BS
+                cc.log("Executing command unlock: " + key);
+                sdkbox.PluginSdkboxPlay.unlockAchievement(key);
             }
         },
 
         showAchievements: function () {
             if (cc.sys.isNative) {
                 sdkbox.PluginSdkboxPlay.showAchievements();
-            }
-        },
-
-        // goes through every command on the queue
-        // the commands can be either to submit score or unlock an achievement
-        // reasoning: game center doesn't like everything submitted at once
-        _reapCommandQueue: function() {
-            if(!cc.sys.isNative)
-                return;
-
-            _state = states.reap;
-
-            if(_commandQueue.length > 0) {
-                _executeCommand(_commandQueue.shift());
-            } else {
-                cc.log("finished reaping nothing");
             }
         }
     }
