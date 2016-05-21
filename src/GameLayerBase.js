@@ -775,7 +775,9 @@ var BaseGameLayer = cc.Layer.extend({
 		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
 			that.spawnDropRandomBlocks(count);
 			that.relocateBlocks();
-			callback();
+			if (callback) {
+				callback();
+			}
 		})));
 	},
 
