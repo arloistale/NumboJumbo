@@ -342,7 +342,7 @@ var NumboLevel = (function() {
 			// collapse columns if there is an empty middle column
 			var seenNonEmpty = false;
 			var collapsed = false;
-			for(i = 1; i < NJ.NUM_COLS - 1 && collapsed == false; ++i) {
+			for(i = 0; i < NJ.NUM_COLS - 1 && collapsed == false; ++i) {
 				if (this._blocks[i].length > 0){
 					seenNonEmpty = true;
 				}

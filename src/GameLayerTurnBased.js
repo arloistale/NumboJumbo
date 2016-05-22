@@ -17,8 +17,8 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         { key: 9, weight: 40 }
     ],
 
-    // blocks dropped every turn (changes)
-    _blocksToDrop: 6,
+    // initial # of blocks dropped every turn (increases at each level)
+    _blocksToDrop: 5,
 
     ////////////////////
     // Initialization //
@@ -279,7 +279,13 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
 
         this._numboHeaderLayer.updateValues();
         this._numboHeaderLayer.setProgress(NJ.gameState.getLevelupProgress());
+        var that = this;
+        var blocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
+        this.spawnBlocksAfterDelay(blocksToSpawn, this._spawnDelay, function() {
+            that.checkGameOver();
+        });
 
-        this.checkGameOver();
+
     }
+
 });

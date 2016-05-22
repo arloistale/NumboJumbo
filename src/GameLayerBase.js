@@ -40,6 +40,12 @@ var BaseGameLayer = cc.Layer.extend({
 	// Selection Data
 	_lastTouchPosition: null,
 
+	// amount of time to wait before destroying bonus blocks
+	_killDelay: null,
+	// amount of time to wait before spawning blocks in turn-based moves
+	// (must be strictly greater than _killDelay!)
+	_spawnDelay: null,
+
 	////////////////////
 	// Initialization //
 	////////////////////
@@ -62,6 +68,9 @@ var BaseGameLayer = cc.Layer.extend({
 		this._initParticles();
 
         this._initUI();
+
+		this._killDelay = 0.35;
+		this._spawnDelay = this._killDelay + 0.1;
 
 		// extranneous initialization
 		this._reset();
@@ -258,7 +267,6 @@ var BaseGameLayer = cc.Layer.extend({
     checkGameOver: function() {
         if (this.isGameOver() ) {
             this.onGameOver();
-
 			return true;
         }
 
@@ -343,15 +351,21 @@ var BaseGameLayer = cc.Layer.extend({
 	// Move scene block sprite into place.
 	moveBlockIntoPlace: function(moveBlock) {
 
+		var previousMoveAction = moveBlock.getActionByTag(42);
+
 		var blockTargetY = this._levelBounds.y +  this._levelCellSize.height * (moveBlock.row + 0.5);
 		var blockTargetX = this._levelBounds.x +  this._levelCellSize.width * (moveBlock.col + 0.5);
-
 		var duration = 0.7;
 		var easing = cc.easeQuinticActionInOut();
 		var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 		moveAction.setTag(42);
-		moveBlock.stopActionByTag(42);
-		moveBlock.runAction(moveAction);
+
+		if (previousMoveAction == null
+			|| previousMoveAction._endPosition.x != moveAction._endPosition.x
+			|| previousMoveAction._endPosition.y != moveAction._endPosition.y) {
+			moveBlock.stopActionByTag(42);
+			moveBlock.runAction(moveAction);
+		}
 	},
 
 	// spawns and drops a block with random col and val.
@@ -688,7 +702,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 		this.relocateBlocks();
 
-		this.killBlocksAfterDelay(bonusBlocks, 0.4);
+		this.killBlocksAfterDelay(bonusBlocks, this._killDelay);
 
 		// Allow controller to look for new hint.
 		this._numboController.resetKnownPath();
@@ -730,7 +744,6 @@ var BaseGameLayer = cc.Layer.extend({
 		// add to number of blocks cleared
 		NJ.gameState.addBlocksCleared(comboLength);
 
-		cc.log(scoreDifference);
 		// add to score
 		NJ.gameState.addScore(scoreDifference);
 
@@ -756,14 +769,15 @@ var BaseGameLayer = cc.Layer.extend({
 		})));
 	},
 
-	spawnBlocksAfterDelay: function(count, delay){
+	spawnBlocksAfterDelay: function(count, delay, callback){
 		var that = this;
 
 		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
 			that.spawnDropRandomBlocks(count);
-
 			that.relocateBlocks();
-
+			if (callback) {
+				callback();
+			}
 		})));
 	},
 
