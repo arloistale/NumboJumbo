@@ -112,7 +112,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         if(!comboLength)
             return;
 
-        this.spawnDropRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
+        //this.spawnDropRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
 
         if(NJ.settings.sounds) {
             var activationSounds = [];
