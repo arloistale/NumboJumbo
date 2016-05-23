@@ -14,6 +14,27 @@ var NumboController = (function() {
 			return path.length >= 4 || path.length >= 2 && Math.random() > 0.5;
 		},
 
+		sumOrDifferenceIsValid: function(path){
+			if (path.length != 2){
+				return false;
+			}
+
+			var valA = path[0].val;
+			var valB = path[1].val;
+			if (valA + valB <= 9) {
+				cc.log( valA, " + ", valB, " <= 9!");
+				return true;
+			}
+			if (valB - valA >= 1){
+				cc.log( valB, " - ", valA, " >= 1!");
+				return true;
+			}
+
+			return false;
+
+
+		},
+
 		// search for a path of 3 blocks that sums to the last element
 		threeBlocksSumsToLast: function(path) {
 			var sum = 0;
@@ -161,7 +182,7 @@ var NumboController = (function() {
 				var bonusBlocks = this.getNRandomFreeBlocks(numBonus);
 
 				//clearedBlocks = clearedBlocks.concat(bonusBlocks);
-                
+
 				// remove duplicates
 				for(i = 0; i < clearedBlocks.length; ++i) {
 					for(var j = i + 1; j < clearedBlocks.length; ++j) {
@@ -272,7 +293,8 @@ var NumboController = (function() {
 				var block = this._numboLevel.getRandomBlock();
 
 				if(block) {
-					this._knownPath = this.meanderSearch(block.col, block.row, meanderSearchCriteria.threeBlocksSumsToLast);
+					this._knownPath = this.meanderSearch(block.col, block.row,
+						meanderSearchCriteria.threeBlocksSumsToLast, [block]);
 				}
 
 				--tries;
@@ -280,6 +302,44 @@ var NumboController = (function() {
 
 			return this._knownPath;
 		},
+
+		// returns a col/val pair such that the column is legal to spawn in,
+		// and the value has at least one solution associated with it
+		// useful if we want to guarantee spawning a 'good' block
+		findLocationAndValueForNewBlock: function(){
+			var maxTries = 500;
+			var path = [];
+			var col = null;
+			var val = 0;
+			var i;
+			for (i = 0; i < maxTries && path.length == 0; ++i){
+				col = this._numboLevel.getRandomValidCol();
+				var row = this._numboLevel.getNumBlocksInColumn(col);
+				if (row >= 0){
+					path = this.meanderSearch(col, row,
+						meanderSearchCriteria.sumOrDifferenceIsValid, []);
+				}
+			}
+
+			if (path.length == 2){
+				var valA = path[0].val;
+				var valB = path[1].val;
+				if (valA + valB <= 9) {
+					val = valA + valB;
+				}
+				else if (valB - valA >= 1){
+					val = valB - valA;
+				}
+
+
+			}
+
+			cc.log("special block: 		col: ", col, ", val: ", val,", tries: ", i);
+
+			return {col: col, val: val};
+
+		},
+
 
         resetKnownPath: function(){
             this._knownPath = [];
@@ -290,37 +350,21 @@ var NumboController = (function() {
 		 * @param col
 		 * @param row
 		 * @param criteria Criteria boolean expression
-         * @returns {*}
+		 * @param path: array containing the first block (if you want to include it) or an empty array (if there is no first block)
+         * @returns an array containing a valid path, or an empty array if one is not found
          */
-		meanderSearch: function(col, row, criteria) {
-			var i;
 
-			var searchStack = [];
-			var path = [];
+		meanderSearch: function(col, row, criteria, path) {
+			if (criteria(path))
+				return path;
 
-			var firstBlock = this._numboLevel.getBlock(col, row);
-			searchStack.push(firstBlock);
-			path.push(firstBlock);
-
-			var neighbors;
-			var block, neighbor;
-			while(searchStack.length > 0) {
-				block = searchStack.pop();
-
-				neighbors = this._numboLevel.getNeighbors(col, row);
-				neighbors = NJ.shuffleArray(neighbors);
-
-				for(i = 0; i < neighbors.length; i++) {
-					neighbor = neighbors[i];
-					cc.assert(neighbor, "Get neighbors returned a null -.-");
-					if(neighbor != firstBlock && path.indexOf(neighbor) < 0) {
-						searchStack.push(neighbor);
-						path.push(neighbor);
-
-						if (criteria(path)) {
-							return path;
-						}
-					}
+			var neighbors = NJ.shuffleArray(this._numboLevel.getNeighbors(col, row) );
+			for (var i = 0; i < neighbors.length; ++i){
+				var block = neighbors[i];
+				if (path.indexOf(block) < 0) { // if it's not already in the path
+					var newPath = path.slice(0);
+					newPath.push(block);
+					return this.meanderSearch(block.col, block.row, criteria, newPath);
 				}
 			}
 

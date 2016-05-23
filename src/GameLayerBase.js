@@ -773,7 +773,15 @@ var BaseGameLayer = cc.Layer.extend({
 		var that = this;
 
 		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
-			that.spawnDropRandomBlocks(count);
+			if (that._numboController.findHint().length == 0){
+				that.spawnDropRandomBlocks(count-1);
+
+				var colAndVal = that._numboController.findLocationAndValueForNewBlock();
+				that.spawnDropBlock (colAndVal.col, colAndVal.val);
+			}
+			else {
+				that.spawnDropRandomBlocks(count);
+			}
 			that.relocateBlocks();
 			if (callback) {
 				callback();
