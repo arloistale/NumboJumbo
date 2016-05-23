@@ -19,6 +19,9 @@ var res = {
         png: resRoot + "Fonts/mainFont.png"
     },
 
+    // Loader
+    logoImage: resRoot + "Images/logo.png",
+
 	// UI
     buttonImage: resRoot + "Images/Button.png",
     pauseImage: resRoot + "Images/ic_pause/ic_pause_2x.png",
@@ -35,7 +38,7 @@ var res = {
     // ingame
     blockImage: resRoot + "Images/blockImage.png",
     alertImage: resRoot + "Images/alertOverlay.png",
-    handImage: resRoot + "Images/ic_hand_2x.png",
+    handImage: resRoot + "Images/ic_hand/ic_hand_2x.png",
     levelImage: resRoot + "Images/levelImage.png",
 
     // music
@@ -148,6 +151,7 @@ var g_game = [
     res.homeImage,
     res.pauseImage,
     res.retryImage,
+    res.handImage,
 
     // Scene
     res.blockImage,
@@ -214,3 +218,15 @@ var g_game = [
     res.mainFont.fnt,
     res.mainFont.png
 ];
+
+var g_all = (function() {
+    var a = g_game.concat(g_menu);
+    for(var i = 0; i < a.length; ++i) {
+        for(var j = i + 1; j < a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+}());

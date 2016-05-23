@@ -134,56 +134,48 @@ var NumboMenuLayer = (function() {
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
 
-            cc.LoaderScene.preload(g_game, function () {
-                cc.audioEngine.stopMusic();
-                cc.audioEngine.stopAllEffects();
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
 
-                var scene = new cc.Scene();
-                scene.addChild(new MinuteMadnessLayer());
-                cc.director.runScene(new cc.TransitionFade(0.5, scene));
-            }, this);
+            var scene = new cc.Scene();
+            scene.addChild(new MinuteMadnessLayer());
+            cc.director.runScene(scene);
         },
 
         _onChooseMoves: function() {
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
 
-            cc.LoaderScene.preload(g_game, function () {
-                cc.audioEngine.stopMusic();
-                cc.audioEngine.stopAllEffects();
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
 
-                var scene = new cc.Scene();
-                scene.addChild(new MovesLayer());
-                cc.director.runScene(new cc.TransitionFade(0.5, scene));
-            }, this);
+            var scene = new cc.Scene();
+            scene.addChild(new MovesLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
         },
 
         _onChooseTurnBased: function() {
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
 
-            cc.LoaderScene.preload(g_game, function () {
-                cc.audioEngine.stopMusic();
-                cc.audioEngine.stopAllEffects();
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
 
-                var scene = new cc.Scene();
-                scene.addChild(new TurnBasedFillUpGameLayer());
-                cc.director.runScene(new cc.TransitionFade(0.5, scene));
-            }, this);
+            var scene = new cc.Scene();
+            scene.addChild(new TurnBasedFillUpGameLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
         },
 
         _onChooseSurvival: function() {
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
 
-            cc.LoaderScene.preload(g_game, function () {
-                cc.audioEngine.stopMusic();
-                cc.audioEngine.stopAllEffects();
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.stopAllEffects();
 
-                var scene = new cc.Scene();
-                scene.addChild(new SurvivalGameLayer());
-                cc.director.runScene(new cc.TransitionFade(0.5, scene));
-            }, this);
+            var scene = new cc.Scene();
+            scene.addChild(new SurvivalGameLayer());
+            cc.director.runScene(new cc.TransitionFade(0.5, scene));
         },
 
         // tools

@@ -85,7 +85,7 @@ var NumboController = (function() {
 			var block = this._numboLevel.getBlock(col, row);
 			var lastBlock = null;
 
-			if (block === null)
+			if (!block)
 				return null;
 
 			// TODO: possible optimization

@@ -4,7 +4,8 @@ NJ.social = (function() {
 
     var leaderboardPrefix = "ldb-";
 
-    // helper functions
+    // data
+    var isEnabled = false;
 
     return {
         // expose achievement keys
@@ -39,7 +40,7 @@ NJ.social = (function() {
         init: function () {
             if (cc.sys.isNative) {
                 sdkbox.PluginSdkboxPlay.init();
-
+/*
                 sdkbox.PluginSdkboxPlay.setListener({
                     onConnectionStatusChanged: function (status) {
                         cc.log("Connection status changed");
@@ -54,12 +55,14 @@ NJ.social = (function() {
                         cc.log("achievement unlocked!");
                     }
                 });
+ */
             }
         },
 
         login: function () {
             if (cc.sys.isNative) {
                 sdkbox.PluginSdkboxPlay.signin();
+                isEnabled = true;
             }
         },
 
@@ -77,14 +80,14 @@ NJ.social = (function() {
         // submits score data to the leaderboard defined by the given game mode key
         // callback usage: function( leaderboard_name, score, is_maxScoreAllTime, is_maxScoreWeek, is_maxScoreToday )
         submitScore: function (key, score) {
-            if (cc.sys.isNative) {
+            if (cc.sys.isNative && isEnabled) {
                 cc.log("Executing command submit: " + key + ", " + score);
                 sdkbox.PluginSdkboxPlay.submitScore(leaderboardPrefix + key, score);
             }
         },
 
         showLeaderboard: function () {
-            if (cc.sys.isNative) {
+            if (cc.sys.isNative && isEnabled) {
                 var isLoggedIn = this.isLoggedIn();
                 cc.log(isLoggedIn);
                 /*
@@ -105,7 +108,7 @@ NJ.social = (function() {
         // callback usage:  function( achievement_name, newlyUnlocked )
         // TODO: Do not call this function directly, may cause a crash
         unlockAchievement: function (key) {
-            if (cc.sys.isNative) {
+            if (cc.sys.isNative && isEnabled) {
 
                 cc.log("Executing command unlock: " + key);
                 sdkbox.PluginSdkboxPlay.unlockAchievement(key);
@@ -113,7 +116,7 @@ NJ.social = (function() {
         },
 
         showAchievements: function () {
-            if (cc.sys.isNative) {
+            if (cc.sys.isNative && isEnabled) {
                 sdkbox.PluginSdkboxPlay.showAchievements();
             }
         }

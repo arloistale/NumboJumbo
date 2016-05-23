@@ -517,12 +517,10 @@ var BaseGameLayer = cc.Layer.extend({
 		this._feedbackLayer.reset();
 
 		//load resources
-		cc.LoaderScene.preload(g_menu, function () {
-			cc.audioEngine.stopMusic();
-			var scene = new cc.Scene();
-			scene.addChild(new NumboMenuLayer());
-			cc.director.runScene(new cc.TransitionFade(0.5, scene));
-		}, this);
+		cc.audioEngine.stopMusic();
+		var scene = new cc.Scene();
+		scene.addChild(new NumboMenuLayer());
+		cc.director.runScene(new cc.TransitionFade(0.5, scene));
 	},
 
 //////////////////
@@ -536,7 +534,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 			var touchCoords = this._convertPointToLevelCoords(touchPosition);
 
-			if (this._isPointWithinCoordsDistanceThreshold(touchPosition, touchCoords.col, touchCoords.row)) {
+			if (touchCoords && this._isPointWithinCoordsDistanceThreshold(touchPosition, touchCoords.col, touchCoords.row)) {
 				var selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 				var selectedBlocks = this._numboController.getSelectedBlocks();
 
@@ -592,7 +590,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 				// if we have valid touch coordinates then we either select or deselect the block based on
 				// whether it is already selected and is the last selected block
-				if (this._isPointWithinCoordsDistanceThreshold(currPosition, touchCoords.col, touchCoords.row)) {
+				if (touchCoords && this._isPointWithinCoordsDistanceThreshold(currPosition, touchCoords.col, touchCoords.row)) {
 					touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
 					if(touchBlock === penultimate) {
 						deselectedBlock = this._numboController.deselectLastBlock();

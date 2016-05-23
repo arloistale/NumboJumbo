@@ -23,10 +23,12 @@ NJ.loadSettings = function() {
         cc.sys.localStorage.setItem('hasLoaded', 'true');
         NJ.saveSettings();
         return;
+    } else {
+        NJ.settings.hasLoaded = true;
     }
 
     for(var key in NJ.settings) {
-        if(NJ.settings.hasOwnProperty(key)) {
+        if(key != 'hasLoaded' && NJ.settings.hasOwnProperty(key)) {
             var rawItem = cc.sys.localStorage.getItem(key);
 
             if(typeof NJ.settings[key] === 'boolean')
@@ -41,7 +43,7 @@ NJ.loadSettings = function() {
 // NOTE: Must be called to persist changes in settings
 NJ.saveSettings = function() {
     for(var key in NJ.settings) {
-        if(NJ.settings.hasOwnProperty(key))
+        if(key != 'hasLoaded' && NJ.settings.hasOwnProperty(key))
             cc.sys.localStorage.setItem(key, JSON.stringify(NJ.settings[key]));
     }
 };

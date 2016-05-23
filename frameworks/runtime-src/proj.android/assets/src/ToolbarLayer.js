@@ -126,8 +126,8 @@ var ToolbarLayer = (function() {
                     } else {
                         equationStr += " = " + nums[i];
                         // pulse the bar a bit
-                        this._equationLabel.stopAllActions();
-                        this._equationLabel.runAction(cc.sequence(cc.scaleBy(0.15, 1.5, 1.5), cc.scaleBy(0.05, 1 / 1.5, 1 / 1.5)));
+                        //this._equationLabel.stopAllActions();
+                        //this._equationLabel.runAction(cc.sequence(cc.scaleBy(0.15, 1.5, 1.5), cc.scaleBy(0.05, 1 / 1.5, 1 / 1.5)));
                     }
                 }
             }
