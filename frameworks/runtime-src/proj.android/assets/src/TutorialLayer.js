@@ -20,10 +20,11 @@ var TutorialLayer = (function() {
         // definition of possible tutorial slides
         slides: {
             intro: 1,
-            subtraction: 2,
-            more: 3,
-            wombo: 4,
-            end: 5
+            practice1: 2,
+            teach2: 3,
+            practice2: 4,
+            wombo: 5,
+            end: 6
         },
 
         // UI Data
@@ -99,10 +100,10 @@ var TutorialLayer = (function() {
 
                         break;
 
-                    case slides.subtraction:
+                    case slides.practice1:
 
-                        that._titleMenuItem.setTitle("Nice! You added to 3.");
-                        that._helperMenuItem.setTitle("There are many possible Combos.");
+                        that._titleMenuItem.setTitle("Right, because 2 + 1 = 3!");
+                        that._helperMenuItem.setTitle("Try a longer combo.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -117,7 +118,7 @@ var TutorialLayer = (function() {
                         })));
 
                         break;
-                    case slides.more:
+                    case slides.teach2:
 
                         that._titleMenuItem.setTitle("Great!");
                         that._helperMenuItem.setTitle("You can even move diagonally.");
@@ -136,10 +137,29 @@ var TutorialLayer = (function() {
 
                         break;
 
+                    case slides.practice2:
+
+                        that._titleMenuItem.setTitle("Cool!");
+                        that._helperMenuItem.setTitle(" ");
+
+                        that._titleMenuItem.setChildrenOpacity(0);
+                        that._helperMenuItem.setChildrenOpacity(0);
+
+                        that._menu.alignItemsVerticallyWithPadding(10);
+
+                        that._titleMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
+
+                        that.runAction(cc.sequence(cc.delayTime(4.75), cc.callFunc(function() {
+                            that._helperMenuItem.setChildrenOpacity(0);
+                            that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
+                        })));
+
+                        break;
+
                     case slides.wombo:
 
                         that._titleMenuItem.setTitle("Beautiful.");
-                        that._helperMenuItem.setTitle("Longer combos can explode more blocks!");
+                        that._helperMenuItem.setTitle("Longer combos clear even more blocks!");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -172,6 +192,15 @@ var TutorialLayer = (function() {
                 }
             })));
 
+            return this._currSlide;
+        },
+
+        fadeOutHelperLabel: function() {
+            this._helperMenuItem.stopAllActionsOnChildren();
+            this._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 0)));
+        },
+
+        getCurrSlide: function() {
             return this._currSlide;
         },
 

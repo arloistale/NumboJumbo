@@ -39,11 +39,10 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	//////////////
 
 	/**
-	 * Usage: provide pivot point and target point (both must be of cc.Point)
-	 * pivot
+	 * Usage: provide a path for the hand to patrol (must have at least 1 point)
      * @private
      */
-	_startHandOverPath: function(pivot, target) {
+	_startHandOverPath: function(path) {
 		if(!this._handIndicator) {
 			this._handIndicator = new cc.Sprite(res.handImage);
 			this._handIndicator.attr({
@@ -56,21 +55,43 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 		var that = this;
 
-		pivot = pivot || cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y);
-		target = target || cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y);
+		cc.assert(path.length > 0, "Must define at least a start point in the path!");
 
+		// initialize path
+		var start = path[0];
+
+		this._handIndicator.stopAllActions();
 		this._handIndicator.setVisible(true);
-		this._handIndicator.setPosition(pivot);
-		cc.log(pivot.x + " : " + pivot.y);
+		this._handIndicator.setPosition(start);
+		var handActionList = [];
 
-		this._handIndicator.runAction(cc.sequence(cc.moveTo(1.2, target).easing(cc.easeBackInOut()), cc.delayTime(0.5), cc.callFunc(function() {
-			that._handIndicator.setPosition(pivot);
-		})).repeatForever());
+		if(path.length > 2) {
+			for (var i = 1; i < path.length; ++i) {
+				if (i == 1) {
+                    handActionList.push(cc.moveTo(0.5, path[i]).easing(cc.easeBackIn()));
+                } else if(i == path.length - 1) {
+                    handActionList.push(cc.moveTo(0.7, path[i]).easing(cc.easeBackOut()));
+                } else {
+                    handActionList.push(cc.moveTo(0.5, path[i]));
+                }
+			}
+		} else {
+			handActionList.push(cc.moveTo(1.2, path[1]).easing(cc.easeBackInOut()));
+		}
+
+        handActionList.push(cc.delayTime(1));
+        handActionList.push(cc.callFunc(function() {
+            that._handIndicator.setPosition(start);
+        }));
+
+        this._handIndicator.runAction(cc.sequence(handActionList).repeatForever());
 	},
 
 	_clearHand: function() {
-		this._handIndicator.stopAllActions();
-		this._handIndicator.setVisible(false);
+        if(this._handIndicator) {
+            this._handIndicator.stopAllActions();
+            this._handIndicator.setVisible(false);
+        }
 	},
 
 	_advanceTutorialSlide: function() {
@@ -93,41 +114,47 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 2, 3);
 					}), cc.delayTime(1), cc.callFunc(function() {
-						that._startHandOverPath(that._convertLevelCoordsToPoint(centerCol, 0), that._convertLevelCoordsToPoint(centerCol + 2, 0));
+						that._startHandOverPath([
+							that._convertLevelCoordsToPoint(centerCol, 0),
+							that._convertLevelCoordsToPoint(centerCol + 2, 0)
+						]);
+
+                        that._handIndicator.runAction(cc.sequence(cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(0.5), cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol + 1, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(0.2), cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol + 2, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(1.5)).repeatForever());
 					})
 				));
 
 				break;
-			case slides.subtraction:
+			case slides.practice1:
 				centerCol = Math.floor((NJ.NUM_COLS) / 2);
 
 				this._clearHand();
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 4);
+						that.spawnDropBlock(centerCol - 2, 1);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 7);
+						that.spawnDropBlock(centerCol - 1, 2);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 5);
+						that.spawnDropBlock(centerCol, 4);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 8);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 2, 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 3);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 4);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 3);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 2, 2);
+						that.spawnDropBlock(centerCol, 7);
 					})
 				));
 
 				break;
-			case slides.more:
+			case slides.teach2:
 				centerCol = Math.floor((NJ.NUM_COLS) / 2);
+
+                this._clearHand();
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
@@ -142,17 +169,62 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 						that.spawnDropBlock(centerCol, 5);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 1, 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						// begin scheduling hint jiggles
-						that.schedule(that.jiggleHintBlocks, 5);
-					})
+					}), cc.delayTime(1), cc.callFunc(function() {
+                        that._startHandOverPath([
+                            that._convertLevelCoordsToPoint(centerCol - 2, 0),
+                            that._convertLevelCoordsToPoint(centerCol - 1, 0),
+                            that._convertLevelCoordsToPoint(centerCol, 1)
+                        ]);
+
+                        that._handIndicator.runAction(cc.sequence(cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol - 2, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(0.5), cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol - 1, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(0.2), cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol, 1);
+                            if(block) block.highlight();
+                        }), cc.delayTime(1.5)).repeatForever());
+                    })
 				));
 
 				break;
 
+            case slides.practice2:
+                centerCol = Math.floor((NJ.NUM_COLS) / 2);
+
+                this._clearHand();
+
+                this.runAction(cc.sequence(cc.delayTime(4),
+                    cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol - 2, 4);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol - 1, 7);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol, 5);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol + 1, 8);
+                    }), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol + 2, 2);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol - 2, 3);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol - 1, 4);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol, 3);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol + 2, 2);
+                    })
+                ));
+
+                break;
+
 			case slides.wombo:
 
 				centerCol = Math.floor((NJ.NUM_COLS) / 2);
+
+				this._clearHand();
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
@@ -223,8 +295,17 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		if(!comboLength)
 			return;
 
+        var targetBlock = Math.max.apply(null, clearedBlocks.map(function(b) {
+            return b.val;
+        }));
+
+        if(this._tutorialLayer.getCurrSlide() == this._tutorialLayer.slides.teach2 && targetBlock == 5) {
+            this._clearHand();
+            this._tutorialLayer.fadeOutHelperLabel();
+        }
+
 		var activationSounds = [];
-		for(var i=0; i<comboLength-2; i++) {
+		for(var i = 0; i < comboLength - 2; i++) {
 			activationSounds.push(bloops[i]);
 		}
 
@@ -288,15 +369,16 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 			}, .35, false);
 		}
 
-		// launch feedback for combo threshold title snippet
-		if (comboLength >= 5) {
+        var that = this;
 
-			//if (NJ.settings.sounds)
-			//cc.audioEngine.playEffect(res.applauseSound);
-		}
-
-		if(this._numboController.levelIsClear()) {
-			this._advanceTutorialSlide();
-		}
+        if(this._tutorialLayer.getCurrSlide() == this._tutorialLayer.slides.wombo) {
+            this.runAction(cc.sequence(cc.delayTime(0.45), cc.callFunc(function() {
+                that._advanceTutorialSlide();
+            })));
+        } else {
+            if (this._numboController.levelIsClear()) {
+                this._advanceTutorialSlide();
+            }
+        }
 	}
 });

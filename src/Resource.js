@@ -49,7 +49,11 @@ var res = {
 
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
+    levelupSound: resRoot + "Sounds/levelup.wav",
+    overSound: resRoot + "Sounds/over.mp3",
+    coinSound: resRoot + "Sounds/coin.wav",
     plipSound: resRoot + "Sounds/plipSound.mp3",
+
     plopSound: resRoot + "Sounds/Plop.wav",
     plopSound4: resRoot + "Sounds/Plop4.wav",
     plopSound5: resRoot + "Sounds/Plop5.wav",
@@ -74,15 +78,6 @@ var res = {
     progressSound8: resRoot + "Sounds/progress8.wav",
     progressSound9: resRoot + "Sounds/progress9.wav",
     progressSound10: resRoot + "Sounds/progress10.wav",
-
-    plangSound1: resRoot + "Sounds/plang1.wav",
-    plangSound2: resRoot + "Sounds/plang2.wav",
-    plangSound3: resRoot + "Sounds/plang3.wav",
-    plangSound4: resRoot + "Sounds/plang4.wav",
-    plangSound5: resRoot + "Sounds/plang5.wav",
-    plangSound6: resRoot + "Sounds/plang6.wav",
-    plangSound7: resRoot + "Sounds/plang7.wav",
-    plangSound8: resRoot + "Sounds/plang8.wav",
 
     bloopSound1: resRoot + "Sounds/boop1.wav",
     bloopSound2: resRoot + "Sounds/boop2.wav",
@@ -136,11 +131,9 @@ var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, re
     res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
     res.progressSound9, res.progressSound10];
 
-var plangs = [res.plangSound1, res.plangSound2, res.plangSound3, res.plangSound4,
-    res.plangSound5, res.plangSound6, res.plangSound7, res.plangSound8];
-
 var bloops = [res.bloopSound1, res.bloopSound2, res.bloopSound3, res.bloopSound4, res.bloopSound5,
     res.bloopSound6, res.bloopSound7, res.bloopSound8, res.bloopSound9, res.bloopSound10];
+
 
 // resources for ingame
 var g_game = [
@@ -186,15 +179,6 @@ var g_game = [
     res.progressSound8,
     res.progressSound9,
     res.progressSound10,
-
-    res.plangSound1,
-    res.plangSound2,
-    res.plangSound3,
-    res.plangSound4,
-    res.plangSound5,
-    res.plangSound6,
-    res.plangSound7,
-    res.plangSound8,
 
     res.bloopSound1,
     res.bloopSound2,

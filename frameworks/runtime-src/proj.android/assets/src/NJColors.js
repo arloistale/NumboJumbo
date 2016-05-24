@@ -93,11 +93,16 @@ NJ.themes = (function() {
         }
     ];
 
-    var main = data[0];
+    var _lightTheme = data[0];
+    var _darkTheme = data[1];
 
+    var main = _lightTheme;
     var _themeIndex = 0;
 
     return {
+        lightTheme: _lightTheme,
+        darkTheme: _darkTheme,
+
         // here we expose properties of the current main theme
         backgroundColor: main.backgroundColor,
         levelColor: main.levelColor,

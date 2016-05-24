@@ -30,7 +30,7 @@ var GameOverMenuLayer = (function() {
         // UI Data
         _menu: null,
         _scoreLabel: null,
-        _levelLabel: null,
+        _condLabel: null,
         _bestLabel: null,
         _bestLevelLabel: null,
         _currencyLabel: null,

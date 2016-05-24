@@ -88,8 +88,10 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	},
 
 	_clearHand: function() {
-		this._handIndicator.stopAllActions();
-		this._handIndicator.setVisible(false);
+        if(this._handIndicator) {
+            this._handIndicator.stopAllActions();
+            this._handIndicator.setVisible(false);
+        }
 	},
 
 	_advanceTutorialSlide: function() {
@@ -113,16 +115,19 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 						that.spawnDropBlock(centerCol + 2, 3);
 					}), cc.delayTime(1), cc.callFunc(function() {
 						that._startHandOverPath([
-							that._numboController.getBlock(centerCol, 0),
-							that._numboController.getBlock(centerCol + 2, 0)
+							that._convertLevelCoordsToPoint(centerCol, 0),
+							that._convertLevelCoordsToPoint(centerCol + 2, 0)
 						]);
 
                         that._handIndicator.runAction(cc.sequence(cc.callFunc(function() {
-                            that._numboController.getBlock(centerCol, 0).highlight();
+                            var block = that._numboController.getBlock(centerCol, 0);
+                            if(block) block.highlight();
                         }), cc.delayTime(0.5), cc.callFunc(function() {
-                            that._numboController.getBlock(centerCol + 1, 0).highlight();
+                            var block = that._numboController.getBlock(centerCol + 1, 0);
+                            if(block) block.highlight();
                         }), cc.delayTime(0.2), cc.callFunc(function() {
-                            that._numboController.getBlock(centerCol + 2, 0).highlight();
+                            var block = that._numboController.getBlock(centerCol + 2, 0);
+                            if(block) block.highlight();
                         }), cc.delayTime(1.5)).repeatForever());
 					})
 				));
@@ -364,15 +369,16 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 			}, .35, false);
 		}
 
-		// launch feedback for combo threshold title snippet
-		if (comboLength >= 5) {
+        var that = this;
 
-			//if (NJ.settings.sounds)
-			//cc.audioEngine.playEffect(res.applauseSound);
-		}
-
-		if(this._numboController.levelIsClear()) {
-			this._advanceTutorialSlide();
-		}
+        if(this._tutorialLayer.getCurrSlide() == this._tutorialLayer.slides.wombo) {
+            this.runAction(cc.sequence(cc.delayTime(0.45), cc.callFunc(function() {
+                that._advanceTutorialSlide();
+            })));
+        } else {
+            if (this._numboController.levelIsClear()) {
+                this._advanceTutorialSlide();
+            }
+        }
 	}
 });

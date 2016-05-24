@@ -174,7 +174,7 @@ var NumboGameLayer = (function() {
 				that.onPause();
 			});
 			this.addChild(this._numboHeaderLayer, 999);
-			this._numboHeaderLayer.updateValues();
+			this._numboHeaderLayer.setScoreValue();
 
 			// toolbar
 			this._toolbarLayer = new ToolbarLayer();
@@ -762,7 +762,7 @@ var NumboGameLayer = (function() {
 				NJ.gameState.offerComboForMultiplier();
 
 				// show player data
-				this._numboHeaderLayer.updateValues();
+				this._numboHeaderLayer.setScoreValue();
 
 				// Allow controller to look for new hint.
 				this._numboController.resetKnownPath();

@@ -40,6 +40,12 @@ var BaseGameLayer = cc.Layer.extend({
 	// Selection Data
 	_lastTouchPosition: null,
 
+	// amount of time to wait before destroying bonus blocks
+	_killDelay: null,
+	// amount of time to wait before spawning blocks in turn-based moves
+	// (must be strictly greater than _killDelay!)
+	_spawnDelay: null,
+
 	////////////////////
 	// Initialization //
 	////////////////////
@@ -63,6 +69,9 @@ var BaseGameLayer = cc.Layer.extend({
 
         this._initUI();
 
+		this._killDelay = 0.35;
+		this._spawnDelay = this._killDelay + 0.1;
+
 		// extranneous initialization
 		this._reset();
 	},
@@ -81,7 +90,8 @@ var BaseGameLayer = cc.Layer.extend({
         this._selectedLinesNode.clear();
 
         this._numboHeaderLayer.reset();
-        this._numboHeaderLayer.updateValues();
+        this._numboHeaderLayer.setScoreValue(0);
+		this._numboHeaderLayer.setConditionValue(0);
 
         this._numboController.reset();
         this._feedbackLayer.reset();
@@ -167,7 +177,8 @@ var BaseGameLayer = cc.Layer.extend({
 			that.onPause();
 		});
 		this.addChild(this._numboHeaderLayer, 999);
-		this._numboHeaderLayer.updateValues();
+		this._numboHeaderLayer.setScoreValue(0);
+		this._numboHeaderLayer.setConditionValue(0);
 
 		// toolbar
 		this._toolbarLayer = new ToolbarLayer( this._toolBarSize);
@@ -258,7 +269,6 @@ var BaseGameLayer = cc.Layer.extend({
     checkGameOver: function() {
         if (this.isGameOver() ) {
             this.onGameOver();
-
 			return true;
         }
 
@@ -341,16 +351,23 @@ var BaseGameLayer = cc.Layer.extend({
 	////////////////////
 
 	// Move scene block sprite into place.
-	moveBlockIntoPlace: function(moveBlock) {
+	moveBlockIntoPlace: function(moveBlock, shouldOverride) {
+
 		var blockTargetY = this._levelBounds.y +  this._levelCellSize.height * (moveBlock.row + 0.5);
 		var blockTargetX = this._levelBounds.x +  this._levelCellSize.width * (moveBlock.col + 0.5);
-
 		var duration = 0.7;
 		var easing = cc.easeQuinticActionInOut();
 		var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 		moveAction.setTag(42);
-		moveBlock.stopActionByTag(42);
-		moveBlock.runAction(moveAction);
+
+		//if(!moveBlock.isFalling || shouldOverride) {
+		//	moveBlock.isFalling = true;
+
+			moveBlock.stopAllActions();
+			moveBlock.runAction(cc.sequence(moveAction, cc.callFunc(function() {
+				moveBlock.isFalling = false;
+			})));
+		//}
 	},
 
 	// spawns and drops a block with random col and val.
@@ -427,6 +444,7 @@ var BaseGameLayer = cc.Layer.extend({
 	// Halts game, children must handle what to do afterwards in terms of going to game over screen
 	// also increments number of times played overall
 	onGameOver: function() {
+		this._selectedLinesNode.clear();
 		this._feedbackLayer.clearDoomsayer();
 		this.pauseInput();
 		this.unscheduleAllCallbacks();
@@ -435,6 +453,8 @@ var BaseGameLayer = cc.Layer.extend({
 			cc.audioEngine.playEffect(res.overSound);
 
 		cc.audioEngine.stopMusic();
+
+		// achievements
 
 		var numGames = NJ.stats.incrementNumGamesCompleted();
 
@@ -547,8 +567,6 @@ var BaseGameLayer = cc.Layer.extend({
 						selectedBlockSum += block.val;
 					}
 
-					var currColor = NJ.getColor(selectedBlockSum - 1);
-
 					// if selected block was returned then we have a new selected block deal with
 					if(selectedBlock) {
 						selectedBlock.highlight();
@@ -557,7 +575,7 @@ var BaseGameLayer = cc.Layer.extend({
 						var selectedNums = selectedBlocks.map(function(b) {
 							return b.val;
 						});
-						this._toolbarLayer.setEquation(selectedNums);
+						this._numboHeaderLayer.setEquation(selectedNums);
 					}
 
 					this.redrawSelectedLines(selectedBlocks);
@@ -609,7 +627,7 @@ var BaseGameLayer = cc.Layer.extend({
 				var selectedNums = selectedBlocks.map(function (b) {
 					return b.val;
 				});
-				this._toolbarLayer.setEquation(selectedNums);
+				this._numboHeaderLayer.setEquation(selectedNums);
 			}
 
 			// update graphics for selected blocks
@@ -631,13 +649,6 @@ var BaseGameLayer = cc.Layer.extend({
 
 					if(isCombo) {
 						highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
-
-							/*
-							// grab each block adjacent to this combo:
-							for (i = 0; i < selectedBlocks.length; ++i) {
-								highlightBlocks = highlightBlocks.concat(this._numboController.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1));
-							}
-							*/
 
 						this._effectsLayer.launchComboOverlay();
 						selectedBlock.highlight();
@@ -680,11 +691,13 @@ var BaseGameLayer = cc.Layer.extend({
     // Returns the cleared blocks.
 	onTouchEnded: function(touchPosition) {
 		// Activate any selected blocks.
-		var clearedBlocks = this._numboController.activateSelectedBlocks();
+		var clearedAndBonusBlocks = this._numboController.activateSelectedBlocks();
+		var clearedBlocks = clearedAndBonusBlocks.clearedBlocks;
+		var bonusBlocks = clearedAndBonusBlocks.bonusBlocks;
 
 		this.redrawSelectedLines();
 
-		this._toolbarLayer.setEquation([]);
+		this._numboHeaderLayer.setEquation([]);
 
 		this._effectsLayer.clearComboOverlay();
 
@@ -694,6 +707,24 @@ var BaseGameLayer = cc.Layer.extend({
 		if(!comboLength)
 			return clearedBlocks;
 
+		this.scoreBlocksMakeParticles(clearedBlocks, comboLength);
+
+		this.relocateBlocks();
+
+		//if(bonusBlocks.length > 0)
+			//this.killBlocksAfterDelay(bonusBlocks, this._killDelay);
+
+		// Allow controller to look for new hint.
+		this._numboController.resetKnownPath();
+		this.jiggleCount = 0;
+
+		// schedule a hint
+		this.schedule(this.jiggleHintBlocks, 7);
+
+		return clearedBlocks;
+	},
+
+	scoreBlocksMakeParticles: function(blocks, comboLength){
 		// initiate iterator variables here because we use them a lot
 		var i, block, color;
 		var sumPos = cc.p(0, 0);
@@ -701,9 +732,8 @@ var BaseGameLayer = cc.Layer.extend({
 		var scoreDifference = 0;
 
 		// loop through the blocks, giving each one a particle explosion and also computing some values
-		for(i = 0; i < comboLength; i++) {
-			block = clearedBlocks[i];
-
+		for(i = 0; i < blocks.length; i++) {
+			block = blocks[i];
 			// we need to find the target value which will be the maximum value in the cleared blocks
 			scoreDifference += block.val;
 
@@ -712,8 +742,12 @@ var BaseGameLayer = cc.Layer.extend({
 			sumPos.y += block.y;
 
 			color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
-			var coords = this._convertPointToLevelCoords({x: block.x, y: block.y});
-			this._effectsLayer.launchExplosion(coords.col, coords.row, color);
+			if (block) {
+				var coords = this._convertPointToLevelCoords({x: block.x, y: block.y});
+				if (coords) {
+					this._effectsLayer.launchExplosion(coords.col, coords.row, color);
+				}
+			}
 		}
 
 		// add to number of blocks cleared
@@ -725,20 +759,55 @@ var BaseGameLayer = cc.Layer.extend({
 		// add moves made
 		NJ.gameState.addMovesMade();
 
-		// Gaps may be created; shift all affected blocks down.
-		for (var col = 0; col < NJ.NUM_COLS; ++col) {
-			for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
-				this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
+		this._numboHeaderLayer.setScoreValue(NJ.gameState.getScore());
+
+	},
+
+	killBlocksAfterDelay: function(blocks, delay) {
+		var that = this;
+
+		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
+			that.scoreBlocksMakeParticles(blocks, 0);
+			for (var i = 0; i < blocks.length; ++i){
+				that._numboController.killBlock(blocks[i]);
+			}
+			that._numboController._numboLevel.updateRowsAndColumns();
+
+			that.relocateBlocks();
+		})));
+	},
+
+	/*
+	// bonus for clearing screen
+	checkClearBonus: function() {
+		if (this._numboController.getNumBlocks() < 3) {
+			if (NJ.settings.sounds)
+				cc.audioEngine.playEffect(res.coinSound);
+
+			this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
+			this.unschedule(this.scheduleSpawn);
+			this.schedule(this.scheduleSpawn, 6);
 		}
+	},*/
 
-		// Allow controller to look for new hint.
-		this._numboController.resetKnownPath();
-		this.jiggleCount = 0;
+	spawnBlocksAfterDelay: function(count, delay, callback){
+		var that = this;
 
-		// schedule a hint
-		this.schedule(this.jiggleHintBlocks, 7);
+		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
+			that.spawnDropRandomBlocks(count);
+			that.relocateBlocks();
+			if (callback) {
+				callback();
+			}
+		})));
+	},
 
-		return clearedBlocks;
+	relocateBlocks: function (){
+		// Gaps may be created; shift all affected blocks down.
+		var blocks = this._numboController.getBlocksList();
+		for (var i = 0; i < blocks.length; ++i){
+			this.moveBlockIntoPlace(blocks[i], true);
+		}
 	},
 
 /////////////

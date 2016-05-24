@@ -24,6 +24,8 @@ var NumboBlock = (function() {
         row: -1,
         val: -1,
 
+        isFalling: false,
+
         ////////////////////
         // Initialization //
         ////////////////////

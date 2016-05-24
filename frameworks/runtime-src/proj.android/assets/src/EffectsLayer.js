@@ -150,7 +150,7 @@ var EffectsLayer = cc.Layer.extend({
             //cc.audioEngine.playEffect(res.cheerSound3);
 
         this._isComboLaunched = true;
-        this._comboOverlay.setVisible(true);
+        //this._comboOverlay.setVisible(true);
     },
 
     clearComboOverlay: function() {

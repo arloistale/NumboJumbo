@@ -58,7 +58,8 @@ var NumboLevel = (function() {
 		// returns spawned block
 		// DO NOT publicly use directly!!! Use NumboController spawnDropRandomBlock instead
 		spawnDropBlock: function(block, col, val) {
-			cc.assert(0 <= col && col < NJ.NUM_COLS && this._blocks[col].length < NJ.NUM_ROWS, "Invalid coords");
+			cc.assert(0 <= col && col < NJ.NUM_COLS && this._blocks[col].length < NJ.NUM_ROWS,
+				"Invalid coords: " + col + " has length " + this._blocks[col].length);
 
 			block.init(col, this._blocks[col].length, val);
 			this._blocks[col].push(block);
@@ -341,7 +342,7 @@ var NumboLevel = (function() {
 			// collapse columns if there is an empty middle column
 			var seenNonEmpty = false;
 			var collapsed = false;
-			for(i = 1; i < NJ.NUM_COLS - 1 && collapsed == false; ++i) {
+			for(i = 0; i < NJ.NUM_COLS - 1 && collapsed == false; ++i) {
 				if (this._blocks[i].length > 0){
 					seenNonEmpty = true;
 				}

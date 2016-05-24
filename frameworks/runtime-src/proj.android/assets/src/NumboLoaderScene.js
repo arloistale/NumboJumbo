@@ -14,46 +14,32 @@ NumboLoaderScene = cc.Scene.extend({
     init: function() {
         var self = this;
 
-        //logo
-        var logoWidth = 160;
-        var logoHeight = 200;
-
         // bg
-        var bgLayer = self._bgLayer = new cc.LayerColor(NJ.themes.backgroundColor);
+        var bgLayer = self._bgLayer = new cc.LayerColor(NJ.themes.darkTheme.backgroundColor);
         self.addChild(bgLayer, 0);
 
-        //image move to CCSceneFile.js
-        var fontSize = 24, lblHeight =  -logoHeight / 2 + 100;
         if(res.logoImage) {
             //loading logo
-            cc.loader.loadImg(res.logoImage, {isCrossOrigin : false }, function(err, img) {
-                logoWidth = img.width;
-                logoHeight = img.height;
-                self._initStage(img, cc.visibleRect.center);
+            cc.loader.load([res.logoImage], function() {}, function() {
+                var logo = self._logo = new cc.Sprite(res.logoImage);
+                var logoSize = logo.getContentSize();
+                var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+                var mSize = cc.size(refDim * 0.5, refDim * 0.5 * logoSize.height / logoSize.width);
+                logo.setScale(mSize.width / logoSize.width, mSize.height / logoSize.height);
+                logo.attr({
+                    anchorX: 0.5,
+                    anchorY: 0.5,
+                    x: cc.visibleRect.center.x,
+                    y: cc.visibleRect.center.y
+                });
+
+                self._bgLayer.addChild(logo, 10);
             });
-            fontSize = 14;
-            lblHeight = -logoHeight / 2 - 10;
         }
 
-        //loading percent
-        //var label = self._label = new cc.LabelTTF("Loading... 0%", "Arial", fontSize);
-        //label.setPosition(cc.pAdd(cc.visibleRect.center, cc.p(0, lblHeight)));
-        //label.setColor(cc.color(180, 180, 180));
-        //bgLayer.addChild(this._label, 10);
         return true;
     },
 
-    _initStage: function (img, centerPos) {
-        var self = this;
-        var texture2d = self._texture2d = new cc.Texture2D();
-        texture2d.initWithElement(img);
-        texture2d.handleLoadedTexture();
-        var logo = self._logo = new cc.Sprite(texture2d);
-        logo.setScale(cc.contentScaleFactor());
-        logo.x = centerPos.x;
-        logo.y = centerPos.y;
-        self._bgLayer.addChild(logo, 10);
-    },
     /**
      * custom onEnter
      */
@@ -67,8 +53,6 @@ NumboLoaderScene = cc.Scene.extend({
      */
     onExit: function () {
         cc.Node.prototype.onExit.call(this);
-        var tmpStr = "Loading... 0%";
-        //this._label.setString(tmpStr);
     },
 
     /**
@@ -89,15 +73,10 @@ NumboLoaderScene = cc.Scene.extend({
         var self = this;
         self.unschedule(self._startLoading);
         var res = self.resources;
-        cc.loader.load(res,
-            function (result, count, loadedCount) {
-                var percent = (loadedCount / count * 100) | 0;
-                percent = Math.min(percent, 100);
-                //self._label.setString("Loading... " + percent + "%");
-            }, function () {
-                if (self.cb)
-                    self.cb.call(self.target);
-            });
+        cc.loader.load(res, function() {}, function () {
+            if (self.cb)
+                self.cb.call(self.target);
+        });
     }
 });
 

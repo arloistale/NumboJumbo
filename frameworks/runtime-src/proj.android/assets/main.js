@@ -53,8 +53,6 @@ cc.game.onStart = function() {
 
     // load jumbos then we're good to go
     var that = this;
-    
-    NJ.settings.hasLoaded = true;
 
     // load resources
     NumboLoaderScene.preload(g_all, function () {

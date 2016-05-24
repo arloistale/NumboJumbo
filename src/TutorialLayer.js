@@ -102,7 +102,7 @@ var TutorialLayer = (function() {
 
                     case slides.practice1:
 
-                        that._titleMenuItem.setTitle("Right, because 2 + 1 = 3.");
+                        that._titleMenuItem.setTitle("Right, because 2 + 1 = 3!");
                         that._helperMenuItem.setTitle("Try a longer combo.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
