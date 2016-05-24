@@ -22,11 +22,9 @@ var NumboController = (function() {
 			var valA = path[0].val;
 			var valB = path[1].val;
 			if (valA + valB <= 9) {
-				cc.log( valA, " + ", valB, " <= 9!");
 				return true;
 			}
 			if (valB - valA >= 1){
-				cc.log( valB, " - ", valA, " >= 1!");
 				return true;
 			}
 
@@ -333,10 +331,75 @@ var NumboController = (function() {
 
 
 			}
-
-			cc.log("special block: 		col: ", col, ", val: ", val,", tries: ", i);
-
 			return {col: col, val: val};
+
+		},
+
+		findLocationAndValueForTwoNewBlocks: function (){
+			var valA = null;
+			var valB = null;
+			var colA = null;
+			var colB = null;
+
+			// find the indices of non-empty columns, then shuffle them, then iterate over them
+			var colIndices = [];
+			for (var col = 0; col < NJ.NUM_COLS; ++col){
+				if (this._numboLevel.getBlocksInColumn(col).length > 1) {
+					colIndices.push(col);
+				}
+			}
+			var colIndicesShuffled = NJ.shuffleArray(colIndices);
+
+			// attempt to place both blocks in a single column (because it's easier, that's why):
+			for (var colI = 0; colI < colIndicesShuffled.length; ++colI){
+				column = this._numboLevel.getBlocksInColumn(colIndicesShuffled[colI]);
+				if (column.length < NJ.NUM_ROWS - 2){
+					colA = colB = col;
+					valA = Math.floor( ( ( column[col].val - 1) * Math.random() )+ 1);
+					valB = column[col].val - valA;
+
+					return [{col: colA, val: valA}, {col: colB, val: valB}];
+				}
+			}
+
+			// ok, that didn't work, so lets try to find two neighboring non-empty columns
+			// such that adding a block to each will result in them being adjacent
+			// (ie, ignore spawning one block in a near-empty column and the other in a
+			// near-ful column, because that wouldn't help anything).
+			// note that here we ignore the far-left and far-right columns,
+			// so as not to have 3 different cases. but those will be covered
+			// by the check we do on their immedate neighbor.
+			var leftIndex = colIndices.indexOf(0);
+			if (leftIndex >= 0){
+				colIndices.splice(leftIndex, 1);
+			}
+			var rightIndex = colIndices.indexOf(NJ.NUM_COLS - 1);
+			if (rightIndex >= 0){
+				colIndices.splice(rightIndex, 1);
+			}
+
+			for (var colI = 0; colI < colIndices.length; ++colI){
+				var column = this._numboLevel.getBlocksInColumn(colIndices[colI]);
+				var leftLength = this._numboLevel.getBlocksInColumn(colIndices[colI - 1]);
+				var rightLength = this._numboLevel.getBlocksInColumn(colIndices[colI + 1]);
+				var colLength = column.length;
+				if (colLength < NJ.NUM_ROWS && leftLength < NJ.NUM_ROWS && Math.abs(colLength - leftLength) <= 1){
+					valA = Math.floor( ( ( column[colIndices[colI]].val - 1) * Math.random() )+ 1);
+					valB = column[colIndices[colI]].val - valA;
+					colA = colIndices[colI];
+					colB = colIndices[colI] - 1;
+
+					return [{col: colA, val: valA}, {col: colB, val: valB}];
+				}
+				else if (colLength < NJ.NUM_ROWS && rightLength < NJ.NUM_ROWS && Math.abs(colLength - rightLength) <= 1){
+					valA = Math.floor( ( ( column[colIndices[colI]].val - 1) * Math.random() )+ 1);
+					valB = column[colIndices[colI]].val - valA;
+					colA = colIndices[colI];
+					colB = colIndices[colI] + 1;
+
+					return [{col: colA, val: valA}, {col: colB, val: valB}];
+				}
+			}
 
 		},
 
@@ -465,6 +528,10 @@ var NumboController = (function() {
 
 		getBlocksList: function() {
 			return this._numboLevel.getCurrentBlocks();
+		},
+
+		areAllBlocksTheSameValue: function() {
+			return this._numboLevel.areAllBlocksTheSameValue();
 		},
 
 		getBlock: function(col, row) {
