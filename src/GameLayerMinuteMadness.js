@@ -65,7 +65,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	// Initialize audio.
 	_initAudio: function() {
 		// start the music
-		this._backgroundTrack = res.backgroundTrack;
+		this._backgroundTrack = res.trackDauntinglyMellow;
 	},
 
 	/////////////////////////

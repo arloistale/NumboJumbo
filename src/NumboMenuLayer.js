@@ -195,7 +195,7 @@ var NumboMenuLayer = (function() {
                 return;
 
             cc.audioEngine.setMusicVolume(NJ.MUSIC_VOLUME);
-            cc.audioEngine.playMusic(res.menuTrack, true);
+            cc.audioEngine.playMusic(res.trackPadMellow, true);
         },
 
         // makes menu elements transition in
@@ -352,7 +352,7 @@ var NumboMenuLayer = (function() {
                     that.enter();
 
                     if(NJ.settings.music)
-                        cc.audioEngine.playMusic(res.menuTrack);
+                        cc.audioEngine.playMusic(res.trackPadMellow);
                 });
 
                 that.addChild(that._settingsMenuLayer, 999);

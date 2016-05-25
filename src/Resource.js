@@ -49,12 +49,11 @@ var res = {
     handImage: resRoot + "Images/ic_hand/ic_hand_2x.png",
 
     // music
-    menuTrack: resRoot + "Sounds/Track2.mp3",
-    backgroundTrack: resRoot + "Sounds/Track1.mp3",
 
-    trackA: resRoot + "Sounds/TrackA.mp3",
-    trackB: resRoot + "Sounds/TrackB.mp3",
-
+    trackPadMellow: resRoot + "Sounds/Music/PadMellowV2.mp3",
+    trackDauntinglyMellow: resRoot + "Sounds/Music/DauntinglyMellowV3.mp3",
+    trackQuicker: resRoot + "Sounds/Music/QuickerV1.mp3",
+    
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
     plipSound: resRoot + "Sounds/plipSound.mp3",

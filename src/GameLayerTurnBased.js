@@ -51,7 +51,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     // Initialize audio.
     _initAudio: function() {
         // start the music
-        this._backgroundTrack = res.trackA;
+        this._backgroundTrack = res.trackDauntinglyMellow;
     },
 
     /////////////////////////
