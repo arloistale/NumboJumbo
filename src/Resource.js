@@ -53,7 +53,7 @@ var res = {
     trackPadMellow: resRoot + "Sounds/Music/PadMellowV2.mp3",
     trackDauntinglyMellow: resRoot + "Sounds/Music/DauntinglyMellowV3.mp3",
     trackQuicker: resRoot + "Sounds/Music/QuickerV1.mp3",
-    
+
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
     plipSound: resRoot + "Sounds/plipSound.mp3",
@@ -124,7 +124,8 @@ var g_menu = [
 
     // sounds
     res.clickSound,
-    res.menuTrack,
+
+    res.trackPadMellow,
 
     // fonts
     res.mainFont.x1.fnt,
@@ -160,7 +161,9 @@ var g_game = [
     res.alertImage,
 
     // music
-    res.trackA,
+    res.trackDauntinglyMellow,
+    res.trackQuicker,
+
 
     // sounds
     res.tickSound,
