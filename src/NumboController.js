@@ -145,10 +145,7 @@ var NumboController = (function() {
 
 				clearedBlocks = selectedBlocks.slice(0);
 
-				var targetNum = Math.max.apply(null, selectedNums);
-
-				var numBonus = this.getNumBonusBlocks(selectedBlocks.length);
-				var bonusBlocks = this.getNRandomFreeBlocks(numBonus);
+				var bonusBlocks = this.getBonusBlocks(selectedBlocks.length);
 
 				clearedBlocks = clearedBlocks.concat(bonusBlocks);
                 
@@ -429,45 +426,72 @@ var NumboController = (function() {
 			return Math.max.apply(null, selectedNums);
 		},
 
-		// returns a list of N random blocks that are not currently selected
-		getNRandomFreeBlocks: function(N) {
-			var randomBlocks = NJ.shuffleArray(this.getBlocksList() );
+		// returns the number of bonus blocks to clear, given a wombocombo of a certain length
+		getBonusBlocks: function(length) {
+			cc.assert(length, "uh-oh! bad LENGTH value in numboController::getBonusBlocks()");
 
+			var numBonusBlocks = 0;
+
+			switch(length) {
+				case 4:
+					numBonusBlocks = 1;
+					break;
+				case 5:
+					numBonusBlocks = 3;
+					break;
+				case 6:
+					numBonusBlocks = 6;
+					break;
+				case 7:
+					numBonusBlocks = 10;
+					break;
+				case 8:
+					numBonusBlocks = 15;
+					break;
+				case 9:
+					numBonusBlocks = 21;
+					break;
+				case 10:
+					numBonusBlocks = 28;
+					break;
+			}
+
+			var womboComboType = 1;
+			var itorBlock;
 			var result = [];
-			for (var i=0; i < randomBlocks.length && result.length < N; ++i) {
-				var block = randomBlocks[i];
-				if (this._selectedBlocks.indexOf(block) < 0) {
-					result.push(block);
-				}
+
+			switch(womboComboType) {
+				// random
+				case 0:
+					var randomBlocks = NJ.shuffleArray(this.getBlocksList());
+
+					for (var i = 0; i < randomBlocks.length && result.length < numBonusBlocks; ++i) {
+						itorBlock = randomBlocks[i];
+						if (this._selectedBlocks.indexOf(itorBlock) < 0) {
+							result.push(itorBlock);
+						}
+					}
+					break;
+				// highest
+				case 1:
+					var sortedBlocks = this.getBlocksList().sort(function(a, b) {
+						return a.val - b.val;
+					});
+
+					var count = numBonusBlocks;
+					while(sortedBlocks.length > 0 && count > 0) {
+						itorBlock = sortedBlocks.pop();
+						if(this._selectedBlocks.indexOf(itorBlock) < 0) {
+							result.push(itorBlock);
+							count--;
+						}
+					}
+
+					cc.log(sortedBlocks);
+					break;
 			}
 
 			return result;
-		},
-
-		// returns the number of bonus blocks to clear, given a wombocombo of a certain length
-		getNumBonusBlocks: function(length) {
-			if (length) {
-				if (length <= 3)
-					return 0;
-				if (length == 4)
-					return 1;
-				if (length == 5)
-					return 3;
-				if (length == 6)
-					return 6;
-				if (length == 7)
-					return 10;
-				if (length == 8)
-					return 15;
-				if (length == 9)
-					return 21;
-				if (length >= 10)
-					return 28;
-			}
-			else {
-				cc.log("uh-oh! bad LENGTH value in numboController::getNumBonusBlocks()");
-				return null;
-			}
 		},
 
 		// checks if the current selected blocks can be activated (their equation is valid)

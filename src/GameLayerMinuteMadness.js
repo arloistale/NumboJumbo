@@ -168,7 +168,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 			return;
 
 		this.spawnDropRandomBlocks(comboLength);
-		var numBonusBlocks = this._numboController.getNumBonusBlocks(comboLength);
+		var numBonusBlocks = this._numboController.getBonusBlocks(comboLength);
 		//this.spawnBlocksAfterDelay(numBonusBlocks, 0.4);
 
 		if(NJ.settings.sounds) {

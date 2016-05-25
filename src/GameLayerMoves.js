@@ -134,7 +134,7 @@ var MovesLayer = BaseGameLayer.extend({
 			return;
 		this.spawnDropRandomBlocks(comboLength);
 
-		var numBonusBlocks = this._numboController.getNumBonusBlocks(comboLength);
+		var numBonusBlocks = this._numboController.getBonusBlocks(comboLength);
 
 		if(NJ.settings.sounds) {
 			var activationSounds = [];

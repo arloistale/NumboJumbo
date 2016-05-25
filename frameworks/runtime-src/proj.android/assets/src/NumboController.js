@@ -147,7 +147,7 @@ var NumboController = (function() {
 
 				var targetNum = Math.max.apply(null, selectedNums);
 
-				var numBonus = this.getNumBonusBlocks(selectedBlocks.length);
+				var numBonus = this.getBonusBlocks(selectedBlocks.length);
 				var bonusBlocks = this.getNRandomFreeBlocks(numBonus);
 
 				clearedBlocks = clearedBlocks.concat(bonusBlocks);
@@ -446,7 +446,7 @@ var NumboController = (function() {
 		},
 
 		// returns the number of bonus blocks to clear, given a wombocombo of a certain length
-		getNumBonusBlocks: function(length) {
+		getBonusBlocks: function(length) {
 			if (length) {
 				if (length <= 3)
 					return 0;
@@ -466,7 +466,7 @@ var NumboController = (function() {
 					return 28;
 			}
 			else {
-				cc.log("uh-oh! bad LENGTH value in numboController::getNumBonusBlocks()");
+				cc.log("uh-oh! bad LENGTH value in numboController::getBonusBlocks()");
 				return null;
 			}
 		},
