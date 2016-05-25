@@ -7,7 +7,9 @@ var NJMenuItem = (function() {
     var generateTitleStates = function(title, size, pos) {
         var scale = 1;
 
-        if(size.height > cc.visibleRect.height * 0.5)
+        var refDim = Math.min(cc.visibleRect.height, cc.visibleRect.width);
+
+        if(size.height > refDim * NJ.uiSizes.header2)
             scale = 2;
 
         // TODO: Figure out when to set scale to 2 (when it gets blurry)

@@ -3,8 +3,10 @@ var NumboMenuLayer = (function() {
 
     return cc.LayerColor.extend({
 
-        _menu: null,
+        _headerMenu: null,
         _jumboMenu: null,
+        _toolMenu: null,
+
         _shopLayer: null,
         _settingsMenuLayer: null,
 
@@ -17,18 +19,35 @@ var NumboMenuLayer = (function() {
 
             this.init(NJ.themes.backgroundColor);
 
+            this._initHeaderUI();
             this._initModesUI();
             this._initToolsUI();
+
             this._initAudio();
+
+            this.enter();
+        },
+
+        _initHeaderUI: function() {
+            this._headerMenu = new cc.Menu();
+            this._headerMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0,
+                y: cc.visibleRect.top.y
+            });
         },
 
         // init game modes buttons
         _initModesUI: function() {
             this._jumboMenu = new cc.Menu();
 
+            this._jumboMenu.setContentSize(cc.size(cc.visibleRect.width,
+                (1 - NJ.uiSizes.headerBar - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+
             this._jumboMenu.attr({
                 anchorX: 0.5,
-                anchorY: 0.5
+                anchorY: 0.5,
+                y: cc.visibleRect.top.y + this._jumboMenu.getContentSize().height
             });
 
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
@@ -125,14 +144,18 @@ var NumboMenuLayer = (function() {
 
         // initialize menu elements
         _initToolsUI: function() {
-            this._menu = new cc.Menu();
+            this._toolMenu = new cc.Menu();
+            this._toolMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.toolbar));
+            var toolSize = this._toolMenu.getContentSize();
+            this._toolMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: cc.visibleRect.bottom.y - toolSize.height / 2
+            });
 
             var that = this;
 
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-            var buttonSize = cc.size(refDim * NJ.uiSizes.playButton, refDim * NJ.uiSizes.playButton);
-
-            buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
+            var buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
 
             var helpButton = new NJMenuButton(buttonSize, this._onHelp.bind(this), this);
             helpButton.setImageRes(res.helpImage);
@@ -146,10 +169,10 @@ var NumboMenuLayer = (function() {
             var achievementsButton = new NJMenuButton(buttonSize, this._onAchievements.bind(this), this);
             achievementsButton.setImageRes(res.trophyImage);
 
-            this._menu.addChild(helpButton);
-            this._menu.addChild(achievementsButton);
-            this._menu.addChild(statsButton);
-            this._menu.addChild(settingsButton);
+            this._toolMenu.addChild(helpButton);
+            this._toolMenu.addChild(achievementsButton);
+            this._toolMenu.addChild(statsButton);
+            this._toolMenu.addChild(settingsButton);
 
             /*
              var shopButton = new NJMenuButton("Jumbos", onShop.bind(this), this);
@@ -157,15 +180,9 @@ var NumboMenuLayer = (function() {
              menu.addChild(shopButton);
              */
 
-            this._menu.alignItemsHorizontallyWithPadding(10);
+            this._toolMenu.alignItemsHorizontallyWithPadding(10);
 
-            this.addChild(this._menu, 100);
-
-            this._menu.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                y: cc.visibleRect.bottom.y + statsButton.getContentSize().height * 1.5 / 2
-            });
+            this.addChild(this._toolMenu, 100);
 
             if(!NJ.social.isLoggedIn()) {
                 NJ.social.login();
@@ -181,6 +198,39 @@ var NumboMenuLayer = (function() {
             cc.audioEngine.playMusic(res.menuTrack, true);
         },
 
+        // makes menu elements transition in
+        enter: function() {
+            var toolSize = this._toolMenu.getContentSize();
+
+            var easing = cc.easeBackOut();
+
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y)).easing(easing));
+            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
+
+            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
+        },
+
+        // transition out
+        leave: function(callback) {
+            var that = this;
+
+            var headerSize = this._headerMenu.getContentSize();
+            var contentSize = this._jumboMenu.getContentSize();
+            var toolSize = this._toolMenu.getContentSize();
+
+            var easing = cc.easeBackOut();
+
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height)).easing(easing));
+            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
+
+            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - contentSize.width, cc.visibleRect.center.y)).easing(easing));
+
+            this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
+                if(callback)
+                    callback();
+            })));
+        },
+
         ///////////////
         // UI Events //
         ///////////////
@@ -194,9 +244,11 @@ var NumboMenuLayer = (function() {
             cc.audioEngine.stopMusic();
             cc.audioEngine.stopAllEffects();
 
-            var scene = new cc.Scene();
-            scene.addChild(new MinuteMadnessLayer());
-            cc.director.runScene(scene);
+            this.leave(function() {
+                var scene = new cc.Scene();
+                scene.addChild(new MinuteMadnessLayer());
+                cc.director.runScene(scene);
+            });
         },
 
         _onChooseMoves: function() {
@@ -206,9 +258,11 @@ var NumboMenuLayer = (function() {
             cc.audioEngine.stopMusic();
             cc.audioEngine.stopAllEffects();
 
-            var scene = new cc.Scene();
-            scene.addChild(new MovesLayer());
-            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+            this.leave(function() {
+                var scene = new cc.Scene();
+                scene.addChild(new MovesLayer());
+                cc.director.runScene(scene);
+            });
         },
 
         _onChooseTurnBased: function() {
@@ -218,9 +272,11 @@ var NumboMenuLayer = (function() {
             cc.audioEngine.stopMusic();
             cc.audioEngine.stopAllEffects();
 
-            var scene = new cc.Scene();
-            scene.addChild(new TurnBasedFillUpGameLayer());
-            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+            this.leave(function() {
+                var scene = new cc.Scene();
+                scene.addChild(new TurnBasedFillUpGameLayer());
+                cc.director.runScene(scene);
+            });
         },
 
         _onChooseSurvival: function() {
@@ -230,9 +286,11 @@ var NumboMenuLayer = (function() {
             cc.audioEngine.stopMusic();
             cc.audioEngine.stopAllEffects();
 
-            var scene = new cc.Scene();
-            scene.addChild(new SurvivalGameLayer());
-            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+            this.leave(function() {
+                var scene = new cc.Scene();
+                scene.addChild(new SurvivalGameLayer());
+                cc.director.runScene(scene);
+            });
         },
 
         // tools
@@ -285,16 +343,20 @@ var NumboMenuLayer = (function() {
             var that = this;
 
             cc.eventManager.pauseTarget(this, true);
-            this._settingsMenuLayer = new SettingsMenuLayer();
-            this._settingsMenuLayer.setOnCloseCallback(function() {
-                cc.eventManager.resumeTarget(that, true);
-                that.removeChild(that._settingsMenuLayer);
+            this.leave(function() {
+                that._settingsMenuLayer = new SettingsMenuLayer();
+                that._settingsMenuLayer.setOnCloseCallback(function() {
+                    cc.eventManager.resumeTarget(that, true);
+                    that.removeChild(that._settingsMenuLayer);
 
-                if(NJ.settings.music)
-                    cc.audioEngine.playMusic(res.menuTrack);
+                    that.enter();
+
+                    if(NJ.settings.music)
+                        cc.audioEngine.playMusic(res.menuTrack);
+                });
+
+                that.addChild(that._settingsMenuLayer, 999);
             });
-
-            this.addChild(this._settingsMenuLayer, 999);
         }
     });
 }());

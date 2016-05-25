@@ -10,6 +10,9 @@ NJ.uiSizes = {
     headerBar: 0.12,
     toolbar: 0.12,
 
+    // bar buttons are calculated based on their bar content sizes
+    barButton: 0.8,
+
     // buttons
     playButton: 0.20,
     optionButton: 0.15,
