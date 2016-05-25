@@ -4,7 +4,7 @@
 
 var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
 
-    // domain of spawning
+    //// domain of spawning
     _numberList: [
         { key: 1, weight: 100 },
         { key: 2, weight: 75 },
@@ -35,9 +35,9 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
             // cause UI elements to fall in
             that._numboHeaderLayer.enter();
             that._toolbarLayer.enter();
-        }), cc.delayTime(0.5), cc.callFunc(function() {
+        }), cc.callFunc(function() {
             // fill the board with blocks initially
-            that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2));
+            that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
         })));
     },
 
