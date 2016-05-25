@@ -52,32 +52,62 @@ var SettingsMenuLayer = (function() {
     return cc.LayerColor.extend({
 
         // UI Data
-        _menu: null,
+        _headerMenu: null,
+        _contentMenu: null,
+        _toolMenu: null,
 
         // Callbacks Data
         onMenuCallback: null,
         onCloseCallback: null,
 
+        // Data
+        _isInGame: false,
+
 ////////////////////
 // Initialization //
 ////////////////////
 
-        ctor: function(bInGame) {
+        ctor: function(isInGame) {
             this._super();
+
+            this._isInGame = isInGame;
 
             this.init(NJ.themes.backgroundColor);
 
-            this.initUI(bInGame);
+            this._initHeaderUI();
+
+            //this.initContentUI();
         },
 
-        initUI: function(bInGame) {
+        _initHeaderUI: function() {
+            this._headerMenu = new cc.Menu();
+            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
+            this._headerMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0,
+                y: cc.visibleRect.top.y
+            });
+
+            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+
+            var headerLabel = this.generateLabel(this._isInGame ? "Paused" : "Settings", refDim * NJ.uiSizes.header);
+            headerLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: -this._headerMenu.getContentSize().height / 2
+            });
+
+            this._headerMenu.addChild(headerLabel);
+
+            this.addChild(this._headerMenu);
+        },
+
+        initContentUI: function() {
             var that = this;
 
             this._menu = new cc.Menu();
 
             var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-
-            var headerLabel = this.generateLabel(bInGame ? "Paused" : "Settings", refDim * NJ.uiSizes.header);
 
             // generate music toggle
             var musicLabel = this.generateLabel("Music", refDim * NJ.uiSizes.header2);
@@ -90,8 +120,6 @@ var SettingsMenuLayer = (function() {
             var soundsToggle = this.generateToggle(onSoundsControl.bind(this));
             state = (NJ.settings.sounds ? 0 : 1);
             soundsToggle.setSelectedIndex(state);
-
-            this._menu.addChild(headerLabel);
 
             this._menu.addChild(musicLabel);
             this._menu.addChild(musicToggle);
@@ -119,6 +147,24 @@ var SettingsMenuLayer = (function() {
             }
 
             this.addChild(this._menu, 100);
+        },
+
+        // makes the header transition into the visible area
+        enter: function() {
+            var size = this.getContentSize();
+
+            var easing = cc.easeBackInOut();
+
+            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - size.height)).easing(easing);
+            this.runAction(moveTo);
+        },
+
+        // transition out
+        leave: function() {
+            var easing = cc.easeBackOut();
+
+            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y)).easing(easing);
+            this.runAction(moveTo);
         },
 
 //////////////////

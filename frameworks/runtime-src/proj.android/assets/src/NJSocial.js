@@ -62,7 +62,6 @@ NJ.social = (function() {
         login: function () {
             if (cc.sys.isNative) {
                 sdkbox.PluginSdkboxPlay.signin();
-                isEnabled = true;
             }
         },
 
@@ -80,24 +79,26 @@ NJ.social = (function() {
         // submits score data to the leaderboard defined by the given game mode key
         // callback usage: function( leaderboard_name, score, is_maxScoreAllTime, is_maxScoreWeek, is_maxScoreToday )
         submitScore: function (key, score) {
-            if (cc.sys.isNative && isEnabled) {
-                cc.log("Executing command submit: " + key + ", " + score);
-                sdkbox.PluginSdkboxPlay.submitScore(leaderboardPrefix + key, score);
+            if (cc.sys.isNative) {
+                var isLoggedIn = this.isLoggedIn();
+                if(isLoggedIn) {
+                    cc.log("Executing command submit: " + key + ", " + score);
+                    sdkbox.PluginSdkboxPlay.submitScore(leaderboardPrefix + key, score);
+                } else {
+                    cc.log("Could not submit due to unauthenticated player");
+                }
             }
         },
 
         showLeaderboard: function () {
-            if (cc.sys.isNative && isEnabled) {
+            if (cc.sys.isNative) {
                 var isLoggedIn = this.isLoggedIn();
-                cc.log(isLoggedIn);
-                /*
-                 if(!isLoggedIn) {
-                 cc.log("ffs");
-                 this.login();
-                 return;
-                 }*/
 
-                sdkbox.PluginSdkboxPlay.showLeaderboard("ldb-mm");
+                 if(isLoggedIn) {
+                     sdkbox.PluginSdkboxPlay.showLeaderboard("ldb-mm");
+                 } else {
+                    cc.log("Could not show leaderboard due to unauthenticated player");
+                 }
             }
         },
 
@@ -108,16 +109,27 @@ NJ.social = (function() {
         // callback usage:  function( achievement_name, newlyUnlocked )
         // TODO: Do not call this function directly, may cause a crash
         unlockAchievement: function (key) {
-            if (cc.sys.isNative && isEnabled) {
+            if (cc.sys.isNative) {
+                var isLoggedIn = this.isLoggedIn();
 
-                cc.log("Executing command unlock: " + key);
-                sdkbox.PluginSdkboxPlay.unlockAchievement(key);
+                if(isLoggedIn) {
+                    cc.log("Executing command unlock: " + key);
+                    sdkbox.PluginSdkboxPlay.unlockAchievement(key);
+                } else {
+                    cc.log("Could not unlock achievement due to unauthenticated player");
+                }
             }
         },
 
         showAchievements: function () {
-            if (cc.sys.isNative && isEnabled) {
-                sdkbox.PluginSdkboxPlay.showAchievements();
+            if (cc.sys.isNative) {
+                var isLoggedIn = this.isLoggedIn();
+
+                if(isLoggedIn) {
+                    sdkbox.PluginSdkboxPlay.showAchievements();
+                } else {
+                    cc.log("Could not show achievements due to unauthenticated player");
+                }
             }
         }
     }

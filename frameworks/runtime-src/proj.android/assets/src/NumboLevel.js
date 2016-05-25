@@ -228,6 +228,16 @@ var NumboLevel = (function() {
 			return NJ.NUM_COLS * NJ.NUM_ROWS;
 		},
 
+		getBlocksInColumn: function(col){
+			cc.assert(0 <= col && col < NJ.NUM_COLS, "bad column value fucker!");
+
+			var column = [];
+			for (var row = 0; row < this._blocks[col].length; ++row){
+				column.push(this._blocks[col][row]);
+			}
+			return column;
+		},
+
 		isClear: function() {
 			return this._numBlocks == 0;
 		},
@@ -318,6 +328,25 @@ var NumboLevel = (function() {
 				"col out of bounds! (col: " + col + ")");
 
 			return this._blocks[col].length;
+		},
+
+		// returns true iff all blocks w/in distance 2 of the frontier have the same value
+		areAllBlocksTheSameValue: function(){
+			if (this._numBlocks >= 2){
+				var aBlockVal = null;
+				for (var col = 0; col < NJ.NUM_COLS; ++col){
+					for (var row = this._blocks[col].length - 1; row >= 0; --row){
+						if (aBlockVal == null){
+							aBlockVal = this._blocks[col][row].val;
+						}
+						else if (this._blocks[col][row].val != aBlockVal){
+							return false;
+						}
+					}
+				}
+			}
+
+			return true;
 		},
 
 		//////////////////////

@@ -15,8 +15,16 @@ var res = {
 
     mainFont: {
         name: "NunitoLight",
-        fnt: resRoot + "Fonts/mainFont.fnt",
-        png: resRoot + "Fonts/mainFont.png"
+
+        x1: {
+            fnt: resRoot + "Fonts/mainFont.fnt",
+            png: resRoot + "Fonts/mainFont.png"
+        },
+
+        x2: {
+            fnt: resRoot + "Fonts/mainFont2x.fnt",
+            png: resRoot + "Fonts/mainFont2x.png"
+        }
     },
 
     // Loader
@@ -49,9 +57,6 @@ var res = {
 
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
-    levelupSound: resRoot + "Sounds/levelup.wav",
-    overSound: resRoot + "Sounds/over.mp3",
-    coinSound: resRoot + "Sounds/coin.wav",
     plipSound: resRoot + "Sounds/plipSound.mp3",
 
     plopSound: resRoot + "Sounds/Plop.wav",
@@ -97,8 +102,12 @@ var res = {
 };
 
 // returns proper font name based on platform
-var b_getFontName = function(fontRes) {
-    return fontRes.fnt;
+var b_getFontName = function(fontRes, scale) {
+    if(scale > 1) {
+        return fontRes.x2.fnt;
+    }
+
+    return fontRes.x1.fnt;
 };
 
 // resources for the main menu of the game
@@ -119,8 +128,10 @@ var g_menu = [
     res.menuTrack,
 
     // fonts
-    res.mainFont.fnt,
-    res.mainFont.png
+    res.mainFont.x1.fnt,
+    res.mainFont.x1.png,
+    res.mainFont.x2.fnt,
+    res.mainFont.x2.png
 ];
 
 var plops = [res.plopSound, res.plopSound4, res.plopSound5,
@@ -197,8 +208,10 @@ var g_game = [
     res.coinSound,
 
     // fonts
-    res.mainFont.fnt,
-    res.mainFont.png
+    res.mainFont.x1.fnt,
+    res.mainFont.x1.png,
+    res.mainFont.x2.fnt,
+    res.mainFont.x2.png
 ];
 
 var g_all = (function() {

@@ -44,7 +44,11 @@ var TutorialDriverLayer = BaseGameLayer.extend({
      */
 	_startHandOverPath: function(path) {
 		if(!this._handIndicator) {
+			var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+			var handSize = refDim * 0.15;
 			this._handIndicator = new cc.Sprite(res.handImage);
+			var spriteSize = this._handIndicator.getContentSize();
+			this._handIndicator.setScale(handSize / spriteSize.width, handSize / spriteSize.height);
 			this._handIndicator.attr({
 				anchorX: 0.5,
 				anchorY: 1
@@ -119,16 +123,18 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 							that._convertLevelCoordsToPoint(centerCol + 2, 0)
 						]);
 
-                        that._handIndicator.runAction(cc.sequence(cc.callFunc(function() {
-                            var block = that._numboController.getBlock(centerCol, 0);
-                            if(block) block.highlight();
-                        }), cc.delayTime(0.5), cc.callFunc(function() {
-                            var block = that._numboController.getBlock(centerCol + 1, 0);
-                            if(block) block.highlight();
-                        }), cc.delayTime(0.2), cc.callFunc(function() {
-                            var block = that._numboController.getBlock(centerCol + 2, 0);
-                            if(block) block.highlight();
-                        }), cc.delayTime(1.5)).repeatForever());
+						if(that._tutorialLayer.getCurrSlide() == slides.teach1) {
+							that._handIndicator.runAction(cc.sequence(cc.callFunc(function () {
+								var block = that._numboController.getBlock(centerCol, 0);
+								if (block) block.highlight();
+							}), cc.delayTime(0.5), cc.callFunc(function () {
+								var block = that._numboController.getBlock(centerCol + 1, 0);
+								if (block) block.highlight();
+							}), cc.delayTime(0.2), cc.callFunc(function () {
+								var block = that._numboController.getBlock(centerCol + 2, 0);
+								if (block) block.highlight();
+							}), cc.delayTime(1.5)).repeatForever());
+						}
 					})
 				));
 
@@ -176,16 +182,18 @@ var TutorialDriverLayer = BaseGameLayer.extend({
                             that._convertLevelCoordsToPoint(centerCol, 1)
                         ]);
 
-                        that._handIndicator.runAction(cc.sequence(cc.callFunc(function() {
-                            var block = that._numboController.getBlock(centerCol - 2, 0);
-                            if(block) block.highlight();
-                        }), cc.delayTime(0.5), cc.callFunc(function() {
-                            var block = that._numboController.getBlock(centerCol - 1, 0);
-                            if(block) block.highlight();
-                        }), cc.delayTime(0.2), cc.callFunc(function() {
-                            var block = that._numboController.getBlock(centerCol, 1);
-                            if(block) block.highlight();
-                        }), cc.delayTime(1.5)).repeatForever());
+						if(that._tutorialLayer.getCurrSlide() == slides.teach2) {
+							that._handIndicator.runAction(cc.sequence(cc.callFunc(function () {
+								var block = that._numboController.getBlock(centerCol - 2, 0);
+								if (block) block.highlight();
+							}), cc.delayTime(0.5), cc.callFunc(function () {
+								var block = that._numboController.getBlock(centerCol - 1, 0);
+								if (block) block.highlight();
+							}), cc.delayTime(0.2), cc.callFunc(function () {
+								var block = that._numboController.getBlock(centerCol, 1);
+								if (block) block.highlight();
+							}), cc.delayTime(1.5)).repeatForever());
+						}
                     })
 				));
 
