@@ -13,7 +13,8 @@ NJ.settings = {
     hasLoaded: false,
 
     music: true,
-    sounds: true
+    sounds: true,
+    vibration: true
 };
 
 // load settings from local store

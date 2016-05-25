@@ -567,8 +567,6 @@ var BaseGameLayer = cc.Layer.extend({
 						selectedBlockSum += block.val;
 					}
 
-					var currColor = NJ.getColor(selectedBlockSum - 1);
-
 					// if selected block was returned then we have a new selected block deal with
 					if(selectedBlock) {
 						selectedBlock.highlight();
@@ -651,13 +649,6 @@ var BaseGameLayer = cc.Layer.extend({
 
 					if(isCombo) {
 						highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
-
-							/*
-							// grab each block adjacent to this combo:
-							for (i = 0; i < selectedBlocks.length; ++i) {
-								highlightBlocks = highlightBlocks.concat(this._numboController.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1));
-							}
-							*/
 
 						this._effectsLayer.launchComboOverlay();
 						selectedBlock.highlight();
@@ -786,30 +777,58 @@ var BaseGameLayer = cc.Layer.extend({
 		})));
 	},
 
-	/*
-	// bonus for clearing screen
-	checkClearBonus: function() {
-		if (this._numboController.getNumBlocks() < 3) {
-			if (NJ.settings.sounds)
-				cc.audioEngine.playEffect(res.coinSound);
-
-			this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
-			this.unschedule(this.scheduleSpawn);
-			this.schedule(this.scheduleSpawn, 6);
-		}
-	},*/
-
+	// spawns N blocks after a certain amount of time, then executes the callback (if given).
+	// ensures that there will also be at least one move present on the board.
+	// do accomplish this, we spawn (n-2) blocks. at this point, there are 3 cases:
+	//	 	case 1: all blocks within t spaces of the frontier have the same value X. here, we must
+	//			generate 2 more blocks that add up to X, and place them next to each-other
+	//		case 2: not all blocks have the same value, but there still isn't an equation
+	//			(eg, board is all 3's and 5's). here the strategy is simple. grab a random
+	//			block A, and a random one of its neigbhoring blocks B.
+	//			if the sum of their values is legal, use that.
+	//			if the difference of their values is legal, use that.
+	//			if neither, try a different block pair.
+	// 			(note that b/c not all blocks have the same value, this will work eventually)
+	//		case 3: there is a known hint, so we just spawn more random blocks
+	//			(this is the most common & easiest case by far!)
 	spawnBlocksAfterDelay: function(count, delay, callback){
 		var that = this;
-
 		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
-			that.spawnDropRandomBlocks(count);
+			that.spawnDropRandomBlocks(count-2);
+
+			// case 1
+			if (that._numboController.areAllBlocksTheSameValue()){
+				colsAndVals = that._numboController.findLocationAndValueForTwoNewBlocks();
+				cc.log("all blocks same value case; returned: ", colsAndVals);
+
+				that.spawnDropBlock(colsAndVals[0].col,colsAndVals[0].val);
+				that.spawnDropBlock(colsAndVals[1].col,colsAndVals[1].val);
+
+			}
+			else {
+				that.spawnDropRandomBlock();
+
+				// case 2
+				if (that._numboController.findHint().length == 0) {
+					var colAndVal = that._numboController.findLocationAndValueForNewBlock();
+					cc.log("one special block case; returned: ", colAndVal);
+					that.spawnDropBlock (colAndVal.col, colAndVal.val);
+				}
+
+				// case 3
+				else {
+					that.spawnDropRandomBlock();
+				}
+			}
+
 			that.relocateBlocks();
 			if (callback) {
 				callback();
 			}
 		})));
 	},
+
+
 
 	relocateBlocks: function (){
 		// Gaps may be created; shift all affected blocks down.

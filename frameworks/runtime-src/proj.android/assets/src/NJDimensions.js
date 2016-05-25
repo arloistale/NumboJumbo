@@ -7,8 +7,11 @@ var NJ = NJ || {};
 // button sizes as a percentage of reference dimension (the minimum of the visible width and height)
 NJ.uiSizes = {
     // elements
-    headerBar: 0.09,
-    toolbar: 0.09,
+    headerBar: 0.12,
+    toolbar: 0.12,
+
+    // bar buttons are calculated based on their bar content sizes
+    barButton: 0.8,
 
     // buttons
     playButton: 0.20,

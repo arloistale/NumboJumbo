@@ -18,7 +18,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     ],
 
     // initial # of blocks dropped every turn (increases at each level)
-    _blocksToDrop: 5,
+    _blocksToDrop: 4,
 
     ////////////////////
     // Initialization //

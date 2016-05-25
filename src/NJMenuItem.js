@@ -5,7 +5,16 @@
 var NJMenuItem = (function() {
 
     var generateTitleStates = function(title, size, pos) {
-        var normalLabel = new cc.LabelBMFont(title, b_getFontName(res.mainFont));
+        var scale = 1;
+
+        var refDim = Math.min(cc.visibleRect.height, cc.visibleRect.width);
+
+        if(size.height > refDim * NJ.uiSizes.header2)
+            scale = 2;
+
+        // TODO: Figure out when to set scale to 2 (when it gets blurry)
+
+        var normalLabel = new cc.LabelBMFont(title, b_getFontName(res.mainFont, scale));
         var imageSize = normalLabel.getContentSize();
         normalLabel.setScale(size.height / imageSize.height, size.height / imageSize.height);
         normalLabel.attr({
@@ -15,7 +24,7 @@ var NJMenuItem = (function() {
             y: pos.y
         });
 
-        var selectedLabel = new cc.LabelBMFont(title, b_getFontName(res.mainFont));
+        var selectedLabel = new cc.LabelBMFont(title, b_getFontName(res.mainFont, scale));
         selectedLabel.setScale(size.height / imageSize.height, size.height / imageSize.height);
         selectedLabel.attr({
             anchorX: 0.5,
@@ -24,7 +33,7 @@ var NJMenuItem = (function() {
             y: pos.y
         });
 
-        var disabledLabel = new cc.LabelBMFont(title, b_getFontName(res.mainFont));
+        var disabledLabel = new cc.LabelBMFont(title, b_getFontName(res.mainFont, scale));
         disabledLabel.setScale(size.height / imageSize.height, size.height / imageSize.height);
         disabledLabel.attr({
             anchorX: 0.5,

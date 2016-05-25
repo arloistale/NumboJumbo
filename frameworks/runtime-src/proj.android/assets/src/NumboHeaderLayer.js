@@ -42,7 +42,7 @@ var NumboHeaderLayer = (function() {
 
             // Score Label
             var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.66);
-            var elementSize = cc.size(contentSize.width * 0.2, contentSize.height * 0.5);
+            var elementSize = cc.size(contentSize.width * 0.2, contentSize.height * 0.4);
             var spriteSize;
 
             this._scoreLabel = new cc.LabelBMFont(scorePrefix, b_getFontName(res.mainFont));
@@ -73,7 +73,7 @@ var NumboHeaderLayer = (function() {
 
             // Score Labels
             startPos = cc.p(contentSize.width / 2, contentSize.height * 0.25);
-            elementSize = cc.size(contentSize.width * 0.5, contentSize.height * 0.3);
+            elementSize = cc.size(contentSize.width * 0.5, contentSize.height * 0.35);
 
             // Equation Label
             this._equationLabel = new cc.LabelBMFont("Default Text", b_getFontName(res.mainFont));
@@ -130,9 +130,9 @@ var NumboHeaderLayer = (function() {
         enter: function() {
             var size = this.getContentSize();
 
-            var easing = cc.easeBackInOut();
+            var easing = cc.easeBackOut();
 
-            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - size.height)).easing(easing);
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y - size.height)).easing(easing);
             this.runAction(moveTo);
         },
 
@@ -140,7 +140,7 @@ var NumboHeaderLayer = (function() {
         leave: function() {
             var easing = cc.easeBackOut();
 
-            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y)).easing(easing);
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.topLeft.y)).easing(easing);
             this.runAction(moveTo);
         },
 
