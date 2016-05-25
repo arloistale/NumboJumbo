@@ -97,7 +97,7 @@ var NumboHeaderLayer = (function() {
 
             var contentSize = this.getContentSize();
 
-            var buttonSize = cc.size(contentSize.height * 0.8, contentSize.height * 0.8);
+            var buttonSize = cc.size(contentSize.height * 0.5, contentSize.height * 0.5);
 
             // initialize pause button
             var menu = new cc.Menu();

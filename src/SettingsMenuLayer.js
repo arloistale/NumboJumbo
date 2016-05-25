@@ -15,8 +15,12 @@ var SettingsMenuLayer = (function() {
         // save any modified settings
         NJ.saveSettings();
 
-        if(this.onMenuCallback)
-            this.onMenuCallback();
+        var that = this;
+
+        this.leave(function() {
+            if(that.onMenuCallback)
+                that.onMenuCallback();
+        });
     };
 
     var onBack = function() {
@@ -26,7 +30,12 @@ var SettingsMenuLayer = (function() {
         // save any modified settings
         NJ.saveSettings();
 
-        this.leave();
+        var that = this;
+
+        this.leave(function() {
+            if(that.onCloseCallback)
+                that.onCloseCallback();
+        });
     };
 
     var onMusicControl = function() {
@@ -211,9 +220,7 @@ var SettingsMenuLayer = (function() {
         },
 
         // transition out
-        leave: function() {
-            var that = this;
-
+        leave: function(callback) {
             var headerSize = this._headerMenu.getContentSize();
             var contentSize = this._contentMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
@@ -226,8 +233,8 @@ var SettingsMenuLayer = (function() {
             this._contentMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - contentSize.width, cc.visibleRect.center.y)).easing(easing));
 
             this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
-                if(that.onCloseCallback)
-                    that.onCloseCallback();
+                if(callback)
+                    callback();
             })));
         },
 

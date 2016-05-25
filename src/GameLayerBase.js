@@ -546,7 +546,7 @@ var BaseGameLayer = cc.Layer.extend({
 		cc.audioEngine.stopMusic();
 		var scene = new cc.Scene();
 		scene.addChild(new NumboMenuLayer());
-		cc.director.runScene(new cc.TransitionFade(0.5, scene));
+		cc.director.runScene(scene);
 	},
 
 //////////////////
