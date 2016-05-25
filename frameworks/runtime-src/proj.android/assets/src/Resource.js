@@ -19,6 +19,9 @@ var res = {
         png: resRoot + "Fonts/mainFont.png"
     },
 
+    // Loader
+    logoImage: resRoot + "Images/logo.png",
+
 	// UI
     buttonImage: resRoot + "Images/Button.png",
     pauseImage: resRoot + "Images/ic_pause/ic_pause_2x.png",
@@ -30,12 +33,12 @@ var res = {
     settingsImage: resRoot + "Images/ic_settings/ic_settings_2x.png",
     retryImage: resRoot + "Images/ic_retry/ic_retry_2x.png",
     statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
+    trophyImage: resRoot + "Images/ic_trophy/ic_trophy_2x.png",
 
     // ingame
     blockImage: resRoot + "Images/blockImage.png",
     alertImage: resRoot + "Images/alertOverlay.png",
-    handImage: resRoot + "Images/ic_hand_2x.png",
-    levelImage: resRoot + "Images/levelImage.png",
+    handImage: resRoot + "Images/ic_hand/ic_hand_2x.png",
 
     // music
     menuTrack: resRoot + "Sounds/Track2.mp3",
@@ -46,7 +49,11 @@ var res = {
 
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
+    levelupSound: resRoot + "Sounds/levelup.wav",
+    overSound: resRoot + "Sounds/over.mp3",
+    coinSound: resRoot + "Sounds/coin.wav",
     plipSound: resRoot + "Sounds/plipSound.mp3",
+
     plopSound: resRoot + "Sounds/Plop.wav",
     plopSound4: resRoot + "Sounds/Plop4.wav",
     plopSound5: resRoot + "Sounds/Plop5.wav",
@@ -72,6 +79,17 @@ var res = {
     progressSound9: resRoot + "Sounds/progress9.wav",
     progressSound10: resRoot + "Sounds/progress10.wav",
 
+    bloopSound1: resRoot + "Sounds/boop1.wav",
+    bloopSound2: resRoot + "Sounds/boop2.wav",
+    bloopSound3: resRoot + "Sounds/boop3.wav",
+    bloopSound4: resRoot + "Sounds/boop4.wav",
+    bloopSound5: resRoot + "Sounds/boop5.wav",
+    bloopSound6: resRoot + "Sounds/boop6.wav",
+    bloopSound7: resRoot + "Sounds/boop7.wav",
+    bloopSound8: resRoot + "Sounds/boop8.wav",
+    bloopSound9: resRoot + "Sounds/boop9.wav",
+    bloopSound10: resRoot + "Sounds/boop10.wav",
+
     levelupSound: resRoot + "Sounds/levelup.wav",
     overSound: resRoot + "Sounds/over.mp3",
 
@@ -94,6 +112,7 @@ var g_menu = [
     res.buttonImage,
     res.statsImage,
     res.blockImage,
+    res.trophyImage,
 
     // sounds
     res.clickSound,
@@ -112,7 +131,9 @@ var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, re
     res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
     res.progressSound9, res.progressSound10];
 
-var cheers = [res.cheerSound3];
+var bloops = [res.bloopSound1, res.bloopSound2, res.bloopSound3, res.bloopSound4, res.bloopSound5,
+    res.bloopSound6, res.bloopSound7, res.bloopSound8, res.bloopSound9, res.bloopSound10];
+
 
 // resources for ingame
 var g_game = [
@@ -122,11 +143,11 @@ var g_game = [
     res.homeImage,
     res.pauseImage,
     res.retryImage,
+    res.handImage,
 
     // Scene
     res.blockImage,
     res.alertImage,
-    res.levelImage,
 
     // music
     res.trackA,
@@ -159,6 +180,18 @@ var g_game = [
     res.progressSound9,
     res.progressSound10,
 
+    res.bloopSound1,
+    res.bloopSound2,
+    res.bloopSound3,
+    res.bloopSound4,
+    res.bloopSound5,
+    res.bloopSound6,
+    res.bloopSound7,
+    res.bloopSound8,
+    res.bloopSound9,
+    res.bloopSound10,
+
+    
     res.overSound,
     res.levelupSound,
     res.coinSound,
@@ -167,3 +200,15 @@ var g_game = [
     res.mainFont.fnt,
     res.mainFont.png
 ];
+
+var g_all = (function() {
+    var a = g_game.concat(g_menu);
+    for(var i = 0; i < a.length; ++i) {
+        for(var j = i + 1; j < a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+}());

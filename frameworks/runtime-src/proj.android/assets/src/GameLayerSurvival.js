@@ -56,6 +56,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         var that = this;
 
         this._numboController.initDistribution(this._numberList, this._thresholdNumbers);
+        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
 
         this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
             // cause UI elements to fall in
@@ -79,6 +80,12 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
         var spawnTime = 1.5 * LFactor * BFactor;
         return spawnTime;
+    },
+
+    _initUI: function() {
+        this._super();
+
+        this._numboHeaderLayer.setConditionPrefix("Level: ");
     },
 
     // Initialize audio.
@@ -108,11 +115,29 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
         var highlevelAccepted = NJ.stats.offerHighlevel(key, NJ.gameState.getLevel());
 
-        if(highscoreAccepted)
-            NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+        if(highscoreAccepted) {
+            var highscore = NJ.stats.getHighscore(key);
+            NJ.social.submitScore(key, highscore);
 
-        if(highlevelAccepted)
-            NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
+            if(highscore >= 500) {
+                NJ.social.unlockAchievement(NJ.social.achievementKeys.inf1);
+
+                if(highscore >= 1000) {
+                    NJ.social.unlockAchievement(NJ.social.achievementKeys.inf2);
+
+                    if(highscore >= 1500) {
+                        NJ.social.unlockAchievement(NJ.social.achievementKeys.inf3);
+
+                        if(highscore >= 2000) {
+                            NJ.social.unlockAchievement(NJ.social.achievementKeys.inf4);
+                        }
+                    }
+                }
+            }
+        }
+
+        //if(highlevelAccepted)
+          //  NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
 
         NJ.stats.save();
 
@@ -168,35 +193,11 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         this.schedule(this.spawnDropRandomBlock, 0.1, amount - 1);
     },
 
-    // bonus for clearing screen
-    checkClearBonus: function() {
-        if (this._numboController.getNumBlocks() < 3) {
-            if (NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.cheeringSound);
-            this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
-            this.unschedule(this.scheduleSpawn);
-            this.schedule(this.scheduleSpawn, 6);
-
-            // give the player 5 * 9 points and launch 5 random '+9' snippets
-            for (i = 0; i < 5; ++i) {
-                NJ.gameState.addScore(9);
-                this._feedbackLayer.launchSnippet({
-                    title: "+" + 9,
-                    x: cc.visibleRect.center.x,
-                    y: cc.visibleRect.center.y,
-                    targetX: this._levelBounds.x + Math.random() * this._levelBounds.width,
-                    targetY: this._levelBounds.y + Math.random() * this._levelBounds.height
-                });
-            }
-        }
-    },
-
     // Curtain
-
     closeCurtain: function() {
         this.levelTransition = true;
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.applauseSound);
+        //if(NJ.settings.sounds)
+            //cc.audioEngine.playEffect(res.applauseSound);
         this.unschedule(this.closeCurtain);
 
         this._curtainLayer.initLabels();
@@ -227,7 +228,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         this.removeChild(this._curtainLayer);
         this.unschedule(this.openCurtain);
         this.schedule(this.scheduleSpawn, this._getSpawnTime());
-        this.checkClearBonus();
+        //this.checkClearBonus();
     },
 
     ///////////////////
@@ -279,19 +280,171 @@ var SurvivalGameLayer = BaseGameLayer.extend({
             this.unschedule(this.scheduleSpawn);
         } else {
             progress = NJ.gameState.getLevelupProgress();
-            // choose and play a sound depending on how many blocks until levelup
-            var soundProgressIndex = Math.floor((progresses.length - 1) * progress);
-            activationSound = progresses[soundProgressIndex];
+            //var soundProgressIndex = Math.floor((bloops.length-1) * progress);
+            //activationSound = bloops[soundProgressIndex];
         }
 
-        if (NJ.settings.sounds)
-            cc.audioEngine.playEffect(activationSound);
+        if(NJ.settings.sounds) {
+            var activationSounds = [];
+            for (var i = 0; i < comboLength; i++) {
+                activationSounds.push(bloops[i]);
+            }
+
+            this.schedule(function () {
+                cc.audioEngine.playEffect(activationSounds[0]);
+            }, .05, false);
+
+            var timeBetween = 0;
+            switch (activationSounds.length) {
+                case 3:
+                    timeBetween = .12;
+                    break;
+                case 4:
+                    timeBetween = .1;
+                    break;
+                case 5:
+                    timeBetween = .07;
+                    break;
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                    timeBetween = .06;
+                    break;
+            }
+            /*
+             for (var i = 1; i < activationSounds.length; i++) {
+             this.schedule(function () {
+             cc.audioEngine.playEffect(activationSounds[i]);
+             }, .05 + (i * timeBetween), false);
+             }
+             */
+            if (activationSounds.length == 3) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .29, false);
+            }
+            else if (activationSounds.length == 4) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .15, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .25, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .35, false);
+            }
+            else if (activationSounds.length == 5) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .12, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .19, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .26, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .33, false);
+            }
+            else if (activationSounds.length == 6) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .11, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .23, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .29, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .35, false);
+            }
+            else if (activationSounds.length == 7) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .11, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .23, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .29, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .35, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[6]);
+                }, .41, false);
+            }
+            else if (activationSounds.length == 8) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .11, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .23, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .29, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .35, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[6]);
+                }, .41, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[7]);
+                }, .47, false);
+            }
+            else {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .11, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .23, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .29, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .35, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[6]);
+                }, .41, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[7]);
+                }, .47, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[8]);
+                }, .47, false);
+            }
+        }
 
         // check for a near-empty screen, do 'nice clear!', etc
-        this.checkClearBonus();
+        //this.checkClearBonus();
 
-        this._numboHeaderLayer.updateValues();
-        this._numboHeaderLayer.setProgress(progress);
+        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
     },
 
     onExit: function() {

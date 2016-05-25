@@ -56,6 +56,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         var that = this;
 
         this._numboController.initDistribution(this._numberList, this._thresholdNumbers);
+        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
 
         this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
             // cause UI elements to fall in
@@ -79,6 +80,12 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
         var spawnTime = 1.5 * LFactor * BFactor;
         return spawnTime;
+    },
+
+    _initUI: function() {
+        this._super();
+
+        this._numboHeaderLayer.setConditionPrefix("Level: ");
     },
 
     // Initialize audio.
@@ -108,11 +115,29 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
         var highlevelAccepted = NJ.stats.offerHighlevel(key, NJ.gameState.getLevel());
 
-        if(highscoreAccepted)
-            NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+        if(highscoreAccepted) {
+            var highscore = NJ.stats.getHighscore(key);
+            NJ.social.submitScore(key, highscore);
 
-        if(highlevelAccepted)
-            NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
+            if(highscore >= 500) {
+                NJ.social.unlockAchievement(NJ.social.achievementKeys.inf1);
+
+                if(highscore >= 1000) {
+                    NJ.social.unlockAchievement(NJ.social.achievementKeys.inf2);
+
+                    if(highscore >= 1500) {
+                        NJ.social.unlockAchievement(NJ.social.achievementKeys.inf3);
+
+                        if(highscore >= 2000) {
+                            NJ.social.unlockAchievement(NJ.social.achievementKeys.inf4);
+                        }
+                    }
+                }
+            }
+        }
+
+        //if(highlevelAccepted)
+          //  NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
 
         NJ.stats.save();
 
@@ -168,29 +193,6 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         this.schedule(this.spawnDropRandomBlock, 0.1, amount - 1);
     },
 
-    // bonus for clearing screen
-    checkClearBonus: function() {
-        if (this._numboController.getNumBlocks() < 3) {
-            if (NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.coinSound);
-            this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS * .4));
-            this.unschedule(this.scheduleSpawn);
-            this.schedule(this.scheduleSpawn, 6);
-
-            // give the player 5 * 9 points and launch 5 random '+9' snippets
-            /*for (i = 0; i < 5; ++i) {
-                NJ.gameState.addScore(9);
-                this._feedbackLayer.launchSnippet({
-                    title: "+" + 9,
-                    x: cc.visibleRect.center.x,
-                    y: cc.visibleRect.center.y,
-                    targetX: this._levelBounds.x + Math.random() * this._levelBounds.width,
-                    targetY: this._levelBounds.y + Math.random() * this._levelBounds.height
-                });
-            }*/
-        }
-    },
-
     // Curtain
     closeCurtain: function() {
         this.levelTransition = true;
@@ -226,7 +228,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         this.removeChild(this._curtainLayer);
         this.unschedule(this.openCurtain);
         this.schedule(this.scheduleSpawn, this._getSpawnTime());
-        this.checkClearBonus();
+        //this.checkClearBonus();
     },
 
     ///////////////////
@@ -440,10 +442,9 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         }
 
         // check for a near-empty screen, do 'nice clear!', etc
-        this.checkClearBonus();
+        //this.checkClearBonus();
 
-        this._numboHeaderLayer.updateValues();
-        this._numboHeaderLayer.setProgress(progress);
+        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
     },
 
     onExit: function() {

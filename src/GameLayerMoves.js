@@ -26,8 +26,6 @@ var MovesLayer = BaseGameLayer.extend({
 
 	ctor: function() {
 		this._super();
-
-		this._numboHeaderLayer.hideLevelLabel(true);
 	},
 
 	_reset: function() {
@@ -36,6 +34,7 @@ var MovesLayer = BaseGameLayer.extend({
 		var that = this;
 
 		this._numboController.initDistribution(this._numberList);
+		this._numboHeaderLayer.setConditionValue(this._movesLimit);
 
 		this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
 			// cause UI elements to fall in
@@ -45,6 +44,12 @@ var MovesLayer = BaseGameLayer.extend({
 			// fill the board with blocks initially
 			that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
 		})));
+	},
+
+	_initUI: function() {
+		this._super();
+
+		this._numboHeaderLayer.setConditionPrefix("Moves: ");
 	},
 
 	// Initialize audio.
@@ -68,7 +73,24 @@ var MovesLayer = BaseGameLayer.extend({
 		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
 
 		if(highscoreAccepted) {
-			NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+			var highscore = NJ.stats.getHighscore(key);
+			NJ.social.submitScore(key, highscore);
+
+			if(highscore >= 64) {
+				NJ.social.unlockAchievement(NJ.social.achievementKeys.mov1);
+
+				if(highscore >= 128) {
+					NJ.social.unlockAchievement(NJ.social.achievementKeys.mov2);
+
+					if(highscore >= 256) {
+						NJ.social.unlockAchievement(NJ.social.achievementKeys.mov3);
+
+						if(highscore >= 512) {
+							NJ.social.unlockAchievement(NJ.social.achievementKeys.mov4);
+						}
+					}
+				}
+			}
 		}
 
 		NJ.stats.save();
@@ -112,7 +134,7 @@ var MovesLayer = BaseGameLayer.extend({
 			return;
 		this.spawnDropRandomBlocks(comboLength);
 
-		var numBonusBlocks = this._numboController.getNumBonusBlocks(comboLength);
+		var numBonusBlocks = this._numboController.getBonusBlocks(comboLength);
 
 		if(NJ.settings.sounds) {
 			var activationSounds = [];
@@ -269,15 +291,12 @@ var MovesLayer = BaseGameLayer.extend({
 					cc.audioEngine.playEffect(activationSounds[8]);
 				}, .47, false);
 			}
-		this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);
 		}
 
-		if(this.checkGameOver())
-			return;
+		//this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);
 
-		this._numboHeaderLayer.updateValues();
+		this._numboHeaderLayer.setConditionValue(this._movesLimit - NJ.gameState.getMovesMade());
 
-		var movesRatio = NJ.gameState.getMovesMade() / this._movesLimit;
-		this._numboHeaderLayer.setProgress(1 - movesRatio);
+		this.checkGameOver();
 	}
 });

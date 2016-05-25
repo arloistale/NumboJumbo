@@ -93,11 +93,16 @@ NJ.themes = (function() {
         }
     ];
 
-    var main = data[0];
+    var _lightTheme = data[0];
+    var _darkTheme = data[1];
 
+    var main = _lightTheme;
     var _themeIndex = 0;
 
     return {
+        lightTheme: _lightTheme,
+        darkTheme: _darkTheme,
+
         // here we expose properties of the current main theme
         backgroundColor: main.backgroundColor,
         levelColor: main.levelColor,
@@ -145,30 +150,6 @@ NJ.getColor = function (index) {
 
     return null;
 };
-
-
-NJ.selectionColors = (function() {
-    var data = [
-        // color palette from: http://www.color-hex.com/color-palette/8075
-        cc.color(186, 39, 39),  // red
-        cc.color(236, 157, 34), // orange
-        cc.color(200, 212, 44), // yellow
-        cc.color(65, 188, 49),  // green
-        cc.color(44, 107, 173)  // blue
-    ];
-
-    return {
-        // returns the next color in this.selectionColors[]
-        // used for highlighting blocks in rainbow (or whatever) order
-        getNextColor: function(index) {
-            if (typeof index === 'undefined')
-                index = 0;
-
-            index %= data.length;
-            return data[index];
-        }
-    };
-}());
 
 // returns the hex string representing the color with modified brightness
 NJ.blendColors = function(color1, color2) {

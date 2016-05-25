@@ -30,6 +30,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         var that = this;
 
         this._numboController.initDistribution(this._numberList);
+        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
 
         this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
             // cause UI elements to fall in
@@ -39,6 +40,12 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
             // fill the board with blocks initially
             that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
         })));
+    },
+
+    _initUI: function() {
+        this._super();
+
+        this._numboHeaderLayer.setConditionPrefix("Level: ");
     },
 
     // Initialize audio.
@@ -62,11 +69,31 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
         var highlevelAccepted = NJ.stats.offerHighlevel(key, NJ.gameState.getLevel());
 
-        if(highscoreAccepted)
-            NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+        // only submit score after all desired achievements have been pushed
+        // because the achievement
+        if(highscoreAccepted) {
+            var highscore = NJ.stats.getHighscore(key);
+            NJ.social.submitScore(key, highscore);
 
-        if(highlevelAccepted)
-            NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
+            if(highscore >= 500) {
+                NJ.social.unlockAchievement(NJ.social.achievementKeys.re1);
+
+                if(highscore >= 1000) {
+                    NJ.social.unlockAchievement(NJ.social.achievementKeys.re2);
+
+                    if(highscore >= 1500) {
+                        NJ.social.unlockAchievement(NJ.social.achievementKeys.re3);
+
+                        if(highscore >= 2000) {
+                            NJ.social.unlockAchievement(NJ.social.achievementKeys.re4);
+                        }
+                    }
+                }
+            }
+        }
+
+        //if(highlevelAccepted)
+          //  NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
 
         NJ.stats.save();
 
@@ -111,8 +138,6 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
 
         if(!comboLength)
             return;
-
-        //this.spawnDropRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
 
         if(NJ.settings.sounds) {
             var activationSounds = [];
@@ -277,15 +302,10 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
             this._blocksToDrop++;
         }
 
-        this._numboHeaderLayer.updateValues();
-        this._numboHeaderLayer.setProgress(NJ.gameState.getLevelupProgress());
-        var that = this;
-        var blocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
-        this.spawnBlocksAfterDelay(blocksToSpawn, this._spawnDelay, function() {
-            that.checkGameOver();
-        });
+        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
+        var numBlocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
 
-
+        this.spawnDropRandomBlocks(numBlocksToSpawn);
+        this.checkGameOver();
     }
-
 });

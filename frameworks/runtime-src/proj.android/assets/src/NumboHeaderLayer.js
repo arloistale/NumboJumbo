@@ -1,8 +1,8 @@
 var NumboHeaderLayer = (function() {
 
     // Label prefixes
-    var scorePrefix = "Pts: ";
-    var levelPrefix = "Lv: ";
+    var scorePrefix = "Points: ";
+    var condPrefix = "Cond: ";
 
     // Touch Events
     var onPause = function() {
@@ -20,10 +20,9 @@ var NumboHeaderLayer = (function() {
 
         // labels
         _scoreLabel: null,
-        _levelLabel: null,
+        _condLabel: null,
 
-        // progress bar for level progress
-        progressBarLayer: null,
+        _equationLabel: null,
 
         // callback
         onPauseCallback: null,
@@ -34,7 +33,6 @@ var NumboHeaderLayer = (function() {
             this.setContentSize(size.width, size.height);
 
             this.initLabels();
-            this.initProgressBar();
             this.initButtons();
         },
 
@@ -42,8 +40,8 @@ var NumboHeaderLayer = (function() {
         initLabels: function() {
             var contentSize = this.getContentSize();
 
-            // Score Labels
-            var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.75);
+            // Score Label
+            var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.66);
             var elementSize = cc.size(contentSize.width * 0.2, contentSize.height * 0.5);
             var spriteSize;
 
@@ -59,25 +57,38 @@ var NumboHeaderLayer = (function() {
             this._scoreLabel.setColor(NJ.themes.defaultLabelColor);
             this.addChild(this._scoreLabel);
 
-            startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.25);
+            startPos = cc.p(contentSize.width * 0.54, contentSize.height * 0.66);
 
-            this._levelLabel = new cc.LabelBMFont(levelPrefix, b_getFontName(res.mainFont));
-            this._levelLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
-            this._levelLabel.attr({
+            // Condition Label
+            this._condLabel = new cc.LabelBMFont(condPrefix, b_getFontName(res.mainFont));
+            this._condLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
+            this._condLabel.attr({
                 anchorX: 0,
                 anchorY: 0.5,
                 x: startPos.x,
                 y: startPos.y
             });
-            this._levelLabel.setColor(NJ.themes.defaultLabelColor);
-            this.addChild(this._levelLabel);
-        },
+            this._condLabel.setColor(NJ.themes.defaultLabelColor);
+            this.addChild(this._condLabel);
 
-        initProgressBar: function() {
-            var contentSize = this.getContentSize();
+            // Score Labels
+            startPos = cc.p(contentSize.width / 2, contentSize.height * 0.25);
+            elementSize = cc.size(contentSize.width * 0.5, contentSize.height * 0.3);
 
-            this._progressBar = new ProgressBarLayer(cc.rect(contentSize.width * 0.25, contentSize.height * 0.25, contentSize.width * 0.5, contentSize.height * 0.5));
-            this.addChild(this._progressBar, -2);
+            // Equation Label
+            this._equationLabel = new cc.LabelBMFont("Default Text", b_getFontName(res.mainFont));
+            spriteSize = this._equationLabel.getContentSize();
+            this._equationLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
+            this._equationLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: startPos.x,
+                y: startPos.y
+            });
+            this._equationLabel.setColor(NJ.themes.defaultLabelColor);
+            this.addChild(this._equationLabel);
+
+            this._equationLabel.setString(" ");
         },
 
         // create buttons (probably the only button will be pause button but w/e)
@@ -111,8 +122,8 @@ var NumboHeaderLayer = (function() {
             });
 
             this._scoreLabel.setString(" ");
-            this._levelLabel.setString(" ");
-            this._progressBar.setProgress(0);
+            this._condLabel.setString(" ");
+            this._equationLabel.setString( " ");
         },
 
         // makes the header transition into the visible area
@@ -137,26 +148,53 @@ var NumboHeaderLayer = (function() {
 // UI setters //
 ////////////////
 
-        hideLevelLabel: function(flag) {
-            if(flag) {
-                this._levelLabel.setVisible(true);
-            } else {
-                this._levelLabel.setVisible(false);
+        setConditionPrefix: function(prefix) {
+            condPrefix = prefix;
+
+            this.setConditionValue(-1);
+        },
+
+        setScoreValue: function(value) {
+            cc.assert(typeof value === 'number', "Score value must be a Number");
+
+            this._scoreLabel.setString(scorePrefix + value);
+        },
+
+        setConditionValue: function(value) {
+            cc.assert(typeof value === 'number', "Condition value must be a Number");
+
+            this._condLabel.setString(condPrefix + value);
+        },
+
+        setEquation: function(nums) {
+            var equationStr = " ";
+
+            if(nums.length > 0) {
+                equationStr = nums[0] + "";
+
+                var sumSoFar = nums[0];
+
+                for (var i = 1; i < nums.length - 1; ++i) {
+                    equationStr += " + " + nums[i];
+                    sumSoFar += nums[i];
+                }
+
+                if (nums.length > 1) {
+                    if (sumSoFar != nums[i] || nums.length <= 2) {
+                        equationStr += " + " + nums[i];
+                    } else {
+                        equationStr += " = " + nums[i];
+                    }
+                }
             }
-        },
 
-        updateValues: function() {
-            this._scoreLabel.setString(scorePrefix + NJ.gameState.getScore());
-            this._levelLabel.setString(levelPrefix + NJ.gameState.getLevel());
-        },
-
-        setProgress: function(progress) {
-            this._progressBar.setProgress(progress);
+            this._equationLabel.setString(equationStr);
         },
 
         updateTheme: function() {
             this._scoreLabel.setColor(NJ.themes.defaultLabelColor);
-            this._levelLabel.setColor(NJ.themes.defaultLabelColor);
+            this._condLabel.setColor(NJ.themes.defaultLabelColor);
+            this._equationLabel.setColor(NJ.themes.defaultLabelColor);
         },
 
 // UI callbacks //

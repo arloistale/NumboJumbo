@@ -85,7 +85,7 @@ var NumboController = (function() {
 			var block = this._numboLevel.getBlock(col, row);
 			var lastBlock = null;
 
-			if (block === null)
+			if (!block)
 				return null;
 
 			// TODO: possible optimization
@@ -137,24 +137,21 @@ var NumboController = (function() {
 				var i;
 
 					//cc.audioEngine.playEffect(res.plipSound);
-					
+
 				var selectedBlocks = this._selectedBlocks;
 				var selectedNums = this._selectedBlocks.map(function(b) {
 					return b.val;
 				});
 
+				clearedBlocks = selectedBlocks.slice(0);
+
 				var targetNum = Math.max.apply(null, selectedNums);
 
-				// wombo comboo clear blocks of value
-				if(selectedBlocks.length >= 5) {
-					for(i = 0; i < selectedBlocks.length; ++i) {
-						var explodeBlocks = this.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1);
-						clearedBlocks = clearedBlocks.concat(explodeBlocks);
-					}
-				}
+				var numBonus = this.getBonusBlocks(selectedBlocks.length);
+				var bonusBlocks = this.getNRandomFreeBlocks(numBonus);
 
-				clearedBlocks = clearedBlocks.concat(selectedBlocks);
-
+				clearedBlocks = clearedBlocks.concat(bonusBlocks);
+                
 				// remove duplicates
 				for(i = 0; i < clearedBlocks.length; ++i) {
 					for(var j = i + 1; j < clearedBlocks.length; ++j) {
@@ -173,7 +170,7 @@ var NumboController = (function() {
 
 			this.deselectAllBlocks();
 
-			return clearedBlocks;
+			return {clearedBlocks: clearedBlocks, bonusBlocks: bonusBlocks};
 		},
 
         ////////////////////////////
@@ -432,6 +429,48 @@ var NumboController = (function() {
 			return Math.max.apply(null, selectedNums);
 		},
 
+		// returns a list of N random blocks that are not currently selected
+		getNRandomFreeBlocks: function(N){
+			var randomBlocks = NJ.shuffleArray(this.getBlocksList() );
+
+			var result = [];
+			for (var i=0; i < randomBlocks.length && result.length < N; ++i) {
+				var block = randomBlocks[i];
+				if (this._selectedBlocks.indexOf(block) < 0) {
+					result.push(block);
+				}
+			}
+
+			return result;
+
+		},
+
+		// returns the number of bonus blocks to clear, given a wombocombo of a certain length
+		getBonusBlocks: function(length) {
+			if (length) {
+				if (length <= 3)
+					return 0;
+				if (length == 4)
+					return 1;
+				if (length == 5)
+					return 3;
+				if (length == 6)
+					return 6;
+				if (length == 7)
+					return 10;
+				if (length == 8)
+					return 15;
+				if (length == 9)
+					return 21;
+				if (length >= 10)
+					return 28;
+			}
+			else {
+				cc.log("uh-oh! bad LENGTH value in numboController::getBonusBlocks()");
+				return null;
+			}
+		},
+
 		// checks if the current selected blocks can be activated (their equation is valid)
 		isSelectedClearable: function() {
 			if (!this._selectedBlocks.length || this._selectedBlocks.length < 3)
@@ -439,10 +478,10 @@ var NumboController = (function() {
 
 
 			// "order-less"
-			//return this.sumToHighest();
+			return this.sumToHighest();
 
 			// "order matters"
-			 return this.sumToLast();
+			// return this.sumToLast();
 		},
 
 		sumToLast: function(){

@@ -218,11 +218,18 @@ var NJMenuItem = (function() {
         setLabelColor: function(color) {
             var key;
 
-            if(this._titleStates) {
-                for (key in this._titleStates) {
-                    if (this._titleStates.hasOwnProperty(key)) {
-                        this._titleStates[key].setColor(color);
-                    }
+            // only initialize the labels when we need it
+            if(!this._titleStates) {
+                var contentSize = this.getContentSize();
+                this._titleStates = generateTitleStates(" ", contentSize, cc.p(contentSize.width / 2, contentSize.height / 2));
+                this._spriteStates.normal.addChild(this._titleStates.normal, 2);
+                this._spriteStates.selected.addChild(this._titleStates.selected, 2);
+                this._spriteStates.disabled.addChild(this._titleStates.disabled, 2);
+            }
+
+            for (key in this._titleStates) {
+                if (this._titleStates.hasOwnProperty(key)) {
+                    this._titleStates[key].setColor(color);
                 }
             }
         },

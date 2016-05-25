@@ -39,29 +39,59 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	//////////////
 
 	/**
-	 * Usage:
-	 * @param data Number x-position for hand or Object with data about hand
-	 * @param y y position of spawn point if using data as x-position
+	 * Usage: provide a path for the hand to patrol (must have at least 1 point)
      * @private
      */
-	_startHand: function(data, y) {
+	_startHandOverPath: function(path) {
 		if(!this._handIndicator) {
 			this._handIndicator = new cc.Sprite(res.handImage);
 			this._handIndicator.attr({
 				anchorX: 0.5,
-				anchorY: 0.5
-			})
+				anchorY: 1
+			});
+			this._handIndicator.setColor(NJ.themes.defaultLabelColor);
+			this.addChild(this._handIndicator, 56);
 		}
 
-		var spawnX = cc.visibleRect.center.x, spawnY = cc.visibleRect.center.y;
+		var that = this;
 
-		if(typeof data !== 'number') {
-			spawnX = data.x;
-			spawnY = data.y;
+		cc.assert(path.length > 0, "Must define at least a start point in the path!");
+
+		// initialize path
+		var start = path[0];
+
+		this._handIndicator.stopAllActions();
+		this._handIndicator.setVisible(true);
+		this._handIndicator.setPosition(start);
+		var handActionList = [];
+
+		if(path.length > 2) {
+			for (var i = 1; i < path.length; ++i) {
+				if (i == 1) {
+                    handActionList.push(cc.moveTo(0.5, path[i]).easing(cc.easeBackIn()));
+                } else if(i == path.length - 1) {
+                    handActionList.push(cc.moveTo(0.7, path[i]).easing(cc.easeBackOut()));
+                } else {
+                    handActionList.push(cc.moveTo(0.5, path[i]));
+                }
+			}
 		} else {
-			spawnX = data;
-			spawnY = y;
+			handActionList.push(cc.moveTo(1.2, path[1]).easing(cc.easeBackInOut()));
 		}
+
+        handActionList.push(cc.delayTime(1));
+        handActionList.push(cc.callFunc(function() {
+            that._handIndicator.setPosition(start);
+        }));
+
+        this._handIndicator.runAction(cc.sequence(handActionList).repeatForever());
+	},
+
+	_clearHand: function() {
+        if(this._handIndicator) {
+            this._handIndicator.stopAllActions();
+            this._handIndicator.setVisible(false);
+        }
 	},
 
 	_advanceTutorialSlide: function() {
@@ -78,43 +108,53 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				this.runAction(cc.sequence(cc.delayTime(5.5),
 					cc.callFunc(function() {
-						that.spawnDropBlock(centerCol , 2);
+						that.spawnDropBlock(centerCol, 2);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 1, 1);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 2, 3);
+					}), cc.delayTime(1), cc.callFunc(function() {
+						that._startHandOverPath([
+							that._convertLevelCoordsToPoint(centerCol, 0),
+							that._convertLevelCoordsToPoint(centerCol + 2, 0)
+						]);
+
+                        that._handIndicator.runAction(cc.sequence(cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(0.5), cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol + 1, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(0.2), cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol + 2, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(1.5)).repeatForever());
 					})
 				));
 
 				break;
-			case slides.subtraction:
+			case slides.practice1:
 				centerCol = Math.floor((NJ.NUM_COLS) / 2);
+
+				this._clearHand();
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 4);
+						that.spawnDropBlock(centerCol - 2, 1);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 7);
+						that.spawnDropBlock(centerCol - 1, 2);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 5);
+						that.spawnDropBlock(centerCol, 4);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 8);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 2, 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 3);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 4);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 3);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 2, 2);
+						that.spawnDropBlock(centerCol, 7);
 					})
 				));
 
 				break;
-			case slides.more:
+			case slides.teach2:
 				centerCol = Math.floor((NJ.NUM_COLS) / 2);
+
+                this._clearHand();
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
@@ -129,17 +169,62 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 						that.spawnDropBlock(centerCol, 5);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 1, 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						// begin scheduling hint jiggles
-						that.schedule(that.jiggleHintBlocks, 5);
-					})
+					}), cc.delayTime(1), cc.callFunc(function() {
+                        that._startHandOverPath([
+                            that._convertLevelCoordsToPoint(centerCol - 2, 0),
+                            that._convertLevelCoordsToPoint(centerCol - 1, 0),
+                            that._convertLevelCoordsToPoint(centerCol, 1)
+                        ]);
+
+                        that._handIndicator.runAction(cc.sequence(cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol - 2, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(0.5), cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol - 1, 0);
+                            if(block) block.highlight();
+                        }), cc.delayTime(0.2), cc.callFunc(function() {
+                            var block = that._numboController.getBlock(centerCol, 1);
+                            if(block) block.highlight();
+                        }), cc.delayTime(1.5)).repeatForever());
+                    })
 				));
 
 				break;
 
+            case slides.practice2:
+                centerCol = Math.floor((NJ.NUM_COLS) / 2);
+
+                this._clearHand();
+
+                this.runAction(cc.sequence(cc.delayTime(4),
+                    cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol - 2, 4);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol - 1, 7);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol, 5);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol + 1, 8);
+                    }), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol + 2, 2);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol - 2, 3);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol - 1, 4);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol, 3);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol + 2, 2);
+                    })
+                ));
+
+                break;
+
 			case slides.wombo:
 
 				centerCol = Math.floor((NJ.NUM_COLS) / 2);
+
+				this._clearHand();
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
@@ -157,10 +242,6 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 					// spawn some extra 7's to demonstrate the wombo combo explosion
 					, cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 3, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 2, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol - 1, 7);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 7);
@@ -176,11 +257,9 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				this.runAction(cc.sequence(cc.delayTime(4), cc.callFunc(function() {
 					// load resources
-					cc.LoaderScene.preload(g_menu, function () {
-						var scene = new cc.Scene();
-						scene.addChild(new NumboMenuLayer());
-						cc.director.runScene(new cc.TransitionFade(0.5, scene));
-					}, that);
+					var scene = new cc.Scene();
+					scene.addChild(new NumboMenuLayer());
+					cc.director.runScene(new cc.TransitionFade(0.5, scene));
 				})));
 
 				break;
@@ -216,20 +295,90 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		if(!comboLength)
 			return;
 
-		var activationSound = progresses[Math.min(comboLength - 2, progresses.length - 1)];
+        var targetBlock = Math.max.apply(null, clearedBlocks.map(function(b) {
+            return b.val;
+        }));
 
-		// launch feedback for combo threshold title snippet
-		if (comboLength >= 5) {
+        if(this._tutorialLayer.getCurrSlide() == this._tutorialLayer.slides.teach2 && targetBlock == 5) {
+            this._clearHand();
+            this._tutorialLayer.fadeOutHelperLabel();
+        }
 
-			//if (NJ.settings.sounds)
-			//cc.audioEngine.playEffect(res.applauseSound);
+		var activationSounds = [];
+		for(var i = 0; i < comboLength - 2; i++) {
+			activationSounds.push(bloops[i]);
 		}
 
-		if(NJ.settings.sounds)
-			cc.audioEngine.playEffect(activationSound);
+		this.schedule(function() {
+			cc.audioEngine.playEffect(activationSounds[0]);
+		},.05, false);
 
-		if(this._numboController.levelIsClear()) {
-			this._advanceTutorialSlide();
+		if(activationSounds.length == 2) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .2, false);
 		}
+		else if(activationSounds.length == 3) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .17, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .29, false);
+		}
+		else if(activationSounds.length == 4) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .15, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .25, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[3]);
+			}, .35, false);
+		}
+		else if(activationSounds.length == 5) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .12, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .19, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[3]);
+			}, .26, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[4]);
+			}, .33, false);
+		}
+		else if(activationSounds.length > 5) {
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[1]);
+			}, .11, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[2]);
+			}, .17, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[3]);
+			}, .23, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[4]);
+			}, .29, false);
+			this.schedule(function () {
+				cc.audioEngine.playEffect(activationSounds[5]);
+			}, .35, false);
+		}
+
+        var that = this;
+
+        if(this._tutorialLayer.getCurrSlide() == this._tutorialLayer.slides.wombo) {
+            this.runAction(cc.sequence(cc.delayTime(0.45), cc.callFunc(function() {
+                that._advanceTutorialSlide();
+            })));
+        } else {
+            if (this._numboController.levelIsClear()) {
+                this._advanceTutorialSlide();
+            }
+        }
 	}
 });

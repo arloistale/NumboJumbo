@@ -19,7 +19,7 @@ namespace sdkbox
         /*!
          * initialize the plugin instance.
          */
-        static void init();
+        static void init(const char* jsonconfig = 0);
 
         /*!
          * The analytics session is being explicitly started at plugin initialization time.

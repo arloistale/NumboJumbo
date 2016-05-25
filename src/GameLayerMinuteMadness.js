@@ -26,8 +26,6 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 
 	ctor: function() {
 		this._super();
-
-		this._numboHeaderLayer.hideLevelLabel(true);
 	},
 
 	_reset: function() {
@@ -38,6 +36,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		this._numboController.initDistribution(this._numberList);
 
 		// here is our schedule
+		that._numboHeaderLayer.setConditionValue(this._elapsedTimeLimit);
 
 		this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
 			// cause UI elements to fall in
@@ -48,13 +47,19 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 			that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
 
 			that.schedule(function() {
-				var elapsedTime = (Date.now() - NJ.gameState.getStartTime()) / 1000;
-				var timeFraction = 1 - elapsedTime / 60;
+				// pad with 2 seconds to compensate for time taken entering
+				var timeLeft = that._elapsedTimeLimit + 2 - (Date.now() - NJ.gameState.getStartTime()) / 1000;
 
-				that._numboHeaderLayer.setProgress(timeFraction);
+				that._numboHeaderLayer.setConditionValue(Math.floor(timeLeft));
 				that.checkGameOver();
 			}, 1);
 		})));
+	},
+
+	_initUI: function() {
+		this._super();
+
+		this._numboHeaderLayer.setConditionPrefix("Time: ");
 	},
 
 	// Initialize audio.
@@ -78,7 +83,24 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
 
 		if(highscoreAccepted) {
-			NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+			var highscore = NJ.stats.getHighscore(key);
+			NJ.social.submitScore(key, highscore);
+
+			if(highscore >= 64) {
+				NJ.social.unlockAchievement(NJ.social.achievementKeys.mm1);
+
+				if(highscore >= 128) {
+					NJ.social.unlockAchievement(NJ.social.achievementKeys.mm2);
+
+					if(highscore >= 256) {
+						NJ.social.unlockAchievement(NJ.social.achievementKeys.mm3);
+
+						if(highscore >= 512) {
+							NJ.social.unlockAchievement(NJ.social.achievementKeys.mm4);
+						}
+					}
+				}
+			}
 		}
 
 		NJ.stats.save();
@@ -120,7 +142,8 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 
 	// whether the game is over or not
 	isGameOver: function() {
-		return this._getElapsedTime() >= this._elapsedTimeLimit;
+		// 1 second padding to account for time spent entering
+		return this._getElapsedTime() >= (this._elapsedTimeLimit + 1);
 	},
 
 	///////////////////
@@ -145,8 +168,8 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 			return;
 
 		this.spawnDropRandomBlocks(comboLength);
-		var numBonusBlocks = this._numboController.getNumBonusBlocks(comboLength);
-		this.spawnBlocksAfterDelay(numBonusBlocks, 0.4);
+		var numBonusBlocks = this._numboController.getBonusBlocks(comboLength);
+		//this.spawnBlocksAfterDelay(numBonusBlocks, 0.4);
 
 		if(NJ.settings.sounds) {
 			var activationSounds = [];
@@ -304,8 +327,6 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 				}, .47, false);
 			}
 		}
-		// show player data
-		this._numboHeaderLayer.updateValues();
 	},
 
 	/////////////

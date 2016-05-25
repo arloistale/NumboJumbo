@@ -131,7 +131,7 @@ var NumboHeaderLayer = (function() {
 // UI setters //
 ////////////////
 
-        updateValues: function() {
+        setScoreValue: function() {
             this._scoreValueLabel.setString(NJ.prettifier.formatNumber(NJ.gameState.getScore()));
             this._levelValueLabel.setString(NJ.gameState.getLevel());
             this._progressBar.setProgress(NJ.gameState.getLevelupProgress());

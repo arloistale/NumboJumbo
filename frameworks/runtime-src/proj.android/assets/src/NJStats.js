@@ -10,6 +10,8 @@ NJ.stats = (function() {
     // stats data for every mode
     var modeData = {};
 
+    var numGamesCompleted = 0;
+
     return {
 
         ///////////////////
@@ -17,6 +19,7 @@ NJ.stats = (function() {
         ///////////////////
 
         load: function() {
+            // load mode data
             for(var key in NJ.modekeys) {
                 if(!NJ.modekeys.hasOwnProperty(key))
                     continue;
@@ -27,12 +30,13 @@ NJ.stats = (function() {
                 }
             }
 
-            cc.log(modeData);
-
+            // load misc stat tracking
             currency = parseInt(cc.sys.localStorage.getItem('currency')) || 0;
+            numGamesCompleted = parseInt(cc.sys.localStorage.getItem('numGamesCompleted')) || 0;
         },
 
         save: function() {
+            // save mode data
             for(var key in NJ.modekeys) {
                 if(!NJ.modekeys.hasOwnProperty(key))
                     continue;
@@ -41,12 +45,16 @@ NJ.stats = (function() {
                 cc.sys.localStorage.setItem('highlevel-' + NJ.modekeys[key], JSON.stringify(modeData[NJ.modekeys[key]].highlevel));
             }
 
+            // save misc
             cc.sys.localStorage.setItem('currency', JSON.stringify(currency));
+            cc.sys.localStorage.setItem('numGamesCompleted', JSON.stringify(numGamesCompleted));
         },
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
+
+        // Game Mode Specific Metrics
 
         // offers a highscore to the leaderboard identified with key
         // each leaderboard corresponds to a game mode
@@ -78,6 +86,8 @@ NJ.stats = (function() {
             return modeData[key].highlevel;
         },
 
+        // Misc Metrics
+
         setCurrency: function(value) {
             currency = value;
         },
@@ -88,6 +98,16 @@ NJ.stats = (function() {
 
         getCurrency: function() {
             return currency;
+        },
+
+        // returns the new number of games completed
+        incrementNumGamesCompleted: function() {
+            cc.log("Completed: " + (numGamesCompleted + 1) + " games");
+            return ++numGamesCompleted;
+        },
+
+        getNumGamesCompleted: function() {
+            return numGamesCompleted;
         }
     }
 }());

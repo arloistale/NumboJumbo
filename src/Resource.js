@@ -19,6 +19,9 @@ var res = {
         png: resRoot + "Fonts/mainFont.png"
     },
 
+    // Loader
+    logoImage: resRoot + "Images/logo.png",
+
 	// UI
     buttonImage: resRoot + "Images/Button.png",
     pauseImage: resRoot + "Images/ic_pause/ic_pause_2x.png",
@@ -30,12 +33,12 @@ var res = {
     settingsImage: resRoot + "Images/ic_settings/ic_settings_2x.png",
     retryImage: resRoot + "Images/ic_retry/ic_retry_2x.png",
     statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
+    trophyImage: resRoot + "Images/ic_trophy/ic_trophy_2x.png",
 
     // ingame
     blockImage: resRoot + "Images/blockImage.png",
     alertImage: resRoot + "Images/alertOverlay.png",
-    handImage: resRoot + "Images/ic_hand_2x.png",
-    levelImage: resRoot + "Images/levelImage.png",
+    handImage: resRoot + "Images/ic_hand/ic_hand_2x.png",
 
     // music
     menuTrack: resRoot + "Sounds/Track2.mp3",
@@ -87,8 +90,6 @@ var res = {
     bloopSound9: resRoot + "Sounds/boop9.wav",
     bloopSound10: resRoot + "Sounds/boop10.wav",
 
-
-
     levelupSound: resRoot + "Sounds/levelup.wav",
     overSound: resRoot + "Sounds/over.mp3",
 
@@ -111,6 +112,7 @@ var g_menu = [
     res.buttonImage,
     res.statsImage,
     res.blockImage,
+    res.trophyImage,
 
     // sounds
     res.clickSound,
@@ -141,11 +143,11 @@ var g_game = [
     res.homeImage,
     res.pauseImage,
     res.retryImage,
+    res.handImage,
 
     // Scene
     res.blockImage,
     res.alertImage,
-    res.levelImage,
 
     // music
     res.trackA,
@@ -198,3 +200,15 @@ var g_game = [
     res.mainFont.fnt,
     res.mainFont.png
 ];
+
+var g_all = (function() {
+    var a = g_game.concat(g_menu);
+    for(var i = 0; i < a.length; ++i) {
+        for(var j = i + 1; j < a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+}());

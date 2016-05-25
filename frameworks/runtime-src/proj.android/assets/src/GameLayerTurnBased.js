@@ -17,8 +17,8 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         { key: 9, weight: 40 }
     ],
 
-    // blocks dropped every turn (changes)
-    _blocksToDrop: 6,
+    // initial # of blocks dropped every turn (increases at each level)
+    _blocksToDrop: 5,
 
     ////////////////////
     // Initialization //
@@ -30,6 +30,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         var that = this;
 
         this._numboController.initDistribution(this._numberList);
+        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
 
         this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
             // cause UI elements to fall in
@@ -39,6 +40,12 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
             // fill the board with blocks initially
             that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2));
         })));
+    },
+
+    _initUI: function() {
+        this._super();
+
+        this._numboHeaderLayer.setConditionPrefix("Level: ");
     },
 
     // Initialize audio.
@@ -62,11 +69,31 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
         var highlevelAccepted = NJ.stats.offerHighlevel(key, NJ.gameState.getLevel());
 
-        if(highscoreAccepted)
-            NJ.social.submitScore(key, NJ.stats.getHighscore(key));
+        // only submit score after all desired achievements have been pushed
+        // because the achievement
+        if(highscoreAccepted) {
+            var highscore = NJ.stats.getHighscore(key);
+            NJ.social.submitScore(key, highscore);
 
-        if(highlevelAccepted)
-            NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
+            if(highscore >= 500) {
+                NJ.social.unlockAchievement(NJ.social.achievementKeys.re1);
+
+                if(highscore >= 1000) {
+                    NJ.social.unlockAchievement(NJ.social.achievementKeys.re2);
+
+                    if(highscore >= 1500) {
+                        NJ.social.unlockAchievement(NJ.social.achievementKeys.re3);
+
+                        if(highscore >= 2000) {
+                            NJ.social.unlockAchievement(NJ.social.achievementKeys.re4);
+                        }
+                    }
+                }
+            }
+        }
+
+        //if(highlevelAccepted)
+          //  NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
 
         NJ.stats.save();
 
@@ -112,12 +139,162 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         if(!comboLength)
             return;
 
-        this.spawnDropRandomBlocks(Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks()));
+        if(NJ.settings.sounds) {
+            var activationSounds = [];
+            for (var i = 0; i < comboLength; i++) {
+                activationSounds.push(bloops[i]);
+            }
 
-        var activationSound = progresses[Math.min(comboLength*2, progresses.length-1)];
+            this.schedule(function () {
+                cc.audioEngine.playEffect(activationSounds[0]);
+            }, .05, false);
 
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(activationSound);
+            var timeBetween = 0;
+            switch (activationSounds.length) {
+                case 3:
+                    timeBetween = .12;
+                    break;
+                case 4:
+                    timeBetween = .1;
+                    break;
+                case 5:
+                    timeBetween = .07;
+                    break;
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                    timeBetween = .06;
+                    break;
+            }
+            /*
+             for (var i = 1; i < activationSounds.length; i++) {
+             this.schedule(function () {
+             cc.audioEngine.playEffect(activationSounds[i]);
+             }, .05 + (i * timeBetween), false);
+             }
+             */
+            if (activationSounds.length == 3) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .29, false);
+            }
+            else if (activationSounds.length == 4) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .15, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .25, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .35, false);
+            }
+            else if (activationSounds.length == 5) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .12, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .19, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .26, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .33, false);
+            }
+            else if (activationSounds.length == 6) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .11, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .23, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .29, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .35, false);
+            }
+            else if (activationSounds.length == 7) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .11, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .23, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .29, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .35, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[6]);
+                }, .41, false);
+            }
+            else if (activationSounds.length == 8) {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .11, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .23, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .29, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .35, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[6]);
+                }, .41, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[7]);
+                }, .47, false);
+            }
+            else {
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .11, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .17, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .23, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .29, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .35, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[6]);
+                }, .41, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[7]);
+                }, .47, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[8]);
+                }, .47, false);
+            }
+        }
 
         var levelUpCount = NJ.gameState.levelUpIfNeeded();
 
@@ -125,9 +302,10 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
             this._blocksToDrop++;
         }
 
-        this._numboHeaderLayer.updateValues();
-        this._numboHeaderLayer.setProgress(NJ.gameState.getLevelupProgress());
+        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
+        var numBlocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
 
+        this.spawnDropRandomBlocks(numBlocksToSpawn);
         this.checkGameOver();
     }
 });

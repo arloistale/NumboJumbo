@@ -24,6 +24,8 @@ var NumboBlock = (function() {
         row: -1,
         val: -1,
 
+        isFalling: false,
+
         ////////////////////
         // Initialization //
         ////////////////////
@@ -131,12 +133,13 @@ var NumboBlock = (function() {
                 this._highlightSprite.setColor(color);
 
             this._highlightSprite.setVisible(true);
-            this._highlightSprite.setOpacity(212);
+            this._highlightSprite.setOpacity(255);
 
             this._highlightSprite.setScale(_backgroundScale.x, _backgroundScale.y);
 
-            this._highlightSprite.runAction(cc.scaleBy(0.25, 2, 2));
-            this._highlightSprite.runAction(cc.sequence(cc.fadeTo(0.25, 0), cc.callFunc(function() {
+            this._highlightSprite.stopAllActions();
+            this._highlightSprite.runAction(cc.scaleBy(0.3, 2, 2));
+            this._highlightSprite.runAction(cc.sequence(cc.fadeTo(0.3, 0), cc.callFunc(function() {
                 that._highlightSprite.setVisible(false);
             })));
         },

@@ -91,7 +91,8 @@ var BaseGameLayer = cc.Layer.extend({
         this._selectedLinesNode.clear();
 
         this._numboHeaderLayer.reset();
-        this._numboHeaderLayer.updateValues();
+        this._numboHeaderLayer.setScoreValue(0);
+		this._numboHeaderLayer.setConditionValue(0);
 
         this._numboController.reset();
         this._feedbackLayer.reset();
@@ -182,7 +183,8 @@ var BaseGameLayer = cc.Layer.extend({
 			that.onPause();
 		});
 		this.addChild(this._numboHeaderLayer, 999);
-		this._numboHeaderLayer.updateValues();
+		this._numboHeaderLayer.setScoreValue(0);
+		this._numboHeaderLayer.setConditionValue(0);
 
 		// toolbar
 		this._toolbarLayer = new ToolbarLayer( this._toolBarSize);
@@ -355,9 +357,7 @@ var BaseGameLayer = cc.Layer.extend({
 	////////////////////
 
 	// Move scene block sprite into place.
-	moveBlockIntoPlace: function(moveBlock) {
-
-		var previousMoveAction = moveBlock.getActionByTag(42);
+	moveBlockIntoPlace: function(moveBlock, shouldOverride) {
 
 		var blockTargetY = this._levelBounds.y +  this._levelCellSize.height * (moveBlock.row + 0.5);
 		var blockTargetX = this._levelBounds.x +  this._levelCellSize.width * (moveBlock.col + 0.5);
@@ -366,12 +366,14 @@ var BaseGameLayer = cc.Layer.extend({
 		var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 		moveAction.setTag(42);
 
-		if (previousMoveAction == null
-			|| previousMoveAction._endPosition.x != moveAction._endPosition.x
-			|| previousMoveAction._endPosition.y != moveAction._endPosition.y) {
-			moveBlock.stopActionByTag(42);
-			moveBlock.runAction(moveAction);
-		}
+		//if(!moveBlock.isFalling || shouldOverride) {
+		//	moveBlock.isFalling = true;
+
+			moveBlock.stopAllActions();
+			moveBlock.runAction(cc.sequence(moveAction, cc.callFunc(function() {
+				moveBlock.isFalling = false;
+			})));
+		//}
 	},
 
 	// spawns and drops a block with random col and val.
@@ -446,7 +448,9 @@ var BaseGameLayer = cc.Layer.extend({
 	///////////////////////
 
 	// Halts game, children must handle what to do afterwards in terms of going to game over screen
+	// also increments number of times played overall
 	onGameOver: function() {
+		this._selectedLinesNode.clear();
 		this._feedbackLayer.clearDoomsayer();
 		this.pauseInput();
 		this.unscheduleAllCallbacks();
@@ -455,6 +459,22 @@ var BaseGameLayer = cc.Layer.extend({
 			cc.audioEngine.playEffect(res.overSound);
 
 		cc.audioEngine.stopMusic();
+
+		// achievements
+
+		var numGames = NJ.stats.incrementNumGamesCompleted();
+
+		if(numGames == 1) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played1);
+		} else if(numGames == 5) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played2);
+		} else if(numGames == 10) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played3);
+		} else if(numGames == 25) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played4);
+		} else if(numGames == 50) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.played5);
+		}
 	},
 
 	///////////////
@@ -466,7 +486,7 @@ var BaseGameLayer = cc.Layer.extend({
 		NJ.themes.toggle();
 
 		this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
-		this._levelSprite.setColor(NJ.themes.levelColor);
+		//this._levelSprite.setColor(NJ.themes.levelColor);
 
 		this._numboHeaderLayer.updateTheme();
 
@@ -523,12 +543,10 @@ var BaseGameLayer = cc.Layer.extend({
 		this._feedbackLayer.reset();
 
 		//load resources
-		cc.LoaderScene.preload(g_menu, function () {
-			cc.audioEngine.stopMusic();
-			var scene = new cc.Scene();
-			scene.addChild(new NumboMenuLayer());
-			cc.director.runScene(new cc.TransitionFade(0.5, scene));
-		}, this);
+		cc.audioEngine.stopMusic();
+		var scene = new cc.Scene();
+		scene.addChild(new NumboMenuLayer());
+		cc.director.runScene(new cc.TransitionFade(0.5, scene));
 	},
 
 //////////////////
@@ -542,7 +560,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 			var touchCoords = this._convertPointToLevelCoords(touchPosition);
 
-			if (touchCoords) {
+			if (touchCoords && this._isPointWithinCoordsDistanceThreshold(touchPosition, touchCoords.col, touchCoords.row)) {
 				var selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
 				var selectedBlocks = this._numboController.getSelectedBlocks();
 
@@ -555,8 +573,6 @@ var BaseGameLayer = cc.Layer.extend({
 						selectedBlockSum += block.val;
 					}
 
-					var currColor = NJ.getColor(selectedBlockSum - 1);
-
 					// if selected block was returned then we have a new selected block deal with
 					if(selectedBlock) {
 						selectedBlock.highlight();
@@ -565,7 +581,7 @@ var BaseGameLayer = cc.Layer.extend({
 						var selectedNums = selectedBlocks.map(function(b) {
 							return b.val;
 						});
-						this._toolbarLayer.setEquation(selectedNums);
+						this._numboHeaderLayer.setEquation(selectedNums);
 					}
 
 					this.redrawSelectedLines(selectedBlocks);
@@ -591,14 +607,14 @@ var BaseGameLayer = cc.Layer.extend({
 
 			var penultimate = this._numboController.getPenultimateSelectedBlock();
 
-			for (var i = 0; currLength < touchDistance; i++) {
+			for (var i = 0; currLength <= touchDistance; i++) {
 				currPosition = cc.pAdd(this._lastTouchPosition, cc.pMult(touchDirection, currLength));
 
 				touchCoords = this._convertPointToLevelCoords(currPosition);
 
 				// if we have valid touch coordinates then we either select or deselect the block based on
 				// whether it is already selected and is the last selected block
-				if (touchCoords) {
+				if (touchCoords && this._isPointWithinCoordsDistanceThreshold(currPosition, touchCoords.col, touchCoords.row)) {
 					touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
 					if(touchBlock === penultimate) {
 						deselectedBlock = this._numboController.deselectLastBlock();
@@ -617,7 +633,7 @@ var BaseGameLayer = cc.Layer.extend({
 				var selectedNums = selectedBlocks.map(function (b) {
 					return b.val;
 				});
-				this._toolbarLayer.setEquation(selectedNums);
+				this._numboHeaderLayer.setEquation(selectedNums);
 			}
 
 			// update graphics for selected blocks
@@ -639,13 +655,6 @@ var BaseGameLayer = cc.Layer.extend({
 
 					if(isCombo) {
 						highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
-
-							/*
-							// grab each block adjacent to this combo:
-							for (i = 0; i < selectedBlocks.length; ++i) {
-								highlightBlocks = highlightBlocks.concat(this._numboController.depthLimitedSearch(selectedBlocks[i].col, selectedBlocks[i].row, 1));
-							}
-							*/
 
 						this._effectsLayer.launchComboOverlay();
 						selectedBlock.highlight();
@@ -694,7 +703,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 		this.redrawSelectedLines();
 
-		this._toolbarLayer.setEquation([]);
+		this._numboHeaderLayer.setEquation([]);
 
 		this._effectsLayer.clearComboOverlay();
 
@@ -708,7 +717,8 @@ var BaseGameLayer = cc.Layer.extend({
 
 		this.relocateBlocks();
 
-		this.killBlocksAfterDelay(bonusBlocks, this._killDelay);
+		//if(bonusBlocks.length > 0)
+			//this.killBlocksAfterDelay(bonusBlocks, this._killDelay);
 
 		// Allow controller to look for new hint.
 		this._numboController.resetKnownPath();
@@ -719,7 +729,6 @@ var BaseGameLayer = cc.Layer.extend({
 
 		return clearedBlocks;
 	},
-
 
 	scoreBlocksMakeParticles: function(blocks, comboLength){
 		// initiate iterator variables here because we use them a lot
@@ -756,11 +765,11 @@ var BaseGameLayer = cc.Layer.extend({
 		// add moves made
 		NJ.gameState.addMovesMade();
 
-		this._numboHeaderLayer.updateValues();
+		this._numboHeaderLayer.setScoreValue(NJ.gameState.getScore());
 
 	},
 
-	killBlocksAfterDelay: function(blocks, delay){
+	killBlocksAfterDelay: function(blocks, delay) {
 		var that = this;
 
 		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
@@ -771,10 +780,8 @@ var BaseGameLayer = cc.Layer.extend({
 			that._numboController._numboLevel.updateRowsAndColumns();
 
 			that.relocateBlocks();
-
 		})));
 	},
-
 
 	// spawns N blocks after a certain amount of time, then executes the callback (if given).
 	// ensures that there will also be at least one move present on the board.
@@ -834,12 +841,10 @@ var BaseGameLayer = cc.Layer.extend({
 
 	relocateBlocks: function (){
 		// Gaps may be created; shift all affected blocks down.
-
 		var blocks = this._numboController.getBlocksList();
 		for (var i = 0; i < blocks.length; ++i){
-			this.moveBlockIntoPlace(blocks[i]);
+			this.moveBlockIntoPlace(blocks[i], true);
 		}
-
 	},
 
 /////////////
@@ -886,6 +891,20 @@ var BaseGameLayer = cc.Layer.extend({
 	// Helpers //
 	/////////////
 
+	_isPointWithinCoordsDistanceThreshold: function(point, col, row) {
+		// return only if coordinates in certain radius of the block.
+		var radius = 0.5 *  this._blockSize.width;
+
+		var cellCenter = cc.p(this._levelBounds.x + (col + 0.5) *  this._levelCellSize.width,
+			this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);
+
+		var diff = cc.pSub(point, cellCenter);
+		var distSq = cc.pDot(diff, diff);
+
+		// check distance
+		return distSq <= radius * radius;
+	},
+
 	// Attempt to convert point to location on grid.
 	_convertPointToLevelCoords: function(point) {
 		if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
@@ -894,18 +913,7 @@ var BaseGameLayer = cc.Layer.extend({
 			var col = Math.floor((point.x - this._levelBounds.x) /  this._levelCellSize.width);
 			var row = Math.floor((point.y - this._levelBounds.y) /  this._levelCellSize.height);
 
-			// return only if coordinates in certain radius of the block.
-			var radius = 0.5 *  this._blockSize.width;
-
-			var cellCenter = cc.p(this._levelBounds.x + (col + 0.5) *  this._levelCellSize.width,
-				this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);
-
-			var diff = cc.pSub(point, cellCenter);
-			var distSq = cc.pDot(diff, diff);
-
-			// check distance
-			if (distSq <= radius * radius)
-				return {col: col, row: row};
+			return { col: col, row: row };
 		}
 
 		return null;
