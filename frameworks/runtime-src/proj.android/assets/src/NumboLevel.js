@@ -229,7 +229,7 @@ var NumboLevel = (function() {
 		},
 
 		getBlocksInColumn: function(col){
-			cc.assert(0 <= col && col < NJ.NUM_COLS, "bad column value fucker!");
+			cc.assert(0 <= col && col < NJ.NUM_COLS, "bad column value fucker: " + col);
 
 			var column = [];
 			for (var row = 0; row < this._blocks[col].length; ++row){

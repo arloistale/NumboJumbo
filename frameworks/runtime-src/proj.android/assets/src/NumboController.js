@@ -330,20 +330,28 @@ var NumboController = (function() {
 
 			// find the indices of non-empty columns, then shuffle them, then iterate over them
 			var colIndices = [];
-			for (var col = 0; col < NJ.NUM_COLS; ++col){
-				if (this._numboLevel.getBlocksInColumn(col).length > 1) {
-					colIndices.push(col);
+			for (var colI = 0; colI < NJ.NUM_COLS; ++colI){
+				var column = this._numboLevel.getBlocksInColumn(colI);
+				if (column && column.length < NJ.NUM_ROWS) {
+					colIndices.push(colI);
 				}
 			}
-			var colIndicesShuffled = NJ.shuffleArray(colIndices);
+			var colIndicesShuffled = colIndices.slice(0);
+			NJ.shuffleArray(colIndicesShuffled);
+
+			var printString = "";
+			for (var colI = 0; colI < colIndicesShuffled.length; ++colI){
+				var column = this._numboLevel.getBlocksInColumn(colIndicesShuffled[colI]);
+			}
 
 			// attempt to place both blocks in a single column (because it's easier, that's why):
 			for (var colI = 0; colI < colIndicesShuffled.length; ++colI){
-				column = this._numboLevel.getBlocksInColumn(colIndicesShuffled[colI]);
+				var column = this._numboLevel.getBlocksInColumn(colIndicesShuffled[colI]);
 				if (column.length < NJ.NUM_ROWS - 2){
-					colA = colB = col;
-					valA = Math.floor( ( ( column[col].val - 1) * Math.random() )+ 1);
-					valB = column[col].val - valA;
+					colA = colB = colIndicesShuffled[colI];
+					var valOfExisting = column[column.length-1].val;
+					valA = Math.floor( ( ( valOfExisting - 1) * Math.random() )+ 1);
+					valB = valOfExisting - valA;
 
 					return [{col: colA, val: valA}, {col: colB, val: valB}];
 				}
@@ -367,8 +375,8 @@ var NumboController = (function() {
 
 			for (var colI = 0; colI < colIndices.length; ++colI){
 				var column = this._numboLevel.getBlocksInColumn(colIndices[colI]);
-				var leftLength = this._numboLevel.getBlocksInColumn(colIndices[colI - 1]);
-				var rightLength = this._numboLevel.getBlocksInColumn(colIndices[colI + 1]);
+				var leftLength = this._numboLevel.getBlocksInColumn(colIndices[colI] - 1).length;
+				var rightLength = this._numboLevel.getBlocksInColumn(colIndices[colI] + 1).length;
 				var colLength = column.length;
 				if (colLength < NJ.NUM_ROWS && leftLength < NJ.NUM_ROWS && Math.abs(colLength - leftLength) <= 1){
 					valA = Math.floor( ( ( column[colIndices[colI]].val - 1) * Math.random() )+ 1);
@@ -387,6 +395,9 @@ var NumboController = (function() {
 					return [{col: colA, val: valA}, {col: colB, val: valB}];
 				}
 			}
+
+			cc.log("find location for two blocks did not return anything!" +
+				" crap, might as well throw our hands in the air and spawn random stuff");
 
 		},
 

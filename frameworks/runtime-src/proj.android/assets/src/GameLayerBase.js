@@ -82,6 +82,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 	// Override this for extranneous
 	_reset: function() {
+		var that = this;
         NJ.gameState.init();
 
         this.unscheduleAllCallbacks();
@@ -99,6 +100,11 @@ var BaseGameLayer = cc.Layer.extend({
 
         if(NJ.settings.music)
             cc.audioEngine.playMusic(this._backgroundTrack, true);
+
+
+		this.schedule(function(){
+			that._numboController.findHint();
+		}, 0.1);
 	},
 
 	_initParticles: function(){
@@ -799,10 +805,13 @@ var BaseGameLayer = cc.Layer.extend({
 			// case 1
 			if (that._numboController.areAllBlocksTheSameValue()){
 				colsAndVals = that._numboController.findLocationAndValueForTwoNewBlocks();
-				cc.log("all blocks same value case; returned: ", colsAndVals);
-
-				that.spawnDropBlock(colsAndVals[0].col,colsAndVals[0].val);
-				that.spawnDropBlock(colsAndVals[1].col,colsAndVals[1].val);
+				if (colsAndVals) {
+					that.spawnDropBlock(colsAndVals[0].col, colsAndVals[0].val);
+					that.spawnDropBlock(colsAndVals[1].col, colsAndVals[1].val);
+				}
+				else {
+					that.spawnDropRandomBlocks(2);
+				}
 
 			}
 			else {
@@ -811,7 +820,6 @@ var BaseGameLayer = cc.Layer.extend({
 				// case 2
 				if (that._numboController.findHint().length == 0) {
 					var colAndVal = that._numboController.findLocationAndValueForNewBlock();
-					cc.log("one special block case; returned: ", colAndVal);
 					that.spawnDropBlock (colAndVal.col, colAndVal.val);
 				}
 
@@ -820,6 +828,7 @@ var BaseGameLayer = cc.Layer.extend({
 					that.spawnDropRandomBlock();
 				}
 			}
+
 
 			that.relocateBlocks();
 			if (callback) {

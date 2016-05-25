@@ -42,7 +42,7 @@ var NumboHeaderLayer = (function() {
 
             // Score Label
             var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.66);
-            var elementSize = cc.size(contentSize.width * 0.2, contentSize.height * 0.4);
+            var elementSize = cc.size(contentSize.width * 0.2, contentSize.height * 0.35);
             var spriteSize;
 
             this._scoreLabel = new cc.LabelBMFont(scorePrefix, b_getFontName(res.mainFont));
@@ -73,7 +73,7 @@ var NumboHeaderLayer = (function() {
 
             // Score Labels
             startPos = cc.p(contentSize.width / 2, contentSize.height * 0.25);
-            elementSize = cc.size(contentSize.width * 0.5, contentSize.height * 0.35);
+            elementSize = cc.size(contentSize.width * 0.5, contentSize.height * 0.3);
 
             // Equation Label
             this._equationLabel = new cc.LabelBMFont("Default Text", b_getFontName(res.mainFont));
