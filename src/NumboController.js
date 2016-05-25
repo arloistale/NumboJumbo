@@ -14,6 +14,25 @@ var NumboController = (function() {
 			return path.length >= 4 || path.length >= 2 && Math.random() > 0.5;
 		},
 
+		sumOrDifferenceIsValid: function(path){
+			if (path.length != 2){
+				return false;
+			}
+
+			var valA = path[0].val;
+			var valB = path[1].val;
+			if (valA + valB <= 9) {
+				return true;
+			}
+			if (valB - valA >= 1){
+				return true;
+			}
+
+			return false;
+
+
+		},
+
 		// search for a path of 3 blocks that sums to the last element
 		threeBlocksSumsToLast: function(path) {
 			var sum = 0;
@@ -148,7 +167,7 @@ var NumboController = (function() {
 				var bonusBlocks = this.getBonusBlocks(selectedBlocks.length);
 
 				clearedBlocks = clearedBlocks.concat(bonusBlocks);
-                
+
 				// remove duplicates
 				for(i = 0; i < clearedBlocks.length; ++i) {
 					for(var j = i + 1; j < clearedBlocks.length; ++j) {
@@ -259,7 +278,8 @@ var NumboController = (function() {
 				var block = this._numboLevel.getRandomBlock();
 
 				if(block) {
-					this._knownPath = this.meanderSearch(block.col, block.row, meanderSearchCriteria.threeBlocksSumsToLast);
+					this._knownPath = this.meanderSearch(block.col, block.row,
+						meanderSearchCriteria.threeBlocksSumsToLast, [block]);
 				}
 
 				--tries;
@@ -267,6 +287,109 @@ var NumboController = (function() {
 
 			return this._knownPath;
 		},
+
+		// returns a col/val pair such that the column is legal to spawn in,
+		// and the value has at least one solution associated with it
+		// useful if we want to guarantee spawning a 'good' block
+		findLocationAndValueForNewBlock: function(){
+			var maxTries = 500;
+			var path = [];
+			var col = null;
+			var val = 0;
+			var i;
+			for (i = 0; i < maxTries && path.length == 0; ++i){
+				col = this._numboLevel.getRandomValidCol();
+				var row = this._numboLevel.getNumBlocksInColumn(col);
+				if (row >= 0){
+					path = this.meanderSearch(col, row,
+						meanderSearchCriteria.sumOrDifferenceIsValid, []);
+				}
+			}
+
+			if (path.length == 2){
+				var valA = path[0].val;
+				var valB = path[1].val;
+				if (valA + valB <= 9) {
+					val = valA + valB;
+				}
+				else if (valB - valA >= 1){
+					val = valB - valA;
+				}
+
+
+			}
+			return {col: col, val: val};
+
+		},
+
+		findLocationAndValueForTwoNewBlocks: function (){
+			var valA = null;
+			var valB = null;
+			var colA = null;
+			var colB = null;
+
+			// find the indices of non-empty columns, then shuffle them, then iterate over them
+			var colIndices = [];
+			for (var col = 0; col < NJ.NUM_COLS; ++col){
+				if (this._numboLevel.getBlocksInColumn(col).length > 1) {
+					colIndices.push(col);
+				}
+			}
+			var colIndicesShuffled = NJ.shuffleArray(colIndices);
+
+			// attempt to place both blocks in a single column (because it's easier, that's why):
+			for (var colI = 0; colI < colIndicesShuffled.length; ++colI){
+				column = this._numboLevel.getBlocksInColumn(colIndicesShuffled[colI]);
+				if (column.length < NJ.NUM_ROWS - 2){
+					colA = colB = col;
+					valA = Math.floor( ( ( column[col].val - 1) * Math.random() )+ 1);
+					valB = column[col].val - valA;
+
+					return [{col: colA, val: valA}, {col: colB, val: valB}];
+				}
+			}
+
+			// ok, that didn't work, so lets try to find two neighboring non-empty columns
+			// such that adding a block to each will result in them being adjacent
+			// (ie, ignore spawning one block in a near-empty column and the other in a
+			// near-ful column, because that wouldn't help anything).
+			// note that here we ignore the far-left and far-right columns,
+			// so as not to have 3 different cases. but those will be covered
+			// by the check we do on their immedate neighbor.
+			var leftIndex = colIndices.indexOf(0);
+			if (leftIndex >= 0){
+				colIndices.splice(leftIndex, 1);
+			}
+			var rightIndex = colIndices.indexOf(NJ.NUM_COLS - 1);
+			if (rightIndex >= 0){
+				colIndices.splice(rightIndex, 1);
+			}
+
+			for (var colI = 0; colI < colIndices.length; ++colI){
+				var column = this._numboLevel.getBlocksInColumn(colIndices[colI]);
+				var leftLength = this._numboLevel.getBlocksInColumn(colIndices[colI - 1]);
+				var rightLength = this._numboLevel.getBlocksInColumn(colIndices[colI + 1]);
+				var colLength = column.length;
+				if (colLength < NJ.NUM_ROWS && leftLength < NJ.NUM_ROWS && Math.abs(colLength - leftLength) <= 1){
+					valA = Math.floor( ( ( column[colIndices[colI]].val - 1) * Math.random() )+ 1);
+					valB = column[colIndices[colI]].val - valA;
+					colA = colIndices[colI];
+					colB = colIndices[colI] - 1;
+
+					return [{col: colA, val: valA}, {col: colB, val: valB}];
+				}
+				else if (colLength < NJ.NUM_ROWS && rightLength < NJ.NUM_ROWS && Math.abs(colLength - rightLength) <= 1){
+					valA = Math.floor( ( ( column[colIndices[colI]].val - 1) * Math.random() )+ 1);
+					valB = column[colIndices[colI]].val - valA;
+					colA = colIndices[colI];
+					colB = colIndices[colI] + 1;
+
+					return [{col: colA, val: valA}, {col: colB, val: valB}];
+				}
+			}
+
+		},
+
 
         resetKnownPath: function(){
             this._knownPath = [];
@@ -277,37 +400,21 @@ var NumboController = (function() {
 		 * @param col
 		 * @param row
 		 * @param criteria Criteria boolean expression
-         * @returns {*}
+		 * @param path: array containing the first block (if you want to include it) or an empty array (if there is no first block)
+         * @returns an array containing a valid path, or an empty array if one is not found
          */
-		meanderSearch: function(col, row, criteria) {
-			var i;
 
-			var searchStack = [];
-			var path = [];
+		meanderSearch: function(col, row, criteria, path) {
+			if (criteria(path))
+				return path;
 
-			var firstBlock = this._numboLevel.getBlock(col, row);
-			searchStack.push(firstBlock);
-			path.push(firstBlock);
-
-			var neighbors;
-			var block, neighbor;
-			while(searchStack.length > 0) {
-				block = searchStack.pop();
-
-				neighbors = this._numboLevel.getNeighbors(col, row);
-				neighbors = NJ.shuffleArray(neighbors);
-
-				for(i = 0; i < neighbors.length; i++) {
-					neighbor = neighbors[i];
-					cc.assert(neighbor, "Get neighbors returned a null -.-");
-					if(neighbor != firstBlock && path.indexOf(neighbor) < 0) {
-						searchStack.push(neighbor);
-						path.push(neighbor);
-
-						if (criteria(path)) {
-							return path;
-						}
-					}
+			var neighbors = NJ.shuffleArray(this._numboLevel.getNeighbors(col, row) );
+			for (var i = 0; i < neighbors.length; ++i){
+				var block = neighbors[i];
+				if (path.indexOf(block) < 0) { // if it's not already in the path
+					var newPath = path.slice(0);
+					newPath.push(block);
+					return this.meanderSearch(block.col, block.row, criteria, newPath);
 				}
 			}
 
@@ -410,6 +517,10 @@ var NumboController = (function() {
 			return this._numboLevel.getCurrentBlocks();
 		},
 
+		areAllBlocksTheSameValue: function() {
+			return this._numboLevel.areAllBlocksTheSameValue();
+		},
+
 		getBlock: function(col, row) {
 			return this._numboLevel.getBlock(col, row);
 		},
@@ -487,7 +598,6 @@ var NumboController = (function() {
 						}
 					}
 
-					cc.log(sortedBlocks);
 					break;
 			}
 
@@ -520,13 +630,14 @@ var NumboController = (function() {
 
 		sumToHighest: function(){
 			var sum = 0;
+			var i;
 
 			var selectedBlocksLength = this._selectedBlocks.length;
-			for(var i = 0; i < selectedBlocksLength; ++i) {
+			for(i = 0; i < selectedBlocksLength; ++i) {
 				sum += this._selectedBlocks[i].val;
 			}
 
-			for(var i = 0; i < selectedBlocksLength; ++i) {
+			for(i = 0; i < selectedBlocksLength; ++i) {
 				if(sum - this._selectedBlocks[i].val == this._selectedBlocks[i].val) {
 					return true;
 				}
