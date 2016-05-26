@@ -110,10 +110,10 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            movButton.setPosition(-buttonSize.width * 0.9, buttonSize.height * 0.9);
-            mmButton.setPosition(buttonSize.width * 0.9, buttonSize.height * 0.9);
-            reButton.setPosition(-buttonSize.width * 0.9, -buttonSize.height * 0.9);
-            infButton.setPosition(buttonSize.width * 0.9, -buttonSize.height * 0.9);
+            movButton.setPosition(-buttonSize.width * 0.85, buttonSize.height * 0.85);
+            mmButton.setPosition(buttonSize.width * 0.85, buttonSize.height * 0.85);
+            reButton.setPosition(-buttonSize.width * 0.85, -buttonSize.height * 0.85);
+            infButton.setPosition(buttonSize.width * 0.85, -buttonSize.height * 0.85);
 
             movButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
             mmButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));

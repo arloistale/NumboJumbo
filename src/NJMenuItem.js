@@ -294,6 +294,8 @@ var NJMenuItem = (function() {
             var contentSize = this.getContentSize();
             var imageStates = generateImageStates(res, cc.size(contentSize.width * 0.75, contentSize.height * 0.75), cc.p(contentSize.width / 2, contentSize.height / 2));
 
+            this._rawImageSize = imageStates.normal.getContentSize();
+
             this._spriteStates.normal.addChild(imageStates.normal, 1);
             this._spriteStates.selected.addChild(imageStates.selected, 1);
             this._spriteStates.disabled.addChild(imageStates.disabled, 1);
@@ -302,22 +304,25 @@ var NJMenuItem = (function() {
         // Assumes sizes is a cc.Size
         // also assumes image states have been initialized with setImageRes
         setImageSize: function(size) {
+            var contentSize = this.getContentSize();
             var spriteSize;
             for (var key in this._spriteStates) {
                 if (this._spriteStates.hasOwnProperty(key)) {
                     spriteSize = this._spriteStates[key].getContentSize();
-                    cc.log(size);
-                    cc.log(spriteSize);
                     this._spriteStates[key].setScale(size.width / spriteSize.width, size.height / spriteSize.height);
+                    this._spriteStates[key].attr({
+                        anchorX: 0.5,
+                        anchorY: 0.5,
+                        x: contentSize.width / 2,
+                        y: contentSize.height / 2
+                    })
                 }
             }
         },
 
         // DO NOT call this before initializing image states
         getRawImageSize: function() {
-            var size = this._spriteStates.normal.getContentSize();
-            cc.log(size);
-            return size;
+            return this._rawImageSize;
         },
 
         /////////////

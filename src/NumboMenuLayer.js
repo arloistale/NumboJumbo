@@ -92,7 +92,7 @@ var NumboMenuLayer = (function() {
 
             reButton = new NJMenuButton(buttonSize, this._onChooseTurnBased.bind(this), this);
             reButton.setBackgroundColor(NJ.themes.blockColors[2]);
-            reButton.setLabelTitle("Tower");
+            reButton.setLabelTitle("Stack");
             reButton.setLabelSize(titleSize);
             reButton.setImageRes(res.playImage);
             reButton.attr({
