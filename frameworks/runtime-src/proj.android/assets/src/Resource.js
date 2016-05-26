@@ -49,11 +49,10 @@ var res = {
     handImage: resRoot + "Images/ic_hand/ic_hand_2x.png",
 
     // music
-    menuTrack: resRoot + "Sounds/Track2.mp3",
-    backgroundTrack: resRoot + "Sounds/Track1.mp3",
 
-    trackA: resRoot + "Sounds/TrackA.mp3",
-    trackB: resRoot + "Sounds/TrackB.mp3",
+    trackPadMellow: resRoot + "Sounds/music/PadMellowV2.mp3",
+    trackDauntinglyMellow: resRoot + "Sounds/music/DauntinglyMellowV3.mp3",
+    trackQuicker: resRoot + "Sounds/music/QuickerV1.mp3",
 
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
@@ -125,7 +124,8 @@ var g_menu = [
 
     // sounds
     res.clickSound,
-    res.menuTrack,
+
+    res.trackPadMellow,
 
     // fonts
     res.mainFont.x1.fnt,
@@ -161,7 +161,9 @@ var g_game = [
     res.alertImage,
 
     // music
-    res.trackA,
+    res.trackDauntinglyMellow,
+    res.trackQuicker,
+
 
     // sounds
     res.tickSound,

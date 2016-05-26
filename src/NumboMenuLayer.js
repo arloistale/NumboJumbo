@@ -63,8 +63,8 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            var mmLabel = new NJMenuItem(refDim * NJ.uiSizes.sub);
-            mmLabel.setTitle("Minute Madness");
+            var mmLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
+            mmLabel.setTitle("Timed");
             mmLabel.setLabelColor(NJ.themes.defaultLabelColor);
             mmLabel.attr({
                 anchorX: 0.5,
@@ -79,7 +79,7 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            var movLabel = new NJMenuItem(refDim * NJ.uiSizes.sub);
+            var movLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
             movLabel.setTitle("Moves");
             movLabel.setLabelColor(NJ.themes.defaultLabelColor);
             movLabel.attr({
@@ -95,8 +95,8 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            var reLabel = new NJMenuItem(refDim * NJ.uiSizes.sub);
-            reLabel.setTitle("Numbers React");
+            var reLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
+            reLabel.setTitle("Tower");
             reLabel.setLabelColor(NJ.themes.defaultLabelColor);
             reLabel.attr({
                 anchorX: 0.5,
@@ -111,7 +111,7 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            var infLabel = new NJMenuItem(refDim * NJ.uiSizes.sub);
+            var infLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
             infLabel.setTitle("Infinite");
             infLabel.setLabelColor(NJ.themes.defaultLabelColor);
             infLabel.attr({
@@ -119,15 +119,15 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            movButton.setPosition(-buttonSize.width / 1.5, buttonSize.height / 1.5);
-            mmButton.setPosition(buttonSize.width / 1.5, buttonSize.height / 1.5);
-            reButton.setPosition(-buttonSize.width / 1.5, -buttonSize.height / 1.5);
-            infButton.setPosition(buttonSize.width / 1.5, -buttonSize.height / 1.5);
+            movButton.setPosition(-buttonSize.width, buttonSize.height);
+            mmButton.setPosition(buttonSize.width, buttonSize.height);
+            reButton.setPosition(-buttonSize.width, -buttonSize.height);
+            infButton.setPosition(buttonSize.width, -buttonSize.height);
 
-            movLabel.setPosition(-buttonSize.width / 1.5, 0);
-            mmLabel.setPosition(buttonSize.width / 1.5, 0);
-            reLabel.setPosition(-buttonSize.width / 1.5, -buttonSize.height * 1.3);
-            infLabel.setPosition(buttonSize.width / 1.5, -buttonSize.height * 1.3);
+            movLabel.setPosition(-buttonSize.width, buttonSize.height * 1.5);
+            mmLabel.setPosition(buttonSize.width, buttonSize.height * 1.5);
+            reLabel.setPosition(-buttonSize.width, -buttonSize.height * 1.5);
+            infLabel.setPosition(buttonSize.width, -buttonSize.height * 1.5);
 
             this._jumboMenu.addChild(mmButton);
             this._jumboMenu.addChild(movButton);

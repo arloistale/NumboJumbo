@@ -63,7 +63,7 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            var mmLabel = new NJMenuItem(refDim * NJ.uiSizes.sub);
+            var mmLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
             mmLabel.setTitle("Minute Madness");
             mmLabel.setLabelColor(NJ.themes.defaultLabelColor);
             mmLabel.attr({
@@ -79,7 +79,7 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            var movLabel = new NJMenuItem(refDim * NJ.uiSizes.sub);
+            var movLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
             movLabel.setTitle("Moves");
             movLabel.setLabelColor(NJ.themes.defaultLabelColor);
             movLabel.attr({
@@ -95,7 +95,7 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            var reLabel = new NJMenuItem(refDim * NJ.uiSizes.sub);
+            var reLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
             reLabel.setTitle("Numbers React");
             reLabel.setLabelColor(NJ.themes.defaultLabelColor);
             reLabel.attr({
@@ -111,7 +111,7 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            var infLabel = new NJMenuItem(refDim * NJ.uiSizes.sub);
+            var infLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
             infLabel.setTitle("Infinite");
             infLabel.setLabelColor(NJ.themes.defaultLabelColor);
             infLabel.attr({
@@ -119,15 +119,15 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            movButton.setPosition(-buttonSize.width / 1.5, buttonSize.height / 1.5);
-            mmButton.setPosition(buttonSize.width / 1.5, buttonSize.height / 1.5);
-            reButton.setPosition(-buttonSize.width / 1.5, -buttonSize.height / 1.5);
-            infButton.setPosition(buttonSize.width / 1.5, -buttonSize.height / 1.5);
+            movButton.setPosition(-buttonSize.width / 1.0, buttonSize.height / 1.0);
+            mmButton.setPosition(buttonSize.width / 1.0, buttonSize.height / 1.0);
+            reButton.setPosition(-buttonSize.width / 1.0, -buttonSize.height / 1.0);
+            infButton.setPosition(buttonSize.width / 1.0, -buttonSize.height / 1.0);
 
-            movLabel.setPosition(-buttonSize.width / 1.5, 0);
-            mmLabel.setPosition(buttonSize.width / 1.5, 0);
-            reLabel.setPosition(-buttonSize.width / 1.5, -buttonSize.height * 1.3);
-            infLabel.setPosition(buttonSize.width / 1.5, -buttonSize.height * 1.3);
+            movLabel.setPosition(-buttonSize.width / 1.0, 0);
+            mmLabel.setPosition(buttonSize.width / 1.0, 0);
+            reLabel.setPosition(-buttonSize.width / 1.0, -buttonSize.height * 1.0);
+            infLabel.setPosition(buttonSize.width / 1.0, -buttonSize.height * 1.0);
 
             this._jumboMenu.addChild(mmButton);
             this._jumboMenu.addChild(movButton);
@@ -195,7 +195,7 @@ var NumboMenuLayer = (function() {
                 return;
 
             cc.audioEngine.setMusicVolume(NJ.MUSIC_VOLUME);
-            cc.audioEngine.playMusic(res.menuTrack, true);
+            cc.audioEngine.playMusic(res.trackPadMellow, true);
         },
 
         // makes menu elements transition in
@@ -207,13 +207,11 @@ var NumboMenuLayer = (function() {
             this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
-            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(cc.easeQuinticActionInOut()));
+            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(cc.easeBackOut()));
         },
 
         // transition out
         leave: function(callback) {
-            var that = this;
-
             var headerSize = this._headerMenu.getContentSize();
             var contentSize = this._jumboMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
@@ -223,7 +221,7 @@ var NumboMenuLayer = (function() {
             this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
-            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y + contentSize.height)).easing(cc.easeQuinticActionInOut()));
+            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y + contentSize.height)).easing(cc.easeBackOut()));
 
             this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
                 if(callback)
@@ -352,7 +350,7 @@ var NumboMenuLayer = (function() {
                     that.enter();
 
                     if(NJ.settings.music)
-                        cc.audioEngine.playMusic(res.menuTrack);
+                        cc.audioEngine.playMusic(res.trackPadMellow);
                 });
 
                 that.addChild(that._settingsMenuLayer, 999);

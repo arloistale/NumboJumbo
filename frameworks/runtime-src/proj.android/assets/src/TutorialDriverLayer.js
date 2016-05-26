@@ -31,7 +31,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	// Initialize audio.
 	_initAudio: function() {
 		// start the music
-		this._backgroundTrack = res.backgroundTrack;
+		this._backgroundTrack = res.trackDauntinglyMellow;
 	},
 
 	//////////////
@@ -313,7 +313,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
         }
 
 		var activationSounds = [];
-		for(var i = 0; i < comboLength - 2; i++) {
+		for(var i = 0; i < comboLength; i++) {
 			activationSounds.push(bloops[i]);
 		}
 

@@ -262,7 +262,7 @@ var BaseGameLayer = cc.Layer.extend({
 	// Initialize audio.
 	_initAudio: function() {
 		// start the music
-        this._backgroundTrack = res.backgroundTrack;
+        this._backgroundTrack = res.trackPadMellow;
 	},
 
 	/////////////////////////
@@ -523,7 +523,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 		// play music again if music settings turned on
 		if(NJ.settings.music)
-			cc.audioEngine.playMusic(res.backgroundTrack);
+			cc.audioEngine.playMusic(res.trackDauntinglyMellow);
 	},
 
 	// On game over when player chooses to go to menu we return to menu.

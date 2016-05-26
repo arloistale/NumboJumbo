@@ -91,7 +91,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     // Initialize audio.
     _initAudio: function() {
         // start the music
-        this._backgroundTrack = res.backgroundTrack;
+        this._backgroundTrack = res.trackDauntinglyMellow;
     },
 
     _initGeometry: function() {

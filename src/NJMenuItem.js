@@ -223,6 +223,25 @@ var NJMenuItem = (function() {
             }
         },
 
+        offsetLabel: function(offset) {
+            // only initialize the labels when we need it
+            if(!this._titleStates) {
+                var contentSize = this.getContentSize();
+                this._titleStates = generateTitleStates(" ", contentSize, cc.p(contentSize.width / 2, contentSize.height / 2));
+                this._spriteStates.normal.addChild(this._titleStates.normal, 2);
+                this._spriteStates.selected.addChild(this._titleStates.selected, 2);
+                this._spriteStates.disabled.addChild(this._titleStates.disabled, 2);
+            }
+
+            var statePos;
+            for (var key in this._titleStates) {
+                if (this._titleStates.hasOwnProperty(key)) {
+                    statePos = this._titleStates[key].getPosition();
+                    this._titleStates[key].setPosition(statePos.x + offset.x, statePos.y + offset.y);
+                }
+            }
+        },
+
         // sets the color of the label of the menu item
         setLabelColor: function(color) {
             var key;

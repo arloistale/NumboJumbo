@@ -50,9 +50,9 @@ var res = {
 
     // music
 
-    trackPadMellow: resRoot + "Sounds/Music/PadMellowV2.mp3",
-    trackDauntinglyMellow: resRoot + "Sounds/Music/DauntinglyMellowV3.mp3",
-    trackQuicker: resRoot + "Sounds/Music/QuickerV1.mp3",
+    trackPadMellow: resRoot + "Sounds/music/PadMellowV2.mp3",
+    trackDauntinglyMellow: resRoot + "Sounds/music/DauntinglyMellowV3.mp3",
+    trackQuicker: resRoot + "Sounds/music/QuickerV1.mp3",
 
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",

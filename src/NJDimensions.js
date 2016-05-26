@@ -14,7 +14,7 @@ NJ.uiSizes = {
     barButton: 0.8,
 
     // buttons
-    playButton: 0.20,
+    playButton: 0.25,
     optionButton: 0.15,
     textButton: 0.075,
 
