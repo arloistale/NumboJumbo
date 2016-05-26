@@ -11,10 +11,10 @@ NJ.uiSizes = {
     toolbar: 0.12,
 
     // bar buttons are calculated based on their bar content sizes
-    barButton: 0.8,
+    barButton: 0.7,
 
     // buttons
-    playButton: 0.25,
+    playButton: 0.28,
     optionButton: 0.15,
     textButton: 0.075,
 
@@ -26,3 +26,9 @@ NJ.uiSizes = {
 
 // the size of blocks in the game as a percentage of each level grid cell size
 NJ.blockCellSize = 0.7;
+
+// gets a screen dimension from a given percentage from 0 to 1
+// this is calculated from the smaller of the screen dimensions
+NJ.calculateScreenDimensionFromRatio = function(ratio) {
+    return Math.min(cc.visibleRect.width, cc.visibleRect.height) * ratio;
+};

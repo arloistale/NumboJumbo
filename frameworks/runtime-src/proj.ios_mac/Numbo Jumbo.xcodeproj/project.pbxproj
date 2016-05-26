@@ -20,6 +20,8 @@
 		221A48921CE2E17C0052D721 /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 221A48911CE2E17C0052D721 /* Icon@3x.png */; };
 		221D45811CE56EF8004C5CF5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 221D45801CE56EF8004C5CF5 /* StoreKit.framework */; };
 		221D45831CE56EFE004C5CF5 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 221D45821CE56EFE004C5CF5 /* GameKit.framework */; };
+		222B76141CF7AE2D004DC56B /* LightIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 222B76131CF7AE2D004DC56B /* LightIcon@3x.png */; };
+		222B76161CF7AE31004DC56B /* LightIconA@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 222B76151CF7AE31004DC56B /* LightIconA@3x.png */; };
 		22960B7B1CF3E017002913C4 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 22960B7A1CF3E017002913C4 /* Default.png */; };
 		22960B7D1CF3E099002913C4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22960B7C1CF3E099002913C4 /* Default@2x.png */; };
 		22960B7F1CF3E09E002913C4 /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = 22960B7E1CF3E09E002913C4 /* Default-568h.png */; };
@@ -155,6 +157,8 @@
 		221A48911CE2E17C0052D721 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
 		221D45801CE56EF8004C5CF5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		221D45821CE56EFE004C5CF5 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
+		222B76131CF7AE2D004DC56B /* LightIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LightIcon@3x.png"; sourceTree = "<group>"; };
+		222B76151CF7AE31004DC56B /* LightIconA@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LightIconA@3x.png"; sourceTree = "<group>"; };
 		226D450BBA11EA66AC6A335A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = SOURCE_ROOT; };
 		22960B7A1CF3E017002913C4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		22960B7C1CF3E099002913C4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -305,6 +309,8 @@
 		5091732E17ECDF8A00D62437 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				222B76151CF7AE31004DC56B /* LightIconA@3x.png */,
+				222B76131CF7AE2D004DC56B /* LightIcon@3x.png */,
 				221A48911CE2E17C0052D721 /* Icon@3x.png */,
 			);
 			name = Icons;
@@ -592,12 +598,14 @@
 				BAF426FB19484B3E002B22EF /* script in Resources */,
 				1AE159EC18C9DF3600FCA372 /* project.json in Resources */,
 				221A48921CE2E17C0052D721 /* Icon@3x.png in Resources */,
+				222B76161CF7AE31004DC56B /* LightIconA@3x.png in Resources */,
 				22960B7D1CF3E099002913C4 /* Default@2x.png in Resources */,
 				22960B7B1CF3E017002913C4 /* Default.png in Resources */,
 				1AD7E0A818C9DB93004817A6 /* main.js in Resources */,
 				C03780EB18BEE0E400FE4F13 /* src in Resources */,
 				C0799CB918BAE62000E9C828 /* res in Resources */,
 				0D10471D84B42507279C127A /* SdkboxReviewResLocalizable.strings in Resources */,
+				222B76141CF7AE2D004DC56B /* LightIcon@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -792,7 +800,7 @@
 				);
 				OTHER_CFLAGS = "-DSDKBOX_ENABLED";
 				OTHER_LDFLAGS = " -ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.wombocombo.numbojumbo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wombocombo.numbojumbo1;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -829,7 +837,7 @@
 				);
 				OTHER_CFLAGS = "-DSDKBOX_ENABLED";
 				OTHER_LDFLAGS = " -ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.wombocombo.numbojumbo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wombocombo.numbojumbo1;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

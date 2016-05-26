@@ -45,7 +45,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	_startHandOverPath: function(path) {
 		if(!this._handIndicator) {
 			var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-			var handSize = refDim * 0.15;
+			var handSize = refDim * 0.2;
 			this._handIndicator = new cc.Sprite(res.handImage);
 			var spriteSize = this._handIndicator.getContentSize();
 			this._handIndicator.setScale(handSize / spriteSize.width, handSize / spriteSize.height);
@@ -123,7 +123,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 							that._convertLevelCoordsToPoint(centerCol + 2, 0)
 						]);
 
-						if(that._tutorialLayer.getCurrSlide() == slides.teach1) {
+						if(that._tutorialLayer.getCurrSlide() == slides.intro) {
 							that._handIndicator.runAction(cc.sequence(cc.callFunc(function () {
 								var block = that._numboController.getBlock(centerCol, 0);
 								if (block) block.highlight();
@@ -267,7 +267,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 					// load resources
 					var scene = new cc.Scene();
 					scene.addChild(new NumboMenuLayer());
-					cc.director.runScene(new cc.TransitionFade(0.5, scene));
+					cc.director.runScene(scene);
 				})));
 
 				break;

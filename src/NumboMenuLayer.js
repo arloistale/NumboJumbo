@@ -30,11 +30,26 @@ var NumboMenuLayer = (function() {
 
         _initHeaderUI: function() {
             this._headerMenu = new cc.Menu();
+            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
             this._headerMenu.attr({
                 anchorX: 0.5,
-                anchorY: 0,
-                y: cc.visibleRect.top.y
+                anchorY: 0.5,
+                y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2
             });
+
+            var logo = new NJMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
+            logo.setImageRes(res.logoImage);
+            var logoSize = logo.getContentSize();
+            var rawSize = logo.getRawImageSize();
+            logo.setImageSize(cc.size(logoSize.height * rawSize.width / rawSize.height, logoSize.height));
+            logo.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
+
+            this._headerMenu.addChild(logo);
+
+            this.addChild(this._headerMenu);
         },
 
         // init game modes buttons
@@ -47,97 +62,68 @@ var NumboMenuLayer = (function() {
             this._jumboMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                y: cc.visibleRect.top.y + this._jumboMenu.getContentSize().height
+                x: cc.visibleRect.left.x - this._jumboMenu.getContentSize().width / 2
             });
 
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-            var buttonSize = cc.size(refDim * NJ.uiSizes.playButton, refDim * NJ.uiSizes.playButton);
+            var buttonSize = cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton));
+            var titleSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
 
             var mmButton, movButton, reButton, infButton;
 
             mmButton = new NJMenuButton(buttonSize, this._onChooseMinuteMadness.bind(this), this);
             mmButton.setBackgroundColor(NJ.themes.blockColors[0]);
+            mmButton.setLabelTitle("Timed");
+            mmButton.setLabelSize(titleSize);
             mmButton.setImageRes(res.playImage);
             mmButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
 
-            var mmLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
-            mmLabel.setTitle("Timed");
-            mmLabel.setLabelColor(NJ.themes.defaultLabelColor);
-            mmLabel.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
-
             movButton = new NJMenuButton(buttonSize, this._onChooseMoves.bind(this), this);
             movButton.setBackgroundColor(NJ.themes.blockColors[1]);
+            movButton.setLabelTitle("Moves");
+            movButton.setLabelSize(titleSize);
             movButton.setImageRes(res.playImage);
             movButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
 
-            var movLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
-            movLabel.setTitle("Moves");
-            movLabel.setLabelColor(NJ.themes.defaultLabelColor);
-            movLabel.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
-
             reButton = new NJMenuButton(buttonSize, this._onChooseTurnBased.bind(this), this);
             reButton.setBackgroundColor(NJ.themes.blockColors[2]);
+            reButton.setLabelTitle("Tower");
+            reButton.setLabelSize(titleSize);
             reButton.setImageRes(res.playImage);
             reButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
 
-            var reLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
-            reLabel.setTitle("Tower");
-            reLabel.setLabelColor(NJ.themes.defaultLabelColor);
-            reLabel.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
-
             infButton = new NJMenuButton(buttonSize, this._onChooseSurvival.bind(this), this);
             infButton.setBackgroundColor(NJ.themes.blockColors[3]);
+            infButton.setLabelTitle("Infinite");
+            infButton.setLabelSize(titleSize);
             infButton.setImageRes(res.playImage);
             infButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
 
-            var infLabel = new NJMenuItem(refDim * NJ.uiSizes.header2);
-            infLabel.setTitle("Infinite");
-            infLabel.setLabelColor(NJ.themes.defaultLabelColor);
-            infLabel.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
+            movButton.setPosition(-buttonSize.width * 0.85, buttonSize.height * 0.85);
+            mmButton.setPosition(buttonSize.width * 0.85, buttonSize.height * 0.85);
+            reButton.setPosition(-buttonSize.width * 0.85, -buttonSize.height * 0.85);
+            infButton.setPosition(buttonSize.width * 0.85, -buttonSize.height * 0.85);
 
-            movButton.setPosition(-buttonSize.width, buttonSize.height);
-            mmButton.setPosition(buttonSize.width, buttonSize.height);
-            reButton.setPosition(-buttonSize.width, -buttonSize.height);
-            infButton.setPosition(buttonSize.width, -buttonSize.height);
-
-            movLabel.setPosition(-buttonSize.width, buttonSize.height * 1.5);
-            mmLabel.setPosition(buttonSize.width, buttonSize.height * 1.5);
-            reLabel.setPosition(-buttonSize.width, -buttonSize.height * 1.5);
-            infLabel.setPosition(buttonSize.width, -buttonSize.height * 1.5);
+            movButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
+            mmButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
+            reButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
+            infButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
 
             this._jumboMenu.addChild(mmButton);
             this._jumboMenu.addChild(movButton);
             this._jumboMenu.addChild(reButton);
             this._jumboMenu.addChild(infButton);
-
-            this._jumboMenu.addChild(mmLabel);
-            this._jumboMenu.addChild(movLabel);
-            this._jumboMenu.addChild(reLabel);
-            this._jumboMenu.addChild(infLabel);
 
             this.addChild(this._jumboMenu, 100);
         },
@@ -200,11 +186,12 @@ var NumboMenuLayer = (function() {
 
         // makes menu elements transition in
         enter: function() {
+            var headerSize = this._headerMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
 
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y)).easing(easing));
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
             this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(cc.easeBackOut()));
@@ -218,10 +205,10 @@ var NumboMenuLayer = (function() {
 
             var easing = cc.easeBackOut();
 
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height)).easing(easing));
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
-            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y + contentSize.height)).easing(cc.easeBackOut()));
+            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.left.x - contentSize.width / 2, cc.visibleRect.center.y)).easing(cc.easeBackOut()));
 
             this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
                 if(callback)
@@ -299,10 +286,13 @@ var NumboMenuLayer = (function() {
 
             cc.audioEngine.stopMusic();
             cc.audioEngine.stopAllEffects();
+            cc.eventManager.pauseTarget(this, true);
 
-            var scene = new cc.Scene();
-            scene.addChild(new TutorialDriverLayer());
-            cc.director.runScene(new cc.TransitionFade(0.5, scene));
+            this.leave(function() {
+                var scene = new cc.Scene();
+                scene.addChild(new TutorialDriverLayer());
+                cc.director.runScene(scene);
+            });
         },
 
         _onLeaderboard: function() {
@@ -349,7 +339,7 @@ var NumboMenuLayer = (function() {
 
                     that.enter();
 
-                    if(NJ.settings.music)
+                    if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
                         cc.audioEngine.playMusic(res.trackPadMellow);
                 });
 

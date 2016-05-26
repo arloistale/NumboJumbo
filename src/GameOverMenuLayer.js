@@ -140,7 +140,7 @@ var GameOverMenuLayer = (function() {
 
         generateLabel: function(title, size) {
             var toggleItem = new NJMenuItem(size);
-            toggleItem.setTitle(title);
+            toggleItem.setLabelTitle(title);
             toggleItem.setLabelColor(NJ.themes.defaultLabelColor);
             return toggleItem;
         }

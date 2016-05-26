@@ -191,7 +191,7 @@ var NJMenuButton = (function() {
             this._backgroundStates.disabled.setColor(pressedColor);
         },
 
-        setTitle: function(title) {
+        setLabelTitle: function(title) {
             // only initialize the labels when we need it
             if(!this._titleStates) {
                 var contentSize = this.getContentSize();

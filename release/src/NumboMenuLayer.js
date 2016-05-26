@@ -56,7 +56,7 @@ var NumboMenuLayer = (function() {
 
         var jumbosButton = new NJMenuItem(buttonSize, onJumbos.bind(this), this);
         jumbosButton.setBackgroundColor(NJ.themes.jumbosButtonColor);
-        jumbosButton.setTitle("Jumbos");
+        jumbosButton.setLabelTitle("Jumbos");
 
         menu.addChild(playButton);
 

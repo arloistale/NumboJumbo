@@ -522,7 +522,7 @@ var BaseGameLayer = cc.Layer.extend({
 		this.removeChild(this._settingsMenuLayer);
 
 		// play music again if music settings turned on
-		if(NJ.settings.music)
+		if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
 			cc.audioEngine.playMusic(res.trackDauntinglyMellow);
 	},
 

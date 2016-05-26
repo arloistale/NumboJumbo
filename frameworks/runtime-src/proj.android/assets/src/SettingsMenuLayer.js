@@ -107,9 +107,7 @@ var SettingsMenuLayer = (function() {
                 y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height
             });
 
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-
-            var headerLabel = this.generateLabel(this._isInGame ? "Paused" : "Settings", refDim * NJ.uiSizes.header);
+            var headerLabel = this.generateLabel(this._isInGame ? "Paused" : "Settings", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
             headerLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -134,22 +132,20 @@ var SettingsMenuLayer = (function() {
                 x: -this._contentMenu.getContentSize().width
             });
 
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-
             // generate music toggle
-            var musicLabel = this.generateLabel("Music", refDim * NJ.uiSizes.header2);
+            var musicLabel = this.generateLabel("Music", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             var musicToggle = this.generateToggle(onMusicControl.bind(this));
             var state = (NJ.settings.music ? 0 : 1);
             musicToggle.setSelectedIndex(state);
 
             // generate sounds toggle
-            var soundsLabel = this.generateLabel("Sounds", refDim * NJ.uiSizes.header2);
+            var soundsLabel = this.generateLabel("Sounds", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             var soundsToggle = this.generateToggle(onSoundsControl.bind(this));
             state = (NJ.settings.sounds ? 0 : 1);
             soundsToggle.setSelectedIndex(state);
 
             // generate vibration toggle
-            var vibrationLabel = this.generateLabel("Vibration", refDim * NJ.uiSizes.header2);
+            var vibrationLabel = this.generateLabel("Vibration", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             var vibrationToggle = this.generateToggle(onVibrationControl.bind(this));
             state = (NJ.settings.vibration ? 0 : 1);
             vibrationToggle.setSelectedIndex(state);
@@ -256,18 +252,17 @@ var SettingsMenuLayer = (function() {
 
         generateLabel: function(title, size) {
             var toggleItem = new NJMenuItem(size);
-            toggleItem.setTitle(title);
+            toggleItem.setLabelTitle(title);
             toggleItem.setLabelColor(NJ.themes.defaultLabelColor);
             return toggleItem;
         },
 
         generateToggle: function(callback) {
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-            var onItem = new NJMenuItem(refDim * NJ.uiSizes.sub);
-            onItem.setTitle("On");
+            var onItem = new NJMenuItem(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            onItem.setLabelTitle("On");
             onItem.setLabelColor(NJ.themes.defaultLabelColor);
-            var offItem = new NJMenuItem(refDim * NJ.uiSizes.sub);
-            offItem.setTitle("Off");
+            var offItem = new NJMenuItem(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            offItem.setLabelTitle("Off");
             offItem.setLabelColor(NJ.themes.defaultLabelColor);
             var toggle = new cc.MenuItemToggle(
                 onItem,

@@ -54,9 +54,8 @@ var TutorialLayer = (function() {
             this._menu = new cc.Menu();
             this.addChild(this._menu, 100);
 
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
-            this._titleMenuItem = new NJMenuItem(cc.size(cc.visibleRect.width, refDim * 0.05));
-            this._helperMenuItem = new NJMenuItem(cc.size(cc.visibleRect.width, refDim * 0.05));
+            this._titleMenuItem = new NJMenuItem(cc.size(cc.visibleRect.width, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2)));
+            this._helperMenuItem = new NJMenuItem(cc.size(cc.visibleRect.width, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2)));
             this._titleMenuItem.setLabelColor(NJ.themes.defaultLabelColor);
             this._helperMenuItem.setLabelColor(NJ.themes.defaultLabelColor);
 
@@ -80,8 +79,8 @@ var TutorialLayer = (function() {
 
                 switch(that._currSlide) {
                     case slides.intro:
-                        that._titleMenuItem.setTitle("\"I don't believe in mathematics.\"");
-                        that._helperMenuItem.setTitle("- Albert Einstein");
+                        that._titleMenuItem.setLabelTitle("\"I don't believe in mathematics.\"");
+                        that._helperMenuItem.setLabelTitle("- Albert Einstein");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -92,7 +91,7 @@ var TutorialLayer = (function() {
                         that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(6), cc.callFunc(function() {
-                            that._helperMenuItem.setTitle("Connect the numbers that add together!");
+                            that._helperMenuItem.setLabelTitle("Combos are addition sums.\nFor example: 2 + 1 = 3");
                             that._menu.alignItemsVerticallyWithPadding(10);
                             that._helperMenuItem.setChildrenOpacity(0);
                             that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
@@ -102,8 +101,8 @@ var TutorialLayer = (function() {
 
                     case slides.practice1:
 
-                        that._titleMenuItem.setTitle("Right, because 2 + 1 = 3!");
-                        that._helperMenuItem.setTitle("Try a longer combo.");
+                        that._titleMenuItem.setLabelTitle("Right, because 2 + 1 = 3!");
+                        that._helperMenuItem.setLabelTitle("Try a longer combo.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -120,8 +119,8 @@ var TutorialLayer = (function() {
                         break;
                     case slides.teach2:
 
-                        that._titleMenuItem.setTitle("Great!");
-                        that._helperMenuItem.setTitle("You can even move diagonally.");
+                        that._titleMenuItem.setLabelTitle("Great!");
+                        that._helperMenuItem.setLabelTitle("You can even move diagonally.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -139,8 +138,8 @@ var TutorialLayer = (function() {
 
                     case slides.practice2:
 
-                        that._titleMenuItem.setTitle("Cool!");
-                        that._helperMenuItem.setTitle(" ");
+                        that._titleMenuItem.setLabelTitle("Cool!");
+                        that._helperMenuItem.setLabelTitle(" ");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -158,8 +157,8 @@ var TutorialLayer = (function() {
 
                     case slides.wombo:
 
-                        that._titleMenuItem.setTitle("Beautiful.");
-                        that._helperMenuItem.setTitle("Longer combos clear even more blocks!");
+                        that._titleMenuItem.setLabelTitle("Beautiful.");
+                        that._helperMenuItem.setLabelTitle("Longer combos clear even more!");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -177,8 +176,8 @@ var TutorialLayer = (function() {
 
                     case slides.end:
 
-                        that._titleMenuItem.setTitle("Wombo Combo!");
-                        that._helperMenuItem.setTitle("Welcome to Numbo Jumbo.");
+                        that._titleMenuItem.setLabelTitle("Wombo Combo!");
+                        that._helperMenuItem.setLabelTitle("Welcome to Numbo Jumbo.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);

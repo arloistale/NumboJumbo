@@ -7,9 +7,7 @@ var NJMenuItem = (function() {
     var generateTitleStates = function(title, size, pos) {
         var scale = 1;
 
-        var refDim = Math.min(cc.visibleRect.height, cc.visibleRect.width);
-
-        if(size.height > refDim * NJ.uiSizes.header2)
+        if(size.height >= NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2))
             scale = 2;
 
         // TODO: Figure out when to set scale to 2 (when it gets blurry)
@@ -66,55 +64,7 @@ var NJMenuItem = (function() {
         disabledImage.setScale(size.width / imageSize.width, size.height / imageSize.height);
 
         selectedImage.setColor(cc.color(192, 192, 192, 255));
-        disabledImage.setColor(cc.color(64, 64, 64, 255));
-
-        normalImage.attr({
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: pos.x,
-            y: pos.y
-        });
-
-        selectedImage.attr({
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: pos.x,
-            y: pos.y
-        });
-
-        disabledImage.attr({
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: pos.x,
-            y: pos.y
-        });
-
-        return {
-            normal: normalImage,
-            selected: selectedImage,
-            disabled: disabledImage
-        };
-    };
-
-    var generateScale9States = function(imageRes, size, pos) {
-        size = size || cc.size(100, 100);
-        pos = pos || cc.p(size.width / 2, size.height / 2);
-
-        var normalImage, selectedImage, disabledImage;
-
-        var insets = cc.rect(0, 0, 0, 0);
-
-        // initialize button background
-        normalImage = new cc.Scale9Sprite(imageRes);
-        selectedImage = new cc.Scale9Sprite(imageRes);
-        disabledImage = new cc.Scale9Sprite(imageRes);
-// try not doing this
-        normalImage.setContentSize(size);
-        selectedImage.setContentSize(size);
-        disabledImage.setContentSize(size);
-
-        selectedImage.setColor(cc.color(192, 192, 192, 255));
-        disabledImage.setColor(cc.color(64, 64, 64, 255));
+        disabledImage.setColor(cc.color(255, 255, 255, 255));
 
         normalImage.attr({
             anchorX: 0.5,
@@ -149,6 +99,8 @@ var NJMenuItem = (function() {
         _spriteStates: null,
         _backgroundStates: null,
         _titleStates: null,
+
+        _rawImageSize: null,
 
         _shouldResizeWithText: false,
 
@@ -223,45 +175,6 @@ var NJMenuItem = (function() {
             }
         },
 
-        offsetLabel: function(offset) {
-            // only initialize the labels when we need it
-            if(!this._titleStates) {
-                var contentSize = this.getContentSize();
-                this._titleStates = generateTitleStates(" ", contentSize, cc.p(contentSize.width / 2, contentSize.height / 2));
-                this._spriteStates.normal.addChild(this._titleStates.normal, 2);
-                this._spriteStates.selected.addChild(this._titleStates.selected, 2);
-                this._spriteStates.disabled.addChild(this._titleStates.disabled, 2);
-            }
-
-            var statePos;
-            for (var key in this._titleStates) {
-                if (this._titleStates.hasOwnProperty(key)) {
-                    statePos = this._titleStates[key].getPosition();
-                    this._titleStates[key].setPosition(statePos.x + offset.x, statePos.y + offset.y);
-                }
-            }
-        },
-
-        // sets the color of the label of the menu item
-        setLabelColor: function(color) {
-            var key;
-
-            // only initialize the labels when we need it
-            if(!this._titleStates) {
-                var contentSize = this.getContentSize();
-                this._titleStates = generateTitleStates(" ", contentSize, cc.p(contentSize.width / 2, contentSize.height / 2));
-                this._spriteStates.normal.addChild(this._titleStates.normal, 2);
-                this._spriteStates.selected.addChild(this._titleStates.selected, 2);
-                this._spriteStates.disabled.addChild(this._titleStates.disabled, 2);
-            }
-
-            for (key in this._titleStates) {
-                if (this._titleStates.hasOwnProperty(key)) {
-                    this._titleStates[key].setColor(color);
-                }
-            }
-        },
-
         // sets the opacity of the children of the menu item
         setChildrenOpacity: function(opacity) {
             var key;
@@ -282,6 +195,10 @@ var NJMenuItem = (function() {
                 }
             }
         },
+
+        //////////////////////
+        // Background Logic //
+        //////////////////////
 
         setBackgroundImage: function(res) {
             var contentSize = this.getContentSize();
@@ -307,20 +224,71 @@ var NJMenuItem = (function() {
             this._backgroundStates.disabled.setColor(pressedColor);
         },
 
-        setTitle: function(title) {
+        /////////////////
+        // Title Logic //
+        /////////////////
+
+        setLabelTitle: function(title) {
             // only initialize the labels when we need it
             if(!this._titleStates) {
-                var contentSize = this.getContentSize();
-                this._titleStates = generateTitleStates(title, contentSize, cc.p(contentSize.width / 2, contentSize.height / 2));
-                this._spriteStates.normal.addChild(this._titleStates.normal, 2);
-                this._spriteStates.selected.addChild(this._titleStates.selected, 2);
-                this._spriteStates.disabled.addChild(this._titleStates.disabled, 2);
+                this._makeTitleStates();
             }
 
             this._titleStates.normal.setString(title);
             this._titleStates.selected.setString(title);
             this._titleStates.disabled.setString(title);
         },
+
+        // Assumes sizes is a dimension value
+        setLabelSize: function(size) {
+            // only initialize the labels when we need it
+            if(!this._titleStates) {
+                this._makeTitleStates();
+            }
+
+            var spriteSize;
+            for (var key in this._titleStates) {
+                if (this._titleStates.hasOwnProperty(key)) {
+                    spriteSize = this._titleStates[key].getContentSize();
+                    this._titleStates[key].setScale(size / spriteSize.height, size / spriteSize.height);
+                }
+            }
+        },
+
+        offsetLabel: function(offset) {
+            // only initialize the labels when we need it
+            if(!this._titleStates) {
+                this._makeTitleStates();
+            }
+
+            var statePos;
+            for (var key in this._titleStates) {
+                if (this._titleStates.hasOwnProperty(key)) {
+                    statePos = this._titleStates[key].getPosition();
+                    this._titleStates[key].setPosition(statePos.x + offset.x, statePos.y + offset.y);
+                }
+            }
+        },
+
+        // sets the color of the label of the menu item
+        setLabelColor: function(color) {
+            var key;
+
+            // only initialize the labels when we need it
+            if(!this._titleStates) {
+                this._makeTitleStates();
+            }
+
+            for (key in this._titleStates) {
+                if (this._titleStates.hasOwnProperty(key)) {
+                    this._titleStates[key].setColor(color);
+                }
+            }
+        },
+
+        /////////////////
+        // Image Logic //
+        /////////////////
 
         setImageRes: function(res) {
             var contentSize = this.getContentSize();
@@ -329,6 +297,41 @@ var NJMenuItem = (function() {
             this._spriteStates.normal.addChild(imageStates.normal, 1);
             this._spriteStates.selected.addChild(imageStates.selected, 1);
             this._spriteStates.disabled.addChild(imageStates.disabled, 1);
+        },
+
+        // Assumes sizes is a cc.Size
+        // also assumes image states have been initialized with setImageRes
+        setImageSize: function(size) {
+            var spriteSize;
+            for (var key in this._spriteStates) {
+                if (this._spriteStates.hasOwnProperty(key)) {
+                    spriteSize = this._spriteStates[key].getContentSize();
+                    cc.log(size);
+                    cc.log(spriteSize);
+                    this._spriteStates[key].setScale(size.width / spriteSize.width, size.height / spriteSize.height);
+                }
+            }
+        },
+
+        // DO NOT call this before initializing image states
+        getRawImageSize: function() {
+            var size = this._spriteStates.normal.getContentSize();
+            cc.log(size);
+            return size;
+        },
+
+        /////////////
+        // Helpers //
+        /////////////
+
+        _makeTitleStates: function() {
+            var contentSize = this.getContentSize();
+            this._titleStates = generateTitleStates(" ", contentSize, cc.p(contentSize.width / 2, contentSize.height / 2));
+            this._spriteStates.normal.addChild(this._titleStates.normal, 2);
+            this._spriteStates.selected.addChild(this._titleStates.selected, 2);
+            this._spriteStates.disabled.addChild(this._titleStates.disabled, 2);
+
+            this.setLabelColor(NJ.themes.defaultLabelColor);
         }
     });
 }());

@@ -93,7 +93,7 @@ var NJButton = (function() {
             this._spriteStates.disabled.addChild(backgroundStates.disabled, -5);
         },
 
-        setTitle: function(title) {
+        setLabelTitle: function(title) {
             /*
             // only initialize the labels when we need it
             if(!this._titleStates) {
