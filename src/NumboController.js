@@ -60,6 +60,10 @@ var NumboController = (function() {
 		_numboLevel: null,
 		_knownPath: [],
 		_selectedBlocks: [],
+
+		// the element at index i of the cache represents the (i + 3) combo length bonus blocks image
+		_bonusBlocksImageCache: [],
+
 		blocksDropped: 0,
 
 		////////////////////
@@ -158,13 +162,8 @@ var NumboController = (function() {
 					//cc.audioEngine.playEffect(res.plipSound);
 
 				var selectedBlocks = this._selectedBlocks;
-				var selectedNums = this._selectedBlocks.map(function(b) {
-					return b.val;
-				});
 
 				clearedBlocks = selectedBlocks.slice(0);
-
-				var bonusBlocks = this.getBonusBlocks(selectedBlocks.length);
 
 				clearedBlocks = clearedBlocks.concat(bonusBlocks);
 
