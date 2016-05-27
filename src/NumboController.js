@@ -165,7 +165,7 @@ var NumboController = (function() {
 
 				clearedBlocks = selectedBlocks.slice(0);
 
-				clearedBlocks = clearedBlocks.concat(bonusBlocks);
+				//clearedBlocks = clearedBlocks.concat(this._bonusBlocksImageCache);
 
 				// remove duplicates
 				for(i = 0; i < clearedBlocks.length; ++i) {
@@ -185,7 +185,7 @@ var NumboController = (function() {
 
 			this.deselectAllBlocks();
 
-			return {clearedBlocks: clearedBlocks, bonusBlocks: bonusBlocks};
+			return { clearedBlocks: clearedBlocks, bonusBlocks: [] };
 		},
 
         ////////////////////////////
