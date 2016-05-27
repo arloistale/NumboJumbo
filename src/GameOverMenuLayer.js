@@ -70,6 +70,7 @@ var GameOverMenuLayer = (function() {
 
             this._initHeaderUI();
             this._initStatsUI();
+            this._initToolUI();
 
             this.enter();
         },
@@ -181,9 +182,6 @@ var GameOverMenuLayer = (function() {
 
             this._toolMenu.alignItemsHorizontallyWithPadding(10);
 
-            this._toolMenu.addChild(retryButton);
-            this._toolMenu.addChild(menuButton);
-
             this.addChild(this._toolMenu, 100);
         },
 
@@ -202,7 +200,7 @@ var GameOverMenuLayer = (function() {
         // transition out
         leave: function(callback) {
             var headerSize = this._headerMenu.getContentSize();
-            var statSize = this._statsMenu.getContentSize();
+            var statsSize = this._statsMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
@@ -210,7 +208,7 @@ var GameOverMenuLayer = (function() {
             this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
-            this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - contentSize.width, cc.visibleRect.center.y)).easing(easing));
+            this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - statsSize.width, cc.visibleRect.center.y)).easing(easing));
 
             this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
                 if(callback)

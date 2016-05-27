@@ -294,7 +294,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
 
             this.leave(function() {
                 var scene = new cc.Scene();
@@ -308,7 +307,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
 
             this.leave(function() {
                 var scene = new cc.Scene();
@@ -322,7 +320,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
 
             this.leave(function() {
                 var scene = new cc.Scene();
@@ -336,7 +333,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
 
             this.leave(function() {
                 var scene = new cc.Scene();
@@ -352,7 +348,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
             cc.eventManager.pauseTarget(this, true);
 
             this.leave(function() {
