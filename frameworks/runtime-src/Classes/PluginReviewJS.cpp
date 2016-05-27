@@ -1,5 +1,4 @@
 #include "PluginReviewJS.hpp"
-#include "cocos2d_specifics.hpp"
 #include "PluginReview/PluginReview.h"
 #include "SDKBoxJSHelper.h"
 #include "sdkbox/Sdkbox.h"

@@ -178,7 +178,7 @@ var NumboController = (function() {
 
 				// remove any affected block sprite objects:
 				for(i = 0; i < clearedBlocks.length; ++i) {
-					this.killBlock(clearedBlocks[i]);
+					this.popKillBlock(clearedBlocks[i]);
 				}
 
 				this._numboLevel.updateRowsAndColumns();
@@ -469,8 +469,8 @@ var NumboController = (function() {
 			this._numboLevel.updateTheme();
 		},
 
-        killBlock: function(block) {
-            this._numboLevel.killBlock(block);
+        popKillBlock: function(block) {
+            this._numboLevel.popKillBlock(block);
         },
 
         killAllBlocks: function() {
@@ -481,6 +481,10 @@ var NumboController = (function() {
 		/////////////
 		// GETTERS //
 		/////////////
+
+		clearLevel: function() {
+			this._numboLevel.clear();
+		},
 
 		levelIsClear: function() {
 			return this._numboLevel.isClear();
@@ -578,7 +582,7 @@ var NumboController = (function() {
 					break;
 			}
 
-			var womboComboType = 1;
+			var womboComboType = 0;
 			var itorBlock;
 			var result = [];
 

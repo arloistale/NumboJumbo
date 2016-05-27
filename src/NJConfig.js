@@ -26,6 +26,14 @@ NJ.modekeys = {
     infinite: "inf"
 };
 
+// each name corresponds to the keys above
+NJ.modeNames = {
+    mm: "Timed",
+    mov: "Moves",
+    re: "Stack",
+    inf: "Infinite"
+};
+
 // combo thresholds
 NJ.comboThresholds = (function() {
     var data = [

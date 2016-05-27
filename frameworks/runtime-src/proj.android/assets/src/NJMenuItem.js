@@ -63,7 +63,7 @@ var NJMenuItem = (function() {
         selectedImage.setScale(size.width / imageSize.width, size.height / imageSize.height);
         disabledImage.setScale(size.width / imageSize.width, size.height / imageSize.height);
 
-        selectedImage.setColor(cc.color(192, 192, 192, 255));
+        selectedImage.setColor(cc.color(255, 255, 255, 255));
         disabledImage.setColor(cc.color(255, 255, 255, 255));
 
         normalImage.attr({
@@ -217,7 +217,7 @@ var NJMenuItem = (function() {
         // parameters can consist of a single col
         setBackgroundColor: function(color) {
             var normalColor = color;
-            var pressedColor = NJ.colorWithBrightness(color, 0.5);
+            var pressedColor = NJ.colorWithBrightness(color, 1);
 
             this._backgroundStates.normal.setColor(normalColor);
             this._backgroundStates.selected.setColor(pressedColor);

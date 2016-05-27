@@ -12,23 +12,33 @@ var GameOverMenuLayer = (function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
 
-        if(this.onRetryCallback)
-            this.onRetryCallback();
+        var that = this;
+
+        this.leave(function() {
+            if(that.onRetryCallback)
+                that.onRetryCallback();
+        });
     };
 
     var onMenu = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
 
+        var that = this;
 
-        if(this.onMenuCallback)
-            this.onMenuCallback();
+        this.leave(function() {
+            if(that.onMenuCallback)
+                that.onMenuCallback();
+        });
     };
 
     return cc.LayerColor.extend({
 
         // UI Data
-        _menu: null,
+        _headerMenu: null,
+        _statsMenu: null,
+        _toolMenu: null,
+
         _scoreLabel: null,
         _condLabel: null,
         _bestLabel: null,
@@ -58,46 +68,76 @@ var GameOverMenuLayer = (function() {
             var backgroundColor = NJ.themes.backgroundColor;
             this.init(backgroundColor);
 
-            this.initUI();
+            this._initHeaderUI();
+            this._initStatsUI();
+
+            this.enter();
         },
 
-        initUI: function() {
+        _initHeaderUI: function() {
+            this._headerMenu = new cc.Menu();
+            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
+            this._headerMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0,
+                y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height
+            });
+
+            var headerLabel = this.generateLabel("Summary (" + NJ.modeNames[this._modeKey] + ")", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
+            headerLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: -this._headerMenu.getContentSize().height / 2
+            });
+
+            this._headerMenu.addChild(headerLabel);
+
+            this.addChild(this._headerMenu);
+        },
+
+        _initStatsUI: function() {
             var key = this._modeKey;
             var shouldDisplayLevel = this._shouldDisplayLevel;
 
             var columnCount = shouldDisplayLevel ? 2 : 1;
 
-            this._menu = new cc.Menu();
+            this._statsMenu = new cc.Menu();
 
-            var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
+            this._statsMenu.setContentSize(cc.size(cc.visibleRect.width,
+                (1 - NJ.uiSizes.headerBar - NJ.uiSizes.toolbar) * cc.visibleRect.height));
 
-            var headerLabel = this.generateLabel("Stats", refDim * NJ.uiSizes.header);
+            this._statsMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: -this._statsMenu.getContentSize().width
+            });
 
-            var currentLabel = this.generateLabel("Current", refDim * NJ.uiSizes.header2);
+            // compute label size
+            var header2Size = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
 
-            this._scoreLabel = this.generateLabel("Pts: " + NJ.gameState.getScore(), refDim * NJ.uiSizes.header2);
-            this._levelLabel = this.generateLabel("Lv: " + NJ.gameState.getLevel(), refDim * NJ.uiSizes.header2);
+            var currentLabel = this.generateLabel("Current", header2Size);
 
-            var bestLabel = this.generateLabel("Best", refDim * NJ.uiSizes.header2);
+            this._scoreLabel = this.generateLabel("Points: " + NJ.gameState.getScore(), header2Size);
+            this._levelLabel = this.generateLabel("Level: " + NJ.gameState.getLevel(), header2Size);
 
-            this._bestLabel = this.generateLabel("Pts: " + NJ.stats.getHighscore(key), refDim * NJ.uiSizes.header2);
-            this._bestLevelLabel = this.generateLabel("Lv: " + NJ.stats.getHighlevel(key), refDim * NJ.uiSizes.header2);
+            var bestLabel = this.generateLabel("Best", header2Size);
 
-            this._menu.addChild(headerLabel);
+            this._bestLabel = this.generateLabel("Points: " + NJ.stats.getHighscore(key), header2Size);
+            this._bestLevelLabel = this.generateLabel("Level: " + NJ.stats.getHighlevel(key), header2Size);
             
-            this._menu.addChild(currentLabel);
-            
-            this._menu.addChild(this._scoreLabel);
+            this._statsMenu.addChild(currentLabel);
+
+            this._statsMenu.addChild(this._scoreLabel);
 
             if(shouldDisplayLevel)
-                this._menu.addChild(this._levelLabel);
+                this._statsMenu.addChild(this._levelLabel);
 
-            this._menu.addChild(bestLabel);
+            this._statsMenu.addChild(bestLabel);
 
-            this._menu.addChild(this._bestLabel);
+            this._statsMenu.addChild(this._bestLabel);
 
             if(shouldDisplayLevel)
-                this._menu.addChild(this._bestLevelLabel);
+                this._statsMenu.addChild(this._bestLevelLabel);
 
             //var currencyTitleLabel = this.generateLabel("Currency");
             //this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
@@ -105,21 +145,77 @@ var GameOverMenuLayer = (function() {
             //this._menu.addChild(currencyTitleLabel);
             //this._menu.addChild(this._currencyLabel);
 
-            var buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
+            this._statsMenu.alignItemsInColumns(1, 1, columnCount, 1, columnCount);
+            this.addChild(this._statsMenu, 100);
+        },
+
+        _initToolUI: function() {
+
+            this._toolMenu = new cc.Menu();
+            this._toolMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.toolbar));
+            var toolSize = this._toolMenu.getContentSize();
+            this._toolMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: cc.visibleRect.bottom.y - toolSize.height / 2
+            });
+
+            var buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
 
             var retryButton = new NJMenuButton(buttonSize, onRetry.bind(this), this);
             retryButton.setImageRes(res.retryImage);
-
-            buttonSize = cc.size(refDim * NJ.uiSizes.optionButton, refDim * NJ.uiSizes.optionButton);
+            retryButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
 
             var menuButton = new NJMenuButton(buttonSize, onMenu.bind(this), this);
             menuButton.setImageRes(res.homeImage);
+            menuButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
 
-            this._menu.addChild(retryButton);
-            this._menu.addChild(menuButton);
+            this._toolMenu.addChild(retryButton);
+            this._toolMenu.addChild(menuButton);
 
-            this._menu.alignItemsInColumns(1, 1, columnCount, 1, columnCount, 1, 1);
-            this.addChild(this._menu, 100);
+            this._toolMenu.alignItemsHorizontallyWithPadding(10);
+
+            this._toolMenu.addChild(retryButton);
+            this._toolMenu.addChild(menuButton);
+
+            this.addChild(this._toolMenu, 100);
+        },
+
+        // makes menu elements transition in
+        enter: function() {
+            var toolSize = this._toolMenu.getContentSize();
+
+            var easing = cc.easeBackOut();
+
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y)).easing(easing));
+            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
+
+            this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
+        },
+
+        // transition out
+        leave: function(callback) {
+            var headerSize = this._headerMenu.getContentSize();
+            var statSize = this._statsMenu.getContentSize();
+            var toolSize = this._toolMenu.getContentSize();
+
+            var easing = cc.easeBackOut();
+
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height)).easing(easing));
+            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
+
+            this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - contentSize.width, cc.visibleRect.center.y)).easing(easing));
+
+            this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
+                if(callback)
+                    callback();
+            })));
         },
 
 //////////////////

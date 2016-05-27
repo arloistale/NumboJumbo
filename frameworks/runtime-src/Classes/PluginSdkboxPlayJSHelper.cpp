@@ -1,9 +1,6 @@
 #include "PluginSdkboxPlayJSHelper.h"
-#include "cocos2d_specifics.hpp"
 #include "PluginSdkboxPlay/PluginSdkboxPlay.h"
 #include "SDKBoxJSHelper.h"
-
-#include "js_manual_conversions.h"
 
 extern JSObject* jsb_sdkbox_PluginSdkboxPlay_prototype;
 static JSContext* s_cx = nullptr;

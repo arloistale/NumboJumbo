@@ -41,7 +41,7 @@ var NumboBlock = (function() {
 
             // if first block initialize backgroundSize
             if(!_backgroundScale) {
-                _backgroundSize = this._backgroundSprite.getContentSize();
+                var _backgroundSize = this._backgroundSprite.getContentSize();
                 _backgroundScale = {
                     x: blockSize.width / _backgroundSize.width,
                     y: blockSize.height / _backgroundSize.height
@@ -100,9 +100,9 @@ var NumboBlock = (function() {
         // Manipulation //
         //////////////////
 
-        // kill the block
-        // NOTE: DO NOT call directly, call kill block in NumboLevel instead
-        kill: function(clean) {
+        // popKill the block
+        // NOTE: DO NOT call directly, call popKill block in NumboLevel instead
+        popKill: function(clean) {
             var block = this;
 
             if(clean) {
@@ -126,7 +126,6 @@ var NumboBlock = (function() {
 
         // highlight the sprite indicating selection
         highlight: function(color) {
-
             var that = this;
 
             if(color)

@@ -67,20 +67,20 @@ var NumboLevel = (function() {
 			return block;
 		},
 
-		// kill given block
+		// popKill given block
 		killBlock: function(block, clean) {
 			cc.assert(block, "Invalid block");
 
 			var col = block.col;
 			var row = block.row;
-			block.kill(clean);
+			block.popKill(clean);
 
 			// mark this block as null
 			// later when we update rows and columns we will remove from the array
 			this._blocks[col][row] = null;
 		},
 
-		// kill block at given coordinates
+		// popKill block at given coordinates
 		killBlockAtCoords: function(col, row) {
 			cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
 

@@ -68,6 +68,7 @@ NJ.social = (function() {
         isLoggedIn: function () {
             // TODO: There is a problem when the user signs out using Settings option, will still be connected
             if (cc.sys.isNative) {
+                cc.log("Are we logged in? " + sdkbox.PluginSdkboxPlay.isConnected());
                 return sdkbox.PluginSdkboxPlay.isConnected();
             }
         },

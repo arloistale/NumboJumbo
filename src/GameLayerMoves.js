@@ -18,7 +18,7 @@ var MovesLayer = BaseGameLayer.extend({
 	],
 
 	// maximum number of moves allowed
-	_movesLimit: 20,
+	_movesLimit: 2,
 
 	////////////////////
 	// Initialization //
@@ -101,7 +101,9 @@ var MovesLayer = BaseGameLayer.extend({
 		this.runAction(cc.sequence(cc.callFunc(function() {
 			that._numboHeaderLayer.leave();
 			that._toolbarLayer.leave();
-		}), cc.delayTime(2), cc.callFunc(function() {
+		}), cc.delayTime(1), cc.callFunc(function() {
+			that._numboController.clearLevel();
+		}), cc.delayTime(1), cc.callFunc(function() {
 			that.pauseGame();
 
 			that._gameOverMenuLayer = new GameOverMenuLayer(key, false);

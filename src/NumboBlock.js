@@ -41,7 +41,7 @@ var NumboBlock = (function() {
 
             // if first block initialize backgroundSize
             if(!_backgroundScale) {
-                _backgroundSize = this._backgroundSprite.getContentSize();
+                var _backgroundSize = this._backgroundSprite.getContentSize();
                 _backgroundScale = {
                     x: blockSize.width / _backgroundSize.width,
                     y: blockSize.height / _backgroundSize.height
@@ -100,15 +100,36 @@ var NumboBlock = (function() {
         // Manipulation //
         //////////////////
 
-        // kill the block
-        // NOTE: DO NOT call directly, call kill block in NumboLevel instead
-        kill: function(clean) {
+        // immediatley removes the block
+        // DO NOT call directly, use killblock in NumboLevel instead
+        remove: function() {
+            block.removeFromParent(true);
+        },
+
+        // fade kill the block
+        // mainly used for when killing the block no big deal
+        // NOTE: DO NOT call directly
+        fadeKill: function(clean) {
             var block = this;
 
-            if(clean) {
+            var delayAction = cc.delayTime(1.25);
+
+            var removeAction = cc.callFunc(function() {
                 block.removeFromParent(true);
-                return;
-            }
+            });
+
+            this._highlightSprite.stopAllActions();
+            this._highlightSprite.setVisible(false);
+
+            this._backgroundSprite.runAction(cc.scaleBy(0.1, 0, 0));
+            this._valueLabel.runAction(cc.scaleBy(0.1, 0, 0));
+            this.runAction(cc.sequence(delayAction, removeAction));
+        },
+
+        // popKill the block
+        // NOTE: DO NOT call directly, call kill block in NumboLevel instead
+        popKill: function(clean) {
+            var block = this;
 
             var delayAction = cc.delayTime(1.25);
 
@@ -126,7 +147,6 @@ var NumboBlock = (function() {
 
         // highlight the sprite indicating selection
         highlight: function(color) {
-
             var that = this;
 
             if(color)

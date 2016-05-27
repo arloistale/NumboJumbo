@@ -128,9 +128,9 @@ var NumboBlock = (function() {
             this._valueLabel.setColor(cc.color(255, 255, 255));
         },
 
-        // kill the block
-        // NOTE: DO NOT call directly, call kill block in NumboLevel instead
-        kill: function() {
+        // popKill the block
+        // NOTE: DO NOT call directly, call popKill block in NumboLevel instead
+        popKill: function() {
             var block = this;
             var scaleAction = cc.scaleTo(0.7, 1.5, 1.5).easing(cc.easeExponentialOut());
             var fadeAction = cc.fadeTo(0.2, 0);

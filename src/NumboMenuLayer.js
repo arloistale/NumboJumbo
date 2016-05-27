@@ -3,9 +3,39 @@ var NumboMenuLayer = (function() {
 
     return cc.LayerColor.extend({
 
+        // Menu Data
         _headerMenu: null,
         _jumboMenu: null,
         _toolMenu: null,
+
+        // Mode Buttons Data
+        _modeData: {
+            mm: {
+                button: null,
+                startPos: null,
+                endPos: null
+            },
+
+            mov: {
+                button: null,
+                startPos: null,
+                endPos: null
+            },
+
+            re: {
+                button: null,
+                startPos: null,
+                endPos: null
+            },
+
+            inf: {
+                button: null,
+                startPos: null,
+                endPos: null
+            }
+        },
+
+
 
         _shopLayer: null,
         _settingsMenuLayer: null,
@@ -41,10 +71,11 @@ var NumboMenuLayer = (function() {
             logo.setImageRes(res.logoImage);
             var logoSize = logo.getContentSize();
             var rawSize = logo.getRawImageSize();
-            logo.setImageSize(cc.size(logoSize.height * rawSize.width / rawSize.height, logoSize.height));
+            logo.setImageSize(cc.size(logoSize.height * rawSize.width / rawSize.height * 2, logoSize.height * 2));
             logo.attr({
                 anchorX: 0.5,
-                anchorY: 0.5
+                anchorY: 0.5,
+                y: -logoSize.height / 2
             });
 
             this._headerMenu.addChild(logo);
@@ -62,68 +93,85 @@ var NumboMenuLayer = (function() {
             this._jumboMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.left.x - this._jumboMenu.getContentSize().width / 2
+                x: cc.visibleRect.center.x,
+                y: cc.visibleRect.center.y * 0.95
             });
 
             var buttonSize = cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton));
             var titleSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
 
-            var mmButton, movButton, reButton, infButton;
-
-            mmButton = new NJMenuButton(buttonSize, this._onChooseMinuteMadness.bind(this), this);
-            mmButton.setBackgroundColor(NJ.themes.blockColors[0]);
-            mmButton.setLabelTitle("Timed");
-            mmButton.setLabelSize(titleSize);
-            mmButton.setImageRes(res.playImage);
-            mmButton.attr({
+            this._modeData.mm.button = new NJMenuButton(buttonSize, this._onChooseMinuteMadness.bind(this), this);
+            this._modeData.mm.button.enableHighlight(true);
+            this._modeData.mm.button.setHighlightColor(NJ.themes.blockColors[0]);
+            this._modeData.mm.button.setBackgroundColor(NJ.themes.blockColors[0]);
+            this._modeData.mm.button.setLabelTitle(NJ.modeNames[NJ.modekeys.minuteMadness]);
+            this._modeData.mm.button.setLabelSize(titleSize);
+            this._modeData.mm.button.setImageRes(res.playImage);
+            this._modeData.mm.button.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
 
-            movButton = new NJMenuButton(buttonSize, this._onChooseMoves.bind(this), this);
-            movButton.setBackgroundColor(NJ.themes.blockColors[1]);
-            movButton.setLabelTitle("Moves");
-            movButton.setLabelSize(titleSize);
-            movButton.setImageRes(res.playImage);
-            movButton.attr({
+            this._modeData.mov.button = new NJMenuButton(buttonSize, this._onChooseMoves.bind(this), this);
+            this._modeData.mov.button.enableHighlight(true);
+            this._modeData.mov.button.setHighlightColor(NJ.themes.blockColors[1]);
+            this._modeData.mov.button.setBackgroundColor(NJ.themes.blockColors[1]);
+            this._modeData.mov.button.setLabelTitle(NJ.modeNames[NJ.modekeys.moves]);
+            this._modeData.mov.button.setLabelSize(titleSize);
+            this._modeData.mov.button.setImageRes(res.playImage);
+            this._modeData.mov.button.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
 
-            reButton = new NJMenuButton(buttonSize, this._onChooseTurnBased.bind(this), this);
-            reButton.setBackgroundColor(NJ.themes.blockColors[2]);
-            reButton.setLabelTitle("Stack");
-            reButton.setLabelSize(titleSize);
-            reButton.setImageRes(res.playImage);
-            reButton.attr({
+            this._modeData.re.button = new NJMenuButton(buttonSize, this._onChooseTurnBased.bind(this), this);
+            this._modeData.re.button.enableHighlight(true);
+            this._modeData.re.button.setHighlightColor(NJ.themes.blockColors[2]);
+            this._modeData.re.button.setBackgroundColor(NJ.themes.blockColors[2]);
+            this._modeData.re.button.setLabelTitle(NJ.modeNames[NJ.modekeys.react]);
+            this._modeData.re.button.setLabelSize(titleSize);
+            this._modeData.re.button.setImageRes(res.playImage);
+            this._modeData.re.button.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
 
-            infButton = new NJMenuButton(buttonSize, this._onChooseSurvival.bind(this), this);
-            infButton.setBackgroundColor(NJ.themes.blockColors[3]);
-            infButton.setLabelTitle("Infinite");
-            infButton.setLabelSize(titleSize);
-            infButton.setImageRes(res.playImage);
-            infButton.attr({
+            this._modeData.inf.button = new NJMenuButton(buttonSize, this._onChooseSurvival.bind(this), this);
+            this._modeData.inf.button.enableHighlight(true);
+            this._modeData.inf.button.setHighlightColor(NJ.themes.blockColors[3]);
+            this._modeData.inf.button.setBackgroundColor(NJ.themes.blockColors[3]);
+            this._modeData.inf.button.setLabelTitle(NJ.modeNames[NJ.modekeys.infinite]);
+            this._modeData.inf.button.setLabelSize(titleSize);
+            this._modeData.inf.button.setImageRes(res.playImage);
+            this._modeData.inf.button.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
 
-            movButton.setPosition(-buttonSize.width * 0.85, buttonSize.height * 0.85);
-            mmButton.setPosition(buttonSize.width * 0.85, buttonSize.height * 0.85);
-            reButton.setPosition(-buttonSize.width * 0.85, -buttonSize.height * 0.85);
-            infButton.setPosition(buttonSize.width * 0.85, -buttonSize.height * 0.85);
+            this._modeData.mov.startPos = cc.p(-cc.visibleRect.width / 2 - buttonSize.width * 0.85, buttonSize.height * 0.85);
+            this._modeData.mm.startPos = cc.p(cc.visibleRect.width / 2 + buttonSize.width * 0.85, buttonSize.height * 0.85);
+            this._modeData.re.startPos = cc.p(-cc.visibleRect.width / 2 - buttonSize.width * 0.85, -buttonSize.height * 0.85);
+            this._modeData.inf.startPos = cc.p(cc.visibleRect.width / 2 + buttonSize.width * 0.85, -buttonSize.height * 0.85);
 
-            movButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
-            mmButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
-            reButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
-            infButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
+            this._modeData.mov.endPos = cc.p(-buttonSize.width * 0.85, buttonSize.height * 0.85);
+            this._modeData.mm.endPos = cc.p(buttonSize.width * 0.85, buttonSize.height * 0.85);
+            this._modeData.re.endPos = cc.p(-buttonSize.width * 0.85, -buttonSize.height * 0.85);
+            this._modeData.inf.endPos = cc.p(buttonSize.width * 0.85, -buttonSize.height * 0.85);
 
-            this._jumboMenu.addChild(mmButton);
-            this._jumboMenu.addChild(movButton);
-            this._jumboMenu.addChild(reButton);
-            this._jumboMenu.addChild(infButton);
+            this._modeData.mov.button.setPosition(this._modeData.mov.startPos);
+            this._modeData.mm.button.setPosition(this._modeData.mm.startPos);
+            this._modeData.re.button.setPosition(this._modeData.re.startPos);
+            this._modeData.inf.button.setPosition(this._modeData.inf.startPos);
+
+            this._modeData.mov.button.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
+            this._modeData.mm.button.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
+            this._modeData.re.button.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
+            this._modeData.inf.button.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
+
+            this._jumboMenu.addChild(this._modeData.mm.button);
+            this._jumboMenu.addChild(this._modeData.mov.button);
+            this._jumboMenu.addChild(this._modeData.re.button);
+            this._jumboMenu.addChild(this._modeData.inf.button);
 
             this.addChild(this._jumboMenu, 100);
         },
@@ -194,7 +242,18 @@ var NumboMenuLayer = (function() {
             this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
-            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(cc.easeBackOut()));
+            var data;
+            var delay = 0.4;
+            for(var key in this._modeData) {
+                if(!this._modeData.hasOwnProperty(key))
+                    continue;
+
+                data = this._modeData[key];
+
+                data.button.runAction(cc.moveTo(delay, data.endPos).easing(easing));
+
+                delay += 0.075;
+            }
         },
 
         // transition out
@@ -205,10 +264,18 @@ var NumboMenuLayer = (function() {
 
             var easing = cc.easeBackOut();
 
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height * 1.1)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
-            this._jumboMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.left.x - contentSize.width / 2, cc.visibleRect.center.y)).easing(cc.easeBackOut()));
+            var data;
+            for(var key in this._modeData) {
+                if(!this._modeData.hasOwnProperty(key))
+                    continue;
+
+                data = this._modeData[key];
+
+                data.button.runAction(cc.moveTo(0.4, data.startPos).easing(easing));
+            }
 
             this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
                 if(callback)

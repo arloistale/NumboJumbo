@@ -126,13 +126,13 @@ var NumboLevel = (function() {
 			return block;
 		},
 
-		// kill given block
+		// popKill given block
 		killBlock: function(block) {
 			cc.assert(block, "Invalid block");
 
 			var col = block.col;
 			var row = block.row;
-			block.kill();
+			block.popKill();
 
 			// naturally the blocks collection for this column will rearrange itself
 			blocks[col].splice(row, 1);
@@ -150,7 +150,7 @@ var NumboLevel = (function() {
 			}
 		},
 
-		// kill block at given coordinates
+		// popKill block at given coordinates
 		killBlockAtCoords: function(col, row) {
 			cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
 
