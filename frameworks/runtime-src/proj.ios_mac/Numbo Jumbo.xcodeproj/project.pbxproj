@@ -775,8 +775,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: kaveh daryabeygi (8WB7ES3K9C)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: kaveh daryabeygi (28DZN8KS2Y)";
 				COMPRESS_PNG_FILES = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
@@ -801,7 +801,8 @@
 				OTHER_CFLAGS = "-DSDKBOX_ENABLED";
 				OTHER_LDFLAGS = " -ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wombocombo.numbojumbo;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "06ca38e7-3a4b-4224-99bd-8d40d2e7826f";
+				"PROVISIONING_PROFILE[sdk=*]" = "06ca38e7-3a4b-4224-99bd-8d40d2e7826f";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../js-bindings/cocos2d-x/cocos/platform/ios $(SRCROOT)/../../js-bindings/external/spidermonkey/include/ios $(SRCROOT)/../../js-bindings/cocos2d-x/plugin/jsbindings/auto $(SRCROOT)/../../js-bindings/cocos2d-x/plugin/jsbindings/manual";
@@ -813,8 +814,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: kaveh daryabeygi (8WB7ES3K9C)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: kaveh daryabeygi (8WB7ES3K9C)";
 				COMPRESS_PNG_FILES = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
@@ -838,7 +839,8 @@
 				OTHER_CFLAGS = "-DSDKBOX_ENABLED";
 				OTHER_LDFLAGS = " -ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wombocombo.numbojumbo;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ae513b3b-10b3-4f11-b337-e95042a46bb7";
+				"PROVISIONING_PROFILE[sdk=*]" = "ae513b3b-10b3-4f11-b337-e95042a46bb7";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../js-bindings/cocos2d-x/cocos/platform/ios $(SRCROOT)/../../js-bindings/external/spidermonkey/include/ios $(SRCROOT)/../../js-bindings/cocos2d-x/plugin/jsbindings/auto $(SRCROOT)/../../js-bindings/cocos2d-x/plugin/jsbindings/manual";
