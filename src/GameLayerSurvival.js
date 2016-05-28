@@ -262,13 +262,20 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
     // On touch ended, activates all selected blocks once touch is released.
     onTouchEnded: function(touchPosition) {
-        var clearedBlocks = this._super(touchPosition);
-        var comboLength = clearedBlocks.length;
+        var selectedAndBonusBlocks = this._super(touchPosition);
+        var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
+        var bonusBlocks = selectedAndBonusBlocks.bonusBlocks;
+
+        if (!selectedBlocks)
+            return;
+        var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
         if(!comboLength)
             return;
 
         var activationSound;
         var progress;
+
+
 
         // handle levelup if we meet the threshold
         if (NJ.gameState.levelUpIfNeeded()) {
