@@ -160,16 +160,18 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
-		var clearedBlocks = this._super(touchPosition);
+		var selectedAndBonusBlocks = this._super(touchPosition);
+		var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
+		var bonusBlocks = selectedAndBonusBlocks.bonusBlocks;
 
-		var comboLength = clearedBlocks.length;
-
+		if (!selectedBlocks)
+			return;
+		var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
 		if(!comboLength)
 			return;
 
 		this.spawnDropRandomBlocks(comboLength);
-		var numBonusBlocks = this._numboController.getBonusBlocks(comboLength);
-		//this.spawnBlocksAfterDelay(numBonusBlocks, 0.4);
+		//this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);
 
 		if(NJ.settings.sounds) {
 			var activationSounds = [];
