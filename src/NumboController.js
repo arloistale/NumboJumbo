@@ -210,6 +210,10 @@ var NumboController = (function() {
 			return this.spawnDropBlock(block, col, val);
 		},
 
+		getMaxBlockFromDistribution: function() {
+			return this._spawnDistribution[this._spawnDistribution.length];
+		},
+
         // updates progression of the game based on the current level
         updateProgression: function() {
             var level = NJ.gameState.getLevel();

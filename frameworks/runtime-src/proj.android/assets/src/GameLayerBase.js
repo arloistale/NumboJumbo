@@ -775,7 +775,7 @@ var BaseGameLayer = cc.Layer.extend({
 		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
 			that.scoreBlocksMakeParticles(blocks, 0);
 			for (var i = 0; i < blocks.length; ++i){
-				that._numboController.killBlock(blocks[i]);
+				that._numboController.popKillBlock(blocks[i]);
 			}
 			that._numboController._numboLevel.updateRowsAndColumns();
 

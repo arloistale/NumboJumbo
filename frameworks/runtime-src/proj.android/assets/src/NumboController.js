@@ -60,6 +60,10 @@ var NumboController = (function() {
 		_numboLevel: null,
 		_knownPath: [],
 		_selectedBlocks: [],
+
+		// the element at index i of the cache represents the (i + 3) combo length bonus blocks image
+		_bonusBlocksImageCache: [],
+
 		blocksDropped: 0,
 
 		////////////////////
@@ -158,15 +162,10 @@ var NumboController = (function() {
 					//cc.audioEngine.playEffect(res.plipSound);
 
 				var selectedBlocks = this._selectedBlocks;
-				var selectedNums = this._selectedBlocks.map(function(b) {
-					return b.val;
-				});
 
 				clearedBlocks = selectedBlocks.slice(0);
 
-				var bonusBlocks = this.getBonusBlocks(selectedBlocks.length);
-
-				clearedBlocks = clearedBlocks.concat(bonusBlocks);
+				//clearedBlocks = clearedBlocks.concat(this._bonusBlocksImageCache);
 
 				// remove duplicates
 				for(i = 0; i < clearedBlocks.length; ++i) {
@@ -178,7 +177,7 @@ var NumboController = (function() {
 
 				// remove any affected block sprite objects:
 				for(i = 0; i < clearedBlocks.length; ++i) {
-					this.killBlock(clearedBlocks[i]);
+					this.popKillBlock(clearedBlocks[i]);
 				}
 
 				this._numboLevel.updateRowsAndColumns();
@@ -186,7 +185,7 @@ var NumboController = (function() {
 
 			this.deselectAllBlocks();
 
-			return {clearedBlocks: clearedBlocks, bonusBlocks: bonusBlocks};
+			return { clearedBlocks: clearedBlocks, bonusBlocks: [] };
 		},
 
         ////////////////////////////
@@ -469,8 +468,8 @@ var NumboController = (function() {
 			this._numboLevel.updateTheme();
 		},
 
-        killBlock: function(block) {
-            this._numboLevel.killBlock(block);
+        popKillBlock: function(block) {
+            this._numboLevel.popKillBlock(block);
         },
 
         killAllBlocks: function() {
@@ -481,6 +480,10 @@ var NumboController = (function() {
 		/////////////
 		// GETTERS //
 		/////////////
+
+		clearLevel: function() {
+			this._numboLevel.clear();
+		},
 
 		levelIsClear: function() {
 			return this._numboLevel.isClear();
@@ -578,7 +581,7 @@ var NumboController = (function() {
 					break;
 			}
 
-			var womboComboType = 1;
+			var womboComboType = 0;
 			var itorBlock;
 			var result = [];
 

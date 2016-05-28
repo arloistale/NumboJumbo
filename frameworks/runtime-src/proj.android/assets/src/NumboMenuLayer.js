@@ -104,7 +104,7 @@ var NumboMenuLayer = (function() {
             this._modeData.mm.button.enableHighlight(true);
             this._modeData.mm.button.setHighlightColor(NJ.themes.blockColors[0]);
             this._modeData.mm.button.setBackgroundColor(NJ.themes.blockColors[0]);
-            this._modeData.mm.button.setLabelTitle("Timed");
+            this._modeData.mm.button.setLabelTitle(NJ.modeNames[NJ.modekeys.minuteMadness]);
             this._modeData.mm.button.setLabelSize(titleSize);
             this._modeData.mm.button.setImageRes(res.playImage);
             this._modeData.mm.button.attr({
@@ -116,7 +116,7 @@ var NumboMenuLayer = (function() {
             this._modeData.mov.button.enableHighlight(true);
             this._modeData.mov.button.setHighlightColor(NJ.themes.blockColors[1]);
             this._modeData.mov.button.setBackgroundColor(NJ.themes.blockColors[1]);
-            this._modeData.mov.button.setLabelTitle("Moves");
+            this._modeData.mov.button.setLabelTitle(NJ.modeNames[NJ.modekeys.moves]);
             this._modeData.mov.button.setLabelSize(titleSize);
             this._modeData.mov.button.setImageRes(res.playImage);
             this._modeData.mov.button.attr({
@@ -128,7 +128,7 @@ var NumboMenuLayer = (function() {
             this._modeData.re.button.enableHighlight(true);
             this._modeData.re.button.setHighlightColor(NJ.themes.blockColors[2]);
             this._modeData.re.button.setBackgroundColor(NJ.themes.blockColors[2]);
-            this._modeData.re.button.setLabelTitle("Stack");
+            this._modeData.re.button.setLabelTitle(NJ.modeNames[NJ.modekeys.react]);
             this._modeData.re.button.setLabelSize(titleSize);
             this._modeData.re.button.setImageRes(res.playImage);
             this._modeData.re.button.attr({
@@ -140,7 +140,7 @@ var NumboMenuLayer = (function() {
             this._modeData.inf.button.enableHighlight(true);
             this._modeData.inf.button.setHighlightColor(NJ.themes.blockColors[3]);
             this._modeData.inf.button.setBackgroundColor(NJ.themes.blockColors[3]);
-            this._modeData.inf.button.setLabelTitle("Infinite");
+            this._modeData.inf.button.setLabelTitle(NJ.modeNames[NJ.modekeys.infinite]);
             this._modeData.inf.button.setLabelSize(titleSize);
             this._modeData.inf.button.setImageRes(res.playImage);
             this._modeData.inf.button.attr({
@@ -161,7 +161,7 @@ var NumboMenuLayer = (function() {
             this._modeData.mov.button.setPosition(this._modeData.mov.startPos);
             this._modeData.mm.button.setPosition(this._modeData.mm.startPos);
             this._modeData.re.button.setPosition(this._modeData.re.startPos);
-            this._modeData.inf.button.setPosition(this._modeData.mm.startPos);
+            this._modeData.inf.button.setPosition(this._modeData.inf.startPos);
 
             this._modeData.mov.button.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
             this._modeData.mm.button.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
@@ -243,13 +243,16 @@ var NumboMenuLayer = (function() {
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
             var data;
+            var delay = 0.4;
             for(var key in this._modeData) {
                 if(!this._modeData.hasOwnProperty(key))
                     continue;
 
                 data = this._modeData[key];
 
-                data.button.runAction(cc.moveTo(0.4, data.endPos).easing(easing));
+                data.button.runAction(cc.moveTo(delay, data.endPos).easing(easing));
+
+                delay += 0.075;
             }
         },
 
@@ -291,7 +294,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
 
             this.leave(function() {
                 var scene = new cc.Scene();
@@ -305,7 +307,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
 
             this.leave(function() {
                 var scene = new cc.Scene();
@@ -319,7 +320,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
 
             this.leave(function() {
                 var scene = new cc.Scene();
@@ -333,7 +333,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
 
             this.leave(function() {
                 var scene = new cc.Scene();
@@ -349,7 +348,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
-            cc.audioEngine.stopAllEffects();
             cc.eventManager.pauseTarget(this, true);
 
             this.leave(function() {

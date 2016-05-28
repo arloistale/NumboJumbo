@@ -84,7 +84,7 @@ var GameOverMenuLayer = (function() {
                 y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height
             });
 
-            var headerLabel = this.generateLabel("Summary (" + NJ.modeNames[this._modeKey] + ")", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
+            var headerLabel = this.generateLabel("Scores (" + NJ.modeNames[this._modeKey] + ")", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
             headerLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -116,29 +116,11 @@ var GameOverMenuLayer = (function() {
             // compute label size
             var header2Size = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
 
-            var currentLabel = this.generateLabel("Current", header2Size);
-
-            this._scoreLabel = this.generateLabel("Points: " + NJ.gameState.getScore(), header2Size);
-            this._levelLabel = this.generateLabel("Level: " + NJ.gameState.getLevel(), header2Size);
-
-            var bestLabel = this.generateLabel("Best", header2Size);
-
-            this._bestLabel = this.generateLabel("Points: " + NJ.stats.getHighscore(key), header2Size);
-            this._bestLevelLabel = this.generateLabel("Level: " + NJ.stats.getHighlevel(key), header2Size);
-            
-            this._statsMenu.addChild(currentLabel);
+            this._scoreLabel = this.generateLabel("Current: " + NJ.gameState.getScore(), header2Size);
+            this._bestLabel = this.generateLabel("Best: " + NJ.stats.getHighscore(key), header2Size);
 
             this._statsMenu.addChild(this._scoreLabel);
-
-            if(shouldDisplayLevel)
-                this._statsMenu.addChild(this._levelLabel);
-
-            this._statsMenu.addChild(bestLabel);
-
             this._statsMenu.addChild(this._bestLabel);
-
-            if(shouldDisplayLevel)
-                this._statsMenu.addChild(this._bestLevelLabel);
 
             //var currencyTitleLabel = this.generateLabel("Currency");
             //this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
@@ -146,7 +128,7 @@ var GameOverMenuLayer = (function() {
             //this._menu.addChild(currencyTitleLabel);
             //this._menu.addChild(this._currencyLabel);
 
-            this._statsMenu.alignItemsInColumns(1, 1, columnCount, 1, columnCount);
+            this._statsMenu.alignItemsVerticallyWithPadding(10);
             this.addChild(this._statsMenu, 100);
         },
 

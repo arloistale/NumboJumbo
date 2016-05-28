@@ -45,7 +45,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     _initUI: function() {
         this._super();
 
-        this._numboHeaderLayer.setConditionPrefix("Level: ");
+        this._numboHeaderLayer.setConditionPrefix("Drops: ");
     },
 
     // Initialize audio.

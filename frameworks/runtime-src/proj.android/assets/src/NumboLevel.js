@@ -36,6 +36,10 @@ var NumboLevel = (function() {
 				this._blocks.push([]);
 		},
 
+		clear: function() {
+			this.killAllBlocks(false);
+		},
+
 		reset: function() {
 			this.killAllBlocks(true);
 
@@ -67,32 +71,50 @@ var NumboLevel = (function() {
 			return block;
 		},
 
-		// popKill given block
-		killBlock: function(block, clean) {
+		removeBlock: function(block) {
 			cc.assert(block, "Invalid block");
 
 			var col = block.col;
 			var row = block.row;
-			block.popKill(clean);
+			block.remove();
 
 			// mark this block as null
 			// later when we update rows and columns we will remove from the array
 			this._blocks[col][row] = null;
 		},
 
-		// popKill block at given coordinates
-		killBlockAtCoords: function(col, row) {
-			cc.assert(col >= 0 && row >= 0 && col < NJ.NUM_COLS && col < NJ.NUM_ROWS, "Invalid coords");
+		fadeKillBlock: function(block) {
+			cc.assert(block, "Invalid block");
 
-			if (row < this._blocks[col].length)
-				this.killBlock(this._blocks[col][row]);
+			var col = block.col;
+			var row = block.row;
+			block.fadeKill();
+
+			// mark this block as null
+			// later when we update rows and columns we will remove from the array
+			this._blocks[col][row] = null;
+		},
+
+		// popKill given block
+		popKillBlock: function(block) {
+			cc.assert(block, "Invalid block");
+
+			var col = block.col;
+			var row = block.row;
+			block.popKill();
+
+			// mark this block as null
+			// later when we update rows and columns we will remove from the array
+			this._blocks[col][row] = null;
 		},
 
 		killAllBlocks: function(clean) {
 			for (var col = 0; col < NJ.NUM_COLS; ++col){
 				for (var row = this._blocks[col].length - 1; row >= 0; --row){
 					var block = this._blocks[col][row];
-					this.killBlock(block, clean);
+					// make sure block wasn't already cleared
+					if(block)
+						this.fadeKillBlock(block);
 				}
 			}
 		},

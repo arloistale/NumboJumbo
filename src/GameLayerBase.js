@@ -188,9 +188,6 @@ var BaseGameLayer = cc.Layer.extend({
 
 		// toolbar
 		this._toolbarLayer = new ToolbarLayer( this._toolBarSize);
-		this._toolbarLayer.setOnToggleThemeCallback(function() {
-			that.onToggleTheme();
-		});
 		this.addChild(this._toolbarLayer, 999);
 	},
 
@@ -480,18 +477,6 @@ var BaseGameLayer = cc.Layer.extend({
 	///////////////
 	// UI Events //
 	///////////////
-
-	// on toggle theme, change errthang
-	onToggleTheme: function() {
-		NJ.themes.toggle();
-
-		this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
-		//this._levelSprite.setColor(NJ.themes.levelColor);
-
-		this._numboHeaderLayer.updateTheme();
-
-		this._numboController.updateTheme();
-	},
 
 	// On pause, pauses game and opens up the settings menu.
 	onPause: function() {

@@ -53,7 +53,6 @@ var NJMenuButton = NJMenuItem.extend({
 
     // highlight the sprite indicating selection
     highlight: function() {
-
         var that = this;
 
         this._highlightSprite.setVisible(true);

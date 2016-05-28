@@ -96,7 +96,7 @@ NJ.themes = (function() {
     var _lightTheme = data[0];
     var _darkTheme = data[1];
 
-    var main = _lightTheme;
+    var main = _darkTheme;
     var _themeIndex = 0;
 
     return {

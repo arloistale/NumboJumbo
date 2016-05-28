@@ -276,8 +276,8 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
             progress = NJ.gameState.getLevelupProgress();
 
-            this.closeCurtain();
-            this.unschedule(this.scheduleSpawn);
+            //this.closeCurtain();
+            //this.unschedule(this.scheduleSpawn);
         } else {
             progress = NJ.gameState.getLevelupProgress();
             //var soundProgressIndex = Math.floor((bloops.length-1) * progress);

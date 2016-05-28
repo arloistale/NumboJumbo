@@ -130,8 +130,11 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/PluginReviewJS.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/jsbytecode.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/js/CallNonGenericMethod.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/js.msg \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocos2d_specifics.hpp \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/ScriptingCore.h \
+ jni/PluginReview/PluginReview.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/string \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/vector \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/map \
+ jni/../../Classes/SDKBoxJSHelper.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../cocos2d.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../base/ccConfig.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../platform/CCPlatformConfig.h \
@@ -146,8 +149,6 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/PluginReviewJS.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../base/CCConsole.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/select.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/thread \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/vector \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/map \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/mutex \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../platform/CCStdC.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../platform/android/CCStdC-android.h \
@@ -449,6 +450,13 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/PluginReviewJS.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../deprecated/CCString.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../deprecated/CCNotificationCenter.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../deprecated/CCDeprecated.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_core.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_config.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/spidermonkey_specifics.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/uthash.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocos2d_specifics.hpp \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/ScriptingCore.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../ui/CocosGUI.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../ui/UIWidget.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../2d/CCProtectedNode.h \
@@ -482,14 +490,8 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/PluginReviewJS.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../ui/UIEditBox/UIEditBox.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../ui/UILayoutComponent.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../2d/CCComponent.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_config.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_core.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/spidermonkey_specifics.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/uthash.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/mozilla/Maybe.h \
- jni/PluginReview/PluginReview.h jni/../../Classes/SDKBoxJSHelper.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h \
  jni/sdkbox/Sdkbox.h
 
 jni/../../Classes/PluginReviewJS.hpp:
@@ -752,9 +754,15 @@ jni/../../Classes/PluginReviewJS.hpp:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/js.msg:
 
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocos2d_specifics.hpp:
+jni/PluginReview/PluginReview.h:
 
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/ScriptingCore.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/string:
+
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/vector:
+
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/map:
+
+jni/../../Classes/SDKBoxJSHelper.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../cocos2d.h:
 
@@ -783,10 +791,6 @@ jni/../../Classes/PluginReviewJS.hpp:
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/select.h:
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/thread:
-
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/vector:
-
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/map:
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/mutex:
 
@@ -1390,6 +1394,20 @@ jni/../../Classes/PluginReviewJS.hpp:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../deprecated/CCDeprecated.h:
 
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_core.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_config.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/spidermonkey_specifics.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/uthash.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocos2d_specifics.hpp:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/ScriptingCore.h:
+
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../ui/CocosGUI.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../ui/UIWidget.h:
@@ -1456,22 +1474,8 @@ jni/../../Classes/PluginReviewJS.hpp:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../2d/CCComponent.h:
 
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_config.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_core.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/spidermonkey_specifics.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/uthash.h:
-
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/mozilla/Maybe.h:
-
-jni/PluginReview/PluginReview.h:
-
-jni/../../Classes/SDKBoxJSHelper.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h:
 
 jni/sdkbox/Sdkbox.h:
