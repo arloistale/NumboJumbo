@@ -18,7 +18,7 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	],
 
 	// time limit for minute madness
-	_elapsedTimeLimit: 5,
+	_elapsedTimeLimit: 60,
 
 	////////////////////
 	// Initialization //
@@ -111,7 +111,9 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 		this.runAction(cc.sequence(cc.callFunc(function() {
 			that._numboHeaderLayer.leave();
 			that._toolbarLayer.leave();
-		}), cc.delayTime(2), cc.callFunc(function() {
+		}), cc.delayTime(1), cc.callFunc(function() {
+			that._numboController.clearLevel();
+		}), cc.delayTime(1), cc.callFunc(function() {
 			that.pauseGame();
 
 			that._gameOverMenuLayer = new GameOverMenuLayer(key, false);
