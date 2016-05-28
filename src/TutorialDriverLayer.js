@@ -296,14 +296,17 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
-		var clearedBlocks = this._super(touchPosition);
+		var selectedAndBonusBlocks = this._super(touchPosition);
+		var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
+		var bonusBlocks = selectedAndBonusBlocks.bonusBlocks;
 
-		var comboLength = clearedBlocks.length;
-
+		if (!selectedBlocks)
+			return;
+		var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
 		if(!comboLength)
 			return;
 
-        var targetBlock = Math.max.apply(null, clearedBlocks.map(function(b) {
+        var targetBlock = Math.max.apply(null, selectedBlocks.map(function(b) {
             return b.val;
         }));
 
@@ -378,6 +381,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		}
 
         var that = this;
+
 
         if(this._tutorialLayer.getCurrSlide() == this._tutorialLayer.slides.wombo) {
             this.runAction(cc.sequence(cc.delayTime(0.45), cc.callFunc(function() {
