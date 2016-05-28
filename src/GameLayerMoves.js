@@ -18,7 +18,7 @@ var MovesLayer = BaseGameLayer.extend({
 	],
 
 	// maximum number of moves allowed
-	_movesLimit: 20,
+	_movesLimit: 2,
 
 	////////////////////
 	// Initialization //
