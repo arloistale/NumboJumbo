@@ -35,8 +35,6 @@ var NumboMenuLayer = (function() {
             }
         },
 
-
-
         _shopLayer: null,
         _settingsMenuLayer: null,
 
@@ -52,6 +50,8 @@ var NumboMenuLayer = (function() {
             this._initHeaderUI();
             this._initModesUI();
             this._initToolsUI();
+
+            this._updateTheme();
 
             this._initAudio();
 
@@ -403,10 +403,23 @@ var NumboMenuLayer = (function() {
 
                     if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
                         cc.audioEngine.playMusic(res.trackPadMellow);
+
+                    that._updateTheme();
                 });
 
                 that.addChild(that._settingsMenuLayer, 999);
             });
+        },
+
+        _updateTheme: function() {
+            this.setColor(NJ.themes.backgroundColor);
+
+            for(var key in this._modeData) {
+                if(!this._modeData.hasOwnProperty(key))
+                    continue;
+
+                this._modeData[key].button.setLabelColor(NJ.themes.defaultLabelColor);
+            }
         }
     });
 }());

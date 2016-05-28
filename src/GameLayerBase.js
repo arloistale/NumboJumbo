@@ -360,7 +360,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 		var blockTargetY = this._levelBounds.y +  this._levelCellSize.height * (moveBlock.row + 0.5);
 		var blockTargetX = this._levelBounds.x +  this._levelCellSize.width * (moveBlock.col + 0.5);
-		var duration = 0.5 + 0.1 * moveBlock.col;
+		var duration = 0.7;
 		var easing = cc.easeQuinticActionInOut();
 		var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 		moveAction.setTag(42);

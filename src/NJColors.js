@@ -96,7 +96,7 @@ NJ.themes = (function() {
     var _lightTheme = data[0];
     var _darkTheme = data[1];
 
-    var main = _darkTheme;
+    var main = _lightTheme;
     var _themeIndex = 0;
 
     return {
@@ -120,8 +120,8 @@ NJ.themes = (function() {
         /**
          * Toggle between themes
          */
-        toggle: function() {
-            _themeIndex = (_themeIndex + 1) % data.length;
+        toggle: function(index) {
+            _themeIndex = index;
             main = data[_themeIndex];
 
             for(var key in this) {

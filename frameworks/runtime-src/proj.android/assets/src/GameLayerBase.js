@@ -69,8 +69,10 @@ var BaseGameLayer = cc.Layer.extend({
 
         this._initUI();
 
-		this._killDelay = 0.35;
-		this._spawnDelay = this._killDelay + 0.1;
+		//this._killDelay = 0.35;
+		this._killDelay = 0.0;
+		//this._spawnDelay = this._killDelay + 0.1;
+		this._spawnDelay = 0.0;
 
 		// extranneous initialization
 		this._reset();
@@ -188,9 +190,6 @@ var BaseGameLayer = cc.Layer.extend({
 
 		// toolbar
 		this._toolbarLayer = new ToolbarLayer( this._toolBarSize);
-		this._toolbarLayer.setOnToggleThemeCallback(function() {
-			that.onToggleTheme();
-		});
 		this.addChild(this._toolbarLayer, 999);
 	},
 
@@ -481,18 +480,6 @@ var BaseGameLayer = cc.Layer.extend({
 	// UI Events //
 	///////////////
 
-	// on toggle theme, change errthang
-	onToggleTheme: function() {
-		NJ.themes.toggle();
-
-		this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
-		//this._levelSprite.setColor(NJ.themes.levelColor);
-
-		this._numboHeaderLayer.updateTheme();
-
-		this._numboController.updateTheme();
-	},
-
 	// On pause, pauses game and opens up the settings menu.
 	onPause: function() {
 		var that = this;
@@ -697,9 +684,9 @@ var BaseGameLayer = cc.Layer.extend({
     // Returns the cleared blocks.
 	onTouchEnded: function(touchPosition) {
 		// Activate any selected blocks.
-		var clearedAndBonusBlocks = this._numboController.activateSelectedBlocks();
-		var clearedBlocks = clearedAndBonusBlocks.clearedBlocks;
-		var bonusBlocks = clearedAndBonusBlocks.bonusBlocks;
+		var selectedAndBonusBlocks = this._numboController.activateSelectedBlocks();
+		var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
+		var bonusBlocks = selectedAndBonusBlocks.bonusBlocks;
 
 		this.redrawSelectedLines();
 
@@ -707,18 +694,13 @@ var BaseGameLayer = cc.Layer.extend({
 
 		this._effectsLayer.clearComboOverlay();
 
-		var comboLength = clearedBlocks.length;
+		if (!selectedBlocks)
+			return selectedBlocks;
 
-		// make sure something actually happened
-		if(!comboLength)
-			return clearedBlocks;
-
-		this.scoreBlocksMakeParticles(clearedBlocks, comboLength);
+		var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
+		this.scoreBlocksMakeParticles(totalClearedBlocks, totalClearedBlocks.length);
 
 		this.relocateBlocks();
-
-		//if(bonusBlocks.length > 0)
-			//this.killBlocksAfterDelay(bonusBlocks, this._killDelay);
 
 		// Allow controller to look for new hint.
 		this._numboController.resetKnownPath();
@@ -727,7 +709,7 @@ var BaseGameLayer = cc.Layer.extend({
 		// schedule a hint
 		this.schedule(this.jiggleHintBlocks, 7);
 
-		return clearedBlocks;
+		return selectedAndBonusBlocks;
 	},
 
 	scoreBlocksMakeParticles: function(blocks, comboLength){
@@ -769,6 +751,14 @@ var BaseGameLayer = cc.Layer.extend({
 
 	},
 
+	killBlocks:function(blocks){
+		for (var i = 0; i < blocks.length; ++i){
+			this._numboController.popPopKillBlock(blocks[i]);
+		}
+		this._numboController.updateRowsAndColumns();
+		this.relocateBlocks;
+	},
+
 	killBlocksAfterDelay: function(blocks, delay) {
 		var that = this;
 
@@ -779,6 +769,7 @@ var BaseGameLayer = cc.Layer.extend({
 			}
 			that._numboController._numboLevel.updateRowsAndColumns();
 
+			// TODO: this is some bandaid bullshit right here
 			that.relocateBlocks();
 		})));
 	},

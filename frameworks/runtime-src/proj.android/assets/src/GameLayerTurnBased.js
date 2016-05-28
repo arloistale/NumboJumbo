@@ -45,7 +45,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     _initUI: function() {
         this._super();
 
-        this._numboHeaderLayer.setConditionPrefix("Level: ");
+        this._numboHeaderLayer.setConditionPrefix("Drops: ");
     },
 
     // Initialize audio.
@@ -132,12 +132,16 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
 
     // On touch ended, activates all selected blocks once touch is released.
     onTouchEnded: function(touchPosition) {
-        var clearedBlocks = this._super(touchPosition);
+        var selectedAndBonusBlocks = this._super(touchPosition);
+        var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
+        var bonusBlocks = selectedAndBonusBlocks.bonusBlocks;
 
-        var comboLength = clearedBlocks.length;
-
+        if (!selectedBlocks)
+            return;
+        var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
         if(!comboLength)
             return;
+
 
         if(NJ.settings.sounds) {
             var activationSounds = [];

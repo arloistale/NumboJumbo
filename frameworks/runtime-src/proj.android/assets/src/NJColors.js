@@ -120,8 +120,8 @@ NJ.themes = (function() {
         /**
          * Toggle between themes
          */
-        toggle: function() {
-            _themeIndex = (_themeIndex + 1) % data.length;
+        toggle: function(index) {
+            _themeIndex = index;
             main = data[_themeIndex];
 
             for(var key in this) {

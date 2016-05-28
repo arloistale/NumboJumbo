@@ -147,7 +147,9 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         this.runAction(cc.sequence(cc.callFunc(function() {
             that._numboHeaderLayer.leave();
             that._toolbarLayer.leave();
-        }), cc.delayTime(2), cc.callFunc(function() {
+        }), cc.delayTime(1), cc.callFunc(function() {
+            that._numboController.clearLevel();
+        }), cc.delayTime(1), cc.callFunc(function() {
             that.pauseGame();
 
             that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
@@ -260,13 +262,20 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
     // On touch ended, activates all selected blocks once touch is released.
     onTouchEnded: function(touchPosition) {
-        var clearedBlocks = this._super(touchPosition);
-        var comboLength = clearedBlocks.length;
+        var selectedAndBonusBlocks = this._super(touchPosition);
+        var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
+        var bonusBlocks = selectedAndBonusBlocks.bonusBlocks;
+
+        if (!selectedBlocks)
+            return;
+        var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
         if(!comboLength)
             return;
 
         var activationSound;
         var progress;
+
+
 
         // handle levelup if we meet the threshold
         if (NJ.gameState.levelUpIfNeeded()) {
@@ -276,8 +285,8 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
             progress = NJ.gameState.getLevelupProgress();
 
-            this.closeCurtain();
-            this.unschedule(this.scheduleSpawn);
+            //this.closeCurtain();
+            //this.unschedule(this.scheduleSpawn);
         } else {
             progress = NJ.gameState.getLevelupProgress();
             //var soundProgressIndex = Math.floor((bloops.length-1) * progress);

@@ -2,13 +2,14 @@ var ToolbarLayer = (function() {
 
     // Touch Events
 
+    /*
     var onToggleTheme = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
 
         if(this._onToggleThemeCallback)
             this._onToggleThemeCallback();
-    };
+    };*/
 
     return cc.Layer.extend({
 
@@ -18,7 +19,7 @@ var ToolbarLayer = (function() {
         _equationLabel: null,
 
         // callback
-        _onToggleThemeCallback: null,
+        //_onToggleThemeCallback: null,
 
         ctor: function(size) {
             this._super();
@@ -55,9 +56,9 @@ var ToolbarLayer = (function() {
                 x: contentSize.width - contentSize.height / 2,
                 y: contentSize.height / 2
             });
-            var toggleButton = new NJMenuButton(buttonSize, onToggleTheme.bind(this), this);
+            //var toggleButton = new NJMenuButton(buttonSize, onToggleTheme.bind(this), this);
             //pauseButton.setImageRes(res.pauseImage);
-            menu.addChild(toggleButton);
+            //menu.addChild(toggleButton);
 
             this.addChild(menu);
         },
@@ -94,13 +95,10 @@ var ToolbarLayer = (function() {
         },
 
         // UI callbacks //
-
+/*
         setOnToggleThemeCallback: function(callback) {
             this._onToggleThemeCallback = callback;
         },
-
-        updateTheme: function() {
-            this._equationLabel.setColor(NJ.themes.defaultLabelColor);
-        }
+*/
     });
 }());

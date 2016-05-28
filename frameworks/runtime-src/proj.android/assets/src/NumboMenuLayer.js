@@ -35,8 +35,6 @@ var NumboMenuLayer = (function() {
             }
         },
 
-
-
         _shopLayer: null,
         _settingsMenuLayer: null,
 
@@ -53,6 +51,8 @@ var NumboMenuLayer = (function() {
             this._initModesUI();
             this._initToolsUI();
 
+            this._updateTheme();
+
             this._initAudio();
 
             this.enter();
@@ -60,25 +60,26 @@ var NumboMenuLayer = (function() {
 
         _initHeaderUI: function() {
             this._headerMenu = new cc.Menu();
-            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
+            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 2));
             this._headerMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
                 y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2
             });
 
-            var logo = new NJMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
+            var logo = new NJMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 2));
             logo.setImageRes(res.logoImage);
             var logoSize = logo.getContentSize();
             var rawSize = logo.getRawImageSize();
-            logo.setImageSize(cc.size(logoSize.height * rawSize.width / rawSize.height * 2, logoSize.height * 2));
+            logo.setImageSize(cc.size(logoSize.height * rawSize.width / rawSize.height, logoSize.height));
             logo.attr({
                 anchorX: 0.5,
-                anchorY: 0.5,
-                y: -logoSize.height / 2
+                anchorY: 0.5
             });
 
             this._headerMenu.addChild(logo);
+
+            this._headerMenu.alignItemsHorizontally();
 
             this.addChild(this._headerMenu);
         },
@@ -259,12 +260,11 @@ var NumboMenuLayer = (function() {
         // transition out
         leave: function(callback) {
             var headerSize = this._headerMenu.getContentSize();
-            var contentSize = this._jumboMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
 
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height * 1.1)).easing(easing));
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
             var data;
@@ -403,10 +403,23 @@ var NumboMenuLayer = (function() {
 
                     if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
                         cc.audioEngine.playMusic(res.trackPadMellow);
+
+                    that._updateTheme();
                 });
 
                 that.addChild(that._settingsMenuLayer, 999);
             });
+        },
+
+        _updateTheme: function() {
+            this.setColor(NJ.themes.backgroundColor);
+
+            for(var key in this._modeData) {
+                if(!this._modeData.hasOwnProperty(key))
+                    continue;
+
+                this._modeData[key].button.setLabelColor(NJ.themes.defaultLabelColor);
+            }
         }
     });
 }());

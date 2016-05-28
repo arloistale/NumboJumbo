@@ -60,6 +60,10 @@ var SettingsMenuLayer = (function() {
     var onVibrationControl = function() {
         NJ.settings.vibration = !NJ.settings.vibration;
 
+        NJ.themes.toggle(NJ.settings.vibration ? 0 : 1);
+
+        this._updateTheme();
+
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
         else
@@ -145,8 +149,8 @@ var SettingsMenuLayer = (function() {
             soundsToggle.setSelectedIndex(state);
 
             // generate vibration toggle
-            var vibrationLabel = this.generateLabel("Vibration", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            var vibrationToggle = this.generateToggle(onVibrationControl.bind(this));
+            var vibrationLabel = this.generateLabel("Theme", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            var vibrationToggle = this.generateToggle(onVibrationControl.bind(this), { on: "Light", off: "Dark" });
             state = (NJ.settings.vibration ? 0 : 1);
             vibrationToggle.setSelectedIndex(state);
 
@@ -257,12 +261,13 @@ var SettingsMenuLayer = (function() {
             return toggleItem;
         },
 
-        generateToggle: function(callback) {
+        generateToggle: function(callback, opts) {
+            opts = opts || { on: "On", off: "Off" };
             var onItem = new NJMenuItem(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            onItem.setLabelTitle("On");
+            onItem.setLabelTitle(opts.on);
             onItem.setLabelColor(NJ.themes.defaultLabelColor);
             var offItem = new NJMenuItem(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            offItem.setLabelTitle("Off");
+            offItem.setLabelTitle(opts.off);
             offItem.setLabelColor(NJ.themes.defaultLabelColor);
             var toggle = new cc.MenuItemToggle(
                 onItem,
@@ -272,6 +277,29 @@ var SettingsMenuLayer = (function() {
             toggle.setCallback(callback);
 
             return toggle;
+        },
+
+        _updateTheme: function() {
+            this.setColor(NJ.themes.backgroundColor);
+
+            var i;
+            var children = this._headerMenu.getChildren();
+
+            for(i = 0; i < children.length; i++) {
+                children[i].setLabelColor(NJ.themes.defaultLabelColor);
+            }
+
+            children = this._contentMenu.getChildren();
+
+            for(i = 0; i < children.length; i++) {
+                children[i].setLabelColor(NJ.themes.defaultLabelColor);
+            }
+
+            children = this._toolMenu.getChildren();
+
+            for(i = 0; i < children.length; i++) {
+                children[i].setLabelColor(NJ.themes.defaultLabelColor);
+            }
         }
     });
 }());

@@ -6,7 +6,7 @@ var NJ = NJ || {};
 
 // default settings
 NJ.MUSIC_VOLUME = 0.2;
-NJ.SOUNDS_VOLUME = 1;
+NJ.SOUNDS_VOLUME = 0.7;
 
 NJ.settings = {
     // we store whether this is our first time playing or not
@@ -38,6 +38,8 @@ NJ.loadSettings = function() {
                 NJ.settings[key] = rawItem;
         }
     }
+
+    //NJ.themes.toggle(NJ.settings.vibration ? 1 : 0);
 };
 
 // save settings to local store

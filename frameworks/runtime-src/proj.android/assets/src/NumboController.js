@@ -154,30 +154,22 @@ var NumboController = (function() {
 		// checks if we got a wombo combo, removes all numbers of the same value as target
 		// returns the list of blocks that were cleared
 		activateSelectedBlocks: function() {
-			var clearedBlocks = [];
+			var selectedBlocks = [];
+			var bonusBlocks = [];
 
 			if(this.isSelectedClearable()) {
 				var i;
 
-					//cc.audioEngine.playEffect(res.plipSound);
-
-				var selectedBlocks = this._selectedBlocks;
-
-				clearedBlocks = selectedBlocks.slice(0);
-
-				//clearedBlocks = clearedBlocks.concat(this._bonusBlocksImageCache);
-
-				// remove duplicates
-				for(i = 0; i < clearedBlocks.length; ++i) {
-					for(var j = i + 1; j < clearedBlocks.length; ++j) {
-						if(clearedBlocks[i] === clearedBlocks[j])
-							clearedBlocks.splice(j--, 1);
-					}
-				}
+				selectedBlocks = this._selectedBlocks.slice(0);
+				bonusBlocks = this.getBonusBlocks(selectedBlocks.length);
 
 				// remove any affected block sprite objects:
-				for(i = 0; i < clearedBlocks.length; ++i) {
-					this.popKillBlock(clearedBlocks[i]);
+				for(i = 0; i < selectedBlocks.length; ++i) {
+					this.popKillBlock(selectedBlocks[i]);
+				}
+
+				for (i = 0; i < bonusBlocks.length; ++i){
+					this.popKillBlock(bonusBlocks[i]);
 				}
 
 				this._numboLevel.updateRowsAndColumns();
@@ -185,7 +177,7 @@ var NumboController = (function() {
 
 			this.deselectAllBlocks();
 
-			return { clearedBlocks: clearedBlocks, bonusBlocks: [] };
+			return { selectedBlocks: selectedBlocks, bonusBlocks: bonusBlocks };
 		},
 
         ////////////////////////////
@@ -208,6 +200,10 @@ var NumboController = (function() {
 			var val = NJ.weightedRandom(this._spawnDistribution) * this._spawnScale;
 
 			return this.spawnDropBlock(block, col, val);
+		},
+
+		getMaxBlockFromDistribution: function() {
+			return this._spawnDistribution[this._spawnDistribution.length];
 		},
 
         // updates progression of the game based on the current level
