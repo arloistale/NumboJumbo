@@ -18,7 +18,7 @@ var MovesLayer = BaseGameLayer.extend({
 	],
 
 	// maximum number of moves allowed
-	_movesLimit: 2,
+	_movesLimit: 20,
 
 	////////////////////
 	// Initialization //
@@ -129,14 +129,18 @@ var MovesLayer = BaseGameLayer.extend({
 
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
-		var clearedBlocks = this._super(touchPosition);
 
-		var comboLength = clearedBlocks.length;
+		var selectedAndBonusBlocks = this._super(touchPosition);
+		var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
+		var bonusBlocks = selectedAndBonusBlocks.bonusBlocks;
+
+		if (!selectedBlocks)
+			return;
+		var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
 		if(!comboLength)
 			return;
-		this.spawnDropRandomBlocks(comboLength);
 
-		var numBonusBlocks = this._numboController.getBonusBlocks(comboLength);
+		this.spawnDropRandomBlocks(comboLength);
 
 		if(NJ.settings.sounds) {
 			var activationSounds = [];
