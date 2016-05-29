@@ -2,7 +2,7 @@
  * Created by The Dylan on 5/4/2016.
  */
 
-var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
+var StackGameLayer = BaseGameLayer.extend({
 
     //// domain of spawning
     _numberList: [
@@ -58,6 +58,14 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     /////////////////////////
     // Game State Handling //
     /////////////////////////
+
+    onRetry: function() {
+        this._super();
+
+        var scene = new cc.Scene();
+        scene.addChild(new StackGameLayer());
+        cc.director.runScene(scene);
+    },
 
     onGameOver: function() {
         this._super();

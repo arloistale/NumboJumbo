@@ -298,7 +298,7 @@ var NumboMenuLayer = (function() {
 
             this.leave(function() {
                 var scene = new cc.Scene();
-                scene.addChild(new MinuteMadnessLayer());
+                scene.addChild(new TimedGameLayer());
                 cc.director.runScene(scene);
             });
         },
@@ -311,7 +311,7 @@ var NumboMenuLayer = (function() {
 
             this.leave(function() {
                 var scene = new cc.Scene();
-                scene.addChild(new MovesLayer());
+                scene.addChild(new MovesGameLayer());
                 cc.director.runScene(scene);
             });
         },
@@ -324,7 +324,7 @@ var NumboMenuLayer = (function() {
 
             this.leave(function() {
                 var scene = new cc.Scene();
-                scene.addChild(new TurnBasedFillUpGameLayer());
+                scene.addChild(new StackGameLayer());
                 cc.director.runScene(scene);
             });
         },
@@ -337,7 +337,7 @@ var NumboMenuLayer = (function() {
 
             this.leave(function() {
                 var scene = new cc.Scene();
-                scene.addChild(new SurvivalGameLayer());
+                scene.addChild(new InfiniteGameLayer());
                 cc.director.runScene(scene);
             });
         },

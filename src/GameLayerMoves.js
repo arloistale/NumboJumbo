@@ -2,7 +2,7 @@
  * Created by jonathanlu on 1/18/16.
  */
 
-var MovesLayer = BaseGameLayer.extend({
+var MovesGameLayer = BaseGameLayer.extend({
 
 	// domain of spawning
 	_numberList: [
@@ -61,6 +61,14 @@ var MovesLayer = BaseGameLayer.extend({
 	/////////////////////////
 	// Game State Handling //
 	/////////////////////////
+
+	onRetry: function() {
+		this._super();
+
+		var scene = new cc.Scene();
+		scene.addChild(new MovesGameLayer());
+		cc.director.runScene(scene);
+	},
 
 	onGameOver: function() {
 		this._super();

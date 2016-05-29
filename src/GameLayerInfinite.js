@@ -2,7 +2,7 @@
  * Created by jonathanlu on 1/18/16.
  */
 
-var SurvivalGameLayer = BaseGameLayer.extend({
+var InfiniteGameLayer = BaseGameLayer.extend({
 
     // time limit for minute madness
     _elapsedTimeLimit: 60,
@@ -103,6 +103,14 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     /////////////////////////
     // Game State Handling //
     /////////////////////////
+
+    onRetry: function() {
+        this._super();
+
+        var scene = new cc.Scene();
+        scene.addChild(new InfiniteGameLayer());
+        cc.director.runScene(scene);
+    },
 
     onGameOver: function() {
         this._super();

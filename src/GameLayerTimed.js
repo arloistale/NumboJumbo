@@ -2,7 +2,7 @@
  * Created by jonathanlu on 1/18/16.
  */
 
-var MinuteMadnessLayer = BaseGameLayer.extend({
+var TimedGameLayer = BaseGameLayer.extend({
 
 	// domain of spawning
 	_numberList: [
@@ -71,6 +71,14 @@ var MinuteMadnessLayer = BaseGameLayer.extend({
 	/////////////////////////
 	// Game State Handling //
 	/////////////////////////
+
+	onRetry: function() {
+		this._super();
+
+		var scene = new cc.Scene();
+		scene.addChild(new TimedGameLayer());
+		cc.director.runScene(scene);
+	},
 
 	onGameOver: function() {
 		this._super();

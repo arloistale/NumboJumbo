@@ -525,13 +525,8 @@ var BaseGameLayer = cc.Layer.extend({
         this.unscheduleAllCallbacks();
         this.stopAllActions();
         */
-        this.resumeGame();
 
-		this._reset();
-
-		var scene = new cc.Scene();
-		scene.addChild(new MovesLayer());
-		cc.director.runScene(scene);
+		//this._reset();
 	},
 
 	// On game over when player chooses to go to menu we return to menu.

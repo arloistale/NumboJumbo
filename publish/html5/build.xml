@@ -297,9 +297,9 @@
                 <file name="src/JumboMenuLayer.js"/>
                 <file name="src/SettingsMenuLayer.js"/>
                 <file name="src/GameLayerBase.js"/>
-                <file name="src/GameLayerMinuteMadness.js"/>
-                <file name="src/GameLayerTurnBased.js"/>
-                <file name="src/GameLayerSurvival.js"/>
+                <file name="src/GameLayerTimed.js"/>
+                <file name="src/GameLayerStack.js"/>
+                <file name="src/GameLayerInfinite.js"/>
                 <file name="src/GameLayerMoves.js"/>
                 <file name="src/TutorialDriverLayer.js"/>
                 <file name="src/NumboHeaderLayer.js"/>
