@@ -8,6 +8,18 @@ var SettingsMenuLayer = (function() {
     // UI Events //
     ///////////////
 
+    var onRetry = function() {
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound, false);
+
+        var that = this;
+
+        this.leave(function() {
+            if(that._onRetryCallback)
+                that._onRetryCallback();
+        });
+    };
+
     var onMenu = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
@@ -78,6 +90,7 @@ var SettingsMenuLayer = (function() {
         _toolMenu: null,
 
         // Callbacks Data
+        _onRetryCallback: null,
         onMenuCallback: null,
         onCloseCallback: null,
 
@@ -192,6 +205,14 @@ var SettingsMenuLayer = (function() {
 
             if(this._isInGame) {
                 buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
+
+                var retryButton = new NJMenuButton(buttonSize, onRetry.bind(this), this);
+                retryButton.setImageRes(res.retryImage);
+                retryButton.attr({
+                    anchorX: 0.5,
+                    anchorY: 0.5
+                });
+
                 var menuButton = new NJMenuButton(buttonSize, onMenu.bind(this), this);
                 menuButton.setImageRes(res.homeImage);
                 menuButton.attr({
@@ -199,6 +220,7 @@ var SettingsMenuLayer = (function() {
                     anchorY: 0.5
                 });
 
+                this._toolMenu.addChild(retryButton);
                 this._toolMenu.addChild(menuButton);
             }
 
@@ -241,6 +263,10 @@ var SettingsMenuLayer = (function() {
 //////////////////
 // UI Callbacks //
 //////////////////
+
+        setOnRetryCallback: function(callback) {
+            this._onRetryCallback = callback;
+        },
 
         setOnCloseCallback: function(callback) {
             this.onCloseCallback = callback;
@@ -292,7 +318,22 @@ var SettingsMenuLayer = (function() {
             children = this._contentMenu.getChildren();
 
             for(i = 0; i < children.length; i++) {
-                children[i].setLabelColor(NJ.themes.defaultLabelColor);
+                if(children[i].mType && children[i].mType == "NJMenuItem")
+                    children[i].setLabelColor(NJ.themes.defaultLabelColor);
+                else {
+                    var childrenChildrenStack = [children];
+
+                    while(childrenChildrenStack.length > 0) {
+                        var childrenChildren = childrenChildrenStack.pop();
+
+                        for(var j = 0; j < childrenChildren.length; ++j) {
+                            if(childrenChildren[j] && childrenChildren[j].mType && childrenChildren[j].mType == "NJMenuItem")
+                                childrenChildren[j].setLabelColor(NJ.themes.defaultLabelColor);
+                            else if(childrenChildren[j])
+                                childrenChildrenStack.push(childrenChildren[j].getChildren());
+                        }
+                    }
+                }
             }
 
             children = this._toolMenu.getChildren();

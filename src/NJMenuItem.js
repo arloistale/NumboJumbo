@@ -96,6 +96,8 @@ var NJMenuItem = (function() {
 
     return cc.MenuItemSprite.extend({
 
+        mType: "NJMenuItem",
+
         _spriteStates: null,
         _backgroundStates: null,
         _titleStates: null,
@@ -273,7 +275,7 @@ var NJMenuItem = (function() {
         // sets the color of the label of the menu item
         setLabelColor: function(color) {
             var key;
-            cc.log(color);
+
             // only initialize the labels when we need it
             if(!this._titleStates) {
                 this._makeTitleStates();
@@ -323,10 +325,6 @@ var NJMenuItem = (function() {
         // DO NOT call this before initializing image states
         getRawImageSize: function() {
             return this._rawImageSize;
-        },
-
-        getType: function() {
-            return "NJMenuItem";
         },
 
         /////////////

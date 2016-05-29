@@ -2,24 +2,24 @@ var ToolbarLayer = (function() {
 
     // Touch Events
 
-    /*
-    var onToggleTheme = function() {
+    // Touch Events
+    var onPause = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
 
-        if(this._onToggleThemeCallback)
-            this._onToggleThemeCallback();
-    };*/
+        if(this._onPauseCallback)
+            this._onPauseCallback();
+    };
 
     return cc.Layer.extend({
 
-        // menu for buttons in the header
+        // UI Data
         buttonsMenu: null,
 
         _equationLabel: null,
 
         // callback
-        //_onToggleThemeCallback: null,
+        _onPauseCallback: null,
 
         ctor: function(size) {
             this._super();
@@ -27,7 +27,6 @@ var ToolbarLayer = (function() {
             this.setContentSize(size.width, size.height);
 
             this._initButtons();
-
             this._initLabels();
 
             this.reset();
@@ -48,17 +47,18 @@ var ToolbarLayer = (function() {
 
             var contentSize = this.getContentSize();
 
-            var buttonSize = cc.size(contentSize.height * 0.8, contentSize.height * 0.8);
-
             // initialize pause button
             var menu = new cc.Menu();
             menu.attr({
-                x: contentSize.width - contentSize.height / 2,
+                x: contentSize.width / 2,
                 y: contentSize.height / 2
             });
-            //var toggleButton = new NJMenuButton(buttonSize, onToggleTheme.bind(this), this);
-            //pauseButton.setImageRes(res.pauseImage);
-            //menu.addChild(toggleButton);
+
+            var buttonSize = cc.size(contentSize.height * NJ.uiSizes.barButton, contentSize.height * NJ.uiSizes.barButton);
+
+            var pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
+            pauseButton.setImageRes(res.pauseImage);
+            menu.addChild(pauseButton);
 
             this.addChild(menu);
         },
@@ -95,10 +95,9 @@ var ToolbarLayer = (function() {
         },
 
         // UI callbacks //
-/*
-        setOnToggleThemeCallback: function(callback) {
-            this._onToggleThemeCallback = callback;
-        },
-*/
+
+        setOnPauseCallback: function(callback) {
+            this._onPauseCallback = callback;
+        }
     });
 }());

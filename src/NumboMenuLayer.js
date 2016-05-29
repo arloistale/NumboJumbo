@@ -45,6 +45,7 @@ var NumboMenuLayer = (function() {
         ctor: function () {
             this._super();
 
+            NJ.themes.toggle(NJ.settings.vibration ? 0 : 1);
             this.init(NJ.themes.backgroundColor);
 
             this._initHeaderUI();

@@ -38,8 +38,6 @@ NJ.loadSettings = function() {
                 NJ.settings[key] = rawItem;
         }
     }
-
-    //NJ.themes.toggle(NJ.settings.vibration ? 1 : 0);
 };
 
 // save settings to local store

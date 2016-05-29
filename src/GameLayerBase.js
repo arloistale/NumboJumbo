@@ -181,15 +181,15 @@ var BaseGameLayer = cc.Layer.extend({
 
 		// header
 		this._numboHeaderLayer = new NumboHeaderLayer(this._headerSize);
-		this._numboHeaderLayer.setOnPauseCallback(function() {
-			that.onPause();
-		});
 		this.addChild(this._numboHeaderLayer, 999);
 		this._numboHeaderLayer.setScoreValue(0);
 		this._numboHeaderLayer.setConditionValue(0);
 
 		// toolbar
 		this._toolbarLayer = new ToolbarLayer( this._toolBarSize);
+		this._toolbarLayer.setOnPauseCallback(function() {
+			that.onPause();
+		});
 		this.addChild(this._toolbarLayer, 999);
 	},
 
@@ -489,6 +489,9 @@ var BaseGameLayer = cc.Layer.extend({
 		this.pauseGame();
 
 		this._settingsMenuLayer = new SettingsMenuLayer(true);
+		this._settingsMenuLayer.setOnRetryCallback(function() {
+			that.onRetry();
+		});
 		this._settingsMenuLayer.setOnCloseCallback(function() {
 			that.onResume();
 		});
@@ -511,17 +514,24 @@ var BaseGameLayer = cc.Layer.extend({
 		// play music again if music settings turned on
 		if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
 			cc.audioEngine.playMusic(res.trackDauntinglyMellow);
+
+		this._updateTheme();
 	},
 
 	// On game over when player chooses to go to menu we return to menu.
 	onRetry: function() {
         this.removeChild(this._gameOverMenuLayer);
-
+/*
         this.unscheduleAllCallbacks();
         this.stopAllActions();
+        */
         this.resumeGame();
 
 		this._reset();
+
+		var scene = new cc.Scene();
+		scene.addChild(new MovesLayer());
+		cc.director.runScene(scene);
 	},
 
 	// On game over when player chooses to go to menu we return to menu.
@@ -707,7 +717,7 @@ var BaseGameLayer = cc.Layer.extend({
 		this.jiggleCount = 0;
 
 		// schedule a hint
-		this.schedule(this.jiggleHintBlocks, 7);
+		//this.schedule(this.jiggleHintBlocks, 7);
 
 		return selectedAndBonusBlocks;
 	},
@@ -749,29 +759,6 @@ var BaseGameLayer = cc.Layer.extend({
 
 		this._numboHeaderLayer.setScoreValue(NJ.gameState.getScore());
 
-	},
-
-	killBlocks:function(blocks){
-		for (var i = 0; i < blocks.length; ++i){
-			this._numboController.popPopKillBlock(blocks[i]);
-		}
-		this._numboController.updateRowsAndColumns();
-		this.relocateBlocks;
-	},
-
-	killBlocksAfterDelay: function(blocks, delay) {
-		var that = this;
-
-		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
-			that.scoreBlocksMakeParticles(blocks, 0);
-			for (var i = 0; i < blocks.length; ++i){
-				that._numboController.popKillBlock(blocks[i]);
-			}
-			that._numboController._numboLevel.updateRowsAndColumns();
-
-			// TODO: this is some bandaid bullshit right here
-			that.relocateBlocks();
-		})));
 	},
 
 	// spawns N blocks after a certain amount of time, then executes the callback (if given).
@@ -827,8 +814,6 @@ var BaseGameLayer = cc.Layer.extend({
 			}
 		})));
 	},
-
-
 
 	relocateBlocks: function (){
 		// Gaps may be created; shift all affected blocks down.
@@ -914,5 +899,11 @@ var BaseGameLayer = cc.Layer.extend({
 	_convertLevelCoordsToPoint: function(col, row) {
 		return cc.p(this._levelBounds.x + (col + 0.5) *  this._levelCellSize.width,
 			this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);
+	},
+
+	_updateTheme: function() {
+		this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
+		this._numboHeaderLayer.updateTheme();
+		this._numboController.updateTheme();
 	}
 });

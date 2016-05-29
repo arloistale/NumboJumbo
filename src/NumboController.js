@@ -393,7 +393,7 @@ var NumboController = (function() {
 
 			cc.log("find location for two blocks did not return anything!" +
 				" crap, might as well throw our hands in the air and spawn random stuff");
-
+			return [];
 		},
 
 
@@ -476,6 +476,10 @@ var NumboController = (function() {
 		/////////////
 		// GETTERS //
 		/////////////
+
+		getSpawnDistributionMaxNumber: function() {
+			return this._spawnDistribution[this._spawnDistribution.length - 1].key;
+		},
 
 		clearLevel: function() {
 			this._numboLevel.clear();

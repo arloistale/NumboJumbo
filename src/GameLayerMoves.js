@@ -18,7 +18,7 @@ var MovesLayer = BaseGameLayer.extend({
 	],
 
 	// maximum number of moves allowed
-	_movesLimit: 2,
+	_movesLimit: 20,
 
 	////////////////////
 	// Initialization //
@@ -121,6 +121,10 @@ var MovesLayer = BaseGameLayer.extend({
 	isGameOver: function() {
 		var movesMade = NJ.gameState.getMovesMade();
 		return movesMade >= this._movesLimit;
+	},
+
+	isInDanger: function() {
+		return false;
 	},
 
 	//////////////////

@@ -10,18 +10,18 @@ obj/local/armeabi/objs/cocos2dx_internal_static/base/CCEventDispatcher.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCPlatformConfig.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCPlatformDefine.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCPlatformDefine-android.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/android/log.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEventListener.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/memory \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCRef.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEvent.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCStdC.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCStdC-android.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/math.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdlib.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/alloca.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/strings.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/memory.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/math.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/stdlib.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/alloca.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/strings.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/memory.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/algorithm \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEventCustom.h \
@@ -31,7 +31,7 @@ obj/local/armeabi/objs/cocos2dx_internal_static/base/CCEventDispatcher.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./math/CCGeometry.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/ccMacros.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCConsole.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/select.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/select.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/thread \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/map \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/mutex \
@@ -54,10 +54,10 @@ obj/local/armeabi/objs/cocos2dx_internal_static/base/CCEventDispatcher.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./math/Quaternion.inl \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/CCGL.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCGL-android.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2platform.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/KHR/khrplatform.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2ext.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEventListenerMouse.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEventMouse.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEventListenerKeyboard.h \
@@ -101,7 +101,7 @@ obj/local/armeabi/objs/cocos2dx_internal_static/base/CCEventDispatcher.o: \
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCPlatformDefine-android.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/android/log.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/android/log.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEventListener.h:
 
@@ -115,15 +115,15 @@ obj/local/armeabi/objs/cocos2dx_internal_static/base/CCEventDispatcher.o: \
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCStdC-android.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/math.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/math.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/stdlib.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/stdlib.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/alloca.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/alloca.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/strings.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/strings.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/memory.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/memory.h:
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert:
 
@@ -143,7 +143,7 @@ obj/local/armeabi/objs/cocos2dx_internal_static/base/CCEventDispatcher.o: \
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCConsole.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/sys/select.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/sys/select.h:
 
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/thread:
 
@@ -189,13 +189,13 @@ obj/local/armeabi/objs/cocos2dx_internal_static/base/CCEventDispatcher.o: \
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./platform/android/CCGL-android.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2platform.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/KHR/khrplatform.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2.h:
 
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h:
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-15/arch-arm/usr/include/GLES2/gl2ext.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./base/CCEventListenerMouse.h:
 

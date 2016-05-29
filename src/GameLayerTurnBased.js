@@ -31,6 +31,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
 
         this._numboController.initDistribution(this._numberList);
         this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
+        this._numboHeaderLayer.setConditionValue(this._blocksToDrop);
 
         this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
             // cause UI elements to fall in
@@ -45,7 +46,7 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     _initUI: function() {
         this._super();
 
-        this._numboHeaderLayer.setConditionPrefix("Drops: ");
+        this._numboHeaderLayer.setConditionPrefix("Drop Count: ");
     },
 
     // Initialize audio.
@@ -103,7 +104,9 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
         this.runAction(cc.sequence(cc.callFunc(function() {
             that._numboHeaderLayer.leave();
             that._toolbarLayer.leave();
-        }), cc.delayTime(2), cc.callFunc(function() {
+        }), cc.delayTime(1), cc.callFunc(function() {
+            that._numboController.clearLevel();
+        }), cc.delayTime(1), cc.callFunc(function() {
             that.pauseGame();
 
             that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
@@ -120,6 +123,10 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
     // whether the game is over or not
     isGameOver: function() {
         return (this._numboController.getNumBlocks() >= NJ.NUM_COLS * NJ.NUM_ROWS);
+    },
+
+    isInDanger: function() {
+        return false;
     },
 
     addMoreBlocks: function() {
@@ -306,8 +313,8 @@ var TurnBasedFillUpGameLayer = BaseGameLayer.extend({
             this._blocksToDrop++;
         }
 
-        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
         var numBlocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
+        this._numboHeaderLayer.setConditionValue(this._blocksToDrop);
 
         this.spawnDropRandomBlocks(numBlocksToSpawn);
         this.checkGameOver();

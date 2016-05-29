@@ -4,15 +4,6 @@ var NumboHeaderLayer = (function() {
     var scorePrefix = "Points: ";
     var condPrefix = "Cond: ";
 
-    // Touch Events
-    var onPause = function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
-
-        if(this.onPauseCallback)
-            this.onPauseCallback();
-    };
-
     return cc.Layer.extend({
 
         // menu for buttons in the header
@@ -25,7 +16,7 @@ var NumboHeaderLayer = (function() {
         _equationLabel: null,
 
         // callback
-        onPauseCallback: null,
+        //onPauseCallback: null,
 
         ctor: function(size) {
             this._super();
@@ -33,7 +24,6 @@ var NumboHeaderLayer = (function() {
             this.setContentSize(size.width, size.height);
 
             this.initLabels();
-            this.initButtons();
         },
 
         // Create the labels used to communicate game state with text.
@@ -41,7 +31,7 @@ var NumboHeaderLayer = (function() {
             var contentSize = this.getContentSize();
 
             // Score Label
-            var startPos = cc.p(contentSize.width * 0.04, contentSize.height * 0.66);
+            var startPos = cc.p(contentSize.width * 0.33, contentSize.height * 0.66);
             var elementSize = cc.size(contentSize.width * 0.2, contentSize.height * 0.35);
             var spriteSize;
 
@@ -49,7 +39,7 @@ var NumboHeaderLayer = (function() {
             spriteSize = this._scoreLabel.getContentSize();
             this._scoreLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
             this._scoreLabel.attr({
-                anchorX: 0,
+                anchorX: 0.5,
                 anchorY: 0.5,
                 x: startPos.x,
                 y: startPos.y
@@ -57,13 +47,13 @@ var NumboHeaderLayer = (function() {
             this._scoreLabel.setColor(NJ.themes.defaultLabelColor);
             this.addChild(this._scoreLabel);
 
-            startPos = cc.p(contentSize.width * 0.54, contentSize.height * 0.66);
+            startPos = cc.p(contentSize.width * 0.66, contentSize.height * 0.66);
 
             // Condition Label
             this._condLabel = new cc.LabelBMFont(condPrefix, b_getFontName(res.mainFont));
             this._condLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
             this._condLabel.attr({
-                anchorX: 0,
+                anchorX: 0.5,
                 anchorY: 0.5,
                 x: startPos.x,
                 y: startPos.y
@@ -89,27 +79,6 @@ var NumboHeaderLayer = (function() {
             this.addChild(this._equationLabel);
 
             this._equationLabel.setString(" ");
-        },
-
-        // create buttons (probably the only button will be pause button but w/e)
-        initButtons: function() {
-            var that = this;
-
-            var contentSize = this.getContentSize();
-
-            var buttonSize = cc.size(contentSize.height * 0.5, contentSize.height * 0.5);
-
-            // initialize pause button
-            var menu = new cc.Menu();
-            menu.attr({
-                x: contentSize.width - contentSize.height / 2,
-                y: contentSize.height / 2
-            });
-            var pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
-            pauseButton.setImageRes(res.pauseImage);
-            menu.addChild(pauseButton);
-
-            this.addChild(menu);
         },
 
         // resets all elements
@@ -195,12 +164,13 @@ var NumboHeaderLayer = (function() {
             this._scoreLabel.setColor(NJ.themes.defaultLabelColor);
             this._condLabel.setColor(NJ.themes.defaultLabelColor);
             this._equationLabel.setColor(NJ.themes.defaultLabelColor);
-        },
+        }
 
 // UI callbacks //
-
+/*
         setOnPauseCallback: function(callback) {
             this.onPauseCallback = callback;
         }
+        */
     });
 }());

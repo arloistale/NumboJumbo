@@ -56,7 +56,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         var that = this;
 
         this._numboController.initDistribution(this._numberList, this._thresholdNumbers);
-        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
+        this._numboHeaderLayer.setConditionValue(this._numboController.getSpawnDistributionMaxNumber());
 
         this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
             // cause UI elements to fall in
@@ -85,7 +85,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
     _initUI: function() {
         this._super();
 
-        this._numboHeaderLayer.setConditionPrefix("Level: ");
+        this._numboHeaderLayer.setConditionPrefix("Max Drop: ");
     },
 
     // Initialize audio.
@@ -281,12 +281,7 @@ var SurvivalGameLayer = BaseGameLayer.extend({
         if (NJ.gameState.levelUpIfNeeded()) {
             this._numboController.updateProgression();
 
-            activationSound = res.levelupSound;
-
-            progress = NJ.gameState.getLevelupProgress();
-
-            //this.closeCurtain();
-            //this.unschedule(this.scheduleSpawn);
+            this._numboHeaderLayer.setConditionValue(this._numboController.getSpawnDistributionMaxNumber());
         } else {
             progress = NJ.gameState.getLevelupProgress();
             //var soundProgressIndex = Math.floor((bloops.length-1) * progress);
@@ -452,8 +447,6 @@ var SurvivalGameLayer = BaseGameLayer.extend({
 
         // check for a near-empty screen, do 'nice clear!', etc
         //this.checkClearBonus();
-
-        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
     },
 
     onExit: function() {
