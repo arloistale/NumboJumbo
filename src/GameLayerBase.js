@@ -160,16 +160,22 @@ var BaseGameLayer = cc.Layer.extend({
 				event: cc.EventListener.TOUCH_ONE_BY_ONE,
 				swallowTouches: true,
 				onTouchBegan: function(touch, event) {
-					event.getCurrentTarget().onTouchBegan(touch.getLocation());
-					return true;
+					if(touch.getID() == 0) {
+						event.getCurrentTarget().onTouchBegan(touch.getLocation());
+						return true;
+					}
 				},
 				onTouchMoved: function(touch, event) {
-					event.getCurrentTarget().onTouchMoved(touch.getLocation());
-					return true;
+					if(touch.getID() == 0) {
+						event.getCurrentTarget().onTouchMoved(touch.getLocation());
+						return true;
+					}
 				},
 				onTouchEnded: function(touch, event) {
-					event.getCurrentTarget().onTouchEnded(touch.getLocation());
-					return true;
+					if(touch.getID() == 0) {
+						event.getCurrentTarget().onTouchEnded(touch.getLocation());
+						return true;
+					}
 				}
 			}, this);
 		}
@@ -650,6 +656,9 @@ var BaseGameLayer = cc.Layer.extend({
 
 						this._effectsLayer.launchComboOverlay();
 						selectedBlock.highlight();
+
+						if(this._numboController.getSelectedBlocks().length >= 5)
+							cc.audioEngine.playEffect(res.tensionSound, false);
 					}
 
 					// remove duplicates

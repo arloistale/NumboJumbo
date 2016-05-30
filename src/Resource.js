@@ -98,7 +98,9 @@ var res = {
     levelupSound: resRoot + "Sounds/levelup.wav",
     overSound: resRoot + "Sounds/over.mp3",
 
-    coinSound: resRoot + "Sounds/coin.wav"
+    coinSound: resRoot + "Sounds/coin.wav",
+
+    tensionSound: resRoot + "Sounds/tension.wav"
 };
 
 // returns proper font name based on platform
@@ -214,7 +216,9 @@ var g_game = [
     res.mainFont.x1.fnt,
     res.mainFont.x1.png,
     res.mainFont.x2.fnt,
-    res.mainFont.x2.png
+    res.mainFont.x2.png,
+
+    res.tensionSound
 ];
 
 var g_all = (function() {
