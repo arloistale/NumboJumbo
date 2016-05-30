@@ -608,7 +608,7 @@ var BaseGameLayer = cc.Layer.extend({
 				// whether it is already selected and is the last selected block
 				if (touchCoords && this._isPointWithinCoordsDistanceThreshold(currPosition, touchCoords.col, touchCoords.row)) {
 					touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
-					if(touchBlock === penultimate) {
+					if(penultimate != null && touchBlock === penultimate) {
 						deselectedBlock = this._numboController.deselectLastBlock();
 					} else {
 						selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
