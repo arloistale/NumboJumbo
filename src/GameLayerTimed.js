@@ -182,7 +182,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 		this._effectsLayer.clearComboOverlay();
 
 		if (!selectedBlocks)
-			return selectedBlocks;
+			return;
 
 		var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
 		this.scoreBlocksMakeParticles(totalClearedBlocks, totalClearedBlocks.length);
@@ -196,8 +196,6 @@ var TimedGameLayer = BaseGameLayer.extend({
 		// schedule a hint
 		//this.schedule(this.jiggleHintBlocks, 7);
 
-		if (!selectedBlocks)
-			return;
 		var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
 		if(!comboLength)
 			return;

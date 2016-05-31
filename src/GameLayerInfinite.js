@@ -282,7 +282,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         this._effectsLayer.clearComboOverlay();
 
         if (!selectedBlocks)
-            return selectedBlocks;
+            return;
 
         var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
         this.scoreBlocksMakeParticles(totalClearedBlocks, totalClearedBlocks.length);
@@ -296,16 +296,12 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         // schedule a hint
         //this.schedule(this.jiggleHintBlocks, 7);
 
-        if (!selectedBlocks)
-            return;
         var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
         if(!comboLength)
             return;
 
         var activationSound;
         var progress;
-
-
 
         // handle levelup if we meet the threshold
         if (NJ.gameState.levelUpIfNeeded()) {
