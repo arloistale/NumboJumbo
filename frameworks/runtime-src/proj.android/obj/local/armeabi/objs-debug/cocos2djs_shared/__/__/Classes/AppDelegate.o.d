@@ -602,7 +602,8 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/AppDelegate.o: \
  jni/../../Classes/PluginReviewJSHelper.h \
  jni/../../Classes/PluginSdkboxPlayJS.hpp \
  jni/../../Classes/PluginSdkboxPlayJSHelper.h \
- jni/../../Classes/PluginGoogleAnalyticsJS.hpp
+ jni/../../Classes/PluginGoogleAnalyticsJS.hpp \
+ jni/../../Classes/Vibrator.h
 
 jni/../../Classes/AppDelegate.h:
 
@@ -1811,3 +1812,5 @@ jni/../../Classes/PluginSdkboxPlayJS.hpp:
 jni/../../Classes/PluginSdkboxPlayJSHelper.h:
 
 jni/../../Classes/PluginGoogleAnalyticsJS.hpp:
+
+jni/../../Classes/Vibrator.h:

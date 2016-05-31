@@ -21,9 +21,9 @@
         "src/SettingsMenuLayer.js",
 
         "src/GameLayerBase.js",
-        "src/GameLayerMinuteMadness.js",
-        "src/GameLayerTurnBased.js",
-        "src/GameLayerSurvival.js",
+        "src/GameLayerTimed.js",
+        "src/GameLayerStack.js",
+        "src/GameLayerInfinite.js",
         "src/GameLayerMoves.js",
 
         "src/TutorialDriverLayer.js",

@@ -26,6 +26,7 @@
 #import "RootViewController.h"
 #import "cocos2d.h"
 #import "platform/ios/CCEAGLView-ios.h"
+#import <AudioToolbox/AudioServices.h>
 
 @implementation RootViewController
 
@@ -90,6 +91,11 @@
 {
     return YES;
 }
+/*
+- (void)nj_vibrate:(int)milliseconds {
+    #warning TODO : solve conflicts with AudioPlayerRecorder
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+}*/
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

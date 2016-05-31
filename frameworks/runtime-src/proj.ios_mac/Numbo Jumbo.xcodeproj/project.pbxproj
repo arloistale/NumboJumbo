@@ -163,6 +163,7 @@
 		22960B7A1CF3E017002913C4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		22960B7C1CF3E099002913C4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		22960B7E1CF3E09E002913C4 /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
+		22BA7A001CFCC7D300AE0626 /* Vibrator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vibrator.h; sourceTree = "<group>"; };
 		2D3245848D9B1AF51B89583B /* ar */ = {isa = PBXFileReference; lastKnownFileType = "?"; name = ar; path = plugin_review_res_bundle/ar.lproj/SdkboxReviewResLocalizable.strings; sourceTree = SOURCE_ROOT; };
 		331243E8AB3E03A1EE037C38 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/EventKitUI.framework; sourceTree = DEVELOPER_DIR; };
 		35F5422A802C15CDBC49496D /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
@@ -450,6 +451,7 @@
 				CF8448258545A0C63C6D8F3A /* PluginSdkboxPlayJS.hpp */,
 				1D624628A9098C83ED63828E /* PluginSdkboxPlayJSHelper.cpp */,
 				390644C6B288378EAEA95321 /* PluginSdkboxPlayJSHelper.h */,
+				22BA7A001CFCC7D300AE0626 /* Vibrator.h */,
 			);
 			name = Classes;
 			path = ../Classes;

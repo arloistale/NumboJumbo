@@ -30,4 +30,5 @@
 
 }
 - (BOOL)prefersStatusBarHidden;
+//- (void)nj_vibrate:(int)milliseconds;
 @end

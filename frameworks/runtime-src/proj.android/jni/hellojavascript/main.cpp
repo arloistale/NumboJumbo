@@ -13,3 +13,10 @@ void cocos_android_app_init (JNIEnv* env, jobject thiz) {
     LOGD("cocos_android_app_init");
     AppDelegate *pAppDelegate = new AppDelegate();
 }
+
+void nj_vibrate(int time) {
+    JniMethodInfo minfo;
+    CCAssert(JniHelper::getStaticMethodInfo(minfo, "org/cocos2dx/javascript/AppActivity", "vibrate", "(I)V"), "Function doesn't exist");
+    minfo.env->CallStaticVoidMethod(minfo.classID, minfo.methodID, (jint)time);
+    minfo.env->DeleteLocalRef(minfo.classID);
+}
