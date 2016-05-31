@@ -72,6 +72,10 @@ NJ.gameState = (function() {
             return startTime;
         },
 
+        setStartTime: function(newTime) {
+            startTime = newTime;
+        },
+
         // get the number of blocks cleared so far
         getBlocksCleared: function() {
             return blocksCleared;

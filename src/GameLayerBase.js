@@ -494,6 +494,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 		this.pauseGame();
 
+
 		this._settingsMenuLayer = new SettingsMenuLayer(true);
 		this._settingsMenuLayer.setOnRetryCallback(function() {
 			that.onRetry();
