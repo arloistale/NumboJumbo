@@ -125,7 +125,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 	// Initialize input depending on the device.
 	_initInput: function() {
-		if ('mouse' in cc.sys.capabilities) {
+		/*if ('mouse' in cc.sys.capabilities) {
 			cc.eventManager.addListener({
 				event: cc.EventListener.MOUSE,
 				onMouseDown: function (event) {
@@ -154,22 +154,28 @@ var BaseGameLayer = cc.Layer.extend({
 				}
 			}, this);
 		}
-		else if (cc.sys.capabilities.hasOwnProperty('touches')) {
+		else */if (cc.sys.capabilities.hasOwnProperty('touches')) {
 			cc.eventManager.addListener({
 				prevTouchId: -1,
 				event: cc.EventListener.TOUCH_ONE_BY_ONE,
 				swallowTouches: true,
 				onTouchBegan: function(touch, event) {
-					event.getCurrentTarget().onTouchBegan(touch.getLocation());
-					return true;
+					if(touch.getID() == 0) {
+						event.getCurrentTarget().onTouchBegan(touch.getLocation());
+						return true;
+					}
 				},
 				onTouchMoved: function(touch, event) {
-					event.getCurrentTarget().onTouchMoved(touch.getLocation());
-					return true;
+					if(touch.getID() == 0) {
+						event.getCurrentTarget().onTouchMoved(touch.getLocation());
+						return true;
+					}
 				},
 				onTouchEnded: function(touch, event) {
-					event.getCurrentTarget().onTouchEnded(touch.getLocation());
-					return true;
+					if(touch.getID() == 0) {
+						event.getCurrentTarget().onTouchEnded(touch.getLocation());
+						return true;
+					}
 				}
 			}, this);
 		}
@@ -488,6 +494,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 		this.pauseGame();
 
+
 		this._settingsMenuLayer = new SettingsMenuLayer(true);
 		this._settingsMenuLayer.setOnRetryCallback(function() {
 			that.onRetry();
@@ -605,7 +612,7 @@ var BaseGameLayer = cc.Layer.extend({
 				// whether it is already selected and is the last selected block
 				if (touchCoords && this._isPointWithinCoordsDistanceThreshold(currPosition, touchCoords.col, touchCoords.row)) {
 					touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
-					if(touchBlock === penultimate) {
+					if(penultimate != null && touchBlock === penultimate) {
 						deselectedBlock = this._numboController.deselectLastBlock();
 					} else {
 						selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
@@ -642,6 +649,14 @@ var BaseGameLayer = cc.Layer.extend({
 
 						this._effectsLayer.launchComboOverlay();
 						selectedBlock.highlight();
+
+						if(this._numboController.getSelectedBlocks().length >= 9)
+							cc.audioEngine.playEffect(res.tensionSound3, false);
+						else if(this._numboController.getSelectedBlocks().length >= 7)
+							cc.audioEngine.playEffect(res.tensionSound2, false);
+						else if(this._numboController.getSelectedBlocks().length >= 5)
+							cc.audioEngine.playEffect(res.tensionSound, false);
+
 					}
 
 					// remove duplicates
@@ -835,7 +850,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 			currSum = first.val;
 
-			color = NJ.getColor(currSum - 1);
+			color = NJ.getColor(first.val-1);
 
 			this._selectedLinesNode.drawSegment(this._convertLevelCoordsToPoint(first.col, first.row),
 				this._convertLevelCoordsToPoint(second.col, second.row), 3, color);

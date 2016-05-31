@@ -341,6 +341,19 @@ var TimedGameLayer = BaseGameLayer.extend({
 		}
 	},
 
+	onPause: function() {
+		this._super();
+
+		this._timePassed = (Date.now() - NJ.gameState.getStartTime()) / 1000;
+	},
+
+	onResume: function() {
+		this._super();
+
+		NJ.gameState.setStartTime(Date.now() - this._timePassed*1000);
+
+	},
+
 	/////////////
 	// Helpers //
 	/////////////

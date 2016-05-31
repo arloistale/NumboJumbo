@@ -94,6 +94,7 @@ var NumboController = (function() {
 
 		reset: function() {
 			this._numboLevel.reset();
+			this.deselectAllBlocks();
 		},
 
 		/////////////////////////////
