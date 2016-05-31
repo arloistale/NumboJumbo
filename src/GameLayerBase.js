@@ -154,7 +154,9 @@ var BaseGameLayer = cc.Layer.extend({
 				}
 			}, this);
 		}
-		else */if (cc.sys.capabilities.hasOwnProperty('touches')) {
+		else */
+
+		if (cc.sys.capabilities.hasOwnProperty('touches')) {
 			cc.eventManager.addListener({
 				prevTouchId: -1,
 				event: cc.EventListener.TOUCH_ONE_BY_ONE,
