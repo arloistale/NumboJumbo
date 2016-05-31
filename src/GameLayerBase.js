@@ -125,7 +125,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 	// Initialize input depending on the device.
 	_initInput: function() {
-		if ('mouse' in cc.sys.capabilities) {
+		/*if ('mouse' in cc.sys.capabilities) {
 			cc.eventManager.addListener({
 				event: cc.EventListener.MOUSE,
 				onMouseDown: function (event) {
@@ -154,7 +154,7 @@ var BaseGameLayer = cc.Layer.extend({
 				}
 			}, this);
 		}
-		else if (cc.sys.capabilities.hasOwnProperty('touches')) {
+		else */if (cc.sys.capabilities.hasOwnProperty('touches')) {
 			cc.eventManager.addListener({
 				prevTouchId: -1,
 				event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -657,8 +657,13 @@ var BaseGameLayer = cc.Layer.extend({
 						this._effectsLayer.launchComboOverlay();
 						selectedBlock.highlight();
 
-						if(this._numboController.getSelectedBlocks().length >= 5)
+						if(this._numboController.getSelectedBlocks().length >= 9)
+							cc.audioEngine.playEffect(res.tensionSound3, false);
+						else if(this._numboController.getSelectedBlocks().length >= 7)
+							cc.audioEngine.playEffect(res.tensionSound2, false);
+						else if(this._numboController.getSelectedBlocks().length >= 5)
 							cc.audioEngine.playEffect(res.tensionSound, false);
+
 					}
 
 					// remove duplicates

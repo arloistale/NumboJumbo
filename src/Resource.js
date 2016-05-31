@@ -100,7 +100,9 @@ var res = {
 
     coinSound: resRoot + "Sounds/coin.wav",
 
-    tensionSound: resRoot + "Sounds/tension.wav"
+    tensionSound: resRoot + "Sounds/tension.wav",
+    tensionSound2: resRoot + "Sounds/tension2.wav",
+    tensionSound3: resRoot + "Sounds/tension3.wav"
 };
 
 // returns proper font name based on platform
@@ -218,7 +220,9 @@ var g_game = [
     res.mainFont.x2.fnt,
     res.mainFont.x2.png,
 
-    res.tensionSound
+    res.tensionSound,
+    res.tensionSound2,
+    res.tensionSound3
 ];
 
 var g_all = (function() {
