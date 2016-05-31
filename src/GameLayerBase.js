@@ -858,7 +858,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 			currSum += first.val;
 
-			color = NJ.getColor(currSum - 1);
+			color = NJ.getColor(first.val-1);
 
 			this._selectedLinesNode.drawSegment(this._convertLevelCoordsToPoint(first.col, first.row),
 				this._convertLevelCoordsToPoint(second.col, second.row), 3, color);
