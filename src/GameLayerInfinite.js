@@ -270,9 +270,31 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
     // On touch ended, activates all selected blocks once touch is released.
     onTouchEnded: function(touchPosition) {
-        var selectedAndBonusBlocks = this._super(touchPosition);
+        // Activate any selected blocks.
+        var selectedAndBonusBlocks = this._numboController.activateSelectedBlocks();
         var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
         var bonusBlocks = selectedAndBonusBlocks.bonusBlocks;
+
+        this.redrawSelectedLines();
+
+        this._numboHeaderLayer.setEquation([]);
+
+        this._effectsLayer.clearComboOverlay();
+
+        if (!selectedBlocks)
+            return selectedBlocks;
+
+        var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
+        this.scoreBlocksMakeParticles(totalClearedBlocks, totalClearedBlocks.length);
+
+        this.relocateBlocks();
+
+        // Allow controller to look for new hint.
+        this._numboController.resetKnownPath();
+        this.jiggleCount = 0;
+
+        // schedule a hint
+        //this.schedule(this.jiggleHintBlocks, 7);
 
         if (!selectedBlocks)
             return;

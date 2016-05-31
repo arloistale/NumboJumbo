@@ -697,33 +697,6 @@ var BaseGameLayer = cc.Layer.extend({
 	// On touch ended, activates all selected blocks once touch is released.
     // Returns the cleared blocks.
 	onTouchEnded: function(touchPosition) {
-		// Activate any selected blocks.
-		var selectedAndBonusBlocks = this._numboController.activateSelectedBlocks();
-		var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
-		var bonusBlocks = selectedAndBonusBlocks.bonusBlocks;
-
-		this.redrawSelectedLines();
-
-		this._numboHeaderLayer.setEquation([]);
-
-		this._effectsLayer.clearComboOverlay();
-
-		if (!selectedBlocks)
-			return selectedBlocks;
-
-		var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
-		this.scoreBlocksMakeParticles(totalClearedBlocks, totalClearedBlocks.length);
-
-		this.relocateBlocks();
-
-		// Allow controller to look for new hint.
-		this._numboController.resetKnownPath();
-		this.jiggleCount = 0;
-
-		// schedule a hint
-		//this.schedule(this.jiggleHintBlocks, 7);
-
-		return selectedAndBonusBlocks;
 	},
 
 	scoreBlocksMakeParticles: function(blocks, comboLength){
