@@ -382,6 +382,18 @@ var InfiniteGameLayer = BaseGameLayer.extend({
                 this.schedule(function () {
                     cc.audioEngine.playEffect(activationSounds[4]);
                 }, .33, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .40, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .47, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .54, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[0]);
+                }, .61, false);
             }
             else if (activationSounds.length == 6) {
                 this.schedule(function () {
@@ -399,6 +411,21 @@ var InfiniteGameLayer = BaseGameLayer.extend({
                 this.schedule(function () {
                     cc.audioEngine.playEffect(activationSounds[5]);
                 }, .35, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .41, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .47, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .53, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .59, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[0]);
+                }, .65, false);
             }
             else if (activationSounds.length == 7) {
                 this.schedule(function () {
@@ -419,6 +446,24 @@ var InfiniteGameLayer = BaseGameLayer.extend({
                 this.schedule(function () {
                     cc.audioEngine.playEffect(activationSounds[6]);
                 }, .41, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .47, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .53, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .59, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .65, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .71, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[0]);
+                }, .77, false);
             }
             else if (activationSounds.length == 8) {
                 this.schedule(function () {
@@ -442,6 +487,27 @@ var InfiniteGameLayer = BaseGameLayer.extend({
                 this.schedule(function () {
                     cc.audioEngine.playEffect(activationSounds[7]);
                 }, .47, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[6]);
+                }, .53, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .59, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .65, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .71, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .77, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .83, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[0]);
+                }, .89, false);
             }
             else {
                 this.schedule(function () {
@@ -467,7 +533,31 @@ var InfiniteGameLayer = BaseGameLayer.extend({
                 }, .47, false);
                 this.schedule(function () {
                     cc.audioEngine.playEffect(activationSounds[8]);
-                }, .47, false);
+                }, .53, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[7]);
+                }, .59, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[6]);
+                }, .65, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[5]);
+                }, .71, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[4]);
+                }, .77, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[3]);
+                }, .83, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[2]);
+                }, .89, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[1]);
+                }, .95, false);
+                this.schedule(function () {
+                    cc.audioEngine.playEffect(activationSounds[0]);
+                }, 1.01, false);
             }
         }
 
