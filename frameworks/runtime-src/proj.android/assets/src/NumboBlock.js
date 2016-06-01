@@ -96,6 +96,21 @@ var NumboBlock = (function() {
             this.updateTheme();
         },
 
+        unuse: function () {
+            this.col = 0;
+            this.row = 0;
+            this.val = 0;
+
+            this.retain();//if in jsb
+
+            this.setVisible(false);
+            this.removeFromParent(true);
+        },
+
+        reuse: function () {
+            this.setVisible(true);
+        },
+
         //////////////////
         // Manipulation //
         //////////////////
@@ -115,7 +130,7 @@ var NumboBlock = (function() {
             var delayAction = cc.delayTime(1.25);
 
             var removeAction = cc.callFunc(function() {
-                block.removeFromParent(true);
+                cc.pool.putInPool(block);
             });
 
             this._highlightSprite.stopAllActions();
@@ -134,7 +149,7 @@ var NumboBlock = (function() {
             var delayAction = cc.delayTime(1.25);
 
             var removeAction = cc.callFunc(function() {
-                block.removeFromParent(true);
+                cc.pool.putInPool(block);
             });
 
             this._highlightSprite.stopAllActions();
@@ -184,3 +199,17 @@ var NumboBlock = (function() {
         }
     });
 }());
+
+NumboBlock.create = function (blockSize) {
+    return new NumboBlock(blockSize);
+};
+
+NumboBlock.recreate = function (blockSize) {
+    //if (cc.pool.hasObject(NumboBlock)) {
+      //  return cc.pool.getFromPool(NumboBlock);
+    //}
+
+    //cc.log("creating");
+
+    return NumboBlock.create(blockSize);
+};

@@ -141,6 +141,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
+		this._super(touchPosition);
 
 		// Activate any selected blocks.
 		var selectedAndBonusBlocks = this._numboController.activateSelectedBlocks();
@@ -153,8 +154,11 @@ var MovesGameLayer = BaseGameLayer.extend({
 
 		this._effectsLayer.clearComboOverlay();
 
-		if (!selectedBlocks)
+		if (!selectedBlocks.length)
 			return;
+
+		// add moves made
+		NJ.gameState.addMovesMade();
 
 		var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
 		this.scoreBlocksMakeParticles(totalClearedBlocks, totalClearedBlocks.length);
@@ -171,8 +175,6 @@ var MovesGameLayer = BaseGameLayer.extend({
 		var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
 		if(!comboLength)
 			return;
-
-		this.spawnDropRandomBlocks(comboLength);
 
 		if(NJ.settings.sounds) {
 			var activationSounds = [];
@@ -331,7 +333,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 			}
 		}
 
-		//this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);
+		this.spawnBlocksAfterDelay(comboLength, this._spawnDelay);
 
 		this._numboHeaderLayer.setConditionValue(this._movesLimit - NJ.gameState.getMovesMade());
 

@@ -6,7 +6,7 @@ var NJ = NJ || {};
 
 // default settings
 NJ.MUSIC_VOLUME = 0.2;
-NJ.SOUNDS_VOLUME = 0.7;
+NJ.SOUNDS_VOLUME = 0.6;
 
 NJ.settings = {
     // we store whether this is our first time playing or not

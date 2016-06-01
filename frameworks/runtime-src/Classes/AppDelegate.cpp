@@ -39,8 +39,6 @@
 //#include "PluginGoogleAnalyticsJSHelper.h"
 #endif
 
-#include "Vibrator.h"
-
 USING_NS_CC;
 using namespace CocosDenshion;
 
@@ -118,10 +116,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     ScriptEngineProtocol *engine = ScriptingCore::getInstance();
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
     ScriptingCore::getInstance()->runScript("main.js");
-
-    #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-        nj_vibrate(200);
-    #endif
 
     return true;
 }

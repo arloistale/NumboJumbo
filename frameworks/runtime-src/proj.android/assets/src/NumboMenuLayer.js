@@ -103,8 +103,6 @@ var NumboMenuLayer = (function() {
             var titleSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
 
             this._modeData.mm.button = new NJMenuButton(buttonSize, this._onChooseMinuteMadness.bind(this), this);
-            this._modeData.mm.button.enableHighlight(true);
-            this._modeData.mm.button.setHighlightColor(NJ.themes.blockColors[0]);
             this._modeData.mm.button.setBackgroundColor(NJ.themes.blockColors[0]);
             this._modeData.mm.button.setLabelTitle(NJ.modeNames[NJ.modekeys.minuteMadness]);
             this._modeData.mm.button.setLabelSize(titleSize);
@@ -115,8 +113,6 @@ var NumboMenuLayer = (function() {
             });
 
             this._modeData.mov.button = new NJMenuButton(buttonSize, this._onChooseMoves.bind(this), this);
-            this._modeData.mov.button.enableHighlight(true);
-            this._modeData.mov.button.setHighlightColor(NJ.themes.blockColors[1]);
             this._modeData.mov.button.setBackgroundColor(NJ.themes.blockColors[1]);
             this._modeData.mov.button.setLabelTitle(NJ.modeNames[NJ.modekeys.moves]);
             this._modeData.mov.button.setLabelSize(titleSize);
@@ -127,8 +123,6 @@ var NumboMenuLayer = (function() {
             });
 
             this._modeData.re.button = new NJMenuButton(buttonSize, this._onChooseTurnBased.bind(this), this);
-            this._modeData.re.button.enableHighlight(true);
-            this._modeData.re.button.setHighlightColor(NJ.themes.blockColors[2]);
             this._modeData.re.button.setBackgroundColor(NJ.themes.blockColors[2]);
             this._modeData.re.button.setLabelTitle(NJ.modeNames[NJ.modekeys.react]);
             this._modeData.re.button.setLabelSize(titleSize);
@@ -139,8 +133,6 @@ var NumboMenuLayer = (function() {
             });
 
             this._modeData.inf.button = new NJMenuButton(buttonSize, this._onChooseSurvival.bind(this), this);
-            this._modeData.inf.button.enableHighlight(true);
-            this._modeData.inf.button.setHighlightColor(NJ.themes.blockColors[3]);
             this._modeData.inf.button.setBackgroundColor(NJ.themes.blockColors[3]);
             this._modeData.inf.button.setLabelTitle(NJ.modeNames[NJ.modekeys.infinite]);
             this._modeData.inf.button.setLabelSize(titleSize);

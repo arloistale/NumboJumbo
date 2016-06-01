@@ -170,6 +170,8 @@ var TimedGameLayer = BaseGameLayer.extend({
 
 	// On touch ended, activates all selected blocks once touch is released.
 	onTouchEnded: function(touchPosition) {
+		this._super(touchPosition);
+
 		// Activate any selected blocks.
 		var selectedAndBonusBlocks = this._numboController.activateSelectedBlocks();
 		var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
@@ -181,7 +183,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 
 		this._effectsLayer.clearComboOverlay();
 
-		if (!selectedBlocks)
+		if (!selectedBlocks.length)
 			return;
 
 		var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);

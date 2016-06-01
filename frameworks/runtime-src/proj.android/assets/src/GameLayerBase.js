@@ -125,7 +125,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 	// Initialize input depending on the device.
 	_initInput: function() {
-		/*if ('mouse' in cc.sys.capabilities) {
+		if ('mouse' in cc.sys.capabilities) {
 			cc.eventManager.addListener({
 				event: cc.EventListener.MOUSE,
 				onMouseDown: function (event) {
@@ -154,7 +154,7 @@ var BaseGameLayer = cc.Layer.extend({
 				}
 			}, this);
 		}
-		else */
+		//else
 
 		if (cc.sys.capabilities.hasOwnProperty('touches')) {
 			cc.eventManager.addListener({
@@ -380,7 +380,7 @@ var BaseGameLayer = cc.Layer.extend({
 	// spawns and drops a block with random col and val.
 	// plays appropriate sound
 	spawnDropBlock: function(col, val) {
-		var spawnBlock = new NumboBlock( this._blockSize);
+		var spawnBlock = NumboBlock.recreate(this._blockSize);
 		this._numboController.spawnDropBlock(spawnBlock, col, val);
 		this._instantiateBlock(spawnBlock);
 		this.moveBlockIntoPlace(spawnBlock);
@@ -393,7 +393,7 @@ var BaseGameLayer = cc.Layer.extend({
 	// Spawns a block with random col and val and drops the spawned block into place.
 	// plays appropriate sound
 	spawnDropRandomBlock: function() {
-		var spawnBlock = new NumboBlock( this._blockSize);
+		var spawnBlock = NumboBlock.recreate(this._blockSize);
 		this._numboController.spawnDropRandomBlock(spawnBlock);
 		this._instantiateBlock(spawnBlock);
 		this.moveBlockIntoPlace(spawnBlock);
@@ -409,7 +409,7 @@ var BaseGameLayer = cc.Layer.extend({
 		var spawnBlock;
 
 		for(var i = 0; i < amount; i++) {
-			spawnBlock = new NumboBlock( this._blockSize);
+			spawnBlock = NumboBlock.recreate( this._blockSize);
 			this._numboController.spawnDropRandomBlock(spawnBlock);
 			this._instantiateBlock(spawnBlock);
 			this.moveBlockIntoPlace(spawnBlock);
@@ -730,11 +730,7 @@ var BaseGameLayer = cc.Layer.extend({
 		// add to score
 		NJ.gameState.addScore(scoreDifference);
 
-		// add moves made
-		NJ.gameState.addMovesMade();
-
 		this._numboHeaderLayer.setScoreValue(NJ.gameState.getScore());
-
 	},
 
 	// spawns N blocks after a certain amount of time, then executes the callback (if given).
@@ -754,11 +750,11 @@ var BaseGameLayer = cc.Layer.extend({
 	spawnBlocksAfterDelay: function(count, delay, callback){
 		var that = this;
 		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
-			that.spawnDropRandomBlocks(count-2);
+			that.spawnDropRandomBlocks(count - 2);
 
 			// case 1
 			if (that._numboController.areAllBlocksTheSameValue()){
-				colsAndVals = that._numboController.findLocationAndValueForTwoNewBlocks();
+				var colsAndVals = that._numboController.findLocationAndValueForTwoNewBlocks();
 				if (colsAndVals) {
 					that.spawnDropBlock(colsAndVals[0].col, colsAndVals[0].val);
 					that.spawnDropBlock(colsAndVals[1].col, colsAndVals[1].val);
@@ -767,8 +763,7 @@ var BaseGameLayer = cc.Layer.extend({
 					that.spawnDropRandomBlocks(2);
 				}
 
-			}
-			else {
+			} else {
 				that.spawnDropRandomBlock();
 
 				// case 2
@@ -782,7 +777,6 @@ var BaseGameLayer = cc.Layer.extend({
 					that.spawnDropRandomBlock();
 				}
 			}
-
 
 			that.relocateBlocks();
 			if (callback) {

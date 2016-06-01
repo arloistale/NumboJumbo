@@ -38,26 +38,6 @@ import android.os.Bundle;
 
 public class AppActivity extends Cocos2dxActivity {
 
-    private static volatile Cocos2dxActivity mainActivity;
-
-    public static void setMainActivity(Cocos2dxActivity activity) {
-        mainActivity = activity;
-    }
-
-    public static Cocos2dxActivity getMainActivity() {
-        if(mainActivity == null)
-        {
-            Log.w("Numbo Jumbo", "Warning: null main Activity");
-        }
-        return mainActivity;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        AppActivity.setMainActivity(this);
-    }
-
     @Override
     public Cocos2dxGLSurfaceView onCreateView() {
         Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
@@ -65,12 +45,5 @@ public class AppActivity extends Cocos2dxActivity {
         glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
 
         return glSurfaceView;
-    }
-
-    public static void vibrate(int milliseconds) {
-        Vibrator v = (Vibrator) getMainActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        if (getMainActivity().getSystemService(Context.VIBRATOR_SERVICE) != null) {
-            v.vibrate(milliseconds);
-        }
     }
 }

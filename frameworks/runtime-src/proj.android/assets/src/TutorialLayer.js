@@ -91,7 +91,7 @@ var TutorialLayer = (function() {
                         that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(3), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         that.runAction(cc.sequence(cc.delayTime(6), cc.callFunc(function() {
-                            that._helperMenuItem.setLabelTitle("Combos are addition sums.\nFor example: 2 + 1 = 3");
+                            that._helperMenuItem.setLabelTitle("Swipe numbers to create sums.\nFor example: 2 + 1 = 3");
                             that._menu.alignItemsVerticallyWithPadding(10);
                             that._helperMenuItem.setChildrenOpacity(0);
                             that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
@@ -102,7 +102,7 @@ var TutorialLayer = (function() {
                     case slides.practice1:
 
                         that._titleMenuItem.setLabelTitle("Right, because 2 + 1 = 3!");
-                        that._helperMenuItem.setLabelTitle("Try a longer combo.");
+                        that._helperMenuItem.setLabelTitle("Longer sums are even better.");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -139,7 +139,7 @@ var TutorialLayer = (function() {
                     case slides.practice2:
 
                         that._titleMenuItem.setLabelTitle("Cool!");
-                        that._helperMenuItem.setLabelTitle(" ");
+                        that._helperMenuItem.setLabelTitle("");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);

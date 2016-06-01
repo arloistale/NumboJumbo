@@ -13,8 +13,6 @@
     "jsList": [
         "src/NumboLoaderScene.js",
 
-        "src/Extensions.js",
-        "src/NJPrettifier.js",
         "src/Resource.js",
         "src/NumboMenuLayer.js",
         "src/TutorialLayer.js",
@@ -37,7 +35,6 @@
         "src/Snippet.js",
         "src/NumboBlock.js",
         "src/NumboLevel.js",
-        "src/NJMath.js",
         "src/NJConfig.js",
         "src/NJSocial.js",
         "src/NJAnalytics.js",
@@ -49,8 +46,6 @@
         "src/NJSettings.js",
         "src/NumboController.js",
         "src/BackgroundLayer.js",
-        "src/ProgressBarLayer.js",
-        "src/ToolbarLayer.js",
-        "src/CurtainLayer.js"
+        "src/ToolbarLayer.js"
     ]
 }

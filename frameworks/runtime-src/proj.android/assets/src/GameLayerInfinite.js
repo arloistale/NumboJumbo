@@ -7,7 +7,6 @@ var InfiniteGameLayer = BaseGameLayer.extend({
     // time limit for minute madness
     _elapsedTimeLimit: 60,
     _spawnTime: 1.0,
-    _curtainLayer: null,
 
     // domain of spawning
     _numberList: [
@@ -92,12 +91,6 @@ var InfiniteGameLayer = BaseGameLayer.extend({
     _initAudio: function() {
         // start the music
         this._backgroundTrack = res.trackDauntinglyMellow;
-    },
-
-    _initGeometry: function() {
-        this._super();
-        // curtain layer between levels
-        this._curtainLayer = new CurtainLayer(this._levelBounds);
     },
 
     /////////////////////////
@@ -203,44 +196,6 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         this.schedule(this.spawnDropRandomBlock, 0.1, amount - 1);
     },
 
-    // Curtain
-    closeCurtain: function() {
-        this.levelTransition = true;
-        //if(NJ.settings.sounds)
-            //cc.audioEngine.playEffect(res.applauseSound);
-        this.unschedule(this.closeCurtain);
-
-        this._curtainLayer.initLabels();
-        this._curtainLayer.animate();
-        this.addChild(this._curtainLayer, 901);
-
-        for (var col = 0; col < NJ.NUM_COLS; ++col) {
-            for (var row = 0; row < this._numboController.getNumBlocksInColumn(col); ++row)
-                this.moveBlockIntoPlace(this._numboController.getBlock(col, row));
-        }
-
-        this.schedule(this.checkOpenCurtain,2);
-    },
-
-    checkOpenCurtain: function() {
-        this.unschedule(this.checkOpenCurtain);
-
-        if(this._curtainLayer.isCurtainComplete()) {
-            this.openCurtain();
-        }
-        else {
-            this.schedule(this.checkOpenCurtain, .5);
-        }
-    },
-
-    openCurtain: function() {
-        this.levelTransition = false;
-        this.removeChild(this._curtainLayer);
-        this.unschedule(this.openCurtain);
-        this.schedule(this.scheduleSpawn, this._getSpawnTime());
-        //this.checkClearBonus();
-    },
-
     ///////////////////
     // Virtual Stuff //
     ///////////////////
@@ -270,6 +225,8 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
     // On touch ended, activates all selected blocks once touch is released.
     onTouchEnded: function(touchPosition) {
+        this._super(touchPosition);
+
         // Activate any selected blocks.
         var selectedAndBonusBlocks = this._numboController.activateSelectedBlocks();
         var selectedBlocks = selectedAndBonusBlocks.selectedBlocks;
@@ -280,8 +237,8 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         this._numboHeaderLayer.setEquation([]);
 
         this._effectsLayer.clearComboOverlay();
-
-        if (!selectedBlocks)
+s
+        if (!selectedBlocks.length)
             return;
 
         var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
@@ -473,10 +430,5 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
         // check for a near-empty screen, do 'nice clear!', etc
         //this.checkClearBonus();
-    },
-
-    onExit: function() {
-        this._super();
-        this._curtainLayer.release();
     }
 });

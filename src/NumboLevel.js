@@ -42,6 +42,7 @@ var NumboLevel = (function() {
 
 		reset: function() {
 			this.killAllBlocks(true);
+			cc.pool.drainAllPools();
 
 			this.init();
 		},
@@ -115,29 +116,6 @@ var NumboLevel = (function() {
 					// make sure block wasn't already cleared
 					if(block)
 						this.fadeKillBlock(block);
-				}
-			}
-		},
-
-		divideBlocksBy: function(factor) {
-			for(var i = 0; i < NJ.NUM_COLS; i++) {
-				for(var j = 0; j < NJ.NUM_ROWS; j++) {
-					if(this._blocks[i][j]) {
-
-						this._blocks[i][j].val = this._blocks[i][j].val / factor;
-						this._blocks[i][j].valueLabel.setString(this._blocks[i][j].val);
-					}
-				}
-			}
-		},
-
-		multiplyBlocksBy: function(factor) {
-			for(var i = 0; i < NJ.NUM_ROWS; i++) {
-				for(var j = 0; j < NJ.NUM_COLS; j++) {
-					if(this._blocks[i][j]) {
-						this._blocks[i][j].val = this._blocks[i][j].val * factor;
-						this._blocks[i][j].valueLabel.setString(this._blocks[i][j].val);
-					}
 				}
 			}
 		},
