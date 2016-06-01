@@ -110,9 +110,12 @@ var res = {
 
     coinSound: resRoot + "Sounds/coin.wav",
 
-    tensionSound: resRoot + "Sounds/tension.wav",
-    tensionSound2: resRoot + "Sounds/tension2.wav",
-    tensionSound3: resRoot + "Sounds/tension3.wav"
+    //tensionSound: resRoot + "Sounds/tension.wav",
+    //tensionSound2: resRoot + "Sounds/tension2.wav",
+    //tensionSound3: resRoot + "Sounds/tension3.wav"
+    tensionSound: resRoot + "Sounds/blubSoundsA1.wav",
+    tensionSound2: resRoot + "Sounds/blubSoundsA2.wav",
+    tensionSound3: resRoot + "Sounds/blubSoundsA3.wav"
 };
 
 // returns proper font name based on platform

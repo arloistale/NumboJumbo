@@ -651,11 +651,11 @@ var BaseGameLayer = cc.Layer.extend({
 						this._effectsLayer.launchComboOverlay();
 						selectedBlock.highlight();
 
-						if(this._numboController.getSelectedBlocks().length >= 9)
+						if(this._numboController.getSelectedBlocks().length >= 7)
 							cc.audioEngine.playEffect(res.tensionSound3, false);
-						else if(this._numboController.getSelectedBlocks().length >= 7)
-							cc.audioEngine.playEffect(res.tensionSound2, false);
 						else if(this._numboController.getSelectedBlocks().length >= 5)
+							cc.audioEngine.playEffect(res.tensionSound2, false);
+						else if(this._numboController.getSelectedBlocks().length >= 3)
 							cc.audioEngine.playEffect(res.tensionSound, false);
 
 					}
