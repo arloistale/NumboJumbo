@@ -125,7 +125,7 @@ var BaseGameLayer = cc.Layer.extend({
 
 	// Initialize input depending on the device.
 	_initInput: function() {
-		/*if ('mouse' in cc.sys.capabilities) {
+		if ('mouse' in cc.sys.capabilities) {
 			cc.eventManager.addListener({
 				event: cc.EventListener.MOUSE,
 				onMouseDown: function (event) {
@@ -154,7 +154,7 @@ var BaseGameLayer = cc.Layer.extend({
 				}
 			}, this);
 		}
-		else */
+		//else
 
 		if (cc.sys.capabilities.hasOwnProperty('touches')) {
 			cc.eventManager.addListener({

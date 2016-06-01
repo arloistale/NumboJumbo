@@ -344,7 +344,7 @@ var StackGameLayer = BaseGameLayer.extend({
         var numBlocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
         this._numboHeaderLayer.setConditionValue(this._blocksToDrop);
 
-        this.spawnDropRandomBlocks(numBlocksToSpawn);
+        this.spawnBlocksAfterDelay(numBlocksToSpawn, this._spawnDelay);
         this.checkGameOver();
     }
 });
