@@ -292,8 +292,8 @@ var SettingsMenuLayer = (function() {
 
         generateToggle: function(callback, opts) {
             opts = opts || [
-                    { name: "Yes", color: NJ.themes.specialLabelColor },
-                    { name: "No", color: NJ.themes.specialLabelColor2 }
+                    { name: "On", color: NJ.themes.specialLabelColor },
+                    { name: "Off", color: NJ.themes.specialLabelColor2 }
                 ];
             var items = [];
             var item;

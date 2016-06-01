@@ -18,7 +18,6 @@
 		1AD7E0A918C9DBE3004817A6 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AE159EC18C9DF3600FCA372 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A081B18C9DF05005C6854 /* project.json */; };
 		221A48921CE2E17C0052D721 /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 221A48911CE2E17C0052D721 /* Icon@3x.png */; };
-		221D45811CE56EF8004C5CF5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 221D45801CE56EF8004C5CF5 /* StoreKit.framework */; };
 		221D45831CE56EFE004C5CF5 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 221D45821CE56EFE004C5CF5 /* GameKit.framework */; };
 		222B76141CF7AE2D004DC56B /* LightIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 222B76131CF7AE2D004DC56B /* LightIcon@3x.png */; };
 		222B76161CF7AE31004DC56B /* LightIconA@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 222B76151CF7AE31004DC56B /* LightIconA@3x.png */; };
@@ -155,7 +154,6 @@
 		1AC6FB34180E9ACB004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = "../../js-bindings/cocos2d-x/build/cocos2d_libs.xcodeproj"; sourceTree = "<group>"; };
 		1D624628A9098C83ED63828E /* PluginSdkboxPlayJSHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginSdkboxPlayJSHelper.cpp; path = ../Classes/PluginSdkboxPlayJSHelper.cpp; sourceTree = SOURCE_ROOT; };
 		221A48911CE2E17C0052D721 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
-		221D45801CE56EF8004C5CF5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		221D45821CE56EFE004C5CF5 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		222B76131CF7AE2D004DC56B /* LightIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LightIcon@3x.png"; sourceTree = "<group>"; };
 		222B76151CF7AE31004DC56B /* LightIconA@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LightIconA@3x.png"; sourceTree = "<group>"; };
@@ -264,7 +262,6 @@
 				A92275441517C094001B78AA /* OpenGLES.framework in Frameworks */,
 				A92275461517C094001B78AA /* OpenAL.framework in Frameworks */,
 				A92275481517C094001B78AA /* AudioToolbox.framework in Frameworks */,
-				221D45811CE56EF8004C5CF5 /* StoreKit.framework in Frameworks */,
 				A922754A1517C094001B78AA /* AVFoundation.framework in Frameworks */,
 				A922754C1517C094001B78AA /* UIKit.framework in Frameworks */,
 				A922754E1517C094001B78AA /* Foundation.framework in Frameworks */,
@@ -366,7 +363,6 @@
 			isa = PBXGroup;
 			children = (
 				221D45821CE56EFE004C5CF5 /* GameKit.framework */,
-				221D45801CE56EF8004C5CF5 /* StoreKit.framework */,
 				BAEE4D831AC40C11003BEB0F /* Security.framework */,
 				BA3A85EB1A724AE900924D24 /* Security.framework */,
 				BA4E718219EB6E4600932425 /* GameController.framework */,
@@ -513,7 +509,7 @@
 								enabled = 1;
 							};
 							com.apple.InAppPurchase = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};

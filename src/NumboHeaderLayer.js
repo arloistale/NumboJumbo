@@ -31,7 +31,7 @@ var NumboHeaderLayer = (function() {
             var contentSize = this.getContentSize();
 
             // Score Label
-            var startPos = cc.p(contentSize.width * 0.33, contentSize.height * 0.66);
+            var startPos = cc.p(contentSize.width * 0.25, contentSize.height * 0.66);
             var elementSize = cc.size(contentSize.width * 0.2, contentSize.height * 0.35);
             var spriteSize;
 
@@ -47,7 +47,7 @@ var NumboHeaderLayer = (function() {
             this._scoreLabel.setColor(NJ.themes.defaultLabelColor);
             this.addChild(this._scoreLabel);
 
-            startPos = cc.p(contentSize.width * 0.66, contentSize.height * 0.66);
+            startPos = cc.p(contentSize.width * 0.75, contentSize.height * 0.66);
 
             // Condition Label
             this._condLabel = new cc.LabelBMFont(condPrefix, b_getFontName(res.mainFont));

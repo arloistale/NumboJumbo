@@ -53,7 +53,7 @@ static AppDelegate s_sharedApplication;
                                    multiSampling: NO
                                  numberOfSamples: 0 ];
 
-    [eaglView setMultipleTouchEnabled:YES];
+    [eaglView setMultipleTouchEnabled:NO];
     
     // Use RootViewController manage CCEAGLView
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
