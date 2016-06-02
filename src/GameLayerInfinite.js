@@ -300,6 +300,8 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         if(!comboLength)
             return;
 
+        var numSounds = comboLength - bonusBlocks.length;
+
         var activationSound;
         var progress;
 
@@ -316,9 +318,11 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
         if(NJ.settings.sounds) {
             var activationSounds = [];
-            for (var i = 0; i < comboLength; i++) {
+            for (var i = 0; i < numSounds; i++) {
                 activationSounds.push(bloops[i]);
             }
+            if(numSounds > 4)
+                activationSounds.push(bloops[numSounds]);
 
             this.schedule(function () {
                 cc.audioEngine.playEffect(activationSounds[0]);
@@ -350,6 +354,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
              }, .05 + (i * timeBetween), false);
              }
              */
+
             if (activationSounds.length == 3) {
                 this.schedule(function () {
                     cc.audioEngine.playEffect(activationSounds[1]);
@@ -369,7 +374,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
                     cc.audioEngine.playEffect(activationSounds[3]);
                 }, .35, false);
             }
-            else if (activationSounds.length == 5) {
+            else if (activationSounds.length == 6) {
                 this.schedule(function () {
                     cc.audioEngine.playEffect(activationSounds[1]);
                 }, .12, false);
@@ -383,49 +388,23 @@ var InfiniteGameLayer = BaseGameLayer.extend({
                     cc.audioEngine.playEffect(activationSounds[4]);
                 }, .33, false);
                 this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[3]);
+                    cc.audioEngine.playEffect(activationSounds[5]);
                 }, .40, false);
                 this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[2]);
+                    cc.audioEngine.playEffect(activationSounds[4]);
                 }, .47, false);
                 this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[1]);
+                    cc.audioEngine.playEffect(activationSounds[3]);
                 }, .54, false);
                 this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[0]);
+                    cc.audioEngine.playEffect(activationSounds[2]);
                 }, .61, false);
-            }
-            else if (activationSounds.length == 6) {
                 this.schedule(function () {
                     cc.audioEngine.playEffect(activationSounds[1]);
-                }, .11, false);
-                this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[2]);
-                }, .17, false);
-                this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[3]);
-                }, .23, false);
-                this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[4]);
-                }, .29, false);
-                this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[5]);
-                }, .35, false);
-                this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[4]);
-                }, .41, false);
-                this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[3]);
-                }, .47, false);
-                this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[2]);
-                }, .53, false);
-                this.schedule(function () {
-                    cc.audioEngine.playEffect(activationSounds[1]);
-                }, .59, false);
+                }, .68, false);
                 this.schedule(function () {
                     cc.audioEngine.playEffect(activationSounds[0]);
-                }, .65, false);
+                }, .75, false);
             }
             else if (activationSounds.length == 7) {
                 this.schedule(function () {
