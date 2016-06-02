@@ -121,7 +121,7 @@ var EffectsLayer = cc.Layer.extend({
     // LAUNCHING //
     ///////////////
 
-    launchExplosion: function(col, row, color){
+    launchExplosion: function(col, row, color) {
         var that = this;
         var particleSystem = this._explosionGrid[col][row];
 

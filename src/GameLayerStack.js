@@ -46,7 +46,7 @@ var StackGameLayer = BaseGameLayer.extend({
     _initUI: function() {
         this._super();
 
-        this._numboHeaderLayer.setConditionPrefix("Drop Count: ");
+        this._numboHeaderLayer.setConditionPrefix("Level: ");
     },
 
     // Initialize audio.
@@ -107,7 +107,7 @@ var StackGameLayer = BaseGameLayer.extend({
         NJ.stats.save();
 
         // first send the analytics for the current game session
-        NJ.sendAnalytics("Default");
+        NJ.sendAnalytics("Stack");
 
         this.runAction(cc.sequence(cc.callFunc(function() {
             that._numboHeaderLayer.leave();
@@ -339,12 +339,15 @@ var StackGameLayer = BaseGameLayer.extend({
 
         var levelUpCount = NJ.gameState.levelUpIfNeeded();
 
-        for(var i = 0; i < levelUpCount; ++i) {
-            this._blocksToDrop++;
+        if(levelUpCount) {
+            for (var i = 0; i < levelUpCount; ++i) {
+                this._blocksToDrop++;
+            }
+
+            this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
         }
 
         var numBlocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
-        this._numboHeaderLayer.setConditionValue(this._blocksToDrop);
 
         this.spawnBlocksAfterDelay(numBlocksToSpawn, this._spawnDelay);
         this.checkGameOver();

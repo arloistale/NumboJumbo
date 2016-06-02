@@ -75,7 +75,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         var LFactor = 1 / Math.pow(L, exponent);
 
         // linear blocks-cleared-this-level factor
-        var BFactor = 1 - NJ.gameState.getLevelupProgress() / 3;
+        var BFactor = 1;// - NJ.gameState.getLevelupProgress() / 3;
 
         var spawnTime = 1.5 * LFactor * BFactor;
         return spawnTime;
@@ -84,13 +84,13 @@ var InfiniteGameLayer = BaseGameLayer.extend({
     _initUI: function() {
         this._super();
 
-        this._numboHeaderLayer.setConditionPrefix("Max Drop: ");
+        this._numboHeaderLayer.setConditionPrefix("Highest Number: ");
     },
 
     // Initialize audio.
     _initAudio: function() {
         // start the music
-        this._backgroundTrack = res.trackDauntinglyMellow;
+        this._backgroundTrack = res.trackSomethingElse1;
     },
 
     /////////////////////////
@@ -143,7 +143,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         NJ.stats.save();
 
         // first send the analytics for the current game session
-        NJ.sendAnalytics("Default");
+        NJ.sendAnalytics("Infinite");
 
         this.runAction(cc.sequence(cc.callFunc(function() {
             that._numboHeaderLayer.leave();
@@ -237,7 +237,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         this._numboHeaderLayer.setEquation([]);
 
         this._effectsLayer.clearComboOverlay();
-s
+
         if (!selectedBlocks.length)
             return;
 

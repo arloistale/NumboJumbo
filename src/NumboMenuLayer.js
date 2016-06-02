@@ -8,6 +8,12 @@ var NumboMenuLayer = (function() {
         _jumboMenu: null,
         _toolMenu: null,
 
+        // Buttons Data
+        _achievementsButton: null,
+        _statsButton: null,
+        _loginButton: null,
+        _settingsButton: null,
+
         // Mode Buttons Data
         _modeData: {
             mm: {
@@ -35,7 +41,6 @@ var NumboMenuLayer = (function() {
             }
         },
 
-        _shopLayer: null,
         _settingsMenuLayer: null,
 
         ////////////////////
@@ -57,6 +62,15 @@ var NumboMenuLayer = (function() {
             this._initAudio();
 
             this.enter();
+        },
+
+        onExit: function() {
+            this._super();
+
+            this._settingsButton.release();
+            this._achievementsButton.release();
+            this._loginButton.release();
+            this._statsButton.release();
         },
 
         _initHeaderUI: function() {
@@ -188,34 +202,95 @@ var NumboMenuLayer = (function() {
             var helpButton = new NJMenuButton(buttonSize, this._onHelp.bind(this), this);
             helpButton.setImageRes(res.helpImage);
 
-            var settingsButton = new NJMenuButton(buttonSize, this._onSettings.bind(this), this);
-            settingsButton.setImageRes(res.settingsImage);
+            this._settingsButton = new NJMenuButton(buttonSize, this._onSettings.bind(this), this);
+            this._settingsButton.setImageRes(res.settingsImage);
+            this._settingsButton.retain();
 
-            var statsButton = new NJMenuButton(buttonSize, this._onLeaderboard.bind(this), this);
-            statsButton.setImageRes(res.statsImage);
+            this._statsButton = new NJMenuButton(buttonSize, this._onLeaderboard.bind(this), this);
+            this._statsButton.setImageRes(res.statsImage);
+            this._statsButton.retain();
 
-            var achievementsButton = new NJMenuButton(buttonSize, this._onAchievements.bind(this), this);
-            achievementsButton.setImageRes(res.trophyImage);
+            this._achievementsButton = new NJMenuButton(buttonSize, this._onAchievements.bind(this), this);
+            this._achievementsButton.setImageRes(res.trophyImage);
+            this._achievementsButton.retain();
+
+            this._loginButton = new NJMenuButton(buttonSize, function() {
+                if(!NJ.social.isLoggedIn()) {
+                    NJ.social.login();
+                } else {
+                    cc.log("Warning: tried to login when already login!");
+                }
+            }, this);
+            this._loginButton.setImageRes(res.loginImage);
+            this._loginButton.retain();
 
             this._toolMenu.addChild(helpButton);
-            this._toolMenu.addChild(achievementsButton);
-            this._toolMenu.addChild(statsButton);
-            this._toolMenu.addChild(settingsButton);
 
-            /*
-             var shopButton = new NJMenuButton("Jumbos", onShop.bind(this), this);
-             shopButton.setImageRes(res.buttonImage);
-             menu.addChild(shopButton);
-             */
+            if(cc.sys.isNative) {
+                if (NJ.social.isLoggedIn()) {
+                    this._toolMenu.addChild(this._achievementsButton);
+                    this._toolMenu.addChild(this._statsButton);
+                } else {
+                    if (cc.sys.os == cc.sys.OS_IOS) {
+                        NJ.social.login();
+
+                        NJ.social.setListener({
+                            onConnectionStatusChanged: function (status) {
+                                cc.log("Connection status changed");
+                                cc.log(status);
+
+                                switch (status) {
+                                    case 1000:
+                                        that.leaveTools(function () {
+                                            that._toolMenu.removeChild(that._settingsButton);
+
+                                            that._toolMenu.addChild(that._achievementsButton);
+                                            that._toolMenu.addChild(that._statsButton);
+                                            that._toolMenu.addChild(that._settingsButton);
+
+                                            that._toolMenu.alignItemsHorizontallyWithPadding(10);
+
+                                            that.enterTools();
+                                        });
+                                        break;
+                                }
+                            }
+                        });
+                    } else {
+                        this._toolMenu.addChild(this._loginButton);
+
+                        NJ.social.setListener({
+                            onConnectionStatusChanged: function (status) {
+                                cc.log("Connection status changed");
+                                cc.log(status);
+
+                                switch (status) {
+                                    case 1000:
+                                        that.leaveTools(function () {
+                                            that._toolMenu.removeChild(that._settingsButton);
+                                            that._toolMenu.removeChild(that._loginButton);
+
+                                            that._toolMenu.addChild(that._achievementsButton);
+                                            that._toolMenu.addChild(that._statsButton);
+                                            that._toolMenu.addChild(that._settingsButton);
+
+                                            that._toolMenu.alignItemsHorizontallyWithPadding(10);
+
+                                            that.enterTools();
+                                        });
+                                        break;
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+
+            this._toolMenu.addChild(this._settingsButton);
 
             this._toolMenu.alignItemsHorizontallyWithPadding(10);
 
             this.addChild(this._toolMenu, 100);
-/*
-            if(!NJ.social.isLoggedIn()) {
-                NJ.social.login();
-            }
-            */
         },
 
         // initialize game audio
@@ -224,7 +299,7 @@ var NumboMenuLayer = (function() {
                 return;
 
             cc.audioEngine.setMusicVolume(NJ.MUSIC_VOLUME);
-            cc.audioEngine.playMusic(res.trackPadMellow, true);
+            cc.audioEngine.playMusic(res.trackChill2, true);
         },
 
         // makes menu elements transition in
@@ -235,7 +310,7 @@ var NumboMenuLayer = (function() {
             var easing = cc.easeBackOut();
 
             this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
+            this.enterTools();
 
             var data;
             var delay = 0.4;
@@ -251,6 +326,13 @@ var NumboMenuLayer = (function() {
             }
         },
 
+        enterTools: function() {
+            var easing = cc.easeBackOut();
+            var toolSize = this._toolMenu.getContentSize();
+
+            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
+        },
+
         // transition out
         leave: function(callback) {
             var headerSize = this._headerMenu.getContentSize();
@@ -259,7 +341,7 @@ var NumboMenuLayer = (function() {
             var easing = cc.easeBackOut();
 
             this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
+            this.leaveTools();
 
             var data;
             for(var key in this._modeData) {
@@ -271,10 +353,23 @@ var NumboMenuLayer = (function() {
                 data.button.runAction(cc.moveTo(0.4, data.startPos).easing(easing));
             }
 
-            this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
-                if(callback)
+            if(callback) {
+                this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function () {
                     callback();
-            })));
+                })));
+            }
+        },
+
+        leaveTools: function(callback) {
+            var toolSize = this._toolMenu.getContentSize();
+
+            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(cc.easeBackOut()));
+
+            if(callback) {
+                this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function () {
+                    callback();
+                })));
+            }
         },
 
         ///////////////
@@ -396,7 +491,7 @@ var NumboMenuLayer = (function() {
                     that.enter();
 
                     if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-                        cc.audioEngine.playMusic(res.trackPadMellow);
+                        cc.audioEngine.playMusic(res.trackChill2);
 
                     that._updateTheme();
                 });

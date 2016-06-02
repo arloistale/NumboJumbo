@@ -104,7 +104,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 		NJ.stats.save();
 
 		// first send the analytics for the current game session
-		NJ.sendAnalytics("Default");
+		NJ.sendAnalytics("Moves");
 
 		this.runAction(cc.sequence(cc.callFunc(function() {
 			that._numboHeaderLayer.leave();

@@ -17,13 +17,12 @@
 		1AD7E0A818C9DB93004817A6 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AD7E0A918C9DBE3004817A6 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AE159EC18C9DF3600FCA372 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A081B18C9DF05005C6854 /* project.json */; };
-		221A48921CE2E17C0052D721 /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 221A48911CE2E17C0052D721 /* Icon@3x.png */; };
+		22185E971D00052B00601B59 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22185E961D00052B00601B59 /* Images.xcassets */; };
 		221D45831CE56EFE004C5CF5 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 221D45821CE56EFE004C5CF5 /* GameKit.framework */; };
-		222B76141CF7AE2D004DC56B /* LightIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 222B76131CF7AE2D004DC56B /* LightIcon@3x.png */; };
-		222B76161CF7AE31004DC56B /* LightIconA@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 222B76151CF7AE31004DC56B /* LightIconA@3x.png */; };
 		22960B7B1CF3E017002913C4 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 22960B7A1CF3E017002913C4 /* Default.png */; };
-		22960B7D1CF3E099002913C4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22960B7C1CF3E099002913C4 /* Default@2x.png */; };
-		22960B7F1CF3E09E002913C4 /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = 22960B7E1CF3E09E002913C4 /* Default-568h.png */; };
+		229833431D00E469001CA830 /* Default-667h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 229833421D00E469001CA830 /* Default-667h@2x.png */; };
+		229833471D00E48D001CA830 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 229833461D00E48D001CA830 /* Default@2x.png */; };
+		229833491D00E493001CA830 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 229833481D00E493001CA830 /* Default-568h@2x.png */; };
 		2B2240D1B845D4EE4E8714BB /* PluginGoogleAnalyticsJS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 387941B68C3E774DB0EC2605 /* PluginGoogleAnalyticsJS.cpp */; };
 		33F1415E9FB875E302A98150 /* PluginSdkboxPlayJSHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D624628A9098C83ED63828E /* PluginSdkboxPlayJSHelper.cpp */; };
 		502380DC17EBB88200990C9B /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 502380DB17EBB88200990C9B /* libcurl.dylib */; };
@@ -153,14 +152,13 @@
 		1A96A4F2174A3432008653A9 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "../../js-bindings/cocos2d-x/cocos2dx/platform/third_party/ios/libraries/libcurl.a"; sourceTree = "<group>"; };
 		1AC6FB34180E9ACB004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = "../../js-bindings/cocos2d-x/build/cocos2d_libs.xcodeproj"; sourceTree = "<group>"; };
 		1D624628A9098C83ED63828E /* PluginSdkboxPlayJSHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginSdkboxPlayJSHelper.cpp; path = ../Classes/PluginSdkboxPlayJSHelper.cpp; sourceTree = SOURCE_ROOT; };
-		221A48911CE2E17C0052D721 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
+		22185E961D00052B00601B59 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "NumboJumbo iOS/Images.xcassets"; sourceTree = "<group>"; };
 		221D45821CE56EFE004C5CF5 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
-		222B76131CF7AE2D004DC56B /* LightIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LightIcon@3x.png"; sourceTree = "<group>"; };
-		222B76151CF7AE31004DC56B /* LightIconA@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LightIconA@3x.png"; sourceTree = "<group>"; };
 		226D450BBA11EA66AC6A335A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = SOURCE_ROOT; };
 		22960B7A1CF3E017002913C4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		22960B7C1CF3E099002913C4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		22960B7E1CF3E09E002913C4 /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
+		229833421D00E469001CA830 /* Default-667h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667h@2x.png"; sourceTree = "<group>"; };
+		229833461D00E48D001CA830 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		229833481D00E493001CA830 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		2D3245848D9B1AF51B89583B /* ar */ = {isa = PBXFileReference; lastKnownFileType = "?"; name = ar; path = plugin_review_res_bundle/ar.lproj/SdkboxReviewResLocalizable.strings; sourceTree = SOURCE_ROOT; };
 		331243E8AB3E03A1EE037C38 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/EventKitUI.framework; sourceTree = DEVELOPER_DIR; };
 		35F5422A802C15CDBC49496D /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
@@ -286,6 +284,7 @@
 		15628F5B15F0F5C2000CF24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				22185E961D00052B00601B59 /* Images.xcassets */,
 				1A1A081B18C9DF05005C6854 /* project.json */,
 				1A6BF21418C9DB5900FB0E1C /* main.js */,
 				C0799CB518BAE62000E9C828 /* res */,
@@ -306,9 +305,6 @@
 		5091732E17ECDF8A00D62437 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				222B76151CF7AE31004DC56B /* LightIconA@3x.png */,
-				222B76131CF7AE2D004DC56B /* LightIcon@3x.png */,
-				221A48911CE2E17C0052D721 /* Icon@3x.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -414,8 +410,9 @@
 		D45446CC156DE73F00887EB5 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				22960B7E1CF3E09E002913C4 /* Default-568h.png */,
-				22960B7C1CF3E099002913C4 /* Default@2x.png */,
+				229833481D00E493001CA830 /* Default-568h@2x.png */,
+				229833461D00E48D001CA830 /* Default@2x.png */,
+				229833421D00E469001CA830 /* Default-667h@2x.png */,
 				22960B7A1CF3E017002913C4 /* Default.png */,
 				509D4AAB17EBB2AB00697056 /* AppController.h */,
 				509D4AAC17EBB2AB00697056 /* AppController.mm */,
@@ -590,18 +587,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22960B7F1CF3E09E002913C4 /* Default-568h.png in Resources */,
+				22185E971D00052B00601B59 /* Images.xcassets in Resources */,
+				229833491D00E493001CA830 /* Default-568h@2x.png in Resources */,
 				BAF426FB19484B3E002B22EF /* script in Resources */,
+				229833471D00E48D001CA830 /* Default@2x.png in Resources */,
 				1AE159EC18C9DF3600FCA372 /* project.json in Resources */,
-				221A48921CE2E17C0052D721 /* Icon@3x.png in Resources */,
-				222B76161CF7AE31004DC56B /* LightIconA@3x.png in Resources */,
-				22960B7D1CF3E099002913C4 /* Default@2x.png in Resources */,
 				22960B7B1CF3E017002913C4 /* Default.png in Resources */,
 				1AD7E0A818C9DB93004817A6 /* main.js in Resources */,
 				C03780EB18BEE0E400FE4F13 /* src in Resources */,
+				229833431D00E469001CA830 /* Default-667h@2x.png in Resources */,
 				C0799CB918BAE62000E9C828 /* res in Resources */,
 				0D10471D84B42507279C127A /* SdkboxReviewResLocalizable.strings in Resources */,
-				222B76141CF7AE2D004DC56B /* LightIcon@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -771,6 +767,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: kaveh daryabeygi (8WB7ES3K9C)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: kaveh daryabeygi (28DZN8KS2Y)";
 				COMPRESS_PNG_FILES = NO;
@@ -810,6 +808,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: kaveh daryabeygi (8WB7ES3K9C)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: kaveh daryabeygi (8WB7ES3K9C)";
 				COMPRESS_PNG_FILES = NO;

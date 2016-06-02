@@ -65,7 +65,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 	// Initialize audio.
 	_initAudio: function() {
 		// start the music
-		this._backgroundTrack = res.trackQuicker;
+		this._backgroundTrack = res.trackSomethingElse1;
 	},
 
 	/////////////////////////
@@ -114,7 +114,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 		NJ.stats.save();
 
 		// first send the analytics for the current game session
-		NJ.sendAnalytics("Default");
+		NJ.sendAnalytics("Timed");
 
 		this.runAction(cc.sequence(cc.callFunc(function() {
 			that._numboHeaderLayer.leave();
@@ -373,7 +373,6 @@ var TimedGameLayer = BaseGameLayer.extend({
 		this._super();
 
 		NJ.gameState.setStartTime(Date.now() - this._timePassed*1000);
-
 	},
 
 	/////////////

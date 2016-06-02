@@ -263,7 +263,7 @@ var BaseGameLayer = cc.Layer.extend({
 	// Initialize audio.
 	_initAudio: function() {
 		// start the music
-        this._backgroundTrack = res.trackPadMellow;
+        this._backgroundTrack = res.trackChill2;
 	},
 
 	/////////////////////////
@@ -379,14 +379,14 @@ var BaseGameLayer = cc.Layer.extend({
 
 	// spawns and drops a block with random col and val.
 	// plays appropriate sound
-	spawnDropBlock: function(col, val) {
+	spawnDropBlock: function(col, val, customSound) {
 		var spawnBlock = NumboBlock.recreate(this._blockSize);
 		this._numboController.spawnDropBlock(spawnBlock, col, val);
 		this._instantiateBlock(spawnBlock);
 		this.moveBlockIntoPlace(spawnBlock);
 
 		if(NJ.settings.sounds) {
-			cc.audioEngine.playEffect(res.clickSound);
+			cc.audioEngine.playEffect(customSound || res.clickSound);
 		}
 	},
 
@@ -651,13 +651,16 @@ var BaseGameLayer = cc.Layer.extend({
 						this._effectsLayer.launchComboOverlay();
 						selectedBlock.highlight();
 
-						if(this._numboController.getSelectedBlocks().length >= 9)
-							cc.audioEngine.playEffect(res.tensionSound3, false);
-						else if(this._numboController.getSelectedBlocks().length >= 7)
-							cc.audioEngine.playEffect(res.tensionSound2, false);
-						else if(this._numboController.getSelectedBlocks().length >= 5)
-							cc.audioEngine.playEffect(res.tensionSound, false);
-
+						if(this._numboController.getSelectedBlocks().length >= 7) {
+							if(NJ.settings.sounds)
+								cc.audioEngine.playEffect(res.tensionSound3);
+						} else if(this._numboController.getSelectedBlocks().length >= 5) {
+							if(NJ.settings.sounds)
+								cc.audioEngine.playEffect(res.tensionSound2);
+						} else if(this._numboController.getSelectedBlocks().length >= 3) {
+							if(NJ.settings.sounds)
+								cc.audioEngine.playEffect(res.tensionSound);
+						}
 					}
 
 					// remove duplicates
@@ -749,40 +752,41 @@ var BaseGameLayer = cc.Layer.extend({
 	//			(this is the most common & easiest case by far!)
 	spawnBlocksAfterDelay: function(count, delay, callback){
 		var that = this;
-		this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
+		//this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
 			that.spawnDropRandomBlocks(count - 2);
 
 			// case 1
 			if (that._numboController.areAllBlocksTheSameValue()){
 				var colsAndVals = that._numboController.findLocationAndValueForTwoNewBlocks();
 				if (colsAndVals) {
-					that.spawnDropBlock(colsAndVals[0].col, colsAndVals[0].val);
-					that.spawnDropBlock(colsAndVals[1].col, colsAndVals[1].val);
+					that.spawnDropBlock(colsAndVals[0].col, colsAndVals[0].val, res.plipSound);
+					that.spawnDropBlock(colsAndVals[1].col, colsAndVals[1].val, res.plipSound);
 				}
 				else {
 					that.spawnDropRandomBlocks(2);
 				}
 
 			} else {
-				that.spawnDropRandomBlock();
+				that.spawnDropRandomBlocks(1);
 
 				// case 2
 				if (that._numboController.findHint().length == 0) {
 					var colAndVal = that._numboController.findLocationAndValueForNewBlock();
-					that.spawnDropBlock (colAndVal.col, colAndVal.val);
+					that.spawnDropBlock (colAndVal.col, colAndVal.val, res.plipSound);
 				}
 
 				// case 3
 				else {
-					that.spawnDropRandomBlock();
+					that.spawnDropRandomBlocks(1);
 				}
 			}
 
 			that.relocateBlocks();
+
 			if (callback) {
 				callback();
 			}
-		})));
+		//})));
 	},
 
 	relocateBlocks: function (){

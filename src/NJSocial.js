@@ -40,22 +40,12 @@ NJ.social = (function() {
         init: function () {
             if (cc.sys.isNative) {
                 sdkbox.PluginSdkboxPlay.init();
-/*
-                sdkbox.PluginSdkboxPlay.setListener({
-                    onConnectionStatusChanged: function (status) {
-                        cc.log("Connection status changed");
-                        cc.log(status);
-                    },
+            }
+        },
 
-                    onScoreSubmitted: function (leaderboard_name, score, is_maxScoreAllTime, is_maxScoreWeek, is_maxScoreToday) {
-                        cc.log("Score submitted!");
-                    },
-
-                    onAchievementUnlocked: function (achievement_name, newlyUnlocked) {
-                        cc.log("achievement unlocked!");
-                    }
-                });
- */
+        setListener: function(listener) {
+            if(cc.sys.isNative) {
+                sdkbox.PluginSdkboxPlay.setListener(listener);
             }
         },
 

@@ -118,10 +118,10 @@ var GameOverMenuLayer = (function() {
             var largeSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.large);
 
             var scoreTitleLabel = this.generateLabel("Score", header2Size);
-            this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.blockColors[0]);
+            this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
             var bestTitleLabel = this.generateLabel("Best", header2Size);
-            this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.blockColors[0]);
+            this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
 
             this._statsMenu.addChild(scoreTitleLabel);
             this._statsMenu.addChild(this._scoreLabel);

@@ -46,7 +46,7 @@ var StackGameLayer = BaseGameLayer.extend({
     _initUI: function() {
         this._super();
 
-        this._numboHeaderLayer.setConditionPrefix("Drop Count: ");
+        this._numboHeaderLayer.setConditionPrefix("Level: ");
     },
 
     // Initialize audio.
@@ -107,7 +107,7 @@ var StackGameLayer = BaseGameLayer.extend({
         NJ.stats.save();
 
         // first send the analytics for the current game session
-        NJ.sendAnalytics("Default");
+        NJ.sendAnalytics("Stack");
 
         this.runAction(cc.sequence(cc.callFunc(function() {
             that._numboHeaderLayer.leave();

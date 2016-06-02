@@ -9,6 +9,7 @@ Definition for falling blocks.
 var NumboBlock = (function() {
 
     var _backgroundScale = null;
+    var _labelScale = null;
 
     return cc.Sprite.extend({
         // exposed public properties
@@ -73,8 +74,14 @@ var NumboBlock = (function() {
 
             // initialize number label
             this._valueLabel = new cc.LabelBMFont("label test", b_getFontName(res.mainFont));
-            var imageSize = this._valueLabel.getContentSize();
-            this._valueLabel.setScale(blockSize.height * 0.75 / imageSize.height, blockSize.height * 0.75 / imageSize.height);
+            if(!_labelScale) {
+                var imageSize = this._valueLabel.getContentSize();
+                _labelScale = {
+                    x: blockSize.height * 0.75 / imageSize.height,
+                    y: blockSize.height * 0.75 / imageSize.height
+                }
+            }
+            this._valueLabel.setScale(_labelScale.x, _labelScale.y);
             this._valueLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -108,6 +115,8 @@ var NumboBlock = (function() {
         },
 
         reuse: function () {
+            this._backgroundSprite.setScale(_backgroundScale.x, _backgroundScale.y);
+            this._valueLabel.setScale(_labelScale.x, _labelScale.y);
             this.setVisible(true);
         },
 
@@ -205,11 +214,9 @@ NumboBlock.create = function (blockSize) {
 };
 
 NumboBlock.recreate = function (blockSize) {
-    //if (cc.pool.hasObject(NumboBlock)) {
-      //  return cc.pool.getFromPool(NumboBlock);
-    //}
-
-    //cc.log("creating");
+    if (cc.pool.hasObject(NumboBlock)) {
+        return cc.pool.getFromPool(NumboBlock);
+    }
 
     return NumboBlock.create(blockSize);
 };

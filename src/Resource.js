@@ -46,6 +46,7 @@ var res = {
     retryImage: resRoot + "Images/ic_retry/ic_retry_2x.png",
     statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
     trophyImage: resRoot + "Images/ic_trophy/ic_trophy_2x.png",
+    loginImage: resRoot + "Images/login.png",
 
     playImage: resRoot + "Images/ic_play/ic_play_2x.png",
     timedImage: resRoot + "Images/ic_timed.png",
@@ -57,13 +58,12 @@ var res = {
     blockImage: resRoot + "Images/blockImage/blockImage1x.png",
     blockImage2x: resRoot + "Images/blockImage/blockImage2x.png",
     alertImage: resRoot + "Images/alertOverlay.png",
-    //handImage: resRoot + "Images/ic_hand/ic_hand_2x.png",
     handImage: resRoot + "Images/ic_hand/Hand2.png",
 
     // music
-    trackPadMellow: resRoot + "Sounds/music/PadMellowV2.mp3",
+    trackChill2: resRoot + "Sounds/music/Chill2.mp3",
     trackDauntinglyMellow: resRoot + "Sounds/music/DauntinglyMellowV3.mp3",
-    trackQuicker: resRoot + "Sounds/music/QuickerV1.mp3",
+    trackSomethingElse1: resRoot + "Sounds/music/SomethingElseV1.mp3",
 
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
@@ -83,17 +83,6 @@ var res = {
     plopSound14: resRoot + "Sounds/Plop14.wav",
     clickSound: resRoot + "Sounds/clickSound.wav",
 
-    progressSound1: resRoot + "Sounds/progress1.wav",
-    progressSound2: resRoot + "Sounds/progress2.wav",
-    progressSound3: resRoot + "Sounds/progress3.wav",
-    progressSound4: resRoot + "Sounds/progress4.wav",
-    progressSound5: resRoot + "Sounds/progress5.wav",
-    progressSound6: resRoot + "Sounds/progress6.wav",
-    progressSound7: resRoot + "Sounds/progress7.wav",
-    progressSound8: resRoot + "Sounds/progress8.wav",
-    progressSound9: resRoot + "Sounds/progress9.wav",
-    progressSound10: resRoot + "Sounds/progress10.wav",
-
     bloopSound1: resRoot + "Sounds/boop1.wav",
     bloopSound2: resRoot + "Sounds/boop2.wav",
     bloopSound3: resRoot + "Sounds/boop3.wav",
@@ -105,17 +94,13 @@ var res = {
     bloopSound9: resRoot + "Sounds/boop9.wav",
     bloopSound10: resRoot + "Sounds/boop10.wav",
 
-    levelupSound: resRoot + "Sounds/levelup.wav",
     overSound: resRoot + "Sounds/over.mp3",
 
     coinSound: resRoot + "Sounds/coin.wav",
 
-    //tensionSound: resRoot + "Sounds/tension.wav",
-    //tensionSound2: resRoot + "Sounds/tension2.wav",
-    //tensionSound3: resRoot + "Sounds/tension3.wav"
-    tensionSound: resRoot + "Sounds/blubSoundsA1.wav",
-    tensionSound2: resRoot + "Sounds/blubSoundsA2.wav",
-    tensionSound3: resRoot + "Sounds/blubSoundsA3.wav"
+    tensionSound: resRoot + "Sounds/plang1.wav",
+    tensionSound2: resRoot + "Sounds/plang2.wav",
+    tensionSound3: resRoot + "Sounds/plang8.wav"
 };
 
 // returns proper font name based on platform
@@ -139,6 +124,7 @@ var g_menu = [
     res.helpImage,
     res.buttonImage,
     res.statsImage,
+    res.loginImage,
     res.blockImage,
     res.blockImage2x,
     res.trophyImage,
@@ -151,7 +137,7 @@ var g_menu = [
     // sounds
     res.clickSound,
 
-    res.trackPadMellow,
+    res.trackChill2,
 
     // fonts
     res.mainFont.x1.fnt,
@@ -165,10 +151,6 @@ var g_menu = [
 var plops = [res.plopSound, res.plopSound4, res.plopSound5,
     res.plopSound6, res.plopSound7, res.plopSound8, res.plopSound9, res.plopSound10, res.plopSound11,
     res.plopSound12, res.plopSound13, res.plopSound14];
-
-var progresses = [res.progressSound1, res.progressSound2, res.progressSound3, res.progressSound4,
-    res.progressSound5, res.progressSound6, res.progressSound7, res.progressSound8,
-    res.progressSound9, res.progressSound10];
 
 var bloops = [res.bloopSound1, res.bloopSound2, res.bloopSound3, res.bloopSound4, res.bloopSound5,
     res.bloopSound6, res.bloopSound7, res.bloopSound8, res.bloopSound9, res.bloopSound10];
@@ -190,8 +172,7 @@ var g_game = [
 
     // music
     res.trackDauntinglyMellow,
-    res.trackQuicker,
-
+    res.trackSomethingElse1,
 
     // sounds
     res.tickSound,
@@ -210,17 +191,6 @@ var g_game = [
     res.plopSound13,
     res.plopSound14,
 
-    res.progressSound1,
-    res.progressSound2,
-    res.progressSound3,
-    res.progressSound4,
-    res.progressSound5,
-    res.progressSound6,
-    res.progressSound7,
-    res.progressSound8,
-    res.progressSound9,
-    res.progressSound10,
-
     res.bloopSound1,
     res.bloopSound2,
     res.bloopSound3,
@@ -232,9 +202,7 @@ var g_game = [
     res.bloopSound9,
     res.bloopSound10,
 
-    
     res.overSound,
-    res.levelupSound,
     res.coinSound,
 
     // fonts

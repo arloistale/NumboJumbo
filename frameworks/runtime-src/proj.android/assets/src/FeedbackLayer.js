@@ -9,7 +9,6 @@ var FeedbackLayer = cc.Layer.extend({
     snippetPool: [],
 
     // feedback doomsayer
-    alertOverlay: null,
     bIsDoomsayerLaunched: false,
 
 ////////////////////
@@ -32,16 +31,6 @@ var FeedbackLayer = cc.Layer.extend({
             entity.retain();
             this.snippetPool.push(entity);
         }
-
-        // initialize doomsayer
-        this.alertOverlay = new cc.Sprite(res.alertImage);
-        this.alertOverlay.attr({
-            scale: 1,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            color: cc.color(255, 0, 0, 255)
-        });
-        this.alertOverlay.retain();
 	},
 
     // TODO: Memory leaks???
@@ -159,15 +148,11 @@ var FeedbackLayer = cc.Layer.extend({
     runDoomsayer: function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.tickSound);
-
-        this.alertOverlay.setOpacity(0.5);
-        var fadeAction = cc.fadeTo(0.5, 0);
-        this.alertOverlay.runAction(fadeAction);
     },
 
     launchDoomsayer: function() {
         if(!this.bIsDoomsayerLaunched) {
-            this.schedule(this.runDoomsayer, 0.5);
+            this.schedule(this.runDoomsayer, 0.7);
         }
 
         this.bIsDoomsayerLaunched = true;
@@ -177,7 +162,6 @@ var FeedbackLayer = cc.Layer.extend({
 
     clearDoomsayer: function() {
         this.bIsDoomsayerLaunched = false;
-        this.removeChild(this.alertOverlay);
         this.unschedule(this.runDoomsayer);
     },
 

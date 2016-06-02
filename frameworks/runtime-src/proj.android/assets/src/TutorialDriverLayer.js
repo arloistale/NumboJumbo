@@ -260,6 +260,9 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 			case slides.end:
 
+				// first send the analytics for the current game session
+				NJ.sendAnalytics("Tutorial");
+
 				this.runAction(cc.sequence(cc.delayTime(4), cc.callFunc(function() {
 					// load resources
 					var scene = new cc.Scene();
