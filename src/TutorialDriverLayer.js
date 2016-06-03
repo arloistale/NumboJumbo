@@ -12,8 +12,24 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	// Initialization //
 	////////////////////
 
-	ctor: function () {
+	ctor: function (allowToolbar) {
 		this._super();
+
+		var that = this;
+
+		if(allowToolbar) {
+			// this seems like a hack but will work for now
+			this._toolbarLayer.setOnPauseCallback(function() {
+				that.onMenu();
+			});
+
+			this._toolbarLayer.enterTutorialMode();
+
+			this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
+				// cause UI elements to fall in
+				that._toolbarLayer.enter();
+			})));
+		}
 
 		this._initTutorial();
 

@@ -16,7 +16,7 @@ var ToolbarLayer = (function() {
         // UI Data
         buttonsMenu: null,
 
-        _equationLabel: null,
+        _pauseButton: null,
 
         // callback
         _onPauseCallback: null,
@@ -56,9 +56,9 @@ var ToolbarLayer = (function() {
 
             var buttonSize = cc.size(contentSize.height * NJ.uiSizes.barButton, contentSize.height * NJ.uiSizes.barButton);
 
-            var pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
-            pauseButton.setImageRes(res.pauseImage);
-            menu.addChild(pauseButton);
+            this._pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
+            this._pauseButton.setImageRes(res.pauseImage);
+            menu.addChild(this._pauseButton);
 
             this.addChild(menu);
         },
@@ -66,6 +66,10 @@ var ToolbarLayer = (function() {
         //////////////////
         // Manipulation //
         //////////////////
+
+        enterTutorialMode: function() {
+            this._pauseButton.setImageRes(res.skipImage);
+        },
 
         reset: function() {
             var size = this.getContentSize();

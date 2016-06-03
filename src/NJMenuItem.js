@@ -294,14 +294,23 @@ var NJMenuItem = (function() {
         /////////////////
 
         setImageRes: function(res) {
+            if(this._spriteStates.normal.getChildByTag(117))
+                this._spriteStates.normal.removeChildByTag(117);
+
+            if(this._spriteStates.selected.getChildByTag(117))
+                this._spriteStates.selected.removeChildByTag(117);
+
+            if(this._spriteStates.disabled.getChildByTag(117))
+                this._spriteStates.disabled.removeChildByTag(117);
+
             var contentSize = this.getContentSize();
             var imageStates = generateImageStates(res, cc.size(contentSize.width * 0.75, contentSize.height * 0.75), cc.p(contentSize.width / 2, contentSize.height / 2));
 
             this._rawImageSize = imageStates.normal.getContentSize();
 
-            this._spriteStates.normal.addChild(imageStates.normal, 1);
-            this._spriteStates.selected.addChild(imageStates.selected, 1);
-            this._spriteStates.disabled.addChild(imageStates.disabled, 1);
+            this._spriteStates.normal.addChild(imageStates.normal, 1, 117);
+            this._spriteStates.selected.addChild(imageStates.selected, 1, 117);
+            this._spriteStates.disabled.addChild(imageStates.disabled, 1, 117);
         },
 
         // Assumes sizes is a cc.Size

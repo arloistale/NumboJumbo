@@ -441,7 +441,7 @@ var NumboMenuLayer = (function() {
 
             this.leave(function() {
                 var scene = new cc.Scene();
-                scene.addChild(new TutorialDriverLayer());
+                scene.addChild(new TutorialDriverLayer(true));
                 cc.director.runScene(scene);
             });
         },
@@ -458,21 +458,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             NJ.social.showAchievements();
-        },
-
-        _onShop: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
-
-            var that = this;
-
-            cc.eventManager.pauseTarget(this, true);
-            this._shopLayer = new ShopMenuLayer();
-            this._shopLayer.setOnCloseCallback(function() {
-                cc.eventManager.resumeTarget(that, true);
-                that.removeChild(that._shopLayer);
-            });
-            this.addChild(this._shopLayer, 999);
         },
 
         _onSettings: function() {
@@ -503,11 +488,16 @@ var NumboMenuLayer = (function() {
         _updateTheme: function() {
             this.setColor(NJ.themes.backgroundColor);
 
+            var index = 0;
+
             for(var key in this._modeData) {
                 if(!this._modeData.hasOwnProperty(key))
                     continue;
 
+                this._modeData[key].button.setBackgroundColor(NJ.themes.blockColors[index]);
                 this._modeData[key].button.setLabelColor(NJ.themes.defaultLabelColor);
+
+                index++;
             }
         }
     });

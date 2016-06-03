@@ -42,6 +42,7 @@ var res = {
     nextImage: resRoot + "Images/ic_next/ic_next_2x.png",
     helpImage: resRoot + "Images/ic_help/ic_help_2x.png",
     homeImage: resRoot + "Images/ic_home/ic_home_2x.png",
+    skipImage: resRoot + "Images/ic_skip/ic_skip_2x.png",
     settingsImage: resRoot + "Images/ic_settings/ic_settings_2x.png",
     retryImage: resRoot + "Images/ic_retry/ic_retry_2x.png",
     statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
@@ -159,6 +160,7 @@ var bloops = [res.bloopSound1, res.bloopSound2, res.bloopSound3, res.bloopSound4
 // resources for ingame
 var g_game = [
     // UI
+    res.skipImage,
     res.buttonImage,
     res.backImage,
     res.homeImage,
