@@ -5,44 +5,52 @@
 var BaseGameLayer = (function() {
 	var activationSounds = [
 		{
+			// combo length = 3
 			startingDelay: 0.05,
 			midDelay: 0.12,
 			data: [ 0, 1, 2 ]
 		},
 		{
+			// combo length = 4
 			startingDelay: 0.05,
-			midDelay: 0.12,
+			midDelay: 0.09,
 			data: [ 0, 1, 2, 3, 4]
 		},
 		{
+			// combo length = 5
 			startingDelay: 0.05,
-			midDelay: 0.12,
-			data: [ 0, 1, 2, 3, 2, 1, 0 ]
+			midDelay: 0.09,
+			data: [ 0, 1, 2, 3, 4, 5, 6 ]
 		},
 		{
+			// combo length = 6
 			startingDelay: 0.05,
-			midDelay: 0.10,
-			data: [ 0, 1, 2, 3, 2 ]
+			midDelay: 0.09,
+			data: [ 0, 2, 4, 6, 4, 2, 0 ]
 		},
 		{
+			// combo length = 7
 			startingDelay: 0.05,
-			midDelay: 0.075,
-			data: [ 0, 1, 2, 3, 4, 3, 2, 1, 0 ]
+			midDelay: 0.09,
+			data: [ 0, 1, 3, 5, 7, 5, 3, 1, 0]
 		},
 		{
+			// combo length = 8
 			startingDelay: 0.05,
-			midDelay: 0.065,
-			data: [ 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0 ]
+			midDelay: 0.09,
+			data: [ 0, 2, 4, 6, 4, 2, 0, 6, 8 ]
 		},
 		{
+			// combo length = 9
 			startingDelay: 0.05,
-			midDelay: 0.055,
-			data: [  0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0]
+			midDelay: 0.09,
+			data: [ 0, 3, 6, 9, 6, 3, 0, 5, 7, 9 ]
 		},
 		{
+			// combo length = 10
 			startingDelay: 0.05,
-			midDelay: 0.045,
-			data: [ 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+			midDelay: 0.08,
+			data: [ 6, 4, 2, 8, 6, 4, 5, 6, 7, 8, 9]
 		}
 	];
 
