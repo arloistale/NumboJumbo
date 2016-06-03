@@ -7,11 +7,11 @@ var MovesGameLayer = BaseGameLayer.extend({
 	// domain of spawning
 	_numberList: [
 		{ key: 1, weight: 100 },
-		//{ key: 2, weight: 75 },
-		//{ key: 3, weight: 50 },
-		//{ key: 4, weight: 50 },
-		//{ key: 5, weight: 50 },
-		//{ key: 6, weight: 40 },
+		{ key: 2, weight: 75 },
+		{ key: 3, weight: 50 },
+		{ key: 4, weight: 50 },
+		{ key: 5, weight: 50 },
+		{ key: 6, weight: 40 },
 		{ key: 7, weight: 20 },
 		{ key: 8, weight: 20 },
 		{ key: 9, weight: 20 }
