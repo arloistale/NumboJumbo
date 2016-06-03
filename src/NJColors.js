@@ -17,38 +17,35 @@ NJ.themes = (function() {
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#6C6760"),
 
-            playButtonColor: cc.color("#6C6760"),
-            jumbosButtonColor: cc.color("#4AD87D"),
-            loginButtonColor: cc.color("#5D74C9"),
-            settingsButtonColor: cc.color("#33A5BA"),
 
             blockColors: [
-                // aqua
-                cc.color("#33A5BA"),
-
-                // warm yellow
-                cc.color("#F9D74A"),
-
-                // pinkish red
-                cc.color("#E81B58"),
 
                 // warm teal
-                cc.color("#52C9A8"),
+                cc.color("#50aa91"),
+
+                // warm yellow
+                cc.color("e2b349"),
+
+                // pinkish red
+                cc.color("#c53e66"),
+
+                // chartreuse
+                cc.color("#b4ca4b"),
 
                 // intense blue
-                cc.color("#5D74C9"),
+                cc.color("#6977a8"),
 
                 // orange
-                cc.color("#F88A2D"),
+                cc.color("#cc7b43"),
 
                 // darkish green teal
-                cc.color("#00A896"),
+                cc.color("#794e84"),
 
                 // violent red
-                cc.color("#F02A31"),
+                cc.color("#c23d42"),
 
                 // warm purple
-                cc.color("#C658AC")
+                cc.color("#9c3783")
             ]
         },
         // dark theme
@@ -61,23 +58,19 @@ NJ.themes = (function() {
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#424242"),
 
-            playButtonColor: cc.color("#424242"),
-            jumbosButtonColor: cc.color("#4AD87D"),
-            loginButtonColor: cc.color("#5D74C9"),
-            settingsButtonColor: cc.color("#33A5BA"),
-
             blockColors: [
                 // aqua
                 cc.color("#33A5BA"),
 
                 // warm yellow
-                cc.color("#F9D74A"),
+                cc.color("#f7b52b"),
 
                 // pinkish red
                 cc.color("#E81B58"),
 
                 // warm teal
                 cc.color("#52C9A8"),
+                //cc.color("33ee33"),
 
                 // intense blue
                 cc.color("#5D74C9"),
@@ -86,7 +79,7 @@ NJ.themes = (function() {
                 cc.color("#F88A2D"),
 
                 // darkish green teal
-                cc.color("#00A896"),
+                cc.color("#F55D16"),
 
                 // violent red
                 cc.color("#F02A31"),
