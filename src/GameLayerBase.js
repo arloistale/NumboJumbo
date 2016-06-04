@@ -82,6 +82,7 @@ var BaseGameLayer = (function() {
 
 		// Geometry Data
 		_backgroundLayer: null,
+        _boardContainer: null,
 
 		_levelSprite: null,
 		_selectedLinesNode: null,
@@ -152,11 +153,12 @@ var BaseGameLayer = (function() {
 			this._feedbackLayer.reset();
 			this._effectsLayer.reset();
 
+            this._drawDividersGeometry();
+
 			if(NJ.settings.music)
 				cc.audioEngine.playMusic(this._backgroundTrack, true);
 
-
-			this.schedule(function(){
+			this.schedule(function() {
 				that._numboController.findHint();
 			}, 0.1);
 		},
@@ -278,32 +280,22 @@ var BaseGameLayer = (function() {
 
 			this._blockSize = cc.size( this._levelCellSize.width * NJ.blockCellSize,  this._levelCellSize.height * NJ.blockCellSize);
 
-			// initialize rectangle around level
-			this._levelSprite = new cc.Sprite(res.levelImage);
-			var spriteSize = this._levelSprite.getContentSize();
-			this._levelSprite.setColor(NJ.themes.levelColor);
-			this._levelSprite.setScale(levelDims.width / spriteSize.width, levelDims.height / spriteSize.height);
-			this._levelSprite.attr({
-				anchorX: 0.5,
-				anchorY: 0.5,
-				x: cc.visibleRect.center.x,
-				y: cc.visibleRect.center.y
-			});
-			//this.addChild(this._levelSprite, -1);
+            this._boardContainer = new cc.Layer();
+            this.addChild(this._boardContainer);
 
 			// selected lines
 			this._selectedLinesNode = cc.DrawNode.create();
-			this.addChild(this._selectedLinesNode, 2);
+			this._boardContainer.addChild(this._selectedLinesNode, 2);
 
 			this.redrawSelectedLines(null);
 
 			// feedback overlay
 			this._feedbackLayer = new FeedbackLayer();
-			this.addChild(this._feedbackLayer, 800);
+			this._boardContainer.addChild(this._feedbackLayer, 800);
 
 			// effects middle layer between background and game elements
 			this._effectsLayer = new EffectsLayer();
-			this.addChild(this._effectsLayer, 24);
+			this._boardContainer.addChild(this._effectsLayer, 24);
 		},
 
 		// Initialize the Numbo Controller, which controls the level.
@@ -317,6 +309,75 @@ var BaseGameLayer = (function() {
 			// start the music
 			this._backgroundTrack = res.trackChill2;
 		},
+
+        // call this function AFTER initlalizing UI.
+        _drawDividersGeometry: function() {
+            if(!this._dividersNode) {
+                this._dividersNode = cc.DrawNode.create();
+                this.addChild(this._dividersNode, 2);
+            } else
+                this._dividersNode.clear();
+
+            // init header and lower dividers
+
+            // TODO: again drawing the dummy rect
+            //this._selectedLinesNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x, this._levelBounds.y), cc.color(255, 255, 255, 0), 0, cc.color(255, 255, 255, 0));
+
+            var startX = cc.visibleRect.left.x + cc.visibleRect.width * 0.1;
+            var endX = cc.visibleRect.right.x - cc.visibleRect.width * 0.1;
+
+            var currY = cc.visibleRect.bottom.y + this._headerSize.height;
+
+            var color = NJ.themes.dividerColor;
+
+            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
+
+            currY = cc.visibleRect.bottom.y + this._toolBarSize.height;
+
+            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
+
+            //this._dividersNode.setContentSize(1, 1);
+            /*
+             this._dividersNode.attr({
+             anchorX: 0.5,
+             anchorY: 0.5
+             });
+             */
+            //this._dividersNode.setPosition(cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y));
+        },
+
+		enter: function(callback) {
+			var that = this;
+
+			this._backgroundLayer.runAction(cc.sequence(cc.callFunc(function() {
+				// cause UI elements to fall in
+				that._numboHeaderLayer.enter();
+				that._toolbarLayer.enter();
+			}), cc.delayTime(0.4), cc.callFunc(function() {
+				if(callback)
+					callback();
+			})));
+		},
+
+		leave: function(callback) {
+			var that = this;
+
+			this._backgroundLayer.runAction(cc.sequence(cc.callFunc(function() {
+				that._numboHeaderLayer.leave();
+				that._toolbarLayer.leave();
+			}), cc.delayTime(0.4), cc.callFunc(function() {
+				if(callback)
+					callback();
+			})));
+		},
+
+        enterBoard: function() {
+            this._boardContainer.runAction(cc.sequence(cc.moveTo(0.4, cc.p(0, 0)).easing(cc.easeBackOut())));
+        },
+
+        leaveBoard: function() {
+            this._boardContainer.runAction(cc.sequence(cc.moveTo(0.4, cc.p(cc.visibleRect.width, 0)).easing(cc.easeBackOut())));
+        },
 
 		/////////////////////////
 		// Game State Handling //
@@ -476,7 +537,7 @@ var BaseGameLayer = (function() {
 		_instantiateBlock: function(block) {
 			var blockX = this._levelBounds.x +  this._levelCellSize.width * (block.col + 0.5);
 			block.setPosition(blockX, cc.visibleRect.top.y +  this._levelCellSize.height / 2);
-			this.addChild(block, 42, 42);
+			this._boardContainer.addChild(block, 42, 42);
 		},
 
 		//////////////////
@@ -542,19 +603,21 @@ var BaseGameLayer = (function() {
 
 			this.pauseGame();
 
-			//this.leave(function() {
-			this._settingsMenuLayer = new SettingsMenuLayer(true);
-			this._settingsMenuLayer.setOnRetryCallback(function() {
-				that.onRetry();
-			});
-			this._settingsMenuLayer.setOnCloseCallback(function() {
-				that.onResume();
-			});
-			this._settingsMenuLayer.setOnMenuCallback(function() {
-				that.onMenu();
-			});
-			this.addChild(this._settingsMenuLayer, 999);
-			//});
+            this.leaveBoard();
+
+            this.leave(function() {
+                that._settingsMenuLayer = new SettingsMenuLayer(true);
+                that._settingsMenuLayer.setOnRetryCallback(function() {
+                    that.onRetry();
+                });
+                that._settingsMenuLayer.setOnCloseCallback(function() {
+                    that.onResume();
+                });
+                that._settingsMenuLayer.setOnMenuCallback(function() {
+                    that.onMenu();
+                });
+                that.addChild(that._settingsMenuLayer, 999);
+            });
 		},
 
 		// On closing previously opened settings menu we resume.
@@ -563,19 +626,20 @@ var BaseGameLayer = (function() {
 
 			var that = this;
 
-			//this.enter(function() {
-			// resume doomsayer if needed
-			if(this.isInDanger())
-				this._feedbackLayer.launchDoomsayer();
+            this.enterBoard();
 
-			this.resumeGame();
+			this.enter(function() {
+                if(that.isInDanger())
+                    that._feedbackLayer.launchDoomsayer();
 
-			// play music again if music settings turned on
-			if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-				cc.audioEngine.playMusic(res.trackDauntinglyMellow);
+                that.resumeGame();
 
-			this._updateTheme();
-			//});
+                // play music again if music settings turned on
+                if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
+                    cc.audioEngine.playMusic(that._backgroundTrack);
+
+                that._updateTheme();
+            });
 		},
 
 		// On game over when player chooses to go to menu we return to menu.
@@ -858,7 +922,8 @@ var BaseGameLayer = (function() {
 			this._selectedLinesNode.clear();
 
 			// TODO: again drawing the dummy rect
-			this._selectedLinesNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x, this._levelBounds.y), cc.color(255, 255, 255, 0), 0, cc.color(255, 255, 255, 0));
+            // TODO: before we drew the dummy rect to make html5 shut up,
+			//this._selectedLinesNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x, this._levelBounds.y), cc.color(255, 255, 255, 0), 0, cc.color(255, 255, 255, 0));
 
 			if(!selectedBlocks)
 				return;
@@ -920,205 +985,6 @@ var BaseGameLayer = (function() {
 				}
 
 				this._backgroundLayer.runAction(cc.sequence(actionList));
-
-				/*
-				 for (var i = 0; i < selectedLength; i++) {
-				 activationSounds.push(bloops[i]);
-				 }
-				 if(selectedLength > 4)
-				 activationSounds.push(bloops[selectedLength]);
-
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[0]);
-				 }, .05, false);
-
-				 if (activationSounds.length == 3) {
-				 cc.log("3");
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .17, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .29, false);
-				 }
-				 else if (activationSounds.length == 4) {
-				 cc.log("4");
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .15, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .25, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[3]);
-				 }, .35, false);
-				 }
-				 else if (activationSounds.length == 6) {
-				 cc.log("6");
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .12, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .19, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[3]);
-				 }, .26, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[4]);
-				 }, .33, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[5]);
-				 }, .40, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[4]);
-				 }, .47, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[3]);
-				 }, .54, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .61, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .68, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[0]);
-				 }, .75, false);
-				 }
-				 else if (activationSounds.length == 7) {
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .11, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .17, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[3]);
-				 }, .23, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[4]);
-				 }, .29, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[5]);
-				 }, .35, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[6]);
-				 }, .41, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[5]);
-				 }, .47, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[4]);
-				 }, .53, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[3]);
-				 }, .59, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .65, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .71, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[0]);
-				 }, .77, false);
-				 }
-				 else if (activationSounds.length == 8) {
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .11, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .17, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[3]);
-				 }, .23, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[4]);
-				 }, .29, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[5]);
-				 }, .35, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[6]);
-				 }, .41, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[7]);
-				 }, .47, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[6]);
-				 }, .53, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[5]);
-				 }, .59, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[4]);
-				 }, .65, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[3]);
-				 }, .71, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .77, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .83, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[0]);
-				 }, .89, false);
-				 }
-				 else {
-				 cc.log("5 sucka");
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .11, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .17, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[3]);
-				 }, .23, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[4]);
-				 }, .29, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[5]);
-				 }, .35, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[6]);
-				 }, .41, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[7]);
-				 }, .47, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[8]);
-				 }, .53, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[7]);
-				 }, .59, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[6]);
-				 }, .65, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[5]);
-				 }, .71, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[4]);
-				 }, .77, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[3]);
-				 }, .83, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[2]);
-				 }, .89, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[1]);
-				 }, .95, false);
-				 this.schedule(function () {
-				 cc.audioEngine.playEffect(activationSounds[0]);
-				 }, 1.01, false);
-				 }*/
 			}
 		},
 
@@ -1164,6 +1030,7 @@ var BaseGameLayer = (function() {
 			this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
 			this._numboHeaderLayer.updateTheme();
 			this._numboController.updateTheme();
+            this._drawDividersGeometry();
 		}
 	});
 }());

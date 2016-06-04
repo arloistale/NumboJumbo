@@ -94,16 +94,16 @@ var TimedGameLayer = BaseGameLayer.extend({
 			var highscore = NJ.stats.getHighscore(key);
 			NJ.social.submitScore(key, highscore);
 
-			if(highscore >= 300) {
+			if(highscore >= 400) {
 				NJ.social.unlockAchievement(NJ.social.achievementKeys.mm1);
 
-				if(highscore >= 400) {
+				if(highscore >= 500) {
 					NJ.social.unlockAchievement(NJ.social.achievementKeys.mm2);
 
-					if(highscore >= 500) {
+					if(highscore >= 600) {
 						NJ.social.unlockAchievement(NJ.social.achievementKeys.mm3);
 
-						if(highscore >= 600) {
+						if(highscore >= 700) {
 							NJ.social.unlockAchievement(NJ.social.achievementKeys.mm4);
 						}
 					}
@@ -205,162 +205,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 		this.spawnDropRandomBlocks(comboLength);
 		//this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);
 
-		if(NJ.settings.sounds) {
-			var activationSounds = [];
-			for (var i = 0; i < comboLength; i++) {
-				activationSounds.push(bloops[i]);
-			}
-
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[0]);
-			}, .05, false);
-
-			var timeBetween = 0;
-			switch (activationSounds.length) {
-				case 3:
-					timeBetween = .12;
-					break;
-				case 4:
-					timeBetween = .1;
-					break;
-				case 5:
-					timeBetween = .07;
-					break;
-				case 6:
-				case 7:
-				case 8:
-				case 9:
-				case 10:
-					timeBetween = .06;
-					break;
-			}
-
-			/*for (var i = 1; i < activationSounds.length; i++) {
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[i]);
-				}, .05 + (i * timeBetween), false);
-			}*/
-
-			if (activationSounds.length == 3) {
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[1]);
-				}, .17, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[2]);
-				}, .29, false);
-			}
-			else if (activationSounds.length == 4) {
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[1]);
-				}, .15, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[2]);
-				}, .25, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[3]);
-				}, .35, false);
-			}
-			else if (activationSounds.length == 5) {
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[1]);
-				}, .12, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[2]);
-				}, .19, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[3]);
-				}, .26, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[4]);
-				}, .33, false);
-			}
-			else if (activationSounds.length == 6) {
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[1]);
-				}, .11, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[2]);
-				}, .17, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[3]);
-				}, .23, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[4]);
-				}, .29, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[5]);
-				}, .35, false);
-			}
-			else if (activationSounds.length == 7) {
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[1]);
-				}, .11, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[2]);
-				}, .17, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[3]);
-				}, .23, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[4]);
-				}, .29, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[5]);
-				}, .35, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[6]);
-				}, .41, false);
-			}
-			else if (activationSounds.length == 8) {
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[1]);
-				}, .11, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[2]);
-				}, .17, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[3]);
-				}, .23, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[4]);
-				}, .29, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[5]);
-				}, .35, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[6]);
-				}, .41, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[7]);
-				}, .47, false);
-			}
-			else {
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[1]);
-				}, .11, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[2]);
-				}, .17, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[3]);
-				}, .23, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[4]);
-				}, .29, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[5]);
-				}, .35, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[6]);
-				}, .41, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[7]);
-				}, .47, false);
-				this.schedule(function () {
-					cc.audioEngine.playEffect(activationSounds[8]);
-				}, .47, false);
-			}
-		}
+		this._playActivationSounds(selectedBlocks.length);
 	},
 
 	onPause: function() {

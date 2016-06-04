@@ -44,9 +44,9 @@ NJ.social = (function() {
         },
 
         setListener: function(listener) {
-            if(cc.sys.isNative) {
-                sdkbox.PluginSdkboxPlay.setListener(listener);
-            }
+            //if(cc.sys.isNative) {
+                //sdkbox.PluginSdkboxPlay.setListener(listener);
+            //}
         },
 
         login: function () {

@@ -39,20 +39,20 @@ var TimedGameLayer = BaseGameLayer.extend({
 		that._numboHeaderLayer.setConditionValue(this._elapsedTimeLimit);
 
 		this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
-			// cause UI elements to fall in
-			that._numboHeaderLayer.enter();
-			that._toolbarLayer.enter();
-		}), cc.delayTime(0.5), cc.callFunc(function() {
-			// fill the board with blocks initially
-			that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+			that.enter(function() {
+				that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function() {
+					// fill the board with blocks initially
+					that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
 
-			that.schedule(function() {
-				// pad with 2 seconds to compensate for time taken entering
-				var timeLeft = that._elapsedTimeLimit + 2 - (Date.now() - NJ.gameState.getStartTime()) / 1000;
+					that.schedule(function() {
+						// pad with 2 seconds to compensate for time taken entering
+						var timeLeft = that._elapsedTimeLimit + 2 - (Date.now() - NJ.gameState.getStartTime()) / 1000;
 
-				that._numboHeaderLayer.setConditionValue(Math.floor(timeLeft));
-				that.checkGameOver();
-			}, 1);
+						that._numboHeaderLayer.setConditionValue(Math.floor(timeLeft));
+						that.checkGameOver();
+					}, 1);
+				})));
+			});
 		})));
 	},
 
@@ -97,13 +97,13 @@ var TimedGameLayer = BaseGameLayer.extend({
 			if(highscore >= 300) {
 				NJ.social.unlockAchievement(NJ.social.achievementKeys.mm1);
 
-				if(highscore >= 400) {
+				if(highscore >= 450) {
 					NJ.social.unlockAchievement(NJ.social.achievementKeys.mm2);
 
-					if(highscore >= 500) {
+					if(highscore >= 600) {
 						NJ.social.unlockAchievement(NJ.social.achievementKeys.mm3);
 
-						if(highscore >= 600) {
+						if(highscore >= 750) {
 							NJ.social.unlockAchievement(NJ.social.achievementKeys.mm4);
 						}
 					}
@@ -116,23 +116,22 @@ var TimedGameLayer = BaseGameLayer.extend({
 		// first send the analytics for the current game session
 		NJ.sendAnalytics("Timed");
 
-		this.runAction(cc.sequence(cc.callFunc(function() {
-			that._numboHeaderLayer.leave();
-			that._toolbarLayer.leave();
-		}), cc.delayTime(1), cc.callFunc(function() {
-			that._numboController.clearLevel();
-		}), cc.delayTime(1), cc.callFunc(function() {
-			that.pauseGame();
+		this.leave(function() {
+			that.runAction(cc.sequence(cc.delayTime(0.6), cc.callFunc(function() {
+				that._numboController.clearLevel();
+			}), cc.delayTime(1), cc.callFunc(function() {
+				that.pauseGame();
 
-			that._gameOverMenuLayer = new GameOverMenuLayer(key, false);
-			that._gameOverMenuLayer.setOnRetryCallback(function() {
-				that.onRetry();
-			});
-			that._gameOverMenuLayer.setOnMenuCallback(function() {
-				that.onMenu();
-			});
-			that.addChild(that._gameOverMenuLayer, 999);
-		})));
+				that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
+				that._gameOverMenuLayer.setOnRetryCallback(function() {
+					that.onRetry();
+				});
+				that._gameOverMenuLayer.setOnMenuCallback(function() {
+					that.onMenu();
+				});
+				that.addChild(that._gameOverMenuLayer, 999);
+			})));
+		});
 	},
 
 	checkGameOver: function() {

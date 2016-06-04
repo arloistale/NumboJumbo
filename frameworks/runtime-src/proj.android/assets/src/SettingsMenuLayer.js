@@ -89,6 +89,9 @@ var SettingsMenuLayer = (function() {
         _contentMenu: null,
         _toolMenu: null,
 
+        // Geometry Data
+        _dividersNode: null,
+
         // Callbacks Data
         _onRetryCallback: null,
         onMenuCallback: null,
@@ -112,7 +115,45 @@ var SettingsMenuLayer = (function() {
             this._initContentUI();
             this._initToolUI();
 
+            //this._drawGeometry();
+
             this.enter();
+        },
+
+        // call this function AFTER initlalizing UI.
+        _drawGeometry: function() {
+            if(!this._dividersNode) {
+                this._dividersNode = cc.DrawNode.create();
+                this.addChild(this._dividersNode, 2);
+            } else
+                this._dividersNode.clear();
+
+            // init header and lower dividers
+
+            // TODO: again drawing the dummy rect
+            //this._selectedLinesNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x, this._levelBounds.y), cc.color(255, 255, 255, 0), 0, cc.color(255, 255, 255, 0));
+
+            var startX = cc.visibleRect.left.x + cc.visibleRect.width * 0.1;
+            var endX = cc.visibleRect.right.x - cc.visibleRect.width * 0.1;
+
+            var currY = cc.visibleRect.top.y - this._headerMenu.getContentSize().height;
+
+            var color = NJ.themes.dividerColor;
+
+            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
+
+            currY = cc.visibleRect.bottom.y + this._toolMenu.getContentSize().height;
+
+            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
+
+            //this._dividersNode.setContentSize(1, 1);
+            /*
+            this._dividersNode.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
+            */
+            //this._dividersNode.setPosition(cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y));
         },
 
         _initHeaderUI: function() {
@@ -242,6 +283,8 @@ var SettingsMenuLayer = (function() {
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
             this._contentMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
+
+            //this._dividersNode.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
         },
 
         // transition out
@@ -256,6 +299,8 @@ var SettingsMenuLayer = (function() {
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
             this._contentMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - contentSize.width, cc.visibleRect.center.y)).easing(easing));
+
+            //this._dividersNode.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.left.x, cc.visibleRect.left.y)).easing(easing));
 
             this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
                 if(callback)
@@ -347,6 +392,8 @@ var SettingsMenuLayer = (function() {
             for(i = 0; i < children.length; i++) {
                 children[i].setLabelColor(NJ.themes.defaultLabelColor);
             }
+
+            this._drawGeometry();
         }
     });
 }());

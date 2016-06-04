@@ -13,10 +13,11 @@ NJ.themes = (function() {
             levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#332F2A"),
-            specialLabelColor: cc.color("#00A896"),
+            specialLabelColor: cc.color("#50aa91"),
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#6C6760"),
 
+            dividerColor: cc.color("#6c6760"),
 
             blockColors: [
 
@@ -30,7 +31,7 @@ NJ.themes = (function() {
                 cc.color("#c53e66"),
 
                 // chartreuse
-                cc.color("#b4ca4b"),
+                cc.color("#52ab73"),
 
                 // intense blue
                 cc.color("#6977a8"),
@@ -54,9 +55,11 @@ NJ.themes = (function() {
             levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#ffffff"),
-            specialLabelColor: cc.color("#00A896"),
+            specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#424242"),
+
+            dividerColor: cc.color("#ffffff"),
 
             blockColors: [
                 // aqua
@@ -78,7 +81,7 @@ NJ.themes = (function() {
                 // orange
                 cc.color("#F88A2D"),
 
-                // darkish green teal
+                // dark red orange
                 cc.color("#F55D16"),
 
                 // violent red
@@ -108,6 +111,8 @@ NJ.themes = (function() {
         specialLabelColor: main.specialLabelColor,
         specialLabelColor2: main.specialLabelColor2,
         defaultButtonColor: main.defaultButtonColor,
+
+        dividerColor: main.dividerColor,
 
         playButtonColor: main.playButtonColor,
         jumbosButtonColor: main.jumbosButtonColor,

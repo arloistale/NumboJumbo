@@ -65,24 +65,26 @@ var NumboMenuLayer = (function() {
         },
 
         onExit: function() {
-            this._super();
+            this.unscheduleAllCallbacks();
 
             this._settingsButton.release();
             this._achievementsButton.release();
             this._loginButton.release();
             this._statsButton.release();
+
+            this._super();
         },
 
         _initHeaderUI: function() {
             this._headerMenu = new cc.Menu();
-            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 2));
+            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 1.5));
             this._headerMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
                 y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2
             });
 
-            var logo = new NJMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 2));
+            var logo = new NJMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 1.5));
             logo.setImageRes(res.logoImage);
             var logoSize = logo.getContentSize();
             var rawSize = logo.getRawImageSize();
@@ -110,7 +112,7 @@ var NumboMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: cc.visibleRect.center.x,
-                y: cc.visibleRect.center.y * 0.95
+                y: cc.visibleRect.center.y
             });
 
             var buttonSize = cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton));
@@ -233,56 +235,32 @@ var NumboMenuLayer = (function() {
                 } else {
                     if (cc.sys.os == cc.sys.OS_IOS) {
                         NJ.social.login();
-
-                        NJ.social.setListener({
-                            onConnectionStatusChanged: function (status) {
-                                cc.log("Connection status changed");
-                                cc.log(status);
-
-                                switch (status) {
-                                    case 1000:
-                                        that.leaveTools(function () {
-                                            that._toolMenu.removeChild(that._settingsButton);
-
-                                            that._toolMenu.addChild(that._achievementsButton);
-                                            that._toolMenu.addChild(that._statsButton);
-                                            that._toolMenu.addChild(that._settingsButton);
-
-                                            that._toolMenu.alignItemsHorizontallyWithPadding(10);
-
-                                            that.enterTools();
-                                        });
-                                        break;
-                                }
-                            }
-                        });
                     } else {
                         this._toolMenu.addChild(this._loginButton);
-
-                        NJ.social.setListener({
-                            onConnectionStatusChanged: function (status) {
-                                cc.log("Connection status changed");
-                                cc.log(status);
-
-                                switch (status) {
-                                    case 1000:
-                                        that.leaveTools(function () {
-                                            that._toolMenu.removeChild(that._settingsButton);
-                                            that._toolMenu.removeChild(that._loginButton);
-
-                                            that._toolMenu.addChild(that._achievementsButton);
-                                            that._toolMenu.addChild(that._statsButton);
-                                            that._toolMenu.addChild(that._settingsButton);
-
-                                            that._toolMenu.alignItemsHorizontallyWithPadding(10);
-
-                                            that.enterTools();
-                                        });
-                                        break;
-                                }
-                            }
-                        });
                     }
+
+                    // poll every second until we are logged in
+                    this.schedule(function() {
+                        if(NJ.social.isLoggedIn()) {
+                            that.leaveTools(function () {
+                                that._toolMenu.removeChild(that._settingsButton);
+
+                                // remove the login button on android
+                                if(cc.sys.os != cc.sys.OS_IOS)
+                                    that._toolMenu.removeChild(that._loginButton);
+
+                                that._toolMenu.addChild(that._achievementsButton);
+                                that._toolMenu.addChild(that._statsButton);
+                                that._toolMenu.addChild(that._settingsButton);
+
+                                that._toolMenu.alignItemsHorizontallyWithPadding(10);
+
+                                that.enterTools();
+                            });
+
+                            that.unscheduleAllCallbacks();
+                        }
+                    }, 1);
                 }
             }
 

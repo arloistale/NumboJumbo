@@ -34,12 +34,12 @@ var StackGameLayer = BaseGameLayer.extend({
         this._numboHeaderLayer.setConditionValue(this._blocksToDrop);
 
         this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
-            // cause UI elements to fall in
-            that._numboHeaderLayer.enter();
-            that._toolbarLayer.enter();
-        }), cc.callFunc(function() {
-            // fill the board with blocks initially
-            that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
+            that.enter(function() {
+                that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function() {
+                    // fill the board with blocks initially
+                    that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
+                })));
+            });
         })));
     },
 
@@ -109,23 +109,22 @@ var StackGameLayer = BaseGameLayer.extend({
         // first send the analytics for the current game session
         NJ.sendAnalytics("Stack");
 
-        this.runAction(cc.sequence(cc.callFunc(function() {
-            that._numboHeaderLayer.leave();
-            that._toolbarLayer.leave();
-        }), cc.delayTime(1), cc.callFunc(function() {
-            that._numboController.clearLevel();
-        }), cc.delayTime(1), cc.callFunc(function() {
-            that.pauseGame();
+        this.leave(function() {
+            that.runAction(cc.sequence(cc.delayTime(0.6), cc.callFunc(function() {
+                that._numboController.clearLevel();
+            }), cc.delayTime(1), cc.callFunc(function() {
+                that.pauseGame();
 
-            that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
-            that._gameOverMenuLayer.setOnRetryCallback(function() {
-                that.onRetry();
-            });
-            that._gameOverMenuLayer.setOnMenuCallback(function() {
-                that.onMenu();
-            });
-            that.addChild(that._gameOverMenuLayer, 999);
-        })));
+                that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
+                that._gameOverMenuLayer.setOnRetryCallback(function() {
+                    that.onRetry();
+                });
+                that._gameOverMenuLayer.setOnMenuCallback(function() {
+                    that.onMenu();
+                });
+                that.addChild(that._gameOverMenuLayer, 999);
+            })));
+        });
     },
 
     // whether the game is over or not

@@ -702,6 +702,7 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_play \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_retry \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_settings \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_skip \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_stack.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_stats \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_timed.png \
@@ -731,13 +732,12 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_settings/ic_settings_1x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_settings/ic_settings_2x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_settings/setting.png \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_skip/ic_skip_1x.png \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_skip/ic_skip_2x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_stats/ic_stats_1x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_stats/ic_stats_2x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_trophy/ic_trophy_1x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_trophy/ic_trophy_2x.png \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/blubSoundsA1.wav \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/blubSoundsA2.wav \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/blubSoundsA3.wav \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/boop.wav \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/boop1.wav \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/boop10.wav \
@@ -779,7 +779,6 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/tick.mp3 \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/music/Chill2.mp3 \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/music/DauntinglyMellowV3.mp3 \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/music/QuickerV1.mp3 \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Sounds/music/SomethingElseV1.mp3 \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/script/3d \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/script/ccui \

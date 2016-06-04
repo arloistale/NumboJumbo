@@ -65,25 +65,26 @@ var NumboMenuLayer = (function() {
         },
 
         onExit: function() {
-            this._super();
+            this.unscheduleAllCallbacks();
 
-            cc.log("MenuLayer exiting, REMOVE THIS LOG WHEN DONE");
             this._settingsButton.release();
             this._achievementsButton.release();
             this._loginButton.release();
             this._statsButton.release();
+
+            this._super();
         },
 
         _initHeaderUI: function() {
             this._headerMenu = new cc.Menu();
-            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 2));
+            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 1.5));
             this._headerMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
                 y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2
             });
 
-            var logo = new NJMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 2));
+            var logo = new NJMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 1.5));
             logo.setImageRes(res.logoImage);
             var logoSize = logo.getContentSize();
             var rawSize = logo.getRawImageSize();
@@ -111,7 +112,7 @@ var NumboMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: cc.visibleRect.center.x,
-                y: cc.visibleRect.center.y * 0.95
+                y: cc.visibleRect.center.y
             });
 
             var buttonSize = cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton));
@@ -234,56 +235,32 @@ var NumboMenuLayer = (function() {
                 } else {
                     if (cc.sys.os == cc.sys.OS_IOS) {
                         NJ.social.login();
-
-                        NJ.social.setListener({
-                            onConnectionStatusChanged: function (status) {
-                                cc.log("Connection status changed");
-                                cc.log(status);
-
-                                switch (status) {
-                                    case 1000:
-                                        that.leaveTools(function () {
-                                            that._toolMenu.removeChild(that._settingsButton);
-
-                                            that._toolMenu.addChild(that._achievementsButton);
-                                            that._toolMenu.addChild(that._statsButton);
-                                            that._toolMenu.addChild(that._settingsButton);
-
-                                            that._toolMenu.alignItemsHorizontallyWithPadding(10);
-
-                                            that.enterTools();
-                                        });
-                                        break;
-                                }
-                            }
-                        });
                     } else {
                         this._toolMenu.addChild(this._loginButton);
-
-                        NJ.social.setListener({
-                            onConnectionStatusChanged: function (status) {
-                                cc.log("Connection status changed");
-                                cc.log(status);
-
-                                switch (status) {
-                                    case 1000:
-                                        that.leaveTools(function () {
-                                            that._toolMenu.removeChild(that._settingsButton);
-                                            that._toolMenu.removeChild(that._loginButton);
-
-                                            that._toolMenu.addChild(that._achievementsButton);
-                                            that._toolMenu.addChild(that._statsButton);
-                                            that._toolMenu.addChild(that._settingsButton);
-
-                                            that._toolMenu.alignItemsHorizontallyWithPadding(10);
-
-                                            that.enterTools();
-                                        });
-                                        break;
-                                }
-                            }
-                        });
                     }
+
+                    // poll every second until we are logged in
+                    this.schedule(function() {
+                        if(NJ.social.isLoggedIn()) {
+                            that.leaveTools(function () {
+                                that._toolMenu.removeChild(that._settingsButton);
+
+                                // remove the login button on android
+                                if(cc.sys.os != cc.sys.OS_IOS)
+                                    that._toolMenu.removeChild(that._loginButton);
+
+                                that._toolMenu.addChild(that._achievementsButton);
+                                that._toolMenu.addChild(that._statsButton);
+                                that._toolMenu.addChild(that._settingsButton);
+
+                                that._toolMenu.alignItemsHorizontallyWithPadding(10);
+
+                                that.enterTools();
+                            });
+
+                            that.unscheduleAllCallbacks();
+                        }
+                    }, 1);
                 }
             }
 
@@ -442,7 +419,7 @@ var NumboMenuLayer = (function() {
 
             this.leave(function() {
                 var scene = new cc.Scene();
-                scene.addChild(new TutorialDriverLayer());
+                scene.addChild(new TutorialDriverLayer(true));
                 cc.director.runScene(scene);
             });
         },
@@ -459,21 +436,6 @@ var NumboMenuLayer = (function() {
                 cc.audioEngine.playEffect(res.clickSound, false);
 
             NJ.social.showAchievements();
-        },
-
-        _onShop: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
-
-            var that = this;
-
-            cc.eventManager.pauseTarget(this, true);
-            this._shopLayer = new ShopMenuLayer();
-            this._shopLayer.setOnCloseCallback(function() {
-                cc.eventManager.resumeTarget(that, true);
-                that.removeChild(that._shopLayer);
-            });
-            this.addChild(this._shopLayer, 999);
         },
 
         _onSettings: function() {
@@ -504,11 +466,16 @@ var NumboMenuLayer = (function() {
         _updateTheme: function() {
             this.setColor(NJ.themes.backgroundColor);
 
+            var index = 0;
+
             for(var key in this._modeData) {
                 if(!this._modeData.hasOwnProperty(key))
                     continue;
 
+                this._modeData[key].button.setBackgroundColor(NJ.themes.blockColors[index]);
                 this._modeData[key].button.setLabelColor(NJ.themes.defaultLabelColor);
+
+                index++;
             }
         }
     });

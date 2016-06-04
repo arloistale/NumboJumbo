@@ -37,12 +37,12 @@ var MovesGameLayer = BaseGameLayer.extend({
 		this._numboHeaderLayer.setConditionValue(this._movesLimit);
 
 		this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
-			// cause UI elements to fall in
-			that._numboHeaderLayer.enter();
-			that._toolbarLayer.enter();
-		}), cc.delayTime(0.5), cc.callFunc(function() {
-			// fill the board with blocks initially
-			that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+			that.enter(function() {
+				that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function() {
+					// fill the board with blocks initially
+					that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+				})));
+			});
 		})));
 	},
 
@@ -87,13 +87,13 @@ var MovesGameLayer = BaseGameLayer.extend({
 			if(highscore >= 300) {
 				NJ.social.unlockAchievement(NJ.social.achievementKeys.mov1);
 
-				if(highscore >= 400) {
+				if(highscore >= 450) {
 					NJ.social.unlockAchievement(NJ.social.achievementKeys.mov2);
 
-					if(highscore >= 500) {
+					if(highscore >= 600) {
 						NJ.social.unlockAchievement(NJ.social.achievementKeys.mov3);
 
-						if(highscore >= 600) {
+						if(highscore >= 750) {
 							NJ.social.unlockAchievement(NJ.social.achievementKeys.mov4);
 						}
 					}
