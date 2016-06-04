@@ -17,6 +17,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 		var that = this;
 
+		this._numboHeaderLayer.enterTutorialMode();
+
 		if(allowToolbar) {
 			// this seems like a hack but will work for now
 			this._toolbarLayer.setOnPauseCallback(function() {
@@ -27,7 +29,13 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 			this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
 				// cause UI elements to fall in
+				that._numboHeaderLayer.enter();
 				that._toolbarLayer.enter();
+			})));
+		} else {
+			this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
+				// cause UI elements to fall in
+				that._numboHeaderLayer.enter();
 			})));
 		}
 

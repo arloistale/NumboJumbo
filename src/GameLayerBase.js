@@ -777,12 +777,12 @@ var BaseGameLayer = (function() {
 						for (i = 0; i < highlightBlocks.length; ++i) {
 							highlightBlocks[i].highlight();
 						}
-
-                        this.redrawSelectedLines(selectedBlocks);
 					} else {
 						if(selectedBlocks.length < 5)
 							this._effectsLayer.clearComboOverlay();
 					}
+
+                    this.redrawSelectedLines(selectedBlocks);
 
 					// draw a line from last selected to our finger if we are outside of the range of the block
 					var lastBlockPos = this._convertLevelCoordsToPoint(block.col, block.row);

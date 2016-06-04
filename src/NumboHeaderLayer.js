@@ -15,6 +15,9 @@ var NumboHeaderLayer = (function() {
 
         _equationLabel: null,
 
+        // data
+        _isTutorialMode: false,
+
         // callback
         //onPauseCallback: null,
 
@@ -37,6 +40,7 @@ var NumboHeaderLayer = (function() {
 
             this._scoreLabel = new cc.LabelBMFont(scorePrefix, b_getFontName(res.mainFont));
             spriteSize = this._scoreLabel.getContentSize();
+            this._scoreLabel.setString(" ");
             this._scoreLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
             this._scoreLabel.attr({
                 anchorX: 0.5,
@@ -51,6 +55,7 @@ var NumboHeaderLayer = (function() {
 
             // Condition Label
             this._condLabel = new cc.LabelBMFont(condPrefix, b_getFontName(res.mainFont));
+            this._condLabel.setString(" ");
             this._condLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
             this._condLabel.attr({
                 anchorX: 0.5,
@@ -113,6 +118,13 @@ var NumboHeaderLayer = (function() {
             this.runAction(moveTo);
         },
 
+        enterTutorialMode: function() {
+            this._isTutorialMode = true;
+
+            this._scoreLabel.setString(" ");
+            this._condLabel.setString(" ");
+        },
+
 ////////////////
 // UI setters //
 ////////////////
@@ -126,16 +138,18 @@ var NumboHeaderLayer = (function() {
         setScoreValue: function(value) {
             cc.assert(typeof value === 'number', "Score value must be a Number");
 
-            this._scoreLabel.setString(scorePrefix + value);
+            if(!this._isTutorialMode)
+                this._scoreLabel.setString(scorePrefix + value);
         },
 
         setConditionValue: function(value) {
             cc.assert(typeof value === 'number', "Condition value must be a Number");
 
-            this._condLabel.setString(condPrefix + value);
+            if(!this._isTutorialMode)
+                this._condLabel.setString(condPrefix + value);
         },
 
-        setEquation: function(nums){
+        setEquation: function(nums) {
             var equationStr = "";
 
             // just print the values, no + or =
@@ -173,7 +187,7 @@ var NumboHeaderLayer = (function() {
                     maxIndex = i;
                 }
             }
-            cc.log("max is ", nums[maxIndex]);
+            //cc.log("max is ", nums[maxIndex]);
             return maxIndex;
         },
 
@@ -228,12 +242,5 @@ var NumboHeaderLayer = (function() {
             this._condLabel.setColor(NJ.themes.defaultLabelColor);
             this._equationLabel.setColor(NJ.themes.defaultLabelColor);
         }
-
-// UI callbacks //
-/*
-        setOnPauseCallback: function(callback) {
-            this.onPauseCallback = callback;
-        }
-        */
     });
 }());
