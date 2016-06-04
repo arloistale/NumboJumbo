@@ -319,32 +319,18 @@ var BaseGameLayer = (function() {
             } else
                 this._dividersNode.clear();
 
-            // init header and lower dividers
+            // define header and lower dividers
+			var startX = this._convertLevelCoordsToPoint(0, 0).x - this._blockSize.width/2;
+			var endX = this._convertLevelCoordsToPoint(NJ.NUM_COLS-1, 0).x + this._blockSize.width/2;
+			var topY = this._levelBounds.y + this._levelBounds.height + this._blockSize.height/2;
+			var botY = this._levelBounds.y - this._blockSize.height/2;
 
-            // TODO: again drawing the dummy rect
-            //this._selectedLinesNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x, this._levelBounds.y), cc.color(255, 255, 255, 0), 0, cc.color(255, 255, 255, 0));
+			var color = NJ.themes.dividerColor;
+			var strokeWidth = 2;
 
-            var startX = cc.visibleRect.left.x + cc.visibleRect.width * 0.1;
-            var endX = cc.visibleRect.right.x - cc.visibleRect.width * 0.1;
+            this._dividersNode.drawSegment(cc.p(startX, topY), cc.p(endX, topY), strokeWidth, color);
+            this._dividersNode.drawSegment(cc.p(startX, botY), cc.p(endX, botY), strokeWidth, color);
 
-            var currY = cc.visibleRect.bottom.y + this._headerSize.height;
-
-            var color = NJ.themes.dividerColor;
-
-            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
-
-            currY = cc.visibleRect.bottom.y + this._toolBarSize.height;
-
-            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
-
-            //this._dividersNode.setContentSize(1, 1);
-            /*
-             this._dividersNode.attr({
-             anchorX: 0.5,
-             anchorY: 0.5
-             });
-             */
-            //this._dividersNode.setPosition(cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y));
         },
 
 		enter: function(callback) {

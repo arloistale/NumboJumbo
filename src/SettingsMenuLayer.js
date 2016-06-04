@@ -115,46 +115,10 @@ var SettingsMenuLayer = (function() {
             this._initContentUI();
             this._initToolUI();
 
-            this._drawGeometry();
-
             this.enter();
         },
 
-        // call this function AFTER initlalizing UI.
-        _drawGeometry: function() {
-            if(!this._dividersNode) {
-                this._dividersNode = cc.DrawNode.create();
-                this.addChild(this._dividersNode, 2);
-            } else
-                this._dividersNode.clear();
 
-            // init header and lower dividers
-
-            // TODO: again drawing the dummy rect
-            //this._selectedLinesNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x, this._levelBounds.y), cc.color(255, 255, 255, 0), 0, cc.color(255, 255, 255, 0));
-
-            var startX = cc.visibleRect.left.x + cc.visibleRect.width * 0.1;
-            var endX = cc.visibleRect.right.x - cc.visibleRect.width * 0.1;
-
-            var currY = cc.visibleRect.top.y - this._headerMenu.getContentSize().height;
-
-            var color = NJ.themes.dividerColor;
-
-            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
-
-            currY = cc.visibleRect.bottom.y + this._toolMenu.getContentSize().height;
-
-            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
-
-            //this._dividersNode.setContentSize(1, 1);
-            /*
-            this._dividersNode.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
-            */
-            //this._dividersNode.setPosition(cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y));
-        },
 
         _initHeaderUI: function() {
             this._headerMenu = new cc.Menu();
@@ -393,7 +357,6 @@ var SettingsMenuLayer = (function() {
                 children[i].setLabelColor(NJ.themes.defaultLabelColor);
             }
 
-            this._drawGeometry();
         }
     });
 }());
