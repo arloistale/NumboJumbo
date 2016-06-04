@@ -17,8 +17,6 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 		var that = this;
 
-		allowToolbar = true;
-
 		if(allowToolbar) {
 			// this seems like a hack but will work for now
 			this._toolbarLayer.setOnPauseCallback(function() {

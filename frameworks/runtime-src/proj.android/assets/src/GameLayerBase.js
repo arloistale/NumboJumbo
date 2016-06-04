@@ -82,6 +82,7 @@ var BaseGameLayer = (function() {
 
 		// Geometry Data
 		_backgroundLayer: null,
+        _boardContainer: null,
 
 		_levelSprite: null,
 		_selectedLinesNode: null,
@@ -154,10 +155,11 @@ var BaseGameLayer = (function() {
 
             //this._drawDividersGeometry();
 
-			if(NJ.settings.music)
-				cc.audioEngine.playMusic(this._backgroundTrack, true);
+            // play music again if music settings turned on
+            if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
+                cc.audioEngine.playMusic(that._backgroundTrack, true);
 
-			this.schedule(function(){
+			this.schedule(function() {
 				that._numboController.findHint();
 			}, 0.1);
 		},
@@ -279,32 +281,22 @@ var BaseGameLayer = (function() {
 
 			this._blockSize = cc.size( this._levelCellSize.width * NJ.blockCellSize,  this._levelCellSize.height * NJ.blockCellSize);
 
-			// initialize rectangle around level
-			this._levelSprite = new cc.Sprite(res.levelImage);
-			var spriteSize = this._levelSprite.getContentSize();
-			this._levelSprite.setColor(NJ.themes.levelColor);
-			this._levelSprite.setScale(levelDims.width / spriteSize.width, levelDims.height / spriteSize.height);
-			this._levelSprite.attr({
-				anchorX: 0.5,
-				anchorY: 0.5,
-				x: cc.visibleRect.center.x,
-				y: cc.visibleRect.center.y
-			});
-			//this.addChild(this._levelSprite, -1);
+            this._boardContainer = new cc.Layer();
+            this.addChild(this._boardContainer);
 
 			// selected lines
 			this._selectedLinesNode = cc.DrawNode.create();
-			this.addChild(this._selectedLinesNode, 2);
+			this._boardContainer.addChild(this._selectedLinesNode, 2);
 
 			this.redrawSelectedLines(null);
 
 			// feedback overlay
 			this._feedbackLayer = new FeedbackLayer();
-			this.addChild(this._feedbackLayer, 800);
+			this._boardContainer.addChild(this._feedbackLayer, 800);
 
 			// effects middle layer between background and game elements
 			this._effectsLayer = new EffectsLayer();
-			this.addChild(this._effectsLayer, 24);
+			this._boardContainer.addChild(this._effectsLayer, 24);
 		},
 
 		// Initialize the Numbo Controller, which controls the level.
@@ -327,32 +319,51 @@ var BaseGameLayer = (function() {
             } else
                 this._dividersNode.clear();
 
-            // init header and lower dividers
+            // define header and lower dividers
+			var startX = this._convertLevelCoordsToPoint(0, 0).x - this._blockSize.width/2;
+			var endX = this._convertLevelCoordsToPoint(NJ.NUM_COLS-1, 0).x + this._blockSize.width/2;
+			var topY = this._levelBounds.y + this._levelBounds.height + this._blockSize.height/2;
+			var botY = this._levelBounds.y - this._blockSize.height/2;
 
-            // TODO: again drawing the dummy rect
-            //this._selectedLinesNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x, this._levelBounds.y), cc.color(255, 255, 255, 0), 0, cc.color(255, 255, 255, 0));
+			var color = NJ.themes.dividerColor;
+			var strokeWidth = 2;
 
-            var startX = cc.visibleRect.left.x + cc.visibleRect.width * 0.1;
-            var endX = cc.visibleRect.right.x - cc.visibleRect.width * 0.1;
+            this._dividersNode.drawSegment(cc.p(startX, topY), cc.p(endX, topY), strokeWidth, color);
+            this._dividersNode.drawSegment(cc.p(startX, botY), cc.p(endX, botY), strokeWidth, color);
 
-            var currY = cc.visibleRect.top.y - this._levelBounds.y + this._levelBounds.height;
+        },
 
-            var color = NJ.themes.dividerColor;
+		enter: function(callback) {
+			var that = this;
 
-            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
+			this._backgroundLayer.runAction(cc.sequence(cc.callFunc(function() {
+				// cause UI elements to fall in
+				that._numboHeaderLayer.enter();
+				that._toolbarLayer.enter();
+			}), cc.delayTime(0.4), cc.callFunc(function() {
+				if(callback)
+					callback();
+			})));
+		},
 
-            currY = cc.visibleRect.bottom.y + this._levelBounds.y;
+		leave: function(callback) {
+			var that = this;
 
-            this._dividersNode.drawSegment(cc.p(startX, currY), cc.p(endX, currY), 1, color);
+			this._backgroundLayer.runAction(cc.sequence(cc.callFunc(function() {
+				that._numboHeaderLayer.leave();
+				that._toolbarLayer.leave();
+			}), cc.delayTime(0.4), cc.callFunc(function() {
+				if(callback)
+					callback();
+			})));
+		},
 
-            //this._dividersNode.setContentSize(1, 1);
-            /*
-             this._dividersNode.attr({
-             anchorX: 0.5,
-             anchorY: 0.5
-             });
-             */
-            //this._dividersNode.setPosition(cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y));
+        enterBoard: function() {
+            this._boardContainer.runAction(cc.sequence(cc.moveTo(0.4, cc.p(0, 0)).easing(cc.easeBackOut())));
+        },
+
+        leaveBoard: function() {
+            this._boardContainer.runAction(cc.sequence(cc.moveTo(0.4, cc.p(cc.visibleRect.width, 0)).easing(cc.easeBackOut())));
         },
 
 		/////////////////////////
@@ -513,7 +524,7 @@ var BaseGameLayer = (function() {
 		_instantiateBlock: function(block) {
 			var blockX = this._levelBounds.x +  this._levelCellSize.width * (block.col + 0.5);
 			block.setPosition(blockX, cc.visibleRect.top.y +  this._levelCellSize.height / 2);
-			this.addChild(block, 42, 42);
+			this._boardContainer.addChild(block, 42, 42);
 		},
 
 		//////////////////
@@ -579,40 +590,42 @@ var BaseGameLayer = (function() {
 
 			this.pauseGame();
 
-			//this.leave(function() {
-			this._settingsMenuLayer = new SettingsMenuLayer(true);
-			this._settingsMenuLayer.setOnRetryCallback(function() {
-				that.onRetry();
-			});
-			this._settingsMenuLayer.setOnCloseCallback(function() {
-				that.onResume();
-			});
-			this._settingsMenuLayer.setOnMenuCallback(function() {
-				that.onMenu();
-			});
-			this.addChild(this._settingsMenuLayer, 999);
-			//});
+            this.leaveBoard();
+
+            this.leave(function() {
+                that._settingsMenuLayer = new SettingsMenuLayer(true);
+                that._settingsMenuLayer.setOnRetryCallback(function() {
+                    that.onRetry();
+                });
+                that._settingsMenuLayer.setOnCloseCallback(function() {
+                    that.removeChild(that._settingsMenuLayer);
+                    that.onResume();
+                });
+                that._settingsMenuLayer.setOnMenuCallback(function() {
+                    that.onMenu();
+                });
+                that.addChild(that._settingsMenuLayer, 999);
+            });
 		},
 
 		// On closing previously opened settings menu we resume.
 		onResume: function() {
-			this.removeChild(this._settingsMenuLayer);
-
 			var that = this;
 
-			//this.enter(function() {
-			// resume doomsayer if needed
-			if(this.isInDanger())
-				this._feedbackLayer.launchDoomsayer();
+            this.enterBoard();
 
-			this.resumeGame();
+			this.enter(function() {
+                if(that.isInDanger())
+                    that._feedbackLayer.launchDoomsayer();
 
-			// play music again if music settings turned on
-			if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-				cc.audioEngine.playMusic(res.trackDauntinglyMellow);
+                that.resumeGame();
 
-			this._updateTheme();
-			//});
+                // play music again if music settings turned on
+                if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
+                    cc.audioEngine.playMusic(that._backgroundTrack, true);
+
+                that._updateTheme();
+            });
 		},
 
 		// On game over when player chooses to go to menu we return to menu.
@@ -764,12 +777,12 @@ var BaseGameLayer = (function() {
 						for (i = 0; i < highlightBlocks.length; ++i) {
 							highlightBlocks[i].highlight();
 						}
+
+                        this.redrawSelectedLines(selectedBlocks);
 					} else {
 						if(selectedBlocks.length < 5)
 							this._effectsLayer.clearComboOverlay();
 					}
-
-					this.redrawSelectedLines(selectedBlocks);
 
 					// draw a line from last selected to our finger if we are outside of the range of the block
 					var lastBlockPos = this._convertLevelCoordsToPoint(block.col, block.row);
@@ -841,6 +854,7 @@ var BaseGameLayer = (function() {
 		//			(this is the most common & easiest case by far!)
 		spawnBlocksAfterDelay: function(count, delay, callback){
 			var that = this;
+
 			//this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
 			that.spawnDropRandomBlocks(count - 2);
 
@@ -893,6 +907,8 @@ var BaseGameLayer = (function() {
 		// redraw lines indicating selected blocks
 		redrawSelectedLines: function(selectedBlocks) {
 			this._selectedLinesNode.clear();
+
+            cc.log("clearing");
 
 			// TODO: again drawing the dummy rect
             // TODO: before we drew the dummy rect to make html5 shut up,

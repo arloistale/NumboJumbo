@@ -36,14 +36,31 @@ var MovesGameLayer = BaseGameLayer.extend({
 		this._numboController.initDistribution(this._numberList);
 		this._numboHeaderLayer.setConditionValue(this._movesLimit);
 
-		this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
-			// cause UI elements to fall in
-			that._numboHeaderLayer.enter();
-			that._toolbarLayer.enter();
-		}), cc.delayTime(0.5), cc.callFunc(function() {
-			// fill the board with blocks initially
-			that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
-		})));
+		if(!NJ.settings.hasLoadedMOV) {
+			this.pauseGame();
+
+			this._prepLayer = new PrepLayer(res.movesImage, NJ.themes.blockColors[1], "Moves", "As many numbers\nas you need.\n\n\nClear as many numbers\nas you can in 20 moves.\n\n\nLet's go!");
+			this._prepLayer.setOnCloseCallback(function() {
+				that.onResume();
+
+				that.removeChild(that._prepLayer);
+
+				NJ.settings.hasLoadedMOV = true;
+				NJ.saveSettings();
+
+				that._reset();
+			});
+			this.addChild(this._prepLayer, 100);
+		} else {
+			this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
+				that.enter(function () {
+					that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+						// fill the board with blocks initially
+						that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+					})));
+				});
+			})));
+		}
 	},
 
 	_initUI: function() {
@@ -84,16 +101,16 @@ var MovesGameLayer = BaseGameLayer.extend({
 			var highscore = NJ.stats.getHighscore(key);
 			NJ.social.submitScore(key, highscore);
 
-			if(highscore >= 400) {
+			if(highscore >= 300) {
 				NJ.social.unlockAchievement(NJ.social.achievementKeys.mov1);
 
-				if(highscore >= 500) {
+				if(highscore >= 450) {
 					NJ.social.unlockAchievement(NJ.social.achievementKeys.mov2);
 
 					if(highscore >= 600) {
 						NJ.social.unlockAchievement(NJ.social.achievementKeys.mov3);
 
-						if(highscore >= 700) {
+						if(highscore >= 750) {
 							NJ.social.unlockAchievement(NJ.social.achievementKeys.mov4);
 						}
 					}

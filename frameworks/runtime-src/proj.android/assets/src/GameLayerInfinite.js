@@ -4,6 +4,9 @@
 
 var InfiniteGameLayer = BaseGameLayer.extend({
 
+    // UI Data
+    _prepLayer: null,
+
     // time limit for minute madness
     _elapsedTimeLimit: 60,
     _spawnTime: 1.0,
@@ -57,15 +60,31 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         this._numboController.initDistribution(this._numberList, this._thresholdNumbers);
         this._numboHeaderLayer.setConditionValue(this._numboController.getSpawnDistributionMaxNumber());
 
-        this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
-            // cause UI elements to fall in
-            that._numboHeaderLayer.enter();
-            that._toolbarLayer.enter();
-        }), cc.delayTime(0.5), cc.callFunc(function() {
+        if(!NJ.settings.hasLoadedINF) {
+            this.pauseGame();
 
-            // spawn blocks until the board is 1/3 full initially fill the board with blocks initially
-            that.spawnInitialBlocks();
-        })));
+            this._prepLayer = new PrepLayer(res.infiniteImage, NJ.themes.blockColors[3], "Infinite", "Numbers appear\nevery few seconds.\n\n\nThe game ends\nwhen the board fills up.\n\n\nLet's go!");
+            this._prepLayer.setOnCloseCallback(function() {
+                that.onResume();
+
+                that.removeChild(that._prepLayer);
+
+                NJ.settings.hasLoadedINF = true;
+                NJ.saveSettings();
+
+                that._reset();
+            });
+            this.addChild(this._prepLayer, 100);
+        } else {
+            this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
+                that.enter(function () {
+                    that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+                        // spawn blocks until the board is 1/3 full initially fill the board with blocks initially
+                        that.spawnInitialBlocks();
+                    })));
+                });
+            })));
+        }
     },
 
     _getSpawnTime: function() {
@@ -74,10 +93,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         var exponent = 0.3;
         var LFactor = 1 / Math.pow(L, exponent);
 
-        // linear blocks-cleared-this-level factor
-        var BFactor = 1;// - NJ.gameState.getLevelupProgress() / 3;
-
-        var spawnTime = 1.5 * LFactor * BFactor;
+        var spawnTime = 1.5 * LFactor;
         return spawnTime;
     },
 
@@ -145,23 +161,22 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         // first send the analytics for the current game session
         NJ.sendAnalytics("Infinite");
 
-        this.runAction(cc.sequence(cc.callFunc(function() {
-            that._numboHeaderLayer.leave();
-            that._toolbarLayer.leave();
-        }), cc.delayTime(1), cc.callFunc(function() {
-            that._numboController.clearLevel();
-        }), cc.delayTime(1), cc.callFunc(function() {
-            that.pauseGame();
+        this.leave(function() {
+            that.runAction(cc.sequence(cc.delayTime(0.6), cc.callFunc(function() {
+                that._numboController.clearLevel();
+            }), cc.delayTime(1), cc.callFunc(function() {
+                that.pauseGame();
 
-            that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
-            that._gameOverMenuLayer.setOnRetryCallback(function() {
-                that.onRetry();
-            });
-            that._gameOverMenuLayer.setOnMenuCallback(function() {
-                that.onMenu();
-            });
-            that.addChild(that._gameOverMenuLayer, 999);
-        })));
+                that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
+                that._gameOverMenuLayer.setOnRetryCallback(function() {
+                    that.onRetry();
+                });
+                that._gameOverMenuLayer.setOnMenuCallback(function() {
+                    that.onMenu();
+                });
+                that.addChild(that._gameOverMenuLayer, 999);
+            })));
+        });
     },
 
     // whether the game is over or not
@@ -169,13 +184,17 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         return this._numboController.levelIsFull();
     },
 
-    spawnInitialBlocks: function(){
+    spawnInitialBlocks: function() {
         var that = this;
 
-        var firstBlocksAction = cc.callFunc(function() {that.spawnDropRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);});
+        var firstBlocksAction = cc.callFunc(function() {
+            that.spawnDropRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);
+        });
 
         var delayAction = cc.delayTime(2.0);
-        var scheduleAction = cc.callFunc(function(){that.scheduleSpawn();})
+        var scheduleAction = cc.callFunc(function(){
+            that.scheduleSpawn();
+        });
 
         this.runAction(cc.sequence(firstBlocksAction, delayAction, scheduleAction));
     },
@@ -266,7 +285,8 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
         this._playActivationSounds(selectedBlocks.length);
 
-        // check for a near-empty screen, do 'nice clear!', etc
-        //this.checkClearBonus();
+        if(this._numboController.getNumBlocks() <= 3) {
+            this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS / 3));
+        }
     }
 });

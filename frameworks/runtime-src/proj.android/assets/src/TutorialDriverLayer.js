@@ -278,6 +278,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				// first send the analytics for the current game session
 				NJ.sendAnalytics("Tutorial");
+				NJ.settings.hasLoadedTUT = true;
+				NJ.saveSettings();
 
 				this.runAction(cc.sequence(cc.delayTime(4), cc.callFunc(function() {
 					// load resources

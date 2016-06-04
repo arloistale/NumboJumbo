@@ -153,7 +153,7 @@ var BaseGameLayer = (function() {
 			this._feedbackLayer.reset();
 			this._effectsLayer.reset();
 
-            this._drawDividersGeometry();
+            //this._drawDividersGeometry();
 
             // play music again if music settings turned on
             if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
@@ -777,12 +777,12 @@ var BaseGameLayer = (function() {
 						for (i = 0; i < highlightBlocks.length; ++i) {
 							highlightBlocks[i].highlight();
 						}
+
+                        this.redrawSelectedLines(selectedBlocks);
 					} else {
 						if(selectedBlocks.length < 5)
 							this._effectsLayer.clearComboOverlay();
 					}
-
-					this.redrawSelectedLines(selectedBlocks);
 
 					// draw a line from last selected to our finger if we are outside of the range of the block
 					var lastBlockPos = this._convertLevelCoordsToPoint(block.col, block.row);
@@ -1017,7 +1017,7 @@ var BaseGameLayer = (function() {
 			this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
 			this._numboHeaderLayer.updateTheme();
 			this._numboController.updateTheme();
-            this._drawDividersGeometry();
+            //this._drawDividersGeometry();
 		}
 	});
 }());
