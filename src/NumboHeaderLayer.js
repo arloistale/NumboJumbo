@@ -135,7 +135,70 @@ var NumboHeaderLayer = (function() {
             this._condLabel.setString(condPrefix + value);
         },
 
-        setEquation: function(nums) {
+        setEquation: function(nums){
+            var equationStr = "";
+
+            // just print the values, no + or =
+            if (! this.sumToHighest(nums) ) {
+                for (var i = 0; i < nums.length; ++i){
+                    equationStr += nums[i] + "     ";
+                }
+                this._equationLabel.setString(equationStr);
+            }
+                // valid combo, need to put + and =
+            else {
+                var maxIndex = this.findMax(nums);
+                for (var i = 0; i < nums.length; ++i) {
+                    if (i != maxIndex){
+                        if (equationStr == ""){
+                            equationStr = nums[i];
+                        }
+                        else{
+                            equationStr += " + " + nums[i];
+                        }
+                    }
+                }
+                equationStr += " = " + nums[maxIndex];
+                this._equationLabel.setString(equationStr);
+            }
+        },
+
+        findMax: function(nums){
+            var maxIndex;
+            if (nums.length > 0){
+                maxIndex = 0;
+            }
+            for (var i = 1; i < nums.length; ++i){
+                if (nums[i] > nums[maxIndex]){
+                    maxIndex = i;
+                }
+            }
+            cc.log("max is ", nums[maxIndex]);
+            return maxIndex;
+        },
+
+        sumToHighest: function(nums){
+            if (!nums || nums.length < 3){
+                return false;
+            }
+
+
+            var sum = 0;
+            for(var i = 0; i < nums.length; ++i) {
+                sum += nums[i];
+            }
+
+            for(i = 0; i < nums.length; ++i) {
+                if(sum - nums[i] == nums[i]) {
+                    return true;
+                }
+            }
+
+            return false;
+
+        },
+
+        setEquationOld: function(nums) {
             var equationStr = " ";
 
             if(nums.length > 0) {
