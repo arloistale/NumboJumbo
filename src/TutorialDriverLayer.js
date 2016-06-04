@@ -17,6 +17,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 		var that = this;
 
+		allowToolbar = true;
+
 		if(allowToolbar) {
 			// this seems like a hack but will work for now
 			this._toolbarLayer.setOnPauseCallback(function() {
@@ -278,6 +280,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				// first send the analytics for the current game session
 				NJ.sendAnalytics("Tutorial");
+				NJ.settings.hasLoadedTUT = true;
+				NJ.saveSettings();
 
 				this.runAction(cc.sequence(cc.delayTime(4), cc.callFunc(function() {
 					// load resources

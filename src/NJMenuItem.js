@@ -15,6 +15,7 @@ var NJMenuItem = (function() {
 
         var normalLabel = new cc.LabelBMFont(title, b_getFontName(res.mainFont, scale));
         var imageSize = normalLabel.getContentSize();
+        normalLabel.setAlignment(cc.TEXT_ALIGNMENT_CENTER);
         normalLabel.setScale(size.height / imageSize.height, size.height / imageSize.height);
         normalLabel.attr({
             anchorX: 0.5,
@@ -24,6 +25,7 @@ var NJMenuItem = (function() {
         });
 
         var selectedLabel = new cc.LabelBMFont(title, b_getFontName(res.mainFont, scale));
+        selectedLabel.setAlignment(cc.TEXT_ALIGNMENT_CENTER);
         selectedLabel.setScale(size.height / imageSize.height, size.height / imageSize.height);
         selectedLabel.attr({
             anchorX: 0.5,
@@ -33,6 +35,7 @@ var NJMenuItem = (function() {
         });
 
         var disabledLabel = new cc.LabelBMFont(title, b_getFontName(res.mainFont, scale));
+        disabledLabel.setAlignment(cc.TEXT_ALIGNMENT_CENTER);
         disabledLabel.setScale(size.height / imageSize.height, size.height / imageSize.height);
         disabledLabel.attr({
             anchorX: 0.5,

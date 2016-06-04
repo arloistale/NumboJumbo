@@ -155,8 +155,9 @@ var BaseGameLayer = (function() {
 
             this._drawDividersGeometry();
 
-			if(NJ.settings.music)
-				cc.audioEngine.playMusic(this._backgroundTrack, true);
+            // play music again if music settings turned on
+            if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
+                cc.audioEngine.playMusic(that._backgroundTrack, true);
 
 			this.schedule(function() {
 				that._numboController.findHint();
@@ -611,6 +612,7 @@ var BaseGameLayer = (function() {
                     that.onRetry();
                 });
                 that._settingsMenuLayer.setOnCloseCallback(function() {
+                    that.removeChild(that._settingsMenuLayer);
                     that.onResume();
                 });
                 that._settingsMenuLayer.setOnMenuCallback(function() {
@@ -622,8 +624,6 @@ var BaseGameLayer = (function() {
 
 		// On closing previously opened settings menu we resume.
 		onResume: function() {
-			this.removeChild(this._settingsMenuLayer);
-
 			var that = this;
 
             this.enterBoard();
@@ -636,7 +636,7 @@ var BaseGameLayer = (function() {
 
                 // play music again if music settings turned on
                 if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-                    cc.audioEngine.playMusic(that._backgroundTrack);
+                    cc.audioEngine.playMusic(that._backgroundTrack, true);
 
                 that._updateTheme();
             });
@@ -868,6 +868,7 @@ var BaseGameLayer = (function() {
 		//			(this is the most common & easiest case by far!)
 		spawnBlocksAfterDelay: function(count, delay, callback){
 			var that = this;
+
 			//this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
 			that.spawnDropRandomBlocks(count - 2);
 

@@ -33,14 +33,31 @@ var StackGameLayer = BaseGameLayer.extend({
         this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
         this._numboHeaderLayer.setConditionValue(this._blocksToDrop);
 
-        this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
-            that.enter(function() {
-                that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function() {
-                    // fill the board with blocks initially
-                    that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
-                })));
+        if(!NJ.settings.hasLoadedRE) {
+            this.pauseGame();
+
+            this._prepLayer = new PrepLayer(res.stackImage, NJ.themes.blockColors[2], "Stack", "Numbers appear\nwhen you make moves.\n\n\nThe game ends\nwhen the board fills up.\n\n\nLet's go!");
+            this._prepLayer.setOnCloseCallback(function() {
+                that.onResume();
+
+                that.removeChild(that._prepLayer);
+
+                NJ.settings.hasLoadedRE = true;
+                NJ.saveSettings();
+
+                that._reset();
             });
-        })));
+            this.addChild(this._prepLayer, 100);
+        } else {
+            this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
+                that.enter(function () {
+                    that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+                        // fill the board with blocks initially
+                        that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
+                    })));
+                });
+            })));
+        }
     },
 
     _initUI: function() {

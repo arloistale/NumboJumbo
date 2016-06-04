@@ -4,6 +4,9 @@
 
 var InfiniteGameLayer = BaseGameLayer.extend({
 
+    // UI Data
+    _prepLayer: null,
+
     // time limit for minute madness
     _elapsedTimeLimit: 60,
     _spawnTime: 1.0,
@@ -57,14 +60,31 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         this._numboController.initDistribution(this._numberList, this._thresholdNumbers);
         this._numboHeaderLayer.setConditionValue(this._numboController.getSpawnDistributionMaxNumber());
 
-        this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
-            that.enter(function() {
-                that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function() {
-                    // spawn blocks until the board is 1/3 full initially fill the board with blocks initially
-                    that.spawnInitialBlocks();
-                })));
+        if(!NJ.settings.hasLoadedINF) {
+            this.pauseGame();
+
+            this._prepLayer = new PrepLayer(res.infiniteImage, NJ.themes.blockColors[3], "Infinite", "Numbers appear\nevery few seconds.\n\n\nThe game ends\nwhen the board fills up.\n\n\nLet's go!");
+            this._prepLayer.setOnCloseCallback(function() {
+                that.onResume();
+
+                that.removeChild(that._prepLayer);
+
+                NJ.settings.hasLoadedINF = true;
+                NJ.saveSettings();
+
+                that._reset();
             });
-        })));
+            this.addChild(this._prepLayer, 100);
+        } else {
+            this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
+                that.enter(function () {
+                    that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+                        // spawn blocks until the board is 1/3 full initially fill the board with blocks initially
+                        that.spawnInitialBlocks();
+                    })));
+                });
+            })));
+        }
     },
 
     _getSpawnTime: function() {

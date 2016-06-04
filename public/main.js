@@ -58,7 +58,7 @@ cc.game.onStart = function() {
     NumboLoaderScene.preload(g_all, function () {
         var scene = new cc.Scene();
 
-        if(NJ.settings.hasLoaded) {
+        if(NJ.settings.hasLoadedTUT) {
             scene.addChild(new NumboMenuLayer());
         } else {
             scene.addChild(new TutorialDriverLayer());
