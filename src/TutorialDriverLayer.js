@@ -47,6 +47,11 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		this._backgroundTrack = res.trackDauntinglyMellow;
 	},
 
+	// overload the divider drawing function so that we don't get lines in the tutorial
+	_drawDividersGeometry: function(){
+		cc.log(":)");
+	},
+
 	//////////////
 	// Tutorial //
 	//////////////
@@ -233,7 +238,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
                     }), cc.delayTime(0.1), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol - 1, 4);
                     }), cc.delayTime(0.1), cc.callFunc(function() {
-                        that.spawnDropBlock(centerCol, 3);
+                        that.spawnDropBlock(centerCol + 1, 3);
                     }), cc.delayTime(0.1), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol + 2, 2);
                     })
