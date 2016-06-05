@@ -1,8 +1,6 @@
 var ToolbarLayer = (function() {
 
     // Touch Events
-
-    // Touch Events
     var onPause = function() {
         if(NJ.settings.sounds)
             cc.audioEngine.playEffect(res.clickSound, false);
@@ -48,8 +46,8 @@ var ToolbarLayer = (function() {
             var contentSize = this.getContentSize();
 
             // initialize pause button
-            var menu = new cc.Menu();
-            menu.attr({
+            this._buttonsMenu = new cc.Menu();
+            this._buttonsMenu.attr({
                 x: contentSize.width / 2,
                 y: contentSize.height / 2
             });
@@ -58,9 +56,9 @@ var ToolbarLayer = (function() {
 
             this._pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
             this._pauseButton.setImageRes(res.pauseImage);
-            menu.addChild(this._pauseButton);
+            this._buttonsMenu.addChild(this._pauseButton);
 
-            this.addChild(menu);
+            this.addChild(this._buttonsMenu);
         },
 
         //////////////////
@@ -68,7 +66,8 @@ var ToolbarLayer = (function() {
         //////////////////
 
         enterTutorialMode: function() {
-            this._pauseButton.setImageRes(res.skipImage);
+            var imageRes = res.homeImage;
+            this._pauseButton.setImageRes(imageRes);
         },
 
         reset: function() {

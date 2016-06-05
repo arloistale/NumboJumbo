@@ -60,6 +60,7 @@ var res = {
     blockImage2x: resRoot + "Images/blockImage/blockImage2x.png",
     alertImage: resRoot + "Images/alertOverlay.png",
     handImage: resRoot + "Images/ic_hand/Hand2.png",
+    cancelImage: resRoot + "Images/ic_cancel/ic_cancel_2x.png",
 
     // music
     trackChill2: resRoot + "Sounds/music/Chill2.mp3",
@@ -167,6 +168,7 @@ var g_game = [
     res.pauseImage,
     res.retryImage,
     res.handImage,
+    res.cancelImage,
 
     // Scene
     res.blockImage,

@@ -5,7 +5,7 @@
 var NJ = NJ || {};
 
 // default settings
-NJ.MUSIC_VOLUME = 0.2;
+NJ.MUSIC_VOLUME = 0.3;
 NJ.SOUNDS_VOLUME = 0.6;
 
 NJ.settings = {
