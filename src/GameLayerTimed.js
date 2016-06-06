@@ -41,7 +41,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 		if(!NJ.settings.hasLoadedMM) {
 			this.pauseGame();
 
-			this._prepLayer = new PrepLayer(res.timedImage, NJ.themes.blockColors[0], "Timed", "As many numbers\nas you need.\n\n\nClear as many numbers\nas you can in 60 seconds.\n\n\nLet's go!");
+			this._prepLayer = new PrepLayer(res.timedImage, NJ.themes.blockColors[0], "Timed", "As many numbers\nas you need.\n\n\nClear as many numbers\nas you can in 60 seconds.\n\n\nLet\'s go!");
 			this._prepLayer.setOnCloseCallback(function() {
 				that.onResume();
 
@@ -195,7 +195,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 
 		this.redrawSelectedLines();
 
-		this._numboHeaderLayer.setEquation([]);
+		this._numboHeaderLayer.activateEquation();
 
 		this._effectsLayer.clearComboOverlay();
 

@@ -132,6 +132,9 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 		var centerCol;
 
+		this._numboController.killAllBlocks();
+		this.relocateBlocks();
+
 		switch(currSlide) {
 			case slides.intro:
 				centerCol = Math.floor((NJ.NUM_COLS - 1) / 2);
@@ -436,7 +439,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
                 that._advanceTutorialSlide();
             })));
         } else {
-            if (this._numboController.levelIsClear()) {
+            //if (this._numboController.levelIsClear()) {
+				if (this._numboController.findHint().length == 0){
                 this._advanceTutorialSlide();
             }
         }

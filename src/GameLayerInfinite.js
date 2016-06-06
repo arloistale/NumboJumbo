@@ -253,7 +253,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
         this.redrawSelectedLines();
 
-        this._numboHeaderLayer.setEquation([]);
+        this._numboHeaderLayer.activateEquation();
 
         this._effectsLayer.clearComboOverlay();
 

@@ -14,6 +14,7 @@ var NumboHeaderLayer = (function() {
         _condLabel: null,
 
         _equationLabel: null,
+        _dummyEquationLabel: null,
 
         // data
         _isTutorialMode: false,
@@ -84,6 +85,21 @@ var NumboHeaderLayer = (function() {
             this.addChild(this._equationLabel);
 
             this._equationLabel.setString(" ");
+
+            // Equation Label
+            this._dummyEquationLabel = new cc.LabelBMFont("Default Text", b_getFontName(res.mainFont));
+            this._dummyEquationLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
+            this._dummyEquationLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: startPos.x,
+                y: startPos.y,
+                visible: false
+            });
+            this._dummyEquationLabel.setColor(NJ.themes.defaultLabelColor);
+            this.addChild(this._dummyEquationLabel);
+
+            this._dummyEquationLabel.setString(" ");
         },
 
         // resets all elements
@@ -98,6 +114,8 @@ var NumboHeaderLayer = (function() {
             this._scoreLabel.setString(" ");
             this._condLabel.setString(" ");
             this._equationLabel.setString( " ");
+            this._dummyEquationLabel.setString(" ");
+            this._dummyEquationLabel.setVisible(false);
         },
 
         // makes the header transition into the visible area
@@ -158,6 +176,7 @@ var NumboHeaderLayer = (function() {
                     equationStr += nums[i] + "     ";
                 }
                 this._equationLabel.setString(equationStr);
+                this._equationLabel.setColor(NJ.themes.defaultLabelColor);
             }
                 // valid combo, need to put + and =
             else {
@@ -166,15 +185,27 @@ var NumboHeaderLayer = (function() {
                     if (i != maxIndex){
                         if (equationStr == ""){
                             equationStr = nums[i];
-                        }
-                        else{
+                        } else {
                             equationStr += " + " + nums[i];
                         }
                     }
                 }
                 equationStr += " = " + nums[maxIndex];
                 this._equationLabel.setString(equationStr);
+                this._equationLabel.setColor(NJ.themes.blockColors[nums[maxIndex] - 1]);
             }
+        },
+
+        activateEquation: function() {
+            var that = this;
+
+            this._dummyEquationLabel.setString(this._equationLabel.getString());
+            this._dummyEquationLabel.setVisible(true);
+            this._dummyEquationLabel.runAction(cc.sequence(cc.fadeTo(0.5, 0), cc.callFunc(function() {
+                that._dummyEquationLabel.setVisible(false);
+            })));
+
+            this.setEquation([]);
         },
 
         findMax: function(nums){

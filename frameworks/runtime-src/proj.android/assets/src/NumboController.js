@@ -472,6 +472,8 @@ var NumboController = (function() {
         killAllBlocks: function() {
             this.deselectAllBlocks();
             this._numboLevel.killAllBlocks();
+
+			this._numboLevel.updateRowsAndColumns();
         },
 
 		/////////////

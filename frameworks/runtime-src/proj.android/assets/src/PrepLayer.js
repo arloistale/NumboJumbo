@@ -120,7 +120,7 @@ var PrepLayer = (function() {
             this._contentMenu.addChild(primaryIcon);
             this._contentMenu.addChild(primaryLabel);
 
-            this._contentMenu.alignItemsVerticallyWithPadding(120);
+            this._contentMenu.alignItemsVerticallyWithPadding(cc.visibleRect.height * 0.2);
 
             this.addChild(this._contentMenu);
         },

@@ -692,6 +692,7 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/blockImage \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/Button.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_back \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_cancel \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_hand \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_help \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_home \
@@ -713,6 +714,8 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/blockImage/blockImage2x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_back/ic_back_1x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_back/ic_back_2x.png \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_cancel/ic_cancel_1x.png \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_cancel/ic_cancel_2x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_hand/Hand2.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_hand/ic_hand_1x.png \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/res/Images/ic_hand/ic_hand_2x.png \

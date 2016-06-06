@@ -61,11 +61,11 @@ var NumboMenuLayer = (function() {
 
             this._initAudio();
 
-            NJ.settings.hasLoadedMM = false;
-            NJ.settings.hasLoadedMOV = false;
-            NJ.settings.hasLoadedRE = false;
-            NJ.settings.hasLoadedINF = false;
-            NJ.saveSettings();
+            //NJ.settings.hasLoadedMM = false;
+            //NJ.settings.hasLoadedMOV = false;
+            //NJ.settings.hasLoadedRE = false;
+            //NJ.settings.hasLoadedINF = false;
+            //NJ.saveSettings();
 
             this.enter();
         },
@@ -460,7 +460,7 @@ var NumboMenuLayer = (function() {
                     that.enter();
 
                     if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-                        cc.audioEngine.playMusic(res.trackChill2);
+                        cc.audioEngine.playMusic(res.trackChill2, true);
 
                     that._updateTheme();
                 });
