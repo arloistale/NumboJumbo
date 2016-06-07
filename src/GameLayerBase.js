@@ -154,7 +154,7 @@ var BaseGameLayer = (function() {
 			this._effectsLayer.reset();
 
             //this._drawDividersGeometry();
-			
+
 			cc.audioEngine.setMusicVolume(0.15);
             // play music again if music settings turned on
             if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
@@ -402,7 +402,7 @@ var BaseGameLayer = (function() {
 		// Pauses the game, halting all actions and schedulers.
 		pauseGame: function() {
 			// halt the doomsayer
-			this._feedbackLayer.clearDoomsayer();
+			//this._feedbackLayer.clearDoomsayer();
 
 			// use breadth first search to pause all valid children
 			var children = [this];
@@ -553,7 +553,7 @@ var BaseGameLayer = (function() {
 		// also increments number of times played overall
 		onGameOver: function() {
 			this._selectedLinesNode.clear();
-			this._feedbackLayer.clearDoomsayer();
+			//this._feedbackLayer.clearDoomsayer();
 			this.pauseInput();
 			this.unscheduleAllCallbacks();
 
@@ -587,7 +587,7 @@ var BaseGameLayer = (function() {
 		onPause: function() {
 			var that = this;
 
-			this._feedbackLayer.clearDoomsayer();
+			//this._feedbackLayer.clearDoomsayer();
 
 			this.pauseGame();
 
@@ -616,8 +616,8 @@ var BaseGameLayer = (function() {
             this.enterBoard();
 
 			this.enter(function() {
-                if(that.isInDanger())
-                    that._feedbackLayer.launchDoomsayer();
+                //if(that.isInDanger())
+                //    that._feedbackLayer.launchDoomsayer();
 
                 that.resumeGame();
 

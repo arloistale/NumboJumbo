@@ -223,19 +223,35 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         if(this._super())
             return true;
 
-        if(this.isInDanger()) {
+        /*if(this.isInDanger()) {
             if(!this._feedbackLayer.isDoomsayerLaunched())
                 this._feedbackLayer.launchDoomsayer();
         } else {
             if(this._feedbackLayer.isDoomsayerLaunched())
                 this._feedbackLayer.clearDoomsayer();
-        }
+        }*/
 
         return false;
     },
 
     isInDanger: function() {
         return this._numboController.getNumBlocks() / this._numboController.getCapacity() >= NJ.DANGER_THRESHOLD;
+    },
+
+    spawnDropRandomBlock: function() {
+        var spawnBlock = NumboBlock.recreate(this._blockSize);
+        this._numboController.spawnDropRandomBlock(spawnBlock);
+        this._instantiateBlock(spawnBlock);
+        this.moveBlockIntoPlace(spawnBlock);
+
+        if(NJ.settings.sounds) {
+            cc.audioEngine.playEffect(clickSounds[Math.min(clickSounds.length-1, NJ.gameState.getLevel())]);
+            if(this.isInDanger()) {
+                cc.audioEngine.playEffect(res.tickSound);
+                if(this._numboController.getCapacity() - this._numboController.getNumBlocks() <= 2)
+                    this.schedule(function() { cc.audioEngine.playEffect(res.tickSound);}, this._getSpawnTime()/2, false);
+            }
+        }
     },
 
     //////////////////
