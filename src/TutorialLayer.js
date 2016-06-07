@@ -72,7 +72,7 @@ var TutorialLayer = (function() {
 
             var that = this;
 
-            this._fadeOutSlide();
+            this.fadeOutSlide();
 
             this.runAction(cc.sequence(cc.delayTime(0.25), cc.callFunc(function() {
                 var slides = that.slides;
@@ -217,7 +217,7 @@ var TutorialLayer = (function() {
 
         // helper function to fade out the old slide
         // to make room for the new one
-        _fadeOutSlide: function() {
+        fadeOutSlide: function() {
             this.stopAllActions();
 
             // we assume here that all children of the menu are instances of NJMenuItem
