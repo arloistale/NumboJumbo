@@ -9,7 +9,7 @@ var TutorialLayer = (function() {
 
     var onBack = function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+            cc.audioEngine.playEffect(res.clickSound4, false);
 
         if(this.onCloseCallback)
             this.onCloseCallback();

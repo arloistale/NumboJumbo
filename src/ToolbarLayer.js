@@ -3,7 +3,7 @@ var ToolbarLayer = (function() {
     // Touch Events
     var onPause = function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+            cc.audioEngine.playEffect(res.clickSound4, false);
 
         if(this._onPauseCallback)
             this._onPauseCallback();

@@ -364,7 +364,7 @@ var NumboMenuLayer = (function() {
 
         _onChooseMinuteMadness: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+                cc.audioEngine.playEffect(res.clickSound4, false);
 
             cc.audioEngine.stopMusic();
 
@@ -377,7 +377,7 @@ var NumboMenuLayer = (function() {
 
         _onChooseMoves: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+                cc.audioEngine.playEffect(res.clickSound4, false);
 
             cc.audioEngine.stopMusic();
 
@@ -390,7 +390,7 @@ var NumboMenuLayer = (function() {
 
         _onChooseTurnBased: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+                cc.audioEngine.playEffect(res.clickSound4, false);
 
             cc.audioEngine.stopMusic();
 
@@ -403,7 +403,7 @@ var NumboMenuLayer = (function() {
 
         _onChooseSurvival: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+                cc.audioEngine.playEffect(res.clickSound4, false);
 
             cc.audioEngine.stopMusic();
 
@@ -418,7 +418,7 @@ var NumboMenuLayer = (function() {
 
         _onHelp: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+                cc.audioEngine.playEffect(res.clickSound4, false);
 
             cc.audioEngine.stopMusic();
             cc.eventManager.pauseTarget(this, true);
@@ -432,21 +432,21 @@ var NumboMenuLayer = (function() {
 
         _onLeaderboard: function() {
              if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+                cc.audioEngine.playEffect(res.clickSound4, false);
 
              NJ.social.showLeaderboard();
         },
 
         _onAchievements: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+                cc.audioEngine.playEffect(res.clickSound4, false);
 
             NJ.social.showAchievements();
         },
 
         _onSettings: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+                cc.audioEngine.playEffect(res.clickSound4, false);
 
             var that = this;
 

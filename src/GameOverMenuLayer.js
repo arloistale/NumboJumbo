@@ -10,7 +10,7 @@ var GameOverMenuLayer = (function() {
 
     var onRetry = function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+            cc.audioEngine.playEffect(res.clickSound4, false);
 
         var that = this;
 
@@ -22,7 +22,7 @@ var GameOverMenuLayer = (function() {
 
     var onMenu = function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+            cc.audioEngine.playEffect(res.clickSound4, false);
 
         var that = this;
 
