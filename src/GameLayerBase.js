@@ -154,10 +154,11 @@ var BaseGameLayer = (function() {
 			this._effectsLayer.reset();
 
             //this._drawDividersGeometry();
-
+			
+			cc.audioEngine.setMusicVolume(0.15);
             // play music again if music settings turned on
             if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-                cc.audioEngine.playMusic(that._backgroundTrack, true);
+				cc.audioEngine.playMusic(that._backgroundTrack, true);
 
 			this.schedule(function() {
 				that._numboController.findHint();
