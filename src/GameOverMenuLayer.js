@@ -4,6 +4,10 @@
 
 var GameOverMenuLayer = (function() {
 
+    var highscoreMessages = ["You did it. You really did it.",
+                            "You are feared by numbers great and small.",
+                            "You might be a prodigy."];
+
     ///////////////
     // UI Events //
     ///////////////
@@ -44,6 +48,8 @@ var GameOverMenuLayer = (function() {
         _bestLabel: null,
         _bestLevelLabel: null,
         _currencyLabel: null,
+
+        //_bestScoreLabel: null,
 
         // Callbacks Data
         onRetryCallback: null,
@@ -116,17 +122,29 @@ var GameOverMenuLayer = (function() {
             // compute label size
             var header2Size = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
             var largeSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.large);
+            var headerSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header);
 
-            var scoreTitleLabel = this.generateLabel("Score", header2Size);
-            this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
+            var bestScoreTitleLabel = null;
+            if(NJ.gameState.getScore() == NJ.stats.getHighscore(key)) {
+                var scoreTitleLabel = this.generateLabel("New High Score!", header2Size);
+                this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
+                var bestScoreTitleLabel = this.generateLabel(highscoreMessages[Math.floor(Math.random()*highscoreMessages.length)], headerSize);
+            }
+            else {
+                var scoreTitleLabel = this.generateLabel("Score", header2Size);
+                this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
-            var bestTitleLabel = this.generateLabel("Best", header2Size);
-            this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
+                var bestTitleLabel = this.generateLabel("Best", header2Size);
+                this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
 
+                this._statsMenu.addChild(bestTitleLabel);
+                this._statsMenu.addChild(this._bestLabel);
+            }
             this._statsMenu.addChild(scoreTitleLabel);
             this._statsMenu.addChild(this._scoreLabel);
-            this._statsMenu.addChild(bestTitleLabel);
-            this._statsMenu.addChild(this._bestLabel);
+
+            if(bestScoreTitleLabel != null)
+                this._statsMenu.addChild(bestScoreTitleLabel);
 
             //var currencyTitleLabel = this.generateLabel("Currency");
             //this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
