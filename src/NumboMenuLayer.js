@@ -276,8 +276,14 @@ var NumboMenuLayer = (function() {
             if(!NJ.settings.music)
                 return;
 
+            cc.log("before");
+            cc.log(cc.loader.getRes(res.trackChill2));
+
             cc.audioEngine.setMusicVolume(NJ.MUSIC_VOLUME);
             cc.audioEngine.playMusic(res.trackChill2, true);
+
+            cc.log("after");
+            cc.log(cc.loader.getRes(res.trackChill2));
         },
 
         // makes menu elements transition in
