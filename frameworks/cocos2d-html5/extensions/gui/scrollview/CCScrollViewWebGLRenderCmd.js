@@ -71,6 +71,7 @@
 
     proto.visit = function(parendCmd){
         var node = this._node;
+        if (!node._visible) return;
 
         var i, locChildren = node._children, selChild, childrenLen;
 
@@ -84,7 +85,7 @@
 
         if (locChildren && locChildren.length > 0) {
             childrenLen = locChildren.length;
-            // _barNode children zOrder < 0
+            // draw children zOrder < 0
             for (i = 0; i < childrenLen; i++) {
                 selChild = locChildren[i];
                 if (selChild && selChild._localZOrder < 0)
@@ -93,7 +94,7 @@
                     break;
             }
 
-            // _barNode children zOrder >= 0
+            // draw children zOrder >= 0
             for (; i < childrenLen; i++)
                 locChildren[i]._renderCmd.visit();
         }

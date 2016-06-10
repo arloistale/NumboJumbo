@@ -1,0 +1,7 @@
+include ':libcocos2dx'
+project(':libcocos2dx').projectDir = new File(settingsDir, '../../cocos2d-x/cocos/platform/android/libcocos2dx')
+include ':NumboJumbo'
+project(':NumboJumbo').projectDir = new File(settingsDir, 'app')
+
+include ':gps'
+project(':gps').projectDir = new File(settingsDir, '../../cocos2d-x/cocos/platform/android/java/libs/gps')

@@ -122,6 +122,7 @@ var EffectsLayer = cc.Layer.extend({
     ///////////////
 
     launchExplosion: function(col, row, color) {
+        /*
         var that = this;
         var particleSystem = this._explosionGrid[col][row];
 
@@ -134,26 +135,29 @@ var EffectsLayer = cc.Layer.extend({
         particleSystem.setVisible(true);
         particleSystem.resetSystem();
 
-        var invisibleAction = cc.callFunc(function(){
+        var invisibleAction = cc.callFunc(function() {
             particleSystem.setVisible(false);
         });
 
         particleSystem.runAction(cc.sequence(cc.delayTime(1), invisibleAction));
+        */
+ 
     },
 
     ///////////////////
     // Combo Overlay //
     ///////////////////
 
-    launchComboOverlay: function() {
-        //if(NJ.settings.sounds)
-            //cc.audioEngine.playEffect(res.cheerSound3);
-
+    launchComboOverlay: function(color) {
         this._isComboLaunched = true;
-        //this._comboOverlay.setVisible(true);
+        this._comboOverlay.setColor(color);
+        this._comboOverlay.setVisible(true);
     },
 
     clearComboOverlay: function() {
+        if(!this._isComboLaunched)
+            return;
+
         this._isComboLaunched = false;
 
         this._comboOverlay.setVisible(false);

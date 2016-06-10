@@ -290,6 +290,7 @@ var NJMenuItem = (function() {
                     this._titleStates[key].setColor(color);
                 }
             }
+
         },
 
         /////////////////

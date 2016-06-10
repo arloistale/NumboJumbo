@@ -556,7 +556,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
         if(isSelector === false){
             //callback, target, interval, repeat, delay, paused, key
             //callback, target, interval, paused, key
-            if(arguments.length === 5){
+            if(arguments.length === 4 || arguments.length === 5){
                 key = delay;
                 paused = repeat;
                 delay = 0;
@@ -571,10 +571,11 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
                 delay = 0;
             }
         }
+        if (key === undefined) {
+            key = target.__instanceId + "";
+        }
 
         cc.assert(target, cc._LogInfos.Scheduler_scheduleCallbackForTarget_3);
-        if(isSelector === false)
-            cc.assert(key, "key should not be empty!");
 
         var element = this._hashForTimers[target.__instanceId];
 
@@ -727,7 +728,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
     unscheduleAllWithMinPriority: function(minPriority){
         // Custom Selectors
         var i, element, arr = this._arrayForTimers;
-        for(i=0; i<arr.length; i++){
+        for(i=arr.length-1; i>=0; i--){
             element = arr[i];
             this.unscheduleAllForTarget(element.target);
         }

@@ -2,294 +2,270 @@
     "android": {
         "GoogleAnalytics": {
             "trackingCode": "UA-72620222-1"
-        }, 
-        "Review": {
-            "LaunchLimit": 3, 
-            "DayForReminding": 1, 
-            "tryPromptWhenInit": true, 
-            "DayLimit": 0, 
-            "LaunchForReminding": 2, 
-            "UserEventLimit": 0
-        }, 
+        },
         "sdkboxplay": {
             "leaderboards": [
                 {
-                    "id": "CgkIjJ-toeEIEAIQAg",
+                    "id": "CgkIjJ-toeEIEAIQAg", 
                     "name": "ldb-mm"
-                },
+                }, 
                 {
-                    "id": "CgkIjJ-toeEIEAIQBQ",
+                    "id": "CgkIjJ-toeEIEAIQBQ", 
                     "name": "ldb-mov"
-                },
+                }, 
                 {
-                    "id": "CgkIjJ-toeEIEAIQBA",
+                    "id": "CgkIjJ-toeEIEAIQBA", 
                     "name": "ldb-re"
-                },
+                }, 
                 {
-                    "id": "CgkIjJ-toeEIEAIQAw",
+                    "id": "CgkIjJ-toeEIEAIQAw", 
                     "name": "ldb-inf"
                 }
             ], 
             "achievements": [
                 {
                     "incremental": false, 
-                    "id": "CgkIjJ-toeEIEAIQAQ",
+                    "id": "CgkIjJ-toeEIEAIQAQ", 
                     "name": "played1"
-                },
+                }, 
                 {
-                    "incremental": false,
-                    "id": "CgkIjJ-toeEIEAIQBg",
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQBg", 
                     "name": "played2"
-                },
+                }, 
                 {
-                    "incremental": false,
-                    "id": "CgkIjJ-toeEIEAIQBw",
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQBw", 
                     "name": "played3"
-                },
+                }, 
                 {
-                    "incremental": false,
-                    "id": "CgkIjJ-toeEIEAIQCA",
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQCA", 
                     "name": "played4"
-                },
+                }, 
                 {
-                    "incremental": false,
-                    "id": "CgkIjJ-toeEIEAIQCQ",
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQCQ", 
                     "name": "played5"
-                },
-
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQCg",
-                  "name": "mm1"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQCg", 
+                    "name": "mm1"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQCw",
-                  "name": "mm2"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQCw", 
+                    "name": "mm2"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQDA",
-                  "name": "mm3"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQDA", 
+                    "name": "mm3"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQDQ",
-                  "name": "mm4"
-                },
-
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQDQ", 
+                    "name": "mm4"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQFg",
-                  "name": "mov1"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQFg", 
+                    "name": "mov1"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQFw",
-                  "name": "mov2"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQFw", 
+                    "name": "mov2"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQGA",
-                  "name": "mov3"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQGA", 
+                    "name": "mov3"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQGQ",
-                  "name": "mov4"
-                },
-
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQGQ", 
+                    "name": "mov4"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQDg",
-                  "name": "re1"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQDg", 
+                    "name": "re1"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQDw",
-                  "name": "re2"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQDw", 
+                    "name": "re2"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQEA",
-                  "name": "re3"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQEA", 
+                    "name": "re3"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQEQ",
-                  "name": "re4"
-                },
-
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQEQ", 
+                    "name": "re4"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQEg",
-                  "name": "inf1"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQEg", 
+                    "name": "inf1"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQEw",
-                  "name": "inf2"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQEw", 
+                    "name": "inf2"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQFA",
-                  "name": "inf3"
-                },
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQFA", 
+                    "name": "inf3"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "CgkIjJ-toeEIEAIQFQ",
-                  "name": "inf4"
+                    "incremental": false, 
+                    "id": "CgkIjJ-toeEIEAIQFQ", 
+                    "name": "inf4"
                 }
-            ], 
-            "connect_on_start": false,
-            "debug": true
+            ],
+            "connect_on_start": false, 
+            "debug": false
         }
-    },
+    }, 
     "ios": {
         "GoogleAnalytics": {
+            "track_init_screen": false, 
             "trackingCode": "UA-72620222-1"
         },
-        "Review": {
-            "LaunchLimit": 3, 
-            "DayForReminding": 1, 
-            "tryPromptWhenInit": true, 
-            "AppID": "587767923", 
-            "DayLimit": 0, 
-            "LaunchForReminding": 2, 
-            "UserEventLimit": 0
-        }, 
         "sdkboxplay": {
             "leaderboards": [
                 {
-                    "id": "ldb_mm",
+                    "id": "ldb_mm", 
                     "name": "ldb-mm"
-                },
+                }, 
                 {
-                    "id": "ldb_mov",
+                    "id": "ldb_mov", 
                     "name": "ldb-mov"
-                },
+                }, 
                 {
-                    "id": "ldb_re",
+                    "id": "ldb_re", 
                     "name": "ldb-re"
-                },
+                }, 
                 {
-                    "id": "ldb_inf",
+                    "id": "ldb_inf", 
                     "name": "ldb-inf"
                 }
-            ],
+            ], 
             "achievements": [
                 {
-                    "incremental": false,
-                    "id": "played1",
+                    "incremental": false, 
+                    "id": "played1", 
                     "name": "played1"
-                },
+                }, 
                 {
-                    "incremental": false,
-                    "id": "played2",
+                    "incremental": false, 
+                    "id": "played2", 
                     "name": "played2"
-                },
+                }, 
                 {
-                    "incremental": false,
-                    "id": "played3",
+                    "incremental": false, 
+                    "id": "played3", 
                     "name": "played3"
-                },
+                }, 
                 {
-                    "incremental": false,
-                    "id": "played4",
+                    "incremental": false, 
+                    "id": "played4", 
                     "name": "played4"
-                },
+                }, 
                 {
-                    "incremental": false,
-                    "id": "played5",
+                    "incremental": false, 
+                    "id": "played5", 
                     "name": "played5"
-                },
-
+                }, 
                 {
-                    "incremental": false,
-                    "id": "mm1",
+                    "incremental": false, 
+                    "id": "mm1", 
                     "name": "mm1"
-                },
+                }, 
                 {
-                    "incremental": false,
-                    "id": "mm2",
+                    "incremental": false, 
+                    "id": "mm2", 
                     "name": "mm2"
-                },
+                }, 
                 {
-                  "incremental": false,
-                  "id": "mm3",
-                  "name": "mm3"
-                },
+                    "incremental": false, 
+                    "id": "mm3", 
+                    "name": "mm3"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "mm4",
-                  "name": "mm4"
-                },
-
+                    "incremental": false, 
+                    "id": "mm4", 
+                    "name": "mm4"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "mov1",
-                  "name": "mov1"
-                },
+                    "incremental": false, 
+                    "id": "mov1", 
+                    "name": "mov1"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "mov2",
-                  "name": "mov2"
-                },
+                    "incremental": false, 
+                    "id": "mov2", 
+                    "name": "mov2"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "mov3",
-                  "name": "mov3"
-                },
+                    "incremental": false, 
+                    "id": "mov3", 
+                    "name": "mov3"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "mov4",
-                  "name": "mov4"
-                },
-
+                    "incremental": false, 
+                    "id": "mov4", 
+                    "name": "mov4"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "re1",
-                  "name": "re1"
-                },
+                    "incremental": false, 
+                    "id": "re1", 
+                    "name": "re1"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "re2",
-                  "name": "re2"
-                },
+                    "incremental": false, 
+                    "id": "re2", 
+                    "name": "re2"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "re3",
-                  "name": "re3"
-                },
+                    "incremental": false, 
+                    "id": "re3", 
+                    "name": "re3"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "re4",
-                  "name": "re4"
-                },
-
+                    "incremental": false, 
+                    "id": "re4", 
+                    "name": "re4"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "inf1",
-                  "name": "inf1"
-                },
+                    "incremental": false, 
+                    "id": "inf1", 
+                    "name": "inf1"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "inf2",
-                  "name": "inf2"
-                },
+                    "incremental": false, 
+                    "id": "inf2", 
+                    "name": "inf2"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "inf3",
-                  "name": "inf3"
-                },
+                    "incremental": false, 
+                    "id": "inf3", 
+                    "name": "inf3"
+                }, 
                 {
-                  "incremental": false,
-                  "id": "inf4",
-                  "name": "inf4"
+                    "incremental": false, 
+                    "id": "inf4", 
+                    "name": "inf4"
                 }
-            ],
-            "connect_on_start": false,
-            "debug": true
+            ], 
+            "connect_on_start": false, 
+            "debug": false
         }
     }
 }

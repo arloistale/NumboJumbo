@@ -1,18 +1,18 @@
-# view AndroidManifest.xml #generated:28
+# view AndroidManifest.xml #generated:34
 -keep class com.google.android.gms.ads.AdActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:16
+# view AndroidManifest.xml #generated:22
 -keep class com.google.android.gms.analytics.AnalyticsReceiver { <init>(...); }
 
-# view AndroidManifest.xml #generated:21
+# view AndroidManifest.xml #generated:27
 -keep class com.google.android.gms.analytics.AnalyticsService { <init>(...); }
 
-# view AndroidManifest.xml #generated:22
+# view AndroidManifest.xml #generated:28
 -keep class com.google.android.gms.analytics.CampaignTrackingReceiver { <init>(...); }
 
-# view AndroidManifest.xml #generated:27
+# view AndroidManifest.xml #generated:33
 -keep class com.google.android.gms.analytics.CampaignTrackingService { <init>(...); }
 
-# view AndroidManifest.xml #generated:7
+# view AndroidManifest.xml #generated:13
 -keep class org.cocos2dx.javascript.AppActivity { <init>(...); }
 

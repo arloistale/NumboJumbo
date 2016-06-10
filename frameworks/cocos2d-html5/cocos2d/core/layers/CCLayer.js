@@ -57,7 +57,7 @@ cc.Layer = cc.Node.extend(/** @lends cc.Layer# */{
     },
 
     /**
-     * Sets the layer to cache all of children to a bake sprite, and _barNode itself by bake sprite. recommend using it in UI.<br/>
+     * Sets the layer to cache all of children to a bake sprite, and draw itself by bake sprite. recommend using it in UI.<br/>
      * This is useful only in html5 engine
      * @function
      * @see cc.Layer#unbake
@@ -83,7 +83,7 @@ cc.Layer = cc.Node.extend(/** @lends cc.Layer# */{
      * @see cc.Layer#bake and cc.Layer#unbake
      */
     isBaked: function(){
-        return this._isBaked;
+        return this._renderCmd._isBaked;
     },
 
     addChild: function(child, localZOrder, tag){
@@ -92,7 +92,7 @@ cc.Layer = cc.Node.extend(/** @lends cc.Layer# */{
     },
 
     _createRenderCmd: function(){
-        if (cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if (cc._renderType === cc.game.RENDER_TYPE_CANVAS)
             return new cc.Layer.CanvasRenderCmd(this);
         else
             return new cc.Layer.WebGLRenderCmd(this);
@@ -191,7 +191,7 @@ cc.LayerColor = cc.Layer.extend(/** @lends cc.LayerColor# */{
      */
     ctor: function(color, width, height){
         cc.Layer.prototype.ctor.call(this);
-        this._blendFunc = new cc.BlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
+        this._blendFunc = cc.BlendFunc._alphaNonPremultiplied();
         cc.LayerColor.prototype.init.call(this, color, width, height);
     },
 
@@ -203,7 +203,7 @@ cc.LayerColor = cc.Layer.extend(/** @lends cc.LayerColor# */{
      * @return {Boolean}
      */
     init: function (color, width, height) {
-        if (cc._renderType !== cc._RENDER_TYPE_CANVAS)
+        if (cc._renderType !== cc.game.RENDER_TYPE_CANVAS)
             this.shaderProgram = cc.shaderCache.programForKey(cc.SHADER_POSITION_COLOR);
 
         var winSize = cc.director.getWinSize();
@@ -255,7 +255,7 @@ cc.LayerColor = cc.Layer.extend(/** @lends cc.LayerColor# */{
     },
 
     _createRenderCmd: function(){
-        if (cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if (cc._renderType === cc.game.RENDER_TYPE_CANVAS)
             return new cc.LayerColor.CanvasRenderCmd(this);
         else
             return new cc.LayerColor.WebGLRenderCmd(this);
@@ -574,7 +574,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
     },
 
     _createRenderCmd: function(){
-        if (cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if (cc._renderType === cc.game.RENDER_TYPE_CANVAS)
             return new cc.LayerGradient.CanvasRenderCmd(this);
         else
             return new cc.LayerGradient.WebGLRenderCmd(this);

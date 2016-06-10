@@ -222,13 +222,7 @@ var NumboMenuLayer = (function() {
             this._achievementsButton.setImageRes(res.trophyImage);
             this._achievementsButton.retain();
 
-            this._loginButton = new NJMenuButton(buttonSize, function() {
-                if(!NJ.social.isLoggedIn()) {
-                    NJ.social.login();
-                } else {
-                    cc.log("Warning: tried to login when already login!");
-                }
-            }, this);
+            this._loginButton = new NJMenuButton(buttonSize, this._onLogin.bind(this), this);
             this._loginButton.setImageRes(res.loginImage);
             this._loginButton.retain();
 
@@ -364,7 +358,7 @@ var NumboMenuLayer = (function() {
 
         _onChooseMinuteMadness: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound4, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
 
@@ -377,7 +371,7 @@ var NumboMenuLayer = (function() {
 
         _onChooseMoves: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound4, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
 
@@ -390,7 +384,7 @@ var NumboMenuLayer = (function() {
 
         _onChooseTurnBased: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound4, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
 
@@ -403,7 +397,7 @@ var NumboMenuLayer = (function() {
 
         _onChooseSurvival: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound4, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
 
@@ -418,7 +412,7 @@ var NumboMenuLayer = (function() {
 
         _onHelp: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound4, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
             cc.audioEngine.stopMusic();
             cc.eventManager.pauseTarget(this, true);
@@ -429,24 +423,36 @@ var NumboMenuLayer = (function() {
                 cc.director.runScene(scene);
             });
         },
+                                
+        _onLogin: function() {
+            if(NJ.settings.sounds)
+                cc.audioEngine.playEffect(res.clickSound, false);
+                                                          
+            if(!NJ.social.isLoggedIn()) {
+                NJ.social.login();
+            } else {
+                cc.log("Warning: tried to login when already login!");
+            }
+        },
 
         _onLeaderboard: function() {
              if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound4, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
              NJ.social.showLeaderboard();
         },
 
         _onAchievements: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound4, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
-            NJ.social.showAchievements();
+            //NJ.social.showAchievements();
+            NJ.openAppDetails();
         },
 
         _onSettings: function() {
             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound4, false);
+                cc.audioEngine.playEffect(res.clickSound, false);
 
             var that = this;
 

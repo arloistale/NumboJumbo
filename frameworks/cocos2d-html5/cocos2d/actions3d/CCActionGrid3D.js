@@ -178,7 +178,7 @@ cc.FlipX3D = cc.Grid3DAction.extend(/** @lends cc.FlipX3D# */{
     },
 
     /**
-     * initializes the action with _gridSize and duration
+     * initializes the action with gridSize and duration
      * @param {cc.Size} gridSize
      * @param {Number} duration
      * @return {Boolean}

@@ -10,7 +10,7 @@ var SettingsMenuLayer = (function() {
 
     var onRetry = function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound4, false);
+            cc.audioEngine.playEffect(res.clickSound, false);
 
         var that = this;
 
@@ -22,7 +22,7 @@ var SettingsMenuLayer = (function() {
 
     var onMenu = function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound4, false);
+            cc.audioEngine.playEffect(res.clickSound, false);
 
         // save any modified settings
         NJ.saveSettings();
@@ -37,7 +37,7 @@ var SettingsMenuLayer = (function() {
 
     var onBack = function() {
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound4, false);
+            cc.audioEngine.playEffect(res.clickSound, false);
 
         // save any modified settings
         NJ.saveSettings();
@@ -54,7 +54,7 @@ var SettingsMenuLayer = (function() {
         NJ.settings.music = !NJ.settings.music;
 
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound4, false);
+            cc.audioEngine.playEffect(res.clickSound, false);
 
         if(!NJ.settings.music)
             cc.audioEngine.stopMusic();
@@ -64,7 +64,7 @@ var SettingsMenuLayer = (function() {
         NJ.settings.sounds = !NJ.settings.sounds;
 
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound4, false);
+            cc.audioEngine.playEffect(res.clickSound, false);
         else
             cc.audioEngine.stopAllEffects();
     };
@@ -77,7 +77,7 @@ var SettingsMenuLayer = (function() {
         this._updateTheme();
 
         if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound4, false);
+            cc.audioEngine.playEffect(res.clickSound, false);
         else
             cc.audioEngine.stopAllEffects();
     };

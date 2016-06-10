@@ -193,6 +193,8 @@ var MovesGameLayer = BaseGameLayer.extend({
 		if(!comboLength)
 			return;
 
+		this._effectsLayer.clearComboOverlay();
+
 		this._playActivationSounds(selectedBlocks.length);
 
 		this.spawnBlocksAfterDelay(comboLength, this._spawnDelay);

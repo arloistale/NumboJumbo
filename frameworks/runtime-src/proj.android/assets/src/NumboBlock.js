@@ -16,7 +16,6 @@ var NumboBlock = (function() {
 
         // Display
         _backgroundSprite: null,
-        _circleNode: null,
         _highlightSprite: null,
         _valueLabel: null,
 
@@ -56,10 +55,7 @@ var NumboBlock = (function() {
                 x: blockSize.width / 2,
                 y: blockSize.height / 2
             });
-            this._backgroundSprite.retain();
-
-            this._circleNode = cc.DrawNode.create();
-            this._circleNode.retain();
+            this.addChild(this._backgroundSprite, -2);
 
             // initialize highlight
             this._highlightSprite = new cc.Sprite(res.blockImage);
@@ -102,7 +98,7 @@ var NumboBlock = (function() {
 
             this.updateTheme();
         },
-
+/*
         unuse: function () {
             this.col = 0;
             this.row = 0;
@@ -119,7 +115,7 @@ var NumboBlock = (function() {
             this._valueLabel.setScale(_labelScale.x, _labelScale.y);
             this.setVisible(true);
         },
-
+*/
         //////////////////
         // Manipulation //
         //////////////////
@@ -127,7 +123,7 @@ var NumboBlock = (function() {
         // immediatley removes the block
         // DO NOT call directly, use killblock in NumboLevel instead
         remove: function() {
-            block.removeFromParent(true);
+            this.unuse();
         },
 
         // fade kill the block
@@ -201,9 +197,6 @@ var NumboBlock = (function() {
 
             this._highlightSprite.setColor(chosen);
 
-            if(this.children.indexOf(this._backgroundSprite) < 0)
-                this.addChild(this._backgroundSprite, -2);
-
             this._backgroundSprite.setColor(chosen);
         }
     });
@@ -214,9 +207,9 @@ NumboBlock.create = function (blockSize) {
 };
 
 NumboBlock.recreate = function (blockSize) {
-    if (cc.pool.hasObject(NumboBlock)) {
-        return cc.pool.getFromPool(NumboBlock);
-    }
+    //if (cc.pool.hasObject(NumboBlock)) {
+      //  return cc.pool.getFromPool(NumboBlock);
+    //}
 
     return NumboBlock.create(blockSize);
 };

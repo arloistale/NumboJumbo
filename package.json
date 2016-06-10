@@ -1,8 +1,0 @@
-{
-    "name": "numbojumbo",
-    "version": "0.1.0",
-    "description": "2D arcade falling block arithmetic game",
-    "dependencies": {
-        "express": "~3.1.0"
-    }
-}

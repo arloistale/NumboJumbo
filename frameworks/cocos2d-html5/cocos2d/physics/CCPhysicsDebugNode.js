@@ -65,7 +65,7 @@ cc.ColorForBody = function (body) {
 };
 
 /**
- * _barNode shape
+ * draw shape
  * @param {cp.Shape} shape
  * @param renderer
  */
@@ -91,7 +91,7 @@ cc.DrawShape = function (shape, renderer) {
 };
 
 /**
- * _barNode constraint
+ * draw constraint
  * @param {cp.Constraint} constraint
  * @param renderer
  */
@@ -128,7 +128,7 @@ cc.DrawConstraint = function (constraint, renderer) {
     } else if (constraint instanceof cp.DampedSpring) {
         // TODO
     } else {
-        //printf("Cannot _barNode constraint\n");
+        //printf("Cannot draw constraint\n");
     }
 };
 
@@ -180,7 +180,7 @@ cc.PhysicsDebugNode = cc.DrawNode.extend({
     },
 
     /**
-     * _barNode
+     * draw
      * @param {object} context
      */
     draw:function (context) {
@@ -189,12 +189,12 @@ cc.PhysicsDebugNode = cc.DrawNode.extend({
 
         this._space.eachShape(cc.DrawShape.bind(this));
         this._space.eachConstraint(cc.DrawConstraint.bind(this));
-        cc.DrawNode.prototype._barNode.call(this);
+        cc.DrawNode.prototype.draw.call(this);
         this.clear();
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc._renderType === cc.game.RENDER_TYPE_CANVAS)
             return new cc.PhysicsDebugNode.CanvasRenderCmd(this);
         else
             return new cc.PhysicsDebugNode.WebGLRenderCmd(this);

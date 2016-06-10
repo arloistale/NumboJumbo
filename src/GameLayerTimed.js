@@ -218,6 +218,8 @@ var TimedGameLayer = BaseGameLayer.extend({
 		if(!comboLength)
 			return;
 
+		this._effectsLayer.clearComboOverlay();
+
 		this.spawnDropRandomBlocks(comboLength);
 		//this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);
 

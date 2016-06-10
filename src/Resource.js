@@ -6,9 +6,9 @@
 
 var resRoot = "";
 
-if(!cc.sys.isNative) {
+//if(!cc.sys.isNative) {
     resRoot = "res/";
-}
+//}
 
 // list of resource definitions
 var res = {
@@ -83,15 +83,7 @@ var res = {
     plopSound12: resRoot + "Sounds/Plop12.wav",
     plopSound13: resRoot + "Sounds/Plop13.wav",
     plopSound14: resRoot + "Sounds/Plop14.wav",
-
     clickSound: resRoot + "Sounds/clickSound.wav",
-    clickSound2: resRoot + "Sounds/clickSound2.wav",
-    clickSound3: resRoot + "Sounds/clickSound3.wav",
-    clickSound4: resRoot + "Sounds/clickSound4.wav",
-    clickSound5: resRoot + "Sounds/clickSound5.wav",
-    clickSound6: resRoot + "Sounds/clickSound6.wav",
-    clickSound7: resRoot + "Sounds/clickSound7.wav",
-
 
     bloopSound1: resRoot + "Sounds/boop1.wav",
     bloopSound2: resRoot + "Sounds/boop2.wav",
@@ -165,8 +157,6 @@ var plops = [res.plopSound, res.plopSound4, res.plopSound5,
 var bloops = [res.bloopSound1, res.bloopSound2, res.bloopSound3, res.bloopSound4, res.bloopSound5,
     res.bloopSound6, res.bloopSound7, res.bloopSound8, res.bloopSound9, res.bloopSound10];
 
-var clickSounds = [res.clickSound, res.clickSound2, res.clickSound3, res.clickSound4, res.clickSound5,
-    res.clickSound6, res.clickSound7];
 
 // resources for ingame
 var g_game = [
@@ -190,16 +180,7 @@ var g_game = [
 
     // sounds
     res.tickSound,
-
     res.clickSound,
-    res.clickSound2,
-    res.clickSound3,
-    res.clickSound4,
-    res.clickSound5,
-    res.clickSound6,
-    res.clickSound7,
-
-
     res.plipSound,
     res.plopSound,
     res.plopSound4,

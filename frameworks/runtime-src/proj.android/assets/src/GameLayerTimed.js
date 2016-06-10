@@ -195,7 +195,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 
 		this.redrawSelectedLines();
 
-		this._numboHeaderLayer.setEquation([]);
+		this._numboHeaderLayer.activateEquation();
 
 		this._effectsLayer.clearComboOverlay();
 
@@ -217,6 +217,8 @@ var TimedGameLayer = BaseGameLayer.extend({
 		var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
 		if(!comboLength)
 			return;
+
+		this._effectsLayer.clearComboOverlay();
 
 		this.spawnDropRandomBlocks(comboLength);
 		//this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);

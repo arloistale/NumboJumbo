@@ -253,7 +253,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
         this.redrawSelectedLines();
 
-        this._numboHeaderLayer.setEquation([]);
+        this._numboHeaderLayer.activateEquation();
 
         this._effectsLayer.clearComboOverlay();
 
@@ -275,6 +275,8 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
         if(!comboLength)
             return;
+
+        this._effectsLayer.clearComboOverlay();
 
         // handle levelup if we meet the threshold
         if (NJ.gameState.levelUpIfNeeded()) {

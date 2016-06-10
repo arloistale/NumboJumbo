@@ -68,7 +68,7 @@
         if (locChildren && locChildren.length > 0) {
             var childLen = locChildren.length;
             node.sortAllChildren();
-            // _barNode children
+            // draw children
             for (var i = 0; i < childLen; i++) {
                 var child = locChildren[i];
                 child && child.visit();

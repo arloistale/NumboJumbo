@@ -27,7 +27,7 @@ NJ.sendAnalytics = function(label) {
         ga('set', 'metric1', NJ.gameState.getBlocksCleared());
         ga('set', 'metric2', sessionLength);
         //ga('set', 'metric3', NJ.stats.maxComboLength);
-        ga('set', 'metric4', NJ.gameState.getLevel());
+        ga('set', 'metric4', 1);
         ga('set', 'metric5', NJ.gameState.getScore());
 
         ga('send', 'event', 'Game', 'end', 'Game Session Data', 42);
@@ -37,7 +37,7 @@ NJ.sendAnalytics = function(label) {
         sdkbox.PluginGoogleAnalytics.setMetric(1, NJ.gameState.getBlocksCleared());
         sdkbox.PluginGoogleAnalytics.setMetric(2, sessionLength);
         //sdkbox.PluginGoogleAnalytics.setMetric(3, NJ.stats.maxComboLength);
-        sdkbox.PluginGoogleAnalytics.setMetric(4, NJ.gameState.getLevel());
+        sdkbox.PluginGoogleAnalytics.setMetric(4, 1);
         sdkbox.PluginGoogleAnalytics.setMetric(5, NJ.gameState.getScore());
 
         sdkbox.PluginGoogleAnalytics.logEvent("Game", "end", "Game Session Data", 42);

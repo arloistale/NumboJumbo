@@ -22,7 +22,9 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		if(allowToolbar) {
 			// this seems like a hack but will work for now
 			this._toolbarLayer.setOnPauseCallback(function() {
-				that.onMenu();
+				that.leave(function() {
+					that.onMenu();
+				});
 			});
 
 			this._toolbarLayer.enterTutorialMode();
@@ -58,6 +60,14 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	// overload the divider drawing function so that we don't get lines in the tutorial
 	_drawDividersGeometry: function(){
 		cc.log(":)");
+	},
+
+	leave: function(callback) {
+		this._numboController.killAllBlocks();
+		this._tutorialLayer.fadeOutSlide();
+		this._clearHand();
+
+		this._super(callback);
 	},
 
 	//////////////
@@ -114,7 +124,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
             that._handIndicator.setPosition(start);
         }));
 
-        this._handIndicator.runAction(cc.sequence(handActionList).repeatForever());
+        //this._handIndicator.runAction(cc.sequence(handActionList).repeatForever());
 	},
 
 	_clearHand: function() {
@@ -181,6 +191,10 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 4);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
+						that.spawnDropBlock(centerCol, 7);
+                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                        that.spawnDropBlock(centerCol, 7);
+				    }), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 7);
 					})
 				));
@@ -298,10 +312,12 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 				NJ.saveSettings();
 
 				this.runAction(cc.sequence(cc.delayTime(4), cc.callFunc(function() {
-					// load resources
-					var scene = new cc.Scene();
-					scene.addChild(new NumboMenuLayer());
-					cc.director.runScene(scene);
+					that.leave(function() {
+						// load resources
+						var scene = new cc.Scene();
+						scene.addChild(new NumboMenuLayer());
+						cc.director.runScene(scene);
+					});
 				})));
 
 				break;
@@ -341,7 +357,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 		this._effectsLayer.clearComboOverlay();
 
-		if (!selectedBlocks)
+		if (!selectedBlocks.length)
 			return;
 
 		var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
@@ -357,6 +373,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		if(!comboLength)
 			return;
 
+		this._playActivationSounds(selectedBlocks.length);
+
         var targetBlock = Math.max.apply(null, selectedBlocks.map(function(b) {
             return b.val;
         }));
@@ -365,74 +383,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
             this._clearHand();
             this._tutorialLayer.fadeOutHelperLabel();
         }
-
-		var activationSounds = [];
-		for(var i = 0; i < comboLength; i++) {
-			activationSounds.push(bloops[i]);
-		}
-
-		this.schedule(function() {
-			cc.audioEngine.playEffect(activationSounds[0]);
-		},.05, false);
-
-		if(activationSounds.length == 2) {
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[1]);
-			}, .2, false);
-		}
-		else if(activationSounds.length == 3) {
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[1]);
-			}, .17, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[2]);
-			}, .29, false);
-		}
-		else if(activationSounds.length == 4) {
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[1]);
-			}, .15, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[2]);
-			}, .25, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[3]);
-			}, .35, false);
-		}
-		else if(activationSounds.length == 5) {
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[1]);
-			}, .12, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[2]);
-			}, .19, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[3]);
-			}, .26, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[4]);
-			}, .33, false);
-		}
-		else if(activationSounds.length > 5) {
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[1]);
-			}, .11, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[2]);
-			}, .17, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[3]);
-			}, .23, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[4]);
-			}, .29, false);
-			this.schedule(function () {
-				cc.audioEngine.playEffect(activationSounds[5]);
-			}, .35, false);
-		}
-
         var that = this;
-
 
         if(this._tutorialLayer.getCurrSlide() == this._tutorialLayer.slides.wombo) {
             this.runAction(cc.sequence(cc.delayTime(0.45), cc.callFunc(function() {
@@ -440,7 +391,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
             })));
         } else {
             //if (this._numboController.levelIsClear()) {
-				if (this._numboController.findHint().length == 0){
+			if (this._numboController.findHint().length == 0) {
                 this._advanceTutorialSlide();
             }
         }

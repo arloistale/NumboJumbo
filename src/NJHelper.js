@@ -39,3 +39,18 @@ NJ.shuffleArray = function(array) {
 
     return array;
 };
+
+NJ.openAppDetails = function() {
+    var url = "";
+
+    switch(cc.sys.os) {
+        case cc.sys.OS_ANDROID:
+            url = "market://details?id=com.fortafygames.colorswitch";
+            break;
+        case cc.sys.OS_IOS:
+            url = "http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1053533457&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8";
+            break;
+    }
+
+    cc.sys.openURL(url);
+};

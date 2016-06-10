@@ -50,7 +50,7 @@
  * @extends cc.Node
  *
  * @param {String|cc.SpriteFrame|HTMLImageElement|cc.Texture2D} fileName  The string which indicates a path to image file, e.g., "scene1/monster.png".
- * @param {cc.Rect} rect  Only the contents inside rect of pszFileName's texture will be applied for this sprite.
+ * @param {cc.Rect} [rect]  Only the contents inside rect of pszFileName's texture will be applied for this sprite.
  * @param {Boolean} [rotated] Whether or not the texture rectangle is rotated.
  * @example
  *
@@ -130,6 +130,20 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         self._rect = cc.rect(0, 0, 0, 0);
 
         self._softInit(fileName, rect, rotated);
+    },
+
+    onEnter: function () {
+        this._super();
+        if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
+            this._renderCmd.updateBuffer();
+        }
+    },
+
+    cleanup: function () {
+        if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
+            this._renderCmd.freeBuffer();
+        }
+        this._super();
     },
 
     /**
@@ -254,7 +268,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         }
 
         //TODO
-        var rotated = cc._renderType === cc._RENDER_TYPE_CANVAS ? false : spriteFrame._rotated;
+        var rotated = cc._renderType === cc.game.RENDER_TYPE_CANVAS ? false : spriteFrame._rotated;
         var ret = this.initWithTexture(spriteFrame.getTexture(), spriteFrame.getRect(), rotated);
         this.setSpriteFrame(spriteFrame);
 
@@ -314,25 +328,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         if (this._reorderChildDirty) {
             var _children = this._children;
 
-            // insertion sort
-            var len = _children.length, i, j, tmp;
-            for(i=1; i<len; i++){
-                tmp = _children[i];
-                j = i - 1;
-
-                //continue moving element downwards while zOrder is smaller or when zOrder is the same but mutatedIndex is smaller
-                while(j >= 0){
-                    if(tmp._localZOrder < _children[j]._localZOrder){
-                        _children[j+1] = _children[j];
-                    }else if(tmp._localZOrder === _children[j]._localZOrder && tmp.arrivalOrder < _children[j].arrivalOrder){
-                        _children[j+1] = _children[j];
-                    }else{
-                        break;
-                    }
-                    j--;
-                }
-                _children[j+1] = tmp;
-            }
+            cc.Node.prototype.sortAllChildren.call(this);
 
             if (this._batchNode) {
                 this._arrayMakeObjectsPerformSelector(_children, cc.Node._stateCallbackType.sortAllChildren);
@@ -729,7 +725,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
             if(_t.texture)
                 _t.texture.removeEventListener("load", _t);
             texture.addEventListener("load", _t._renderCmd._textureLoadedCallback, _t);
-            _t.texture = texture;
+            _t.setTexture(texture);
             return true;
         }
 
@@ -738,7 +734,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
 
         this._renderCmd._checkTextureBoundary(texture, rect, rotated);
 
-        _t.texture = texture;
+        _t.setTexture(texture);
         _t.setTextureRect(rect, rotated);
 
         // by default use "Self Render".
@@ -753,6 +749,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @param {cc.Rect} rect a rect of texture
      * @param {Boolean} [rotated] Whether or not the texture is rotated
      * @param {cc.Size} [untrimmedSize] The original pixels size of the texture
+     * @param {Boolean} [needConvert] contentScaleFactor switch
      */
     setTextureRect: function (rect, rotated, untrimmedSize, needConvert) {
         var _t = this;
@@ -796,7 +793,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @function
      * @param {cc.Sprite} child
      * @param {Number} localZOrder  child's zOrder
-     * @param {String} [tag] child's tag
+     * @param {number|String} [tag] child's tag
      * @override
      */
     addChild: function (child, localZOrder, tag) {
@@ -842,15 +839,18 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
                 _t._textureLoaded = true;
                 var locNewTexture = sender.getTexture();
                 if (locNewTexture !== _t._texture)
-                    _t.texture = locNewTexture;
+                    _t._setTexture(locNewTexture);
                 _t.setTextureRect(sender.getRect(), sender.isRotated(), sender.getOriginalSize());
                 _t.dispatchEvent("load");
-                _t.setColor(_t.color);
+                _t.setColor(_t._realColor);
             }, _t);
-        }else{
+        } else {
+            _t._textureLoaded = true;
             // update texture before updating texture rect
-            if (pNewTexture !== _t._texture)
-                _t.texture = pNewTexture;
+            if (pNewTexture !== _t._texture) {
+                _t._setTexture(pNewTexture);
+                _t.setColor(_t._realColor);
+            }
             _t.setTextureRect(newFrame.getRect(), newFrame.isRotated(), newFrame.getOriginalSize());
         }
         this._renderCmd._updateForSetSpriteFrame(pNewTexture);
@@ -936,59 +936,43 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         if(!texture)
             return this._renderCmd._setTexture(null);
 
-        if(cc.isString(texture)){
+        //CCSprite.cpp 327 and 338
+        var isFileName = cc.isString(texture);
+
+        if(isFileName)
             texture = cc.textureCache.addImage(texture);
 
-            if(!texture._textureLoaded){
-                texture.addEventListener("load", function(){
-                    this._clearRect();
-                    this._renderCmd._setTexture(texture);
-                    this._changeRectWithTexture(texture.getContentSize());
-                    this.setColor(this._realColor);
-                    this._textureLoaded = true;
-                }, this);
-            }else{
-                this._clearRect();
-                this._renderCmd._setTexture(texture);
-                this._changeRectWithTexture(texture.getContentSize());
+        if(texture._textureLoaded){
+            this._setTexture(texture, isFileName);
+            this.setColor(this._realColor);
+            this._textureLoaded = true;
+        }else{
+            this._renderCmd._setTexture(null);
+            texture.addEventListener("load", function(){
+                this._setTexture(texture, isFileName);
                 this.setColor(this._realColor);
                 this._textureLoaded = true;
-            }
-        }else{
-            // CCSprite: setTexture doesn't work when the sprite is rendered using a CCSpriteSheet
-            cc.assert(texture instanceof cc.Texture2D, cc._LogInfos.Sprite_setTexture_2);
-            this._clearRect();
-            this._changeRectWithTexture(texture.getContentSize());
-            this._renderCmd._setTexture(texture);
+            }, this);
         }
     },
 
-    _clearRect: function(){
-        var texture = this._texture;
-        if(texture){
-            var textureRect = texture._contentSize;
-            var spriteRect = this._rect;
-            if(
-                textureRect.width === spriteRect.width &&
-                textureRect.height === spriteRect.height
-            )
-                spriteRect.width = spriteRect.height = 0;
-        }
+    _setTexture: function(texture, change){
+        this._renderCmd._setTexture(texture);
+        if(change)
+            this._changeRectWithTexture(texture);
     },
 
-    _changeRectWithTexture: function(rect){
-        if(!rect || (!rect.width && !rect.height)) return;
-        var textureRect = this.getTextureRect();
-        if(textureRect.height || textureRect.width) return;
-        rect.x = rect.x || 0;
-        rect.y = rect.y || 0;
-        rect.width = rect.width || 0;
-        rect.height = rect.height || 0;
+    _changeRectWithTexture: function(texture){
+        var contentSize = texture._contentSize;
+        var rect = cc.rect(
+                0, 0,
+                contentSize.width, contentSize.height
+            );
         this.setTextureRect(rect);
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc._renderType === cc.game.RENDER_TYPE_CANVAS)
             return new cc.Sprite.CanvasRenderCmd(this);
         else
             return new cc.Sprite.WebGLRenderCmd(this);

@@ -167,7 +167,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 
 		this.redrawSelectedLines();
 
-		this._numboHeaderLayer.setEquation([]);
+		this._numboHeaderLayer.activateEquation();
 
 		this._effectsLayer.clearComboOverlay();
 
@@ -192,6 +192,8 @@ var MovesGameLayer = BaseGameLayer.extend({
 		var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
 		if(!comboLength)
 			return;
+
+		this._effectsLayer.clearComboOverlay();
 
 		this._playActivationSounds(selectedBlocks.length);
 

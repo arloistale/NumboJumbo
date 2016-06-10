@@ -1,14 +1,14 @@
 {
   "version": "1.0",
-  "name": "Numbo Jumbo",
-  "description": "2D arcade arithmetic mobile and web game",
+  "name": "NumboJumbo",
+  "description": "NumboJumbo",
   "launch_path": "/index.html",
   "icons": {
     "128": "/res/icon.png"
   },
   "developer": {
-    "name": "Wombo Combo",
-    "url": "http://numbojumbo.com/"
+    "name": "Cocos2d-html5",
+    "url": "http://cocos2d-x.org/"
   },
   "default_locale": "en",
   "installs_allowed_from": [

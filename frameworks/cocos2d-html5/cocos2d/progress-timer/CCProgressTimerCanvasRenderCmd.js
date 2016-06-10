@@ -88,9 +88,9 @@
             context.closePath();
         }
 
-        //_barNode sprite
+        //draw sprite
         var image = locSprite._texture.getHtmlElementObj();
-        if (locSprite._colorized) {
+        if (locSprite._renderCmd._colorized) {
             context.drawImage(image,
                 0, 0, locTextureCoord.width, locTextureCoord.height,
                 locX * scaleX, locY * scaleY, locWidth * scaleX, locHeight * scaleY);
@@ -105,7 +105,7 @@
 
     proto.releaseData = function(){};
 
-    proto.initCmd = function(){};
+    proto.resetVertexData = function(){};
 
     proto._updateProgress = function(){
         var node = this._node;
@@ -226,14 +226,18 @@
             spriteCmd._syncDisplayOpacity();
         }
 
-/*        if(colorDirty || opacityDirty){
+        if(colorDirty || opacityDirty){
             spriteCmd._updateColor();
-            this._updateColor();
-        }*/
+            //this._updateColor();
+        }
 
         if (locFlag & flags.transformDirty) {
             //update the transform
             this.transform(parentCmd);
+        }
+
+        if (locFlag & flags.orderDirty) {
+            this._dirtyFlag = this._dirtyFlag & flags.orderDirty ^ this._dirtyFlag;
         }
     };
 
@@ -256,10 +260,10 @@
             spriteCmd._updateDisplayOpacity();
         }
 
-/*        if(colorDirty || opacityDirty){
+        if(colorDirty || opacityDirty){
             spriteCmd._updateColor();
-            this._updateColor();
-        }*/
+            //this._updateColor();
+        }
 
         if(locFlag & flags.transformDirty){
             //update the transform

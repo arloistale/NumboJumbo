@@ -177,7 +177,7 @@ cc.TransitionScene = cc.Scene.extend(/** @lends cc.TransitionScene# */{
      */
     initWithDuration:function (t, scene) {
         if(!scene)
-            throw "cc.TransitionScene.initWithDuration(): Argument scene must be non-nil";
+            throw new Error("cc.TransitionScene.initWithDuration(): Argument scene must be non-nil");
 
         if (this.init()) {
             this._duration = t;
@@ -196,7 +196,7 @@ cc.TransitionScene = cc.Scene.extend(/** @lends cc.TransitionScene# */{
             }
 
             if(this._inScene === this._outScene)
-                throw "cc.TransitionScene.initWithDuration(): Incoming scene must be different from the outgoing scene";
+                throw new Error("cc.TransitionScene.initWithDuration(): Incoming scene must be different from the outgoing scene");
 
             this._sceneOrder();
             return true;
@@ -217,7 +217,7 @@ cc.TransitionScene = cc.Scene.extend(/** @lends cc.TransitionScene# */{
 	        scale: 1.0,
 	        rotation: 0.0
         });
-        if(cc._renderType === cc._RENDER_TYPE_WEBGL)
+        if(cc._renderType === cc.game.RENDER_TYPE_WEBGL)
             this._inScene.getCamera().restore();
 
         this._outScene.attr({
@@ -227,7 +227,7 @@ cc.TransitionScene = cc.Scene.extend(/** @lends cc.TransitionScene# */{
 	        scale: 1.0,
 	        rotation: 0.0
         });
-        if(cc._renderType === cc._RENDER_TYPE_WEBGL)
+        if(cc._renderType === cc.game.RENDER_TYPE_WEBGL)
             this._outScene.getCamera().restore();
 
         //[self schedule:@selector(setNewScene:) interval:0];
@@ -357,7 +357,7 @@ cc.TransitionRotoZoom = cc.TransitionScene.extend(/** @lends cc.TransitionRotoZo
 });
 
 /**
- * Creates a Transtion rotation and zoom
+ * Creates a Transition rotation and zoom
  * @deprecated since v3.0,please use new cc.TransitionRotoZoom(t, scene) instead
  * @param {Number} t time in seconds
  * @param {cc.Scene} scene the scene to work with
@@ -652,8 +652,8 @@ cc.TransitionSlideInL = cc.TransitionScene.extend(/** @lends cc.TransitionSlideI
         var inA = this.action();
         var outA = this.action();
 
-        var inAction = this.easeActionWithAction(inA);
-        var outAction = cc.sequence(this.easeActionWithAction(outA), cc.callFunc(this.finish, this));
+        var inAction = cc.sequence(this.easeActionWithAction(inA), cc.callFunc(this.finish, this));
+        var outAction = this.easeActionWithAction(outA);
         this._inScene.runAction(inAction);
         this._outScene.runAction(outAction);
     },
@@ -665,7 +665,7 @@ cc.TransitionSlideInL = cc.TransitionScene.extend(/** @lends cc.TransitionSlideI
         this._inScene.setPosition(-cc.director.getWinSize().width + cc.ADJUST_FACTOR, 0);
     },
     /**
-     * returns the action that will be performed by the incomming and outgoing scene
+     * returns the action that will be performed by the incoming and outgoing scene
      * @return {cc.MoveBy}
      */
     action:function () {
@@ -721,7 +721,7 @@ cc.TransitionSlideInR = cc.TransitionSlideInL.extend(/** @lends cc.TransitionSli
         this._inScene.setPosition(cc.director.getWinSize().width - cc.ADJUST_FACTOR, 0);
     },
     /**
-     *  returns the action that will be performed by the incomming and outgoing scene
+     *  returns the action that will be performed by the incoming and outgoing scene
      * @return {cc.MoveBy}
      */
     action:function () {
@@ -771,7 +771,7 @@ cc.TransitionSlideInB = cc.TransitionSlideInL.extend(/** @lends cc.TransitionSli
     },
 
     /**
-     * returns the action that will be performed by the incomming and outgoing scene
+     * returns the action that will be performed by the incoming and outgoing scene
      * @return {cc.MoveBy}
      */
     action:function () {
@@ -821,7 +821,7 @@ cc.TransitionSlideInT = cc.TransitionSlideInL.extend(/** @lends cc.TransitionSli
     },
 
     /**
-     * returns the action that will be performed by the incomming and outgoing scene
+     * returns the action that will be performed by the incoming and outgoing scene
      * @return {cc.MoveBy}
      */
     action:function () {
@@ -879,10 +879,8 @@ cc.TransitionShrinkGrow = cc.TransitionScene.extend(/** @lends cc.TransitionShri
         var scaleOut = cc.scaleTo(this._duration, 0.01);
         var scaleIn = cc.scaleTo(this._duration, 1.0);
 
-        this._inScene.runAction(this.easeActionWithAction(scaleIn));
-        this._outScene.runAction(
-            cc.sequence(this.easeActionWithAction(scaleOut), cc.callFunc(this.finish, this))
-        );
+        this._inScene.runAction(cc.sequence(this.easeActionWithAction(scaleIn), cc.callFunc(this.finish, this)));
+        this._outScene.runAction(this.easeActionWithAction(scaleOut));
     },
 
     /**
@@ -1560,10 +1558,10 @@ cc.TransitionCrossFade = cc.TransitionScene.extend(/** @lends cc.TransitionCross
     },
 
     /**
-     * overide _barNode
+     * overide draw
      */
     draw:function () {
-        // override _barNode since both scenes (textures) are rendered in 1 scene
+        // override draw since both scenes (textures) are rendered in 1 scene
     }
 });
 

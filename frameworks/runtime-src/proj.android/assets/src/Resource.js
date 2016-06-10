@@ -6,9 +6,9 @@
 
 var resRoot = "";
 
-if(!cc.sys.isNative) {
+//if(!cc.sys.isNative) {
     resRoot = "res/";
-}
+//}
 
 // list of resource definitions
 var res = {

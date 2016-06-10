@@ -102,28 +102,10 @@ ccui.CheckBox = ccui.Widget.extend(/** @lends ccui.CheckBox# */{
                 backGroundSelected = undefined;
         }
         texType = texType === undefined ? 0 : texType;
-        this.init(backGround, backGroundSelected,cross,backGroundDisabled,frontCrossDisabled,texType);
-    },
 
-    /**
-     * Initializes a checkBox. please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
-     * @param {String} backGround
-     * @param {String} backGroundSelected
-     * @param {String} cross
-     * @param {String} backGroundDisabled
-     * @param {String} frontCrossDisabled
-     * @param {Number} [texType=ccui.Widget.LOCAL_TEXTURE]
-     * @returns {boolean}
-     * @override
-     */
-    init: function (backGround, backGroundSelected, cross, backGroundDisabled, frontCrossDisabled, texType) {
-        if (ccui.Widget.prototype.init.call(this)) {
-            this._isSelected = true;
-            this.setSelected(false);
-            this.loadTextures(backGround, backGroundSelected, cross, backGroundDisabled, frontCrossDisabled, texType);
-            return true;
-        }
-        return false;
+        this._isSelected = true;
+        this.setSelected(false);
+        this.loadTextures(backGround, backGroundSelected, cross, backGroundDisabled, frontCrossDisabled, texType);
     },
 
     _initRenderer: function () {
@@ -366,8 +348,10 @@ ccui.CheckBox = ccui.Widget.extend(/** @lends ccui.CheckBox# */{
         this._backGroundBoxRenderer.setScale(this._backgroundTextureScaleX, this._backgroundTextureScaleY);
         this._frontCrossRenderer.setScale(this._backgroundTextureScaleX, this._backgroundTextureScaleY);
 
-        if (this._isSelected)
+        if (this._isSelected){
             this._frontCrossRenderer.setVisible(true);
+            this._frontCrossRendererAdaptDirty = true;
+        }
     },
 
     _onPressStateChangedToPressed: function () {
@@ -395,6 +379,7 @@ ccui.CheckBox = ccui.Widget.extend(/** @lends ccui.CheckBox# */{
 
         if (this._isSelected) {
             this._frontCrossDisabledRenderer.setVisible(true);
+            this._frontCrossDisabledRendererAdaptDirty = true;
         }
     },
 

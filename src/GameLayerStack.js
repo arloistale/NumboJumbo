@@ -195,6 +195,8 @@ var StackGameLayer = BaseGameLayer.extend({
         if(!comboLength)
             return;
 
+        this._effectsLayer.clearComboOverlay();
+
         this._playActivationSounds(selectedBlocks.length);
 
         var levelUpCount = NJ.gameState.levelUpIfNeeded();

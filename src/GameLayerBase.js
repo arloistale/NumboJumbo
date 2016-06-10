@@ -155,10 +155,9 @@ var BaseGameLayer = (function() {
 
             //this._drawDividersGeometry();
 
-			cc.audioEngine.setMusicVolume(0.15);
             // play music again if music settings turned on
             if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-				cc.audioEngine.playMusic(that._backgroundTrack, true);
+                cc.audioEngine.playMusic(that._backgroundTrack, true);
 
 			this.schedule(function() {
 				that._numboController.findHint();
@@ -402,7 +401,7 @@ var BaseGameLayer = (function() {
 		// Pauses the game, halting all actions and schedulers.
 		pauseGame: function() {
 			// halt the doomsayer
-			//this._feedbackLayer.clearDoomsayer();
+			this._feedbackLayer.clearDoomsayer();
 
 			// use breadth first search to pause all valid children
 			var children = [this];
@@ -553,7 +552,7 @@ var BaseGameLayer = (function() {
 		// also increments number of times played overall
 		onGameOver: function() {
 			this._selectedLinesNode.clear();
-			//this._feedbackLayer.clearDoomsayer();
+			this._feedbackLayer.clearDoomsayer();
 			this.pauseInput();
 			this.unscheduleAllCallbacks();
 
@@ -587,7 +586,7 @@ var BaseGameLayer = (function() {
 		onPause: function() {
 			var that = this;
 
-			//this._feedbackLayer.clearDoomsayer();
+			this._feedbackLayer.clearDoomsayer();
 
 			this.pauseGame();
 
@@ -616,8 +615,8 @@ var BaseGameLayer = (function() {
             this.enterBoard();
 
 			this.enter(function() {
-                //if(that.isInDanger())
-                //    that._feedbackLayer.launchDoomsayer();
+                if(that.isInDanger())
+                    that._feedbackLayer.launchDoomsayer();
 
                 that.resumeGame();
 
@@ -655,148 +654,144 @@ var BaseGameLayer = (function() {
 
 		// On touch began, tries to find level coordinates for the touch and selects block accordingly.
 		onTouchBegan: function(touchPosition) {
-			if(!this.levelTransition) {
-				this._lastTouchPosition = touchPosition;
+			this._lastTouchPosition = touchPosition;
 
-				var touchCoords = this._convertPointToLevelCoords(touchPosition);
+			var touchCoords = this._convertPointToLevelCoords(touchPosition);
 
-				if (touchCoords && this._isPointWithinCoordsDistanceThreshold(touchPosition, touchCoords.col, touchCoords.row)) {
-					var selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
-					var selectedBlocks = this._numboController.getSelectedBlocks();
+			if (touchCoords && this._isPointWithinCoordsDistanceThreshold(touchPosition, touchCoords.col, touchCoords.row)) {
+				var selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
+				var selectedBlocks = this._numboController.getSelectedBlocks();
 
-					// we know there is at least 1 selected block
-					if (selectedBlocks.length) {
-						var selectedBlockSum = 0;
-						var block;
-						for (i = 0; i < selectedBlocks.length; i++) {
-							block = selectedBlocks[i];
-							selectedBlockSum += block.val;
-						}
-
-						// if selected block was returned then we have a new selected block deal with
-						if(selectedBlock) {
-							selectedBlock.highlight();
-
-							// gotta update the equation
-							var selectedNums = selectedBlocks.map(function(b) {
-								return b.val;
-							});
-							this._numboHeaderLayer.setEquation(selectedNums);
-						}
-
-						this.redrawSelectedLines(selectedBlocks);
+				// we know there is at least 1 selected block
+				if (selectedBlocks.length) {
+					var selectedBlockSum = 0;
+					var block;
+					for (i = 0; i < selectedBlocks.length; i++) {
+						block = selectedBlocks[i];
+						selectedBlockSum += block.val;
 					}
-				}
 
-				// Prevent any hint during a touch.
-				this.unschedule(this.jiggleHintBlocks);
+					// if selected block was returned then we have a new selected block deal with
+					if(selectedBlock) {
+						selectedBlock.highlight();
+
+						// gotta update the equation
+						var selectedNums = selectedBlocks.map(function(b) {
+							return b.val;
+						});
+						this._numboHeaderLayer.setEquation(selectedNums);
+					}
+
+					this.redrawSelectedLines(selectedBlocks);
+				}
 			}
+
+			// Prevent any hint during a touch.
+			this.unschedule(this.jiggleHintBlocks);
 		},
 
 		// On touch moved, selects additional blocks as the touch is held and moved using raycasting
 		onTouchMoved: function(touchPosition) {
-			if(!this.levelTransition) {
-				var touchDiff = cc.pSub(touchPosition, this._lastTouchPosition);
-				var touchDistance = cc.pLength(touchDiff);
-				var touchDirection = cc.pNormalize(touchDiff);
-				var testLength =  this._levelCellSize.width * 0.25;
-				var currLength = 0;
-				var currPosition = null;
+			var touchDiff = cc.pSub(touchPosition, this._lastTouchPosition);
+			var touchDistance = cc.pLength(touchDiff);
+			var touchDirection = cc.pNormalize(touchDiff);
+			var testLength =  this._levelCellSize.width * 0.25;
+			var currLength = 0;
+			var currPosition = null;
 
-				var touchCoords, touchBlock, selectedBlock, deselectedBlock;
+			var touchCoords = null;
+			var touchBlock = null;
+			var selectedBlock = null;
+			var deselectedBlock = null;
 
-				var penultimate = this._numboController.getPenultimateSelectedBlock();
+			var penultimate = this._numboController.getPenultimateSelectedBlock();
 
-				for (var i = 0; currLength <= touchDistance; i++) {
-					currPosition = cc.pAdd(this._lastTouchPosition, cc.pMult(touchDirection, currLength));
+			for (var i = 0; currLength <= touchDistance; i++) {
+				currPosition = cc.pAdd(this._lastTouchPosition, cc.pMult(touchDirection, currLength));
 
-					touchCoords = this._convertPointToLevelCoords(currPosition);
+				touchCoords = this._convertPointToLevelCoords(currPosition);
 
-					// if we have valid touch coordinates then we either select or deselect the block based on
-					// whether it is already selected and is the last selected block
-					if (touchCoords && this._isPointWithinCoordsDistanceThreshold(currPosition, touchCoords.col, touchCoords.row)) {
-						touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
-						if(penultimate != null && touchBlock === penultimate) {
-							deselectedBlock = this._numboController.deselectLastBlock();
-						} else {
-							selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row);
-						}
-					}
-
-					currLength = testLength * (i + 1);
-				}
-
-				var selectedBlocks = this._numboController.getSelectedBlocks();
-
-				if(selectedBlock || deselectedBlock) {
-					// also update the equation
-					var selectedNums = selectedBlocks.map(function (b) {
-						return b.val;
-					});
-					this._numboHeaderLayer.setEquation(selectedNums);
-				}
-
-				// update graphics for selected blocks
-				if (selectedBlocks.length) {
-					var block = selectedBlocks[selectedBlocks.length - 1];
-
-					var currColor = NJ.getColor(block.val - 1);
-
-					// if selected block was returned then we have a new selected block deal with
-					if(selectedBlock) {
-						var highlightBlocks = [selectedBlock];
-
-						var isCombo = this._numboController.isSelectedClearable();
-
-						if(isCombo) {
-							highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
-
-							this._effectsLayer.launchComboOverlay();
-							selectedBlock.highlight();
-
-							if(this._numboController.getSelectedBlocks().length >= 7) {
-								if(NJ.settings.sounds)
-									cc.audioEngine.playEffect(res.tensionSound3);
-							} else if(this._numboController.getSelectedBlocks().length >= 5) {
-								if(NJ.settings.sounds)
-									cc.audioEngine.playEffect(res.tensionSound2);
-							} else if(this._numboController.getSelectedBlocks().length >= 3) {
-								if(NJ.settings.sounds)
-									cc.audioEngine.playEffect(res.tensionSound);
-							}
-						}
-
-						// remove duplicates
-						for (i = 0; i < highlightBlocks.length; ++i) {
-							for (var j = i + 1; j < highlightBlocks.length; ++j) {
-								if (highlightBlocks[i] === highlightBlocks[j])
-									highlightBlocks.splice(j--, 1);
-							}
-						}
-
-						// highlight all blocks to be potentially cleared
-						for (i = 0; i < highlightBlocks.length; ++i) {
-							highlightBlocks[i].highlight();
-						}
+				// if we have valid touch coordinates then we either select or deselect the block based on
+				// whether it is already selected and is the last selected block
+				if (touchCoords && this._isPointWithinCoordsDistanceThreshold(currPosition, touchCoords.col, touchCoords.row)) {
+					touchBlock = this._numboController.getBlock(touchCoords.col, touchCoords.row);
+					if(penultimate && touchBlock === penultimate) {
+						deselectedBlock = this._numboController.deselectLastBlock();
 					} else {
-						if(selectedBlocks.length < 5)
-							this._effectsLayer.clearComboOverlay();
-					}
-
-                    this.redrawSelectedLines(selectedBlocks);
-
-					// draw a line from last selected to our finger if we are outside of the range of the block
-					var lastBlockPos = this._convertLevelCoordsToPoint(block.col, block.row);
-					var diff = cc.pSub(touchPosition, lastBlockPos);
-					var radius = 0.5 *  this._blockSize.width;
-					if (cc.pDot(diff, diff) >= radius * radius) {
-						this._selectedLinesNode.drawSegment(this._convertLevelCoordsToPoint(block.col, block.row),
-							touchPosition, 3, currColor);
+						selectedBlock = this._numboController.selectBlock(touchCoords.col, touchCoords.row) || selectedBlock;
 					}
 				}
 
-				this._lastTouchPosition = touchPosition;
+				currLength = testLength * (i + 1);
 			}
+
+			var selectedBlocks = this._numboController.getSelectedBlocks();
+
+			if(selectedBlock || deselectedBlock) {
+				// also update the equation
+				var selectedNums = selectedBlocks.map(function (b) {
+					return b.val;
+				});
+				this._numboHeaderLayer.setEquation(selectedNums);
+			}
+
+			// update graphics for selected blocks
+			if (selectedBlocks.length) {
+				var block = selectedBlocks[selectedBlocks.length - 1];
+
+				var currColor = NJ.getColor(block.val - 1);
+
+				// if selected block was returned then we have a new selected block deal with
+				if(selectedBlock) {
+					var highlightBlocks = [selectedBlock];
+
+					var isCombo = this._numboController.isSelectedClearable();
+
+					if(isCombo) {
+						highlightBlocks = highlightBlocks.concat(selectedBlocks.slice(0));
+
+						//this._effectsLayer.launchComboOverlay(NJ.getColor(this._numboController.getSelectedTargetValue() - 1));
+						selectedBlock.highlight();
+
+						if(this._numboController.getSelectedBlocks().length >= 7) {
+							if(NJ.settings.sounds)
+								cc.audioEngine.playEffect(res.tensionSound3, false);
+						} else if(this._numboController.getSelectedBlocks().length >= 5) {
+							if(NJ.settings.sounds)
+								cc.audioEngine.playEffect(res.tensionSound2, false);
+						} else if(this._numboController.getSelectedBlocks().length >= 3) {
+							if(NJ.settings.sounds)
+								cc.audioEngine.playEffect(res.tensionSound, false);
+						}
+					}
+
+					// remove duplicates
+					for (i = 0; i < highlightBlocks.length; ++i) {
+						for (var j = i + 1; j < highlightBlocks.length; ++j) {
+							if (highlightBlocks[i] === highlightBlocks[j])
+								highlightBlocks.splice(j--, 1);
+						}
+					}
+
+					// highlight all blocks to be potentially cleared
+					for (i = 0; i < highlightBlocks.length; ++i) {
+						highlightBlocks[i].highlight();
+					}
+				}
+
+				this.redrawSelectedLines(selectedBlocks);
+
+				// draw a line from last selected to our finger if we are outside of the range of the block
+				var lastBlockPos = this._convertLevelCoordsToPoint(block.col, block.row);
+				var diff = cc.pSub(touchPosition, lastBlockPos);
+				var radius = 0.5 *  this._blockSize.width;
+				if (cc.pDot(diff, diff) >= radius * radius) {
+					this._selectedLinesNode.drawSegment(this._convertLevelCoordsToPoint(block.col, block.row),
+						touchPosition, 3, currColor);
+				}
+			}
+
+			this._lastTouchPosition = touchPosition;
 		},
 
 		// On touch ended, activates all selected blocks once touch is released.

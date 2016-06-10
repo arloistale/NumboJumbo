@@ -61,11 +61,11 @@ var NumboMenuLayer = (function() {
 
             this._initAudio();
 
-            NJ.settings.hasLoadedMM = false;
-            NJ.settings.hasLoadedMOV = false;
-            NJ.settings.hasLoadedRE = false;
-            NJ.settings.hasLoadedINF = false;
-            NJ.saveSettings();
+            //NJ.settings.hasLoadedMM = false;
+            //NJ.settings.hasLoadedMOV = false;
+            //NJ.settings.hasLoadedRE = false;
+            //NJ.settings.hasLoadedINF = false;
+            //NJ.saveSettings();
 
             this.enter();
         },
@@ -222,13 +222,7 @@ var NumboMenuLayer = (function() {
             this._achievementsButton.setImageRes(res.trophyImage);
             this._achievementsButton.retain();
 
-            this._loginButton = new NJMenuButton(buttonSize, function() {
-                if(!NJ.social.isLoggedIn()) {
-                    NJ.social.login();
-                } else {
-                    cc.log("Warning: tried to login when already login!");
-                }
-            }, this);
+            this._loginButton = new NJMenuButton(buttonSize, this._onLogin.bind(this), this);
             this._loginButton.setImageRes(res.loginImage);
             this._loginButton.retain();
 
@@ -429,6 +423,17 @@ var NumboMenuLayer = (function() {
                 cc.director.runScene(scene);
             });
         },
+                                
+        _onLogin: function() {
+            if(NJ.settings.sounds)
+                cc.audioEngine.playEffect(res.clickSound, false);
+                                                          
+            if(!NJ.social.isLoggedIn()) {
+                NJ.social.login();
+            } else {
+                cc.log("Warning: tried to login when already login!");
+            }
+        },
 
         _onLeaderboard: function() {
              if(NJ.settings.sounds)
@@ -441,7 +446,8 @@ var NumboMenuLayer = (function() {
             if(NJ.settings.sounds)
                 cc.audioEngine.playEffect(res.clickSound, false);
 
-            NJ.social.showAchievements();
+            //NJ.social.showAchievements();
+            NJ.openAppDetails();
         },
 
         _onSettings: function() {
@@ -460,7 +466,7 @@ var NumboMenuLayer = (function() {
                     that.enter();
 
                     if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-                        cc.audioEngine.playMusic(res.trackChill2);
+                        cc.audioEngine.playMusic(res.trackChill2, true);
 
                     that._updateTheme();
                 });

@@ -181,6 +181,8 @@ var NumboHeaderLayer = (function() {
                 // valid combo, need to put + and =
             else {
                 var maxIndex = this.findMax(nums);
+                var maxNum = nums[maxIndex];
+
                 for (var i = 0; i < nums.length; ++i) {
                     if (i != maxIndex){
                         if (equationStr == ""){
@@ -190,9 +192,10 @@ var NumboHeaderLayer = (function() {
                         }
                     }
                 }
-                equationStr += " = " + nums[maxIndex];
+                equationStr += " = " + maxNum;
                 this._equationLabel.setString(equationStr);
-                this._equationLabel.setColor(NJ.themes.blockColors[nums[maxIndex] - 1]);
+
+                this._equationLabel.setColor(NJ.getColor(maxNum - 1));
             }
         },
 

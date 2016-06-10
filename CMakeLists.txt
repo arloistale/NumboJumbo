@@ -27,7 +27,7 @@ cmake_minimum_required(VERSION 2.8)
 set(APP_NAME MyGame)
 project (${APP_NAME})
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cmake/Modules/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cmake/Modules/")
 include(CocosBuildHelpers)
 
 option(USE_CHIPMUNK "Use chipmunk for physics library" ON)
@@ -36,6 +36,7 @@ option(BUILD_EXTENSIONS "Build extension library" ON)
 option(BUILD_EDITOR_SPINE "Build editor support for spine" ON)
 option(BUILD_EDITOR_COCOSTUDIO "Build editor support for cocostudio" ON)
 option(BUILD_EDITOR_COCOSBUILDER "Build editor support for cocosbuilder" ON)
+option(USE_BULLET "Use bullet for physics3d library" ON)
 option(USE_PREBUILT_LIBS "Use prebuilt libraries in external directory" ON)
 
 
@@ -44,6 +45,11 @@ if(DEBUG_MODE)
 else(DEBUG_MODE)
   set(CMAKE_BUILD_TYPE RELEASE)
 endif(DEBUG_MODE)
+
+if(USE_BULLET)
+  add_definitions(-DCC_ENABLE_BULLET_INTEGRATION=1)
+  add_definitions(-DCC_USE_PHYSICS=1)
+endif(USE_BULLET)
 
 set(CMAKE_C_FLAGS_DEBUG "-DCOCOS2D_DEBUG=1")
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
@@ -105,35 +111,35 @@ else() # Assume Linux
   set(PLATFORM_FOLDER linux)
 endif()
 
-set(COCOS_EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/external)
+set(COCOS_EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/external)
 
 
 include_directories(
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/base
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/2d
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/ui
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/audio/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/storage
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/network
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/platform
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/editor-support
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/editor-support/spine
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/editor-support/cocosbuilder
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/editor-support/cocostudio
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/deprecated
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cocos/platform
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/extensions
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/external
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/external/chipmunk/include/chipmunk
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/external/spidermonkey/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/bindings/auto
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/bindings/manual
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/base
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/2d
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/ui
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/audio/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/storage
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/network
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/platform
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/editor-support
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/editor-support/spine
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/editor-support/cocostudio
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/deprecated
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/platform
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/extensions
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/external
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/external/chipmunk/include/chipmunk
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/external/spidermonkey/include/${PLATFORM_FOLDER}
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/scripting/js-bindings/auto
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/scripting/js-bindings/manual
 )
 
 link_directories(
-  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/external/spidermonkey/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/external/spidermonkey/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
 )
 
 
@@ -159,6 +165,7 @@ if(LINUX OR MACOSX OR WINDOWS)
 
     #cocos_find_package(FMODEX FMODEX REQUIRED)
     cocos_find_package(Fontconfig FONTCONFIG REQUIRED)
+    cocos_find_package(GTK3 GTK3 REQUIRED)
   endif()
 
   if(WINDOWS)
@@ -193,7 +200,7 @@ endif(USE_CHIPMUNK)
 # Box2d (not prebuilded, exists as source)
 if(USE_BOX2D)
   if(USE_PREBUILT_LIBS)
-    add_subdirectory(frameworks/js-bindings/cocos2d-x/external/Box2D)
+    add_subdirectory(frameworks/cocos2d-x/external/Box2D)
     set(Box2D_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/external/box2d/include)
     set(Box2D_LIBRARIES box2d)
   else()
@@ -209,8 +216,8 @@ endif(USE_BOX2D)
 
 # Tinyxml2 (not prebuilded, exists as source)
 if(USE_PREBUILT_LIBS)
-  add_subdirectory(frameworks/js-bindings/cocos2d-x/external/tinyxml2)
-  set(TinyXML2_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/external/tinyxml2)
+  add_subdirectory(frameworks/cocos2d-x/external/tinyxml2)
+  set(TinyXML2_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/external/tinyxml2)
   set(TinyXML2_LIBRARIES tinyxml2)
 else()
   cocos_find_package(TinyXML2 TinyXML2 REQUIRED)
@@ -227,8 +234,8 @@ cocos_find_package(ZLIB ZLIB REQUIRED)
 # moreover our embedded version modified to quick provide
 # functionality needed by cocos.
 if(USE_PREBUILT_LIBS OR NOT MINGW)
-  add_subdirectory(frameworks/js-bindings/cocos2d-x/external/unzip)
-  set(MINIZIP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/external/unzip)
+  add_subdirectory(frameworks/cocos2d-x/external/unzip)
+  set(MINIZIP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/external/unzip)
   set(MINIZIP_LIBRARIES unzip)
   message(STATUS "MINIZIP include dirs: ${MINIZIP_INCLUDE_DIRS}")
 else()
@@ -248,14 +255,17 @@ cocos_find_package(WEBSOCKETS WEBSOCKETS REQUIRED)
 cocos_find_package(CURL CURL REQUIRED)
 
 
-add_subdirectory(frameworks/js-bindings/cocos2d-x/external/flatbuffers)
-set(FLATBUFFERS_INCLUDE_DIRS frameworks/js-bindings/cocos2d-x/external)
+add_subdirectory(frameworks/cocos2d-x/external/flatbuffers)
+set(FLATBUFFERS_INCLUDE_DIRS frameworks/cocos2d-x/external)
 message(STATUS "Flatbuffers include dirs: ${FLATBUFFERS_INCLUDE_DIRS}")
 
 
 # build xxhash
-add_subdirectory(frameworks/js-bindings/cocos2d-x/external/xxhash)
-include_directories(frameworks/js-bindings/cocos2d-x/external/xxhash)
+add_subdirectory(frameworks/cocos2d-x/external/xxhash)
+include_directories(frameworks/cocos2d-x/external/xxhash)
+
+#buid recast
+add_subdirectory(frameworks/cocos2d-x/external/recast)
 
 set(GAME_SRC
   frameworks/runtime-src/proj.linux/main.cpp
@@ -263,11 +273,10 @@ set(GAME_SRC
 )
 
 # cocos2d
-add_subdirectory(frameworks/js-bindings/cocos2d-x/cocos)
+add_subdirectory(frameworks/cocos2d-x/cocos)
 
 #jsbindings library
-add_subdirectory(frameworks/js-bindings/bindings)
-
+add_subdirectory(frameworks/cocos2d-x/cocos/scripting/js-bindings)
 
 # add the executable
 add_executable(${APP_NAME}
@@ -275,9 +284,15 @@ add_executable(${APP_NAME}
 )
 
 target_link_libraries(${APP_NAME}
-  jsbindings
+  jscocos2d
   cocos2d
+  recast
 )
+
+if(USE_BULLET)
+  add_subdirectory(frameworks/cocos2d-x/external/bullet)
+  target_link_libraries(${APP_NAME} bullet)
+endif()
 
 set(APP_BIN_DIR "${CMAKE_BINARY_DIR}/bin")
 
@@ -292,7 +307,7 @@ pre_build(${APP_NAME}
   COMMAND ${CMAKE_COMMAND} -E remove ${APP_BIN_DIR}/*.json
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/res ${APP_BIN_DIR}/res
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/src ${APP_BIN_DIR}/src
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/bindings/script ${APP_BIN_DIR}/script
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/cocos2d-x/cocos/scripting/js-bindings/script ${APP_BIN_DIR}/script
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/main.js ${APP_BIN_DIR}/main.js
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/project.json ${APP_BIN_DIR}/project.json
 )
