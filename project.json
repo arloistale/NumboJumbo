@@ -37,6 +37,7 @@
         "src/Snippet.js",
         "src/NumboBlock.js",
         "src/NumboLevel.js",
+        "src/NJAudio.js",
         "src/NJConfig.js",
         "src/NJSocial.js",
         "src/NJAnalytics.js",

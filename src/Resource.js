@@ -4,11 +4,7 @@
  *
  */
 
-var resRoot = "";
-
-//if(!cc.sys.isNative) {
-    resRoot = "res/";
-//}
+var resRoot = "res/";
 
 // list of resource definitions
 var res = {
@@ -71,6 +67,14 @@ var res = {
     tickSound: resRoot + "Sounds/tick.mp3",
     plipSound: resRoot + "Sounds/plipSound.mp3",
 
+    overSound: resRoot + "Sounds/over.mp3",
+
+    coinSound: resRoot + "Sounds/coin.wav",
+
+    tensionSound: resRoot + "Sounds/plang1.wav",
+    tensionSound2: resRoot + "Sounds/plang2.wav",
+    tensionSound3: resRoot + "Sounds/plang8.wav",
+
     plopSound: resRoot + "Sounds/Plop.wav",
     plopSound4: resRoot + "Sounds/Plop4.wav",
     plopSound5: resRoot + "Sounds/Plop5.wav",
@@ -94,16 +98,55 @@ var res = {
     bloopSound7: resRoot + "Sounds/boop7.wav",
     bloopSound8: resRoot + "Sounds/boop8.wav",
     bloopSound9: resRoot + "Sounds/boop9.wav",
-    bloopSound10: resRoot + "Sounds/boop10.wav",
-
-    overSound: resRoot + "Sounds/over.mp3",
-
-    coinSound: resRoot + "Sounds/coin.wav",
-
-    tensionSound: resRoot + "Sounds/plang1.wav",
-    tensionSound2: resRoot + "Sounds/plang2.wav",
-    tensionSound3: resRoot + "Sounds/plang8.wav"
+    bloopSound10: resRoot + "Sounds/boop10.wav"
 };
+
+var plops = [res.plopSound, res.plopSound4, res.plopSound5,
+    res.plopSound6, res.plopSound7, res.plopSound8, res.plopSound9, res.plopSound10, res.plopSound11,
+    res.plopSound12, res.plopSound13, res.plopSound14];
+
+var bloops = [res.bloopSound1, res.bloopSound2, res.bloopSound3, res.bloopSound4, res.bloopSound5,
+    res.bloopSound6, res.bloopSound7, res.bloopSound8, res.bloopSound9, res.bloopSound10];
+
+// these resources are preloaded by the AudioEngine
+var sounds = (function() {
+    var g = [
+        res.tickSound,
+        res.plipSound,
+
+        res.overSound,
+        res.coinSound,
+        res.tensionSound2,
+        res.tensionSound,
+        res.tensionSound3
+    ];
+
+    return g.concat(plops).concat(bloops);
+}());
+
+// resources for the game
+var g_all = (function() {
+    var fonts = [
+        // fonts
+        res.mainFont.x1.fnt,
+        res.mainFont.x1.png,
+        res.mainFont.x2.fnt,
+        res.mainFont.x2.png,
+        res.mainFont.x3.fnt,
+        res.mainFont.x3.png
+    ];
+
+    var g = [];
+
+    for(var key in res) {
+        if(!res.hasOwnProperty(key) || typeof res[key] !== 'string')
+            continue;
+
+        g.push(res[key]);
+    }
+
+    return g.concat(fonts);
+}());
 
 // returns proper font name based on platform
 var b_getFontName = function(fontRes, scale) {
@@ -115,119 +158,3 @@ var b_getFontName = function(fontRes, scale) {
 
     return fontRes.x1.fnt;
 };
-
-// resources for the main menu of the game
-var g_menu = [
-    // ui
-    res.playImage,
-    res.settingsImage,
-    res.backImage,
-    res.nextImage,
-    res.helpImage,
-    res.buttonImage,
-    res.statsImage,
-    res.loginImage,
-    res.blockImage,
-    res.blockImage2x,
-    res.trophyImage,
-
-    res.timedImage,
-    res.movesImage,
-    res.stackImage,
-    res.infiniteImage,
-
-    // sounds
-    res.clickSound,
-
-    res.trackChill2,
-
-    // fonts
-    res.mainFont.x1.fnt,
-    res.mainFont.x1.png,
-    res.mainFont.x2.fnt,
-    res.mainFont.x2.png,
-    res.mainFont.x3.fnt,
-    res.mainFont.x3.png
-];
-
-var plops = [res.plopSound, res.plopSound4, res.plopSound5,
-    res.plopSound6, res.plopSound7, res.plopSound8, res.plopSound9, res.plopSound10, res.plopSound11,
-    res.plopSound12, res.plopSound13, res.plopSound14];
-
-var bloops = [res.bloopSound1, res.bloopSound2, res.bloopSound3, res.bloopSound4, res.bloopSound5,
-    res.bloopSound6, res.bloopSound7, res.bloopSound8, res.bloopSound9, res.bloopSound10];
-
-
-// resources for ingame
-var g_game = [
-    // UI
-    res.skipImage,
-    res.buttonImage,
-    res.backImage,
-    res.homeImage,
-    res.pauseImage,
-    res.retryImage,
-    res.handImage,
-    res.cancelImage,
-
-    // Scene
-    res.blockImage,
-    res.alertImage,
-
-    // music
-    res.trackDauntinglyMellow,
-    res.trackSomethingElse1,
-
-    // sounds
-    res.tickSound,
-    res.clickSound,
-    res.plipSound,
-    res.plopSound,
-    res.plopSound4,
-    res.plopSound5,
-    res.plopSound6,
-    res.plopSound7,
-    res.plopSound8,
-    res.plopSound9,
-    res.plopSound10,
-    res.plopSound11,
-    res.plopSound12,
-    res.plopSound13,
-    res.plopSound14,
-
-    res.bloopSound1,
-    res.bloopSound2,
-    res.bloopSound3,
-    res.bloopSound4,
-    res.bloopSound5,
-    res.bloopSound6,
-    res.bloopSound7,
-    res.bloopSound8,
-    res.bloopSound9,
-    res.bloopSound10,
-
-    res.overSound,
-    res.coinSound,
-
-    // fonts
-    res.mainFont.x1.fnt,
-    res.mainFont.x1.png,
-    res.mainFont.x2.fnt,
-    res.mainFont.x2.png,
-
-    res.tensionSound,
-    res.tensionSound2,
-    res.tensionSound3
-];
-
-var g_all = (function() {
-    var a = g_game.concat(g_menu);
-    for(var i = 0; i < a.length; ++i) {
-        for(var j = i + 1; j < a.length; ++j) {
-            if(a[i] === a[j])
-                a.splice(j--, 1);
-        }
-    }
-
-    return a;
-}());

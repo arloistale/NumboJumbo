@@ -9,8 +9,7 @@ var PrepLayer = (function() {
     ///////////////
 
     var onMenu = function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+        NJ.audio.playSound(res.clickSound);
 
         var that = this;
 
@@ -21,8 +20,7 @@ var PrepLayer = (function() {
     };
 
     var onBack = function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+        NJ.audio.playSound(res.clickSound);
 
         var that = this;
 

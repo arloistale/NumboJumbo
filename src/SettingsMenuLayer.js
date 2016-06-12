@@ -9,8 +9,7 @@ var SettingsMenuLayer = (function() {
     ///////////////
 
     var onRetry = function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+        NJ.audio.playSound(res.clickSound);
 
         var that = this;
 
@@ -21,8 +20,7 @@ var SettingsMenuLayer = (function() {
     };
 
     var onMenu = function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+        NJ.audio.playSound(res.clickSound);
 
         // save any modified settings
         NJ.saveSettings();
@@ -36,8 +34,7 @@ var SettingsMenuLayer = (function() {
     };
 
     var onBack = function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+        NJ.audio.playSound(res.clickSound);
 
         // save any modified settings
         NJ.saveSettings();
@@ -53,20 +50,16 @@ var SettingsMenuLayer = (function() {
     var onMusicControl = function() {
         NJ.settings.music = !NJ.settings.music;
 
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
+        NJ.audio.playSound(res.clickSound);
 
         if(!NJ.settings.music)
-            cc.audioEngine.stopMusic();
+            NJ.audio.stopMusic();
     };
 
     var onSoundsControl = function() {
         NJ.settings.sounds = !NJ.settings.sounds;
 
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
-        else
-            cc.audioEngine.stopAllEffects();
+        NJ.audio.playSound(res.clickSound);
     };
 
     var onVibrationControl = function() {
@@ -76,10 +69,7 @@ var SettingsMenuLayer = (function() {
 
         this._updateTheme();
 
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound, false);
-        else
-            cc.audioEngine.stopAllEffects();
+        NJ.audio.playSound(res.clickSound);
     };
 
     return cc.LayerColor.extend({
@@ -117,8 +107,6 @@ var SettingsMenuLayer = (function() {
 
             this.enter();
         },
-
-
 
         _initHeaderUI: function() {
             this._headerMenu = new cc.Menu();

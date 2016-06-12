@@ -25,8 +25,7 @@ var FeedbackLayer = cc.Layer.extend({
     ////////////
 
     runDoomsayer: function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.tickSound);
+        NJ.audio.playSound(res.tickSound);
     },
 
     launchDoomsayer: function() {

@@ -109,6 +109,8 @@ var NumboMenuLayer = (function() {
 
         // init game modes buttons
         _initModesUI: function() {
+            var that = this;
+
             this._jumboMenu = new cc.Menu();
 
             this._jumboMenu.setContentSize(cc.size(cc.visibleRect.width,
@@ -124,7 +126,9 @@ var NumboMenuLayer = (function() {
             var buttonSize = cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton));
             var titleSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
 
-            this._modeData.mm.button = new NJMenuButton(buttonSize, this._onChooseMinuteMadness.bind(this), this);
+            this._modeData.mm.button = new NJMenuButton(buttonSize, function() {
+                that._onChooseGameMode(NJ.modekeys.minuteMadness);
+            }, this);
             this._modeData.mm.button.setBackgroundColor(NJ.themes.blockColors[0]);
             this._modeData.mm.button.setLabelTitle(NJ.modeNames[NJ.modekeys.minuteMadness]);
             this._modeData.mm.button.setLabelSize(titleSize);
@@ -134,7 +138,9 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            this._modeData.mov.button = new NJMenuButton(buttonSize, this._onChooseMoves.bind(this), this);
+            this._modeData.mov.button = new NJMenuButton(buttonSize, function() {
+                that._onChooseGameMode(NJ.modekeys.moves);
+            }, this);
             this._modeData.mov.button.setBackgroundColor(NJ.themes.blockColors[1]);
             this._modeData.mov.button.setLabelTitle(NJ.modeNames[NJ.modekeys.moves]);
             this._modeData.mov.button.setLabelSize(titleSize);
@@ -144,7 +150,9 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            this._modeData.re.button = new NJMenuButton(buttonSize, this._onChooseTurnBased.bind(this), this);
+            this._modeData.re.button = new NJMenuButton(buttonSize, function() {
+                that._onChooseGameMode(NJ.modekeys.react);
+            }, this);
             this._modeData.re.button.setBackgroundColor(NJ.themes.blockColors[2]);
             this._modeData.re.button.setLabelTitle(NJ.modeNames[NJ.modekeys.react]);
             this._modeData.re.button.setLabelSize(titleSize);
@@ -154,7 +162,9 @@ var NumboMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            this._modeData.inf.button = new NJMenuButton(buttonSize, this._onChooseSurvival.bind(this), this);
+            this._modeData.inf.button = new NJMenuButton(buttonSize, function() {
+                that._onChooseGameMode(NJ.modekeys.infinite);
+            }, this);
             this._modeData.inf.button.setBackgroundColor(NJ.themes.blockColors[3]);
             this._modeData.inf.button.setLabelTitle(NJ.modeNames[NJ.modekeys.infinite]);
             this._modeData.inf.button.setLabelSize(titleSize);
@@ -276,8 +286,7 @@ var NumboMenuLayer = (function() {
             if(!NJ.settings.music)
                 return;
 
-            cc.audioEngine.setMusicVolume(NJ.MUSIC_VOLUME);
-            cc.audioEngine.playMusic(res.trackChill2, true);
+            NJ.audio.playMusic(res.trackChill2);
         },
 
         // makes menu elements transition in
@@ -356,54 +365,30 @@ var NumboMenuLayer = (function() {
 
         // game modes
 
-        _onChooseMinuteMadness: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+        _onChooseGameMode: function(key) {
+            NJ.audio.playSound(res.clickSound);
 
-            cc.audioEngine.stopMusic();
-
-            this.leave(function() {
-                var scene = new cc.Scene();
-                scene.addChild(new TimedGameLayer());
-                cc.director.runScene(scene);
-            });
-        },
-
-        _onChooseMoves: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
-
-            cc.audioEngine.stopMusic();
+            NJ.audio.stopMusic();
 
             this.leave(function() {
                 var scene = new cc.Scene();
-                scene.addChild(new MovesGameLayer());
-                cc.director.runScene(scene);
-            });
-        },
+                var gameLayer = null;
+                switch(key) {
+                    case NJ.modekeys.minuteMadness:
+                        gameLayer = new TimedGameLayer();
+                        break;
+                    case NJ.modekeys.moves:
+                        gameLayer = new MovesGameLayer();
+                        break;
+                    case NJ.modekeys.react:
+                        gameLayer = new StackGameLayer();
+                        break;
+                    case NJ.modekeys.infinite:
+                        gameLayer = new InfiniteGameLayer();
+                        break;
+                }
 
-        _onChooseTurnBased: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
-
-            cc.audioEngine.stopMusic();
-
-            this.leave(function() {
-                var scene = new cc.Scene();
-                scene.addChild(new StackGameLayer());
-                cc.director.runScene(scene);
-            });
-        },
-
-        _onChooseSurvival: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
-
-            cc.audioEngine.stopMusic();
-
-            this.leave(function() {
-                var scene = new cc.Scene();
-                scene.addChild(new InfiniteGameLayer());
+                scene.addChild(gameLayer);
                 cc.director.runScene(scene);
             });
         },
@@ -411,10 +396,9 @@ var NumboMenuLayer = (function() {
         // tools
 
         _onHelp: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+            NJ.audio.playSound(res.clickSound);
 
-            cc.audioEngine.stopMusic();
+            NJ.audio.stopMusic();
             cc.eventManager.pauseTarget(this, true);
 
             this.leave(function() {
@@ -425,8 +409,7 @@ var NumboMenuLayer = (function() {
         },
                                 
         _onLogin: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+            NJ.audio.playSound(res.clickSound);
                                                           
             if(!NJ.social.isLoggedIn()) {
                 NJ.social.login();
@@ -436,23 +419,20 @@ var NumboMenuLayer = (function() {
         },
 
         _onLeaderboard: function() {
-             if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+             NJ.audio.playSound(res.clickSound);
 
              NJ.social.showLeaderboard();
         },
 
         _onAchievements: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+            NJ.audio.playSound(res.clickSound);
 
             //NJ.social.showAchievements();
             NJ.openAppDetails();
         },
 
         _onSettings: function() {
-            if(NJ.settings.sounds)
-                cc.audioEngine.playEffect(res.clickSound, false);
+            NJ.audio.playSound(res.clickSound);
 
             var that = this;
 
@@ -465,8 +445,7 @@ var NumboMenuLayer = (function() {
 
                     that.enter();
 
-                    if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-                        cc.audioEngine.playMusic(res.trackChill2, true);
+                    NJ.audio.playMusic(res.trackChill2);
 
                     that._updateTheme();
                 });

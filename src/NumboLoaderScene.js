@@ -7,6 +7,8 @@ NumboLoaderScene = cc.Scene.extend({
     cb: null,
     target: null,
 
+    _audioLoadCount: 0,
+
     /**
      * Extra initialization
      * @returns {boolean}
@@ -72,10 +74,26 @@ NumboLoaderScene = cc.Scene.extend({
     _startLoading: function () {
         var self = this;
         self.unschedule(self._startLoading);
+        self._audioLoadCount = 0;
         var res = self.resources;
+
         cc.loader.load(res, function() {}, function () {
-            if (self.cb)
-                self.cb.call(self.target);
+            // here we need to preload all the audio resources in the game <<<<
+            for(var i = 0; i < sounds.length; ++i) {
+                NJ.audio.preload(sounds[i], function (isSuccess) {
+                    if (!isSuccess) {
+                        cc.log("Warning: preloading failed")
+                    }
+
+                    self._audioLoadCount++;
+                    if(self._audioLoadCount >= sounds.length) {
+                        if (self.cb)
+                            self.cb.call(self.target);
+
+                        cc.log("Finished preloading " + self._audioLoadCount + " audio assets");
+                    }
+                });
+            }
         });
     }
 });

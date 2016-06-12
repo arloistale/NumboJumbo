@@ -124,7 +124,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
             that._handIndicator.setPosition(start);
         }));
 
-        //this._handIndicator.runAction(cc.sequence(handActionList).repeatForever());
+        this._handIndicator.runAction(cc.sequence(handActionList).repeatForever());
 	},
 
 	_clearHand: function() {
@@ -191,10 +191,6 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 					}), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 4);
 					}), cc.delayTime(0.1), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 7);
-                    }), cc.delayTime(0.1), cc.callFunc(function() {
-                        that.spawnDropBlock(centerCol, 7);
-				    }), cc.delayTime(0.1), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 7);
 					})
 				));

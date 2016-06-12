@@ -126,8 +126,7 @@ var NumboController = (function() {
 			// TODO: should be done in gamelayer, we make the block highlight itself here for convenience
 			this._selectedBlocks.push(block);
 
-			if(NJ.settings.sounds)
-				cc.audioEngine.playEffect(plops[Math.min(this._selectedBlocks.length, plops.length - 1)]);
+			NJ.audio.playSound(plops[Math.min(this._selectedBlocks.length, plops.length - 1)]);
 
 			return block;
 		},
@@ -138,8 +137,7 @@ var NumboController = (function() {
 
 			this._selectedBlocks.splice(this._selectedBlocks.length - 1, 1);
 
-			if(NJ.settings.sounds)
-				cc.audioEngine.playEffect(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
+			NJ.audio.playSound(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
 
 			return lastBlock;
 		},

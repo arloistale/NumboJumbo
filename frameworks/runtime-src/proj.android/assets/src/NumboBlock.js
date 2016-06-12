@@ -70,6 +70,7 @@ var NumboBlock = (function() {
 
             // initialize number label
             this._valueLabel = new cc.LabelBMFont("label test", b_getFontName(res.mainFont));
+            this._valueLabel.setAlignment(cc.TEXT_ALIGNMENT_CENTER);
             if(!_labelScale) {
                 var imageSize = this._valueLabel.getContentSize();
                 _labelScale = {
@@ -98,7 +99,7 @@ var NumboBlock = (function() {
 
             this.updateTheme();
         },
-/*
+
         unuse: function () {
             this.col = 0;
             this.row = 0;
@@ -115,7 +116,7 @@ var NumboBlock = (function() {
             this._valueLabel.setScale(_labelScale.x, _labelScale.y);
             this.setVisible(true);
         },
-*/
+
         //////////////////
         // Manipulation //
         //////////////////
@@ -207,9 +208,9 @@ NumboBlock.create = function (blockSize) {
 };
 
 NumboBlock.recreate = function (blockSize) {
-    //if (cc.pool.hasObject(NumboBlock)) {
-      //  return cc.pool.getFromPool(NumboBlock);
-    //}
+    if (cc.pool.hasObject(NumboBlock)) {
+        return cc.pool.getFromPool(NumboBlock);
+    }
 
     return NumboBlock.create(blockSize);
 };

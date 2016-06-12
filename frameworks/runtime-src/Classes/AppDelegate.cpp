@@ -107,11 +107,11 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(register_all_cocos2dx_ui_manual);
 
     // XmlHttpRequest can be commented out to reduce the package
-    sc->addRegisterCallback(MinXmlHttpRequest::_js_register);
+    //sc->addRegisterCallback(MinXmlHttpRequest::_js_register);
     // websocket can be commented out to reduce the package
-    sc->addRegisterCallback(register_jsb_websocket);
+    //sc->addRegisterCallback(register_jsb_websocket);
     // sokcet io can be commented out to reduce the package
-    sc->addRegisterCallback(register_jsb_socketio);
+    //sc->addRegisterCallback(register_jsb_socketio);
 
 #if CC_USE_NAVMESH
     sc->addRegisterCallback(register_all_cocos2dx_navmesh);

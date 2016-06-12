@@ -156,8 +156,7 @@ var BaseGameLayer = (function() {
             //this._drawDividersGeometry();
 
             // play music again if music settings turned on
-            if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-                cc.audioEngine.playMusic(that._backgroundTrack, true);
+            NJ.audio.playMusic(that._backgroundTrack);
 
 			this.schedule(function() {
 				that._numboController.findHint();
@@ -485,9 +484,7 @@ var BaseGameLayer = (function() {
 			this._instantiateBlock(spawnBlock);
 			this.moveBlockIntoPlace(spawnBlock);
 
-			if(NJ.settings.sounds) {
-				cc.audioEngine.playEffect(customSound || res.clickSound);
-			}
+			NJ.audio.playSound(customSound || res.clickSound);
 		},
 
 		// Spawns a block with random col and val and drops the spawned block into place.
@@ -498,9 +495,7 @@ var BaseGameLayer = (function() {
 			this._instantiateBlock(spawnBlock);
 			this.moveBlockIntoPlace(spawnBlock);
 
-			if(NJ.settings.sounds) {
-				cc.audioEngine.playEffect(res.clickSound);
-			}
+			NJ.audio.playSound(res.clickSound);
 		},
 
 		// spawns a specified amount of blocks randomly
@@ -515,9 +510,7 @@ var BaseGameLayer = (function() {
 				this.moveBlockIntoPlace(spawnBlock);
 			}
 
-			if(NJ.settings.sounds) {
-				cc.audioEngine.playEffect(res.plipSound);
-			}
+			NJ.audio.playSound(res.plipSound);
 		},
 
 		// helper function to move a spawned block into place, shifting its position based on column
@@ -556,10 +549,9 @@ var BaseGameLayer = (function() {
 			this.pauseInput();
 			this.unscheduleAllCallbacks();
 
-			if(NJ.settings.sounds)
-				cc.audioEngine.playEffect(res.overSound);
+			NJ.audio.playSound(res.overSound);
 
-			cc.audioEngine.stopMusic();
+			NJ.audio.stopMusic();
 
 			// achievements
 
@@ -621,8 +613,7 @@ var BaseGameLayer = (function() {
                 that.resumeGame();
 
                 // play music again if music settings turned on
-                if(NJ.settings.music && !cc.audioEngine.isMusicPlaying())
-                    cc.audioEngine.playMusic(that._backgroundTrack, true);
+                NJ.audio.playMusic(that._backgroundTrack);
 
                 that._updateTheme();
             });
@@ -642,7 +633,8 @@ var BaseGameLayer = (function() {
 			this._feedbackLayer.reset();
 
 			//load resources
-			cc.audioEngine.stopMusic();
+			NJ.audio.stopMusic();
+
 			var scene = new cc.Scene();
 			scene.addChild(new NumboMenuLayer());
 			cc.director.runScene(scene);
@@ -754,14 +746,11 @@ var BaseGameLayer = (function() {
 						selectedBlock.highlight();
 
 						if(this._numboController.getSelectedBlocks().length >= 7) {
-							if(NJ.settings.sounds)
-								cc.audioEngine.playEffect(res.tensionSound3, false);
+							NJ.audio.playSound(res.tensionSound3);
 						} else if(this._numboController.getSelectedBlocks().length >= 5) {
-							if(NJ.settings.sounds)
-								cc.audioEngine.playEffect(res.tensionSound2, false);
+							NJ.audio.playSound(res.tensionSound2);
 						} else if(this._numboController.getSelectedBlocks().length >= 3) {
-							if(NJ.settings.sounds)
-								cc.audioEngine.playEffect(res.tensionSound, false);
+							NJ.audio.playSound(res.tensionSound);
 						}
 					}
 
@@ -953,18 +942,18 @@ var BaseGameLayer = (function() {
 
 				actionList.push(cc.delayTime(startingDelay));
 				actionList.push(cc.callFunc(function() {
-					cc.audioEngine.playEffect(bloops[data[0]]);
+					NJ.audio.playSound(bloops[data[0]]);
 				}));
 
 				for(var i = 1; i < data.length; ++i) {
-                    (function() {
-                        var soundData = data[i];
+					(function() {
+						var soundData = data[i];
 
-                        actionList.push(cc.delayTime(midDelay));
-                        actionList.push(cc.callFunc(function() {
-                            cc.audioEngine.playEffect(bloops[soundData]);
-                        }));
-                    })();
+						actionList.push(cc.delayTime(midDelay));
+						actionList.push(cc.callFunc(function() {
+							NJ.audio.playSound(bloops[soundData]);
+						}));
+					})();
 				}
 
 				this._backgroundLayer.runAction(cc.sequence(actionList));
