@@ -87,6 +87,7 @@ var res = {
     plopSound12: resRoot + "Sounds/Plop12.wav",
     plopSound13: resRoot + "Sounds/Plop13.wav",
     plopSound14: resRoot + "Sounds/Plop14.wav",
+
     clickSound: resRoot + "Sounds/clickSound.wav",
 
     bloopSound1: resRoot + "Sounds/boop1.wav",
