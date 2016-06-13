@@ -4,12 +4,17 @@
 
 var GameOverMenuLayer = (function() {
 
+    var highscoreMessages = ["You did it. You really did it.",
+        "You are feared by numbers great and small.",
+        "You might be a prodigy."];
+
     ///////////////
     // UI Events //
     ///////////////
 
     var onRetry = function() {
-        NJ.audio.playSound(res.clickSound);
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound4, false);
 
         var that = this;
 
@@ -20,7 +25,8 @@ var GameOverMenuLayer = (function() {
     };
 
     var onMenu = function() {
-        NJ.audio.playSound(res.clickSound);
+        if(NJ.settings.sounds)
+            cc.audioEngine.playEffect(res.clickSound4, false);
 
         var that = this;
 
@@ -42,6 +48,8 @@ var GameOverMenuLayer = (function() {
         _bestLabel: null,
         _bestLevelLabel: null,
         _currencyLabel: null,
+
+        //_bestScoreLabel: null,
 
         // Callbacks Data
         onRetryCallback: null,
@@ -66,26 +74,11 @@ var GameOverMenuLayer = (function() {
             var backgroundColor = NJ.themes.backgroundColor;
             this.init(backgroundColor);
 
-            this._initInput();
-
             this._initHeaderUI();
             this._initStatsUI();
             this._initToolUI();
 
             this.enter();
-        },
-
-        _initInput: function() {
-            var that = this;
-
-            cc.eventManager.addListener({
-                event: cc.EventListener.KEYBOARD,
-                onKeyPressed: function(key, event) {
-                    if(key == cc.KEY.back) {
-                        (onMenu.bind(that))();
-                    }
-                }
-            }, this);
         },
 
         _initHeaderUI: function() {
@@ -129,17 +122,29 @@ var GameOverMenuLayer = (function() {
             // compute label size
             var header2Size = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
             var largeSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.large);
+            var headerSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header);
 
-            var scoreTitleLabel = this.generateLabel("Score", header2Size);
-            this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
+            var bestScoreTitleLabel = null;
+            if(NJ.gameState.getScore() == NJ.stats.getHighscore(key)) {
+                var scoreTitleLabel = this.generateLabel("New High Score!", header2Size);
+                this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
+                var bestScoreTitleLabel = this.generateLabel(highscoreMessages[Math.floor(Math.random()*highscoreMessages.length)], headerSize);
+            }
+            else {
+                var scoreTitleLabel = this.generateLabel("Score", header2Size);
+                this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
-            var bestTitleLabel = this.generateLabel("Best", header2Size);
-            this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
+                var bestTitleLabel = this.generateLabel("Best", header2Size);
+                this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
 
+                this._statsMenu.addChild(bestTitleLabel);
+                this._statsMenu.addChild(this._bestLabel);
+            }
             this._statsMenu.addChild(scoreTitleLabel);
             this._statsMenu.addChild(this._scoreLabel);
-            this._statsMenu.addChild(bestTitleLabel);
-            this._statsMenu.addChild(this._bestLabel);
+
+            if(bestScoreTitleLabel != null)
+                this._statsMenu.addChild(bestScoreTitleLabel);
 
             //var currencyTitleLabel = this.generateLabel("Currency");
             //this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);

@@ -9,18 +9,27 @@ var NJ = NJ || {};
 // returns the key 2 about 70% of the time.
 // only use non-negative weights if you expect sane results!
 NJ.weightedRandom = function(pairsList) {
+    var pair = null;
     var totalWeight = 0;
 
-    for (var pair in pairsList)
+    for (pair in pairsList) {
+        if(!pairsList.hasOwnProperty(pair))
+            continue;
+
         totalWeight += pairsList[pair].weight;
+    }
 
     var value = Math.random() * totalWeight;
 
-    for (var pair in pairsList) {
-        if (value < pairsList[pair].weight)
+    for (pair in pairsList) {
+        if(!pairsList.hasOwnProperty(pair))
+            continue;
+
+        if (value < pairsList[pair].weight) {
             return pairsList[pair].key;
-        else
+        } else {
             value -= pairsList[pair].weight;
+        }
     }
  
     return -1;
@@ -29,7 +38,9 @@ NJ.weightedRandom = function(pairsList) {
 // shuffles the array
 NJ.shuffleArray = function(array) {
     var i = array.length, j, temp;
-    if(i == 0) return array;
+    if(i == 0)
+        return array;
+
     while(--i) {
         j = Math.floor(Math.random() * (i + 1));
         temp = array[i];
@@ -41,8 +52,9 @@ NJ.shuffleArray = function(array) {
 };
 
 NJ.openAppDetails = function() {
-    var url = "";
+    var url = "https://www.facebook.com/numbojumbogame";
 
+    /*
     switch(cc.sys.os) {
         case cc.sys.OS_ANDROID:
             url = "market://details?id=com.fortafygames.colorswitch";
@@ -50,7 +62,7 @@ NJ.openAppDetails = function() {
         case cc.sys.OS_IOS:
             url = "http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1053533457&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8";
             break;
-    }
+    }*/
 
     cc.sys.openURL(url);
 };

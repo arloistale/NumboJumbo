@@ -467,10 +467,10 @@ var BaseGameLayer = (function() {
 		////////////////////
 
 		// Move scene block sprite into place.
-		moveBlockIntoPlace: function(moveBlock, shouldOverride) {
+		moveBlockIntoPlace: function(moveBlock) {
 
-			var blockTargetY = this._levelBounds.y +  this._levelCellSize.height * (moveBlock.row + 0.5);
-			var blockTargetX = this._levelBounds.x +  this._levelCellSize.width * (moveBlock.col + 0.5);
+			var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (moveBlock.row + 0.5);
+			var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (moveBlock.col + 0.5);
 			var duration = 0.7;
 			var easing = cc.easeQuinticActionInOut();
 			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
@@ -889,7 +889,7 @@ var BaseGameLayer = (function() {
 			// Gaps may be created; shift all affected blocks down.
 			var blocks = this._numboController.getBlocksList();
 			for (var i = 0; i < blocks.length; ++i){
-				this.moveBlockIntoPlace(blocks[i], true);
+				this.moveBlockIntoPlace(blocks[i]);
 			}
 		},
 
