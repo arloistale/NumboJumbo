@@ -92,7 +92,6 @@ var StackGameLayer = BaseGameLayer.extend({
 
         var key = NJ.modekeys.react;
         var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
-        var highlevelAccepted = NJ.stats.offerHighlevel(key, NJ.gameState.getLevel());
 
         // only submit score after all desired achievements have been pushed
         // because the achievement
@@ -117,9 +116,6 @@ var StackGameLayer = BaseGameLayer.extend({
             }
         }
 
-        //if(highlevelAccepted)
-          //  NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
-
         NJ.stats.save();
 
         // first send the analytics for the current game session
@@ -131,7 +127,7 @@ var StackGameLayer = BaseGameLayer.extend({
             }), cc.delayTime(1), cc.callFunc(function() {
                 that.pauseGame();
 
-                that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
+                that._gameOverMenuLayer = new GameOverMenuLayer(key, highscoreAccepted);
                 that._gameOverMenuLayer.setOnRetryCallback(function() {
                     that.onRetry();
                 });

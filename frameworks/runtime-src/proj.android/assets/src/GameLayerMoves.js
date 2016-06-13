@@ -131,7 +131,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 		}), cc.delayTime(1), cc.callFunc(function() {
 			that.pauseGame();
 
-			that._gameOverMenuLayer = new GameOverMenuLayer(key, false);
+			that._gameOverMenuLayer = new GameOverMenuLayer(key, highscoreAccepted);
 			that._gameOverMenuLayer.setOnRetryCallback(function() {
 				that.onRetry();
 			});

@@ -4,9 +4,10 @@
 
 var GameOverMenuLayer = (function() {
 
-    var highscoreMessages = ["You did it. You really did it.",
-        "You are feared by numbers great and small.",
-        "You might be a prodigy."];
+    var highscoreMessages = [
+        "You really did it.",
+        "Are we there yet?"
+    ];
 
     ///////////////
     // UI Events //
@@ -122,7 +123,7 @@ var GameOverMenuLayer = (function() {
             var bestTitleLabel, scoreTitleLabel;
 
             if(this._isHighscore) {
-                scoreTitleLabel = this.generateLabel("HIGH SCORE!", headerSize);
+                scoreTitleLabel = this.generateLabel("HIGH SCORE", headerSize);
                 this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
                 bestTitleLabel = this.generateLabel(highscoreMessages[Math.floor(Math.random() * highscoreMessages.length)], header2Size);

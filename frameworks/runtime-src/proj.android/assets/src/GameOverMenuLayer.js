@@ -4,6 +4,12 @@
 
 var GameOverMenuLayer = (function() {
 
+    var highscoreMessages = [
+        "You did it. You really did it.",
+        "Are we there yet?",
+        "You might be a prodigy."
+    ];
+
     ///////////////
     // UI Events //
     ///////////////
@@ -43,49 +49,36 @@ var GameOverMenuLayer = (function() {
         _bestLevelLabel: null,
         _currencyLabel: null,
 
+        //_bestScoreLabel: null,
+
         // Callbacks Data
         onRetryCallback: null,
         onMenuCallback: null,
 
         // Data
-        _shouldDisplayLevel: false,
+        _isHighscore: false,
         _modeKey: null,
 
 ////////////////////
 // Initialization //
 ////////////////////
 
-        ctor: function(modeKey, shouldDisplayLevel) {
+        ctor: function(modeKey, isHighscore) {
             this._super();
 
             // mode key is used to retrieve high score data
             this._modeKey = modeKey;
-            this._shouldDisplayLevel = shouldDisplayLevel;
+            this._isHighscore = isHighscore;
 
             // init background
             var backgroundColor = NJ.themes.backgroundColor;
             this.init(backgroundColor);
-
-            this._initInput();
 
             this._initHeaderUI();
             this._initStatsUI();
             this._initToolUI();
 
             this.enter();
-        },
-
-        _initInput: function() {
-            var that = this;
-
-            cc.eventManager.addListener({
-                event: cc.EventListener.KEYBOARD,
-                onKeyPressed: function(key, event) {
-                    if(key == cc.KEY.back) {
-                        (onMenu.bind(that))();
-                    }
-                }
-            }, this);
         },
 
         _initHeaderUI: function() {
@@ -111,9 +104,6 @@ var GameOverMenuLayer = (function() {
 
         _initStatsUI: function() {
             var key = this._modeKey;
-            var shouldDisplayLevel = this._shouldDisplayLevel;
-
-            var columnCount = shouldDisplayLevel ? 2 : 1;
 
             this._statsMenu = new cc.Menu();
 
@@ -129,17 +119,33 @@ var GameOverMenuLayer = (function() {
             // compute label size
             var header2Size = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
             var largeSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.large);
+            var headerSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header);
 
-            var scoreTitleLabel = this.generateLabel("Score", header2Size);
-            this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
+            var bestTitleLabel, scoreTitleLabel;
 
-            var bestTitleLabel = this.generateLabel("Best", header2Size);
-            this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
+            if(this._isHighscore) {
+                scoreTitleLabel = this.generateLabel("HIGH SCORE!", headerSize);
+                this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
-            this._statsMenu.addChild(scoreTitleLabel);
-            this._statsMenu.addChild(this._scoreLabel);
-            this._statsMenu.addChild(bestTitleLabel);
-            this._statsMenu.addChild(this._bestLabel);
+                bestTitleLabel = this.generateLabel(highscoreMessages[Math.floor(Math.random() * highscoreMessages.length)], header2Size);
+
+                this._statsMenu.addChild(scoreTitleLabel);
+                this._statsMenu.addChild(this._scoreLabel);
+
+                this._statsMenu.addChild(bestTitleLabel);
+            } else {
+                scoreTitleLabel = this.generateLabel("Score", header2Size);
+                this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
+
+                bestTitleLabel = this.generateLabel("Best", header2Size);
+                this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
+
+                this._statsMenu.addChild(scoreTitleLabel);
+                this._statsMenu.addChild(this._scoreLabel);
+
+                this._statsMenu.addChild(bestTitleLabel);
+                this._statsMenu.addChild(this._bestLabel);
+            }
 
             //var currencyTitleLabel = this.generateLabel("Currency");
             //this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
