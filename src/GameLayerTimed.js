@@ -139,7 +139,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 			}), cc.delayTime(1), cc.callFunc(function() {
 				that.pauseGame();
 
-				that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
+				that._gameOverMenuLayer = new GameOverMenuLayer(key, highscoreAccepted);
 				that._gameOverMenuLayer.setOnRetryCallback(function() {
 					that.onRetry();
 				});

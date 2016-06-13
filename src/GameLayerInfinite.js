@@ -130,7 +130,6 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
         var key = NJ.modekeys.infinite;
         var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
-        var highlevelAccepted = NJ.stats.offerHighlevel(key, NJ.gameState.getLevel());
 
         if(highscoreAccepted) {
             var highscore = NJ.stats.getHighscore(key);
@@ -153,9 +152,6 @@ var InfiniteGameLayer = BaseGameLayer.extend({
             }
         }
 
-        //if(highlevelAccepted)
-          //  NJ.social.submitLevel(key, NJ.stats.getHighlevel(key));
-
         NJ.stats.save();
 
         // first send the analytics for the current game session
@@ -167,7 +163,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
             }), cc.delayTime(1), cc.callFunc(function() {
                 that.pauseGame();
 
-                that._gameOverMenuLayer = new GameOverMenuLayer(key, true);
+                that._gameOverMenuLayer = new GameOverMenuLayer(key, highscoreAccepted);
                 that._gameOverMenuLayer.setOnRetryCallback(function() {
                     that.onRetry();
                 });

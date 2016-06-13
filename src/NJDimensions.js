@@ -19,7 +19,7 @@ NJ.uiSizes = {
     textButton: 0.075,
 
     // labels
-    large: 0.25,
+    large: 0.2,
     header: 0.1,
     header2: 0.07,
     sub: 0.05

@@ -13,8 +13,7 @@ var GameOverMenuLayer = (function() {
     ///////////////
 
     var onRetry = function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound4, false);
+        NJ.audio.playSound(res.clickSound);
 
         var that = this;
 
@@ -25,8 +24,7 @@ var GameOverMenuLayer = (function() {
     };
 
     var onMenu = function() {
-        if(NJ.settings.sounds)
-            cc.audioEngine.playEffect(res.clickSound4, false);
+        NJ.audio.playSound(res.clickSound);
 
         var that = this;
 
@@ -56,19 +54,19 @@ var GameOverMenuLayer = (function() {
         onMenuCallback: null,
 
         // Data
-        _shouldDisplayLevel: false,
+        _isHighscore: false,
         _modeKey: null,
 
 ////////////////////
 // Initialization //
 ////////////////////
 
-        ctor: function(modeKey, shouldDisplayLevel) {
+        ctor: function(modeKey, isHighscore) {
             this._super();
 
             // mode key is used to retrieve high score data
             this._modeKey = modeKey;
-            this._shouldDisplayLevel = shouldDisplayLevel;
+            this._isHighscore = isHighscore;
 
             // init background
             var backgroundColor = NJ.themes.backgroundColor;
@@ -104,9 +102,6 @@ var GameOverMenuLayer = (function() {
 
         _initStatsUI: function() {
             var key = this._modeKey;
-            var shouldDisplayLevel = this._shouldDisplayLevel;
-
-            var columnCount = shouldDisplayLevel ? 2 : 1;
 
             this._statsMenu = new cc.Menu();
 
@@ -124,27 +119,31 @@ var GameOverMenuLayer = (function() {
             var largeSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.large);
             var headerSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header);
 
-            var bestScoreTitleLabel = null;
-            if(NJ.gameState.getScore() == NJ.stats.getHighscore(key)) {
-                var scoreTitleLabel = this.generateLabel("New High Score!", header2Size);
-                this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
-                var bestScoreTitleLabel = this.generateLabel(highscoreMessages[Math.floor(Math.random()*highscoreMessages.length)], headerSize);
-            }
-            else {
-                var scoreTitleLabel = this.generateLabel("Score", header2Size);
+            var bestTitleLabel, scoreTitleLabel;
+
+            if(this._isHighscore) {
+                scoreTitleLabel = this.generateLabel("HIGH SCORE!", headerSize);
                 this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
-                var bestTitleLabel = this.generateLabel("Best", header2Size);
+                bestTitleLabel = this.generateLabel(highscoreMessages[Math.floor(Math.random() * highscoreMessages.length)], header2Size);
+
+                this._statsMenu.addChild(scoreTitleLabel);
+                this._statsMenu.addChild(this._scoreLabel);
+
+                this._statsMenu.addChild(bestTitleLabel);
+            } else {
+                scoreTitleLabel = this.generateLabel("Score", header2Size);
+                this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
+
+                bestTitleLabel = this.generateLabel("Best", header2Size);
                 this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
+
+                this._statsMenu.addChild(scoreTitleLabel);
+                this._statsMenu.addChild(this._scoreLabel);
 
                 this._statsMenu.addChild(bestTitleLabel);
                 this._statsMenu.addChild(this._bestLabel);
             }
-            this._statsMenu.addChild(scoreTitleLabel);
-            this._statsMenu.addChild(this._scoreLabel);
-
-            if(bestScoreTitleLabel != null)
-                this._statsMenu.addChild(bestScoreTitleLabel);
 
             //var currencyTitleLabel = this.generateLabel("Currency");
             //this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
