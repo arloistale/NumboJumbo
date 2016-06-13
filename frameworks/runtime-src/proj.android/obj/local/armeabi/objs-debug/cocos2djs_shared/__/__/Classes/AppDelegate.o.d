@@ -84,7 +84,8 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/AppDelegate.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../base/CCEventKeyboard.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/list \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../base/CCAutoreleasePool.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../audio/include/SimpleAudioEngine.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../audio/include/AudioEngine.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/unordered_map \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../audio/include/Export.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../scripting/js-bindings/auto/jsb_cocos2dx_3d_auto.hpp \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/external/spidermonkey/prebuilt/android/../../include/android/jsapi.h \
@@ -192,7 +193,6 @@ obj/local/armeabi/objs-debug/cocos2djs_shared/__/__/Classes/AppDelegate.o: \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h \
  /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../renderer/CCTexture2D.h \
- /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/unordered_map \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../math/CCAffineTransform.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../2d/CCComponentContainer.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../base/CCMap.h \
@@ -791,7 +791,9 @@ jni/../../Classes/AppDelegate.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../base/CCAutoreleasePool.h:
 
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../audio/include/SimpleAudioEngine.h:
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../audio/include/AudioEngine.h:
+
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/unordered_map:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../audio/include/Export.h:
 
@@ -1006,8 +1008,6 @@ jni/../../Classes/AppDelegate.h:
 /Users/jonathanlu/Desktop/DevTools/Android/ndk/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../renderer/CCTexture2D.h:
-
-/Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/unordered_map:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../math/CCAffineTransform.h:
 

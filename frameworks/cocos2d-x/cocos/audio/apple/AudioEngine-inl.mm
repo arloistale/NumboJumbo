@@ -203,6 +203,7 @@ AudioCache* AudioEngineImpl::preload(const std::string& filePath, std::function<
     AudioCache* audioCache = nullptr;
     
     auto it = _audioCaches.find(filePath);
+
     if (it == _audioCaches.end()) {
         audioCache = &_audioCaches[filePath];
         audioCache->_fileFullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
@@ -217,6 +218,7 @@ AudioCache* AudioEngineImpl::preload(const std::string& filePath, std::function<
     {
         audioCache->addLoadCallback(callback);
     }
+
     return audioCache;
 }
 

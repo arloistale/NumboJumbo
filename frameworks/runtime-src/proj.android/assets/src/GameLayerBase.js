@@ -208,7 +208,6 @@ var BaseGameLayer = (function() {
 					}
 				}, this);
 			}
-			//else
 
 			if (cc.sys.capabilities.hasOwnProperty('touches')) {
 				cc.eventManager.addListener({
@@ -229,6 +228,17 @@ var BaseGameLayer = (function() {
 					}
 				}, this);
 			}
+
+			var that = this;
+
+			cc.eventManager.addListener({
+				event: cc.EventListener.KEYBOARD,
+				onKeyPressed: function(key, event) {
+					if(key == cc.KEY.back) {
+						that.onPause();
+					}
+				}
+			}, this);
 		},
 
 		// Initialize UI elements
@@ -464,16 +474,14 @@ var BaseGameLayer = (function() {
 			var duration = 0.7;
 			var easing = cc.easeQuinticActionInOut();
 			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
-			moveAction.setTag(42);
 
-			//if(!moveBlock.isFalling || shouldOverride) {
-			//	moveBlock.isFalling = true;
-
-			moveBlock.stopAllActions();
+			//moveBlock.stopAllActions();
+			/*
 			moveBlock.runAction(cc.sequence(moveAction, cc.callFunc(function() {
 				moveBlock.isFalling = false;
-			})));
-			//}
+			})));*/
+
+			moveBlock.setPosition(cc.p(blockTargetX, blockTargetY));
 		},
 
 		// spawns and drops a block with random col and val.

@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 
-#include "audio/include/SimpleAudioEngine.h"
+#include "audio/include/AudioEngine.h"
 #include "scripting/js-bindings/auto/jsb_cocos2dx_3d_auto.hpp"
 #include "scripting/js-bindings/auto/jsb_cocos2dx_3d_extension_auto.hpp"
 #include "scripting/js-bindings/auto/jsb_cocos2dx_auto.hpp"
@@ -55,7 +55,6 @@
 #endif
 
 USING_NS_CC;
-using namespace CocosDenshion;
 
 AppDelegate::AppDelegate()
 {
@@ -160,8 +159,7 @@ void AppDelegate::applicationDidEnterBackground()
     auto director = Director::getInstance();
     director->stopAnimation();
     director->getEventDispatcher()->dispatchCustomEvent("game_on_hide");
-    SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
-    SimpleAudioEngine::getInstance()->pauseAllEffects();
+    cocos2d::experimental::AudioEngine::pauseAll();
 }
 
 // this function will be called when the app is active again
@@ -170,6 +168,5 @@ void AppDelegate::applicationWillEnterForeground()
     auto director = Director::getInstance();
     director->startAnimation();
     director->getEventDispatcher()->dispatchCustomEvent("game_on_show");
-    SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
-    SimpleAudioEngine::getInstance()->resumeAllEffects();
+    cocos2d::experimental::AudioEngine::resumeAll();
 }

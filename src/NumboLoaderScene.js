@@ -77,22 +77,29 @@ NumboLoaderScene = cc.Scene.extend({
         self._audioLoadCount = 0;
         var res = self.resources;
 
+        var shouldPreload = true;
+
         cc.loader.load(res, function() {}, function () {
-            // here we need to preload all the audio resources in the game <<<<
-            for(var i = 0; i < sounds.length; ++i) {
-                NJ.audio.preload(sounds[i], function (isSuccess) {
-                    if (!isSuccess) {
-                        cc.log("Warning: preloading failed")
-                    }
+            if(!shouldPreload) {
+                if (self.cb)
+                    self.cb.call(self.target);
+            } else {
+                // here we need to preload all the audio resources in the game <<<<
+                for (var i = 0; i < sounds.length; ++i) {
+                    NJ.audio.preload(sounds[i], function (isSuccess) {
+                        if (!isSuccess) {
+                            cc.log("Warning: preloading failed")
+                        }
 
-                    self._audioLoadCount++;
-                    if(self._audioLoadCount >= sounds.length) {
-                        if (self.cb)
-                            self.cb.call(self.target);
+                        self._audioLoadCount++;
+                        if (self._audioLoadCount >= sounds.length) {
+                            if (self.cb)
+                                self.cb.call(self.target);
 
-                        cc.log("Finished preloading " + self._audioLoadCount + " audio assets");
-                    }
-                });
+                            cc.log("Finished preloading " + self._audioLoadCount + " audio assets");
+                        }
+                    });
+                }
             }
         });
     }

@@ -8,6 +8,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 	_tutorialLayer: null,
 
+	_pauseEnabled: false,
+
 	////////////////////
 	// Initialization //
 	////////////////////
@@ -20,6 +22,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		this._numboHeaderLayer.enterTutorialMode();
 
 		if(allowToolbar) {
+			this._pauseEnabled = true;
+
 			// this seems like a hack but will work for now
 			this._toolbarLayer.setOnPauseCallback(function() {
 				that.leave(function() {
@@ -327,6 +331,16 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 	///////////////////////
 	// Game State Events //
 	///////////////////////
+
+	onPause: function() {
+		if(this._pauseEnabled) {
+			var that = this;
+
+			this.leave(function() {
+				that.onMenu();
+			});
+		}
+	},
 
 	// Halts game, switches to game over, sends data.
 	onGameOver: function() { },

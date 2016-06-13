@@ -101,11 +101,27 @@ var SettingsMenuLayer = (function() {
 
             this.init(NJ.themes.backgroundColor);
 
+            this._initInput();
+
             this._initHeaderUI();
             this._initContentUI();
             this._initToolUI();
 
             this.enter();
+        },
+
+        // Initialize input depending on the device.
+        _initInput: function() {
+            var that = this;
+
+            cc.eventManager.addListener({
+                event: cc.EventListener.KEYBOARD,
+                onKeyPressed: function(key, event) {
+                    if(key == cc.KEY.back) {
+                        (onBack.bind(that))();
+                    }
+                }
+            }, this);
         },
 
         _initHeaderUI: function() {

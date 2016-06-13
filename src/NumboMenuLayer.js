@@ -57,6 +57,8 @@ var NumboMenuLayer = (function() {
             this._initModesUI();
             this._initToolsUI();
 
+            this._initInput();
+
             this._updateTheme();
 
             this._initAudio();
@@ -279,6 +281,18 @@ var NumboMenuLayer = (function() {
             this._toolMenu.alignItemsHorizontallyWithPadding(10);
 
             this.addChild(this._toolMenu, 100);
+        },
+
+        // Initialize input depending on the device.
+        _initInput: function() {
+            cc.eventManager.addListener({
+                event: cc.EventListener.KEYBOARD,
+                onKeyPressed: function(key, event) {
+                    if(key == cc.KEY.back) {
+                        console.log("back");
+                    }
+                }
+            }, this);
         },
 
         // initialize game audio

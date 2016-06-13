@@ -58,7 +58,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         var that = this;
 
         this._numboController.initDistribution(this._numberList, this._thresholdNumbers);
-        this._numboHeaderLayer.setConditionValue(this._numboController.getSpawnDistributionMaxNumber());
+        this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
 
         if(!NJ.settings.hasLoadedINF) {
             this.pauseGame();

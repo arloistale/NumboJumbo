@@ -31,7 +31,6 @@ var StackGameLayer = BaseGameLayer.extend({
 
         this._numboController.initDistribution(this._numberList);
         this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
-        this._numboHeaderLayer.setConditionValue(this._blocksToDrop);
 
         if(!NJ.settings.hasLoadedRE) {
             this.pauseGame();
