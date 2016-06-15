@@ -91,7 +91,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
 	autoDraw:false,
 
     _texture:null,
-    _pixelFormat:0,
+    _pixelFormat:cc.Texture2D.PIXEL_FORMAT_RGBA8888,
 
     clearStencilVal:0,
     _clearColor:null,
@@ -114,7 +114,6 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
         cc.Node.prototype.ctor.call(this);
         this._cascadeColorEnabled = true;
         this._cascadeOpacityEnabled = true;
-        this._pixelFormat = cc.Texture2D.PIXEL_FORMAT_RGBA8888;
         this._clearColor = new cc.Color(0,0,0,255);
 
         if(width !== undefined && height !== undefined) {
@@ -126,7 +125,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc.game.RENDER_TYPE_CANVAS)
+        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
             return new cc.RenderTexture.CanvasRenderCmd(this);
         else
             return new cc.RenderTexture.WebGLRenderCmd(this);
@@ -334,7 +333,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
     },
 
     /**
-     * When enabled, it will render its children into the texture automatically. Disabled by default for compatibility reasons. <br/>
+     * When enabled, it will render its children into the texture automatically. Disabled by default for compatiblity reasons. <br/>
      * Will be enabled in the future.
      * @return {Boolean}
      */
@@ -343,7 +342,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
     },
 
     /**
-     * When enabled, it will render its children into the texture automatically. Disabled by default for compatibility reasons. <br/>
+     * When enabled, it will render its children into the texture automatically. Disabled by default for compatiblity reasons. <br/>
      * Will be enabled in the future.
      * @return {Boolean}
      */

@@ -60,20 +60,12 @@ ccs.ActionTimelineData = ccs.Class.extend({
 
 });
 
-ccs.AnimationInfo = function(name, start, end){
-    this.name = name;
-    this.startIndex = start;
-    this.endIndex = end;
-};
-
-ccs.ComExtensionData = ccs.Component.extend({
+ccs.ObjectExtensionData = ccs.Class.extend({
 
     _customProperty: null,
     _timelineData: null,
-    _name: "ComExtensionData",
 
     ctor: function(){
-        this._customProperty = "";
         this._timelineData = new ccs.ActionTimelineData(0);
         return true;
     },
@@ -84,20 +76,11 @@ ccs.ComExtensionData = ccs.Component.extend({
 
     getActionTag: function(){
         return this._timelineData.getActionTag();
-    },
-
-    setCustomProperty: function(customProperty){
-        this._customProperty = customProperty;
-    },
-
-    getCustomProperty: function(){
-        return this._customProperty;
     }
-
 });
 
-ccs.ComExtensionData.create = function(){
-    return new ccs.ComExtensionData();
+ccs.ObjectExtensionData.create = function(){
+    return new ccs.ObjectExtensionData();
 };
 
 /**
@@ -138,7 +121,6 @@ ccs.ActionTimeline = cc.Action.extend({
     _loop: null,
     _frameEventListener: null,
     _animationInfos: null,
-    _lastFrameListener: null,
 
     ctor: function(){
         cc.Action.prototype.ctor.call(this);
@@ -195,7 +177,7 @@ ccs.ActionTimeline = cc.Action.extend({
             }
         }
         startIndex = num[0];
-        endIndex = num[1] !== undefined ? num[1] : this._duration;
+        endIndex = num[1] || this._duration;
         currentFrameIndex = num[2] || startIndex;
         loop = bool!=null ? bool : true;
 
@@ -323,7 +305,10 @@ ccs.ActionTimeline = cc.Action.extend({
             this._timelineMap[tag] = [];
         }
 
-        if (this._timelineMap[tag].indexOf(timeline) === -1) {
+        if (!this._timelineMap[tag].some(function(item){
+            if(item === timeline)
+                return true;
+        })) {
             this._timelineList.push(timeline);
             this._timelineMap[tag].push(timeline);
             timeline.setActionTimeline(this);
@@ -414,24 +399,15 @@ ccs.ActionTimeline = cc.Action.extend({
         }
 
         this._time += delta * this._timeSpeed;
-        var endoffset = this._time - this._endFrame * this._frameInternal;
+        this._currentFrame = this._time / this._frameInternal | 0;
 
-        if(endoffset < this._frameInternal){
-            this._currentFrame = Math.floor(this._time / this._frameInternal);
-            this._stepToFrame(this._currentFrame);
-            if(endoffset >= 0 && this._lastFrameListener)
-                this._lastFrameListener();
-        }else{
+        this._stepToFrame(this._currentFrame);
+
+        if(this._time > this._endFrame * this._frameInternal){
             this._playing = this._loop;
-            if(!this._playing){
+            if(!this._playing)
                 this._time = this._endFrame * this._frameInternal;
-                if (this._currentFrame != this._endFrame){
-                    this._currentFrame = this._endFrame;
-                    this._stepToFrame(this._currentFrame);
-                    if(this._lastFrameListener)
-                        this._lastFrameListener();
-                }
-            }else
+            else
                 this.gotoFrameAndPlay(this._startFrame, this._endFrame, this._loop);
         }
 
@@ -457,7 +433,7 @@ ccs.ActionTimeline = cc.Action.extend({
 
         var self = this;
         var callback = function(child){
-            var data = child.getComponent("ComExtensionData");
+            var data = child.getUserObject();
 
             if(data) {
                 var actionTag = data.getActionTag();
@@ -516,14 +492,6 @@ ccs.ActionTimeline = cc.Action.extend({
 
     getAnimationInfo: function(name){
         return this._animationInfos[name];
-    },
-
-    setLastFrameCallFunc: function(listener){
-        this._lastFrameListener = listener;
-    },
-
-    clearLastFrameCallFunc: function(){
-        this._lastFrameListener = null;
     }
 });
 

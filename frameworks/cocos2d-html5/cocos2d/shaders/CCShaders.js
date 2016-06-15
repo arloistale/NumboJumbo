@@ -76,17 +76,8 @@ cc.SHADER_POSITION_COLOR_VERT =
         + "varying lowp vec4 v_fragmentColor;\n"
         + "void main()\n"
         + "{\n"
+        //+ "    gl_Position = CC_MVPMatrix * a_position;  \n"
         + "    gl_Position = (CC_PMatrix * CC_MVMatrix) * a_position;  \n"
-        + "    v_fragmentColor = a_color;             \n"
-        + "}";
-
-cc.SHADER_SPRITE_POSITION_COLOR_VERT =
-        "attribute vec4 a_position;\n"
-        + "attribute vec4 a_color;\n"
-        + "varying lowp vec4 v_fragmentColor;\n"
-        + "void main()\n"
-        + "{\n"
-        + "    gl_Position = CC_PMatrix * a_position;  \n"
         + "    v_fragmentColor = a_color;             \n"
         + "}";
 
@@ -96,7 +87,7 @@ cc.SHADER_SPRITE_POSITION_COLOR_VERT =
  * @type {String}
  */
 cc.SHADER_POSITION_COLOR_LENGTH_TEXTURE_FRAG =
-        "// #extension GL_OES_standard_derivatives : enable\n"
+        "//#extension GL_OES_standard_derivatives : enable\n"
         + "varying mediump vec4 v_color;\n"
         + "varying mediump vec2 v_texcoord;\n"
         + "void main()	\n"
@@ -211,6 +202,7 @@ cc.SHADER_POSITION_TEXTURE_A8COLOR_VERT =
         + "varying mediump vec2 v_texCoord; \n"
         + "void main() \n"
         + "{ \n"
+        //+ "    gl_Position = CC_MVPMatrix * a_position;  \n"
         + "    gl_Position = (CC_PMatrix * CC_MVMatrix) * a_position;  \n"
         + "    v_fragmentColor = a_color; \n"
         + "    v_texCoord = a_texCoord; \n"
@@ -242,24 +234,8 @@ cc.SHADER_POSITION_TEXTURE_COLOR_VERT =
         + "varying mediump vec2 v_texCoord; \n"
         + "void main() \n"
         + "{ \n"
+        //+ "    gl_Position = CC_MVPMatrix * a_position;  \n"
         + "    gl_Position = (CC_PMatrix * CC_MVMatrix) * a_position;  \n"
-        + "    v_fragmentColor = a_color; \n"
-        + "    v_texCoord = a_texCoord; \n"
-        + "}";
-
-/**
- * @constant
- * @type {String}
- */
-cc.SHADER_SPRITE_POSITION_TEXTURE_COLOR_VERT =
-        "attribute vec4 a_position; \n"
-        + "attribute vec2 a_texCoord; \n"
-        + "attribute vec4 a_color;  \n"
-        + "varying lowp vec4 v_fragmentColor; \n"
-        + "varying mediump vec2 v_texCoord; \n"
-        + "void main() \n"
-        + "{ \n"
-        + "    gl_Position = CC_PMatrix * a_position;  \n"
         + "    v_fragmentColor = a_color; \n"
         + "    v_texCoord = a_texCoord; \n"
         + "}";
@@ -282,20 +258,6 @@ cc.SHADER_POSITION_TEXTURE_COLOR_ALPHATEST_FRAG =
         + "    if ( texColor.a <= CC_alpha_value )          \n"
         + "        discard; \n"
         + "    gl_FragColor = texColor * v_fragmentColor;  \n"
-        + "}";
-
-//-----------------------Shader_PositionSpriteTextureColorVertTest_frag Shader Source----------------------------
-cc.SHADER_SPRITE_POSITION_TEXTURE_COLOR_VERT =
-        "attribute vec4 a_position; \n"
-        + "attribute vec2 a_texCoord; \n"
-        + "attribute vec4 a_color;  \n"
-        + "varying lowp vec4 v_fragmentColor; \n"
-        + "varying mediump vec2 v_texCoord; \n"
-        + "void main() \n"
-        + "{ \n"
-        + "    gl_Position = CC_PMatrix * a_position;  \n"
-        + "    v_fragmentColor = a_color; \n"
-        + "    v_texCoord = a_texCoord; \n"
         + "}";
 
 //-----------------------ShaderEx_SwitchMask_frag Shader Source----------------------------

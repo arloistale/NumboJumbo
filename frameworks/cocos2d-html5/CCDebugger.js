@@ -319,7 +319,7 @@ cc._initDebugSetting = function (mode) {
             if (!cond && msg) {
                 for (var i = 2; i < arguments.length; i++)
                     msg = msg.replace(/(%s)|(%d)/, cc._formatString(arguments[i]));
-                throw new Error(msg);
+                throw msg;
             }
         };
         if(mode !== ccGame.DEBUG_MODE_ERROR)
@@ -332,4 +332,5 @@ cc._initDebugSetting = function (mode) {
             };
     }
 };
+cc._initDebugSetting(cc.game.config[cc.game.CONFIG_KEY.debugMode]);
 //+++++++++++++++++++++++++something about log end+++++++++++++++++++++++++++++

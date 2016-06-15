@@ -40,15 +40,9 @@
     proto.rendering = function(ctx){
         cc.AtlasNode.WebGLRenderCmd.prototype.rendering.call(this, ctx);
         if (cc.LABELATLAS_DEBUG_DRAW) {
-            var node = this._node;
-            var s = node.getContentSize();
-            var locRect = node.getBoundingBoxToWorld();
-            var posX = locRect.x,
-                posY = locRect.y;
-                s.width = locRect.width;
-                s.height = locRect.height;
-            var vertices = [cc.p(posX, posY), cc.p(posX+ s.width, posY),
-                cc.p(s.width+posX, s.height+posY), cc.p(posX, posY+s.height)];
+            var s = this._node.getContentSize();
+            var vertices = [cc.p(0, 0), cc.p(s.width, 0),
+                cc.p(s.width, s.height), cc.p(0, s.height)];
             cc._drawingUtil.drawPoly(vertices, 4, true);
         }
     };
@@ -74,17 +68,11 @@
         var locDisplayedColor = this._displayedColor;
         var curColor = {r: locDisplayedColor.r, g: locDisplayedColor.g, b: locDisplayedColor.b, a: node._displayedOpacity};
         var locItemWidth = node._itemWidth;
-        var locItemHeight = node._itemHeight;
-        for (var i = 0, cr = -1; i < n; i++) {
+        for (var i = 0; i < n; i++) {
             var a = locString.charCodeAt(i) - node._mapStartChar.charCodeAt(0);
             var row = a % node._itemsPerRow;
             var col = 0 | (a / node._itemsPerRow);
-            if(row < 0 || col < 0)
-                continue;
-            if(row*locItemWidth + locItemWidth > textureWide || col*locItemHeight + locItemHeight > textureHigh)
-                continue;
 
-            cr++;
             var left, right, top, bottom;
             if (cc.FIX_ARTIFACTS_BY_STRECHING_TEXEL) {
                 // Issue #938. Don't use texStepX & texStepY
@@ -109,16 +97,16 @@
             locQuadBR.texCoords.u = right;
             locQuadBR.texCoords.v = bottom;
 
-            locQuadBL.vertices.x = (cr * locItemWidth);
+            locQuadBL.vertices.x = (i * locItemWidth);
             locQuadBL.vertices.y = 0;
             locQuadBL.vertices.z = 0.0;
-            locQuadBR.vertices.x = (cr * locItemWidth + locItemWidth);
+            locQuadBR.vertices.x = (i * locItemWidth + locItemWidth);
             locQuadBR.vertices.y = 0;
             locQuadBR.vertices.z = 0.0;
-            locQuadTL.vertices.x = cr * locItemWidth;
+            locQuadTL.vertices.x = i * locItemWidth;
             locQuadTL.vertices.y = node._itemHeight;
             locQuadTL.vertices.z = 0.0;
-            locQuadTR.vertices.x = cr * locItemWidth + locItemWidth;
+            locQuadTR.vertices.x = i * locItemWidth + locItemWidth;
             locQuadTR.vertices.y = node._itemHeight;
             locQuadTR.vertices.z = 0.0;
             locQuadTL.colors = curColor;
@@ -126,20 +114,11 @@
             locQuadBL.colors = curColor;
             locQuadBR.colors = curColor;
         }
-        this.updateContentSize(i, cr+1);
         if (n > 0) {
             locTextureAtlas.dirty = true;
             var totalQuads = locTextureAtlas.totalQuads;
             if (n > totalQuads)
                 locTextureAtlas.increaseTotalQuadsWith(n - totalQuads);
-        }
-    };
-
-    proto.updateContentSize = function(i, cr){
-        var node = this._node,
-            contentSize = node._contentSize;
-        if(i !== cr && i*node._itemWidth === contentSize.width && node._itemHeight === contentSize.height){
-            node.setContentSize(cr * node._itemWidth, node._itemHeight);
         }
     };
 

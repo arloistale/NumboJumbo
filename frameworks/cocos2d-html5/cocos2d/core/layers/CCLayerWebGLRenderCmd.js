@@ -81,8 +81,7 @@
 
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
-        context.enableVertexAttribArray(cc.VERTEX_ATTRIB_POSITION);
-        context.enableVertexAttribArray(cc.VERTEX_ATTRIB_COLOR);
+        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_COLOR);
         cc.glBlendFunc(node._blendFunc.src, node._blendFunc.dst);
 
         //
@@ -283,11 +282,10 @@
         context.enable(context.SCISSOR_TEST);
         cc.view.setScissorInPoints(clippingRect.x, clippingRect.y, clippingRect.width, clippingRect.height);
 
-        //draw gradient layer
+        //_barNode gradient layer
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
-        context.enableVertexAttribArray(cc.VERTEX_ATTRIB_POSITION);
-        context.enableVertexAttribArray(cc.VERTEX_ATTRIB_COLOR);
+        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_COLOR);
         cc.glBlendFunc(node._blendFunc.src, node._blendFunc.dst);
         //
         // Attributes

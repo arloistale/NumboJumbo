@@ -187,7 +187,7 @@ ccs.Timeline = ccs.Class.extend({
     _apply: function(frameIndex){
         if (this._currentKeyFrame)
         {
-            var currentPercent = this._betweenDuration <= 0 ? 0 : (frameIndex - this._currentKeyFrameIndex) / this._betweenDuration;
+            var currentPercent = this._betweenDuration === 0 ? 0 : (frameIndex - this._currentKeyFrameIndex) / this._betweenDuration;
             this._currentKeyFrame.apply(currentPercent);
         }
     },
@@ -199,22 +199,20 @@ ccs.Timeline = ccs.Class.extend({
         var length = this._frames.length;
         var needEnterFrame = false;
 
-        do{
-            if (frameIndex < this._frames[0].getFrameIndex()){
+        do
+        {
+            if (frameIndex <= this._frames[0].getFrameIndex())
+            {
                 if(this._currentKeyFrameIndex >= this._frames[0].getFrameIndex())
                     needEnterFrame = true;
-
-                this._fromIndex = 0;
-                this._toIndex = 0;
 
                 from = to = this._frames[0];
                 this._currentKeyFrameIndex = 0;
                 this._betweenDuration = this._frames[0].getFrameIndex();
                 break;
-            }else if(frameIndex >= this._frames[length - 1].getFrameIndex()){
-                this._fromIndex = length - 1;
-                this._toIndex = 0;
-
+            }
+            else if(frameIndex >= this._frames[length - 1].getFrameIndex())
+            {
                 from = to = this._frames[length - 1];
                 this._currentKeyFrameIndex = this._frames[length - 1].getFrameIndex();
                 this._betweenDuration = 0;
@@ -238,16 +236,6 @@ ccs.Timeline = ccs.Class.extend({
                     low = mid + 1;
             }
 
-            this._fromIndex = target;
-
-            if(length > 1)
-                this._toIndex = (target + 1) | 0;
-            else
-                this._toIndex = (target) | 0;
-
-            from = this._frames[this._fromIndex];
-            to   = this._frames[this._toIndex];
-
             from = this._frames[target];
             to   = this._frames[target+1];
 
@@ -266,8 +254,6 @@ ccs.Timeline = ccs.Class.extend({
     },
 
     _updateCurrentKeyFrame: function(frameIndex){
-        if(frameIndex > 60)
-            var a = 0;
         //! If play to current frame's front or back, then find current frame again
         if (frameIndex < this._currentKeyFrameIndex || frameIndex >= this._currentKeyFrameIndex + this._betweenDuration)
         {
@@ -287,10 +273,10 @@ ccs.Timeline = ccs.Class.extend({
                 }
                 else if(frameIndex >= this._frames[length - 1].getFrameIndex())
                 {
-                    var lastFrameIndex = this._frames[length - 1].getFrameIndex();
-                    if(this._currentKeyFrameIndex >= lastFrameIndex)
-                        return;
-                    frameIndex = lastFrameIndex;
+                    from = to = this._frames[length - 1];
+                    this._currentKeyFrameIndex = this._frames[length - 1].getFrameIndex();
+                    this._betweenDuration = 0;
+                    break;
                 }
 
                 do{
@@ -307,12 +293,10 @@ ccs.Timeline = ccs.Class.extend({
                     to = this._frames[this._toIndex];
 
                     if (frameIndex === from.getFrameIndex())
+                    {
                         break;
-                    if(frameIndex > from.getFrameIndex() && frameIndex < to.getFrameIndex())
-                        break;
-                    if(from.isEnterWhenPassed())
-                        from.onEnter(to);
-                }while (true);
+                    }
+                }while (frameIndex < from.getFrameIndex() || frameIndex >= to.getFrameIndex());
 
                 this._betweenDuration = to.getFrameIndex() - from.getFrameIndex();
 

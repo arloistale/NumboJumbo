@@ -70,6 +70,8 @@ var BaseGameLayer = (function() {
 		_jiggleCount: 0,
 
 		// UI Data
+		_prepLayer: null,
+
 		_numboHeaderLayer: null,
 		_toolbarLayer: null,
 		_settingsMenuLayer: null,
@@ -163,7 +165,7 @@ var BaseGameLayer = (function() {
 			}, 0.1);
 		},
 
-		_initParticles: function(){
+		_initParticles: function() {
 			for (var col = 0; col < NJ.NUM_COLS; ++col){
 				for (var row = 0; row < NJ.NUM_ROWS; ++row) {
 					var coords = this._convertLevelCoordsToPoint(col, row);
@@ -179,6 +181,8 @@ var BaseGameLayer = (function() {
 
 		// Initialize input depending on the device.
 		_initInput: function() {
+			cc.eventManager.removeAllListeners();
+
 			if ('mouse' in cc.sys.capabilities) {
 				cc.eventManager.addListener({
 					event: cc.EventListener.MOUSE,
@@ -238,7 +242,25 @@ var BaseGameLayer = (function() {
 						that.onPause();
 					}
 				}
+			}, 1);
+
+			cc.eventManager.addListener({
+				event: cc.EventListener.CUSTOM,
+				eventName: "game_on_hide",
+				callback: function(event) {
+					that.onPause(true);
+				}
 			}, this);
+
+			cc.eventManager.addListener({
+				event: cc.EventListener.CUSTOM,
+				eventName: "game_on_show",
+				callback: function(event) {
+					if(that._prepLayer) {
+						that.onResume();
+					}
+				}
+			}, 2);
 		},
 
 		// Initialize UI elements
@@ -468,17 +490,16 @@ var BaseGameLayer = (function() {
 
 		// Move scene block sprite into place.
 		moveBlockIntoPlace: function(moveBlock) {
-
 			var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (moveBlock.row + 0.5);
 			var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (moveBlock.col + 0.5);
 			var duration = 0.7;
 			var easing = cc.easeQuinticActionInOut();
 			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 
-			//moveBlock.stopAllActions();
-			//moveBlock.runAction(cc.sequence(moveAction));
+			moveBlock.stopAllActions();
+			moveBlock.runAction(moveAction);
 
-			moveBlock.setPosition(cc.p(blockTargetX, blockTargetY));
+			//moveBlock.setPosition(cc.p(blockTargetX, blockTargetY));
 		},
 
 		// spawns and drops a block with random col and val.
@@ -580,36 +601,53 @@ var BaseGameLayer = (function() {
 		///////////////
 
 		// On pause, pauses game and opens up the settings menu.
-		onPause: function() {
+		onPause: function(isInstant) {
 			var that = this;
 
 			this._feedbackLayer.clearDoomsayer();
 
 			this.pauseGame();
 
+			if(this._prepLayer) {
+				return;
+			}
+
             this.leaveBoard();
 
-            this.leave(function() {
-                that._settingsMenuLayer = new SettingsMenuLayer(true);
-                that._settingsMenuLayer.setOnRetryCallback(function() {
-                    that.onRetry();
-                });
-                that._settingsMenuLayer.setOnCloseCallback(function() {
-                    that.removeChild(that._settingsMenuLayer);
-                    that.onResume();
-                });
-                that._settingsMenuLayer.setOnMenuCallback(function() {
-                    that.onMenu();
-                });
-                that.addChild(that._settingsMenuLayer, 999);
-            });
+			var callback = function() {
+				that._settingsMenuLayer = new SettingsMenuLayer(true);
+				that._settingsMenuLayer.setOnRetryCallback(function() {
+					that.onRetry();
+				});
+				that._settingsMenuLayer.setOnCloseCallback(function() {
+					that.removeChild(that._settingsMenuLayer);
+					that.onResume();
+				});
+				that._settingsMenuLayer.setOnMenuCallback(function() {
+					that.onMenu();
+				});
+				that.addChild(that._settingsMenuLayer, 999);
+			};
+
+			if(isInstant) {
+				callback();
+			} else {
+				this.leave(callback);
+			}
 		},
 
 		// On closing previously opened settings menu we resume.
 		onResume: function() {
 			var that = this;
 
+			if(this._prepLayer) {
+				that.resumeGame();
+				return;
+			}
+
             this.enterBoard();
+
+			that._updateTheme();
 
 			this.enter(function() {
                 if(that.isInDanger())
@@ -619,8 +657,6 @@ var BaseGameLayer = (function() {
 
                 // play music again if music settings turned on
                 NJ.audio.playMusic(that._backgroundTrack);
-
-                that._updateTheme();
             });
 		},
 

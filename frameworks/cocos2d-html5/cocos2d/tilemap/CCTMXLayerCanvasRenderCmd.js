@@ -29,7 +29,7 @@
         this._realWorldTransform = {a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0};
 
         var locCanvas = cc._canvas;
-        var tmpCanvas = document.createElement('canvas');
+        var tmpCanvas = cc.newElement('canvas');
         tmpCanvas.width = locCanvas.width;
         tmpCanvas.height = locCanvas.height;
         this._cacheCanvas = tmpCanvas;
@@ -87,7 +87,7 @@
         wrapper.setGlobalAlpha(alpha);
 
         var locCacheCanvas = this._cacheCanvas;
-        //direct draw image by canvas drawImage
+        //direct _barNode image by canvas drawImage
         if (locCacheCanvas && locCacheCanvas.width !== 0 && locCacheCanvas.height !== 0) {
             wrapper.setTransform(this._realWorldTransform, scaleX, scaleY);
             var locCanvasHeight = locCacheCanvas.height * scaleY;
@@ -160,7 +160,7 @@
             context.clearRect(0, 0, locCanvas.width, locCanvas.height);
             //set the wrapper's offset
 
-            //draw to cache canvas
+            //_barNode to cache canvas
             renderer._renderingToCacheCanvas(wrapper, instanceID);
             //wrapper.restore();                           //todo: it can be reserve.
             this._cacheDirty = false
@@ -205,13 +205,13 @@
 
     proto.initImageSize = function(){
         var node = this._node;
-        node.tileset.imageSize = this._texture.getContentSizeInPixels();
+        node.tileset.imageSize = this._originalTexture.getContentSizeInPixels();
     };
 
     proto._reusedTileWithRect = function(rect){
         var node = this._node;
         node._reusedTile = new cc.Sprite();
-        node._reusedTile.initWithTexture(this._texture, rect, false);
+        node._reusedTile.initWithTexture(node._renderCmd._texture, rect, false);
         node._reusedTile.batchNode = node;
         node._reusedTile.parent = node;
         node._reusedTile._renderCmd._cachedParent = node._renderCmd;

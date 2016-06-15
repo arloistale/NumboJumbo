@@ -18,7 +18,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 	],
 
 	// maximum number of moves allowed
-	_movesLimit: 2,
+	_movesLimit: 20,
 
 	////////////////////
 	// Initialization //
@@ -44,6 +44,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 				that.onResume();
 
 				that.removeChild(that._prepLayer);
+				that._prepLayer = null;
 
 				NJ.settings.hasLoadedMOV = true;
 				NJ.saveSettings();

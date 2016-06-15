@@ -26,6 +26,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+cc.HashUniformEntry = function (value, location, hh) {
+    this.value = value;
+    this.location = location;
+    this.hh = hh || {};
+};
+
 /**
  * Class that implements a WebGL program
  * @class
@@ -41,31 +47,28 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
     _usesTime: false,
 
     // Uniform cache
-    _updateUniformLocation: function (location) {
-        if (!location)
+    _updateUniformLocation: function (location, data, bytes) {
+        if (location == null)
             return false;
 
-        var updated;
-        var element = this._hashForUniforms[location];
+        var updated = true;
+        var element = null;
+        for (var i = 0; i < this._hashForUniforms.length; i++)
+            if (this._hashForUniforms[i].location == location)
+                element = this._hashForUniforms[i];
 
         if (!element) {
-            element = [
-                arguments[1],
-                arguments[2],
-                arguments[3],
-                arguments[4]
-            ];
-            this._hashForUniforms[location] = element;
-            updated = true;
+            element = new cc.HashUniformEntry();
+            // key
+            element.location = location;
+            // value
+            element.value = data;
+            this._hashForUniforms.push(element);
         } else {
-            updated = false;
-            var count = arguments.length-1;
-            for (var i = 0; i < count; ++i) {
-                if (arguments[i+1] !== element[i]) {
-                    element[i] = arguments[i+1];
-                    updated = true;
-                }
-            }
+            if (element.value == data)
+                updated = false;
+            else
+                element.value = data;
         }
 
         return updated;
@@ -113,8 +116,8 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
 	 * @returns {cc.GLProgram}
 	 */
     ctor: function (vShaderFileName, fShaderFileName, glContext) {
-        this._uniforms = {};
-        this._hashForUniforms = {};
+        this._uniforms = [];
+        this._hashForUniforms = [];
         this._glContext = glContext || cc._renderContext;
 
 		vShaderFileName && fShaderFileName && this.init(vShaderFileName, fShaderFileName);
@@ -167,10 +170,7 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
 
         if (this._fragShader)
             locGL.attachShader(this._programObj, this._fragShader);
-
-        for (var key in this._hashForUniforms) {
-            delete this._hashForUniforms[key];
-        }
+        this._hashForUniforms.length = 0;
 
         cc.checkGLErrorDebug();
         return true;
@@ -194,9 +194,9 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
      */
     initWithVertexShaderFilename: function (vShaderFilename, fShaderFileName) {
         var vertexSource = cc.loader.getRes(vShaderFilename);
-        if(!vertexSource) throw new Error("Please load the resource firset : " + vShaderFilename);
+        if(!vertexSource) throw "Please load the resource firset : " + vShaderFilename;
         var fragmentSource = cc.loader.getRes(fShaderFileName);
-        if(!fragmentSource) throw new Error("Please load the resource firset : " + fShaderFileName);
+        if(!fragmentSource) throw "Please load the resource firset : " + fShaderFileName;
         return this.initWithVertexShaderByteArray(vertexSource, fragmentSource);
     },
 
@@ -267,26 +267,21 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
      *  cc.UNIFORM_SAMPLER
      */
     updateUniforms: function () {
-        this._uniforms[cc.UNIFORM_PMATRIX_S] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_PMATRIX_S);
-        this._uniforms[cc.UNIFORM_MVMATRIX_S] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_MVMATRIX_S);
-        this._uniforms[cc.UNIFORM_MVPMATRIX_S] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_MVPMATRIX_S);
-        this._uniforms[cc.UNIFORM_TIME_S] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_TIME_S);
-        this._uniforms[cc.UNIFORM_SINTIME_S] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_SINTIME_S);
-        this._uniforms[cc.UNIFORM_COSTIME_S] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_COSTIME_S);
+        this._uniforms[cc.UNIFORM_PMATRIX] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_PMATRIX_S);
+        this._uniforms[cc.UNIFORM_MVMATRIX] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_MVMATRIX_S);
+        this._uniforms[cc.UNIFORM_MVPMATRIX] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_MVPMATRIX_S);
+        this._uniforms[cc.UNIFORM_TIME] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_TIME_S);
+        this._uniforms[cc.UNIFORM_SINTIME] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_SINTIME_S);
+        this._uniforms[cc.UNIFORM_COSTIME] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_COSTIME_S);
 
-        this._usesTime = (this._uniforms[cc.UNIFORM_TIME_S] != null || this._uniforms[cc.UNIFORM_SINTIME_S] != null || this._uniforms[cc.UNIFORM_COSTIME_S] != null);
+        this._usesTime = (this._uniforms[cc.UNIFORM_TIME] != null || this._uniforms[cc.UNIFORM_SINTIME] != null || this._uniforms[cc.UNIFORM_COSTIME] != null);
 
-        this._uniforms[cc.UNIFORM_RANDOM01_S] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_RANDOM01_S);
-        this._uniforms[cc.UNIFORM_SAMPLER_S] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_SAMPLER_S);
+        this._uniforms[cc.UNIFORM_RANDOM01] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_RANDOM01_S);
+        this._uniforms[cc.UNIFORM_SAMPLER] = this._glContext.getUniformLocation(this._programObj, cc.UNIFORM_SAMPLER_S);
 
         this.use();
         // Since sample most probably won't change, set it to 0 now.
-        this.setUniformLocationWith1i(this._uniforms[cc.UNIFORM_SAMPLER_S], 0);
-    },
-
-    _addUniformLocation: function (name) {
-        var location = this._glContext.getUniformLocation(this._programObj, name);
-        this._uniforms[name] = location;
+        this.setUniformLocationWith1i(this._uniforms[cc.UNIFORM_SAMPLER], 0);
     },
 
     /**
@@ -294,14 +289,13 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
      * @param {String} name
      * @returns {Number}
      */
-    getUniformLocationForName: function (name) {
-        if (!name)
-            throw new Error("cc.GLProgram.getUniformLocationForName(): uniform name should be non-null");
-        if (!this._programObj)
-            throw new Error("cc.GLProgram.getUniformLocationForName(): Invalid operation. Cannot get uniform location when program is not initialized");
+    getUniformLocationForName:function(name){
+        if(!name)
+            throw "cc.GLProgram.getUniformLocationForName(): uniform name should be non-null";
+        if(!this._programObj)
+            throw "cc.GLProgram.getUniformLocationForName(): Invalid operation. Cannot get uniform location when program is not initialized";
 
-        var location = this._uniforms[name] || this._glContext.getUniformLocation(this._programObj, name);
-        return location;
+        return this._glContext.getUniformLocation(this._programObj, name);
     },
 
     /**
@@ -309,7 +303,7 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
      * @returns {WebGLUniformLocation}
      */
     getUniformMVPMatrix: function () {
-        return this._uniforms[cc.UNIFORM_MVPMATRIX_S];
+        return this._uniforms[cc.UNIFORM_MVPMATRIX];
     },
 
     /**
@@ -317,251 +311,212 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
      * @returns {WebGLUniformLocation}
      */
     getUniformSampler: function () {
-        return this._uniforms[cc.UNIFORM_SAMPLER_S];
+        return this._uniforms[cc.UNIFORM_SAMPLER];
     },
 
     /**
      * calls glUniform1i only if the values are different than the previous call for this same shader program.
-     * @param {WebGLUniformLocation|String} location
+     * @param {WebGLUniformLocation} location
      * @param {Number} i1
      */
     setUniformLocationWith1i: function (location, i1) {
-        var gl = this._glContext;
-        if (typeof location === 'string') {
-            var updated = this._updateUniformLocation(location, i1);
-            if (updated) {
-                var locObj = this.getUniformLocationForName(location);
-                gl.uniform1i(locObj, i1);
-            }
-        }
-        else {
-            gl.uniform1i(location, i1);
-        }
+        var updated = this._updateUniformLocation(location, i1);
+        if (updated)
+            this._glContext.uniform1i(location, i1);
     },
 
     /**
      * calls glUniform2i only if the values are different than the previous call for this same shader program.
-     * @param {WebGLUniformLocation|String} location
+     * @param {WebGLUniformLocation} location
      * @param {Number} i1
      * @param {Number} i2
      */
-    setUniformLocationWith2i: function (location, i1, i2) {
-        var gl = this._glContext;
-        if (typeof location === 'string') {
-            var updated = this._updateUniformLocation(location, i1, i2);
-            if (updated) {
-                var locObj = this.getUniformLocationForName(location);
-                gl.uniform2i(locObj, i1, i2);
-            }
-        }
-        else {
-            gl.uniform2i(location, i1, i2);
-        }
+    setUniformLocationWith2i:function(location, i1,i2){
+        var intArray= [i1,i2];
+        var updated =  this._updateUniformLocation(location, intArray);
+
+        if( updated )
+            this._glContext.uniform2i(location, i1, i2);
     },
 
     /**
      * calls glUniform3i only if the values are different than the previous call for this same shader program.
-     * @param {WebGLUniformLocation|String} location
+     * @param {WebGLUniformLocation} location
      * @param {Number} i1
      * @param {Number} i2
      * @param {Number} i3
      */
-    setUniformLocationWith3i: function (location, i1, i2, i3) {
-        var gl = this._glContext;
-        if (typeof location === 'string') {
-            var updated = this._updateUniformLocation(location, i1, i2, i3);
-            if (updated) {
-                var locObj = this.getUniformLocationForName(location);
-                gl.uniform3i(locObj, i1, i2, i3);
-            }
-        }
-        else {
-            gl.uniform3i(location, i1, i2, i3);
-        }
+    setUniformLocationWith3i:function(location, i1, i2, i3){
+        var intArray = [i1,i2,i3];
+        var updated =  this._updateUniformLocation(location, intArray);
+
+        if( updated )
+            this._glContext.uniform3i(location, i1, i2, i3);
     },
 
     /**
      * calls glUniform4i only if the values are different than the previous call for this same shader program.
-     * @param {WebGLUniformLocation|String} location
+     * @param {WebGLUniformLocation} location
      * @param {Number} i1
      * @param {Number} i2
      * @param {Number} i3
      * @param {Number} i4
      */
-    setUniformLocationWith4i: function (location, i1, i2, i3, i4) {
-        var gl = this._glContext;
-        if (typeof location === 'string') {
-            var updated = this._updateUniformLocation(location, i1, i2, i3, i4);
-            if (updated) {
-                var locObj = this.getUniformLocationForName(location);
-                gl.uniform4i(locObj, i1, i2, i3, i4);
-            }
-        }
-        else {
-            gl.uniform4i(location, i1, i2, i3, i4);
-        }
+    setUniformLocationWith4i:function(location, i1, i2, i3, i4){
+        var intArray = [i1,i2,i3,i4];
+        var updated =  this._updateUniformLocation(location, intArray);
+
+        if( updated )
+            this._glContext.uniform4i(location, i1, i2, i3, i4);
     },
 
     /**
-     * calls glUniform2iv
-     * @param {WebGLUniformLocation|String} location
+     * calls glUniform2iv only if the values are different than the previous call for this same shader program.
+     * @param {WebGLUniformLocation} location
      * @param {Int32Array} intArray
      * @param {Number} numberOfArrays
      */
-    setUniformLocationWith2iv: function (location, intArray) {
-        var locObj = typeof location === 'string' ? this.getUniformLocationForName(location) : location;
-        this._glContext.uniform2iv(locObj, intArray);
+    setUniformLocationWith2iv:function(location, intArray, numberOfArrays){
+        var updated =  this._updateUniformLocation(location, intArray);
+
+        if( updated )
+            this._glContext.uniform2iv(location, intArray);
     },
 
     /**
-     * calls glUniform3iv
-     * @param {WebGLUniformLocation|String} location
+     * calls glUniform3iv only if the values are different than the previous call for this same shader program.
+     * @param {WebGLUniformLocation} location
      * @param {Int32Array} intArray
+     * @param {Number} numberOfArrays
      */
-    setUniformLocationWith3iv:function(location, intArray){
-        var locObj = typeof location === 'string' ? this.getUniformLocationForName(location) : location;
-        this._glContext.uniform3iv(locObj, intArray);
+    setUniformLocationWith3iv:function(location, intArray, numberOfArrays){
+        var updated =  this._updateUniformLocation(location, intArray);
+
+        if( updated )
+            this._glContext.uniform3iv(location, intArray);
     },
 
     /**
-     * calls glUniform4iv
-     * @param {WebGLUniformLocation|String} location
+     * calls glUniform4iv only if the values are different than the previous call for this same shader program.
+     * @param {WebGLUniformLocation} location
      * @param {Int32Array} intArray
+     * @param {Number} numberOfArrays
      */
-    setUniformLocationWith4iv:function(location, intArray){
-        var locObj = typeof location === 'string' ? this.getUniformLocationForName(location) : location;
-        this._glContext.uniform4iv(locObj, intArray);
+    setUniformLocationWith4iv:function(location, intArray, numberOfArrays){
+        var updated =  this._updateUniformLocation(location, intArray);
+
+        if( updated )
+            this._glContext.uniform4iv(location, intArray);
     },
 
     /**
      * calls glUniform1i only if the values are different than the previous call for this same shader program.
-     * @param {WebGLUniformLocation|String} location
+     * @param {WebGLUniformLocation} location
      * @param {Number} i1
      */
     setUniformLocationI32: function (location, i1) {
-        this.setUniformLocationWith1i(location, i1);
+        this.setUniformLocationWith1i(arguments[0], arguments[1]);
     },
 
     /**
      * calls glUniform1f only if the values are different than the previous call for this same shader program.
-     * @param {WebGLUniformLocation|String} location
+     * @param {WebGLUniformLocation} location
      * @param {Number} f1
      */
     setUniformLocationWith1f: function (location, f1) {
-        var gl = this._glContext;
-        if (typeof location === 'string') {
-            var updated = this._updateUniformLocation(location, f1);
-            if (updated) {
-                var locObj = this.getUniformLocationForName(location);
-                gl.uniform1f(locObj, f1);
-            }
-        }
-        else {
-            gl.uniform1f(location, f1);
-        }
+        var updated = this._updateUniformLocation(location, f1);
+        if (updated)
+            this._glContext.uniform1f(location, f1);
     },
 
     /**
      * calls glUniform2f only if the values are different than the previous call for this same shader program.
-     * @param {WebGLUniformLocation|String} location
+     * @param {WebGLUniformLocation} location
      * @param {Number} f1
      * @param {Number} f2
      */
     setUniformLocationWith2f: function (location, f1, f2) {
-        var gl = this._glContext;
-        if (typeof location === 'string') {
-            var updated = this._updateUniformLocation(location, f1, f2);
-            if (updated) {
-                var locObj = this.getUniformLocationForName(location);
-                gl.uniform2f(locObj, f1, f2);
-            }
-        }
-        else {
-            gl.uniform2f(location, f1, f2);
-        }
+        var floats = [f1, f2];
+        var updated = this._updateUniformLocation(location, floats);
+        if (updated)
+            this._glContext.uniform2f(location, f1, f2);
     },
 
     /**
      * calls glUniform3f only if the values are different than the previous call for this same shader program.
-     * @param {WebGLUniformLocation|String} location
+     * @param {WebGLUniformLocation} location
      * @param {Number} f1
      * @param {Number} f2
      * @param {Number} f3
      */
     setUniformLocationWith3f: function (location, f1, f2, f3) {
-        var gl = this._glContext;
-        if (typeof location === 'string') {
-            var updated = this._updateUniformLocation(location, f1, f2, f3);
-            if (updated) {
-                var locObj = this.getUniformLocationForName(location);
-                gl.uniform3f(locObj, f1, f2, f3);
-            }
-        }
-        else {
-            gl.uniform3f(location, f1, f2, f3);
-        }
+        var floats = [f1, f2, f3];
+        var updated = this._updateUniformLocation(location, floats);
+        if (updated)
+            this._glContext.uniform3f(location, f1, f2, f3);
     },
 
     /**
      * calls glUniform4f only if the values are different than the previous call for this same shader program.
-     * @param {WebGLUniformLocation|String} location
+     * @param {WebGLUniformLocation} location
      * @param {Number} f1
      * @param {Number} f2
      * @param {Number} f3
      * @param {Number} f4
      */
     setUniformLocationWith4f: function (location, f1, f2, f3, f4) {
-        var gl = this._glContext;
-        if (typeof location === 'string') {
-            var updated = this._updateUniformLocation(location, f1, f2, f3, f4);
-            if (updated) {
-                var locObj = this.getUniformLocationForName(location);
-                gl.uniform4f(locObj, f1, f2, f3, f4);
-            }
-        }
-        else {
-            gl.uniform4f(location, f1, f2, f3, f4);
-        }
+        var floats = [f1, f2, f3, f4];
+        var updated = this._updateUniformLocation(location, floats);
+        if (updated)
+            this._glContext.uniform4f(location, f1, f2, f3, f4);
     },
 
     /**
-     * calls glUniform2fv
-     * @param {WebGLUniformLocation|String} location
+     * calls glUniform2fv only if the values are different than the previous call for this same shader program.
+     * @param {WebGLUniformLocation} location
      * @param {Float32Array} floatArray
+     * @param {Number} numberOfArrays
      */
-    setUniformLocationWith2fv: function (location, floatArray) {
-        var locObj = typeof location === 'string' ? this.getUniformLocationForName(location) : location;
-        this._glContext.uniform2fv(locObj, floatArray);
+    setUniformLocationWith2fv: function (location, floatArray, numberOfArrays) {
+        var updated = this._updateUniformLocation(location, floatArray);
+        if (updated)
+            this._glContext.uniform2fv(location, floatArray);
     },
 
     /**
-     * calls glUniform3fv
-     * @param {WebGLUniformLocation|String} location
+     * calls glUniform3fv only if the values are different than the previous call for this same shader program.
+     * @param {WebGLUniformLocation} location
      * @param {Float32Array} floatArray
+     * @param {Number} numberOfArrays
      */
-    setUniformLocationWith3fv: function (location, floatArray) {
-        var locObj = typeof location === 'string' ? this.getUniformLocationForName(location) : location;
-        this._glContext.uniform3fv(locObj, floatArray);
+    setUniformLocationWith3fv: function (location, floatArray, numberOfArrays) {
+        var updated = this._updateUniformLocation(location, floatArray);
+        if (updated)
+            this._glContext.uniform3fv(location, floatArray);
     },
 
     /**
-     * calls glUniform4fv
-     * @param {WebGLUniformLocation|String} location
+     * calls glUniform4fv only if the values are different than the previous call for this same shader program.
+     * @param {WebGLUniformLocation} location
      * @param {Float32Array} floatArray
+     * @param {Number} numberOfArrays
      */
-    setUniformLocationWith4fv: function (location, floatArray) {
-        var locObj = typeof location === 'string' ? this.getUniformLocationForName(location) : location;
-        this._glContext.uniform4fv(locObj, floatArray);
+    setUniformLocationWith4fv: function (location, floatArray, numberOfArrays) {
+        var updated = this._updateUniformLocation(location, floatArray);
+        if (updated)
+            this._glContext.uniform4fv(location, floatArray);
     },
 
     /**
-     * calls glUniformMatrix4fv
-     * @param {WebGLUniformLocation|String} location
+     * calls glUniformMatrix4fv only if the values are different than the previous call for this same shader program.
+     * @param {WebGLUniformLocation} location
      * @param {Float32Array} matrixArray
+     * @param {Number} numberOfMatrices
      */
-    setUniformLocationWithMatrix4fv: function (location, matrixArray) {
-        var locObj = typeof location === 'string' ? this.getUniformLocationForName(location) : location;
-        this._glContext.uniformMatrix4fv(locObj, false, matrixArray);
+    setUniformLocationWithMatrix4fv: function (location, matrixArray, numberOfMatrices) {
+        var updated = this._updateUniformLocation(location, matrixArray);
+        if (updated)
+            this._glContext.uniformMatrix4fv(location, false, matrixArray);
     },
 
     setUniformLocationF32: function () {
@@ -597,9 +552,9 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
 
         cc.kmMat4Multiply(matrixMVP, matrixP, matrixMV);
 
-        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX_S], matrixP.mat, 1);
-        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX_S], matrixMV.mat, 1);
-        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVPMATRIX_S], matrixMVP.mat, 1);
+        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX], matrixP.mat, 1);
+        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX], matrixMV.mat, 1);
+        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVPMATRIX], matrixMVP.mat, 1);
 
         if (this._usesTime) {
             var director = cc.director;
@@ -608,13 +563,13 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
             // Getting Mach time per frame per shader using time could be extremely expensive.
             var time = director.getTotalFrames() * director.getAnimationInterval();
 
-            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_TIME_S], time / 10.0, time, time * 2, time * 4);
-            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_SINTIME_S], time / 8.0, time / 4.0, time / 2.0, Math.sin(time));
-            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_COSTIME_S], time / 8.0, time / 4.0, time / 2.0, Math.cos(time));
+            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_TIME], time / 10.0, time, time * 2, time * 4);
+            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_SINTIME], time / 8.0, time / 4.0, time / 2.0, Math.sin(time));
+            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_COSTIME], time / 8.0, time / 4.0, time / 2.0, Math.cos(time));
         }
 
-        if (this._uniforms[cc.UNIFORM_RANDOM01_S] !== -1)
-            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_RANDOM01_S], Math.random(), Math.random(), Math.random(), Math.random());
+        if (this._uniforms[cc.UNIFORM_RANDOM01] !== -1)
+            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_RANDOM01], Math.random(), Math.random(), Math.random(), Math.random());
     },
 
     _setUniformsForBuiltinsForRenderer: function (node) {
@@ -630,9 +585,9 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
 
         cc.kmMat4Multiply(matrixMVP, matrixP, node._renderCmd._stackMatrix);
 
-        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX_S], matrixP.mat, 1);
-        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX_S], node._renderCmd._stackMatrix.mat, 1);
-        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVPMATRIX_S], matrixMVP.mat, 1);
+        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX], matrixP.mat, 1);
+        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX], node._renderCmd._stackMatrix.mat, 1);
+        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVPMATRIX], matrixMVP.mat, 1);
 
         if (this._usesTime) {
             var director = cc.director;
@@ -641,42 +596,38 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
             // Getting Mach time per frame per shader using time could be extremely expensive.
             var time = director.getTotalFrames() * director.getAnimationInterval();
 
-            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_TIME_S], time / 10.0, time, time * 2, time * 4);
-            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_SINTIME_S], time / 8.0, time / 4.0, time / 2.0, Math.sin(time));
-            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_COSTIME_S], time / 8.0, time / 4.0, time / 2.0, Math.cos(time));
+            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_TIME], time / 10.0, time, time * 2, time * 4);
+            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_SINTIME], time / 8.0, time / 4.0, time / 2.0, Math.sin(time));
+            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_COSTIME], time / 8.0, time / 4.0, time / 2.0, Math.cos(time));
         }
 
-        if (this._uniforms[cc.UNIFORM_RANDOM01_S] !== -1)
-            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_RANDOM01_S], Math.random(), Math.random(), Math.random(), Math.random());
+        if (this._uniforms[cc.UNIFORM_RANDOM01] !== -1)
+            this.setUniformLocationWith4f(this._uniforms[cc.UNIFORM_RANDOM01], Math.random(), Math.random(), Math.random(), Math.random());
     },
 
     /**
      * will update the MVP matrix on the MVP uniform if it is different than the previous call for this same shader program.
      */
     setUniformForModelViewProjectionMatrix: function () {
-        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_MVPMATRIX_S], false,
-        cc.getMat4MultiplyValue(cc.projection_matrix_stack.top, cc.modelview_matrix_stack.top));
+        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_MVPMATRIX], false,
+            cc.getMat4MultiplyValue(cc.projection_matrix_stack.top, cc.modelview_matrix_stack.top));
     },
 
     setUniformForModelViewProjectionMatrixWithMat4: function (swapMat4) {
         cc.kmMat4Multiply(swapMat4, cc.projection_matrix_stack.top, cc.modelview_matrix_stack.top);
-        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_MVPMATRIX_S], false, swapMat4.mat);
+        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_MVPMATRIX], false, swapMat4.mat);
     },
 
     setUniformForModelViewAndProjectionMatrixWithMat4: function () {
-        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX_S], false, cc.modelview_matrix_stack.top.mat);
-        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX_S], false, cc.projection_matrix_stack.top.mat);
+        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX], false, cc.modelview_matrix_stack.top.mat);
+        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX], false, cc.projection_matrix_stack.top.mat);
     },
 
     _setUniformForMVPMatrixWithMat4: function(modelViewMatrix){
         if(!modelViewMatrix)
-            throw new Error("modelView matrix is undefined.");
-        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX_S], false, modelViewMatrix.mat);
-        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX_S], false, cc.projection_matrix_stack.top.mat);
-    },
-
-    _updateProjectionUniform: function(){
-        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX_S], false, cc.projection_matrix_stack.top.mat);  
+            throw "modelView matrix is undefined.";
+        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX], false, modelViewMatrix.mat);
+        this._glContext.uniformMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX], false, cc.projection_matrix_stack.top.mat);
     },
 
     /**
@@ -742,9 +693,12 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
         this._programObj = null;
 
         // Purge uniform hash
-        for (var key in this._hashForUniforms) {
-            delete this._hashForUniforms[key];
+        for (var i = 0; i < this._hashForUniforms.length; i++) {
+            this._hashForUniforms[i].value = null;
+            this._hashForUniforms[i] = null;
         }
+
+        this._hashForUniforms.length = 0;
     },
 
     /**

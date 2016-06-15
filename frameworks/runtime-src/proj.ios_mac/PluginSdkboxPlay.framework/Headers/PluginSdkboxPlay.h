@@ -151,23 +151,19 @@ namespace sdkbox {
         /**
          * Get a field from the user account's info obtained after authentication.
          * Current values are:
-         *
          * iOS/Android
          * -----------
-         * display_name
-         * name
-         * player_id
-         *
+         *   + display_name
+         *   + name
+         *   + player_id
          * Android only:
          * -------------------
-         * title
-         * icon_image_uri
-         * hires_image_uri
-         * last_play_timestamp
-         * retrieved_timestamp
-         *
+         *   + title
+         *   + icon_image_uri
+         *   + hires_image_uri
+         *   + last_play_timestamp
+         *   + retrieved_timestamp
          * If a field not valid is queried an empty string will be returned.
-         *
          */
         static std::string getPlayerAccountField( const std::string& field );
     };

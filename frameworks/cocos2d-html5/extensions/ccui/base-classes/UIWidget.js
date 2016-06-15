@@ -153,7 +153,6 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
     _callbackName: null,
     _callbackType: null,
     _usingLayoutComponent: false,
-    _inViewRect: true,
 
     /**
      * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
@@ -174,7 +173,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
         this._positionPercent = cc.p(0, 0);
         this._nodes = [];
         this._layoutParameterType = ccui.LayoutParameter.NONE;
-        ccui.Widget.prototype.init.call(this);
+        this.init();                        //TODO
     },
 
     /**
@@ -1769,7 +1768,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
         return originalScale;
     },
     getScale: function(){
-        if(this.getScaleX() !== this.getScaleY())
+        if(this.getScaleX() === this.getScaleY())
             cc.log("Widget#scale. ScaleX != ScaleY. Don't know which one to return");
         return this.getScaleX();
     },
@@ -1829,7 +1828,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc.game.RENDER_TYPE_WEBGL)
+        if(cc._renderType === cc._RENDER_TYPE_WEBGL)
             return new ccui.Widget.WebGLRenderCmd(this);
         else
             return new ccui.Widget.CanvasRenderCmd(this);

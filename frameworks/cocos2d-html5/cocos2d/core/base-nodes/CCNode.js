@@ -132,7 +132,6 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     _localZOrder: 0,                                     ///< Local order (relative to its siblings) used to sort the node
     _globalZOrder: 0,                                    ///< Global order used to sort the node
     _vertexZ: 0.0,
-    _customZ: NaN,
 
     _rotationX: 0,
     _rotationY: 0.0,
@@ -419,7 +418,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      *     Sets the Z order which stands for the drawing order, and reorder this node in its parent's children array.     <br/>
      *                                                                                                                    <br/>
      *      The Z order of node is relative to its "brothers": children of the same parent.                               <br/>
-     *      It's nothing to do with OpenGL's z vertex. This one only affects the draw order of nodes in cocos2d.          <br/>
+     *      It's nothing to do with OpenGL's z vertex. This one only affects the _barNode order of nodes in cocos2d.          <br/>
      *      The larger number it is, the later this node will be drawn in each message loop.                              <br/>
      *      Please refer to setVertexZ(float) for the difference.
      * </p>
@@ -488,7 +487,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @param {Number} Var
      */
     setVertexZ: function (Var) {
-        this._customZ = this._vertexZ = Var;
+        this._vertexZ = Var;
     },
 
     /**
@@ -1247,7 +1246,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @function
      * @param {cc.Node} child  A child node
      * @param {Number} [localZOrder=]  Z order for drawing priority. Please refer to setZOrder(int)
-     * @param {Number|String} [tag=]  An integer or a name to identify the node easily. Please refer to setTag(int) and setName(string)
+     * @param {Number} [tag=]  A integer to identify the node easily. Please refer to setTag(int)
      */
     addChild: function (child, localZOrder, tag) {
         localZOrder = localZOrder === undefined ? child._localZOrder : localZOrder;
@@ -1288,7 +1287,6 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
             if (this._isTransitionFinished)
                 child.onEnterTransitionDidFinish();
         }
-        child._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.transformDirty);
         if (this._cascadeColorEnabled)
             child._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.colorDirty);
         if (this._cascadeOpacityEnabled)
@@ -1448,7 +1446,6 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
         child.arrivalOrder = cc.s_globalOrderOfArrival;
         cc.s_globalOrderOfArrival++;
         child._setLocalZOrder(zOrder);
-        this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.orderDirty);
     },
 
     /**
@@ -1495,8 +1492,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      */
     draw: function (ctx) {
         // override me
-        // Only use- this function to draw your staff.
-        // DON'T draw your stuff outside this method
+        // Only use- this function to _barNode your staff.
+        // DON'T _barNode your stuff outside this method
     },
 
     // Internal use only, do not call it by yourself,
@@ -1507,7 +1504,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
         }
     },
 
-    //scene management
+    //scene managment
     /**
      * <p>
      *     Event callback that is invoked every time when CCNode enters the 'stage'.                                   <br/>
@@ -2111,7 +2108,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     grid: null,
 
     /**
-     * Recursive method that visit its children and draw them
+     * Recursive method that visit its children and _barNode them
      * @function
      * @param {cc.Node.RenderCmd} parentCmd
      */
@@ -2146,21 +2143,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @function
      * @return {cc.AffineTransform} The affine transform object
      */
-    getNodeToParentTransform: function(ancestor){
-        var t = this._renderCmd.getNodeToParentTransform();
-        if(ancestor){
-            var T = {a: t.a, b: t.b, c: t.c, d: t.d, tx: t.tx, ty: t.ty};
-            for(var p = this._parent;  p != null && p != ancestor ; p = p.getParent()){
-                cc.affineTransformConcatIn(T, p.getNodeToParentTransform());
-            }
-            return T;
-        }else{
-            return t;
-        }
-    },
-
-    getNodeToParentAffineTransform: function(ancestor){
-        return this.getNodeToParentTransform(ancestor);
+    getNodeToParentTransform: function(){
+        return this._renderCmd.getNodeToParentTransform();
     },
 
     /**
@@ -2440,7 +2424,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc.game.RENDER_TYPE_CANVAS)
+        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
             return new cc.Node.CanvasRenderCmd(this);
         else
             return new cc.Node.WebGLRenderCmd(this);

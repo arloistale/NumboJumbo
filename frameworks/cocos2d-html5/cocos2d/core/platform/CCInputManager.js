@@ -343,7 +343,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
      * @return {cc.Point}
      */
     getPointByEvent: function(event, pos){
-        if (event.pageX != null)  //not available in <= IE8
+        if (event.pageX != null)  //not avalable in <= IE8
             return {x: event.pageX, y: event.pageY};
 
         pos.left -= document.body.scrollLeft;
@@ -413,11 +413,11 @@ cc.inputManager = /** @lends cc.inputManager# */{
 
         //register touch event
         if (supportMouse) {
-            window.addEventListener('mousedown', function () {
+            cc._addEventListener(window, 'mousedown', function () {
                 selfPointer._mousePressed = true;
             }, false);
 
-            window.addEventListener('mouseup', function (event) {
+            cc._addEventListener(window, 'mouseup', function (event) {
                 if(prohibition) return;
                 var savePressed = selfPointer._mousePressed;
                 selfPointer._mousePressed = false;
@@ -437,7 +437,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
             }, false);
 
             //register canvas mouse event
-            element.addEventListener("mousedown", function (event) {
+            cc._addEventListener(element,"mousedown", function (event) {
                 if(prohibition) return;
                 selfPointer._mousePressed = true;
 
@@ -455,7 +455,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
                 element.focus();
             }, false);
 
-            element.addEventListener("mouseup", function (event) {
+            cc._addEventListener(element, "mouseup", function (event) {
                 if(prohibition) return;
                 selfPointer._mousePressed = false;
 
@@ -472,7 +472,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
                 event.preventDefault();
             }, false);
 
-            element.addEventListener("mousemove", function (event) {
+            cc._addEventListener(element, "mousemove", function (event) {
                 if(prohibition) return;
 
                 var pos = selfPointer.getHTMLElementPosition(element);
@@ -491,7 +491,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
                 event.preventDefault();
             }, false);
 
-            element.addEventListener("mousewheel", function (event) {
+            cc._addEventListener(element, "mousewheel", function (event) {
                 var pos = selfPointer.getHTMLElementPosition(element);
                 var location = selfPointer.getPointByEvent(event, pos);
 
@@ -505,7 +505,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
             }, false);
 
             /* firefox fix */
-            element.addEventListener("DOMMouseScroll", function(event) {
+            cc._addEventListener(element, "DOMMouseScroll", function(event) {
                 var pos = selfPointer.getHTMLElementPosition(element);
                 var location = selfPointer.getPointByEvent(event, pos);
 
@@ -529,7 +529,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
 
             for(var eventName in _pointerEventsMap){
                 (function(_pointerEvent, _touchEvent){
-                    element.addEventListener(_pointerEvent, function (event){
+                    cc._addEventListener(element, _pointerEvent, function (event){
                         var pos = selfPointer.getHTMLElementPosition(element);
                         pos.left -= document.documentElement.scrollLeft;
                         pos.top -= document.documentElement.scrollTop;
@@ -543,7 +543,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
 
         if(supportTouches) {
             //register canvas touch event
-            element.addEventListener("touchstart", function (event) {
+            cc._addEventListener(element,"touchstart", function (event) {
                 if (!event.changedTouches) return;
 
                 var pos = selfPointer.getHTMLElementPosition(element);
@@ -555,7 +555,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
                 element.focus();
             }, false);
 
-            element.addEventListener("touchmove", function (event) {
+            cc._addEventListener(element, "touchmove", function (event) {
                 if (!event.changedTouches) return;
 
                 var pos = selfPointer.getHTMLElementPosition(element);
@@ -566,7 +566,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
                 event.preventDefault();
             }, false);
 
-            element.addEventListener("touchend", function (event) {
+            cc._addEventListener(element, "touchend", function (event) {
                 if (!event.changedTouches) return;
 
                 var pos = selfPointer.getHTMLElementPosition(element);
@@ -577,7 +577,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
                 event.preventDefault();
             }, false);
 
-            element.addEventListener("touchcancel", function (event) {
+            cc._addEventListener(element, "touchcancel", function (event) {
                 if (!event.changedTouches) return;
 
                 var pos = selfPointer.getHTMLElementPosition(element);

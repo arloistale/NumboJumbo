@@ -241,8 +241,8 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
             this._disabledColor = cc.color(126, 126, 126);
             this.setLabel(label);
 
-            this.setCascadeColorEnabled(true);
-            this.setCascadeOpacityEnabled(true);
+            this.cascadeColor = true;
+            this.cascadeOpacity = true;
         }
     },
 
@@ -281,7 +281,6 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
             label.anchorY = 0;
             this.width = label.width;
             this.height = label.height;
-            label.setCascadeColorEnabled(true);
         }
 
         if (this._label) {
@@ -297,14 +296,47 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
      */
     setEnabled: function (enabled) {
         if (this._enabled !== enabled) {
+            var locLabel = this._label;
             if (!enabled) {
-                this._colorBackup = this.color;
-                this.setColor(this._disabledColor);
+                this._colorBackup = locLabel.color;
+                locLabel.color = this._disabledColor;
             } else {
-                this.setColor(this._colorBackup);
+                locLabel.color = this._colorBackup;
             }
         }
         cc.MenuItem.prototype.setEnabled.call(this, enabled);
+    },
+
+    /**
+     * set opacity for cc.MenuItemLabel
+     * @param {Number} opacity from 0-255
+     */
+    setOpacity: function (opacity) {
+        this._label.opacity = opacity;
+    },
+
+    /**
+     * return the opacity of cc.MenuItemLabel
+     * @return {Number}
+     */
+    getOpacity: function () {
+        return this._label.opacity;
+    },
+
+    /**
+     * set the opacity for cc.MenuItemLabel
+     * @param {cc.Color} color
+     */
+    setColor: function (color) {
+        this._label.color = color;
+    },
+
+    /**
+     * return the color of cc.MenuItemLabel
+     * @return {cc.Color}
+     */
+    getColor: function () {
+        return this._label.color;
     },
 
     /**
@@ -321,8 +353,8 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
         this._disabledColor = cc.color(126, 126, 126);
         this.setLabel(label);
 
-        this.setCascadeColorEnabled(true);
-        this.setCascadeOpacityEnabled(true);
+        this.cascadeColor = true;
+        this.cascadeOpacity = true;
 
         return true;
     },
@@ -338,7 +370,7 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
     },
     /**
      * return the string of cc.MenuItemLabel
-     * @returns {String}
+     * @returns {*|string|_p.string|ret.string|q.string|String}
      */
     getString: function () {
         return this._label.string;
@@ -461,7 +493,7 @@ cc.MenuItemAtlasFont = cc.MenuItemLabel.extend(/** @lends cc.MenuItemAtlasFont# 
      */
     initWithString: function (value, charMapFile, itemWidth, itemHeight, startCharMap, callback, target) {
         if (!value || value.length === 0)
-            throw new Error("cc.MenuItemAtlasFont.initWithString(): value should be non-null and its length should be greater than 0");
+            throw "cc.MenuItemAtlasFont.initWithString(): value should be non-null and its length should be greater than 0";
 
         var label = new cc.LabelAtlas();
         label.initWithString(value, charMapFile, itemWidth, itemHeight, startCharMap);
@@ -535,7 +567,7 @@ cc.MenuItemFont = cc.MenuItemLabel.extend(/** @lends cc.MenuItemFont# */{
      */
     initWithString: function (value, callback, target) {
         if (!value || value.length === 0)
-            throw new Error("Value should be non-null and its length should be greater than 0");
+            throw "Value should be non-null and its length should be greater than 0";
 
         this._fontName = cc._globalFontName;
         this._fontSize = cc._globalFontSize;
@@ -692,9 +724,9 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
         this._selectedImage = null;
         this._disabledImage = null;
 
-        if (normalSprite !== undefined) {
+        if (selectedSprite !== undefined) {
             //normalSprite = normalSprite;
-            selectedSprite = selectedSprite || null;
+            //selectedSprite = selectedSprite;
             var disabledImage, target, callback;
             //when you send 4 arguments, five is undefined
             if (five !== undefined) {
@@ -741,9 +773,6 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
         }
 
         this._normalImage = normalImage;
-        if(!this._normalImage)
-            return;
-
         this.width = this._normalImage.width;
         this.height = this._normalImage.height;
         this._updateImagesVisibility();
@@ -838,14 +867,58 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
                 locNormalImage.addEventListener("load", function (sender) {
                     this.width = sender.width;
                     this.height = sender.height;
-                    this.setCascadeColorEnabled(true);
-                    this.setCascadeOpacityEnabled(true);
+                    this.cascadeColor = true;
+                    this.cascadeOpacity = true;
                 }, this);
             }
         }
-        this.setCascadeColorEnabled(true);
-        this.setCascadeOpacityEnabled(true);
+        this.cascadeColor = true;
+        this.cascadeOpacity = true;
         return true;
+    },
+
+    /**
+     * set the color for cc.MenuItemSprite
+     * @param {cc.Color} color
+     */
+    setColor: function (color) {
+        this._normalImage.color = color;
+
+        if (this._selectedImage)
+            this._selectedImage.color = color;
+
+        if (this._disabledImage)
+            this._disabledImage.color = color;
+    },
+
+    /**
+     * return the color of cc.MenuItemSprite
+     * @return {cc.Color}
+     */
+    getColor: function () {
+        return this._normalImage.color;
+    },
+
+    /**
+     * set the opacity for cc.MenuItemSprite
+     * @param {Number} opacity 0 - 255
+     */
+    setOpacity: function (opacity) {
+        this._normalImage.opacity = opacity;
+
+        if (this._selectedImage)
+            this._selectedImage.opacity = opacity;
+
+        if (this._disabledImage)
+            this._disabledImage.opacity = opacity;
+    },
+
+    /**
+     * return the opacity of cc.MenuItemSprite
+     * @return {Number} opacity from 0 - 255
+     */
+    getOpacity: function () {
+        return this._normalImage.opacity;
     },
 
     /**
@@ -981,7 +1054,7 @@ cc.MenuItemImage = cc.MenuItemSprite.extend(/** @lends cc.MenuItemImage# */{
             callback = null,
             target = null;
 
-        if (normalImage === undefined || normalImage === null) {
+        if (normalImage === undefined) {
             cc.MenuItemSprite.prototype.ctor.call(this);
         }
         else {
@@ -1211,9 +1284,9 @@ cc.MenuItemToggle = cc.MenuItem.extend(/** @lends cc.MenuItemToggle# */{
 
     /**
      * initializes a cc.MenuItemToggle with items
-     * @param {...cc.MenuItem} array the rest in the array are cc.MenuItems
-     * @param {function|String} secondTolast the second item in the args array is the callback
-     * @param {cc.Node} last the first item in the args array is a target
+     * @param {cc.MenuItem} args[0...last-2] the rest in the array are cc.MenuItems
+     * @param {function|String} args[last-1] the second item in the args array is the callback
+     * @param {cc.Node} args[last] the first item in the args array is a target
      * @return {Boolean}
      */
     initWithItems: function (args) {
@@ -1238,8 +1311,8 @@ cc.MenuItemToggle = cc.MenuItem.extend(/** @lends cc.MenuItemToggle# */{
         this._selectedIndex = cc.UINT_MAX;
         this.setSelectedIndex(0);
 
-        this.setCascadeColorEnabled(true);
-        this.setCascadeOpacityEnabled(true);
+        this.cascadeColor = true;
+        this.cascadeOpacity = true;
 
         return true;
     },
@@ -1338,6 +1411,7 @@ cc.defineGetterSetter(_p, "selectedIndex", _p.getSelectedIndex, _p.setSelectedIn
  * The inner items can be any MenuItem
  * @deprecated since v3.0 please use new cc.MenuItemToggle(params) instead
  * @return {cc.MenuItemToggle}
+ * @example
  */
 cc.MenuItemToggle.create = function (/*Multiple arguments follow*/) {
     if ((arguments.length > 0) && (arguments[arguments.length - 1] == null))

@@ -31,7 +31,7 @@
  * @type {String}
  * @name cc.ENGINE_VERSION
  */
-window["CocosEngine"] = cc.ENGINE_VERSION = "Cocos2d-JS v3.11";
+window["CocosEngine"] = cc.ENGINE_VERSION = "Cocos2d-JS v3.6";
 
 /**
  * <p>
@@ -117,7 +117,7 @@ cc.SPRITEBATCHNODE_RENDER_SUBPIXEL = 1;
  * @constant
  * @type {Number}
  */
-cc.OPTIMIZE_BLEND_FUNC_FOR_PREMULTIPLIED_ALPHA = 1;
+cc.OPTIMIZE_BLEND_FUNC_FOR_PREMULTIPLIED_ALPHA = 0;
 
 /**
  * <p>
@@ -211,13 +211,13 @@ cc.USE_LA88_LABELS = 1;
 
 /**
  * <p>
- *   If enabled, all subclasses of cc.Sprite will draw a bounding box<br/>
+ *   If enabled, all subclasses of cc.Sprite will _barNode a bounding box<br/>
  *   Useful for debugging purposes only. It is recommend to leave it disabled.<br/>
  *   <br/>
  *   To enable set it to a value different than 0. Disabled by default:<br/>
  *      0 -- disabled<br/>
- *      1 -- draw bounding box<br/>
- *      2 -- draw texture box
+ *      1 -- _barNode bounding box<br/>
+ *      2 -- _barNode texture box
  * </p>
  * @constant
  * @type {Number}
@@ -226,7 +226,7 @@ cc.SPRITE_DEBUG_DRAW = 0;
 
 /**
  * <p>
- *    If enabled, all subclasses of cc.Sprite that are rendered using an cc.SpriteBatchNode draw a bounding box.<br/>
+ *    If enabled, all subclasses of cc.Sprite that are rendered using an cc.SpriteBatchNode _barNode a bounding box.<br/>
  *    Useful for debugging purposes only. It is recommend to leave it disabled.<br/>
  *    <br/>
  *    To enable set it to a value different than 0. Disabled by default.
@@ -238,7 +238,7 @@ cc.SPRITEBATCHNODE_DEBUG_DRAW = 0;
 
 /**
  * <p>
- *   If enabled, all subclasses of cc.LabelBMFont will draw a bounding box <br/>
+ *   If enabled, all subclasses of cc.LabelBMFont will _barNode a bounding box <br/>
  *   Useful for debugging purposes only. It is recommend to leave it disabled.<br/>
  *   <br/>
  *   To enable set it to a value different than 0. Disabled by default.<br/>
@@ -250,7 +250,7 @@ cc.LABELBMFONT_DEBUG_DRAW = 0;
 
 /**
  * <p>
- *    If enabled, all subclasses of cc.LabelAtlas will draw a bounding box<br/>
+ *    If enabled, all subclasses of cc.LabelAtlas will _barNode a bounding box<br/>
  *    Useful for debugging purposes only. It is recommend to leave it disabled.<br/>
  *    <br/>
  *    To enable set it to a value different than 0. Disabled by default.

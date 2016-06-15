@@ -31,8 +31,14 @@
         this._needDraw = false;
 
         this._currentStencilEnabled = 0;
-        this._scissorOldState = false;
-        this._clippingOldRect = null;
+        this._currentStencilWriteMask = 0;
+        this._currentStencilFunc = 0;
+        this._currentStencilRef = 0;
+        this._currentStencilValueMask = 0;
+        this._currentStencilFail = 0;
+        this._currentStencilPassDepthFail = 0;
+        this._currentStencilPassDepthPass = 0;
+        this._currentDepthWriteMask = false;
 
         this._mask_layer_le = 0;
 
@@ -50,10 +56,6 @@
         var node = this._node;
         if (!node._visible)
             return;
-
-        if(parentCmd && (parentCmd._dirtyFlag & cc.Node._dirtyFlags.transformDirty))
-            node._clippingRectDirty = true;
-
         node._adaptRenderers();
         node._doLayout();
 
@@ -69,7 +71,7 @@
                     break;
             }
         } else
-            ccui.ProtectedNode.WebGLRenderCmd.prototype.visit.call(this, parentCmd);
+            ccui.Widget.WebGLRenderCmd.prototype.visit.call(this, parentCmd);
     };
 
     proto._onBeforeVisitStencil = function(ctx){
@@ -83,83 +85,78 @@
 
         // manually save the stencil state
         this._currentStencilEnabled = gl.isEnabled(gl.STENCIL_TEST);
-
-        gl.clear(gl.DEPTH_BUFFER_BIT);
+        this._currentStencilWriteMask = gl.getParameter(gl.STENCIL_WRITEMASK);
+        this._currentStencilFunc = gl.getParameter(gl.STENCIL_FUNC);
+        this._currentStencilRef = gl.getParameter(gl.STENCIL_REF);
+        this._currentStencilValueMask = gl.getParameter(gl.STENCIL_VALUE_MASK);
+        this._currentStencilFail = gl.getParameter(gl.STENCIL_FAIL);
+        this._currentStencilPassDepthFail = gl.getParameter(gl.STENCIL_PASS_DEPTH_FAIL);
+        this._currentStencilPassDepthPass = gl.getParameter(gl.STENCIL_PASS_DEPTH_PASS);
 
         gl.enable(gl.STENCIL_TEST);
+
+        gl.stencilMask(mask_layer);
+
+        this._currentDepthWriteMask = gl.getParameter(gl.DEPTH_WRITEMASK);
 
         gl.depthMask(false);
 
         gl.stencilFunc(gl.NEVER, mask_layer, mask_layer);
+        gl.stencilOp(gl.ZERO, gl.KEEP, gl.KEEP);
+
+        // _barNode a fullscreen solid rectangle to clear the stencil buffer
+        this._drawFullScreenQuadClearStencil();
+
+        gl.stencilFunc(gl.NEVER, mask_layer, mask_layer);
         gl.stencilOp(gl.REPLACE, gl.KEEP, gl.KEEP);
-
-        gl.stencilMask(mask_layer);
-        gl.clear(gl.STENCIL_BUFFER_BIT);
-
     };
 
     proto._onAfterDrawStencil = function(ctx){
         var gl = ctx || cc._renderContext;
-        gl.depthMask(true);
+        gl.depthMask(this._currentDepthWriteMask);
         gl.stencilFunc(gl.EQUAL, this._mask_layer_le, this._mask_layer_le);
         gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
     };
 
     proto._onAfterVisitStencil = function(ctx){
         var gl = ctx || cc._renderContext;
-
-        ccui.Layout.WebGLRenderCmd._layer--;
-
-        if (this._currentStencilEnabled)
-        {
-            var mask_layer = 0x1 << ccui.Layout.WebGLRenderCmd._layer;
-            var mask_layer_l = mask_layer - 1;
-            var mask_layer_le = mask_layer | mask_layer_l;
-
-            gl.stencilMask(mask_layer);
-            gl.stencilFunc(gl.EQUAL, mask_layer_le, mask_layer_le);
-        }
-        else
-        {
+        // manually restore the stencil state
+        gl.stencilFunc(this._currentStencilFunc, this._currentStencilRef, this._currentStencilValueMask);
+        gl.stencilOp(this._currentStencilFail, this._currentStencilPassDepthFail, this._currentStencilPassDepthPass);
+        gl.stencilMask(this._currentStencilWriteMask);
+        if (!this._currentStencilEnabled)
             gl.disable(gl.STENCIL_TEST);
-        }
+        ccui.Layout.WebGLRenderCmd._layer--;
     };
 
     proto._onBeforeVisitScissor = function(ctx){
-        this._node._clippingRectDirty = true;
-        var clippingRect = this._node._getClippingRect();
+        var clippingRect = this._getClippingRect();
         var gl = ctx || cc._renderContext;
+        gl.enable(gl.SCISSOR_TEST);
 
-        this._scissorOldState = cc.view.isScissorEnabled();
-
-        if(!this._scissorOldState)
-            gl.enable(gl.SCISSOR_TEST);
-
-        this._clippingOldRect = cc.view.getScissorRect();
-
-        if(!cc.rectEqualToRect(this._clippingOldRect, clippingRect))
-            cc.view.setScissorInPoints(clippingRect.x, clippingRect.y, clippingRect.width, clippingRect.height);
+        cc.view.setScissorInPoints(clippingRect.x, clippingRect.y, clippingRect.width, clippingRect.height);
     };
 
     proto._onAfterVisitScissor = function(ctx){
         var gl = ctx || cc._renderContext;
-        if(this._scissorOldState)
-        {
-            if(!cc.rectEqualToRect(this._clippingOldRect, this._node._clippingRect))
-            {
-                cc.view.setScissorInPoints( this._clippingOldRect.x,
-                    this._clippingOldRect.y,
-                    this._clippingOldRect.width,
-                    this._clippingOldRect.height);
-            }
-
-        }
-        else
-        {
-            gl.disable(gl.SCISSOR_TEST);
-        }
+        gl.disable(gl.SCISSOR_TEST);
     };
-    
+
+    proto._drawFullScreenQuadClearStencil = function(){
+        // _barNode a fullscreen solid rectangle to clear the stencil buffer
+        cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
+        cc.kmGLPushMatrix();
+        cc.kmGLLoadIdentity();
+        cc.kmGLMatrixMode(cc.KM_GL_MODELVIEW);
+        cc.kmGLPushMatrix();
+        cc.kmGLLoadIdentity();
+        cc._drawingUtil.drawSolidRect(cc.p(-1,-1), cc.p(1,1), cc.color(255, 255, 255, 255));
+        cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
+        cc.kmGLPopMatrix();
+        cc.kmGLMatrixMode(cc.KM_GL_MODELVIEW);
+        cc.kmGLPopMatrix();
+    };
+
     proto.rebindStencilRendering = function(stencil){};
 
     proto.transform = function(parentCmd, recursive){
@@ -182,7 +179,7 @@
                 cc.log("Nesting more than " + cc.stencilBits + "stencils is not supported. Everything will be drawn without stencil for this node and its childs.");
                 ccui.Layout.WebGLRenderCmd._visit_once = false;
             }
-            // draw everything, as if there where no stencil
+            // _barNode everything, as if there where no stencil
             cc.Node.prototype.visit.call(node, parentCmd);
             return;
         }
@@ -200,7 +197,7 @@
 
         cc.renderer.pushRenderCommand(this._afterDrawStencilCmd);
 
-        // draw (according to the stencil test func) this node and its childs
+        // _barNode (according to the stencil test func) this node and its childs
         var i = 0;      // used by _children
         var j = 0;      // used by _protectedChildren
 
@@ -236,7 +233,7 @@
 
     proto.scissorClippingVisit = function(parentCmd){
         cc.renderer.pushRenderCommand(this._beforeVisitCmdScissor);
-        ccui.ProtectedNode.WebGLRenderCmd.prototype.visit.call(this, parentCmd);
+        cc.ProtectedNode.prototype.visit.call(this._node, parentCmd);
         cc.renderer.pushRenderCommand(this._afterVisitCmdScissor);
     };
 

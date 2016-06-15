@@ -71,7 +71,7 @@ cc.TextFieldDelegate = cc.Class.extend(/** @lends cc.TextFieldDelegate# */{
     },
 
     /**
-     * If doesn't want draw sender as default, return true.
+     * If doesn't want _barNode sender as default, return true.
      * @param {cc.TextFieldTTF} sender
      * @return {Boolean}
      */
@@ -126,6 +126,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     ctor:function (placeholder, dimensions, alignment, fontName, fontSize) {
         this.colorSpaceHolder = cc.color(127, 127, 127);
         this._colorText = cc.color(255,255,255, 255);
+        cc.imeDispatcher.addDelegate(this);
         cc.LabelTTF.prototype.ctor.call(this);
 
         if(fontSize !== undefined){
@@ -137,16 +138,6 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
             if(placeholder)
                 this.setPlaceHolder(placeholder);
         }
-    },
-
-    onEnter: function(){
-        cc.LabelTTF.prototype.onEnter.call(this);
-        cc.imeDispatcher.addDelegate(this);
-    },
-
-    onExit: function(){
-        cc.LabelTTF.prototype.onExit.call(this);
-        cc.imeDispatcher.removeDelegate(this);
     },
 
     /**
@@ -236,7 +227,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
                 return this.initWithString(this._placeHolder, arguments[1], arguments[2]);
                 break;
             default:
-                throw new Error("Argument must be non-nil ");
+                throw "Argument must be non-nil ";
                 break;
         }
     },
@@ -257,7 +248,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
             cc.LabelTTF.prototype.setString.call(this,this._inputText);
             this.setColor(this._colorText);
         }
-        if(cc._renderType === cc.game.RENDER_TYPE_CANVAS)
+        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
             this._renderCmd._updateTexture();
         this._charCount = this._inputText.length;
     },
@@ -302,11 +293,11 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         if (this.delegate && this.delegate.onDraw(this))
             return;
 
-        cc.LabelTTF.prototype.draw.call(this, context);
+        cc.LabelTTF.prototype._barNode.call(this, context);
     },
 
     /**
-     * Recursive method that visit its children and draw them.
+     * Recursive method that visit its children and _barNode them.
      * @param {CanvasRenderingContext2D|WebGLRenderingContext} ctx
      */
     visit: function(ctx){

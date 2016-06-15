@@ -24,6 +24,8 @@
 
 (function(load, baseParser){
 
+    var cache = {};
+
     var Parser = baseParser.extend({
 
         getNodeJson: function(json){
@@ -33,6 +35,8 @@
         parseNode: function(json, resourcePath, file){
             if(!json)
                 return null;
+            if(cache[file])
+                return cache[file].clone();
 
             var self = this,
                 action = new ccs.ActionTimeline();
@@ -58,7 +62,9 @@
                 }
             });
 
-            return action;
+            cache[file] = action;
+            cache[file].retain();
+            return action.clone();
         }
 
     });
@@ -227,7 +233,6 @@
         });
     });
 
-    load.registerParser("action", "0.*", parser);
-    load.registerParser("action", "1.*", parser);
+    load.registerParser("action", "*", parser);
 
 })(ccs._load, ccs._parser);

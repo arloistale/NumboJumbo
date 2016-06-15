@@ -41,22 +41,20 @@ cc.GridAction = cc.ActionInterval.extend(/** @lends cc.GridAction# */{
 	 * @param {cc.Size} gridSize
 	 */
     ctor:function(duration, gridSize){
-        cc.sys._checkWebGLRenderMode();
+        cc._checkWebGLRenderMode();
         cc.ActionInterval.prototype.ctor.call(this);
         this._gridSize = cc.size(0,0);
 
-        gridSize && this.initWithDuration(duration, gridSize);
+		gridSize && this.initWithDuration(duration, gridSize);
     },
 
-    _cacheTargetAsGridNode:function (target) {
-        this._gridNodeTarget = target;
-    },
+    _cacheTargetAsGridNode: function(){},
 
     /**
      * to copy object with deep copy.
      * returns a clone of action.
      *
-     * @return {cc.ActionInterval}
+     * @return {cc.Action}
      */
     clone:function(){
         var action = new cc.GridAction();
@@ -73,11 +71,9 @@ cc.GridAction = cc.ActionInterval.extend(/** @lends cc.GridAction# */{
     startWithTarget:function (target) {
         cc.ActionInterval.prototype.startWithTarget.call(this, target);
         cc.renderer.childrenOrderDirty = true;
-        this._cacheTargetAsGridNode(target);
-
         var newGrid = this.getGrid();
-
-        var targetGrid = this._gridNodeTarget.getGrid();
+        var t = this.target;
+        var targetGrid = t.grid;
         if (targetGrid && targetGrid.getReuseGrid() > 0) {
             var locGridSize = targetGrid.getGridSize();
             if (targetGrid.isActive() && (locGridSize.width === this._gridSize.width) && (locGridSize.height === this._gridSize.height))
@@ -85,8 +81,8 @@ cc.GridAction = cc.ActionInterval.extend(/** @lends cc.GridAction# */{
         } else {
             if (targetGrid && targetGrid.isActive())
                 targetGrid.setActive(false);
-            this._gridNodeTarget.setGrid(newGrid);
-            this._gridNodeTarget.getGrid().setActive(true);
+            t.grid = newGrid;
+            t.grid.setActive(true);
         }
     },
 
@@ -158,15 +154,7 @@ cc.Grid3DAction = cc.GridAction.extend(/** @lends cc.Grid3DAction# */{
      * @return {cc.Grid3D}
      */
     getGrid:function () {
-        return new cc.Grid3D(this._gridSize, undefined, undefined, this._gridNodeTarget.getGridRect());
-    },
-
-    /**
-     * get rect of the grid
-     * @return {cc.Rect} rect
-     */
-    getGridRect:function () {
-        return this._gridNodeTarget.getGridRect();
+        return new cc.Grid3D(this._gridSize);
     },
 
     /**
@@ -199,7 +187,7 @@ cc.Grid3DAction = cc.GridAction.extend(/** @lends cc.Grid3DAction# */{
     },
 
     /**
-     * returns the non-transformed vertex that belongs to certain position in the grid
+     * returns the non-transformed vertex than belongs to certain position in the grid
      * @param {cc.Point} position
      * @return {cc.Vertex3F}
      */
@@ -297,7 +285,7 @@ cc.TiledGrid3DAction = cc.GridAction.extend(/** @lends cc.TiledGrid3DAction# */{
      * @return {cc.TiledGrid3D}
      */
     getGrid:function () {
-        return new cc.TiledGrid3D(this._gridSize, undefined, undefined, this._gridNodeTarget.getGridRect());
+        return new cc.TiledGrid3D(this._gridSize);
     }
 });
 

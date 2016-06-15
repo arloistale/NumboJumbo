@@ -64,10 +64,6 @@ ccs.ActionNode = ccs.Class.extend(/** @lends ccs.ActionNode# */{
     initWithDictionary: function (dic, root) {
         this.setActionTag(dic["ActionTag"]);
         var actionFrameList = dic["actionframelist"];
-
-        var node = ccui.helper.seekActionWidgetByActionTag(root, dic["ActionTag"]);
-        var positionOffset = node instanceof ccui.Widget && !(node instanceof ccui.Layout);
-
         for (var i = 0; i < actionFrameList.length; i++) {
             var actionFrameDic = actionFrameList[i];
             var frameIndex = actionFrameDic["frameid"];
@@ -86,11 +82,6 @@ ccs.ActionNode = ccs.Class.extend(/** @lends ccs.ActionNode# */{
             if (actionFrameDic["positionx"] !== undefined) {
                 var positionX = actionFrameDic["positionx"];
                 var positionY = actionFrameDic["positiony"];
-                if(positionOffset && node.parent){
-                    var AnchorPointIn = node.parent.getAnchorPointInPoints();
-                    positionX += AnchorPointIn.x;
-                    positionY += AnchorPointIn.y;
-                }
                 actionFrame = new ccs.ActionMoveFrame();
                 actionFrame.frameIndex = frameIndex;
                 actionFrame.setEasingType(frameTweenType);
@@ -275,17 +266,13 @@ ccs.ActionNode = ccs.Class.extend(/** @lends ccs.ActionNode# */{
             var locSequenceArray = [];
             for (var j = 0; j < locArray.length; j++) {
                 var locFrame = locArray[j];
-                var locAction = null;
                 if (j !== 0) {
                     var locSrcFrame = locArray[j - 1];
                     var locDuration = (locFrame.frameIndex - locSrcFrame.frameIndex) * this.getUnitTime();
-                    locAction = locFrame.getAction(locDuration);
+                    var locAction = locFrame.getAction(locDuration);
+                    if(locAction)
+                        locSequenceArray.push(locAction);
                 }
-                else {
-                    locAction = locFrame.getAction(0);
-                }
-                if(locAction)
-                    locSequenceArray.push(locAction);
             }
             if(locSequenceArray){
                 var locSequence = cc.sequence(locSequenceArray);

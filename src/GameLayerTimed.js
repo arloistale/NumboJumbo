@@ -46,6 +46,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 				that.onResume();
 
 				that.removeChild(that._prepLayer);
+				that._prepLayer = null;
 
 				NJ.settings.hasLoadedMM = true;
 				NJ.saveSettings();
@@ -235,7 +236,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 	onResume: function() {
 		this._super();
 
-		NJ.gameState.setStartTime(Date.now() - this._timePassed*1000);
+		NJ.gameState.setStartTime(Date.now() - this._timePassed * 1000);
 	},
 
 	/////////////

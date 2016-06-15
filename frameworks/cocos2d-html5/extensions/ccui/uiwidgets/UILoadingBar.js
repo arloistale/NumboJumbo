@@ -87,16 +87,14 @@ ccui.LoadingBar = ccui.Widget.extend(/** @lends ccui.LoadingBar# */{
             case ccui.LoadingBar.TYPE_LEFT:
                 this._barRenderer.setAnchorPoint(0, 0.5);
                 this._barRenderer.setPosition(0, this._contentSize.height*0.5);
-                if (!this._scale9Enabled)  
-                    this._barRenderer.setFlippedX(false);  
-
+                if (!this._scale9Enabled)
+                    this._barRenderer.setFlippedX(false);
                 break;
             case ccui.LoadingBar.TYPE_RIGHT:
                 this._barRenderer.setAnchorPoint(1, 0.5);
                 this._barRenderer.setPosition(this._totalLength,this._contentSize.height*0.5);
-                if (!this._scale9Enabled)  
-                    this._barRenderer.setFlippedX(true);  
-
+                if (!this._scale9Enabled)
+                    this._barRenderer.setFlippedX(true);
                 break;
         }
     },
@@ -242,28 +240,24 @@ ccui.LoadingBar = ccui.Widget.extend(/** @lends ccui.LoadingBar# */{
         this._setPercent(percent);
     },
 
-    _setPercent: function(){
-        var res, rect, spriteRenderer, spriteTextureRect;
-
+    _setPercent: function(percent){
         if (this._totalLength <= 0)
             return;
-        res = this._percent / 100.0;
+        var res = this._percent / 100.0;
 
         if (this._scale9Enabled)
             this._setScale9Scale();
         else {
-            spriteRenderer = this._barRenderer;
-            spriteTextureRect = this._barRendererTextureSize;
-            rect = spriteRenderer.getTextureRect();
-            rect.width = spriteTextureRect.width * res;
-            spriteRenderer.setTextureRect(
+            var spriteRenderer = this._barRenderer;
+            var rect = spriteRenderer.getTextureRect();
+            rect.width = this._barRendererTextureSize.width * res;
+            this._barRenderer.setTextureRect(
                 cc.rect(
                     rect.x,
                     rect.y,
-                    spriteTextureRect.width * res,
-                    spriteTextureRect.height
-                ),
-                spriteRenderer._rectRotated
+                    this._barRendererTextureSize.width * res,
+                    this._barRendererTextureSize.height
+                )
             );
         }
     },

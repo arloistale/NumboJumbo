@@ -95,7 +95,7 @@ var NumboBlock = (function() {
             this.row = rowVal;
             this.val = valVal;
 
-            this._valueLabel.setString(this.val + "");
+            this._valueLabel.setString(this.val + '');
 
             this.updateTheme();
         },

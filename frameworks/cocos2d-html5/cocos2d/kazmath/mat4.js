@@ -37,7 +37,6 @@
      * | 2   6  10  14 |                     </br>
      * | 3   7  11  15 |
      * </p>
-     * @class
      * @param {cc.math.Matrix4} [mat4]
      */
     cc.math.Matrix4 = function (mat4) {
@@ -64,8 +63,8 @@
 
     /**
      * Sets pOut to an identity matrix returns pOut
-     * @param pOut - A pointer to the matrix to set to identity
-     * @returns Returns pOut so that the call can be nested
+     * @Params pOut - A pointer to the matrix to set to identity
+     * @Return Returns pOut so that the call can be nested
      */
     cc.kmMat4Identity = function (pOut) {
         var mat = pOut.mat;
@@ -107,7 +106,7 @@
     //Returns an upper and a lower triangular matrix which are L and R in the Gauss algorithm
     cc.math.Matrix4._gaussj = function (a, b) {
         var i, icol = 0, irow = 0, j, k, l, ll, n = 4, m = 4, selElement;
-        var big, dumb, pivinv;
+        var big, dum, pivinv;
         var indxc = [0, 0, 0, 0], indxr = [0, 0, 0, 0], ipiv = [0, 0, 0, 0];
 
         /*    for (j = 0; j < n; j++) {
@@ -152,13 +151,13 @@
 
             for (ll = 0; ll < n; ll++) {
                 if (ll !== icol) {
-                    dumb = a.get(ll, icol);
+                    dum = a.get(ll, icol);
                     a.set(ll, icol, 0.0);
                     for (l = 0; l < n; l++)
-                        a.set(ll, l, a.get(ll, l) - a.get(icol, l) * dumb);
+                        a.set(ll, l, a.get(ll, l) - a.get(icol, l) * dum);
 
                     for (l = 0; l < m; l++)
-                        b.set(ll, l, a.get(ll, l) - b.get(icol, l) * dumb);
+                        b.set(ll, l, a.get(ll, l) - b.get(icol, l) * dum);
                 }
             }
         }
@@ -182,8 +181,7 @@
      */
     cc.kmMat4Inverse = function (pOut, pM) {
         var inv = new cc.math.Matrix4(pM);
-        var tmp = new cc.math.Matrix4(identityMatrix);
-        if (cc.math.Matrix4._gaussj(inv, tmp) === false)
+        if (cc.math.Matrix4._gaussj(inv, identityMatrix) === false)
             return null;
         pOut.assignFrom(inv);
         return pOut;
@@ -195,8 +193,7 @@
      */
     proto.inverse = function(){    //cc.kmMat4Inverse
         var inv = new cc.math.Matrix4(this);
-        var tmp = new cc.math.Matrix4(identityMatrix);
-        if (cc.math.Matrix4._gaussj(inv, tmp) === false)
+        if (cc.math.Matrix4._gaussj(inv, identityMatrix) === false)
             return null;
         return inv;
     };
@@ -1009,3 +1006,7 @@
         return temp.toAxisAndAngle();
     };
 })(cc);
+
+
+
+

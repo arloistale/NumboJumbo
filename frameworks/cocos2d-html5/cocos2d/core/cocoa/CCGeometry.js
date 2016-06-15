@@ -29,9 +29,6 @@
  * @class cc.Point
  * @param {Number} x
  * @param {Number} y
- *
- * @property x {Number}
- * @property y {Number}
  * @see cc.p
  */
 cc.Point = function (x, y) {
@@ -82,8 +79,6 @@ cc.pointEqualToPoint = function (point1, point2) {
  * @class cc.Size
  * @param {Number} width
  * @param {Number} height
- * @property {Number} width
- * @property {Number} height
  * @see cc.size
  */
 cc.Size = function (width, height) {
@@ -132,16 +127,8 @@ cc.sizeEqualToSize = function (size1, size2) {
 /**
  * cc.Rect is the class for rect object, please do not use its constructor to create rects, use cc.rect() alias function instead.
  * @class cc.Rect
- * @param {Number} x
- * @param {Number} y
  * @param {Number} width
  * @param {Number} height
- *
- * @property {Number} x
- * @property {Number} y
- * @property {Number} width
- * @property {Number} height
- *
  * @see cc.rect
  */
 cc.Rect = function (x, y, width, height) {
@@ -336,3 +323,5 @@ cc.rectIntersection = function (rectA, rectB) {
     intersection.height = Math.min(cc.rectGetMaxY(rectA), cc.rectGetMaxY(rectB)) - cc.rectGetMinY(intersection);
     return intersection;
 };
+
+

@@ -4,9 +4,6 @@
 
 var InfiniteGameLayer = BaseGameLayer.extend({
 
-    // UI Data
-    _prepLayer: null,
-
     // time limit for minute madness
     _elapsedTimeLimit: 60,
     _spawnTime: 1.0,
@@ -68,6 +65,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
                 that.onResume();
 
                 that.removeChild(that._prepLayer);
+                that._prepLayer = null;
 
                 NJ.settings.hasLoadedINF = true;
                 NJ.saveSettings();

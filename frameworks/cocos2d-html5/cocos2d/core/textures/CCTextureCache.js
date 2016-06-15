@@ -109,7 +109,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
      * var key = cc.textureCache.getTextureForKey("hello.png");
      */
     getTextureForKey: function(textureKeyName){
-        return this._textures[textureKeyName] || this._textures[cc.loader._getAliase(textureKeyName)];
+        return this._textures[textureKeyName] || this._textures[cc.loader._aliases[textureKeyName]];
     },
 
     /**
@@ -128,8 +128,9 @@ cc.textureCache = /** @lends cc.textureCache# */{
         return null;
     },
 
-    _generalTextureKey: function (id) {
-        return "_textureKey_" + id;
+    _generalTextureKey: function () {
+        this._textureKeySeq++;
+        return "_textureKey_" + this._textureKeySeq;
     },
 
     /**
@@ -140,17 +141,16 @@ cc.textureCache = /** @lends cc.textureCache# */{
      * var cacheTextureForColor = cc.textureCache.getTextureColors(texture);
      */
     getTextureColors: function (texture) {
-        var image = texture._htmlElementObj;
-        var key = this.getKeyByTexture(image);
+        var key = this.getKeyByTexture(texture);
         if (!key) {
-            if (image instanceof HTMLImageElement)
-                key = image.src;
+            if (texture instanceof HTMLImageElement)
+                key = texture.src;
             else
-                key = this._generalTextureKey(texture.__instanceId);
+                key = this._generalTextureKey();
         }
 
         if (!this._textureColorsCache[key])
-            this._textureColorsCache[key] = texture._generateTextureCacheForColor();
+            this._textureColorsCache[key] = cc.Sprite.CanvasRenderCmd._generateTextureCacheForColor(texture);
         return this._textureColorsCache[key];
     },
 
@@ -305,78 +305,67 @@ cc.textureCache = /** @lends cc.textureCache# */{
     }
 };
 
-cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
-    if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
+if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
 
-        var _p = cc.textureCache;
+    var _p = cc.textureCache;
 
-        _p.handleLoadedTexture = function (url) {
-            var locTexs = this._textures;
-            //remove judge
-            var tex = locTexs[url];
-            if (!tex) {
-                tex = locTexs[url] = new cc.Texture2D();
-                tex.url = url;
-            }
-            tex.handleLoadedTexture();
-        };
-
-        /**
-         * <p>Returns a Texture2D object given an file image <br />
-         * If the file image was not previously loaded, it will create a new Texture2D <br />
-         *  object and it will return it. It will use the filename as a key.<br />
-         * Otherwise it will return a reference of a previously loaded image. <br />
-         * Supported image extensions: .png, .jpg, .gif</p>
-         * @param {String} url
-         * @param {Function} cb
-         * @param {Object} target
-         * @return {cc.Texture2D}
-         * @example
-         * //example
-         * cc.textureCache.addImage("hello.png");
-         */
-        _p.addImage = function (url, cb, target) {
-
-            cc.assert(url, cc._LogInfos.Texture2D_addImage);
-
-            var locTexs = this._textures;
-            //remove judge
-            var tex = locTexs[url] || locTexs[cc.loader._getAliase(url)];
-            if (tex) {
-                if(tex.isLoaded()) {
-                    cb && cb.call(target, tex);
-                    return tex;
-                }
-                else
-                {
-                    tex.addEventListener("load", function(){
-                        cb && cb.call(target, tex);
-                    }, target);
-                    return tex;
-                }
-            }
-
+    _p.handleLoadedTexture = function (url) {
+        var locTexs = this._textures;
+        //remove judge
+        var tex = locTexs[url];
+        if (!tex) {
             tex = locTexs[url] = new cc.Texture2D();
             tex.url = url;
-            var loadFunc = cc.loader._checkIsImageURL(url) ? cc.loader.load : cc.loader.loadImg;
-            loadFunc.call(cc.loader, url, function (err, img) {
-                if (err)
-                    return cb && cb.call(target, err);
-                cc.textureCache.handleLoadedTexture(url);
+        }
+        tex.handleLoadedTexture();
+    };
 
-                var texResult = locTexs[url];
-                cb && cb.call(target, texResult);
-            });
+    /**
+     * <p>Returns a Texture2D object given an file image <br />
+     * If the file image was not previously loaded, it will create a new Texture2D <br />
+     *  object and it will return it. It will use the filename as a key.<br />
+     * Otherwise it will return a reference of a previously loaded image. <br />
+     * Supported image extensions: .png, .jpg, .gif</p>
+     * @param {String} url
+     * @param {Function} cb
+     * @param {Object} target
+     * @return {cc.Texture2D}
+     * @example
+     * //example
+     * cc.textureCache.addImage("hello.png");
+     */
+    _p.addImage = function (url, cb, target) {
 
+        cc.assert(url, cc._LogInfos.Texture2D_addImage);
+
+        var locTexs = this._textures;
+        //remove judge
+        var tex = locTexs[url] || locTexs[cc.loader._aliases[url]];
+        if (tex) {
+            cb && cb.call(target, tex);
             return tex;
-        };
+        }
 
-        _p.addImageAsync = _p.addImage;
-        _p = null;
+        tex = locTexs[url] = new cc.Texture2D();
+        tex.url = url;
+        var loadFunc = cc.loader._checkIsImageURL(url) ? cc.loader.load : cc.loader.loadImg;
+        loadFunc.call(cc.loader, url, function (err, img) {
+            if (err)
+                return cb && cb.call(target, err);
+            cc.textureCache.handleLoadedTexture(url);
 
-    } else if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
-        cc.assert(cc.isFunction(cc._tmp.WebGLTextureCache), cc._LogInfos.MissingFile, "TexturesWebGL.js");
-        cc._tmp.WebGLTextureCache();
-        delete cc._tmp.WebGLTextureCache;
-    }
-});
+            var texResult = locTexs[url];
+            cb && cb.call(target, texResult);
+        });
+
+        return tex;
+    };
+
+    _p.addImageAsync = _p.addImage;
+    _p = null;
+
+} else {
+    cc.assert(cc.isFunction(cc._tmp.WebGLTextureCache), cc._LogInfos.MissingFile, "TexturesWebGL.js");
+    cc._tmp.WebGLTextureCache();
+    delete cc._tmp.WebGLTextureCache;
+}

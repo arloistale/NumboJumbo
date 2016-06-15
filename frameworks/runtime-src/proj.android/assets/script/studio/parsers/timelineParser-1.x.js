@@ -287,7 +287,6 @@
         });
     });
 
-    load.registerParser("timeline", "0.*", parser);
-    load.registerParser("timeline", "1.*", parser);
+    load.registerParser("timeline", "*", parser);
 
 })(ccs._load, ccs._parser);

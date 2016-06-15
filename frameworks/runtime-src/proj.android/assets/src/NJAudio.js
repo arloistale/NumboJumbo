@@ -8,11 +8,13 @@ NJ.audio = (function() {
     var _musicRes = null;
     var _musicId = -1;
 
+    var shouldUseJSB = false;
+
     return {
         // preload an audio resource then callback
         // Callback usage: callback(isSuccess)
         preload: function(res, callback) {
-            if(cc.sys.isNative) {
+            if(cc.sys.isNative && shouldUseJSB) {
                 jsb.AudioEngine.preload(res, callback);
             } else {
                 callback(true);
@@ -28,14 +30,14 @@ NJ.audio = (function() {
                 return;
 
             if(_musicId >= 0) {
-                if(cc.sys.isNative)
+                if(cc.sys.isNative && shouldUseJSB)
                     jsb.AudioEngine.stop(_musicId);
                 else
                     cc.audioEngine.stopMusic();
             }
 
             _musicRes = res;
-            if(cc.sys.isNative)
+            if(cc.sys.isNative && shouldUseJSB)
                 _musicId = jsb.AudioEngine.play2d(res, true, NJ.MUSIC_VOLUME);
             else {
                 cc.audioEngine.setMusicVolume(NJ.MUSIC_VOLUME);
@@ -48,7 +50,7 @@ NJ.audio = (function() {
             if(!NJ.settings.sounds)
                 return;
 
-            if(cc.sys.isNative)
+            if(cc.sys.isNative && shouldUseJSB)
                 jsb.AudioEngine.play2d(res, false, NJ.SOUNDS_VOLUME);
             else {
                 cc.audioEngine.setEffectsVolume(NJ.SOUNDS_VOLUME);
@@ -57,7 +59,7 @@ NJ.audio = (function() {
         },
 
         stopMusic: function() {
-            if(cc.sys.isNative)
+            if(cc.sys.isNative && shouldUseJSB)
                 jsb.AudioEngine.stop(_musicId);
             else
                 cc.audioEngine.stopMusic();

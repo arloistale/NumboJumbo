@@ -63,11 +63,11 @@ var NumboMenuLayer = (function() {
 
             this._initAudio();
 
-            //NJ.settings.hasLoadedMM = false;
-            //NJ.settings.hasLoadedMOV = false;
-            //NJ.settings.hasLoadedRE = false;
-            //NJ.settings.hasLoadedINF = false;
-            //NJ.saveSettings();
+            NJ.settings.hasLoadedMM = false;
+            NJ.settings.hasLoadedMOV = false;
+            NJ.settings.hasLoadedRE = false;
+            NJ.settings.hasLoadedINF = false;
+            NJ.saveSettings();
 
             this.enter();
         },

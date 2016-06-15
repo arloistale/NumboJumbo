@@ -77,7 +77,7 @@ NumboLoaderScene = cc.Scene.extend({
         self._audioLoadCount = 0;
         var res = self.resources;
 
-        var shouldPreload = true;
+        var shouldPreload = false;
 
         cc.loader.load(res, function() {}, function () {
             if(!shouldPreload) {

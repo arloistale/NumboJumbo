@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2015 Chukong Technologies Inc.
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -116,7 +116,6 @@ cc.eventManager = /** @lends cc.eventManager# */{
     _nodePriorityMap: {},
     _globalZOrderNodeMap: {},
     _toAddedListeners: [],
-    _toRemovedListeners: [],
     _dirtyNodes: [],
     _inDispatch: 0,
     _isEnabled: false,
@@ -314,10 +313,8 @@ cc.eventManager = /** @lends cc.eventManager# */{
     _sortEventListenersOfSceneGraphPriorityDes : function(l1, l2){
         var locNodePriorityMap = cc.eventManager._nodePriorityMap, node1 = l1._getSceneGraphPriority(),
             node2 = l2._getSceneGraphPriority();
-        if( !l2 || !node2 || !locNodePriorityMap[node2.__instanceId] )
+        if(!l1 || !l2 || !node1 || !node2 || !locNodePriorityMap[node1.__instanceId] || !locNodePriorityMap[node2.__instanceId])
             return -1;
-        else if( !l1 || !node1 || !locNodePriorityMap[node1.__instanceId] )
-            return 1;
         return locNodePriorityMap[l2._getSceneGraphPriority().__instanceId] - locNodePriorityMap[l1._getSceneGraphPriority().__instanceId];
     },
 
@@ -353,17 +350,13 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
         var fixedPriorityListeners = listeners.getFixedPriorityListeners();
         var sceneGraphPriorityListeners = listeners.getSceneGraphPriorityListeners();
-        var i, selListener, idx, toRemovedListeners = this._toRemovedListeners;
+        var i, selListener;
 
         if (sceneGraphPriorityListeners) {
             for (i = 0; i < sceneGraphPriorityListeners.length;) {
                 selListener = sceneGraphPriorityListeners[i];
                 if (!selListener._isRegistered()) {
                     cc.arrayRemoveObject(sceneGraphPriorityListeners, selListener);
-                    // if item in toRemove list, remove it from the list
-                    idx = toRemovedListeners.indexOf(selListener);
-                    if(idx !== -1)
-                        toRemovedListeners.splice(idx, 1);
                 } else
                     ++i;
             }
@@ -372,13 +365,9 @@ cc.eventManager = /** @lends cc.eventManager# */{
         if (fixedPriorityListeners) {
             for (i = 0; i < fixedPriorityListeners.length;) {
                 selListener = fixedPriorityListeners[i];
-                if (!selListener._isRegistered()) {
+                if (!selListener._isRegistered())
                     cc.arrayRemoveObject(fixedPriorityListeners, selListener);
-                    // if item in toRemove list, remove it from the list
-                    idx = toRemovedListeners.indexOf(selListener);
-                    if(idx !== -1)
-                        toRemovedListeners.splice(idx, 1);
-                } else
+                else
                     ++i;
             }
         }
@@ -418,36 +407,6 @@ cc.eventManager = /** @lends cc.eventManager# */{
                 this._forceAddEventListener(locToAddedListeners[i]);
             this._toAddedListeners.length = 0;
         }
-        if(this._toRemovedListeners.length !== 0)
-            this._cleanToRemovedListeners();
-    },
-
-    //Remove all listeners in _toRemoveListeners list and cleanup
-    _cleanToRemovedListeners: function(){
-        var toRemovedListeners = this._toRemovedListeners;
-        for(var i = 0; i< toRemovedListeners.length; i++){
-            var selListener = toRemovedListeners[i];
-            var listeners = this._listenersMap[selListener._getListenerID()];
-            if(!listeners)
-                continue;
-
-            var idx, fixedPriorityListeners = listeners.getFixedPriorityListeners(),
-                sceneGraphPriorityListeners = listeners.getSceneGraphPriorityListeners();
-
-            if(sceneGraphPriorityListeners){
-                idx = sceneGraphPriorityListeners.indexOf(selListener);
-                if (idx !== -1) {
-                    sceneGraphPriorityListeners.splice(idx, 1);
-                }
-            }
-            if(fixedPriorityListeners){
-                idx = fixedPriorityListeners.indexOf(selListener);
-                if (idx !== -1) {
-                    fixedPriorityListeners.splice(idx, 1);
-                }
-            }
-        }
-        toRemovedListeners.length = 0;
     },
 
     _onTouchEventCallback: function(listener, argsObj){
@@ -686,7 +645,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
      * if the parameter "nodeOrPriority" is a Number, it means to add a event listener for a specified event with the fixed priority.                          <br/>
      * </p>
      * @param {cc.EventListener|Object} listener The listener of a specified event or a object of some event parameters.
-     * @param {cc.Node|Number} nodeOrPriority The priority of the listener is based on the draw order of this node or fixedPriority The fixed priority of the listener.
+     * @param {cc.Node|Number} nodeOrPriority The priority of the listener is based on the _barNode order of this node or fixedPriority The fixed priority of the listener.
      * @note  The priority of scene graph will be fixed value 0. So the order of listener item in the vector will be ' <0, scene graph (0 priority), >0'.
      *         A lower priority will be called before the ones that have a higher value. 0 priority is forbidden for fixed priority since it's used for scene graph based priority.
      *         The listener must be a cc.EventListener object when adding a fixed priority listener, because we can't remove a fixed priority listener without the listener handler,
@@ -786,27 +745,6 @@ cc.eventManager = /** @lends cc.eventManager# */{
         }
     },
 
-    _removeListenerInCallback: function(listeners, callback){
-        if (listeners == null)
-            return false;
-
-        for (var i = 0, len = listeners.length; i < len; i++) {
-            var selListener = listeners[i];
-            if (selListener._onCustomEvent === callback || selListener._onEvent === callback) {
-                selListener._setRegistered(false);
-                if (selListener._getSceneGraphPriority() != null){
-                    this._dissociateNodeAndEventListener(selListener._getSceneGraphPriority(), selListener);
-                    selListener._setSceneGraphPriority(null);         // NULL out the node pointer so we don't have any dangling pointers to destroyed nodes.
-                }
-
-                if (this._inDispatch === 0)
-                    cc.arrayRemoveObject(listeners, selListener);
-                return true;
-            }
-        }
-        return false;
-    },
-
     _removeListenerInVector : function(listeners, listener){
         if (listeners == null)
             return false;
@@ -822,8 +760,6 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
                 if (this._inDispatch === 0)
                     cc.arrayRemoveObject(listeners, selListener);
-                else
-                    this._toRemovedListeners.push(selListener);
                 return true;
             }
         }
@@ -961,7 +897,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
         this._updateDirtyFlagForSceneGraph();
         this._inDispatch++;
         if(!event || !event.getType)
-            throw new Error("event is undefined");
+            throw "event is undefined";
         if (event.getType() === cc.Event.TOUCH) {
             this._dispatchTouchEvent(event);
             this._inDispatch--;
@@ -995,3 +931,97 @@ cc.eventManager = /** @lends cc.eventManager# */{
         this.dispatchEvent(ev);
     }
 };
+
+// The event helper
+cc.EventHelper = function(){};
+
+cc.EventHelper.prototype = {
+    constructor: cc.EventHelper,
+
+    apply: function ( object ) {
+        object.addEventListener = cc.EventHelper.prototype.addEventListener;
+        object.hasEventListener = cc.EventHelper.prototype.hasEventListener;
+        object.removeEventListener = cc.EventHelper.prototype.removeEventListener;
+        object.dispatchEvent = cc.EventHelper.prototype.dispatchEvent;
+    },
+
+    addEventListener: function ( type, listener, target ) {
+        //check 'type' status, if the status is ready, dispatch event next frame
+        if(type === "load" && this._textureLoaded){            //only load event checked.
+            setTimeout(function(){
+                listener.call(target);
+            }, 0);
+            return;
+        }
+
+        if ( this._listeners === undefined )
+            this._listeners = {};
+
+        var listeners = this._listeners;
+        if ( listeners[ type ] === undefined )
+            listeners[ type ] = [];
+
+        if ( !this.hasEventListener(type, listener, target))
+            listeners[ type ].push( {callback:listener, eventTarget: target} );
+    },
+
+    hasEventListener: function ( type, listener, target ) {
+        if ( this._listeners === undefined )
+            return false;
+
+        var listeners = this._listeners;
+        if ( listeners[ type ] !== undefined ) {
+            for(var i = 0, len = listeners.length; i < len ; i++){
+                var selListener = listeners[i];
+                if(selListener.callback === listener && selListener.eventTarget === target)
+                    return true;
+            }
+        }
+        return false;
+    },
+
+    removeEventListener: function( type, target){
+        if ( this._listeners === undefined )
+            return;
+
+        var listeners = this._listeners;
+        var listenerArray = listeners[ type ];
+
+        if ( listenerArray !== undefined ) {
+            for(var i = 0; i < listenerArray.length ; ){
+                var selListener = listenerArray[i];
+                if(selListener.eventTarget === target)
+                    listenerArray.splice( i, 1 );
+                else
+                    i++
+            }
+        }
+    },
+
+    dispatchEvent: function ( event, clearAfterDispatch ) {
+        if ( this._listeners === undefined )
+            return;
+
+        if(clearAfterDispatch == null)
+            clearAfterDispatch = true;
+        var listeners = this._listeners;
+        var listenerArray = listeners[ event];
+
+        if ( listenerArray !== undefined ) {
+            var array = [];
+            var length = listenerArray.length;
+
+            for ( var i = 0; i < length; i ++ ) {
+                array[ i ] = listenerArray[ i ];
+            }
+
+            for ( i = 0; i < length; i ++ ) {
+                array[ i ].callback.call( array[i].eventTarget, this );
+            }
+
+            if(clearAfterDispatch)
+                listenerArray.length = 0;
+        }
+    }
+};
+

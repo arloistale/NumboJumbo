@@ -29,8 +29,15 @@ package org.cocos2dx.javascript;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
+/* imports needed for vibration stuff */
+import android.os.Vibrator;
+import android.content.Context;
+import android.app.ActivityManager;
+import android.util.Log;
+import android.os.Bundle;
+
 public class AppActivity extends Cocos2dxActivity {
-	
+
     @Override
     public Cocos2dxGLSurfaceView onCreateView() {
         Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);

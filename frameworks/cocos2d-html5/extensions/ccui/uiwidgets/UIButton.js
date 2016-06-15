@@ -103,10 +103,25 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         this._titleColor = cc.color.WHITE;
         ccui.Widget.prototype.ctor.call(this);
         this.setTouchEnabled(true);
+        this.init(normalImage, selectedImage, disableImage, texType);
+    },
 
-        if (normalImage) {
+    /**
+     * Initializes a button. please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
+     * @param {String} normalImage
+     * @param {String} [selectedImage=""]
+     * @param {String} [disableImage=""]
+     * @param {Number} [texType=ccui.Widget.LOCAL_TEXTURE]
+     * @returns {boolean}
+     * @override
+     */
+    init: function (normalImage, selectedImage,disableImage, texType) {
+        if (ccui.Widget.prototype.init.call(this)) {
+            if(normalImage === undefined)
+                return true;
             this.loadTextures(normalImage, selectedImage,disableImage, texType);
         }
+        return false;
     },
 
     _initRenderer: function () {
@@ -259,8 +274,6 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
                 break;
         }
 
-        this._normalTextureLoaded = normalRenderer._textureLoaded;
-
         this._normalTextureSize = this._buttonNormalRenderer.getContentSize();
         this._updateChildrenDisplayedRGBA();
         if (this._unifySize){
@@ -271,6 +284,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         }else
             this._updateContentSizeWithTextureSize(this._normalTextureSize);
 
+        this._normalTextureLoaded = true;
         this._normalTextureAdaptDirty = true;
         this._findLayout();
     },
@@ -588,6 +602,16 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
             this.setContentSize(this.getVirtualRendererSize());
     },
 
+    _updateTexturesRGBA: function(){
+        this._buttonNormalRenderer.setColor(this.getColor());
+        this._buttonClickedRenderer.setColor(this.getColor());
+        this._buttonDisableRenderer.setColor(this.getColor());
+
+        this._buttonNormalRenderer.setOpacity(this.getOpacity());
+        this._buttonClickedRenderer.setOpacity(this.getOpacity());
+        this._buttonDisableRenderer.setOpacity(this.getOpacity());
+    },
+
     _onSizeChanged: function () {
         ccui.Widget.prototype._onSizeChanged.call(this);
         this._updateTitleLocation();
@@ -867,6 +891,11 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         this.setTitleColor(uiButton.getTitleColor());
         this.setPressedActionEnabled(uiButton.pressedActionEnabled);
         this.setZoomScale(uiButton._zoomScale);
+    },
+
+    setColor: function(color){
+        cc.ProtectedNode.prototype.setColor.call(this, color);
+        this._updateTexturesRGBA();
     },
 
     _getNormalSize: function(){

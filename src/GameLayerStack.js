@@ -40,6 +40,7 @@ var StackGameLayer = BaseGameLayer.extend({
                 that.onResume();
 
                 that.removeChild(that._prepLayer);
+                that._prepLayer = null;
 
                 NJ.settings.hasLoadedRE = true;
                 NJ.saveSettings();

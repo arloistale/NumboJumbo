@@ -8,28 +8,6 @@ var PrepLayer = (function() {
     // UI Events //
     ///////////////
 
-    var onMenu = function() {
-        NJ.audio.playSound(res.clickSound);
-
-        var that = this;
-
-        this.leave(function() {
-            if(that.onMenuCallback)
-                that.onMenuCallback();
-        });
-    };
-
-    var onBack = function() {
-        NJ.audio.playSound(res.clickSound);
-
-        var that = this;
-
-        this.leave(function() {
-            if(that.onCloseCallback)
-                that.onCloseCallback();
-        });
-    };
-
     return cc.LayerColor.extend({
 
         // UI Data
@@ -136,7 +114,7 @@ var PrepLayer = (function() {
 
             var buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
 
-            var backButton = new NJMenuButton(buttonSize, onBack.bind(this), this);
+            var backButton = new NJMenuButton(buttonSize, this.onClose.bind(this), this);
             backButton.setImageRes(res.nextImage);
             backButton.attr({
                 anchorX: 0.5,
@@ -179,6 +157,21 @@ var PrepLayer = (function() {
                 if(callback)
                     callback();
             })));
+        },
+
+        ///////////////
+        // UI Events //
+        ///////////////
+
+        onClose: function() {
+            NJ.audio.playSound(res.clickSound);
+
+            var that = this;
+
+            this.leave(function() {
+                if(that.onCloseCallback)
+                    that.onCloseCallback();
+            });
         },
 
 //////////////////

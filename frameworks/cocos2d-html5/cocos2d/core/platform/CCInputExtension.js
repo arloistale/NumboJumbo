@@ -58,12 +58,12 @@ _p.setAccelerometerInterval = function(interval){
 };
 
 _p._registerKeyboardEvent = function(){
-    cc._canvas.addEventListener("keydown", function (e) {
+    cc._addEventListener(cc._canvas, "keydown", function (e) {
         cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, true));
         e.stopPropagation();
         e.preventDefault();
     }, false);
-    cc._canvas.addEventListener("keyup", function (e) {
+    cc._addEventListener(cc._canvas, "keyup", function (e) {
         cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, false));
         e.stopPropagation();
         e.preventDefault();
@@ -85,7 +85,7 @@ _p._registerAccelerometerEvent = function(){
         _t._minus = -1;
     }
 
-    w.addEventListener(_deviceEventType, _t.didAccelerate.bind(_t), false);
+    cc._addEventListener(w, _deviceEventType, _t.didAccelerate.bind(_t), false);
 };
 
 _p.didAccelerate = function (eventData) {
@@ -108,8 +108,13 @@ _p.didAccelerate = function (eventData) {
         z = (eventData["alpha"] / 90) * 0.981;
     }
 
-    mAcceleration.x = x;
-    mAcceleration.y = y;
+    if(cc.sys.os === cc.sys.OS_ANDROID){
+        mAcceleration.x = -x;
+        mAcceleration.y = -y;
+    }else{
+        mAcceleration.x = x;
+        mAcceleration.y = y;
+    }
     mAcceleration.z = z;
 
     mAcceleration.timestamp = eventData.timeStamp || Date.now();

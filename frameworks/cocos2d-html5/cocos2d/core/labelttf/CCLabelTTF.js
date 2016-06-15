@@ -71,7 +71,6 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
     _fontSize: 0.0,
     _string: "",
     _originalText: null,
-    _onCacheCanvasMode: true,
 
     // font shadow
     _shadowEnabled: false,
@@ -291,7 +290,7 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
         if (a.r != null && a.g != null && a.b != null && a.a != null) {
             this._enableShadow(a, b, c);
         } else {
-            this._enableShadowNoneColor(a, b, c, d);
+            this._enableShadowNoneColor(a, b, c, d)
         }
     },
 
@@ -739,21 +738,11 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
         cc.Sprite.prototype.setTextureRect.call(this, rect, rotated, untrimmedSize, false);
     },
 
-    /**
-     * set Target to draw on
-     * @param boolean onCanvas
-     */
-    setDrawMode: function (onCacheMode) {
-        this._onCacheCanvasMode = onCacheMode;
-    },
-
     _createRenderCmd: function () {
-        if (cc._renderType === cc.game.RENDER_TYPE_WEBGL)
-            return new cc.LabelTTF.WebGLRenderCmd(this);
-        else if (this._onCacheCanvasMode)
-            return new cc.LabelTTF.CacheCanvasRenderCmd(this);
-        else
+        if (cc._renderType === cc._RENDER_TYPE_CANVAS)
             return new cc.LabelTTF.CanvasRenderCmd(this);
+        else
+            return new cc.LabelTTF.WebGLRenderCmd(this);
     },
 
     //For web only
@@ -818,7 +807,7 @@ if (cc.USE_LA88_LABELS)
 else
     cc.LabelTTF._SHADER_PROGRAM = cc.SHADER_POSITION_TEXTUREA8COLOR;
 
-cc.LabelTTF.__labelHeightDiv = document.createElement("div");
+cc.LabelTTF.__labelHeightDiv = cc.newElement("div");
 cc.LabelTTF.__labelHeightDiv.style.fontFamily = "Arial";
 cc.LabelTTF.__labelHeightDiv.style.position = "absolute";
 cc.LabelTTF.__labelHeightDiv.style.left = "-100px";
@@ -827,7 +816,7 @@ cc.LabelTTF.__labelHeightDiv.style.lineHeight = "normal";
 
 document.body ?
     document.body.appendChild(cc.LabelTTF.__labelHeightDiv) :
-    window.addEventListener('load', function () {
+    cc._addEventListener(window, 'load', function () {
         this.removeEventListener('load', arguments.callee, false);
         document.body.appendChild(cc.LabelTTF.__labelHeightDiv);
     }, false);

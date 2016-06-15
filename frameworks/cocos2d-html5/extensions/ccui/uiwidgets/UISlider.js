@@ -81,14 +81,19 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
         this._capInsetsProgressBarRenderer = cc.rect(0, 0, 0, 0);
         ccui.Widget.prototype.ctor.call(this);
 
-        resType = resType || 0;
+        resType = resType == null ? 0 : resType;
         this.setTouchEnabled(true);
-        if (barTextureName) {
-            this.loadBarTexture(barTextureName, resType);
-        }
-        if (normalBallTextureName) {
-            this.loadSlidBallTextures(normalBallTextureName, resType);
-        }
+        barTextureName && this.loadBarTexture(barTextureName, resType);
+        normalBallTextureName && this.loadSlidBallTextures(normalBallTextureName, resType);
+    },
+
+    /**
+     * Initializes a ccui.Slider. Please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
+     * @returns {boolean}
+     * @override
+     */
+    init: function () {
+        return ccui.Widget.prototype.init.call(this);
     },
 
     _initRenderer: function () {
@@ -600,12 +605,12 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
                 var btextureSize = this._barTextureSize;
                 if (btextureSize.width <= 0.0 || btextureSize.height <= 0.0) {
                     this._barRenderer.setScale(1.0);
-                }else{
-                    var bscaleX = this._contentSize.width / btextureSize.width;
-                    var bscaleY = this._contentSize.height / btextureSize.height;
-                    this._barRenderer.setScaleX(bscaleX);
-                    this._barRenderer.setScaleY(bscaleY);
+                    return;
                 }
+                var bscaleX = this._contentSize.width / btextureSize.width;
+                var bscaleY = this._contentSize.height / btextureSize.height;
+                this._barRenderer.setScaleX(bscaleX);
+                this._barRenderer.setScaleY(bscaleY);
             }
         }
         this._barRenderer.setPosition(this._contentSize.width / 2.0, this._contentSize.height / 2.0);

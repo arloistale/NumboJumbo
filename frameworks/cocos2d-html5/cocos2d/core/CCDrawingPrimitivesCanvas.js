@@ -251,7 +251,7 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     },
 
     /**
-     * draw a CatmullRom curve
+     * _barNode a CatmullRom curve
      * @override
      * @param {Array} points
      * @param {Number} segments
@@ -261,7 +261,7 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     },
 
     /**
-     * draw a cardinal spline path
+     * _barNode a cardinal spline path
      * @override
      * @param {Array} config
      * @param {Number} tension
@@ -300,7 +300,7 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     },
 
     /**
-     * draw an image
+     * _barNode an image
      * @override
      * @param {HTMLImageElement|HTMLCanvasElement} image
      * @param {cc.Point} sourcePoint
@@ -330,7 +330,7 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     },
 
     /**
-     * draw a star
+     * _barNode a star
      * @param {cc.CanvasContextWrapper} ctx canvas context
      * @param {Number} radius
      * @param {cc.Color} color
@@ -372,7 +372,7 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     },
 
     /**
-     * draw a color ball
+     * _barNode a color ball
      * @param {cc.CanvasContextWrapper} ctx canvas context
      * @param {Number} radius
      * @param {cc.Color} color

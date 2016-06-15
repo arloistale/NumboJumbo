@@ -28,7 +28,7 @@
         cc.Node.CanvasRenderCmd.call(this, renderable);
 
         this._texture = null;
-        this._textureToRender = null;
+        this._originalTexture = null;
     };
 
     var proto = cc.SpriteBatchNode.CanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
@@ -45,7 +45,8 @@
     };
 
     proto.initWithTexture = function(texture, capacity){
-        this._textureToRender = this._texture = texture;
+        this._originalTexture = texture;
+        this._texture = texture;
     };
 
     proto.insertQuad = function(sprite, index){};

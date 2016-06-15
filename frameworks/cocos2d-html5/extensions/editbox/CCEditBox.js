@@ -173,7 +173,7 @@ cc.EditBoxDelegate = cc.Class.extend({
     },
 
     /**
-     * This method is called when the return button was pressed.
+     * This method is called when the return button was pressed or the outside area of keyboard was touched.
      * @param {cc.EditBox} sender
      */
     editBoxReturn: function (sender) {
@@ -229,12 +229,6 @@ cc.EditBox = cc.ControlButton.extend({
     _tooltip: false,
     _className: "EditBox",
 
-    _onCanvasClick : null,
-    _inputEvent : null,
-    _keyPressEvent : null,
-    _focusEvent : null,
-    _blurEvent : null,
-
     /**
      * constructor of cc.EditBox
      * @param {cc.Size} size
@@ -249,9 +243,10 @@ cc.EditBox = cc.ControlButton.extend({
         this._placeholderColor = cc.color.GRAY;
         this.setContentSize(size);
         var tmpDOMSprite = this._domInputSprite = new cc.Sprite();
-        tmpDOMSprite.draw = function () {};  //redefine draw function
+        tmpDOMSprite._barNode = function () {};  //redefine _barNode function
         this.addChild(tmpDOMSprite);
-        var tmpEdTxt = this._edTxt = document.createElement("input");
+        var selfPointer = this;
+        var tmpEdTxt = this._edTxt = cc.newElement("input");
         tmpEdTxt.type = "text";
         tmpEdTxt.style.fontSize = this._edFontSize + "px";
         tmpEdTxt.style.color = "#000000";
@@ -263,56 +258,47 @@ cc.EditBox = cc.ControlButton.extend({
         tmpEdTxt.style.active = 0;
         tmpEdTxt.style.outline = "medium";
         tmpEdTxt.style.padding = "0";
-        var onCanvasClick = function() { this._edTxt.blur();};
-        this._onCanvasClick = onCanvasClick.bind(this);
+        var onCanvasClick = function() { tmpEdTxt.blur();};
         
-        var inputEvent = function () {
-            if (this._delegate && this._delegate.editBoxTextChanged)
-                this._delegate.editBoxTextChanged(this, this._edTxt.value);
-        };
-        this._inputEvent = inputEvent.bind(this);
-        var keypressEvent = function ( e ) {
+        // TODO the event listener will be remove when EditBox removes from parent.
+        cc._addEventListener(tmpEdTxt, "input", function () {
+            if (selfPointer._delegate && selfPointer._delegate.editBoxTextChanged)
+                selfPointer._delegate.editBoxTextChanged(selfPointer, this.value);
+        });
+        cc._addEventListener(tmpEdTxt, "keypress", function (e) {
             if (e.keyCode === cc.KEY.enter) {
                 e.stopPropagation();
                 e.preventDefault();
-                if (this._delegate && this._delegate.editBoxReturn)
-                    this._delegate.editBoxReturn(this);
                 cc._canvas.focus();
             }
-        };
-        this._keyPressEvent = keypressEvent.bind(this);
-        var focusEvent = function () {
-            if (this._edTxt.value === this._placeholderText) {
-                this._edTxt.value = "";
-                this._edTxt.style.fontSize = this._edFontSize + "px";
-                this._edTxt.style.color = cc.colorToHex(this._textColor);
-                if (this._editBoxInputFlag === cc.EDITBOX_INPUT_FLAG_PASSWORD)
-                    this._edTxt.type = "password";
+        });
+        cc._addEventListener(tmpEdTxt, "focus", function () {
+            if (this.value === selfPointer._placeholderText) {
+                this.value = "";
+                this.style.fontSize = selfPointer._edFontSize + "px";
+                this.style.color = cc.colorToHex(selfPointer._textColor);
+                if (selfPointer._editBoxInputFlag === cc.EDITBOX_INPUT_FLAG_PASSWORD)
+                    selfPointer._edTxt.type = "password";
                 else
-                    this._edTxt.type = "text";
+                    selfPointer._edTxt.type = "text";
             }
-            if (this._delegate && this._delegate.editBoxEditingDidBegin)
-                this._delegate.editBoxEditingDidBegin(this);
-            cc._canvas.addEventListener("click", this._onCanvasClick);
-        };
-        this._focusEvent = focusEvent.bind(this);
-        var blurEvent = function () {
-            if (this._edTxt.value === "") {
-                this._edTxt.value = this._placeholderText;
-                this._edTxt.style.fontSize = this._placeholderFontSize + "px";
-                this._edTxt.style.color = cc.colorToHex(this._placeholderColor);
-                this._edTxt.type = "text";
+            if (selfPointer._delegate && selfPointer._delegate.editBoxEditingDidBegin)
+                selfPointer._delegate.editBoxEditingDidBegin(selfPointer);
+            cc._addEventListener(cc._canvas, "click", onCanvasClick);
+        });
+        cc._addEventListener(tmpEdTxt, "blur", function () {
+            if (this.value === "") {
+                this.value = selfPointer._placeholderText;
+                this.style.fontSize = selfPointer._placeholderFontSize + "px";
+                this.style.color = cc.colorToHex(selfPointer._placeholderColor);
+                selfPointer._edTxt.type = "text";
             }
-            if (this._delegate && this._delegate.editBoxEditingDidEnd)
-                this._delegate.editBoxEditingDidEnd(this);
-            cc._canvas.removeEventListener('click', this._onCanvasClick);
-        };
-        this._blurEvent = blurEvent.bind(this);
-
-        tmpEdTxt.addEventListener("input", this._inputEvent);
-        tmpEdTxt.addEventListener("keypress", this._keyPressEvent);
-        tmpEdTxt.addEventListener("focus", this._focusEvent);
-        tmpEdTxt.addEventListener("blur", this._blurEvent);
+            if (selfPointer._delegate && selfPointer._delegate.editBoxEditingDidEnd)
+                selfPointer._delegate.editBoxEditingDidEnd(selfPointer);
+            if (selfPointer._delegate && selfPointer._delegate.editBoxReturn)
+                selfPointer._delegate.editBoxReturn(selfPointer);
+            cc._canvas.removeEventListener('click', onCanvasClick);
+        });
 
         cc.DOM.convert(tmpDOMSprite);
         tmpDOMSprite.dom.appendChild(tmpEdTxt);
@@ -646,16 +632,6 @@ cc.EditBox = cc.ControlButton.extend({
         this._edHeight = size.height;
         this.dom.style.height = this._edHeight.toString() + "px";
         this.dom.style.backgroundColor = cc.colorToHex(bgColor);
-    },
-
-    cleanup : function () {
-        this._edTxt.removeEventListener("input", this._inputEvent);
-        this._edTxt.removeEventListener("keypress", this._keyPressEvent);
-        this._edTxt.removeEventListener("focus", this._focusEvent);
-        this._edTxt.removeEventListener("blur", this._blurEvent);
-        cc._canvas.removeEventListener('click', this._onCanvasClick);
-
-        this._super();
     }
 });
 

@@ -274,7 +274,7 @@ cc.FiniteTimeAction = cc.Action.extend(/** @lends cc.FiniteTimeAction# */{
      * - The reversed action will be x of 100 move to 0.
      * - Will be rewritten
      *
-     * @return {?cc.Action}
+     * @return {Null}
      */
     reverse:function () {
         cc.log("cocos2d: FiniteTimeAction#reverse: Implement me");
@@ -348,7 +348,7 @@ cc.Speed = cc.Action.extend(/** @lends cc.Speed# */{
      */
     initWithAction:function (action, speed) {
         if(!action)
-            throw new Error("cc.Speed.initWithAction(): action must be non nil");
+            throw "cc.Speed.initWithAction(): action must be non nil";
 
         this._innerAction = action;
         this._speed = speed;
@@ -575,7 +575,7 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
      */
     initWithTarget:function (followedNode, rect) {
         if(!followedNode)
-            throw new Error("cc.Follow.initWithAction(): followedNode must be non nil");
+            throw "cc.Follow.initWithAction(): followedNode must be non nil";
 
         var _this = this;
         rect = rect || cc.rect(0, 0, 0, 0);

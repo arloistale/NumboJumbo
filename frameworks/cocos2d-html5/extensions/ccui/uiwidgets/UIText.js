@@ -43,8 +43,8 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     _touchScaleChangeEnabled: false,
     _normalScaleValueX: 1,
     _normalScaleValueY: 1,
-    _fontName: "Arial",
-    _fontSize: 16,
+    _fontName: "Thonburi",
+    _fontSize: 10,
     _onSelectedScaleOffset:0.5,
     _labelRenderer: "",
     _textAreaSize: null,
@@ -69,13 +69,30 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
         this._textAreaSize = cc.size(0, 0);
         ccui.Widget.prototype.ctor.call(this);
 
-        if (fontSize !== undefined) {
-            this.setFontName(fontName);
-            this.setFontSize(fontSize);
-            this.setString(textContent);
-        } else {
-            this.setFontName(this._fontName);
+        fontSize !== undefined && this.init(textContent, fontName, fontSize);
+
+    },
+
+    /**
+     * Initializes a ccui.Text. Please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
+     * @param {String} textContent
+     * @param {String} fontName
+     * @param {Number} fontSize
+     * @returns {boolean}
+     * @override
+     */
+    init: function (textContent, fontName, fontSize) {
+        if (ccui.Widget.prototype.init.call(this)) {
+            if(arguments.length > 0){
+                this.setFontName(fontName);
+                this.setFontSize(fontSize);
+                this.setString(textContent);
+            }else{
+                this.setFontName(this._fontName);
+            }
+            return true;
         }
+        return false;
     },
 
     _initRenderer: function () {
@@ -401,7 +418,6 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
             this.setTextHorizontalAlignment(uiLabel._labelRenderer.getHorizontalAlignment());
             this.setTextVerticalAlignment(uiLabel._labelRenderer.getVerticalAlignment());
             this.setContentSize(uiLabel.getContentSize());
-            this.setTextColor(uiLabel.getTextColor());
         }
     },
 

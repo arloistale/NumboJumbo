@@ -42,7 +42,7 @@
         node._syncPosition();
         if(!node._ignoreBodyRotation)
             node._syncRotation();
-        this.transform(this.getParentRenderCmd(), true);
+        this.transform(this.getParentRenderCmd());
 
         cc.Sprite.WebGLRenderCmd.prototype.rendering.call(this, ctx);
     };
@@ -81,12 +81,7 @@
     };
 
     proto.updateTransform = function(){
-        var node = this._node;
-        var dirty = node.isDirty();
-        if(dirty){
-            var cmd = node._renderCmd;
-            cmd && cmd.setDirtyRecursively(true);
-        }
+        this._dirty = this._node.isDirty();
         cc.Sprite.WebGLRenderCmd.prototype.updateTransform.call(this);
     };
 })();

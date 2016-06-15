@@ -46,6 +46,9 @@
         fontChar.visible = true;
     };
 
+
+    proto._updateFntFileTexture = function(){};
+
     proto._changeTextureColor = function(){};
 
     proto._updateChildrenDisplayedOpacity = function(locChild){
@@ -70,7 +73,7 @@
         cc.SpriteBatchNode.WebGLRenderCmd.prototype.rendering.call(this, ctx);
 
         var node = this._node;
-        //LabelBMFont - Debug draw
+        //LabelBMFont - Debug _barNode
         if (cc.LABELBMFONT_DEBUG_DRAW) {
             var size = node.getContentSize();
             var pos = cc.p(0 | ( -this._anchorPointInPoints.x), 0 | ( -this._anchorPointInPoints.y));

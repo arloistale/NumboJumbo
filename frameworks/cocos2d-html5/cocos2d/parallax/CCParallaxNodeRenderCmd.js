@@ -44,8 +44,8 @@
     }
 })();
 
-cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
-    if(cc._renderType !== cc.game.RENDER_TYPE_WEBGL)
+(function(){
+    if(cc._renderType !== cc._RENDER_TYPE_WEBGL)
         return;
 
     cc.ParallaxNode.WebGLRenderCmd = function(renderable){
@@ -65,5 +65,5 @@ cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
         this._node._updateParallaxPosition();
         cc.Node.WebGLRenderCmd.prototype._syncStatus.call(this, parentCmd);
     }
-});
+})();
 

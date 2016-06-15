@@ -37,7 +37,7 @@ cc.loader.loadBinary = function (url, cb) {
     var xhr = this.getXMLHttpRequest(),
         errInfo = "load " + url + " failed!";
     xhr.open("GET", url, true);
-    if (cc.loader.loadBinary._IEFilter) {
+    if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
         // IE-specific logic here
         xhr.setRequestHeader("Accept-Charset", "x-user-defined");
         xhr.onreadystatechange = function () {
@@ -54,8 +54,6 @@ cc.loader.loadBinary = function (url, cb) {
     }
     xhr.send(null);
 };
-
-cc.loader.loadBinary._IEFilter = (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent) && window.IEBinaryToArray_ByteStr && window.IEBinaryToArray_ByteStr_Last);
 
 cc.loader._str2Uint8Array = function (strData) {
     if (!strData)
@@ -80,7 +78,7 @@ cc.loader.loadBinarySync = function (url) {
     var errInfo = "load " + url + " failed!";
     req.open('GET', url, false);
     var arrayInfo = null;
-    if (cc.loader.loadBinary._IEFilter) {
+    if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
         req.setRequestHeader("Accept-Charset", "x-user-defined");
         req.send(null);
         if (req.status !== 200) {
@@ -107,9 +105,9 @@ cc.loader.loadBinarySync = function (url) {
 };
 
 //Compatibility with IE9
-window.Uint8Array = window.Uint8Array || window.Array;
+var Uint8Array = Uint8Array || Array;
 
-if (cc.loader.loadBinary._IEFilter) {
+if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
     var IEBinaryToArray_ByteStr_Script =
         "<!-- IEBinaryToArray_ByteStr -->\r\n" +
             //"<script type='text/vbscript'>\r\n" +
@@ -129,7 +127,7 @@ if (cc.loader.loadBinary._IEFilter) {
 
     // inject VBScript
     //document.write(IEBinaryToArray_ByteStr_Script);
-    var myVBScript = document.createElement('script');
+    var myVBScript = cc.newElement('script');
     myVBScript.type = "text/vbscript";
     myVBScript.textContent = IEBinaryToArray_ByteStr_Script;
     document.body.appendChild(myVBScript);

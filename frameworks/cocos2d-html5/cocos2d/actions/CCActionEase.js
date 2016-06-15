@@ -56,7 +56,7 @@ cc.ActionEase = cc.ActionInterval.extend(/** @lends cc.ActionEase# */{
      */
     initWithAction:function (action) {
         if(!action)
-            throw new Error("cc.ActionEase.initWithAction(): action must be non nil");
+            throw "cc.ActionEase.initWithAction(): action must be non nil";
 
         if (this.initWithDuration(action.getDuration())) {
             this._inner = action;
@@ -1140,7 +1140,7 @@ cc.EaseElastic = cc.ActionEase.extend(/** @lends cc.EaseElastic# */{
     /**
      * Create a action. Opposite with the original motion trajectory. <br />
      * Will be overwrite.
-     * @return {?cc.Action}
+     * @return {null}
      */
     reverse:function () {
         cc.log("cc.EaseElastic.reverse(): it should be overridden in subclass.");
@@ -1770,7 +1770,7 @@ cc.easeBounceOut = function(){
 
 /**
  * cc.EaseBounceInOut action. <br />
- * Eased bounce effect at the beginning and ending.
+ * Eased bounce effect at the begining and ending.
  * @warning This action doesn't use a bijective function. Actions like Sequence might have an unexpected result when used with this action.
  * @class
  * @extends cc.EaseBounce
@@ -1823,7 +1823,7 @@ cc.EaseBounceInOut = cc.EaseBounce.extend(/** @lends cc.EaseBounceInOut# */{
 
 /**
  * Creates the action. <br />
- * Eased bounce effect at the beginning and ending.
+ * Eased bounce effect at the begining and ending.
  * @static
  * @deprecated since v3.0 <br /> Please use action.easing(cc.easeBounceInOut())
  * @param {cc.ActionInterval} action
@@ -1857,7 +1857,7 @@ cc._easeBounceInOutObj = {
 
 /**
  * Creates the action easing object. <br />
- * Eased bounce effect at the beginning and ending.
+ * Eased bounce effect at the begining and ending.
  * @function
  * @return {Object}
  * @example
@@ -2050,7 +2050,7 @@ cc.easeBackOut = function(){
 
 /**
  * cc.EaseBackInOut action. <br />
- * Beginning of cc.EaseBackIn. Ending of cc.EaseBackOut.
+ * Begining of cc.EaseBackIn. Ending of cc.EaseBackOut.
  * @warning This action doesn't use a bijective function. Actions like Sequence might have an unexpected result when used with this action.
  * @class
  * @extends cc.ActionEase
@@ -2104,7 +2104,7 @@ cc.EaseBackInOut = cc.ActionEase.extend(/** @lends cc.EaseBackInOut# */{
 
 /**
  * Creates the action. <br />
- * Beginning of cc.EaseBackIn. Ending of cc.EaseBackOut.
+ * Begining of cc.EaseBackIn. Ending of cc.EaseBackOut.
  * @static
  * @param {cc.ActionInterval} action
  * @return {cc.EaseBackInOut}
@@ -2139,7 +2139,7 @@ cc._easeBackInOutObj = {
 
 /**
  * Creates the action easing object. <br />
- * Beginning of cc.EaseBackIn. Ending of cc.EaseBackOut.
+ * Begining of cc.EaseBackIn. Ending of cc.EaseBackOut.
  * @function
  * @return {Object}
  * @example
@@ -3678,3 +3678,4 @@ cc._easeCubicActionInOut = {
 cc.easeCubicActionInOut = function(){
     return cc._easeCubicActionInOut;
 };
+

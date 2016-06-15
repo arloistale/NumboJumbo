@@ -48,7 +48,7 @@ cc.ControlButton = cc.Control.extend(/** @lends cc.ControlButton# */{
     _labelAnchorPoint: null,
     _currentTitle: null,
     _currentTitleColor: null,
-    _titleLabel: null,
+    _titleMenuItem: null,
     _backgroundSprite: null,
     _opacity: 0,
     _isPushed: false,
@@ -168,9 +168,9 @@ cc.ControlButton = cc.Control.extend(/** @lends cc.ControlButton# */{
 
     initWithLabelAndBackgroundSprite: function (label, backgroundSprite) {
         if (!label)
-            throw new Error("cc.ControlButton.initWithLabelAndBackgroundSprite(): label should be non-null");
+            throw "cc.ControlButton.initWithLabelAndBackgroundSprite(): label should be non-null";
         if (!backgroundSprite)
-            throw new Error("cc.ControlButton.initWithLabelAndBackgroundSprite(): backgroundSprite should be non-null");
+            throw "cc.ControlButton.initWithLabelAndBackgroundSprite(): backgroundSprite should be non-null";
         if (cc.Control.prototype.init.call(this, true)) {
             this._parentInited = true;
 
@@ -241,7 +241,7 @@ cc.ControlButton = cc.Control.extend(/** @lends cc.ControlButton# */{
     },
 
     /**
-     * Adjust the background image. YES by default. If the property is set to NO, the background will use the preferred size of the background image.
+     * Adjust the background image. YES by default. If the property is set to NO, the background will use the prefered size of the background image.
      * @return {Boolean}
      */
     doesAdjustBackgroundImage: function () {
@@ -262,7 +262,7 @@ cc.ControlButton = cc.Control.extend(/** @lends cc.ControlButton# */{
         return this.zoomOnTouchDown = zoomOnTouchDown;
     },
 
-    /** The preferred size of the button, if label is larger it will be expanded. */
+    /** The prefered size of the button, if label is larger it will be expanded. */
     getPreferredSize: function () {
         return this._preferredSize;
     },

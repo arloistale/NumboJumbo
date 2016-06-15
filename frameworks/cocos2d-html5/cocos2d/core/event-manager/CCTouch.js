@@ -40,7 +40,8 @@ cc.Touch = cc.Class.extend(/** @lends cc.Touch# */{
     _startPoint:null,
 
     ctor:function (x, y, id) {
-        this.setTouchInfo(id, x, y);
+        this._point = cc.p(x || 0, y || 0);
+        this._id = id || 0;
     },
 
     /**

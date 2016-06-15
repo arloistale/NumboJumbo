@@ -32,19 +32,15 @@ cc.CustomRenderCmd = function (target, func) {
         if (!this._callback)
             return;
         this._callback.call(this._target, ctx, scaleX, scaleY);
-    };
-    this.needDraw = function () {
-        return this._needDraw;
-    };
+    }
 };
 
 cc.Node._dirtyFlags = {transformDirty: 1 << 0, visibleDirty: 1 << 1, colorDirty: 1 << 2, opacityDirty: 1 << 3, cacheDirty: 1 << 4,
-    orderDirty: 1 << 5, textDirty: 1 << 6, gradientDirty:1 << 7, textureDirty: 1 << 8, all: (1 << 9) - 1};
+    orderDirty: 1 << 5, textDirty: 1 << 6, gradientDirty:1 << 7, all: (1 << 8) - 1};
 
 //-------------------------Base -------------------------
 cc.Node.RenderCmd = function(renderable){
     this._dirtyFlag = 1;                           //need update the transform at first.
-    this._savedDirtyFlag = true;
 
     this._node = renderable;
     this._needDraw = false;
@@ -64,10 +60,6 @@ cc.Node.RenderCmd = function(renderable){
 
 cc.Node.RenderCmd.prototype = {
     constructor: cc.Node.RenderCmd,
-
-    needDraw: function () {
-        return this._needDraw;
-    },
 
     getAnchorPointInPoints: function(){
         return cc.p(this._anchorPointInPoints);
@@ -93,7 +85,7 @@ cc.Node.RenderCmd.prototype = {
     },
 
     getParentToNodeTransform: function(){
-        if (this._dirtyFlag & cc.Node._dirtyFlags.transformDirty)
+        if(this._dirtyFlag & cc.Node._dirtyFlags.transformDirty)
             this._inverse = cc.affineTransformInvert(this.getNodeToParentTransform());
         return this._inverse;
     },
@@ -225,8 +217,6 @@ cc.Node.RenderCmd.prototype = {
         var flags = cc.Node._dirtyFlags, locFlag = this._dirtyFlag;
         var colorDirty = locFlag & flags.colorDirty,
             opacityDirty = locFlag & flags.opacityDirty;
-        this._savedDirtyFlag = this._savedDirtyFlag || locFlag;
-
         if(colorDirty)
             this._updateDisplayColor();
 
@@ -239,23 +229,69 @@ cc.Node.RenderCmd.prototype = {
         if(locFlag & flags.transformDirty){
             //update the transform
             this.transform(this.getParentRenderCmd(), true);
-            this._dirtyFlag = this._dirtyFlag & flags.transformDirty ^ this._dirtyFlag;
+            this._dirtyFlag = this._dirtyFlag & cc.Node._dirtyFlags.transformDirty ^ this._dirtyFlag;
         }
+    }
+};
 
-        if (locFlag & flags.orderDirty)
-            this._dirtyFlag = this._dirtyFlag & flags.orderDirty ^ this._dirtyFlag;
-    },
+//-----------------------Canvas ---------------------------
 
-    getNodeToParentTransform: function () {
-        var node = this._node;
+(function() {
+//The cc.Node's render command for Canvas
+    cc.Node.CanvasRenderCmd = function (renderable) {
+        cc.Node.RenderCmd.call(this, renderable);
+        this._cachedParent = null;
+        this._cacheDirty = false;
+
+    };
+
+    var proto = cc.Node.CanvasRenderCmd.prototype = Object.create(cc.Node.RenderCmd.prototype);
+    proto.constructor = cc.Node.CanvasRenderCmd;
+
+    proto.transform = function (parentCmd, recursive) {
+        // transform for canvas
+        var t = this.getNodeToParentTransform(),
+            worldT = this._worldTransform;         //get the world transform
+        this._cacheDirty = true;
+        if (parentCmd) {
+            var pt = parentCmd._worldTransform;
+            // cc.AffineTransformConcat is incorrect at get world transform
+            worldT.a = t.a * pt.a + t.b * pt.c;                               //a
+            worldT.b = t.a * pt.b + t.b * pt.d;                               //b
+            worldT.c = t.c * pt.a + t.d * pt.c;                               //c
+            worldT.d = t.c * pt.b + t.d * pt.d;                               //d
+
+            worldT.tx = pt.a * t.tx + pt.c * t.ty + pt.tx;
+            worldT.ty = pt.d * t.ty + pt.ty + pt.b * t.tx;
+        } else {
+            worldT.a = t.a;
+            worldT.b = t.b;
+            worldT.c = t.c;
+            worldT.d = t.d;
+            worldT.tx = t.tx;
+            worldT.ty = t.ty;
+        }
+        if (recursive) {
+            var locChildren = this._node._children;
+            if (!locChildren || locChildren.length === 0)
+                return;
+            var i, len;
+            for (i = 0, len = locChildren.length; i < len; i++) {
+                locChildren[i]._renderCmd.transform(this, recursive);
+            }
+        }
+    };
+
+    proto.getNodeToParentTransform = function () {
+        var node = this._node, normalizeDirty = false;
         if (node._usingNormalizedPosition && node._parent) {        //TODO need refactor
             var conSize = node._parent._contentSize;
             node._position.x = node._normalizedPosition.x * conSize.width;
             node._position.y = node._normalizedPosition.y * conSize.height;
             node._normalizedPositionDirty = false;
-            this._dirtyFlag = this._dirtyFlag | cc.Node._dirtyFlags.transformDirty;
+            normalizeDirty = true;
         }
-        if (this._dirtyFlag & cc.Node._dirtyFlags.transformDirty) {
+        if (normalizeDirty || (this._dirtyFlag & cc.Node._dirtyFlags.transformDirty)) {
             var t = this._transform;// quick reference
 
             // base position
@@ -330,19 +366,46 @@ cc.Node.RenderCmd.prototype = {
                 this._transform = cc.affineTransformConcat(t, node._additionalTransform);
         }
         return this._transform;
-    },
+    };
 
-    _syncStatus: function (parentCmd) {
+    proto.visit = function (parentCmd) {
+        var node = this._node;
+        // quick return if not visible
+        if (!node._visible)
+            return;
+
+        parentCmd = parentCmd || this.getParentRenderCmd();
+        if (parentCmd)
+            this._curLevel = parentCmd._curLevel + 1;
+
+        //visit for canvas
+        var i, children = node._children, child;
+        this._syncStatus(parentCmd);
+        var len = children.length;
+        if (len > 0) {
+            node.sortAllChildren();
+            // _barNode children zOrder < 0
+            for (i = 0; i < len; i++) {
+                child = children[i];
+                if (child._localZOrder < 0)
+                    child._renderCmd.visit(this);
+                else
+                    break;
+            }
+            cc.renderer.pushRenderCommand(this);
+            for (; i < len; i++)
+                children[i]._renderCmd.visit(this);
+        } else {
+            cc.renderer.pushRenderCommand(this);
+        }
+        this._dirtyFlag = 0;
+    };
+
+    proto._syncStatus = function (parentCmd) {
         //  In the visit logic does not restore the _dirtyFlag
         //  Because child elements need parent's _dirtyFlag to change himself
-        var flags = cc.Node._dirtyFlags, locFlag = this._dirtyFlag, parentNode = null;
-        if (parentCmd) {
-            parentNode = parentCmd._node;
-            this._savedDirtyFlag = this._savedDirtyFlag || parentCmd._savedDirtyFlag || locFlag;
-        }
-        else {
-            this._savedDirtyFlag = this._savedDirtyFlag || locFlag;
-        }
+        var flags = cc.Node._dirtyFlags, locFlag = this._dirtyFlag;
+        var parentNode = parentCmd ? parentCmd._node : null;
 
         //  There is a possibility:
         //    The parent element changed color, child element not change
@@ -360,7 +423,8 @@ cc.Node.RenderCmd.prototype = {
             locFlag |= flags.transformDirty;
 
         var colorDirty = locFlag & flags.colorDirty,
-            opacityDirty = locFlag & flags.opacityDirty;
+            opacityDirty = locFlag & flags.opacityDirty,
+            transformDirty = locFlag & flags.transformDirty;
 
         this._dirtyFlag = locFlag;
 
@@ -372,123 +436,20 @@ cc.Node.RenderCmd.prototype = {
             //update the opacity
             this._syncDisplayOpacity();
 
-        if(colorDirty || opacityDirty)
+        if(colorDirty)
             this._updateColor();
 
-        if (locFlag & flags.transformDirty)
+        if (transformDirty){
             //update the transform
-            this.transform(parentCmd, true);
-
-        if (locFlag & flags.orderDirty)
-            this._dirtyFlag = this._dirtyFlag & flags.orderDirty ^ this._dirtyFlag;
-    },
-
-    visitChildren: function(){
-        var renderer = cc.renderer;
-        var node = this._node;
-        var i, children = node._children, child, cmd;
-        var len = children.length;
-        if (len > 0) {
-            node.sortAllChildren();
-            // draw children zOrder < 0
-            for (i = 0; i < len; i++) {
-                child = children[i];
-                if (child._localZOrder < 0) {
-                    cmd = child._renderCmd;
-                    cmd.visit(this);
-                }
-                else {
-                    break;
-                }
-            }
-
-            if (isNaN(node._customZ)) {
-                node._vertexZ = renderer.assignedZ;
-                renderer.assignedZ += renderer.assignedZStep;
-            }
-
-            renderer.pushRenderCommand(this);
-            for (; i < len; i++) {
-                child = children[i];
-                child._renderCmd.visit(this);
-            }
-        } else {
-            if (isNaN(node._customZ)) {
-                node._vertexZ = renderer.assignedZ;
-                renderer.assignedZ += renderer.assignedZStep;
-            }
-
-            renderer.pushRenderCommand(this);
-        }
-        this._dirtyFlag = 0;
-    }
-};
-
-//-----------------------Canvas ---------------------------
-
-(function() {
-//The cc.Node's render command for Canvas
-    cc.Node.CanvasRenderCmd = function (renderable) {
-        cc.Node.RenderCmd.call(this, renderable);
-        this._cachedParent = null;
-        this._cacheDirty = false;
-    };
-
-    var proto = cc.Node.CanvasRenderCmd.prototype = Object.create(cc.Node.RenderCmd.prototype);
-    proto.constructor = cc.Node.CanvasRenderCmd;
-
-    proto.transform = function (parentCmd, recursive) {
-        // transform for canvas
-        var t = this.getNodeToParentTransform(),
-            worldT = this._worldTransform;         //get the world transform
-        this._cacheDirty = true;
-        if (parentCmd) {
-            var pt = parentCmd._worldTransform;
-            // cc.AffineTransformConcat is incorrect at get world transform
-            worldT.a = t.a * pt.a + t.b * pt.c;                               //a
-            worldT.b = t.a * pt.b + t.b * pt.d;                               //b
-            worldT.c = t.c * pt.a + t.d * pt.c;                               //c
-            worldT.d = t.c * pt.b + t.d * pt.d;                               //d
-
-            worldT.tx = pt.a * t.tx + pt.c * t.ty + pt.tx;
-            worldT.ty = pt.d * t.ty + pt.ty + pt.b * t.tx;
-        } else {
-            worldT.a = t.a;
-            worldT.b = t.b;
-            worldT.c = t.c;
-            worldT.d = t.d;
-            worldT.tx = t.tx;
-            worldT.ty = t.ty;
-        }
-        if (recursive) {
-            var locChildren = this._node._children;
-            if (!locChildren || locChildren.length === 0)
-                return;
-            var i, len;
-            for (i = 0, len = locChildren.length; i < len; i++) {
-                locChildren[i]._renderCmd.transform(this, recursive);
-            }
+            this.transform(parentCmd);
         }
     };
 
-    proto.visit = function (parentCmd) {
-        var node = this._node;
-        // quick return if not visible
-        if (!node._visible)
-            return;
-
-        parentCmd = parentCmd || this.getParentRenderCmd();
-        if (parentCmd)
-            this._curLevel = parentCmd._curLevel + 1;
-        this._syncStatus(parentCmd);
-        this.visitChildren();
-    };
-
-    proto.setDirtyFlag = function (dirtyFlag, child) {
-        cc.Node.RenderCmd.prototype.setDirtyFlag.call(this, dirtyFlag, child);
-        this._setCacheDirty(child);                  //TODO it should remove from here.
+    proto.setDirtyFlag = function (dirtyFlag) {
+        cc.Node.RenderCmd.prototype.setDirtyFlag.call(this, dirtyFlag);
+        this._setCacheDirty();                  //TODO it should remove from here.
         if(this._cachedParent)
-            this._cachedParent.setDirtyFlag(dirtyFlag, true);
+            this._cachedParent.setDirtyFlag(dirtyFlag);
     };
 
     proto._setCacheDirty = function () {

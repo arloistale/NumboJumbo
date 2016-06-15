@@ -140,12 +140,14 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
     initWithViewSize:function (size, container) {
         var pZero = cc.p(0,0);
         if (cc.Layer.prototype.init.call(this)) {
-            if (!container && !this._container) {
-                container = new cc.Layer();
+            this._container = container;
+
+            if (!this._container) {
+                this._container = new cc.Layer();
+                this._container.ignoreAnchorPointForPosition(false);
+                this._container.setAnchorPoint(pZero);
             }
-            if (container) {
-                this.setContainer(container);
-            }
+
             this.setViewSize(size);
 
             this.setTouchEnabled(true);
@@ -159,6 +161,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
             this._container.setPosition(pZero);
             this._touchLength = 0.0;
 
+            this.addChild(this._container);
             this._minScale = this._maxScale = 1.0;
             return true;
         }
@@ -395,10 +398,8 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
     /** override functions */
     // optional
     onTouchBegan:function (touch, event) {
-        for (var c = this; c != null; c = c.parent) {
-            if (!c.isVisible())
-                return false;
-        }
+        if (!this.isVisible())
+            return false;
         //var frameOriginal = this.getParent().convertToWorldSpace(this.getPosition());
         //var frame = cc.rect(frameOriginal.x, frameOriginal.y, this._viewSize.width, this._viewSize.height);
         var frame = this._getViewRect();
@@ -776,7 +777,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
     },
 
     _createRenderCmd: function(){
-        if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
+        if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
             return new cc.ScrollView.CanvasRenderCmd(this);
         } else {
             return new cc.ScrollView.WebGLRenderCmd(this);

@@ -85,7 +85,7 @@
     };
 
     cc.kmGLPopMatrix = function () {
-        //No need to lazy initialize, you shouldn't be popping first anyway!
+        //No need to lazy initialize, you shouldnt be popping first anyway!
         //cc.km_mat4_stack_pop(cc.current_stack, null);
         cc.current_stack.top = cc.current_stack.stack.pop();
     };
@@ -103,7 +103,7 @@
                 cc.current_stack = cc.texture_matrix_stack;
                 break;
             default:
-                throw new Error("Invalid matrix mode specified");   //TODO: Proper error handling
+                throw "Invalid matrix mode specified";   //TODO: Proper error handling
                 break;
         }
     };
@@ -160,7 +160,7 @@
                 pOut.assignFrom(cc.texture_matrix_stack.top);
                 break;
             default:
-                throw new Error("Invalid matrix mode specified"); //TODO: Proper error handling
+                throw "Invalid matrix mode specified"; //TODO: Proper error handling
                 break;
         }
     };

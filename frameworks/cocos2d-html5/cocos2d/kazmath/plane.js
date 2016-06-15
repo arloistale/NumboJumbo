@@ -81,7 +81,7 @@
          Planea = Nx
          Planeb = Ny
          Planec = Nz
-         Planned = −N⋅P
+         Planed = −N⋅P
          */
         return new cc.math.Plane(normal.x, normal.y, normal.z, -normal.dot(vec3));
     };

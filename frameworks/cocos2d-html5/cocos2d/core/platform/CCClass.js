@@ -35,6 +35,38 @@ var ClassManager = {
 
     instanceId : (0|(Math.random()*998)),
 
+    compileSuper : function(func, name, id){
+        //make the func to a string
+        var str = func.toString();
+        //find parameters
+        var pstart = str.indexOf('('), pend = str.indexOf(')');
+        var params = str.substring(pstart+1, pend);
+        params = params.trim();
+
+        //find function body
+        var bstart = str.indexOf('{'), bend = str.lastIndexOf('}');
+        var str = str.substring(bstart+1, bend);
+
+        //now we have the content of the function, replace this._super
+        //find this._super
+        while(str.indexOf('this._super') !== -1)
+        {
+            var sp = str.indexOf('this._super');
+            //find the first '(' from this._super)
+            var bp = str.indexOf('(', sp);
+
+            //find if we are passing params to super
+            var bbp = str.indexOf(')', bp);
+            var superParams = str.substring(bp+1, bbp);
+            superParams = superParams.trim();
+            var coma = superParams? ',':'';
+
+            //replace this._super
+            str = str.substring(0, sp)+  'ClassManager['+id+'].'+name+'.call(this'+coma+str.substring(bp+1);
+        }
+        return Function(params, str);
+    },
+
     getNewID : function(){
         return this.id++;
     },
@@ -43,6 +75,7 @@ var ClassManager = {
         return this.instanceId++;
     }
 };
+ClassManager.compileSuper.ClassManager = ClassManager;
 
 /* Managed JavaScript Inheritance
  * Based on John Resig's Simple JavaScript Inheritance http://ejohn.org/blog/simple-javascript-inheritance/
@@ -50,6 +83,11 @@ var ClassManager = {
  */
 (function () {
     var fnTest = /\b_super\b/;
+    var config = cc.game.config;
+    var releaseMode = config[cc.game.CONFIG_KEY.classReleaseMode];
+    if(releaseMode) {
+        console.log("release Mode");
+    }
 
     /**
      * The base Class implementation (does nothing)
@@ -75,7 +113,7 @@ var ClassManager = {
         ClassManager[classId] = _super;
         // Copy the properties over onto the new prototype. We make function
         // properties non-eumerable as this makes typeof === 'function' check
-        // unnecessary in the for...in loop used 1) for generating Class()
+        // unneccessary in the for...in loop used 1) for generating Class()
         // 2) for cc.clone and perhaps more. It is also required to make
         // these function properties cacheable in Carakan.
         var desc = { writable: true, enumerable: false, configurable: true };
@@ -114,7 +152,10 @@ var ClassManager = {
                 var override = (typeof _super[name] === "function");
                 var hasSuperCall = fnTest.test(prop[name]);
 
-                if (isFunc && override && hasSuperCall) {
+                if (releaseMode && isFunc && override && hasSuperCall) {
+                    desc.value = ClassManager.compileSuper(prop[name], name, classId);
+                    Object.defineProperty(prototype, name, desc);
+                } else if (isFunc && override && hasSuperCall) {
                     desc.value = (function (name, fn) {
                         return function () {
                             var tmp = this._super;
@@ -269,7 +310,7 @@ cc.clone = function (obj) {
 
     // Assuming that the constuctor above initialized all properies on obj, the
     // following keyed assignments won't turn newObj into dictionary mode
-    // because they're not *appending new properties* but *assigning existing
+    // becasue they're not *appending new properties* but *assigning existing
     // ones* (note that appending indexed properties is another story). See
     // CCClass.js for a link to the devils when the assumption fails.
     for (var key in obj) {

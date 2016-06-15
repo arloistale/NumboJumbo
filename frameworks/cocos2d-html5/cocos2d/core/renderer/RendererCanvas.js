@@ -22,11 +22,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+//if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
 cc.rendererCanvas = {
     childrenOrderDirty: true,
-    assignedZ: 0,
-    assignedZStep: 1/10000,
-    
     _transformNodePool: [],                              //save nodes transform dirty
     _renderCmds: [],                                     //save renderer commands
 
@@ -34,8 +32,6 @@ cc.rendererCanvas = {
     _cacheToCanvasCmds: {},                              // an array saves the renderer commands need for cache to other canvas
     _cacheInstanceIds: [],
     _currentID: 0,
-    _clearColor: cc.color(),                                  //background color,default BLACK
-    _clearFillStyle: "rgb(0, 0, 0)",
 
     getRenderCmd: function (renderableObject) {
         //TODO Add renderCmd pool here
@@ -75,9 +71,11 @@ cc.rendererCanvas = {
         for (i = 0, len = locCmds.length; i < len; i++) {
             locCmds[i].rendering(ctx, scaleX, scaleY);
         }
-        this._removeCache(instanceID);
-
+        locCmds.length = 0;
         var locIDs = this._cacheInstanceIds;
+        delete this._cacheToCanvasCmds[instanceID];
+        cc.arrayRemoveObject(locIDs, instanceID);
+
         if (locIDs.length === 0)
             this._isCacheToCanvasOn = false;
         else
@@ -95,18 +93,6 @@ cc.rendererCanvas = {
 
     _turnToNormalMode: function () {
         this._isCacheToCanvasOn = false;
-    },
-
-    _removeCache: function (instanceID) {
-        instanceID = instanceID || this._currentID;
-        var cmds = this._cacheToCanvasCmds[instanceID];
-        if (cmds) {
-            cmds.length = 0;
-            delete this._cacheToCanvasCmds[instanceID];
-        }
-
-        var locIDs = this._cacheInstanceIds;
-        cc.arrayRemoveObject(locIDs, instanceID);
     },
 
     resetFlag: function () {
@@ -139,29 +125,12 @@ cc.rendererCanvas = {
         this._transformNodePool.push(node);
     },
 
-    clear: function () {
-        var viewport = cc._canvas;
-        var wrapper = cc._renderContext;
-        var ctx = wrapper.getContext();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.clearRect(0, 0, viewport.width, viewport.height);
-        if (this._clearColor.r !== 0 ||
-            this._clearColor.g !== 0 || 
-            this._clearColor.b !== 0) {
-            wrapper.setFillStyle(this._clearFillStyle);
-            wrapper.setGlobalAlpha(this._clearColor.a);
-            ctx.fillRect(0, 0, viewport.width, viewport.height);
-        }
-    },
-
     clearRenderCommands: function () {
         this._renderCmds.length = 0;
-        this._cacheInstanceIds.length = 0;
-        this._isCacheToCanvasOn = false;
     },
 
     pushRenderCommand: function (cmd) {
-        if(!cmd.needDraw())
+        if(!cmd._needDraw)
             return;
         if (this._isCacheToCanvasOn) {
             var currentId = this._currentID, locCmdBuffer = this._cacheToCanvasCmds;
@@ -174,6 +143,9 @@ cc.rendererCanvas = {
         }
     }
 };
+
+if (cc._renderType === cc._RENDER_TYPE_CANVAS)
+    cc.renderer = cc.rendererCanvas;
 
 (function () {
     cc.CanvasContextWrapper = function (context) {
