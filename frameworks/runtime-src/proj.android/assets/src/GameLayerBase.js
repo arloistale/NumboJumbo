@@ -476,10 +476,7 @@ var BaseGameLayer = (function() {
 			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 
 			//moveBlock.stopAllActions();
-			/*
-			moveBlock.runAction(cc.sequence(moveAction, cc.callFunc(function() {
-				moveBlock.isFalling = false;
-			})));*/
+			//moveBlock.runAction(cc.sequence(moveAction));
 
 			moveBlock.setPosition(cc.p(blockTargetX, blockTargetY));
 		},

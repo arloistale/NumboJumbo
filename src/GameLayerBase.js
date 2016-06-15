@@ -468,20 +468,14 @@ var BaseGameLayer = (function() {
 
 		// Move scene block sprite into place.
 		moveBlockIntoPlace: function(moveBlock) {
-
 			var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (moveBlock.row + 0.5);
 			var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (moveBlock.col + 0.5);
 			var duration = 0.7;
 			var easing = cc.easeQuinticActionInOut();
 			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 
-			//moveBlock.stopAllActions();
-			/*
-			moveBlock.runAction(cc.sequence(moveAction, cc.callFunc(function() {
-				moveBlock.isFalling = false;
-			})));*/
-
-			moveBlock.setPosition(cc.p(blockTargetX, blockTargetY));
+			moveBlock.stopAllActions();
+			moveBlock.runAction(moveAction);
 		},
 
 		// spawns and drops a block with random col and val.

@@ -5,9 +5,8 @@
 var GameOverMenuLayer = (function() {
 
     var highscoreMessages = [
-        "You did it. You really did it.",
+        "You really did it.",
         "Are we there yet?",
-        "You might be a prodigy."
     ];
 
     ///////////////
@@ -41,15 +40,12 @@ var GameOverMenuLayer = (function() {
         // UI Data
         _headerMenu: null,
         _statsMenu: null,
+        _promoMenu: null,
         _toolMenu: null,
 
         _scoreLabel: null,
-        _condLabel: null,
         _bestLabel: null,
-        _bestLevelLabel: null,
         _currencyLabel: null,
-
-        //_bestScoreLabel: null,
 
         // Callbacks Data
         onRetryCallback: null,
@@ -74,8 +70,10 @@ var GameOverMenuLayer = (function() {
             var backgroundColor = NJ.themes.backgroundColor;
             this.init(backgroundColor);
 
+            // this order must be exact as each menu calculates its geometry in order based on the previous menu
             this._initHeaderUI();
             this._initStatsUI();
+            this._initPromoUI();
             this._initToolUI();
 
             this.enter();
@@ -108,12 +106,15 @@ var GameOverMenuLayer = (function() {
             this._statsMenu = new cc.Menu();
 
             this._statsMenu.setContentSize(cc.size(cc.visibleRect.width,
-                (1 - NJ.uiSizes.headerBar - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+                (1 - NJ.uiSizes.headerBar - NJ.uiSizes.promoArea - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+
+            var statsSize = this._statsMenu.getContentSize();
 
             this._statsMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: -this._statsMenu.getContentSize().width
+                x: cc.visibleRect.center.x - statsSize.width,
+                y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - statsSize.height / 2
             });
 
             // compute label size
@@ -124,7 +125,7 @@ var GameOverMenuLayer = (function() {
             var bestTitleLabel, scoreTitleLabel;
 
             if(this._isHighscore) {
-                scoreTitleLabel = this.generateLabel("HIGH SCORE!", headerSize);
+                scoreTitleLabel = this.generateLabel("HIGH SCORE", headerSize);
                 this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
                 bestTitleLabel = this.generateLabel(highscoreMessages[Math.floor(Math.random() * highscoreMessages.length)], header2Size);
@@ -155,6 +156,37 @@ var GameOverMenuLayer = (function() {
 
             this._statsMenu.alignItemsVerticallyWithPadding(10);
             this.addChild(this._statsMenu, 100);
+        },
+
+        _initPromoUI: function() {
+            this._promoMenu = new cc.Menu();
+            this._promoMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.promoArea));
+            var promoSize = this._promoMenu.getContentSize();
+            this._promoMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: cc.visibleRect.center.x + promoSize.width,
+                y: cc.visibleRect.top.y - this._statsMenu.getContentSize().height - promoSize.height / 2
+            });
+
+            var buttonSize = cc.size(promoSize.height, promoSize.height);// * NJ.uiSizes.barButton, promoSize.height * NJ.uiSizes.barButton);
+
+            var promoButton = new NJMenuButton(buttonSize, function() {
+                NJ.audio.playSound(res.clickSound);
+                NJ.openAppDetails();
+            }, this);
+            promoButton.setImageRes(res.promoImage);
+            promoButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                visible: false
+            });
+
+            this._promoMenu.addChild(promoButton);
+
+            this._promoMenu.alignItemsHorizontallyWithPadding(10);
+
+            this.addChild(this._promoMenu, 100);
         },
 
         _initToolUI: function() {
@@ -195,13 +227,15 @@ var GameOverMenuLayer = (function() {
         // makes menu elements transition in
         enter: function() {
             var toolSize = this._toolMenu.getContentSize();
+            var promoSize = this._promoMenu.getContentSize();
 
             var easing = cc.easeBackOut();
 
             this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
-            this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
+            this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._statsMenu.getPositionY())).easing(easing));
+            this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._promoMenu.getPositionY())).easing(easing));
         },
 
         // transition out
@@ -209,13 +243,15 @@ var GameOverMenuLayer = (function() {
             var headerSize = this._headerMenu.getContentSize();
             var statsSize = this._statsMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
+            var promoSize = this._promoMenu.getContentSize();
 
             var easing = cc.easeBackOut();
 
             this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
-            this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - statsSize.width, cc.visibleRect.center.y)).easing(easing));
+            this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - statsSize.width, this._statsMenu.getPositionY())).easing(easing));
+            this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x + promoSize.width, this._promoMenu.getPositionY())).easing(easing));
 
             this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
                 if(callback)

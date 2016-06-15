@@ -8,6 +8,7 @@ var NJ = NJ || {};
 NJ.uiSizes = {
     // elements
     headerBar: 0.12,
+    promoArea: 0.24,
     toolbar: 0.12,
 
     // bar buttons are calculated based on their bar content sizes

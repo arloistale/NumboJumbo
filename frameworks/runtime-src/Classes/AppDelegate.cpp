@@ -1,29 +1,15 @@
 #include "AppDelegate.h"
 
-#include "audio/include/AudioEngine.h"
-#include "scripting/js-bindings/auto/jsb_cocos2dx_3d_auto.hpp"
-#include "scripting/js-bindings/auto/jsb_cocos2dx_3d_extension_auto.hpp"
 #include "scripting/js-bindings/auto/jsb_cocos2dx_auto.hpp"
-#include "scripting/js-bindings/auto/jsb_cocos2dx_builder_auto.hpp"
 #include "scripting/js-bindings/auto/jsb_cocos2dx_extension_auto.hpp"
 #include "scripting/js-bindings/auto/jsb_cocos2dx_navmesh_auto.hpp"
-#include "scripting/js-bindings/auto/jsb_cocos2dx_physics3d_auto.hpp"
-#include "scripting/js-bindings/auto/jsb_cocos2dx_spine_auto.hpp"
-#include "scripting/js-bindings/auto/jsb_cocos2dx_studio_auto.hpp"
 #include "scripting/js-bindings/auto/jsb_cocos2dx_ui_auto.hpp"
-#include "scripting/js-bindings/manual/3d/jsb_cocos2dx_3d_manual.h"
-#include "scripting/js-bindings/manual/chipmunk/js_bindings_chipmunk_registration.h"
 #include "scripting/js-bindings/manual/cocosbuilder/js_bindings_ccbreader.h"
-#include "scripting/js-bindings/manual/cocostudio/jsb_cocos2dx_studio_manual.h"
 #include "scripting/js-bindings/manual/extension/jsb_cocos2dx_extension_manual.h"
 #include "scripting/js-bindings/manual/jsb_opengl_registration.h"
 #include "scripting/js-bindings/manual/localstorage/js_bindings_system_registration.h"
 #include "scripting/js-bindings/manual/navmesh/jsb_cocos2dx_navmesh_manual.h"
 #include "scripting/js-bindings/manual/network/XMLHTTPRequest.h"
-#include "scripting/js-bindings/manual/network/jsb_socketio.h"
-#include "scripting/js-bindings/manual/network/jsb_websocket.h"
-#include "scripting/js-bindings/manual/physics3d/jsb_cocos2dx_physics3d_manual.h"
-#include "scripting/js-bindings/manual/spine/jsb_cocos2dx_spine_manual.h"
 #include "scripting/js-bindings/manual/ui/jsb_cocos2dx_ui_manual.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -159,7 +145,6 @@ void AppDelegate::applicationDidEnterBackground()
     auto director = Director::getInstance();
     director->stopAnimation();
     director->getEventDispatcher()->dispatchCustomEvent("game_on_hide");
-    cocos2d::experimental::AudioEngine::pauseAll();
 }
 
 // this function will be called when the app is active again
@@ -168,5 +153,4 @@ void AppDelegate::applicationWillEnterForeground()
     auto director = Director::getInstance();
     director->startAnimation();
     director->getEventDispatcher()->dispatchCustomEvent("game_on_show");
-    cocos2d::experimental::AudioEngine::resumeAll();
 }
