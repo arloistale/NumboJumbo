@@ -101,6 +101,9 @@ var BaseGameLayer = (function() {
 		// (must be strictly greater than _killDelay!)
 		_spawnDelay: null,
 
+		// data
+		_isInGame: false,
+
 		////////////////////
 		// Initialization //
 		////////////////////
@@ -242,17 +245,19 @@ var BaseGameLayer = (function() {
 						that.onPause();
 					}
 				}
-			}, 1);
+			}, this);
 
-			cc.eventManager.addListener({
+			cc.eventManager.addListener(cc.EventListener.create({
 				event: cc.EventListener.CUSTOM,
 				eventName: "game_on_hide",
 				callback: function(event) {
-					that.onPause(true);
+					if(that._isInGame) {
+						that.onPause(true);
+					}
 				}
-			}, this);
+			}), 1);
 
-			cc.eventManager.addListener({
+			cc.eventManager.addListener(cc.EventListener.create({
 				event: cc.EventListener.CUSTOM,
 				eventName: "game_on_show",
 				callback: function(event) {
@@ -260,7 +265,7 @@ var BaseGameLayer = (function() {
 						that.onResume();
 					}
 				}
-			}, 2);
+			}), 2);
 		},
 
 		// Initialize UI elements
@@ -604,6 +609,8 @@ var BaseGameLayer = (function() {
 		onPause: function(isInstant) {
 			var that = this;
 
+			that._isInGame = false;
+
 			this._feedbackLayer.clearDoomsayer();
 
 			this.pauseGame();
@@ -639,6 +646,8 @@ var BaseGameLayer = (function() {
 		// On closing previously opened settings menu we resume.
 		onResume: function() {
 			var that = this;
+
+			that._isInGame = true;
 
 			if(this._prepLayer) {
 				that.resumeGame();

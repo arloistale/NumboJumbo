@@ -4,7 +4,11 @@
  *
  */
 
-var resRoot = "res/";
+var resRoot = "";
+
+if(!cc.sys.isNative) {
+    resRoot = "res/";
+}
 
 // list of resource definitions
 var res = {
@@ -90,16 +94,16 @@ var res = {
 
     clickSound: resRoot + "Sounds/clickSound5.wav",
 
-    bloopSound1: resRoot + "Sounds/boop1.wav",
-    bloopSound2: resRoot + "Sounds/boop2.wav",
-    bloopSound3: resRoot + "Sounds/boop3.wav",
-    bloopSound4: resRoot + "Sounds/boop4.wav",
-    bloopSound5: resRoot + "Sounds/boop5.wav",
-    bloopSound6: resRoot + "Sounds/boop6.wav",
-    bloopSound7: resRoot + "Sounds/boop7.wav",
-    bloopSound8: resRoot + "Sounds/boop8.wav",
-    bloopSound9: resRoot + "Sounds/boop9.wav",
-    bloopSound10: resRoot + "Sounds/boop10.wav"
+    bloopSound1: resRoot + "Sounds/boops/boop1.wav",
+    bloopSound2: resRoot + "Sounds/boops/boop2.wav",
+    bloopSound3: resRoot + "Sounds/boops/boop3.wav",
+    bloopSound4: resRoot + "Sounds/boops/boop4.wav",
+    bloopSound5: resRoot + "Sounds/boops/boop5.wav",
+    bloopSound6: resRoot + "Sounds/boops/boop6.wav",
+    bloopSound7: resRoot + "Sounds/boops/boop7.wav",
+    bloopSound8: resRoot + "Sounds/boops/boop8.wav",
+    bloopSound9: resRoot + "Sounds/boops/boop9.wav",
+    bloopSound10: resRoot + "Sounds/boops/boop10.wav"
 };
 
 var plops = [res.plopSound, res.plopSound4, res.plopSound5,

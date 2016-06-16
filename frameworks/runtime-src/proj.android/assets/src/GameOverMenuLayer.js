@@ -178,8 +178,7 @@ var GameOverMenuLayer = (function() {
             promoButton.setImageRes(res.promoImage);
             promoButton.attr({
                 anchorX: 0.5,
-                anchorY: 0.5,
-                visible: false
+                anchorY: 0.5
             });
 
             this._promoMenu.addChild(promoButton);

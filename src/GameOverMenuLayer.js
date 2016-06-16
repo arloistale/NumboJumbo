@@ -114,7 +114,7 @@ var GameOverMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: cc.visibleRect.center.x - statsSize.width,
-                y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - statsSize.height / 2
+                y: cc.visibleRect.center.y//cc.visibleRect.top.y - this._headerMenu.getContentSize().height - statsSize.height / 2
             });
 
             // compute label size
@@ -166,10 +166,10 @@ var GameOverMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: cc.visibleRect.center.x + promoSize.width,
-                y: cc.visibleRect.top.y - this._statsMenu.getContentSize().height - promoSize.height / 2
+                y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - this._statsMenu.getContentSize().height - promoSize.height / 2
             });
 
-            var buttonSize = cc.size(promoSize.height, promoSize.height);// * NJ.uiSizes.barButton, promoSize.height * NJ.uiSizes.barButton);
+            var buttonSize = cc.size(promoSize.height / 2, promoSize.height / 2);
 
             var promoButton = new NJMenuButton(buttonSize, function() {
                 NJ.audio.playSound(res.clickSound);

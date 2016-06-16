@@ -52,6 +52,8 @@ var StackGameLayer = BaseGameLayer.extend({
             this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
                 that.enter(function () {
                     that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+                        that._isInGame = true;
+
                         // fill the board with blocks initially
                         that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
                     })));

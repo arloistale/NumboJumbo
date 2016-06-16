@@ -2242,12 +2242,12 @@ cc.game = /** @lends cc.game# */{
                     if(_src){
                         _resPath = /(.*)\//.exec(_src)[0];
                         cc.loader.resPath = _resPath;
-                        _src = cc.path.join(_resPath, 'public/project.json');
+                        _src = cc.path.join(_resPath, 'project.json');
                     }
                     txt = cc.loader._loadTxtSync(_src);
                 }
                 if(!txt){
-                    txt = cc.loader._loadTxtSync("public/project.json");
+                    txt = cc.loader._loadTxtSync("project.json");
                 }
                 var data = JSON.parse(txt);
                 self.config = _init(data || {});

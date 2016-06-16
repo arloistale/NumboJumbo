@@ -77,6 +77,8 @@ var InfiniteGameLayer = BaseGameLayer.extend({
             this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
                 that.enter(function () {
                     that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+                        that._isInGame = true;
+
                         // spawn blocks until the board is 1/3 full initially fill the board with blocks initially
                         that.spawnInitialBlocks();
                     })));
