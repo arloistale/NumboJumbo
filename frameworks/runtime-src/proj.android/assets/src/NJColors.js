@@ -24,6 +24,8 @@ NJ.themes = (function() {
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#424242"),
 
+            shadowColor: cc.color("#6C6760"),
+
             dividerColor: cc.color("#6c6760"),
 
             blockColors: [
@@ -65,6 +67,8 @@ NJ.themes = (function() {
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#6C6760"),
+
+            shadowColor: cc.color("#F0EBD0"),
 
             dividerColor: cc.color("#ffffff"),
 
@@ -119,6 +123,8 @@ NJ.themes = (function() {
         specialLabelColor: main.specialLabelColor,
         specialLabelColor2: main.specialLabelColor2,
         defaultButtonColor: main.defaultButtonColor,
+
+        shadowColor: main.shadowColor,
 
         dividerColor: main.dividerColor,
 

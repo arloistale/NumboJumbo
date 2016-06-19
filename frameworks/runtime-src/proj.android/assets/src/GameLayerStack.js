@@ -19,6 +19,8 @@ var StackGameLayer = BaseGameLayer.extend({
 
     // initial # of blocks dropped every turn (increases at each level)
     _blocksToDrop: 4,
+    _initialSpawnAmount: null,
+
 
     ////////////////////
     // Initialization //
@@ -55,7 +57,7 @@ var StackGameLayer = BaseGameLayer.extend({
                         that._isInGame = true;
 
                         // fill the board with blocks initially
-                        that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
+                        that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 3), 0.5);
                         NJ.audio.playSound(res.plipSound);
                     })));
                 });
