@@ -17,14 +17,14 @@
 #endif
 
 #ifdef SDKBOX_ENABLED
-#include "PluginReviewJS.hpp"
-#include "PluginReviewJSHelper.h"
-
 #include "PluginSdkboxPlayJS.hpp"
 #include "PluginSdkboxPlayJSHelper.h"
 
 #include "PluginGoogleAnalyticsJS.hpp"
 //#include "PluginGoogleAnalyticsJSHelper.h"
+
+#include "PluginIAPJS.hpp"
+#include "PluginIAPJSHelper.h"
 #endif
 
 USING_NS_CC;
@@ -85,12 +85,12 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(JavaScriptObjCBridge::_js_register);
 #endif
 #ifdef SDKBOX_ENABLED
-    sc->addRegisterCallback(register_all_PluginReviewJS);
-    sc->addRegisterCallback(register_all_PluginReviewJS_helper);
     sc->addRegisterCallback(register_all_PluginSdkboxPlayJS);
     sc->addRegisterCallback(register_all_PluginSdkboxPlayJS_helper);
     sc->addRegisterCallback(register_all_PluginGoogleAnalyticsJS);
 //    sc->addRegisterCallback(register_all_PluginGoogleAnalyticsJS_helper);
+    sc->addRegisterCallback(register_all_PluginIAPJS);
+    sc->addRegisterCallback(register_all_PluginIAPJS_helper);
 #endif
     sc->start();    
     sc->runScript("script/jsb_boot.js");

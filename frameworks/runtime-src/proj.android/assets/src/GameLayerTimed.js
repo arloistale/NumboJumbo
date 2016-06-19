@@ -62,6 +62,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 
 						// fill the board with blocks initially
 						that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+						NJ.audio.playSound(res.plipSound);
 
 						that.schedule(function () {
 							// pad with 2 seconds to compensate for time taken entering
@@ -224,7 +225,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 		this._effectsLayer.clearComboOverlay();
 
 		this.spawnDropRandomBlocks(comboLength);
-		//this.spawnBlocksAfterDelay(numBonusBlocks, this._spawnDelay);
+		//NJ.audio.playSound(res.plipSound);
 
 		this._playActivationSounds(selectedBlocks.length);
 	},

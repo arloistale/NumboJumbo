@@ -62,13 +62,13 @@ var NumboMenuLayer = (function() {
             this._updateTheme();
 
             this._initAudio();
-
+/*
             NJ.settings.hasLoadedMM = false;
             NJ.settings.hasLoadedMOV = false;
             NJ.settings.hasLoadedRE = false;
             NJ.settings.hasLoadedINF = false;
             NJ.saveSettings();
-
+*/
             this.enter();
         },
 
@@ -240,41 +240,8 @@ var NumboMenuLayer = (function() {
 
             this._toolMenu.addChild(helpButton);
 
-            if(cc.sys.isNative) {
-                if (NJ.social.isLoggedIn()) {
-                    this._toolMenu.addChild(this._achievementsButton);
-                    this._toolMenu.addChild(this._statsButton);
-                } else {
-                    if (cc.sys.os == cc.sys.OS_IOS) {
-                        NJ.social.login();
-                    } else {
-                        this._toolMenu.addChild(this._loginButton);
-                    }
-
-                    // poll every second until we are logged in
-                    this.schedule(function() {
-                        if(NJ.social.isLoggedIn()) {
-                            that.leaveTools(function () {
-                                that._toolMenu.removeChild(that._settingsButton);
-
-                                // remove the login button on android
-                                if(cc.sys.os != cc.sys.OS_IOS)
-                                    that._toolMenu.removeChild(that._loginButton);
-
-                                that._toolMenu.addChild(that._achievementsButton);
-                                that._toolMenu.addChild(that._statsButton);
-                                that._toolMenu.addChild(that._settingsButton);
-
-                                that._toolMenu.alignItemsHorizontallyWithPadding(10);
-
-                                that.enterTools();
-                            });
-
-                            that.unscheduleAllCallbacks();
-                        }
-                    }, 1);
-                }
-            }
+            this._toolMenu.addChild(this._achievementsButton);
+            this._toolMenu.addChild(this._statsButton);
 
             this._toolMenu.addChild(this._settingsButton);
 
@@ -310,7 +277,52 @@ var NumboMenuLayer = (function() {
 
             var easing = cc.easeBackOut();
 
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
+            this._headerMenu.runAction(cc.sequence(
+                cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing),
+                cc.callFunc(function() {
+                    if(cc.sys.isNative) {
+                        if(!NJ.social.isLoggedIn()) {
+                            NJ.social.login();
+
+                            /*
+                             if (NJ.social.isLoggedIn()) {
+                             this._toolMenu.addChild(this._achievementsButton);
+                             this._toolMenu.addChild(this._statsButton);
+                             } else {
+                             if (true) {//(cc.sys.os == cc.sys.OS_IOS) {
+                             NJ.social.login();
+                             } else {
+                             this._toolMenu.addChild(this._loginButton);
+                             }
+
+                             // poll every second until we are logged in
+                             this.schedule(function() {
+                             if(NJ.social.isLoggedIn()) {
+                             that.leaveTools(function () {
+                             that._toolMenu.removeChild(that._settingsButton);
+
+                             // remove the login button on android
+                             if(cc.sys.os != cc.sys.OS_IOS)
+                             that._toolMenu.removeChild(that._loginButton);
+
+                             that._toolMenu.addChild(that._achievementsButton);
+                             that._toolMenu.addChild(that._statsButton);
+                             that._toolMenu.addChild(that._settingsButton);
+
+                             that._toolMenu.alignItemsHorizontallyWithPadding(10);
+
+                             that.enterTools();
+                             });
+
+                             that.unscheduleAllCallbacks();
+                             }
+                             }, 1);
+                             }
+                             */
+                        }
+                    }
+                })));
+
             this.enterTools();
 
             var data;
@@ -441,8 +453,7 @@ var NumboMenuLayer = (function() {
         _onAchievements: function() {
             NJ.audio.playSound(res.clickSound);
 
-            //NJ.social.showAchievements();
-            NJ.openAppDetails();
+            NJ.social.showAchievements();
         },
 
         _onSettings: function() {
@@ -481,6 +492,12 @@ var NumboMenuLayer = (function() {
                 this._modeData[key].button.setLabelColor(NJ.themes.defaultLabelColor);
 
                 index++;
+            }
+
+            var children = this._toolMenu.getChildren();
+
+            for(var i = 0; i < children.length; i++) {
+                children[i].updateTheme();
             }
         }
     });

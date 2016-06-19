@@ -16,7 +16,9 @@ LOCAL_SRC_FILES := hellojavascript/main.cpp \
 ../../Classes/PluginReviewJS.cpp \
 ../../Classes/PluginReviewJSHelper.cpp \
 ../../Classes/PluginSdkboxPlayJS.cpp \
-../../Classes/PluginSdkboxPlayJSHelper.cpp
+../../Classes/PluginSdkboxPlayJSHelper.cpp \
+../../Classes/PluginIAPJS.cpp \
+../../Classes/PluginIAPJSHelper.cpp
 
 LOCAL_CPPFLAGS := -DSDKBOX_ENABLED
 LOCAL_LDLIBS := -landroid \
@@ -26,7 +28,9 @@ LOCAL_WHOLE_STATIC_LIBRARIES := PluginGoogleAnalytics \
 sdkbox \
 PluginFacebook \
 PluginReview \
-PluginSdkboxPlay
+PluginSdkboxPlay \
+PluginIAP \
+android_native_app_glue
 
 LOCAL_STATIC_LIBRARIES := cocos_jsb_static
 
@@ -42,3 +46,4 @@ $(call import-module, ./sdkbox)
 $(call import-module, ./plugingoogleanalytics)
 $(call import-module, ./pluginreview)
 $(call import-module, ./pluginsdkboxplay)
+$(call import-module, ./pluginiap)

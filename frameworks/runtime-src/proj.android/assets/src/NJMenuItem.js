@@ -105,6 +105,7 @@ var NJMenuItem = (function() {
         _spriteStates: null,
         _backgroundStates: null,
         _titleStates: null,
+        _imageStates: null,
 
         _rawImageSize: null,
 
@@ -143,6 +144,8 @@ var NJMenuItem = (function() {
         runActionOnChildren: function(action) {
             var key;
 
+            var children, i;
+
             if(this._backgroundStates) {
                 for (key in this._backgroundStates) {
                     if (this._backgroundStates.hasOwnProperty(key)) {
@@ -155,6 +158,14 @@ var NJMenuItem = (function() {
                 for (key in this._titleStates) {
                     if (this._titleStates.hasOwnProperty(key)) {
                         this._titleStates[key].runAction(action.clone());
+                    }
+                }
+            }
+
+            if(this._imageStates) {
+                for (key in this._imageStates) {
+                    if (this._imageStates.hasOwnProperty(key)) {
+                        this._imageStates[key].runAction(action.clone());
                     }
                 }
             }
@@ -179,6 +190,14 @@ var NJMenuItem = (function() {
                     }
                 }
             }
+
+            if(this._imageStates) {
+                for (key in this._imageStates) {
+                    if (this._imageStates.hasOwnProperty(key)) {
+                        this._imageStates[key].stopAllActions();
+                    }
+                }
+            }
         },
 
         // sets the opacity of the children of the menu item
@@ -197,6 +216,14 @@ var NJMenuItem = (function() {
                 for (key in this._titleStates) {
                     if (this._titleStates.hasOwnProperty(key)) {
                         this._titleStates[key].setOpacity(opacity);
+                    }
+                }
+            }
+
+            if(this._imageStates) {
+                for (key in this._imageStates) {
+                    if (this._imageStates.hasOwnProperty(key)) {
+                        this._imageStates[key].setOpacity(opacity);
                     }
                 }
             }
@@ -223,11 +250,11 @@ var NJMenuItem = (function() {
         // parameters can consist of a single col
         setBackgroundColor: function(color) {
             var normalColor = color;
-            var pressedColor = NJ.colorWithBrightness(color, 1);
+            var pressedColor = NJ.colorWithBrightness(color, 0.75);
 
             this._backgroundStates.normal.setColor(normalColor);
             this._backgroundStates.selected.setColor(pressedColor);
-            this._backgroundStates.disabled.setColor(pressedColor);
+            this._backgroundStates.disabled.setColor(normalColor);
         },
 
         /////////////////
@@ -308,13 +335,13 @@ var NJMenuItem = (function() {
                 this._spriteStates.disabled.removeChildByTag(117);
 
             var contentSize = this.getContentSize();
-            var imageStates = generateImageStates(res, cc.size(contentSize.width * 0.75, contentSize.height * 0.75), cc.p(contentSize.width / 2, contentSize.height / 2));
+            this._imageStates = generateImageStates(res, cc.size(contentSize.width * 0.75, contentSize.height * 0.75), cc.p(contentSize.width / 2, contentSize.height / 2));
 
-            this._rawImageSize = imageStates.normal.getContentSize();
+            this._rawImageSize = this._imageStates.normal.getContentSize();
 
-            this._spriteStates.normal.addChild(imageStates.normal, 1, 117);
-            this._spriteStates.selected.addChild(imageStates.selected, 1, 117);
-            this._spriteStates.disabled.addChild(imageStates.disabled, 1, 117);
+            this._spriteStates.normal.addChild(this._imageStates.normal, 1, 117);
+            this._spriteStates.selected.addChild(this._imageStates.selected, 1, 117);
+            this._spriteStates.disabled.addChild(this._imageStates.disabled, 1, 117);
         },
 
         // Assumes sizes is a cc.Size
@@ -339,6 +366,11 @@ var NJMenuItem = (function() {
         // DO NOT call this before initializing image states
         getRawImageSize: function() {
             return this._rawImageSize;
+        },
+
+        updateTheme: function() {
+            this.setLabelColor(NJ.themes.defaultLabelColor);
+            this.setBackgroundColor(NJ.themes.defaultButtonColor);
         },
 
         /////////////

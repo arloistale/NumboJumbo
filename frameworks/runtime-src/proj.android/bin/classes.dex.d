@@ -28,5 +28,7 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginGoogleAnalytics-cf74162cea8261d045b5600f0e302bd2.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/android-support-v4-ea715dba4a6dc4161a0c3b2a45937112.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/google-play-services-5ef3f5692ea6a6b0e1822aa8474cb99c.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginIAP-4fab39e19b6a535ef9e88657ff1375bc.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/sdkbox-38be74be08f901bd111d0d7d63feb93d.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginSdkboxPlay-5191b93adc05a9939ec1448629678651.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginGooglePlay-9e72922acdbde95c38ce7c412da23f07.jar \

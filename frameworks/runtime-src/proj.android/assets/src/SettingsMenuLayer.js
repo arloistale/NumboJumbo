@@ -207,7 +207,11 @@ var SettingsMenuLayer = (function() {
             var buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
 
             var backButton = new NJMenuButton(buttonSize, onBack.bind(this), this);
-            backButton.setImageRes(res.backImage);
+            if(this._isInGame)
+                backButton.setImageRes(res.playImage);
+            else
+                backButton.setImageRes(res.homeImage);
+
             backButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
@@ -358,9 +362,8 @@ var SettingsMenuLayer = (function() {
             children = this._toolMenu.getChildren();
 
             for(i = 0; i < children.length; i++) {
-                children[i].setLabelColor(NJ.themes.defaultLabelColor);
+                children[i].updateTheme();
             }
-
         }
     });
 }());

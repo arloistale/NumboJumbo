@@ -10,6 +10,16 @@ NJ.initAnalytics = function() {
     }
 };
 
+NJ.sendAnalyticsHit = function(category, action, label, value) {
+    // now send over relevant stats data to GA
+    if(cc.sys.isNative) {
+        sdkbox.PluginGoogleAnalytics.setDimension(3, cc.sys.os);
+
+        sdkbox.PluginGoogleAnalytics.logEvent("Promo", "interact", "Global", 43);
+        sdkbox.PluginGoogleAnalytics.dispatchHits();
+    }
+};
+
 // send relevant stats over to Google Analytics
 NJ.sendAnalytics = function(label) {
     // prepare the stats package to send to GA
@@ -21,23 +31,14 @@ NJ.sendAnalytics = function(label) {
     });
 
     // now send over relevant stats data to GA
-    if(!cc.sys.isNative) {
-        ga('set', 'dimension1', rid);
-        ga('set', 'dimension2', label);
-        ga('set', 'metric1', NJ.gameState.getBlocksCleared());
-        ga('set', 'metric2', sessionLength);
-        //ga('set', 'metric3', NJ.stats.maxComboLength);
-        ga('set', 'metric4', 1);
-        ga('set', 'metric5', NJ.gameState.getScore());
-
-        ga('send', 'event', 'Game', 'end', 'Game Session Data', 42);
-    } else {
+    if(cc.sys.isNative) {
         sdkbox.PluginGoogleAnalytics.setDimension(1, rid);
         sdkbox.PluginGoogleAnalytics.setDimension(2, label);
+        sdkbox.PluginGoogleAnalytics.setDimension(3, cc.sys.os);
         sdkbox.PluginGoogleAnalytics.setMetric(1, NJ.gameState.getBlocksCleared());
         sdkbox.PluginGoogleAnalytics.setMetric(2, sessionLength);
-        //sdkbox.PluginGoogleAnalytics.setMetric(3, NJ.stats.maxComboLength);
-        sdkbox.PluginGoogleAnalytics.setMetric(4, 1);
+        sdkbox.PluginGoogleAnalytics.setMetric(3, 1);
+        sdkbox.PluginGoogleAnalytics.setMetric(4, NJ.gameState.getLevel());
         sdkbox.PluginGoogleAnalytics.setMetric(5, NJ.gameState.getScore());
 
         sdkbox.PluginGoogleAnalytics.logEvent("Game", "end", "Game Session Data", 42);

@@ -65,4 +65,6 @@ NJ.openAppDetails = function() {
     }*/
 
     cc.sys.openURL(url);
+
+    NJ.sendAnalyticsHit("Promo", "hit", "Summer", 43)
 };

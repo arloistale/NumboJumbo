@@ -4,9 +4,6 @@ NJ.social = (function() {
 
     var leaderboardPrefix = "ldb-";
 
-    // data
-    var isEnabled = false;
-
     return {
         // expose achievement keys
         achievementKeys: {

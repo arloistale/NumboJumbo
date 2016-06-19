@@ -35,6 +35,12 @@ var GameOverMenuLayer = (function() {
         });
     };
 
+    var onShare = function() {
+        NJ.audio.playSound(res.clickSound);
+
+        var that = this;
+    };
+
     return cc.LayerColor.extend({
 
         // UI Data
@@ -106,7 +112,7 @@ var GameOverMenuLayer = (function() {
             this._statsMenu = new cc.Menu();
 
             this._statsMenu.setContentSize(cc.size(cc.visibleRect.width,
-                (1 - NJ.uiSizes.headerBar - NJ.uiSizes.promoArea - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+                (1 - NJ.uiSizes.headerBar - (!NJ.settings.hasInteractedReview ? NJ.uiSizes.promoArea : 0) - NJ.uiSizes.toolbar) * cc.visibleRect.height));
 
             var statsSize = this._statsMenu.getContentSize();
 
@@ -114,7 +120,7 @@ var GameOverMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: cc.visibleRect.center.x - statsSize.width,
-                y: cc.visibleRect.center.y//cc.visibleRect.top.y - this._headerMenu.getContentSize().height - statsSize.height / 2
+                y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - statsSize.height / 2
             });
 
             // compute label size
@@ -159,6 +165,9 @@ var GameOverMenuLayer = (function() {
         },
 
         _initPromoUI: function() {
+            if(NJ.settings.hasInteractedReview)
+                return;
+
             this._promoMenu = new cc.Menu();
             this._promoMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.promoArea));
             var promoSize = this._promoMenu.getContentSize();
@@ -169,22 +178,28 @@ var GameOverMenuLayer = (function() {
                 y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - this._statsMenu.getContentSize().height - promoSize.height / 2
             });
 
-            var buttonSize = cc.size(promoSize.height / 2, promoSize.height / 2);
+            var promoLabel = this.generateLabel("Enjoy? Like!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+
+            var buttonSize = cc.size(promoSize.height / 2.5, promoSize.height / 2.5);
 
             var promoButton = new NJMenuButton(buttonSize, function() {
+                NJ.settings.hasInteractedReview = true;
+
                 NJ.audio.playSound(res.clickSound);
                 NJ.openAppDetails();
             }, this);
+            promoButton.setBackgroundColor(NJ.colors.facebookColor);
             promoButton.setImageRes(res.promoImage);
+            promoButton.runActionOnChildren(cc.sequence(cc.scaleBy(0.5, 1.25, 1.25).easing(cc.easeQuadraticActionInOut()), cc.scaleBy(0.5, 0.8, 0.8).easing(cc.easeQuadraticActionInOut())).repeatForever());
             promoButton.attr({
                 anchorX: 0.5,
-                anchorY: 0.5,
-                visible: false
+                anchorY: 0.5
             });
 
+            this._promoMenu.addChild(promoLabel);
             this._promoMenu.addChild(promoButton);
 
-            this._promoMenu.alignItemsHorizontallyWithPadding(10);
+            this._promoMenu.alignItemsVerticallyWithPadding(10);
 
             this.addChild(this._promoMenu, 100);
         },
@@ -216,6 +231,13 @@ var GameOverMenuLayer = (function() {
                 anchorY: 0.5
             });
 
+            var shareButton = new NJMenuButton(buttonSize, onShare.bind(this), this);
+            shareButton.setImageRes(res.homeImage);
+            shareButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
+
             this._toolMenu.addChild(retryButton);
             this._toolMenu.addChild(menuButton);
 
@@ -227,7 +249,6 @@ var GameOverMenuLayer = (function() {
         // makes menu elements transition in
         enter: function() {
             var toolSize = this._toolMenu.getContentSize();
-            var promoSize = this._promoMenu.getContentSize();
 
             var easing = cc.easeBackOut();
 
@@ -235,7 +256,9 @@ var GameOverMenuLayer = (function() {
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
             this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._statsMenu.getPositionY())).easing(easing));
-            this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._promoMenu.getPositionY())).easing(easing));
+
+            if(this._promoMenu)
+                this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._promoMenu.getPositionY())).easing(easing));
         },
 
         // transition out
@@ -243,7 +266,6 @@ var GameOverMenuLayer = (function() {
             var headerSize = this._headerMenu.getContentSize();
             var statsSize = this._statsMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
-            var promoSize = this._promoMenu.getContentSize();
 
             var easing = cc.easeBackOut();
 
@@ -251,7 +273,9 @@ var GameOverMenuLayer = (function() {
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
             this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - statsSize.width, this._statsMenu.getPositionY())).easing(easing));
-            this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x + promoSize.width, this._promoMenu.getPositionY())).easing(easing));
+
+            if(this._promoMenu)
+                this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x + this._promoMenu.getContentSize().width, this._promoMenu.getPositionY())).easing(easing));
 
             this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
                 if(callback)

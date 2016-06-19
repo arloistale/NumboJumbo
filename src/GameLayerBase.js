@@ -501,7 +501,8 @@ var BaseGameLayer = (function() {
 			var easing = cc.easeQuinticActionInOut();
 			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 
-			moveBlock.stopAllActions();
+			moveAction.setTag(42);
+			moveBlock.stopActionByTag(42);
 			moveBlock.runAction(moveAction);
 
 			//moveBlock.setPosition(cc.p(blockTargetX, blockTargetY));
@@ -509,13 +510,11 @@ var BaseGameLayer = (function() {
 
 		// spawns and drops a block with random col and val.
 		// plays appropriate sound
-		spawnDropBlock: function(col, val, customSound) {
+		spawnDropBlock: function(col, val) {
 			var spawnBlock = NumboBlock.recreate(this._blockSize);
 			this._numboController.spawnDropBlock(spawnBlock, col, val);
 			this._instantiateBlock(spawnBlock);
 			this.moveBlockIntoPlace(spawnBlock);
-
-			NJ.audio.playSound(customSound || res.clickSound);
 		},
 
 		// Spawns a block with random col and val and drops the spawned block into place.
@@ -525,8 +524,6 @@ var BaseGameLayer = (function() {
 			this._numboController.spawnDropRandomBlock(spawnBlock);
 			this._instantiateBlock(spawnBlock);
 			this.moveBlockIntoPlace(spawnBlock);
-
-			NJ.audio.playSound(res.clickSound);
 		},
 
 		// spawns a specified amount of blocks randomly
@@ -540,8 +537,6 @@ var BaseGameLayer = (function() {
 				this._instantiateBlock(spawnBlock);
 				this.moveBlockIntoPlace(spawnBlock);
 			}
-
-			NJ.audio.playSound(res.plipSound);
 		},
 
 		// helper function to move a spawned block into place, shifting its position based on column
@@ -575,6 +570,8 @@ var BaseGameLayer = (function() {
 		// Halts game, children must handle what to do afterwards in terms of going to game over screen
 		// also increments number of times played overall
 		onGameOver: function() {
+			this._isInGame = false;
+
 			this._selectedLinesNode.clear();
 			this._feedbackLayer.clearDoomsayer();
 			this.pauseInput();
@@ -897,8 +894,8 @@ var BaseGameLayer = (function() {
 			if (that._numboController.areAllBlocksTheSameValue()){
 				var colsAndVals = that._numboController.findLocationAndValueForTwoNewBlocks();
 				if (colsAndVals) {
-					that.spawnDropBlock(colsAndVals[0].col, colsAndVals[0].val, res.plipSound);
-					that.spawnDropBlock(colsAndVals[1].col, colsAndVals[1].val, res.plipSound);
+					that.spawnDropBlock(colsAndVals[0].col, colsAndVals[0].val);
+					that.spawnDropBlock(colsAndVals[1].col, colsAndVals[1].val);
 				}
 				else {
 					that.spawnDropRandomBlocks(2);
@@ -910,7 +907,7 @@ var BaseGameLayer = (function() {
 				// case 2
 				if (that._numboController.findHint().length == 0) {
 					var colAndVal = that._numboController.findLocationAndValueForNewBlock();
-					that.spawnDropBlock (colAndVal.col, colAndVal.val, res.plipSound);
+					that.spawnDropBlock (colAndVal.col, colAndVal.val);
 				}
 
 				// case 3

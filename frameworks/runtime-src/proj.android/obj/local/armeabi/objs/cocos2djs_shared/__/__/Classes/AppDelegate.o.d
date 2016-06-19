@@ -175,15 +175,8 @@ obj/local/armeabi/objs/cocos2djs_shared/__/__/Classes/AppDelegate.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/js/CallNonGenericMethod.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/external/spidermonkey/prebuilt/android/../../include/android/js.msg \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_ui_auto.hpp \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_studio_auto.hpp \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_builder_auto.hpp \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_spine_auto.hpp \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_extension_auto.hpp \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_3d_auto.hpp \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_3d_extension_auto.hpp \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/3d/jsb_cocos2dx_3d_manual.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/ui/jsb_cocos2dx_ui_manual.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocostudio/jsb_cocos2dx_studio_manual.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocosbuilder/js_bindings_ccbreader.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocosbuilder/cocosbuilder_specifics.hpp \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocosbuilder/../cocos2d_specifics.hpp \
@@ -551,58 +544,25 @@ obj/local/armeabi/objs/cocos2djs_shared/__/__/Classes/AppDelegate.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../base/CCEventListenerTouch.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../2d/CCActionTween.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../cocosbuilder/CCSpriteLoader.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/spine/jsb_cocos2dx_spine_manual.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/spine-cocos2dx.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/spine.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Animation.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Event.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/EventData.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Attachment.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/AnimationState.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/AnimationStateData.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonData.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/BoneData.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SlotData.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Skin.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/IkConstraintData.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Atlas.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/AtlasAttachmentLoader.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/AttachmentLoader.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Bone.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/RegionAttachment.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Slot.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/MeshAttachment.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkinnedMeshAttachment.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/BoundingBoxAttachment.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Skeleton.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/IkConstraint.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonBounds.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonJson.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonRenderer.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonAnimation.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/extension/jsb_cocos2dx_extension_manual.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./../extensions/assets-manager/Downloader.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/localstorage/js_bindings_system_registration.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/chipmunk/js_bindings_chipmunk_registration.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/jsb_opengl_registration.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/jsb_opengl_functions.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_config.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/jsb_opengl_manual.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/network/XMLHTTPRequest.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../network/HttpClient.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../network/HttpRequest.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../network/HttpResponse.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_config.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/ScriptingCore.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/jsb_helper.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/network/jsb_websocket.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/network/jsb_socketio.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/platform/android/CCJavascriptJavaBridge.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_config.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/jsb_helper.h \
  jni/../../Classes/PluginReviewJS.hpp \
  jni/../../Classes/PluginReviewJSHelper.h \
  jni/../../Classes/PluginSdkboxPlayJS.hpp \
  jni/../../Classes/PluginSdkboxPlayJSHelper.h \
- jni/../../Classes/PluginGoogleAnalyticsJS.hpp
+ jni/../../Classes/PluginGoogleAnalyticsJS.hpp \
+ jni/../../Classes/PluginIAPJS.hpp jni/../../Classes/PluginIAPJSHelper.h \
+ jni/../../Classes/SDKBoxJSHelper.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocos2d_specifics.hpp
 
 jni/../../Classes/AppDelegate.h:
 
@@ -956,23 +916,9 @@ jni/../../Classes/AppDelegate.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_ui_auto.hpp:
 
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_studio_auto.hpp:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_builder_auto.hpp:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_spine_auto.hpp:
-
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_extension_auto.hpp:
 
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_3d_auto.hpp:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/auto/jsb_cocos2dx_3d_extension_auto.hpp:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/3d/jsb_cocos2dx_3d_manual.h:
-
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/ui/jsb_cocos2dx_ui_manual.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocostudio/jsb_cocos2dx_studio_manual.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocosbuilder/js_bindings_ccbreader.h:
 
@@ -1708,71 +1654,11 @@ jni/../../Classes/AppDelegate.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../cocosbuilder/CCSpriteLoader.h:
 
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/spine/jsb_cocos2dx_spine_manual.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/spine-cocos2dx.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/spine.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Animation.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Event.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/EventData.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Attachment.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/AnimationState.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/AnimationStateData.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonData.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/BoneData.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SlotData.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Skin.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/IkConstraintData.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Atlas.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/AtlasAttachmentLoader.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/AttachmentLoader.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Bone.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/RegionAttachment.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Slot.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/MeshAttachment.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkinnedMeshAttachment.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/BoundingBoxAttachment.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/Skeleton.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/IkConstraint.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonBounds.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonJson.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonRenderer.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/editor-support/cocostudio/../spine/SkeletonAnimation.h:
-
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/extension/jsb_cocos2dx_extension_manual.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/./../extensions/assets-manager/Downloader.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/localstorage/js_bindings_system_registration.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/chipmunk/js_bindings_chipmunk_registration.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/jsb_opengl_registration.h:
 
@@ -1782,25 +1668,11 @@ jni/../../Classes/AppDelegate.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/jsb_opengl_manual.h:
 
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/network/XMLHTTPRequest.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../network/HttpClient.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../network/HttpRequest.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/cocos2d-x/cocos/3d/../network/HttpResponse.h:
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/platform/android/CCJavascriptJavaBridge.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_bindings_config.h:
 
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/ScriptingCore.h:
-
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/jsb_helper.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/network/jsb_websocket.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/network/jsb_socketio.h:
-
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/platform/android/CCJavascriptJavaBridge.h:
 
 jni/../../Classes/PluginReviewJS.hpp:
 
@@ -1811,3 +1683,13 @@ jni/../../Classes/PluginSdkboxPlayJS.hpp:
 jni/../../Classes/PluginSdkboxPlayJSHelper.h:
 
 jni/../../Classes/PluginGoogleAnalyticsJS.hpp:
+
+jni/../../Classes/PluginIAPJS.hpp:
+
+jni/../../Classes/PluginIAPJSHelper.h:
+
+jni/../../Classes/SDKBoxJSHelper.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/js_manual_conversions.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../js-bindings/bindings/manual/cocos2d_specifics.hpp:

@@ -8,7 +8,7 @@ NJ.audio = (function() {
     var _musicRes = null;
     var _musicId = -1;
 
-    var shouldUseJSB = false;
+    var shouldUseJSB = true;
 
     return {
         // preload an audio resource then callback

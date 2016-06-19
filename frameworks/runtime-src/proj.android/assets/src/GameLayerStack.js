@@ -56,6 +56,7 @@ var StackGameLayer = BaseGameLayer.extend({
 
                         // fill the board with blocks initially
                         that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
+                        NJ.audio.playSound(res.plipSound);
                     })));
                 });
             })));
@@ -149,10 +150,6 @@ var StackGameLayer = BaseGameLayer.extend({
 
     isInDanger: function() {
         return false;
-    },
-
-    addMoreBlocks: function() {
-        this.spawnDropRandomBlocks(this._blocksToDrop);
     },
 
 //////////////////

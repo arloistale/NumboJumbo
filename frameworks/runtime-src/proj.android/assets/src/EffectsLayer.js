@@ -122,7 +122,6 @@ var EffectsLayer = cc.Layer.extend({
     ///////////////
 
     launchExplosion: function(col, row, color) {
-        /*
         var that = this;
         var particleSystem = this._explosionGrid[col][row];
 
@@ -140,8 +139,6 @@ var EffectsLayer = cc.Layer.extend({
         });
 
         particleSystem.runAction(cc.sequence(cc.delayTime(1), invisibleAction));
-        */
- 
     },
 
     ///////////////////

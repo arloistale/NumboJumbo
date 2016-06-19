@@ -4,6 +4,13 @@
 
 var NJ = NJ || {};
 
+// constant colors
+NJ.colors = {
+    // global colors
+    facebookColor: cc.color("#3b5998")
+};
+
+// themed colors
 NJ.themes = (function() {
 
     var data = [
@@ -15,7 +22,7 @@ NJ.themes = (function() {
             defaultLabelColor: cc.color("#332F2A"),
             specialLabelColor: cc.color("#50aa91"),
             specialLabelColor2: cc.color("#00A896"),
-            defaultButtonColor: cc.color("#6C6760"),
+            defaultButtonColor: cc.color("#424242"),
 
             dividerColor: cc.color("#6c6760"),
 
@@ -57,7 +64,7 @@ NJ.themes = (function() {
             defaultLabelColor: cc.color("#ffffff"),
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
-            defaultButtonColor: cc.color("#424242"),
+            defaultButtonColor: cc.color("#6C6760"),
 
             dividerColor: cc.color("#ffffff"),
 
@@ -100,6 +107,7 @@ NJ.themes = (function() {
     var _themeIndex = 0;
 
     return {
+        // theme colors
         lightTheme: _lightTheme,
         darkTheme: _darkTheme,
 

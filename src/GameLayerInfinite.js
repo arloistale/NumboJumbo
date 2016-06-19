@@ -183,16 +183,15 @@ var InfiniteGameLayer = BaseGameLayer.extend({
     spawnInitialBlocks: function() {
         var that = this;
 
-        var firstBlocksAction = cc.callFunc(function() {
-            that.spawnDropRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);
-        });
+        that.spawnDropRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);
+        NJ.audio.playSound(res.plipSound);
 
         var delayAction = cc.delayTime(2.0);
         var scheduleAction = cc.callFunc(function(){
             that.scheduleSpawn();
         });
 
-        this.runAction(cc.sequence(firstBlocksAction, delayAction, scheduleAction));
+        this.runAction(cc.sequence(delayAction, scheduleAction));
     },
 
     // Spawns a block and calls itself in a loop.
@@ -204,11 +203,15 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         this.schedule(this.scheduleSpawn, this._getSpawnTime());
 
         this.spawnDropRandomBlock();
+        NJ.audio.playSound(res.clickSound);
     },
 
     // spawns a specified amount of blocks with a small delay between each one
     spawnRandomBlocks: function(amount) {
-        this.schedule(this.spawnDropRandomBlock, 0.1, amount - 1);
+        this.schedule(function() {
+            this.spawnDropRandomBlock();
+            NJ.audio.playSound(res.clickSound);
+        }, 0.1, amount - 1);
     },
 
     ///////////////////

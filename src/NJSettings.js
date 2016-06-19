@@ -18,6 +18,8 @@ NJ.settings = {
     hasLoadedRE: false,
     hasLoadedINF: false,
 
+    hasInteractedReview: false,
+
     music: true,
     sounds: true,
     vibration: true

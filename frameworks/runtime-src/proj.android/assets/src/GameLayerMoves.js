@@ -18,7 +18,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 	],
 
 	// maximum number of moves allowed
-	_movesLimit: 2,
+	_movesLimit: 20,
 
 	////////////////////
 	// Initialization //
@@ -60,6 +60,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 
 						// fill the board with blocks initially
 						that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS));
+						NJ.audio.playSound(res.plipSound);
 					})));
 				});
 			})));
@@ -200,7 +201,8 @@ var MovesGameLayer = BaseGameLayer.extend({
 
 		this._playActivationSounds(selectedBlocks.length);
 
-		this.spawnBlocksAfterDelay(comboLength, this._spawnDelay);
+		this.spawnDropRandomBlocks(comboLength);
+		//NJ.audio.playSound(res.plipSound);
 
 		this._numboHeaderLayer.setConditionValue(this._movesLimit - NJ.gameState.getMovesMade());
 

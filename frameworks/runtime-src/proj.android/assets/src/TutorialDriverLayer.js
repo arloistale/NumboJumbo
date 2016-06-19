@@ -155,10 +155,11 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				this.runAction(cc.sequence(cc.delayTime(5.5),
 					cc.callFunc(function() {
+						NJ.audio.playSound(res.plipSound);
 						that.spawnDropBlock(centerCol, 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 1, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 2, 3);
 					}), cc.delayTime(1), cc.callFunc(function() {
 						that._startHandOverPath([
@@ -189,34 +190,37 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
+						NJ.audio.playSound(res.plipSound);
 						that.spawnDropBlock(centerCol - 2, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol - 1, 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 4);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 7);
 					})
 				));
 
 				break;
 			case slides.teach2:
+				cc.log("omg teach2 what");
 				centerCol = Math.floor((NJ.NUM_COLS) / 2);
 
                 this._clearHand();
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
+						NJ.audio.playSound(res.plipSound);
 						that.spawnDropBlock(centerCol - 2, 2);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol - 2, 6);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol - 1, 3);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 4);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 5);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 1, 2);
 					}), cc.delayTime(1), cc.callFunc(function() {
                         that._startHandOverPath([
@@ -249,22 +253,23 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
                 this.runAction(cc.sequence(cc.delayTime(4),
                     cc.callFunc(function() {
+						NJ.audio.playSound(res.plipSound);
                         that.spawnDropBlock(centerCol - 2, 4);
-                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                    }), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol - 1, 7);
-                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                    }), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol, 5);
-                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                    }), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol + 1, 8);
                     }), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol + 2, 2);
-                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                    }), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol - 2, 3);
-                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                    }), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol - 1, 4);
-                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                    }), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol + 1, 3);
-                    }), cc.delayTime(0.1), cc.callFunc(function() {
+                    }), cc.callFunc(function() {
                         that.spawnDropBlock(centerCol + 2, 2);
                     })
                 ));
@@ -279,24 +284,21 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				this.runAction(cc.sequence(cc.delayTime(4),
 					cc.callFunc(function() {
+						NJ.audio.playSound(res.plipSound);
 						that.spawnDropBlock(centerCol - 2, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol - 1, 4);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 1, 1);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 2, 7);
-					})
-
-
-					// spawn some extra 7's to demonstrate the wombo combo explosion
-					, cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol - 1, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol, 7);
-					}), cc.delayTime(0.1), cc.callFunc(function() {
+					}), cc.callFunc(function() {
 						that.spawnDropBlock(centerCol + 1, 7);
 					})
 

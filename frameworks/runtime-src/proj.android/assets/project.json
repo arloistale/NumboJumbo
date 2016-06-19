@@ -40,6 +40,7 @@
         "src/NJAudio.js",
         "src/NJConfig.js",
         "src/NJSocial.js",
+        "src/NJPurchases.js",
         "src/NJAnalytics.js",
         "src/NJStats.js",
         "src/NJDimensions.js",
