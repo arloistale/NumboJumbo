@@ -286,10 +286,10 @@ var NumboController = (function() {
 		// and the value has at least one solution associated with it
 		// useful if we want to guarantee spawning a 'good' block
 		findLocationAndValueForNewBlock: function(){
-			var maxTries = 500;
+			var maxTries = 100;
 			var path = [];
 			var col = null;
-			var val = 0;
+			var val = null;
 			var i;
 			for (i = 0; i < maxTries && path.length == 0; ++i){
 				col = this._numboLevel.getRandomValidCol();
@@ -303,7 +303,8 @@ var NumboController = (function() {
 			if (path.length == 2){
 				var valA = path[0].val;
 				var valB = path[1].val;
-				if (valA + valB <= 9) {
+				var maxVal = this.getSpawnDistributionMaxNumber();
+				if (valA + valB <= maxVal) {
 					val = valA + valB;
 				}
 				else if (valB - valA >= 1){
@@ -333,15 +334,11 @@ var NumboController = (function() {
 			var colIndicesShuffled = colIndices.slice(0);
 			NJ.shuffleArray(colIndicesShuffled);
 
-			var printString = "";
-			for (var colI = 0; colI < colIndicesShuffled.length; ++colI){
-				var column = this._numboLevel.getBlocksInColumn(colIndicesShuffled[colI]);
-			}
 
 			// attempt to place both blocks in a single column (because it's easier, that's why):
 			for (var colI = 0; colI < colIndicesShuffled.length; ++colI){
 				var column = this._numboLevel.getBlocksInColumn(colIndicesShuffled[colI]);
-				if (column.length < NJ.NUM_ROWS - 2){
+				if (0 < column.length && column.length < NJ.NUM_ROWS - 2){
 					colA = colB = colIndicesShuffled[colI];
 					var valOfExisting = column[column.length-1].val;
 					valA = Math.floor( ( ( valOfExisting - 1) * Math.random() )+ 1);

@@ -124,7 +124,7 @@ var BaseGameLayer = (function() {
 			this._initGeometry();
 			this._initAudio();
 			this._initParticles();
-
+			this._initShadows();
 			this._initUI();
 
 			//this._killDelay = 0.35;
@@ -177,6 +177,21 @@ var BaseGameLayer = (function() {
 						y: coords.y,
 						col: col,
 						row: row
+					});
+				}
+			}
+		},
+
+		_initShadows: function(){
+			for (var col = 0; col < NJ.NUM_COLS; ++col){
+				for (var row = 0; row < NJ.NUM_ROWS; ++row) {
+					var coords = this._convertLevelCoordsToPoint(col, row);
+					this._effectsLayer.initializeShadowAt({
+						x: coords.x,
+						y: coords.y,
+						col: col,
+						row: row,
+						blockSize: this._blockSize
 					});
 				}
 			}
@@ -875,48 +890,56 @@ var BaseGameLayer = (function() {
 
 		// spawns N blocks after a certain amount of time, then executes the callback (if given).
 		// ensures that there will also be at least one move present on the board.
-		// do accomplish this, we spawn (n-2) blocks. at this point, there are 3 cases:
-		//	 	case 1: all blocks within t spaces of the frontier have the same value X. here, we must
+		// to accomplish this, we spawn (n-2) blocks. at this point, there are 3 cases:
+		//		case 1: there is a known hint, so we just spawn more random blocks
+		//			(this is the most common & easiest case by far!)
+		//	 	case 2: all blocks within 2 spaces of the frontier have the same value X. here, we must
 		//			generate 2 more blocks that add up to X, and place them next to each-other
-		//		case 2: not all blocks have the same value, but there still isn't an equation
+		//		case 3: not all blocks have the same value, but there still isn't an equation
 		//			(eg, board is all 3's and 5's). here the strategy is simple. grab a random
 		//			block A, and a random one of its neigbhoring blocks B.
 		//			if the sum of their values is legal, use that.
 		//			if the difference of their values is legal, use that.
 		//			if neither, try a different block pair.
 		// 			(note that b/c not all blocks have the same value, this will work eventually)
-		//		case 3: there is a known hint, so we just spawn more random blocks
-		//			(this is the most common & easiest case by far!)
-		spawnBlocksAfterDelay: function(count, delay, callback){
+
+		spawnBlocksAfterDelayOld: function(count, delay, callback){
 			var that = this;
 
-			//this.runAction(cc.sequence(cc.delayTime(delay), cc.callFunc(function() {
-			that.spawnDropRandomBlocks(count - 2);
+			// case 1: known hint exists
+			if (that._numboController.findHint().length > 0){
+				cc.log("case 1");
+				that.spawnDropRandomBlocks(count);
+			}
 
-			// case 1
-			if (that._numboController.areAllBlocksTheSameValue()){
+			// case 2: all have same value near frontier
+			else if (that._numboController.areAllBlocksTheSameValue()){
+				cc.log("case 2");
+				that.spawnDropRandomBlocks(count-2);
 				var colsAndVals = that._numboController.findLocationAndValueForTwoNewBlocks();
 				if (colsAndVals) {
 					that.spawnDropBlock(colsAndVals[0].col, colsAndVals[0].val, res.plipSound);
 					that.spawnDropBlock(colsAndVals[1].col, colsAndVals[1].val, res.plipSound);
 				}
 				else {
+					cc.log("case 2 failure; spawning random blocks instead");
 					that.spawnDropRandomBlocks(2);
 				}
+			}
 
-			} else {
-				that.spawnDropRandomBlocks(1);
-
-				// case 2
-				if (that._numboController.findHint().length == 0) {
-					var colAndVal = that._numboController.findLocationAndValueForNewBlock();
-					that.spawnDropBlock (colAndVal.col, colAndVal.val, res.plipSound);
+			// case 3: find a col/val pair based on existing board
+			else {
+				cc.log("case 3");
+				that.spawnDropRandomBlocks(count-1);
+				var colAndVal = that._numboController.findLocationAndValueForNewBlock();
+				if(colAndVal) {
+					that.spawnDropBlock(colAndVal.col, colAndVal.val, res.plipSound);
 				}
-
-				// case 3
 				else {
+					cc.log("case 3 failure; spawning random block instead");
 					that.spawnDropRandomBlocks(1);
 				}
+
 			}
 
 			that.relocateBlocks();
@@ -926,6 +949,42 @@ var BaseGameLayer = (function() {
 			}
 			//})));
 		},
+
+		spawnBlocksAfterDelay: function(count, delay, callback) {
+			var that = this;
+			cc.log("need ", count, " blocks yo");
+			//that.runAction(cc.sequence( cc.delayTime(delay), function(){
+				for (var i = 0; i < count; ++i) {
+					if (that._numboController.findHint().length == 0) {
+						var colAndVal = that._numboController.findLocationAndValueForNewBlock();
+						var col = colAndVal.col, val = colAndVal.val;
+						if (col && val) {
+							cc.log("spawning block with value ", val)
+							that.spawnDropBlock(col, val, res.plipSound);
+						}
+						else {
+							cc.log("cant find a good value; spawning random block instead");
+							that.spawnDropRandomBlock();
+						}
+					}
+					else {
+						cc.log("known hint exists, spawning random block");
+						that.spawnDropRandomBlock();
+					}
+				}
+
+			if (that._numboController.findHint().length == 0){
+				cc.log("oh shit, still have no moves. keep spawning more i guess!");
+				that.spawnBlocksAfterDelay(1, 0, callback);
+			}
+
+				if (that.callback){
+					callback();
+				}
+			//}));
+
+		},
+
 
 		relocateBlocks: function (){
 			// Gaps may be created; shift all affected blocks down.

@@ -3,8 +3,10 @@ var EXPLOSION_POOL_SIZE = 40;
 var EffectsLayer = cc.Layer.extend({
 
     _explosionTag: 55,
-
     _explosionGrid: null,
+
+    _shadowGrid: null,
+
 
     // feedback doomsayer
     _comboOverlay: null,
@@ -31,17 +33,27 @@ var EffectsLayer = cc.Layer.extend({
         this.addChild(this._comboOverlay);
 
 
-        this._explosionGrid = new Array(NJ.NUM_COLS);
         // initialize particle systems
+        this._explosionGrid = new Array(NJ.NUM_COLS);
         for (var col = 0; col < NJ.NUM_COLS; ++col){
-
             this._explosionGrid[col] = new Array(NJ.NUM_ROWS);
             for (var row = 0; row < NJ.NUM_ROWS; ++row){
                 // stick a placeholder value in there -- call initializeParticleSystemAt from the gameLayer on each one
                 this._explosionGrid[col][row] = "this should be initialized to a particleSystem!";
             }
         }
+
+        // initialize block shadow grid
+        this._shadowGrid = new Array(NJ.NUM_COLS);
+        for (var col = 0; col < NJ.NUM_COLS; ++col){
+            this._shadowGrid[col] = new Array(NJ.NUM_ROWS);
+            for (var row = 0; row < NJ.NUM_ROWS; ++row){
+                this._shadowGrid[col][row] = "this needs to be initialized! idiot";
+            }
+        }
 	},
+
+
 
     // to be called by the gameLayer during its initialization
     // (this seems weird, but the gameLayer knows where the x/y coordinates are,
@@ -58,6 +70,33 @@ var EffectsLayer = cc.Layer.extend({
             var particleSystem = this._generateNumboParticleSystem(data);
             this._explosionGrid[data.col][data.row] = particleSystem;
         }
+    },
+
+    initializeShadowAt: function(data){
+        cc.assert(typeof data.x == 'number' && typeof data.y == 'number'
+            && typeof data.col == 'number' && typeof data.row == 'number',
+            "error in initializeShadowAt: non-number params");
+
+        if (0 <= data.col && data.col < NJ.NUM_COLS && 0 <= data.row && data.row < NJ.NUM_ROWS
+            && data.blockSize && data.blockSize.height && data.blockSize.width) {
+
+            var shadow = new cc.Sprite(res.blockImage);
+            var shadowSize = shadow.getContentSize();
+            shadow.setScale(1.1 * data.blockSize.width / shadowSize.width, 1.1 * data.blockSize.height / shadowSize.height);
+            shadow.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                visible: false,
+                x: data.x,
+                y: data.y,
+                color: NJ.themes.shadowColor
+            });
+
+            cc.log(this._shadowGrid[data.col][data.row]);
+            this._shadowGrid[data.col][data.row] = shadow;
+            this.addChild(shadow, 1);
+        }
+
     },
 
     reset: function(){
@@ -122,7 +161,6 @@ var EffectsLayer = cc.Layer.extend({
     ///////////////
 
     launchExplosion: function(col, row, color) {
-        /*
         var that = this;
         var particleSystem = this._explosionGrid[col][row];
 
@@ -140,8 +178,27 @@ var EffectsLayer = cc.Layer.extend({
         });
 
         particleSystem.runAction(cc.sequence(cc.delayTime(1), invisibleAction));
-        */
- 
+
+        this.launchShadow(col, row, NJ.themes.shadowColor);
+    },
+
+    launchShadow: function(col, row, color){
+        var that = this;
+        if (0 <= col && col < NJ.NUM_COLS && 0 <= row && NJ.NUM_ROWS) {
+            var shadow = that._shadowGrid[col][row];
+
+            if (color){
+                shadow.setColor(color);
+            }
+
+            shadow.setVisible(true);
+            shadow.setOpacity(0.75*255);
+            //var fadeAction = cc.fadeOut(1.0);
+            //shadow.runAction(fadeAction);
+            shadow.runAction(cc.sequence(cc.fadeOut(0.75), cc.callFunc(function(){
+                shadow.setVisible(false);
+            })))
+        }
     },
 
     ///////////////////

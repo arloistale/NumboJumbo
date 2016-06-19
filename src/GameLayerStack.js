@@ -19,6 +19,8 @@ var StackGameLayer = BaseGameLayer.extend({
 
     // initial # of blocks dropped every turn (increases at each level)
     _blocksToDrop: 4,
+    _initialSpawnAmount: null,
+
 
     ////////////////////
     // Initialization //
@@ -26,6 +28,8 @@ var StackGameLayer = BaseGameLayer.extend({
 
     _reset: function() {
         this._super();
+
+        this._initialSpawnAmount = Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 3);
 
         var that = this;
 
@@ -55,7 +59,8 @@ var StackGameLayer = BaseGameLayer.extend({
                         that._isInGame = true;
 
                         // fill the board with blocks initially
-                        that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 2), 0.5);
+                        cc.log("needa spawn like ", that._initialSpawnAmount, " or whatever");
+                        that.spawnBlocksAfterDelay(that._initialSpawnAmount, 0.5);
                     })));
                 });
             })));
@@ -199,6 +204,8 @@ var StackGameLayer = BaseGameLayer.extend({
 
         var levelUpCount = NJ.gameState.levelUpIfNeeded();
 
+
+
         if(levelUpCount) {
             for (var i = 0; i < levelUpCount; ++i) {
                 this._blocksToDrop++;
@@ -208,6 +215,7 @@ var StackGameLayer = BaseGameLayer.extend({
         }
 
         var numBlocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
+        cc.log("needa spawn like ", numBlocksToSpawn, " blocks!");
 
         this.spawnBlocksAfterDelay(numBlocksToSpawn, this._spawnDelay);
         this.checkGameOver();
