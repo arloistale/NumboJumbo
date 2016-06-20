@@ -137,6 +137,8 @@ var BaseGameLayer = (function() {
 		},
 
 		onExit: function() {
+			cc.pool.drainAllPools();
+
 			this._super();
 		},
 
@@ -1069,7 +1071,7 @@ var BaseGameLayer = (function() {
 
 		_isPointWithinCoordsDistanceThreshold: function(point, col, row) {
 			// return only if coordinates in certain radius of the block.
-			var radius = 0.5 *  this._blockSize.width;
+			var radius = 0.52 *  this._blockSize.width;
 
 			var cellCenter = cc.p(this._levelBounds.x + (col + 0.5) *  this._levelCellSize.width,
 				this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);

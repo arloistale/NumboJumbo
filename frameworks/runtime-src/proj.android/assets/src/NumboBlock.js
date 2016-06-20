@@ -124,7 +124,7 @@ var NumboBlock = (function() {
         // immediatley removes the block
         // DO NOT call directly, use killblock in NumboLevel instead
         remove: function() {
-            this.unuse();
+            cc.pool.putInPool(this);
         },
 
         // fade kill the block
