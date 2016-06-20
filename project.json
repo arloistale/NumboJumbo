@@ -19,6 +19,7 @@
         "src/TutorialLayer.js",
         "src/PrepLayer.js",
         "src/SettingsMenuLayer.js",
+        "src/ShopMenuLayer.js",
 
         "src/GameLayerBase.js",
         "src/GameLayerTimed.js",

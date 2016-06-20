@@ -13,6 +13,7 @@ var NumboMenuLayer = (function() {
         _statsButton: null,
         _loginButton: null,
         _settingsButton: null,
+        _shopButton: null,
 
         // Mode Buttons Data
         _modeData: {
@@ -75,6 +76,7 @@ var NumboMenuLayer = (function() {
         onExit: function() {
             this.unscheduleAllCallbacks();
 
+            this._shopButton.release();
             this._settingsButton.release();
             this._achievementsButton.release();
             this._loginButton.release();
@@ -222,6 +224,10 @@ var NumboMenuLayer = (function() {
             var helpButton = new NJMenuButton(buttonSize, this._onHelp.bind(this), this);
             helpButton.setImageRes(res.helpImage);
 
+            this._shopButton = new NJMenuButton(buttonSize, this._onShop.bind(this), this);
+            this._shopButton.setImageRes(res.shopImage);
+            this._shopButton.retain();
+
             this._settingsButton = new NJMenuButton(buttonSize, this._onSettings.bind(this), this);
             this._settingsButton.setImageRes(res.settingsImage);
             this._settingsButton.retain();
@@ -242,6 +248,8 @@ var NumboMenuLayer = (function() {
 
             this._toolMenu.addChild(this._achievementsButton);
             this._toolMenu.addChild(this._statsButton);
+
+            this._toolMenu.addChild(this._shopButton);
 
             this._toolMenu.addChild(this._settingsButton);
 
@@ -454,6 +462,25 @@ var NumboMenuLayer = (function() {
             NJ.audio.playSound(res.clickSound);
 
             NJ.social.showAchievements();
+        },
+
+        _onShop: function() {
+            NJ.audio.playSound(res.clickSound);
+
+            var that = this;
+
+            cc.eventManager.pauseTarget(this, true);
+            this.leave(function() {
+                that._shopMenuLayer = new ShopMenuLayer();
+                that._shopMenuLayer.setOnCloseCallback(function() {
+                    cc.eventManager.resumeTarget(that, true);
+                    that.removeChild(that._shopMenuLayer);
+
+                    that.enter();
+                });
+
+                that.addChild(that._shopMenuLayer, 999);
+            });
         },
 
         _onSettings: function() {

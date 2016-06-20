@@ -203,17 +203,13 @@ NumboBlock.createAndPool = function() {
     var numboBlock = NumboBlock.create(cc.size(1, 1));
 
     cc.pool.putInPool(numboBlock);
-    cc.log(cc.pool.hasObject(NumboBlock));
 };
 
 // allocate a NumboBlock if needed, otherwise takes from pool
 NumboBlock.recreate = function (blockSize) {
-    cc.log(cc.pool.hasObject(NumboBlock));
     if (cc.pool.hasObject(NumboBlock)) {
-        cc.log("using pool");
         return cc.pool.getFromPool(NumboBlock, blockSize);
     }
 
-    cc.log("creating :(");
     return NumboBlock.create(blockSize);
 };

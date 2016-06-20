@@ -49,6 +49,7 @@ var res = {
     trophyImage: resRoot + "Images/ic_trophy/ic_trophy_2x.png",
     loginImage: resRoot + "Images/login.png",
     promoImage: resRoot + "Images/ic_thumb/ic_thumb_2x.png",
+    shopImage: resRoot + "Images/ic_shop/ic_shop_2x.png",
 
     playImage: resRoot + "Images/ic_play/ic_play_2x.png",
     timedImage: resRoot + "Images/ic_timed.png",
