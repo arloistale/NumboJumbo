@@ -42,6 +42,7 @@ NJ.purchases = (function() {
             if(cc.sys.isNative) {
                 sdkbox.IAP.setListener({
                     onSuccess: function (product) {
+                        cc.log("Transaction Success: " + product);
                         if(onSuccessCallback)
                             onSuccessCallback(product);
                     },
@@ -55,7 +56,7 @@ NJ.purchases = (function() {
                         cc.log("Transaction Canceled");
 
                         if(onCanceledCallback)
-                            onCanceledCallback(product);
+                            onCanceledCallback(product, "Canceled");
                     },
                     onRestored: function (product) {
                         //Purchase restored
@@ -105,7 +106,7 @@ NJ.purchases = (function() {
             onRestoreCallback = callback;
         },
 
-        // Usage: onCanceledCallback(product)
+        // Usage: onCanceledCallback(product, error)
         setCanceledCallback: function(callback) {
             onCanceledCallback = callback;
         },
@@ -130,6 +131,7 @@ NJ.purchases = (function() {
             if (cc.sys.isNative) {
                 sdkbox.IAP.purchase(this.itemKeys[key]);
                 this.setSuccessCallback(callback);
+                this.setCanceledCallback(callback);
                 this.setFailureCallback(callback);
             }
         }

@@ -82,7 +82,22 @@ var GameOverMenuLayer = (function() {
             this._initPromoUI();
             this._initToolUI();
 
+            this._initInput();
+
             this.enter();
+        },
+
+        _initInput: function() {
+            var that = this;
+
+            cc.eventManager.addListener({
+                event: cc.EventListener.KEYBOARD,
+                onKeyPressed: function(key, event) {
+                    if(key == cc.KEY.back) {
+                        (onMenu.bind(that))();
+                    }
+                }
+            }, this);
         },
 
         _initHeaderUI: function() {

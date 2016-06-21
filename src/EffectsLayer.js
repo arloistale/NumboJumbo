@@ -136,8 +136,8 @@ var EffectsLayer = cc.Layer.extend({
         particleSystem.setLifeVar(0.1);
 
         // size, in pixels
-        particleSystem.setStartSize(15.0);
-        particleSystem.setStartSizeVar(10.0);
+        particleSystem.setStartSize(20.0);
+        particleSystem.setStartSizeVar(5.0);
         particleSystem.setEndSize(0.0);
 
         // emits per second
@@ -178,7 +178,7 @@ var EffectsLayer = cc.Layer.extend({
 
         particleSystem.runAction(cc.sequence(cc.delayTime(1), invisibleAction));
 
-        this.launchShadow(col, row, NJ.themes.shadowColor);
+        //this.launchShadow(col, row, NJ.themes.shadowColor);
     },
 
     launchShadow: function(col, row, color){

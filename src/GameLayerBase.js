@@ -514,15 +514,18 @@ var BaseGameLayer = (function() {
 		moveBlockIntoPlace: function(moveBlock) {
 			var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (moveBlock.row + 0.5);
 			var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (moveBlock.col + 0.5);
-			var duration = 0.7;
-			var easing = cc.easeQuinticActionInOut();
-			var moveAction = cc.moveTo(duration, cc.p(blockTargetX, blockTargetY)).easing(easing);
 
-			moveAction.setTag(42);
+			var moveVerticalAction = cc.moveTo(0.7, cc.p(moveBlock.getPositionX(), blockTargetY)).easing(cc.easeBounceOut());
+			var moveHorizontalAction = cc.moveTo(0.7, cc.p(blockTargetX, moveBlock.getPositionY())).easing(cc.easeQuinticActionInOut());
+
+			moveVerticalAction.setTag(42);
+			moveHorizontalAction.setTag(43);
+
 			moveBlock.stopActionByTag(42);
-			moveBlock.runAction(moveAction);
+			moveBlock.stopActionByTag(43);
 
-			//moveBlock.setPosition(cc.p(blockTargetX, blockTargetY));
+			moveBlock.runAction(moveVerticalAction);
+			moveBlock.runAction(moveHorizontalAction);
 		},
 
 		// spawns and drops a block with random col and val.
@@ -602,16 +605,24 @@ var BaseGameLayer = (function() {
 
 			var numGames = NJ.stats.incrementNumGamesCompleted();
 
-			if(numGames == 5) {
+			if(numGames >= 5) {
 				NJ.social.unlockAchievement(NJ.social.achievementKeys.played1);
-			} else if(numGames == 10) {
-				NJ.social.unlockAchievement(NJ.social.achievementKeys.played2);
-			} else if(numGames == 25) {
-				NJ.social.unlockAchievement(NJ.social.achievementKeys.played3);
-			} else if(numGames == 50) {
-				NJ.social.unlockAchievement(NJ.social.achievementKeys.played4);
-			} else if(numGames == 100) {
-				NJ.social.unlockAchievement(NJ.social.achievementKeys.played5);
+
+				if(numGames == 10) {
+					NJ.social.unlockAchievement(NJ.social.achievementKeys.played2);
+
+					if (numGames == 25) {
+						NJ.social.unlockAchievement(NJ.social.achievementKeys.played3);
+
+						if (numGames == 50) {
+							NJ.social.unlockAchievement(NJ.social.achievementKeys.played4);
+
+							if (numGames == 100) {
+								NJ.social.unlockAchievement(NJ.social.achievementKeys.played5);
+							}
+						}
+					}
+				}
 			}
 		},
 

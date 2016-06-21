@@ -291,7 +291,8 @@ var NumboMenuLayer = (function() {
                 cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing),
                 cc.callFunc(function() {
                     if(cc.sys.isNative) {
-                        if(!NJ.social.isLoggedIn()) {
+                        if(!NJ.social.isLoggedIn() && !NJ.settings.hasAttemptedAutoSignin) {
+                            NJ.settings.hasAttemptedAutoSignin = true;
                             NJ.social.login();
 
                             /*

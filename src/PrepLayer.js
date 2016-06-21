@@ -115,7 +115,7 @@ var PrepLayer = (function() {
             var buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
 
             var backButton = new NJMenuButton(buttonSize, this.onClose.bind(this), this);
-            backButton.setImageRes(res.nextImage);
+            backButton.setImageRes(res.playImage);
             backButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5

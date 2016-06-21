@@ -4,6 +4,9 @@
 
 var ShopMenuLayer = (function() {
 
+    var _devCount = 0;
+    var _logCount = 0;
+
     ///////////////
     // UI Events //
     ///////////////
@@ -25,8 +28,16 @@ var ShopMenuLayer = (function() {
     var onBuyCoins = function() {
         NJ.audio.playSound(res.coinSound);
 
+        var that = this;
+
         NJ.purchases.buy(NJ.purchases.itemKeys.coin1, function(product, error) {
-            cc.log("yay buy!");
+            _logCount++;
+            cc.log("Log " + _logCount + ": " + product + " : " + error);
+            if(!error) {
+                that.devModeLog("Log " + _logCount + ": Success = " + product);
+            } else {
+                that.devModeLog("Log " + _logCount + ": Failure = " + product + " : " + error);
+            }
         });
     };
 
@@ -37,11 +48,16 @@ var ShopMenuLayer = (function() {
         _contentMenu: null,
         _toolMenu: null,
 
+        _coinsInfoLabel: null,
+
         // Geometry Data
         _dividersNode: null,
 
         // Callbacks Data
         onCloseCallback: null,
+
+        // number of times to open developer mode for shop
+        _devCount: 0,
 
 ////////////////////
 // Initialization //
@@ -76,6 +92,8 @@ var ShopMenuLayer = (function() {
         },
 
         _initHeaderUI: function() {
+            var that = this;
+
             this._headerMenu = new cc.Menu();
             this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
             this._headerMenu.attr({
@@ -90,6 +108,14 @@ var ShopMenuLayer = (function() {
                 anchorY: 0.5,
                 y: -this._headerMenu.getContentSize().height / 2
             });
+            headerLabel.setEnabled(true);
+            headerLabel.setCallback(function() {
+                _devCount++;
+
+                if(_devCount >= 7) {
+                    that._initDevMode();
+                }
+            }, this);
 
             this._headerMenu.addChild(headerLabel);
 
@@ -118,12 +144,12 @@ var ShopMenuLayer = (function() {
             //buyCoinsButton.setImageRes(res.trophyImage);
 
             // generate sounds toggle
-            var coinsInfoLabel = this.generateLabel("Shop purchases are coming\nsoon. Stock up as many points as you can!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            this._coinsInfoLabel = this.generateLabel("Shop purchases are coming\nsoon. Stock up as many points as you can!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
 
             this._contentMenu.addChild(coinsLabel);
             this._contentMenu.addChild(buyCoinsButton);
 
-            this._contentMenu.addChild(coinsInfoLabel);
+            this._contentMenu.addChild(this._coinsInfoLabel);
 
             this._contentMenu.alignItemsVerticallyWithPadding(10);
 
@@ -156,6 +182,16 @@ var ShopMenuLayer = (function() {
             this._toolMenu.alignItemsHorizontallyWithPadding(10);
 
             this.addChild(this._toolMenu, 100);
+        },
+
+        _initDevMode: function() {
+            this._coinsInfoLabel.setLabelTitle("Super secret dev mode!");
+        },
+
+        devModeLog: function(logStr) {
+            if(_devCount >= 7) {
+                this._coinsInfoLabel.setLabelTitle(logStr);
+            }
         },
 
         // makes menu elements transition in
