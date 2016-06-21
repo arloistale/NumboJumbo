@@ -24,8 +24,6 @@
 
 (function(load, baseParser){
 
-    var cache = {};
-
     var Parser = baseParser.extend({
 
         getNodeJson: function(json){
@@ -35,8 +33,6 @@
         parseNode: function(json, resourcePath, file){
             if(!json)
                 return null;
-            if(cache[file])
-                return cache[file].clone();
 
             var self = this,
                 action = new ccs.ActionTimeline();
@@ -57,9 +53,7 @@
                     action.addTimeline(frame);
             });
 
-            cache[file] = action;
-            cache[file].retain();
-            return action.clone();
+            return action;
         },
 
         deferred: function(json, resourcePath, action, file){
@@ -113,7 +107,7 @@
             name: "Rotation",
             handle: function(options){
                 var frame = new ccs.RotationFrame();
-                var rotation = options["Rotation"];
+                var rotation = options["Rotation"] || options["Value"] || 0;
                 frame.setRotation(rotation);
                 return frame;
             }
@@ -149,8 +143,16 @@
                 frame.setAnchorPoint(cc.p(anchorx, anchory));
                 return frame;
             }
-        },
-        {
+        },{
+            name: "AnchorPoint",
+            handle: function(options){
+                var frame = new ccs.AnchorPointFrame();
+                var anchorx = options["X"];
+                var anchory = options["Y"];
+                frame.setAnchorPoint(cc.p(anchorx, anchory));
+                return frame;
+            }
+        },{
             name: "InnerAction",
             handle: function(options){
                 var frame = new ccs.InnerActionFrame();
@@ -167,9 +169,9 @@
                 var frame = new ccs.ColorFrame();
                 var color = options["Color"];
                 if(!color) color = {};
-                color["R"] = color["R"] || 255;
-                color["G"] = color["G"] || 255;
-                color["B"] = color["B"] || 255;
+                color["R"] = color["R"] === undefined ? 255 : color["R"];
+                color["G"] = color["G"] === undefined ? 255 : color["G"];
+                color["B"] = color["B"] === undefined ? 255 : color["B"];
                 frame.setColor(cc.color(color["R"], color["G"], color["B"]));
                 return frame;
             }
@@ -186,11 +188,21 @@
         {
             name: "FileData",
             handle: function(options, resourcePath){
-                var frame = new ccs.TextureFrame();
-                var texture = options["TextureFile"];
+                var frame, texture, plist, path, spriteFrame;
+                frame = new ccs.TextureFrame();
+                texture = options["TextureFile"];
                 if(texture != null) {
-                    var path = texture["Path"];
-                    var spriteFrame = cc.spriteFrameCache.getSpriteFrame(path);
+                    plist = texture["Plist"];
+                    path = texture["Path"];
+                    spriteFrame = cc.spriteFrameCache.getSpriteFrame(path);
+                    if(!spriteFrame && plist){
+                        if(cc.loader.getRes(resourcePath + plist)){
+                            cc.spriteFrameCache.addSpriteFrames(resourcePath + plist);
+                            spriteFrame = cc.spriteFrameCache.getSpriteFrame(path);
+                        }else{
+                            cc.log("%s need to be preloaded", resourcePath + plist);
+                        }
+                    }
                     if(spriteFrame == null){
                         path = resourcePath + path;
                     }
@@ -242,6 +254,16 @@
 
                 return frame;
             }
+        },
+        {
+            name: "BlendFunc",
+            handle: function(options){
+                var frame = new ccs.BlendFuncFrame();
+                var blendFunc = options["BlendFunc"];
+                if(blendFunc && blendFunc["Src"] !== undefined && blendFunc["Dst"] !== undefined)
+                    frame.setBlendFunc(new cc.BlendFunc(blendFunc["Src"], blendFunc["Dst"]));
+                return frame;
+            }
         }
     ];
 
@@ -249,11 +271,13 @@
         var type = options["Type"];
         frame.setTweenType(type);
         var points = options["Points"];
+        var result = [];
         if(points){
-            points = points.map(function(p){
-                return cc.p(p["X"], p["Y"]);
+            points.forEach(function(p){
+                result.push(p["X"]);
+                result.push(p["Y"]);
             });
-            frame.setEasingParams(points);
+            frame.setEasingParams(result);
         }
     };
 
@@ -281,5 +305,6 @@
     });
 
     load.registerParser("action", "2.*", parser);
+    load.registerParser("action", "*", parser);
 
 })(ccs._load, ccs._parser);

@@ -169,10 +169,11 @@ var NumboHeaderLayer = (function() {
 
         setEquation: function(nums) {
             var equationStr = "";
+            var i;
 
             // just print the values, no + or =
             if (! this.sumToHighest(nums) ) {
-                for (var i = 0; i < nums.length; ++i){
+                for (i = 0; i < nums.length; ++i){
                     equationStr += nums[i] + "     ";
                 }
                 this._equationLabel.setString(equationStr);
@@ -183,7 +184,7 @@ var NumboHeaderLayer = (function() {
                 var maxIndex = this.findMax(nums);
                 var maxNum = nums[maxIndex];
 
-                for (var i = 0; i < nums.length; ++i) {
+                for (i = 0; i < nums.length; ++i) {
                     if (i != maxIndex){
                         if (equationStr == ""){
                             equationStr = nums[i];
@@ -204,6 +205,8 @@ var NumboHeaderLayer = (function() {
 
             this._dummyEquationLabel.setString(this._equationLabel.getString());
             this._dummyEquationLabel.setVisible(true);
+            this._dummyEquationLabel.setOpacity(255);
+            this._dummyEquationLabel.setColor(this._equationLabel.getColor());
             this._dummyEquationLabel.runAction(cc.sequence(cc.fadeTo(0.5, 0), cc.callFunc(function() {
                 that._dummyEquationLabel.setVisible(false);
             })));

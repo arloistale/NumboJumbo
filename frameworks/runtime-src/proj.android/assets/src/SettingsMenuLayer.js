@@ -133,7 +133,7 @@ var SettingsMenuLayer = (function() {
                 y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height
             });
 
-            var headerLabel = this.generateLabel(this._isInGame ? "Paused" : "Settings", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
+            var headerLabel = this.generateLabel(this._isInGame ? "PAUSED" : "SETTINGS", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
             headerLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,

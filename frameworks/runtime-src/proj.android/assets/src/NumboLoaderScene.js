@@ -80,12 +80,18 @@ NumboLoaderScene = cc.Scene.extend({
         var shouldPreload = false;
 
         cc.loader.load(res, function() {}, function () {
+            var i;
+
+            for(i = 0; i < NJ.NUM_COLS * NJ.NUM_ROWS; ++i) {
+                NumboBlock.createAndPool();
+            }
+
             if(!shouldPreload) {
                 if (self.cb)
                     self.cb.call(self.target);
             } else {
                 // here we need to preload all the audio resources in the game <<<<
-                for (var i = 0; i < sounds.length; ++i) {
+                for (i = 0; i < sounds.length; ++i) {
                     NJ.audio.preload(sounds[i], function (isSuccess) {
                         if (!isSuccess) {
                             cc.log("Warning: preloading failed")

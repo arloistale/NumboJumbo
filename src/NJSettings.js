@@ -20,6 +20,8 @@ NJ.settings = {
 
     hasInteractedReview: false,
 
+    hasAttemptedAutoSignin: false,
+
     music: true,
     sounds: true,
     vibration: true

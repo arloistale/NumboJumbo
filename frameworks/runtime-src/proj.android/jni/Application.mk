@@ -9,6 +9,8 @@ APP_CPPFLAGS := -frtti \
 -fsigned-char
 APP_LDFLAGS := -latomic
 
+USE_ARM_MODE := 1
+
 ifeq ($(NDK_DEBUG),1)
 APP_CPPFLAGS += -DCOCOS2D_DEBUG=1
 APP_OPTIM := debug
@@ -16,4 +18,4 @@ else
 APP_CPPFLAGS += -DNDEBUG
 APP_OPTIM := release
 endif
-APP_PLATFORM := android-15
+APP_PLATFORM := android-9

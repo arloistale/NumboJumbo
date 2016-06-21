@@ -137,6 +137,8 @@ var BaseGameLayer = (function() {
 		},
 
 		onExit: function() {
+			cc.pool.drainAllPools();
+
 			this._super();
 		},
 
@@ -905,13 +907,13 @@ var BaseGameLayer = (function() {
 
 			// case 1: known hint exists
 			if (that._numboController.findHint().length > 0){
-				cc.log("case 1");
+				//cc.log("case 1");
 				that.spawnDropRandomBlocks(count);
 			}
 
 			// case 2: all have same value near frontier
 			else if (that._numboController.areAllBlocksTheSameValue()){
-				cc.log("case 2");
+				//cc.log("case 2");
 				that.spawnDropRandomBlocks(count-2);
 				var colsAndVals = that._numboController.findLocationAndValueForTwoNewBlocks();
 				if (colsAndVals) {
@@ -919,20 +921,20 @@ var BaseGameLayer = (function() {
 					that.spawnDropBlock(colsAndVals[1].col, colsAndVals[1].val);
 				}
 				else {
-					cc.log("case 2 failure; spawning random blocks instead");
+					//cc.log("case 2 failure; spawning random blocks instead");
 					that.spawnDropRandomBlocks(2);
 				}
 			}
 			// case 3: find a col/val pair based on existing board
 			else {
-				cc.log("case 3");
+				//cc.log("case 3");
 				that.spawnDropRandomBlocks(count-1);
 				var colAndVal = that._numboController.findLocationAndValueForNewBlock();
 				if(colAndVal) {
 					that.spawnDropBlock(colAndVal.col, colAndVal.val, res.plipSound);
 				}
 				else {
-					cc.log("case 3 failure; spawning random block instead");
+					//cc.log("case 3 failure; spawning random block instead");
 					that.spawnDropRandomBlocks(1);
 				}
 
@@ -948,29 +950,29 @@ var BaseGameLayer = (function() {
 
 		spawnBlocksAfterDelay: function(count, delay, callback) {
 			var that = this;
-			cc.log("need ", count, " blocks yo");
+			//cc.log("need ", count, " blocks yo");
 			//that.runAction(cc.sequence( cc.delayTime(delay), function(){
 			for (var i = 0; i < count; ++i) {
 				if (that._numboController.findHint().length == 0) {
 					var colAndVal = that._numboController.findLocationAndValueForNewBlock();
 					var col = colAndVal.col, val = colAndVal.val;
 					if (col && val) {
-						cc.log("spawning block with value ", val)
+						//cc.log("spawning block with value ", val)
 						that.spawnDropBlock(col, val, res.plipSound);
 					}
 					else {
-						cc.log("cant find a good value; spawning random block instead");
+						//cc.log("cant find a good value; spawning random block instead");
 						that.spawnDropRandomBlock();
 					}
 				}
 				else {
-					cc.log("known hint exists, spawning random block");
+					//cc.log("known hint exists, spawning random block");
 					that.spawnDropRandomBlock();
 				}
 			}
 
 			if (that._numboController.findHint().length == 0){
-				cc.log("oh shit, still have no moves. keep spawning more i guess!");
+				//cc.log("oh shit, still have no moves. keep spawning more i guess!");
 				that.spawnBlocksAfterDelay(1, 0, callback);
 			}
 
@@ -1069,7 +1071,7 @@ var BaseGameLayer = (function() {
 
 		_isPointWithinCoordsDistanceThreshold: function(point, col, row) {
 			// return only if coordinates in certain radius of the block.
-			var radius = 0.5 *  this._blockSize.width;
+			var radius = 0.52 *  this._blockSize.width;
 
 			var cellCenter = cc.p(this._levelBounds.x + (col + 0.5) *  this._levelCellSize.width,
 				this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);

@@ -203,7 +203,6 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				break;
 			case slides.teach2:
-				cc.log("omg teach2 what");
 				centerCol = Math.floor((NJ.NUM_COLS) / 2);
 
                 this._clearHand();

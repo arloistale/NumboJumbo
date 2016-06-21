@@ -2,130 +2,135 @@ var NJ = NJ || {};
 
 NJ.purchases = (function() {
 
-    var leaderboardPrefix = "ldb-";
+    var onSuccessCallback = function(product) {
+    };
+
+    var onFailureCallback = function(product, message) {
+    };
+
+    var onRestoreCallback = function(product) {
+    };
+
+    var onCanceledCallback = function(product) {
+    };
+
+    var onProductRequestSuccessCallback = function(products) {
+    };
+
+    var onProductRequestFailureCallback = function(message) {
+    };
 
     return {
         // expose achievement keys
-        achievementKeys: {
-            played1: "played1",
-            played2: "played2",
-            played3: "played3",
-            played4: "played4",
-            played5: "played5",
-
-            mm1: "mm1",
-            mm2: "mm2",
-            mm3: "mm3",
-            mm4: "mm4",
-
-            mov1: "mov1",
-            mov2: "mov2",
-            mov3: "mov3",
-            mov4: "mov4",
-
-            re1: "re1",
-            re2: "re2",
-            re3: "re3",
-            re4: "re4",
-
-            inf1: "inf1",
-            inf2: "inf2",
-            inf3: "inf3",
-            inf4: "inf4"
+        itemKeys: {
+            coin1: "coin1"
         },
+
+        // Initialization //
 
         init: function () {
             if (cc.sys.isNative) {
                 sdkbox.IAP.init();
+
+                this._initListener();
             }
         },
 
-        setListener: function(listener) {
-            //if(cc.sys.isNative) {
-                //sdkbox.PluginSdkboxPlay.setListener(listener);
-            //}
-        },
+        // this function should not be explicitly called
+        // instead use the individual setCallback functions to provide callbacks for IAP events
+        _initListener: function() {
+            if(cc.sys.isNative) {
+                sdkbox.IAP.setListener({
+                    onSuccess: function (product) {
+                        if(onSuccessCallback)
+                            onSuccessCallback(product);
+                    },
+                    onFailure: function (product, message) {
+                        cc.log("Transaction Failure: " + message);
 
-        login: function () {
-            if (cc.sys.isNative) {
-                sdkbox.PluginSdkboxPlay.signin();
+                        if(onFailureCallback)
+                            onFailureCallback();
+                    },
+                    onCanceled: function (product) {
+                        cc.log("Transaction Canceled");
+
+                        if(onCanceledCallback)
+                            onCanceledCallback(product);
+                    },
+                    onRestored: function (product) {
+                        //Purchase restored
+
+                        if(onRestoreCallback)
+                            onRestoreCallback();
+                    },
+                    onProductRequestSuccess: function (products) {
+                        cc.log("product request success!");
+
+                        for(var i = 0; i < products.length; ++i) {
+                            cc.log(products[i]);
+                            for(var key in products[i]) {
+                                if(products[i].hasOwnProperty(key))
+                                    cc.log(products[i][key]);
+                            }
+                        }
+
+                        if(onProductRequestSuccessCallback)
+                            onProductRequestSuccessCallback(products);
+                    },
+                    onProductRequestFailure: function (message) {
+                        cc.log("Product Request Failure: " + message);
+
+                        if(onProductRequestFailureCallback)
+                            onProductRequestFailureCallback(message);
+                    }
+                });
             }
         },
 
-        isLoggedIn: function () {
-            // TODO: There is a problem when the user signs out using Settings option, will still be connected
-            if (cc.sys.isNative) {
-                var isLoggedIn = sdkbox.PluginSdkboxPlay.isSignedIn();
-                return isLoggedIn;
-            }
+        // Event Handlers //
+
+
+        // Usage: onSuccessCallback(product)
+        setSuccessCallback: function(callback) {
+            onSuccessCallback = callback;
         },
 
-        ///////////////////////
-        // Scores and levels //
-        ///////////////////////
+        // Usage: onFailureCallback(product, message)
+        setFailureCallback: function(callback) {
+            onFailureCallback = callback;
+        },
+
+        // Usage: onRestoreCallback(product)
+        setRestoreCallback: function(callback) {
+            onRestoreCallback = callback;
+        },
+
+        // Usage: onCanceledCallback(product)
+        setCanceledCallback: function(callback) {
+            onCanceledCallback = callback;
+        },
+
+        // Usage: onProductRequestSuccessCallback(products)
+        setProductRequestSuccessCallback: function(callback) {
+            onProductRequestSuccessCallback = callback;
+        },
+
+        // Usage: onProductRequestFailureCallback(message)
+        setProductRequestFailureCallback: function(callback) {
+            onProductRequestFailureCallback = callback;
+        },
+
+        ////////////
+        // Buying //
+        ////////////
 
         // submits score data to the leaderboard defined by the given game mode key
-        // callback usage: function( leaderboard_name, score, is_maxScoreAllTime, is_maxScoreWeek, is_maxScoreToday )
-        submitScore: function (key, score) {
+        // callback usage: function( product, error_message )
+        buy: function (key, callback) {
             if (cc.sys.isNative) {
-                var isLoggedIn = this.isLoggedIn();
-                if(isLoggedIn) {
-                    cc.log("Executing command submit: " + key + ", " + score);
-                    sdkbox.PluginSdkboxPlay.submitScore(leaderboardPrefix + key, score);
-                } else {
-                    cc.log("Could not submit score due to unauthenticated player");
-                }
-            }
-        },
-
-        showLeaderboard: function () {
-            if (cc.sys.isNative) {
-                var isLoggedIn = this.isLoggedIn();
-
-                 if(isLoggedIn) {
-                     var ldbName = "";
-
-                     if(cc.sys.os == cc.sys.OS_IOS) {
-                         ldbName = "ldb-mm";
-                     }
-
-                     sdkbox.PluginSdkboxPlay.showLeaderboard(ldbName);
-                 } else {
-                     cc.log("Show Leaderboards unauthenticated player, logging in");
-                     this.login();
-                 }
-            }
-        },
-
-        //////////////////
-        // Achievements //
-        //////////////////
-
-        // callback usage:  function( achievement_name, newlyUnlocked )
-        // TODO: Do not call this function directly, may cause a crash
-        unlockAchievement: function (key) {
-            if (cc.sys.isNative) {
-                var isLoggedIn = this.isLoggedIn();
-
-                if(isLoggedIn) {
-                    cc.log("Executing command unlock: " + key);
-                    sdkbox.PluginSdkboxPlay.unlockAchievement(key);
-                } else {
-                    cc.log("Could not unlock achievement due to unauthenticated player");
-                }
-            }
-        },
-
-        showAchievements: function () {
-            if (cc.sys.isNative) {
-                var isLoggedIn = this.isLoggedIn();
-
-                if(isLoggedIn) {
-                    sdkbox.PluginSdkboxPlay.showAchievements();
-                } else {
-                    cc.log("Show achievements unauthenticated player, logging in");
-                    this.login();
-                }
+                sdkbox.IAP.purchase(this.itemKeys[key]);
+                this.setSuccessCallback(callback);
+                this.setFailureCallback(callback);
             }
         }
     }

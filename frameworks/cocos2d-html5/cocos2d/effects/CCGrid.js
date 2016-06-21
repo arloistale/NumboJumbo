@@ -34,6 +34,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
     _active:false,
     _reuseGrid:0,
     _gridSize:null,
+    _gridRect:null,
     _texture:null,
     _step:null,
     _grabber:null,
@@ -49,12 +50,14 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
      * @param {cc.Size} gridSize
      * @param {cc.Texture2D} [texture=]
      * @param {Boolean} [flipped=]
+     * @param {cc.Rect} rect
      */
-    ctor:function (gridSize, texture, flipped) {
-        cc._checkWebGLRenderMode();
+    ctor:function (gridSize, texture, flipped, rect) {
+        cc.sys._checkWebGLRenderMode();
         this._active=false;
         this._reuseGrid=0;
         this._gridSize=null;
+        this._gridRect=new cc.rect();
         this._texture=null;
         this._step = cc.p(0, 0);
         this._grabber=null;
@@ -64,7 +67,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
         this._dirty=false;
 
         if(gridSize !== undefined)
-            this.initWithSize(gridSize, texture, flipped);
+            this.initWithSize(gridSize, texture, flipped, rect);
     },
 
     /**
@@ -121,6 +124,22 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
     },
 
     /**
+     * set rect of the grid
+     * @param {cc.Rect} rect
+     */
+    setGridRect:function (rect) {
+        this._gridRect = rect;
+    },
+
+    /**
+     * get rect of the grid
+     * @return {cc.Rect} rect
+     */
+    getGridRect:function () {
+        return this._gridRect;
+    },
+
+    /**
      * get pixels between the grids
      * @return {cc.Point}
      */
@@ -161,9 +180,10 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
      * @param {cc.Size} gridSize
      * @param {cc.Texture2D} [texture=]
      * @param {Boolean} [flipped=false]
+     * @param {cc.Rect} [rect=]
      * @returns {boolean}
      */
-    initWithSize:function (gridSize, texture, flipped) {
+    initWithSize:function (gridSize, texture, flipped, rect) {
         if (!texture) {
             var director = cc.director;
             var winSize = director.getWinSizeInPixels();
@@ -193,9 +213,16 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
         this._gridSize = gridSize;
         this._texture = texture;
         this._isTextureFlipped = flipped;
+        if(rect === undefined || cc._rectEqualToZero(rect))
+        {
+            var size = this._texture.getContentSize();
+            rect = new cc.rect(0,0,size.width,size.height);
+        }
 
-        this._step.x = this._texture.width / gridSize.width;
-        this._step.y = this._texture.height / gridSize.height;
+        this._gridRect = rect;
+
+        this._step.x = this._gridRect.width / gridSize.width;
+        this._step.y = this._gridRect.height / gridSize.height;
 
         this._grabber = new cc.Grabber();
         if (!this._grabber)
@@ -211,6 +238,8 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
         this._directorProjection = cc.director.getProjection();
 
         //this.set2DProjection();    //TODO why?
+        var size = cc.director.getWinSizeInPixels();
+        gl.viewport(0, 0, size.width , size.height);
         this._grabber.beforeRender(this._texture);
     },
 
@@ -219,6 +248,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
 
         // restore projection
         //cc.director.setProjection(this._directorProjection);
+        cc.director.setViewport();
 
         if (target && target.getCamera().isDirty()) {
             var offset = target.getAnchorPointInPoints();
@@ -287,10 +317,11 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
  * @param {cc.Size} gridSize
  * @param {cc.Texture2D} [texture=]
  * @param {Boolean} [flipped=]
+ * @param {cc.Rect} [rect=]
  * @return {cc.GridBase}
  */
-cc.GridBase.create = function (gridSize, texture, flipped) {
-    return new cc.GridBase(gridSize, texture, flipped);
+cc.GridBase.create = function (gridSize, texture, flipped, rect) {
+    return new cc.GridBase(gridSize, texture, flipped, rect);
 };
 
 /**
@@ -318,8 +349,9 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
      * @param {cc.Size} gridSize
      * @param {cc.Texture2D} [texture=]
      * @param {Boolean} [flipped=]
+     * @param {cc.Rect} [rect=]
      */
-    ctor:function (gridSize, texture, flipped) {
+    ctor:function (gridSize, texture, flipped, rect) {
         cc.GridBase.prototype.ctor.call(this);
         this._texCoordinates=null;
         this._vertices=null;
@@ -331,7 +363,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
         this._indicesBuffer=null;
 
         if(gridSize !== undefined)
-            this.initWithSize(gridSize, texture, flipped);
+            this.initWithSize(gridSize, texture, flipped, rect);
     },
 
     /**
@@ -420,12 +452,14 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
 
     blit:function (target) {
         var n = this._gridSize.width * this._gridSize.height;
-        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
         this._shaderProgram.use();
         //this._shaderProgram.setUniformsForBuiltins();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(target._renderCmd._stackMatrix);
 
         var gl = cc._renderContext, locDirty = this._dirty;
+
+        gl.enableVertexAttribArray(cc.VERTEX_ATTRIB_POSITION);
+        gl.enableVertexAttribArray(cc.VERTEX_ATTRIB_TEX_COORDS);
         //
         // Attributes
         //
@@ -487,9 +521,9 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
         for (x = 0; x < locGridSize.width; ++x) {
             for (y = 0; y < locGridSize.height; ++y) {
                 var idx = (y * locGridSize.width) + x;
-                var x1 = x * this._step.x;
+                var x1 = x * this._step.x + this._gridRect.x;
                 var x2 = x1 + this._step.x;
-                var y1 = y * this._step.y;
+                var y1 = y * this._step.y + this._gridRect.y;
                 var y2 = y1 + this._step.y;
 
                 var a = (x * (locGridSize.height + 1) + y);
@@ -580,7 +614,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
      * @param {cc.Texture2D} [texture=]
      * @param {Boolean} [flipped=]
      */
-    ctor:function (gridSize, texture, flipped) {
+    ctor:function (gridSize, texture, flipped, rect) {
         cc.GridBase.prototype.ctor.call(this);
         this._texCoordinates=null;
         this._vertices=null;
@@ -592,7 +626,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
         this._indicesBuffer=null;
 
         if(gridSize !== undefined)
-            this.initWithSize(gridSize, texture, flipped);
+            this.initWithSize(gridSize, texture, flipped, rect);
     },
 
     /**
@@ -686,7 +720,8 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
         // Attributes
         //
         var gl = cc._renderContext, locDirty = this._dirty;
-        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
+        gl.enableVertexAttribArray(cc.VERTEX_ATTRIB_POSITION);
+        gl.enableVertexAttribArray(cc.VERTEX_ATTRIB_TEX_COORDS);
 
         // position
         gl.bindBuffer(gl.ARRAY_BUFFER, this._verticesBuffer);
@@ -806,7 +841,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
 
 /**
  * create one TiledGrid3D object
- * @deprecated since v3.0, please use new cc.TiledGrid3D(_gridSize, texture, flipped) instead
+ * @deprecated since v3.0, please use new cc.TiledGrid3D(gridSize, texture, flipped) instead
  * @param {cc.Size} gridSize
  * @param {cc.Texture2D} [texture=]
  * @param {Boolean} [flipped=]

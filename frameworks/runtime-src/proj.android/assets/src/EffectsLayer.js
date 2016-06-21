@@ -92,7 +92,6 @@ var EffectsLayer = cc.Layer.extend({
                 color: NJ.themes.shadowColor
             });
 
-            cc.log(this._shadowGrid[data.col][data.row]);
             this._shadowGrid[data.col][data.row] = shadow;
             this.addChild(shadow, 1);
         }

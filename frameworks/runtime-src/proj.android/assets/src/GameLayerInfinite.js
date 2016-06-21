@@ -135,16 +135,16 @@ var InfiniteGameLayer = BaseGameLayer.extend({
             var highscore = NJ.stats.getHighscore(key);
             NJ.social.submitScore(key, highscore);
 
-            if(highscore >= 500) {
+            if(highscore >= 2500) {
                 NJ.social.unlockAchievement(NJ.social.achievementKeys.inf1);
 
-                if(highscore >= 1000) {
+                if(highscore >= 5000) {
                     NJ.social.unlockAchievement(NJ.social.achievementKeys.inf2);
 
-                    if(highscore >= 1500) {
+                    if(highscore >= 7500) {
                         NJ.social.unlockAchievement(NJ.social.achievementKeys.inf3);
 
-                        if(highscore >= 2000) {
+                        if(highscore >= 10000) {
                             NJ.social.unlockAchievement(NJ.social.achievementKeys.inf4);
                         }
                     }

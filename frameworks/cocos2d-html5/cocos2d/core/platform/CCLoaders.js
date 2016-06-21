@@ -46,23 +46,26 @@ cc.loader.register(["js"], cc._jsLoader);
 
 cc._imgLoader = {
     load : function(realUrl, url, res, cb){
-        cc.loader.cache[url] =  cc.loader.loadImg(realUrl, function(err, img){
-            if(err)
-                return cb(err);
-            cc.textureCache.handleLoadedTexture(url);
-            cb(null, img);
-        });
+        var callback;
+        if (cc.loader.isLoading(realUrl)) {
+            callback = cb;
+        }
+        else {
+            callback = function(err, img){
+                if(err)
+                    return cb(err);
+                cc.loader.cache[url] = img;
+                cc.textureCache.handleLoadedTexture(url);
+                cb(null, img);
+            };
+        }
+        cc.loader.loadImg(realUrl, callback);
     }
 };
-cc.loader.register(["png", "jpg", "bmp","jpeg","gif", "ico"], cc._imgLoader);
+cc.loader.register(["png", "jpg", "bmp","jpeg","gif", "ico", "tiff", "webp"], cc._imgLoader);
 cc._serverImgLoader = {
     load : function(realUrl, url, res, cb){
-        cc.loader.cache[url] =  cc.loader.loadImg(res.src, function(err, img){
-            if(err)
-                return cb(err);
-            cc.textureCache.handleLoadedTexture(url);
-            cb(null, img);
-        });
+        cc._imgLoader.load(res.src, url, res, cb);
     }
 };
 cc.loader.register(["serverImg"], cc._serverImgLoader);
@@ -82,15 +85,20 @@ cc._fontLoader = {
     TYPE : {
         ".eot" : "embedded-opentype",
         ".ttf" : "truetype",
+        ".ttc" : "truetype",
         ".woff" : "woff",
         ".svg" : "svg"
     },
     _loadFont : function(name, srcs, type){
-        var doc = document, path = cc.path, TYPE = this.TYPE, fontStyle = cc.newElement("style");
+        var doc = document, path = cc.path, TYPE = this.TYPE, fontStyle = document.createElement("style");
         fontStyle.type = "text/css";
         doc.body.appendChild(fontStyle);
 
-        var fontStr = "@font-face { font-family:" + name + "; src:";
+        var fontStr = "";
+        if(isNaN(name - 0))
+            fontStr += "@font-face { font-family:" + name + "; src:";
+        else
+            fontStr += "@font-face { font-family:'" + name + "'; src:";
         if(srcs instanceof Array){
             for(var i = 0, li = srcs.length; i < li; i++){
                 var src = srcs[i];
@@ -99,12 +107,13 @@ cc._fontLoader = {
                 fontStr += (i === li - 1) ? ";" : ",";
             }
         }else{
+            type = type.toLowerCase();
             fontStr += "url('" + srcs + "') format('" + TYPE[type] + "');";
         }
-        fontStyle.textContent += fontStr + "};";
+        fontStyle.textContent += fontStr + "}";
 
         //<div style="font-family: PressStart;">.</div>
-        var preloadDiv = cc.newElement("div");
+        var preloadDiv = document.createElement("div");
         var _divStyle =  preloadDiv.style;
         _divStyle.fontFamily = name;
         preloadDiv.innerHTML = ".";
@@ -123,10 +132,18 @@ cc._fontLoader = {
         }else{
             self._loadFont(name, srcs);
         }
-        cb(null, true);
+        if(document.fonts){
+            document.fonts.load("1em " + name).then(function(){
+                cb(null, true);
+            }, function(err){
+                cb(err);
+            });
+        }else{
+            cb(null, true);
+        }
     }
 };
-cc.loader.register(["font", "eot", "ttf", "woff", "svg"], cc._fontLoader);
+cc.loader.register(["font", "eot", "ttf", "woff", "svg", "ttc"], cc._fontLoader);
 
 cc._binaryLoader = {
     load : function(realUrl, url, res, cb){

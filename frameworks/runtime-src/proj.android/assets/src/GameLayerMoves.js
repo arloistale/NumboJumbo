@@ -105,16 +105,16 @@ var MovesGameLayer = BaseGameLayer.extend({
 			var highscore = NJ.stats.getHighscore(key);
 			NJ.social.submitScore(key, highscore);
 
-			if(highscore >= 300) {
+			if(highscore >= 500) {
 				NJ.social.unlockAchievement(NJ.social.achievementKeys.mov1);
 
-				if(highscore >= 450) {
+				if(highscore >= 750) {
 					NJ.social.unlockAchievement(NJ.social.achievementKeys.mov2);
 
-					if(highscore >= 600) {
+					if(highscore >= 1000) {
 						NJ.social.unlockAchievement(NJ.social.achievementKeys.mov3);
 
-						if(highscore >= 750) {
+						if(highscore >= 1250) {
 							NJ.social.unlockAchievement(NJ.social.achievementKeys.mov4);
 						}
 					}

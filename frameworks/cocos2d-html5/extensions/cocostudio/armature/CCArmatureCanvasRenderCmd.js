@@ -155,7 +155,7 @@
         var len = children.length;
         if (len > 0) {
             childNode.sortAllChildren();
-            // _barNode children zOrder < 0
+            // draw children zOrder < 0
             for (i = 0; i < len; i++) {
                 child = children[i];
                 if (child._localZOrder < 0)

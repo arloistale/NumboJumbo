@@ -31,18 +31,26 @@ var NumboLevel = (function() {
 			this._numBlocks = 0;
 			this._blocks = [];
 
+			var j;
 			// create empty columns:
-			for(var i = 0; i < NJ.NUM_COLS; ++i)
+			for(var i = 0; i < NJ.NUM_COLS; ++i) {
 				this._blocks.push([]);
+
+				for(j = 0; j < NJ.NUM_ROWS; ++j) {
+					NumboBlock.createAndPool();
+				}
+			}
 		},
 
+		// intended to clear the level of all blocks by killing them
+		// used at game over
 		clear: function() {
 			this.killAllBlocks(false);
 		},
 
+		// intended to reset level
 		reset: function() {
 			this.killAllBlocks(true);
-			cc.pool.drainAllPools();
 
 			this.init();
 		},
@@ -66,7 +74,7 @@ var NumboLevel = (function() {
 			cc.assert(0 <= col && col < NJ.NUM_COLS && this._blocks[col].length < NJ.NUM_ROWS,
 				"Invalid coords: " + col + " has length " + this._blocks[col].length);
 
-			block.init(col, this._blocks[col].length, val);
+			block.initValues(col, this._blocks[col].length, val);
 			this._blocks[col].push(block);
 			this._numBlocks++;
 			return block;

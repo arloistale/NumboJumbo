@@ -41,6 +41,7 @@ static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
     // Override point for customization after application launch.
 
     // Add the view controller's view to the window and display.
@@ -53,7 +54,7 @@ static AppDelegate s_sharedApplication;
                                    multiSampling: NO
                                  numberOfSamples: 0 ];
 
-    [eaglView setMultipleTouchEnabled:NO];
+    [eaglView setMultipleTouchEnabled:YES];
     
     // Use RootViewController manage CCEAGLView
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
@@ -79,9 +80,8 @@ static AppDelegate s_sharedApplication;
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
     cocos2d::GLView *glview = cocos2d::GLViewImpl::createWithEAGLView(eaglView);
     cocos2d::Director::getInstance()->setOpenGLView(glview);
-    
+
     cocos2d::Application::getInstance()->run();
-    
     return YES;
 }
 
@@ -95,7 +95,6 @@ static AppDelegate s_sharedApplication;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */

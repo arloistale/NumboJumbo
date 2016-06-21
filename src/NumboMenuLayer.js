@@ -246,10 +246,12 @@ var NumboMenuLayer = (function() {
 
             this._toolMenu.addChild(helpButton);
 
-            this._toolMenu.addChild(this._achievementsButton);
-            this._toolMenu.addChild(this._statsButton);
+            if(cc.sys.isNative) {
+                this._toolMenu.addChild(this._achievementsButton);
+                this._toolMenu.addChild(this._statsButton);
 
-            this._toolMenu.addChild(this._shopButton);
+                this._toolMenu.addChild(this._shopButton);
+            }
 
             this._toolMenu.addChild(this._settingsButton);
 

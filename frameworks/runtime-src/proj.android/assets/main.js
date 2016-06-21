@@ -48,7 +48,7 @@ cc.game.onStart = function() {
     NJ.initAnalytics();
 
     NJ.social.init();
-
+    NJ.purchases.init();
     NJ.stats.load();
 
     // load jumbos then we're good to go

@@ -35,12 +35,14 @@ ccs.Frame = ccs.Class.extend({
     _node: null,
     _tweenType: null,
     _easingParam: null,
+    _enterWhenPassed: null,
 
     ctor: function(){
         this._frameIndex = 0;
         this._tween = true;
         this._timeline = null;
         this._node = null;
+        this._enterWhenPassed = false;
         this._easingParam = [];
     },
 
@@ -190,6 +192,14 @@ ccs.Frame = ccs.Class.extend({
 });
 
 ccs.Frame.tweenToMap = {
+    "-1": function(time, easingParam){
+        if (easingParam)
+        {
+            var tt = 1 - time;
+            return easingParam[1]*tt*tt*tt + 3*easingParam[3]*time*tt*tt + 3*easingParam[5]*time*time*tt + easingParam[7]*time*time*time;
+        }
+        return time;
+    },
     1: cc._easeSineInObj.easing,//Sine_EaseIn
     2: cc._easeSineOutObj.easing,//Sine_EaseOut
     3: cc._easeSineInOutObj.easing,//Sine_EaseInOut
@@ -326,7 +336,7 @@ ccs.TextureFrame = ccs.Frame.extend({
     },
 
     /**
-     * Set the node element to _barNode texture
+     * Set the node element to draw texture
      * @param {cc.Node} node
      */
     setNode: function(node){
@@ -736,7 +746,7 @@ ccs.PositionFrame = ccs.Frame.extend({
     },
 
     /**
-     * Gets the postion x
+     * Gets the position x
      * @returns {Number}
      */
     getX: function(){
@@ -1276,6 +1286,7 @@ ccs.EventFrame = ccs.Frame.extend({
     ctor: function(){
         ccs.Frame.prototype.ctor.call(this);
         this._event = "";
+        this._enterWhenPassed = true;
     },
 
     /**
@@ -1335,7 +1346,7 @@ ccs.EventFrame.create = function(){
  */
 ccs.ZOrderFrame = ccs.Frame.extend({
 
-    _zorder: null,
+    _zorder: 0,
 
     /**
      * the execution of the callback
@@ -1389,17 +1400,30 @@ ccs.ZOrderFrame.create = function(){
 };
 
 ccs.BlendFuncFrame = ccs.Frame.extend({
+    ctor: function () {
+        this._super();
+        this._blendFunc = null;
+    },
 
     onEnter: function(nextFrame, currentFrameIndex){
-        if(this._node)
+        if(this._node && this._blendFunc)
             this._node.setBlendFunc(this._blendFunc);
     },
 
     clone: function(){
         var frame = new ccs.BlendFuncFrame();
         frame.setBlendFunc(this._blendFunc);
-        frame.cloneProperty(this);
+        frame._cloneProperty(this);
         return frame;
+    },
+
+    setBlendFunc: function(blendFunc){
+        if (blendFunc && blendFunc.src && blendFunc.dst)
+            this._blendFunc = blendFunc;
+    },
+
+    getBlendFunc: function(){
+        return this._blendFunc;
     }
 });
 
