@@ -515,7 +515,9 @@ var BaseGameLayer = (function() {
 			var blockTargetY = this._levelBounds.y + this._levelCellSize.height * (moveBlock.row + 0.5);
 			var blockTargetX = this._levelBounds.x + this._levelCellSize.width * (moveBlock.col + 0.5);
 
-			var moveVerticalAction = cc.moveTo(0.7, cc.p(moveBlock.getPositionX(), blockTargetY)).easing(cc.easeBounceOut());
+			var bounceEasing = cc.easeBounceOut();
+
+			var moveVerticalAction = cc.moveTo(0.7, cc.p(moveBlock.getPositionX(), blockTargetY)).easing(bounceEasing);
 			var moveHorizontalAction = cc.moveTo(0.7, cc.p(blockTargetX, moveBlock.getPositionY())).easing(cc.easeQuinticActionInOut());
 
 			moveVerticalAction.setTag(42);
@@ -851,7 +853,7 @@ var BaseGameLayer = (function() {
 				var radius = 0.5 *  this._blockSize.width;
 				if (cc.pDot(diff, diff) >= radius * radius) {
 					this._selectedLinesNode.drawSegment(this._convertLevelCoordsToPoint(block.col, block.row),
-						touchPosition, 3, currColor);
+						touchPosition, this._blockSize.height / 8, currColor);
 				}
 			}
 
@@ -863,10 +865,9 @@ var BaseGameLayer = (function() {
 		onTouchEnded: function(touchPosition) {
 		},
 
-		scoreBlocksMakeParticles: function(blocks, comboLength){
+		scoreBlocksMakeParticles: function(blocks, shouldLaunchShadow){
 			// initiate iterator variables here because we use them a lot
 			var i, block, color;
-			var sumPos = cc.p(0, 0);
 
 			var scoreDifference = 0;
 
@@ -876,21 +877,17 @@ var BaseGameLayer = (function() {
 				// we need to find the target value which will be the maximum value in the cleared blocks
 				scoreDifference += block.val;
 
-				// also count how many extra of the target we cleared
-				sumPos.x += block.x;
-				sumPos.y += block.y;
-
 				color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
 				if (block) {
 					var coords = this._convertPointToLevelCoords({x: block.x, y: block.y});
 					if (coords) {
-						this._effectsLayer.launchExplosion(coords.col, coords.row, color);
+						this._effectsLayer.launchExplosion(coords.col, coords.row, color, shouldLaunchShadow);
 					}
 				}
 			}
 
 			// add to number of blocks cleared
-			NJ.gameState.addBlocksCleared(comboLength);
+			NJ.gameState.addBlocksCleared(blocks.length);
 
 			// add to score
 			NJ.gameState.addScore(scoreDifference);
@@ -969,7 +966,7 @@ var BaseGameLayer = (function() {
 					var col = colAndVal.col, val = colAndVal.val;
 					if (col && val) {
 						//cc.log("spawning block with value ", val)
-						that.spawnDropBlock(col, val, res.plipSound);
+						that.spawnDropBlock(col, val);
 					}
 					else {
 						//cc.log("cant find a good value; spawning random block instead");
@@ -982,10 +979,11 @@ var BaseGameLayer = (function() {
 				}
 			}
 
+			/*
 			if (that._numboController.findHint().length == 0){
 				//cc.log("oh shit, still have no moves. keep spawning more i guess!");
 				that.spawnBlocksAfterDelay(1, 0, callback);
-			}
+			}*/
 
 			if (that.callback) {
 				callback();
@@ -1009,10 +1007,6 @@ var BaseGameLayer = (function() {
 		redrawSelectedLines: function(selectedBlocks) {
 			this._selectedLinesNode.clear();
 
-			// TODO: again drawing the dummy rect
-            // TODO: before we drew the dummy rect to make html5 shut up,
-			//this._selectedLinesNode.drawRect(cc.p(this._levelBounds.x, this._levelBounds.y), cc.p(this._levelBounds.x, this._levelBounds.y), cc.color(255, 255, 255, 0), 0, cc.color(255, 255, 255, 0));
-
 			if(!selectedBlocks)
 				return;
 
@@ -1030,7 +1024,7 @@ var BaseGameLayer = (function() {
 				color = NJ.getColor(first.val-1);
 
 				this._selectedLinesNode.drawSegment(this._convertLevelCoordsToPoint(first.col, first.row),
-					this._convertLevelCoordsToPoint(second.col, second.row), 3, color);
+					this._convertLevelCoordsToPoint(second.col, second.row), this._blockSize.height / 8, color);
 			}
 		},
 

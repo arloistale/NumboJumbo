@@ -170,6 +170,7 @@ var SettingsMenuLayer = (function() {
             state = (NJ.settings.sounds ? 0 : 1);
             soundsToggle.setSelectedIndex(state);
 
+            /*
             // generate vibration toggle
             var vibrationLabel = this.generateLabel("Theme", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             var vibrationToggle = this.generateToggle(onVibrationControl.bind(this), [
@@ -178,6 +179,7 @@ var SettingsMenuLayer = (function() {
             ]);
             state = (NJ.settings.vibration ? 0 : 1);
             vibrationToggle.setSelectedIndex(state);
+*/
 
             this._contentMenu.addChild(musicLabel);
             this._contentMenu.addChild(musicToggle);
@@ -185,8 +187,8 @@ var SettingsMenuLayer = (function() {
             this._contentMenu.addChild(soundsLabel);
             this._contentMenu.addChild(soundsToggle);
 
-            this._contentMenu.addChild(vibrationLabel);
-            this._contentMenu.addChild(vibrationToggle);
+            //this._contentMenu.addChild(vibrationLabel);
+            //this._contentMenu.addChild(vibrationToggle);
 
             this._contentMenu.alignItemsVerticallyWithPadding(10);
 
@@ -309,13 +311,13 @@ var SettingsMenuLayer = (function() {
 
         generateToggle: function(callback, opts) {
             opts = opts || [
-                    { name: "On", color: NJ.themes.specialLabelColor },
-                    { name: "Off", color: NJ.themes.specialLabelColor2 }
+                    { name: "ON", color: NJ.themes.specialLabelColor },
+                    { name: "OFF", color: NJ.themes.specialLabelColor }
                 ];
             var items = [];
             var item;
             for(var i = 0; i < opts.length; ++i) {
-                item = new NJMenuItem(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+                item = new NJMenuItem(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
                 item.setLabelTitle(opts[i].name);
                 item.setLabelColor(opts[i].color);
                 items.push(item);

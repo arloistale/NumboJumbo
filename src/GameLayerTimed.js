@@ -55,7 +55,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 			});
 			this.addChild(this._prepLayer, 100);
 		} else {
-			this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
+			this.runAction(cc.sequence(cc.delayTime(0.2), cc.callFunc(function () {
 				that.enter(function () {
 					that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
 						that._isInGame = true;
@@ -206,8 +206,8 @@ var TimedGameLayer = BaseGameLayer.extend({
 		if (!selectedBlocks.length)
 			return;
 
-		var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
-		this.scoreBlocksMakeParticles(totalClearedBlocks, totalClearedBlocks.length);
+		this.scoreBlocksMakeParticles(selectedBlocks);
+		this.scoreBlocksMakeParticles(bonusBlocks, true);
 
 		this.relocateBlocks();
 

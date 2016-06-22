@@ -249,9 +249,9 @@ var NumboMenuLayer = (function() {
             if(cc.sys.isNative) {
                 this._toolMenu.addChild(this._achievementsButton);
                 this._toolMenu.addChild(this._statsButton);
-
-                this._toolMenu.addChild(this._shopButton);
             }
+
+            this._toolMenu.addChild(this._shopButton);
 
             this._toolMenu.addChild(this._settingsButton);
 

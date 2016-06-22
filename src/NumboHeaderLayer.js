@@ -14,7 +14,6 @@ var NumboHeaderLayer = (function() {
         _condLabel: null,
 
         _equationLabel: null,
-        _dummyEquationLabel: null,
 
         // data
         _isTutorialMode: false,
@@ -85,21 +84,6 @@ var NumboHeaderLayer = (function() {
             this.addChild(this._equationLabel);
 
             this._equationLabel.setString(" ");
-
-            // Equation Label
-            this._dummyEquationLabel = new cc.LabelBMFont("Default Text", b_getFontName(res.mainFont));
-            this._dummyEquationLabel.setScale(elementSize.height / spriteSize.height, elementSize.height / spriteSize.height);
-            this._dummyEquationLabel.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: startPos.x,
-                y: startPos.y,
-                visible: false
-            });
-            this._dummyEquationLabel.setColor(NJ.themes.defaultLabelColor);
-            this.addChild(this._dummyEquationLabel);
-
-            this._dummyEquationLabel.setString(" ");
         },
 
         // resets all elements
@@ -114,8 +98,6 @@ var NumboHeaderLayer = (function() {
             this._scoreLabel.setString(" ");
             this._condLabel.setString(" ");
             this._equationLabel.setString( " ");
-            this._dummyEquationLabel.setString(" ");
-            this._dummyEquationLabel.setVisible(false);
         },
 
         // makes the header transition into the visible area
@@ -172,11 +154,10 @@ var NumboHeaderLayer = (function() {
             var i;
 
             // just print the values, no + or =
-            if (! this.sumToHighest(nums) ) {
+            if (!this.sumToHighest(nums) ) {
                 for (i = 0; i < nums.length; ++i){
                     equationStr += nums[i] + "     ";
                 }
-                this._equationLabel.setString(equationStr);
                 this._equationLabel.setColor(NJ.themes.defaultLabelColor);
             }
                 // valid combo, need to put + and =
@@ -186,7 +167,7 @@ var NumboHeaderLayer = (function() {
 
                 for (i = 0; i < nums.length; ++i) {
                     if (i != maxIndex){
-                        if (equationStr == ""){
+                        if (equationStr == "") {
                             equationStr = nums[i];
                         } else {
                             equationStr += " + " + nums[i];
@@ -194,24 +175,21 @@ var NumboHeaderLayer = (function() {
                     }
                 }
                 equationStr += " = " + maxNum;
-                this._equationLabel.setString(equationStr);
 
                 this._equationLabel.setColor(NJ.getColor(maxNum - 1));
             }
+
+            this._equationLabel.setOpacity(255);
+            this._equationLabel.stopAllActions();
+            this._equationLabel.setString(equationStr);
         },
 
         activateEquation: function() {
             var that = this;
 
-            this._dummyEquationLabel.setString(this._equationLabel.getString());
-            this._dummyEquationLabel.setVisible(true);
-            this._dummyEquationLabel.setOpacity(255);
-            this._dummyEquationLabel.setColor(this._equationLabel.getColor());
-            this._dummyEquationLabel.runAction(cc.sequence(cc.fadeTo(0.5, 0), cc.callFunc(function() {
-                that._dummyEquationLabel.setVisible(false);
+            this._equationLabel.runAction(cc.sequence(cc.fadeTo(0.5, 0), cc.callFunc(function() {
+                that.setEquation([]);
             })));
-
-            this.setEquation([]);
         },
 
         findMax: function(nums){

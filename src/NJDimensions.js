@@ -11,6 +11,9 @@ NJ.uiSizes = {
     promoArea: 0.24,
     toolbar: 0.12,
 
+    // shop elements
+    pointsArea: 0.12,
+
     // bar buttons are calculated based on their bar content sizes
     barButton: 0.7,
 

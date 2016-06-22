@@ -17,7 +17,7 @@ NumboLoaderScene = cc.Scene.extend({
         var self = this;
 
         // bg
-        var bgLayer = self._bgLayer = new cc.LayerColor(NJ.themes.darkTheme.backgroundColor);
+        var bgLayer = self._bgLayer = new cc.LayerColor("#000000");
         self.addChild(bgLayer, 0);
 
         if(res.logoImage) {

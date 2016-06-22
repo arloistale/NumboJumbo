@@ -45,8 +45,13 @@ var ShopMenuLayer = (function() {
 
         // UI Data
         _headerMenu: null,
-        _contentMenu: null,
         _toolMenu: null,
+
+        // shop UI Data
+        _contentScrollView: null,
+
+        _contentMenu: null,
+        _themesMenu: null,
 
         _coinsInfoLabel: null,
 
@@ -72,6 +77,7 @@ var ShopMenuLayer = (function() {
 
             this._initHeaderUI();
             this._initContentUI();
+            this._initThemesUI();
             this._initToolUI();
 
             this.enter();
@@ -125,23 +131,56 @@ var ShopMenuLayer = (function() {
         _initContentUI: function() {
             var that = this;
 
+            this._contentScrollView = new ccui.ScrollView();
+            this._contentScrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+            this._contentScrollView.setTouchEnabled(true);
+            this._contentScrollView.setBounceEnabled();
+            this._contentScrollView.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (1 - NJ.uiSizes.header - NJ.uiSizes.toolbar)));
+            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, 1000));
+            this._contentScrollView.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: cc.visibleRect.center.x,
+                y: cc.visibleRect.center.y
+            });
+
+            this.addChild(this._contentScrollView);
+
+            var sprite = new cc.Sprite(res.blockImage);
+
+            sprite.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: this._contentScrollView.width / 2,
+                y: 500
+            });
+
+            this._contentScrollView.addChild(sprite);
+
             this._contentMenu = new cc.Menu();
             this._contentMenu.setContentSize(cc.size(cc.visibleRect.width,
-                (1 - NJ.uiSizes.headerBar - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+                NJ.uiSizes.pointsArea * cc.visibleRect.height));
 
             this._contentMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: -this._contentMenu.getContentSize().width
+                x: this._contentScrollView.width / 2,
+                y: 500
             });
 
             // generate music toggle
-            var coinsLabel = this.generateLabel("Coins: " + NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            var coinsLabel = this.generateLabel("Points: " + NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             var coinSize = coinsLabel.getContentSize();
 
-            var buyCoinsButton = new NJMenuButton(coinSize, onBuyCoins.bind(this), this);
-            buyCoinsButton.setLabelTitle("+1000");
-            //buyCoinsButton.setImageRes(res.trophyImage);
+            var buyCoinsButton = new NJMenuButton(cc.size(coinSize.height, coinSize.height), onBuyCoins.bind(this), this);
+            //buyCoinsButton.setLabelTitle("1000");
+            //buyCoinsButton.setLabelColor(NJ.themes.defaultLabelColor);
+            buyCoinsButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
+            buyCoinsButton.setImageRes(res.promoImage);
+            //buyCoinsButton.offsetLabel(cc.p(coinSize.height * 1.5, 0));
 
             // generate sounds toggle
             this._coinsInfoLabel = this.generateLabel("Shop purchases are coming\nsoon. Stock up as many points as you can!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
@@ -153,7 +192,48 @@ var ShopMenuLayer = (function() {
 
             this._contentMenu.alignItemsVerticallyWithPadding(10);
 
-            this.addChild(this._contentMenu);
+            this._contentScrollView.addChild(this._contentMenu);
+        },
+
+        _initThemesUI: function() {
+            var that = this;
+
+            this._themeMenu = new cc.Menu();
+            this._themeMenu.setContentSize(cc.size(cc.visibleRect.width,
+                0.3 * 3 * cc.visibleRect.height));
+
+            this._themeMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: -this._themeMenu.getContentSize().width
+            });
+
+            var titleLabel = this.generateLabel("THEMES", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+
+            this._themeMenu.addChild(titleLabel);
+
+            var themes = NJ.themes.getList();
+
+            var buttonSize = cc.size(cc.visibleRect.width, cc.visibleRect.height * 0.3);
+            var themeButton;
+
+            for(var i = 0; i < themes.length; ++i) {
+                themeButton = new NJMenuButton(buttonSize, onBuyCoins.bind(this), this);
+                themeButton.setLabelTitle(themes[i].themeName);
+                themeButton.setLabelColor(NJ.themes.defaultLabelColor);
+                themeButton.attr({
+                    anchorX: 0.5,
+                    anchorY: 0.5
+                });
+                //buyCoinsButton.setImageRes(res.promoImage);
+                //buyCoinsButton.offsetLabel(cc.p(coinSize.height * 1.5, 0));
+
+                this._themeMenu.addChild(themeButton);
+            }
+
+            this._themeMenu.alignItemsInColumns(1, 3);
+
+            this.addChild(this._themeMenu);
         },
 
         _initToolUI: function() {

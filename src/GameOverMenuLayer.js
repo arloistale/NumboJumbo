@@ -109,7 +109,7 @@ var GameOverMenuLayer = (function() {
                 y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height
             });
 
-            var headerLabel = this.generateLabel("SCORES (" + NJ.modeNames[this._modeKey].toUpperCase() + ")", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
+            var headerLabel = this.generateLabel(NJ.modeNames[this._modeKey].toUpperCase() + " SCORES", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
             headerLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,

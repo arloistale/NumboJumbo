@@ -16,6 +16,8 @@ NJ.themes = (function() {
     var data = [
         // light theme
         {
+            themeName: "Light",
+
             backgroundColor: cc.color("#F0EBD0"),
             levelColor: cc.color("#6C6760"),
 
@@ -24,7 +26,7 @@ NJ.themes = (function() {
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#424242"),
 
-            shadowColor: cc.color("#6C6760"),
+            shadowColor: cc.color("#ffffff"),
 
             dividerColor: cc.color("#6c6760"),
 
@@ -60,6 +62,8 @@ NJ.themes = (function() {
         },
         // dark theme
         {
+            themeName: "Dark",
+
             backgroundColor: cc.color("#332F2A"),
             levelColor: cc.color("#6C6760"),
 
@@ -68,7 +72,7 @@ NJ.themes = (function() {
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#6C6760"),
 
-            shadowColor: cc.color("#F0EBD0"),
+            shadowColor: cc.color("#ffffff"),
 
             dividerColor: cc.color("#ffffff"),
 
@@ -111,9 +115,7 @@ NJ.themes = (function() {
     var _themeIndex = 0;
 
     return {
-        // theme colors
-        lightTheme: _lightTheme,
-        darkTheme: _darkTheme,
+        themeName: main.themeName,
 
         // here we expose properties of the current main theme
         backgroundColor: main.backgroundColor,
@@ -135,6 +137,11 @@ NJ.themes = (function() {
 
         blockColors: main.blockColors,
 
+        // get list of themes
+        getList: function() {
+            return data;
+        },
+
         /**
          * Toggle between themes
          */
@@ -143,7 +150,7 @@ NJ.themes = (function() {
             main = data[_themeIndex];
 
             for(var key in this) {
-                if(key == 'toggle' || key == 'strokeTypes')
+                if(key == 'getList' || key == 'toggle' || key == 'strokeTypes')
                     continue;
 
                 if(this.hasOwnProperty(key)) {
