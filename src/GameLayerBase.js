@@ -863,6 +863,7 @@ var BaseGameLayer = (function() {
 		// On touch ended, activates all selected blocks once touch is released.
 		// Returns the cleared blocks.
 		onTouchEnded: function(touchPosition) {
+			; // just for decoration :)
 		},
 
 		scoreBlocksMakeParticles: function(blocks, shouldLaunchShadow){
