@@ -17,7 +17,7 @@ NumboLoaderScene = cc.Scene.extend({
         var self = this;
 
         // bg
-        var bgLayer = self._bgLayer = new cc.LayerColor("#000000");
+        var bgLayer = self._bgLayer = new cc.LayerColor(cc.color("#000000"));
         self.addChild(bgLayer, 0);
 
         if(res.logoImage) {
@@ -77,7 +77,7 @@ NumboLoaderScene = cc.Scene.extend({
         self._audioLoadCount = 0;
         var res = self.resources;
 
-        var shouldPreload = false;
+        var shouldPreload = false;//(cc.sys.os == cc.sys.OS_IOS);
 
         cc.loader.load(res, function() {}, function () {
             var i;

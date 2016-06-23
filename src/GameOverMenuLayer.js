@@ -41,6 +41,27 @@ var GameOverMenuLayer = (function() {
         var that = this;
     };
 
+    var onShop = function() {
+        NJ.audio.playSound(res.clickSound);
+
+        var that = this;
+
+        cc.eventManager.pauseTarget(this, true);
+        this.leave(function() {
+            that._shopMenuLayer = new ShopMenuLayer();
+            that._shopMenuLayer.setOnCloseCallback(function() {
+                cc.eventManager.resumeTarget(that, true);
+                that.removeChild(that._shopMenuLayer);
+
+                that.enter();
+
+                that._updateTheme();
+            });
+
+            that.addChild(that._shopMenuLayer, 999);
+        });
+    };
+
     return cc.LayerColor.extend({
 
         // UI Data
@@ -82,6 +103,8 @@ var GameOverMenuLayer = (function() {
             this._initPromoUI();
             this._initToolUI();
 
+            this._generateBaseDividers();
+
             this._initInput();
 
             this.enter();
@@ -105,15 +128,14 @@ var GameOverMenuLayer = (function() {
             this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
             this._headerMenu.attr({
                 anchorX: 0.5,
-                anchorY: 0,
-                y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height
+                anchorY: 0.5,
+                y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2
             });
 
             var headerLabel = this.generateLabel(NJ.modeNames[this._modeKey].toUpperCase() + " SCORES", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
             headerLabel.attr({
                 anchorX: 0.5,
-                anchorY: 0.5,
-                y: -this._headerMenu.getContentSize().height / 2
+                anchorY: 0.5
             });
 
             this._headerMenu.addChild(headerLabel);
@@ -155,9 +177,22 @@ var GameOverMenuLayer = (function() {
                 this._statsMenu.addChild(this._scoreLabel);
 
                 this._statsMenu.addChild(bestTitleLabel);
+
+                this._statsMenu.alignItemsVerticallyWithPadding(10);
             } else {
                 scoreTitleLabel = this.generateLabel("Score", header2Size);
                 this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
+
+                var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+
+                var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+                divider.setTag(444);
+                divider.setBackgroundImage(res.alertImage);
+                divider.setBackgroundColor(NJ.themes.defaultLabelColor);
+                divider.attr({
+                    anchorX: 0.5,
+                    anchorY: 0.5
+                });
 
                 bestTitleLabel = this.generateLabel("Best", header2Size);
                 this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
@@ -165,17 +200,13 @@ var GameOverMenuLayer = (function() {
                 this._statsMenu.addChild(scoreTitleLabel);
                 this._statsMenu.addChild(this._scoreLabel);
 
+                //this._statsMenu.addChild(divider);
+
                 this._statsMenu.addChild(bestTitleLabel);
                 this._statsMenu.addChild(this._bestLabel);
+
+                this._statsMenu.alignItemsInColumns(2)
             }
-
-            //var currencyTitleLabel = this.generateLabel("Currency");
-            //this._currencyLabel = this.generateLabel(NJ.prettifier.formatNumber(NJ.stats.getCurrency()) + "", NJ.fontSizes.header2);
-
-            //this._menu.addChild(currencyTitleLabel);
-            //this._menu.addChild(this._currencyLabel);
-
-            this._statsMenu.alignItemsVerticallyWithPadding(10);
             this.addChild(this._statsMenu, 100);
         },
 
@@ -216,6 +247,20 @@ var GameOverMenuLayer = (function() {
 
             this._promoMenu.alignItemsVerticallyWithPadding(10);
 
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+
+            var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            divider.setTag(444);
+            divider.setBackgroundImage(res.alertImage);
+            divider.setBackgroundColor(NJ.themes.defaultLabelColor);
+            divider.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: this._promoMenu.getContentSize().height / 2
+            });
+
+            this._promoMenu.addChild(divider);
+
             this.addChild(this._promoMenu, 100);
         },
 
@@ -246,6 +291,13 @@ var GameOverMenuLayer = (function() {
                 anchorY: 0.5
             });
 
+            var shopButton = new NJMenuButton(buttonSize, onShop.bind(this), this);
+            shopButton.setImageRes(res.shopImage);
+            shopButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
+
             var shareButton = new NJMenuButton(buttonSize, onShare.bind(this), this);
             shareButton.setImageRes(res.homeImage);
             shareButton.attr({
@@ -255,19 +307,21 @@ var GameOverMenuLayer = (function() {
 
             this._toolMenu.addChild(retryButton);
             this._toolMenu.addChild(menuButton);
+            this._toolMenu.addChild(shopButton);
 
-            this._toolMenu.alignItemsHorizontallyWithPadding(10);
+            this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
 
             this.addChild(this._toolMenu, 100);
         },
 
         // makes menu elements transition in
         enter: function() {
+            var headerSize = this._headerMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
 
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y)).easing(easing));
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
             this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._statsMenu.getPositionY())).easing(easing));
@@ -284,7 +338,7 @@ var GameOverMenuLayer = (function() {
 
             var easing = cc.easeBackOut();
 
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height)).easing(easing));
+            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
             this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - statsSize.width, this._statsMenu.getPositionY())).easing(easing));
@@ -314,11 +368,72 @@ var GameOverMenuLayer = (function() {
 // UI Helpers //
 ////////////////
 
+        // generate dividers on headers and toolbars
+        _generateBaseDividers: function() {
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+
+            var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            headerDivider.setTag(444);
+            headerDivider.setBackgroundImage(res.alertImage);
+            headerDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
+            headerDivider.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: -this._headerMenu.getContentSize().height / 2 + dividerHeight
+            });
+            this._headerMenu.addChild(headerDivider);
+
+            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            toolDivider.setTag(444);
+            toolDivider.setBackgroundImage(res.alertImage);
+            toolDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
+            toolDivider.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: this._toolMenu.getContentSize().height / 2 - dividerHeight
+            });
+            this._toolMenu.addChild(toolDivider);
+        },
+
         generateLabel: function(title, size, color) {
             var toggleItem = new NJMenuItem(size);
             toggleItem.setLabelTitle(title);
             toggleItem.setLabelColor(color || NJ.themes.defaultLabelColor);
             return toggleItem;
+        },
+
+        _updateTheme: function() {
+            this.setColor(NJ.themes.backgroundColor);
+
+            var i;
+
+            var children = this.getChildren();
+
+            for(i = 0; i < children.length; i++) {
+                if(children[i].mType && children[i].mType == "NJMenuItem")
+                    children[i].updateTheme();
+                else {
+                    var childrenChildrenStack = [children[i].getChildren()];
+
+                    while(childrenChildrenStack.length > 0) {
+                        var childrenChildren = childrenChildrenStack.pop();
+
+                        for(var j = 0; j < childrenChildren.length; ++j) {
+                            if(childrenChildren[j] && childrenChildren[j].getTag() != 666 && childrenChildren[j].mType && childrenChildren[j].mType == "NJMenuItem") {
+                                childrenChildren[j].updateTheme();
+
+                                if(childrenChildren[j].getTag() == 444)
+                                    childrenChildren[j].setBackgroundColor(NJ.themes.defaultLabelColor);
+
+                            } else if(childrenChildren[j])
+                                childrenChildrenStack.push(childrenChildren[j].getChildren());
+                        }
+                    }
+                }
+            }
+
+            this._scoreLabel.setLabelColor(NJ.themes.specialLabelColor);
+            this._bestLabel.setLabelColor(NJ.themes.specialLabelColor);
         }
     });
 }());

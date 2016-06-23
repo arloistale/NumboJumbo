@@ -371,8 +371,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		if (!selectedBlocks.length)
 			return;
 
-		var totalClearedBlocks = selectedBlocks.concat(bonusBlocks);
-		this.scoreBlocksMakeParticles(totalClearedBlocks, totalClearedBlocks.length);
+		this.scoreBlocksMakeParticles(selectedBlocks);
+		this.scoreBlocksMakeParticles(bonusBlocks, true);
 
 		this.relocateBlocks();
 

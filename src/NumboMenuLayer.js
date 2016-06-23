@@ -51,7 +51,7 @@ var NumboMenuLayer = (function() {
         ctor: function () {
             this._super();
 
-            NJ.themes.toggle(NJ.settings.vibration ? 0 : 1);
+            cc.log(NJ.themes.backgroundColor);
             this.init(NJ.themes.backgroundColor);
 
             this._initHeaderUI();
@@ -255,7 +255,7 @@ var NumboMenuLayer = (function() {
 
             this._toolMenu.addChild(this._settingsButton);
 
-            this._toolMenu.alignItemsHorizontallyWithPadding(10);
+            this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
 
             this.addChild(this._toolMenu, 100);
         },
@@ -480,6 +480,8 @@ var NumboMenuLayer = (function() {
                     that.removeChild(that._shopMenuLayer);
 
                     that.enter();
+
+                    that._updateTheme();
                 });
 
                 that.addChild(that._shopMenuLayer, 999);
@@ -501,8 +503,6 @@ var NumboMenuLayer = (function() {
                     that.enter();
 
                     NJ.audio.playMusic(res.trackChill2);
-
-                    that._updateTheme();
                 });
 
                 that.addChild(that._settingsMenuLayer, 999);

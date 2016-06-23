@@ -41,8 +41,8 @@ var NumboBlock = cc.Sprite.extend({
         this.addChild(this._highlightSprite, -1);
 
         // initialize number label
-        this._valueLabel = new cc.LabelBMFont("label test", b_getFontName(res.mainFont));
-        this._valueLabel.setAlignment(cc.TEXT_ALIGNMENT_CENTER);
+        this._valueLabel = new cc.LabelBMFont("0", b_getFontName(res.mainFont));
+        //this._valueLabel.setAlignment(cc.TEXT_ALIGNMENT_CENTER);
         this._labelSize = this._valueLabel.getContentSize();
         this._valueLabel.setColor(cc.color("#ffffff"));
         this.addChild(this._valueLabel, 1);
@@ -87,7 +87,7 @@ var NumboBlock = cc.Sprite.extend({
         this.row = rowVal;
         this.val = valVal;
 
-        this._valueLabel.setString(this.val + '');
+        this._valueLabel.setString(this.val + (this.val != 1 ? "" : " "));
 
         this.updateTheme();
     },

@@ -42,7 +42,6 @@ var res = {
     nextImage: resRoot + "Images/ic_next/ic_next_2x.png",
     helpImage: resRoot + "Images/ic_help/ic_help_2x.png",
     homeImage: resRoot + "Images/ic_home/ic_home_2x.png",
-    skipImage: resRoot + "Images/ic_skip/ic_skip_2x.png",
     settingsImage: resRoot + "Images/ic_settings/ic_settings_2x.png",
     retryImage: resRoot + "Images/ic_retry/ic_retry_2x.png",
     statsImage: resRoot + "Images/ic_stats/ic_stats_2x.png",
@@ -50,6 +49,7 @@ var res = {
     loginImage: resRoot + "Images/login.png",
     promoImage: resRoot + "Images/ic_thumb/ic_thumb_2x.png",
     shopImage: resRoot + "Images/ic_shop/ic_shop_2x.png",
+    plusImage: resRoot + "Images/ic_plus/ic_plus_2x.png",
 
     playImage: resRoot + "Images/ic_play/ic_play_2x.png",
     timedImage: resRoot + "Images/ic_timed.png",

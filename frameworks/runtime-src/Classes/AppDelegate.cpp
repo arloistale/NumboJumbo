@@ -1,5 +1,7 @@
 #include "AppDelegate.h"
 
+#include "audio/include/AudioEngine.h"
+
 #include "scripting/js-bindings/auto/jsb_cocos2dx_auto.hpp"
 #include "scripting/js-bindings/auto/jsb_cocos2dx_extension_auto.hpp"
 #include "scripting/js-bindings/auto/jsb_cocos2dx_navmesh_auto.hpp"
@@ -146,6 +148,7 @@ void AppDelegate::applicationDidEnterBackground()
     auto director = Director::getInstance();
     director->stopAnimation();
     director->getEventDispatcher()->dispatchCustomEvent("game_on_hide");
+    cocos2d::experimental::AudioEngine::pauseAll();
 }
 
 // this function will be called when the app is active again
@@ -154,4 +157,5 @@ void AppDelegate::applicationWillEnterForeground()
     auto director = Director::getInstance();
     director->startAnimation();
     director->getEventDispatcher()->dispatchCustomEvent("game_on_show");
+    cocos2d::experimental::AudioEngine::resumeAll();
 }

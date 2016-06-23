@@ -17,11 +17,13 @@ NJ.themes = (function() {
         // light theme
         {
             themeName: "Light",
+            themeCost: 0,
+            isPurchased: true,
 
             backgroundColor: cc.color("#F0EBD0"),
             levelColor: cc.color("#6C6760"),
 
-            defaultLabelColor: cc.color("#332F2A"),
+            defaultLabelColor: cc.color("#6C6760"),
             specialLabelColor: cc.color("#50aa91"),
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#424242"),
@@ -63,6 +65,8 @@ NJ.themes = (function() {
         // dark theme
         {
             themeName: "Dark",
+            themeCost: 25000,
+            isPurchased: false,
 
             backgroundColor: cc.color("#332F2A"),
             levelColor: cc.color("#6C6760"),
@@ -115,9 +119,12 @@ NJ.themes = (function() {
     var _themeIndex = 0;
 
     return {
-        themeName: main.themeName,
+        // meta data
+        hasLoaded: false,
 
         // here we expose properties of the current main theme
+        themeName: main.themeName,
+
         backgroundColor: main.backgroundColor,
         levelColor: main.levelColor,
 
@@ -142,24 +149,74 @@ NJ.themes = (function() {
             return data;
         },
 
+        updateList: function(list) {
+            data = list;
+        },
+
         /**
-         * Toggle between themes
+         * Set theme according to theme index
          */
-        toggle: function(index) {
+        setThemeByIndex: function(index) {
             _themeIndex = index;
             main = data[_themeIndex];
 
-            for(var key in this) {
-                if(key == 'getList' || key == 'toggle' || key == 'strokeTypes')
-                    continue;
-
-                if(this.hasOwnProperty(key)) {
+            for(var key in main) {
+                if(main.hasOwnProperty(key)) {
                     this[key] = main[key];
                 }
             }
+        },
+
+        purchaseThemeByIndex: function(index) {
+            data[index].isPurchased = true;
+        },
+
+        getThemeByIndex: function(index) {
+            return data[index];
+        },
+
+        getThemeIndex: function() {
+            return _themeIndex;
         }
     }
 }());
+
+// load settings from local store
+NJ.loadThemes = function() {
+    NJ.themes.hasLoaded = true;
+
+    // if this is our first time then save defaults
+    if(!(cc.sys.localStorage.getItem('themesHasLoaded') == 'true')) {
+        NJ.saveThemes();
+        return;
+    }
+
+    var rawIndex = cc.sys.localStorage.getItem("themeIndex");
+
+    NJ.themes.setThemeByIndex(parseInt(rawIndex));
+
+    var themesList = NJ.themes.getList();
+
+    for(var i = 0; i < themesList.length; ++i) {
+        themesList[i].isPurchased = cc.sys.localStorage.getItem("themesPurchased_" + i) == 'true';
+    }
+
+    NJ.themes.updateList(themesList);
+};
+
+// save settings to local store
+// NOTE: Must be called to persist changes in settings
+NJ.saveThemes = function() {
+    cc.sys.localStorage.setItem("themesHasLoaded", JSON.stringify(true));
+    cc.sys.localStorage.setItem("themeIndex", JSON.stringify(NJ.themes.getThemeIndex()));
+    //cc.log("Saving" + NJ.themes.getThemeIndex());
+
+    var themesList = NJ.themes.getList();
+
+    for(var i = 0; i < themesList.length; ++i) {
+        cc.sys.localStorage.setItem("themesPurchased_" + i, JSON.stringify(themesList[i].isPurchased));
+    }
+};
 
 NJ.getColor = function (index) {
     var colorArray = NJ.themes.blockColors;

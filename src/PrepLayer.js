@@ -123,7 +123,7 @@ var PrepLayer = (function() {
 
             this._toolMenu.addChild(backButton);
 
-            this._toolMenu.alignItemsHorizontallyWithPadding(10);
+            this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
 
             this.addChild(this._toolMenu, 100);
         },

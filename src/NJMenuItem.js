@@ -234,6 +234,7 @@ var NJMenuItem = (function() {
         //////////////////////
 
         setBackgroundImage: function(res) {
+
             var contentSize = this.getContentSize();
 
             this._backgroundStates = generateImageStates(res, contentSize,
@@ -249,6 +250,9 @@ var NJMenuItem = (function() {
         // sets the background color for the the button
         // parameters can consist of a single col
         setBackgroundColor: function(color) {
+            if(!this._backgroundStates)
+                return;
+
             var normalColor = color;
             var pressedColor = NJ.colorWithBrightness(color, 0.75);
 

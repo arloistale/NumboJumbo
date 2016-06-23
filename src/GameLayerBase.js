@@ -1112,7 +1112,6 @@ var BaseGameLayer = (function() {
 			this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
 			this._numboHeaderLayer.updateTheme();
 			this._numboController.updateTheme();
-            //this._drawDividersGeometry();
 		}
 	});
 }());

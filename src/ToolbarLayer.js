@@ -22,6 +22,20 @@ var ToolbarLayer = (function() {
             this._super();
 
             this.setContentSize(size.width, size.height);
+/*
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+
+            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
+            toolDivider.setBackgroundImage(res.alertImage);
+            toolDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
+            toolDivider.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: this.getContentSize().width / 2,
+                y: this.getContentSize().height - dividerHeight
+            });
+            this.addChild(toolDivider);
+            */
 
             this._initButtons();
             this._initLabels();
@@ -80,9 +94,9 @@ var ToolbarLayer = (function() {
 
         // transition in
         enter: function() {
-            var easing = cc.easeBackInOut();
+            var easing = cc.easeBackOut();
 
-            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y)).easing(easing);
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y)).easing(easing);
             this.runAction(moveTo);
         },
 
@@ -92,7 +106,7 @@ var ToolbarLayer = (function() {
 
             var easing = cc.easeBackOut();
 
-            var moveTo = cc.moveTo(0.5, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y - size.height)).easing(easing);
+            var moveTo = cc.moveTo(0.4, cc.p(cc.visibleRect.topLeft.x, cc.visibleRect.bottomLeft.y - size.height)).easing(easing);
             this.runAction(moveTo);
         },
 

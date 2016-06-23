@@ -43,8 +43,10 @@ cc.game.onStart = function() {
         cc.view.resizeWithBrowserSize(true);
     }
     
-    // load settings
+    // load data
     NJ.loadSettings();
+    NJ.loadThemes();
+
     NJ.initAnalytics();
 
     NJ.social.init();
