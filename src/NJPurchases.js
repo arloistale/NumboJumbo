@@ -23,7 +23,9 @@ NJ.purchases = (function() {
     return {
         // expose achievement keys
         itemKeys: {
-            coin1: "coin1"
+            coin1: "coin1",
+
+            doubler: "doubler"
         },
 
         // Initialization //

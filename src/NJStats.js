@@ -7,6 +7,8 @@ var NJ = NJ || {};
 NJ.stats = (function() {
     var currency = 0;
 
+    var isDoublerEnabled = false;
+
     // stats data for every mode
     var modeData = {};
 
@@ -33,6 +35,10 @@ NJ.stats = (function() {
             // load misc stat tracking
             currency = parseInt(cc.sys.localStorage.getItem('currency')) || 0;
             numGamesCompleted = parseInt(cc.sys.localStorage.getItem('numGamesCompleted')) || 0;
+
+            isDoublerEnabled = (cc.sys.localStorage.getItem('isDoublerEnabled') || 'false') == 'true';
+            cc.log(cc.sys.localStorage.getItem('isDoublerEnabled'));
+            cc.log(isDoublerEnabled);
         },
 
         save: function() {
@@ -48,6 +54,8 @@ NJ.stats = (function() {
             // save misc
             cc.sys.localStorage.setItem('currency', JSON.stringify(currency));
             cc.sys.localStorage.setItem('numGamesCompleted', JSON.stringify(numGamesCompleted));
+
+            cc.sys.localStorage.setItem('isDoublerEnabled', JSON.stringify(isDoublerEnabled));
         },
 
         ///////////////////////
@@ -108,6 +116,14 @@ NJ.stats = (function() {
 
         getNumGamesCompleted: function() {
             return numGamesCompleted;
+        },
+
+        enableDoubler: function() {
+            isDoublerEnabled = true;
+        },
+
+        isDoubleEnabled: function() {
+            return isDoublerEnabled;
         }
     }
 }());

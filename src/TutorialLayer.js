@@ -155,8 +155,8 @@ var TutorialLayer = (function() {
 
                     case slides.end:
 
-                        that._titleMenuItem.setLabelTitle("Wombo Combo!");
-                        that._helperMenuItem.setLabelTitle("Welcome to Numbo Jumbo.");
+                        that._titleMenuItem.setLabelTitle("Welcome to Numbo Jumbo.");
+                        that._helperMenuItem.setLabelTitle("");
 
                         that._titleMenuItem.setChildrenOpacity(0);
                         that._helperMenuItem.setChildrenOpacity(0);
@@ -164,7 +164,6 @@ var TutorialLayer = (function() {
                         that._menu.alignItemsVerticallyWithPadding(10);
 
                         that._titleMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
-                        that._helperMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
 
                         break;
                 }

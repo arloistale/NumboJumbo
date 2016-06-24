@@ -25,7 +25,7 @@ var ShopMenuLayer = (function() {
         });
     };
 
-    var onBuyCoins = function() {
+    var onBuyBubbles = function() {
         NJ.audio.playSound(res.coinSound);
 
         var that = this;
@@ -37,7 +37,7 @@ var ShopMenuLayer = (function() {
                 if (!error) {
                     that.devModeLog("Log " + _logCount + ": Success = " + product);
                     NJ.stats.addCurrency(25000);
-                    that._coinsLabel.setLabelTitle("Points: " + NJ.stats.getCurrency());
+                    that.updateCurrencyLabel();
                     NJ.stats.save();
                 } else {
                     that.devModeLog("Log " + _logCount + ": Failure = " + product + " : " + error);
@@ -45,8 +45,36 @@ var ShopMenuLayer = (function() {
             });
         } else {
             NJ.stats.addCurrency(25000);
-            that._coinsLabel.setLabelTitle("Points: " + NJ.stats.getCurrency());
+            that.updateCurrencyLabel();
             NJ.stats.save();
+        }
+    };
+
+    var onBuyDoubler = function() {
+        NJ.audio.playSound(res.coinSound);
+
+        if(NJ.stats.isDoubleEnabled())
+            return;
+
+        var that = this;
+
+        if(cc.sys.isNative) {
+            NJ.purchases.buy(NJ.purchases.itemKeys.doubler, function (product, error) {
+                _logCount++;
+
+                if (!error) {
+                    that.devModeLog("Log " + _logCount + ": Success = " + product);
+                    NJ.stats.enableDoubler();
+                    NJ.stats.save();
+                    that._enableDoubler();
+                } else {
+                    that.devModeLog("Log " + _logCount + ": Failure = " + product + " : " + error);
+                }
+            });
+        } else {
+            NJ.stats.enableDoubler();
+            NJ.stats.save();
+            that._enableDoubler();
         }
     };
 
@@ -67,7 +95,7 @@ var ShopMenuLayer = (function() {
         } else {
             if(NJ.stats.getCurrency() >= theme.themeCost) {
                 NJ.stats.addCurrency(-theme.themeCost);
-                that._coinsLabel.setLabelTitle("Points: " + NJ.stats.getCurrency());
+                that.updateCurrencyLabel();
                 NJ.stats.save();
                 NJ.themes.purchaseThemeByIndex(index);
                 NJ.themes.setThemeByIndex(index);
@@ -88,15 +116,18 @@ var ShopMenuLayer = (function() {
         // shop UI Data
         _contentScrollView: null,
 
-        _pointsMenu: null,
+        _bubblesMenu: null,
         _themesMenu: null,
+        _doublerMenu: null,
 
         _popoverMenu: null,
 
         _themeButtons: [],
 
-        _coinsLabel: null,
-        _coinsInfoLabel: null,
+        _currencyLabel: null,
+        _currencyInfoLabel: null,
+
+        _doublerInfoLabel: null,
 
         // Callbacks Data
         onCloseCallback: null,
@@ -117,8 +148,9 @@ var ShopMenuLayer = (function() {
 
             this._initHeaderUI();
             this._initContentUI();
-            this._initPointsUI();
+            this._initBubblesUI();
             this._initThemesUI();
+            this._initDoublerUI();
             this._initToolUI(shouldShowBackButton);
 
             this._generateBaseDividers();
@@ -184,7 +216,7 @@ var ShopMenuLayer = (function() {
             this._contentScrollView.setTouchEnabled(true);
             this._contentScrollView.setBounceEnabled(true);
             this._contentScrollView.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (1 - NJ.uiSizes.header - NJ.uiSizes.toolbar)));
-            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (NJ.uiSizes.pointsArea + NJ.uiSizes.themesArea)));
+            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.themesArea + NJ.uiSizes.doublerArea)));
             this._contentScrollView.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -195,22 +227,22 @@ var ShopMenuLayer = (function() {
             this.addChild(this._contentScrollView);
         },
 
-        _initPointsUI: function() {
-            this._pointsMenu = new cc.Menu();
-            this._pointsMenu.setContentSize(cc.size(cc.visibleRect.width, NJ.uiSizes.pointsArea * cc.visibleRect.height));
+        _initBubblesUI: function() {
+            this._bubblesMenu = new cc.Menu();
+            this._bubblesMenu.setContentSize(cc.size(cc.visibleRect.width, NJ.uiSizes.bubblesArea * cc.visibleRect.height));
 
-            this._pointsMenu.attr({
+            this._bubblesMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: this._contentScrollView.width / 2,
-                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * NJ.uiSizes.pointsArea) / 2
+                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * NJ.uiSizes.bubblesArea) / 2
             });
 
             // generate music toggle
-            this._coinsLabel = this.generateLabel("Points: " + NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            var coinSize = this._coinsLabel.getContentSize();
+            this._currencyLabel = this.generateLabel("Bubbles: " + NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            var coinSize = cc.size(NJ.calculateScreenDimensionFromRatio(0.12), NJ.calculateScreenDimensionFromRatio(0.12));
 
-            var buyCoinsButton = new NJMenuButton(cc.size(coinSize.height, coinSize.height), onBuyCoins.bind(this), this);
+            var buyCoinsButton = new NJMenuButton(cc.size(coinSize.height, coinSize.height), onBuyBubbles.bind(this), this);
             //buyCoinsButton.setLabelTitle("1000");
             //buyCoinsButton.setLabelColor(NJ.themes.defaultLabelColor);
             buyCoinsButton.attr({
@@ -221,14 +253,14 @@ var ShopMenuLayer = (function() {
             //buyCoinsButton.offsetLabel(cc.p(coinSize.height * 1.5, 0));
 
             // generate sounds toggle
-            this._coinsInfoLabel = this.generateLabel("Buy or earn points for pretty themes!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            this._currencyInfoLabel = this.generateLabel("Buy or earn bubbles for pretty themes!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
 
-            this._pointsMenu.addChild(this._coinsLabel);
-            this._pointsMenu.addChild(buyCoinsButton);
+            this._bubblesMenu.addChild(this._currencyLabel);
+            this._bubblesMenu.addChild(buyCoinsButton);
 
-            this._pointsMenu.addChild(this._coinsInfoLabel);
+            this._bubblesMenu.addChild(this._currencyInfoLabel);
 
-            this._pointsMenu.alignItemsVerticallyWithPadding(10);
+            this._bubblesMenu.alignItemsVerticallyWithPadding(10);
 
             var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
 
@@ -239,11 +271,11 @@ var ShopMenuLayer = (function() {
             divider.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                y: -this._pointsMenu.getContentSize().height / 2
+                y: -this._bubblesMenu.getContentSize().height / 2
             });
-            this._pointsMenu.addChild(divider);
+            this._bubblesMenu.addChild(divider);
 
-            this._contentScrollView.addChild(this._pointsMenu);
+            this._contentScrollView.addChild(this._bubblesMenu);
         },
 
         _initThemesUI: function() {
@@ -256,7 +288,7 @@ var ShopMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: this._contentScrollView.width / 2,
-                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * (NJ.uiSizes.pointsArea + NJ.uiSizes.themesArea / 2))
+                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.themesArea / 2))
             });
 
             var titleLabel = this.generateLabel("THEMES", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
@@ -296,8 +328,6 @@ var ShopMenuLayer = (function() {
                         anchorX: 0.5,
                         anchorY: 0.5
                     });
-                    //buyCoinsButton.setImageRes(res.promoImage);
-                    //buyCoinsButton.offsetLabel(cc.p(coinSize.height * 1.5, 0));
 
                     that._themeMenu.addChild(themeButton);
                     that._themeButtons.push(themeButton);
@@ -307,6 +337,37 @@ var ShopMenuLayer = (function() {
             this._themeMenu.alignItemsVerticallyWithPadding(cc.visibleRect.height * 0.07);
 
             this._contentScrollView.addChild(this._themeMenu);
+        },
+
+        _initDoublerUI: function() {
+            this._doublerMenu = new cc.Menu();
+            this._doublerMenu.setContentSize(cc.size(cc.visibleRect.width, NJ.uiSizes.doublerArea * cc.visibleRect.height));
+
+            this._doublerMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: this._contentScrollView.width / 2,
+                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.themesArea + NJ.uiSizes.doublerArea / 2))
+            });
+
+            this._doublerInfoLabel = this.generateLabel("Earning bubbles too slowly?\nBuy the Bubble Doubler for doubled bubble rate!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+
+            if(NJ.stats.isDoubleEnabled())
+                this._enableDoubler();
+
+            var buyDoublerButton = new NJMenuButton(cc.size(NJ.calculateScreenDimensionFromRatio(0.12), NJ.calculateScreenDimensionFromRatio(0.12)), onBuyDoubler.bind(this), this);
+            buyDoublerButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
+            buyDoublerButton.setImageRes(res.skipImage);
+
+            this._doublerMenu.addChild(this._doublerInfoLabel);
+            this._doublerMenu.addChild(buyDoublerButton);
+
+            this._doublerMenu.alignItemsVerticallyWithPadding(10);
+
+            this._contentScrollView.addChild(this._doublerMenu);
         },
 
         _initToolUI: function(shouldShowBackButton) {
@@ -342,12 +403,12 @@ var ShopMenuLayer = (function() {
         },
 
         _initDevMode: function() {
-            this._coinsInfoLabel.setLabelTitle("Super secret dev mode!");
+            this._currencyInfoLabel.setLabelTitle("Super secret dev mode!");
         },
 
         devModeLog: function(logStr) {
             if(_devCount >= 7) {
-                this._coinsInfoLabel.setLabelTitle(logStr);
+                this._currencyInfoLabel.setLabelTitle(logStr);
             }
         },
 
@@ -369,7 +430,7 @@ var ShopMenuLayer = (function() {
         // transition out
         leave: function(callback) {
             var headerSize = this._headerMenu.getContentSize();
-            var contentSize = this._pointsMenu.getContentSize();
+            var contentSize = this._bubblesMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
@@ -398,6 +459,14 @@ var ShopMenuLayer = (function() {
 ////////////////
 // UI Helpers //
 ////////////////
+
+        _enableDoubler: function() {
+            this._doublerInfoLabel.setLabelTitle("Bubble Doubler enabled.\nTwice the rate of earning bubbles!");
+        },
+
+        updateCurrencyLabel: function() {
+            this._currencyLabel.setLabelTitle("Bubbles: " + NJ.stats.getCurrency());
+        },
 
         // generate dividers on headers and toolbars
         _generateBaseDividers: function() {
