@@ -168,35 +168,17 @@ NJ.themes = (function() {
                 cc.color("A6AD3C"),
 
 
-
-                /*
-                // faded blue
-                cc.color("#80BCA3"),
-
-                // ash
-                cc.color("#95877E"),
-
-                // dying rose
-                cc.color("E28B7D"),
-
-                // purple
-                cc.color("7c2130"),
-*/
-
-
-
-
             ]
         },
 
-        // pruple theme
+        // prince theme
         {
             themeName: "Prince",
             themeCost: 25000,
             isPurchased: false,
 
             // evening cloud
-            backgroundColor: cc.color("#2E2633"),
+            //backgroundColor: cc.color("#2E2633"),
 
             // more lighter grayer
             backgroundColor: cc.color("#635063"),
@@ -218,7 +200,7 @@ NJ.themes = (function() {
             blockColors: [
 
                 // light pruple?!
-                cc.color("#B70FD1"),
+                cc.color("#800080"),
 
                 // rich maroon
                 cc.color("#99173C"),
@@ -241,13 +223,75 @@ NJ.themes = (function() {
                 // chicken pox
                 cc.color("#FA023C"),
 
-
                 // dying rose
                 cc.color("E28B7D"),
 
 
             ]
         },
+
+        /*
+
+        // pastel theme
+        {
+             themeName: "Pastels",
+             themeCost: 25000,
+             isPurchased: false,
+
+             // evening cloud
+             backgroundColor: cc.color("#2E2633"),
+
+             // more lighter grayer
+             //backgroundColor: cc.color("#635063"),
+
+             //pale yellow???
+             //backgroundColor: cc.color("#FFFDAA"),
+
+             levelColor: cc.color("#6C6760"),
+
+             defaultLabelColor: cc.color("#FFFDAA"),
+             specialLabelColor: cc.color("#33A5BA"),
+             specialLabelColor2: cc.color("#00A896"),
+             defaultButtonColor: cc.color("#6C6760"),
+
+             shadowColor: cc.color("#FFFDAA"),
+
+             dividerColor: cc.color("#FFFDAA"),
+
+             blockColors: [
+
+             // faded green
+             cc.color("#A4D05F"),
+
+             // above the world
+             cc.color("#3FB8AF"),
+
+             // high heel
+             cc.color("#FF3D7F"),
+
+             // some kinda yellow w/ some orange shit
+             cc.color("#FFBE40"),
+
+             // periwinkle
+             cc.color("#906CD7"),
+
+             // salmon
+             cc.color("#F45639"),
+
+             // ash
+             cc.color("#95877E"),
+
+             // purple
+             cc.color("#D662A8"),
+
+             // GREEN
+             cc.color("#57BA50")
+             ]
+         },
+
+
+ */
+
 
     ];
 
