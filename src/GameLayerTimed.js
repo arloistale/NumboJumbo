@@ -213,10 +213,6 @@ var TimedGameLayer = BaseGameLayer.extend({
 
 		// Allow controller to look for new hint.
 		this._numboController.resetKnownPath();
-		this.jiggleCount = 0;
-
-		// schedule a hint
-		//this.schedule(this.jiggleHintBlocks, 7);
 
 		var comboLength = (selectedBlocks.concat(bonusBlocks)).length;
 		if(!comboLength)

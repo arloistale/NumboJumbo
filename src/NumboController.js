@@ -322,7 +322,7 @@ var NumboController = (function() {
 		// excluding the block at that location and any selected blocks.
 		// should run in O(S*R*C) time, where and S is the number of selected blocks,
 		// and R and C are the maximum number of rows and cols (so R*C is the board size).
-		spiralSearch: function(col, row, count){
+		spiralSearch: function(col, row, count) {
 			// begin by traversing to the right
 			var blocks = [];
 

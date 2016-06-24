@@ -22,8 +22,7 @@ var TutorialLayer = (function() {
             practice1: 2,
             teach2: 3,
             practice2: 4,
-            wombo: 5,
-            end: 6
+            end: 5
         },
 
         // UI Data
@@ -150,25 +149,6 @@ var TutorialLayer = (function() {
                         that.runAction(cc.sequence(cc.delayTime(4.75), cc.callFunc(function() {
                             that._helperMenuItem.setChildrenOpacity(0);
                             that._helperMenuItem.runActionOnChildren(cc.sequence(cc.fadeTo(0.25, 255)));
-                        })));
-
-                        break;
-
-                    case slides.wombo:
-
-                        that._titleMenuItem.setLabelTitle("Beautiful.");
-                        that._helperMenuItem.setLabelTitle("Longer combos clear even more!");
-
-                        that._titleMenuItem.setChildrenOpacity(0);
-                        that._helperMenuItem.setChildrenOpacity(0);
-
-                        that._menu.alignItemsVerticallyWithPadding(10);
-
-                        that._titleMenuItem.runActionOnChildren(cc.sequence(cc.delayTime(1), cc.fadeTo(0.25, 255), cc.delayTime(2), cc.fadeTo(0.25, 0)));
-
-                        that.runAction(cc.sequence(cc.delayTime(4.75), cc.callFunc(function() {
-                            that._helperMenuItem.setChildrenOpacity(0);
-                            that._helperMenuItem.runActionOnChildren(cc.fadeTo(0.25, 255));
                         })));
 
                         break;

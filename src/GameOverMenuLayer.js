@@ -48,7 +48,7 @@ var GameOverMenuLayer = (function() {
 
         cc.eventManager.pauseTarget(this, true);
         this.leave(function() {
-            that._shopMenuLayer = new ShopMenuLayer();
+            that._shopMenuLayer = new ShopMenuLayer(true);
             that._shopMenuLayer.setOnCloseCallback(function() {
                 cc.eventManager.resumeTarget(that, true);
                 that.removeChild(that._shopMenuLayer);
@@ -73,6 +73,8 @@ var GameOverMenuLayer = (function() {
         _scoreLabel: null,
         _bestLabel: null,
         _currencyLabel: null,
+
+        _promoButton: null,
 
         // Callbacks Data
         onRetryCallback: null,
@@ -238,26 +240,26 @@ var GameOverMenuLayer = (function() {
                 y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - this._statsMenu.getContentSize().height - promoSize.height / 2
             });
 
-            var promoLabel = this.generateLabel("Enjoy? Like!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            var promoLabel = this.generateLabel("Review Numbo Jumbo", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
 
             var buttonSize = cc.size(promoSize.height / 2.5, promoSize.height / 2.5);
 
-            var promoButton = new NJMenuButton(buttonSize, function() {
+            this._promoButton = new NJMenuButton(buttonSize, function() {
                 NJ.settings.hasInteractedReview = true;
 
                 NJ.audio.playSound(res.clickSound);
                 NJ.openAppDetails();
             }, this);
-            promoButton.setBackgroundColor(NJ.colors.facebookColor);
-            promoButton.setImageRes(res.promoImage);
-            promoButton.runActionOnChildren(cc.sequence(cc.scaleBy(0.5, 1.25, 1.25).easing(cc.easeQuadraticActionInOut()), cc.scaleBy(0.5, 0.8, 0.8).easing(cc.easeQuadraticActionInOut())).repeatForever());
-            promoButton.attr({
+            this._promoButton.setBackgroundColor(NJ.themes.blockColors[1]);
+            this._promoButton.setImageRes(res.rateImage);
+            this._promoButton.runActionOnChildren(cc.sequence(cc.scaleBy(0.5, 1.25, 1.25).easing(cc.easeQuadraticActionInOut()), cc.scaleBy(0.5, 0.8, 0.8).easing(cc.easeQuadraticActionInOut())).repeatForever());
+            this._promoButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
 
             this._promoMenu.addChild(promoLabel);
-            this._promoMenu.addChild(promoButton);
+            this._promoMenu.addChild(this._promoButton);
 
             this._promoMenu.alignItemsVerticallyWithPadding(10);
 
@@ -445,6 +447,8 @@ var GameOverMenuLayer = (function() {
                     }
                 }
             }
+
+            this._promoButton.setBackgroundColor(NJ.themes.blockColors[1]);
 
             this._scoreLabel.setLabelColor(NJ.themes.specialLabelColor);
             this._bestLabel.setLabelColor(NJ.themes.specialLabelColor);

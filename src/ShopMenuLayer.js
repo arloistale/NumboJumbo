@@ -108,7 +108,7 @@ var ShopMenuLayer = (function() {
 // Initialization //
 ////////////////////
 
-        ctor: function() {
+        ctor: function(shouldShowBackButton) {
             this._super();
 
             this.init(NJ.themes.backgroundColor);
@@ -119,7 +119,7 @@ var ShopMenuLayer = (function() {
             this._initContentUI();
             this._initPointsUI();
             this._initThemesUI();
-            this._initToolUI();
+            this._initToolUI(shouldShowBackButton);
 
             this._generateBaseDividers();
 
@@ -309,7 +309,7 @@ var ShopMenuLayer = (function() {
             this._contentScrollView.addChild(this._themeMenu);
         },
 
-        _initToolUI: function() {
+        _initToolUI: function(shouldShowBackButton) {
 
             this._toolMenu = new cc.Menu();
             this._toolMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.toolbar));
@@ -329,7 +329,7 @@ var ShopMenuLayer = (function() {
             var buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
 
             var backButton = new NJMenuButton(buttonSize, onBack.bind(this), this);
-            backButton.setImageRes(res.homeImage);
+            backButton.setImageRes(shouldShowBackButton ? res.backImage : res.homeImage);
 
             backButton.attr({
                 anchorX: 0.5,

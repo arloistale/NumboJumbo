@@ -50,6 +50,7 @@ var res = {
     promoImage: resRoot + "Images/ic_thumb/ic_thumb_2x.png",
     shopImage: resRoot + "Images/ic_shop/ic_shop_2x.png",
     plusImage: resRoot + "Images/ic_plus/ic_plus_2x.png",
+    rateImage: resRoot + "Images/ic_rate/ic_rate_2x.png",
 
     playImage: resRoot + "Images/ic_play/ic_play_2x.png",
     timedImage: resRoot + "Images/ic_timed.png",

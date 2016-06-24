@@ -65,10 +65,6 @@ var BaseGameLayer = (function() {
 
 		_blockSize: null,
 
-		// Hint Data
-		// Number of times a hint is jiggled.
-		_jiggleCount: 0,
-
 		// UI Data
 		_prepLayer: null,
 
@@ -582,7 +578,6 @@ var BaseGameLayer = (function() {
 			this.jiggleCount++;
 			if(this.jiggleCount < 2 || NJ.gameState.getBlocksCleared() == 0)
 				this.schedule(this.jiggleHintBlocks, 5);
-
 		},
 
 		///////////////////////
@@ -754,9 +749,6 @@ var BaseGameLayer = (function() {
 					this.redrawSelectedLines(selectedBlocks);
 				}
 			}
-
-			// Prevent any hint during a touch.
-			this.unschedule(this.jiggleHintBlocks);
 		},
 
 		// On touch moved, selects additional blocks as the touch is held and moved using raycasting
