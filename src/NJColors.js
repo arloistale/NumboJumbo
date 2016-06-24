@@ -62,6 +62,7 @@ NJ.themes = (function() {
                 cc.color("#9c3783")
             ]
         },
+
         // dark theme
         {
             themeName: "Dark",
@@ -117,7 +118,14 @@ NJ.themes = (function() {
             themeCost: 25000,
             isPurchased: false,
 
+            // lighter brown
             backgroundColor: cc.color("#865810"),
+
+            // darker brown
+            //backgroundColor: cc.color("5a3111"),
+
+            //light shrimpy salmon
+            //backgroundColor: cc.color("ffcba6"),
             levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#ffffff"),
@@ -130,34 +138,117 @@ NJ.themes = (function() {
             dividerColor: cc.color("#ffffff"),
 
             blockColors: [
-                // vomit green
-                cc.color("#4A5200"),
 
-                // old brick red
-                cc.color("#BB1414"),
 
-                // burnt orange
-                cc.color("#F1540F"),
+                // grey-blue            1
+                cc.color("5F715B"),
 
-                // gold
+                // gold                 2
                 cc.color("#E6A60F"),
 
+                // cayenne              3
+                cc.color("d55023"),
+
+                // faded purple         4
+                cc.color("957568"),
+
+                // vomit green          5
+                cc.color("#4A5200"),
+
+                // burnt orange         6
+                cc.color("#F1540F"),
+
+                //forest green          7
+                cc.color("3D5E29"),
+
+                // old brick red        8
+                cc.color("#BB1414"),
+
+                // chartreuse           9
+                cc.color("A6AD3C"),
+
+
+
+                /*
                 // faded blue
                 cc.color("#80BCA3"),
 
                 // ash
                 cc.color("#95877E"),
 
-                // cheutreuse
-                cc.color("A6AD3C"),
-
                 // dying rose
-                cc.color("E28B7D")
+                cc.color("E28B7D"),
+
+                // purple
+                cc.color("7c2130"),
+*/
+
 
 
 
             ]
-        }
+        },
+
+        // pruple theme
+        {
+            themeName: "Prince",
+            themeCost: 25000,
+            isPurchased: false,
+
+            // evening cloud
+            backgroundColor: cc.color("#2E2633"),
+
+            // more lighter grayer
+            backgroundColor: cc.color("#635063"),
+
+            //pale yellow???
+            //backgroundColor: cc.color("#FFFDAA"),
+
+            levelColor: cc.color("#6C6760"),
+
+            defaultLabelColor: cc.color("#FFFDAA"),
+            specialLabelColor: cc.color("#33A5BA"),
+            specialLabelColor2: cc.color("#00A896"),
+            defaultButtonColor: cc.color("#6C6760"),
+
+            shadowColor: cc.color("#FFFDAA"),
+
+            dividerColor: cc.color("#FFFDAA"),
+
+            blockColors: [
+
+                // light pruple?!
+                cc.color("#B70FD1"),
+
+                // rich maroon
+                cc.color("#99173C"),
+
+                // fricking pink!
+                cc.color("#DE0569"),
+
+                // favorite jeans
+                cc.color("#424254"),
+
+                // amaranth
+                cc.color("#CC2A41"),
+
+                // some kinda damn purple, what do you want from me
+                cc.color("#480048"),
+
+                // bitch goddess
+                cc.color("#601848"),
+
+                // chicken pox
+                cc.color("#FA023C"),
+
+
+                // dying rose
+                cc.color("E28B7D"),
+
+
+            ]
+        },
+
     ];
 
     var _lightTheme = data[0];
