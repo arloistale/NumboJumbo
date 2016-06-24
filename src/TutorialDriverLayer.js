@@ -61,11 +61,6 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		this._backgroundTrack = res.trackDauntinglyMellow;
 	},
 
-	// overload the divider drawing function so that we don't get lines in the tutorial
-	_drawDividersGeometry: function(){
-		cc.log(":)");
-	},
-
 	leave: function(callback) {
 		this._numboController.killAllBlocks();
 		this._tutorialLayer.fadeOutSlide();

@@ -14,7 +14,7 @@ NJ.uiSizes = {
 
     // shop elements
     bubblesArea: 0.24,
-    themesArea: 1,
+    themesArea: 0.85,
     doublerArea: 0.24,
 
     // bar buttons are calculated based on their bar content sizes

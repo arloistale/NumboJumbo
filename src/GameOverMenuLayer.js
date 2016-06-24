@@ -55,6 +55,8 @@ var GameOverMenuLayer = (function() {
 
                 that.enter();
 
+                that._howManyBubblesLabel.setLabelTitle(NJ.stats.getCurrency());
+
                 that._updateTheme();
             });
 
@@ -74,6 +76,7 @@ var GameOverMenuLayer = (function() {
         _scoreLabel: null,
         _bestLabel: null,
         _currencyLabel: null,
+        _howManyBubblesLabel: null,
 
         _promoButton: null,
 
@@ -153,7 +156,7 @@ var GameOverMenuLayer = (function() {
             this._statsMenu = new cc.Menu();
 
             this._statsMenu.setContentSize(cc.size(cc.visibleRect.width,
-                (1 - NJ.uiSizes.headerBar - (!NJ.settings.hasInteractedReview ? NJ.uiSizes.promoArea : 0) - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+                (1 - NJ.uiSizes.headerBar - (!NJ.settings.hasInteractedReview ? NJ.uiSizes.promoArea : 0) - NJ.uiSizes.shopArea - NJ.uiSizes.toolbar) * cc.visibleRect.height));
 
             var statsSize = this._statsMenu.getContentSize();
 
@@ -241,10 +244,10 @@ var GameOverMenuLayer = (function() {
 
             var bubblesLabel = this.generateLabel("Bubbles", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
 
-            var howManyBubblesLabel = this.generateLabel(NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            this._howManyBubblesLabel = this.generateLabel(NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header), NJ.themes.specialLabelColor);
 
             this._shopMenu.addChild(bubblesLabel);
-            this._shopMenu.addChild(howManyBubblesLabel);
+            this._shopMenu.addChild(this._howManyBubblesLabel);
 
             this._shopMenu.alignItemsVerticallyWithPadding(10);
 
@@ -360,9 +363,9 @@ var GameOverMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            this._toolMenu.addChild(menuButton);
-            this._toolMenu.addChild(retryButton);
             this._toolMenu.addChild(shopButton);
+            this._toolMenu.addChild(retryButton);
+            this._toolMenu.addChild(menuButton);
 
             this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
 
@@ -381,6 +384,8 @@ var GameOverMenuLayer = (function() {
 
             this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._statsMenu.getPositionY())).easing(easing));
 
+            this._shopMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._shopMenu.getPositionY())).easing(easing));
+
             if(this._promoMenu)
                 this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._promoMenu.getPositionY())).easing(easing));
         },
@@ -389,6 +394,7 @@ var GameOverMenuLayer = (function() {
         leave: function(callback) {
             var headerSize = this._headerMenu.getContentSize();
             var statsSize = this._statsMenu.getContentSize();
+            var shopSize = this._shopMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
@@ -397,6 +403,8 @@ var GameOverMenuLayer = (function() {
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
             this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - statsSize.width, this._statsMenu.getPositionY())).easing(easing));
+
+            this._shopMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - shopSize.width, this._shopMenu.getPositionY())).easing(easing));
 
             if(this._promoMenu)
                 this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x + this._promoMenu.getContentSize().width, this._promoMenu.getPositionY())).easing(easing));
@@ -495,6 +503,9 @@ var GameOverMenuLayer = (function() {
 
             if(this._bestLabel)
                 this._bestLabel.setLabelColor(NJ.themes.specialLabelColor);
+
+            if(this._howManyBubblesLabel)
+                this._howManyBubblesLabel.setLabelColor(NJ.themes.specialLabelColor);
         }
     });
 }());

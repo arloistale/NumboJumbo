@@ -28,6 +28,8 @@ NJ.purchases = (function() {
             doubler: "doubler"
         },
 
+        productsData: {},
+
         // Initialization //
 
         init: function () {
@@ -42,21 +44,17 @@ NJ.purchases = (function() {
         // instead use the individual setCallback functions to provide callbacks for IAP events
         _initListener: function() {
             if(cc.sys.isNative) {
+                var that = this;
                 sdkbox.IAP.setListener({
                     onSuccess: function (product) {
-                        cc.log("Transaction Success: " + product);
                         if(onSuccessCallback)
                             onSuccessCallback(product);
                     },
                     onFailure: function (product, message) {
-                        cc.log("Transaction Failure: " + message);
-
                         if(onFailureCallback)
                             onFailureCallback();
                     },
                     onCanceled: function (product) {
-                        cc.log("Transaction Canceled");
-
                         if(onCanceledCallback)
                             onCanceledCallback(product, "Canceled");
                     },
@@ -67,22 +65,24 @@ NJ.purchases = (function() {
                             onRestoreCallback();
                     },
                     onProductRequestSuccess: function (products) {
-                        cc.log("product request success!");
+                        that.productsData = {};
 
+                        var product;
                         for(var i = 0; i < products.length; ++i) {
-                            cc.log(products[i]);
-                            for(var key in products[i]) {
-                                if(products[i].hasOwnProperty(key))
-                                    cc.log(products[i][key]);
-                            }
+                            product = products[i];
+
+                            if(!product || !product.name || !product.price)
+                                continue;
+
+                            that.productsData[product.name] = {
+                                price: product.price
+                            };
                         }
 
                         if(onProductRequestSuccessCallback)
                             onProductRequestSuccessCallback(products);
                     },
                     onProductRequestFailure: function (message) {
-                        cc.log("Product Request Failure: " + message);
-
                         if(onProductRequestFailureCallback)
                             onProductRequestFailureCallback(message);
                     }
@@ -136,6 +136,14 @@ NJ.purchases = (function() {
                 this.setCanceledCallback(callback);
                 this.setFailureCallback(callback);
             }
+        },
+
+        getProducts: function() {
+            return this.productsData;
+        },
+
+        getProductByName: function(name) {
+            return this.productsData[name];
         }
     }
 }());

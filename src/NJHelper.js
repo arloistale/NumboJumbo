@@ -59,7 +59,7 @@ NJ.openAppDetails = function() {
             url = "market://details?id=com.numbo.jumbo";
             break;
         case cc.sys.OS_IOS:
-            url = "http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1100069987&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8";
+            url = "https://itunes.apple.com/us/app/numbo-jumbo-game-about-adding/id1100069987?mt=8";
             break;
     }
 

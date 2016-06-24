@@ -37,8 +37,6 @@ NJ.stats = (function() {
             numGamesCompleted = parseInt(cc.sys.localStorage.getItem('numGamesCompleted')) || 0;
 
             isDoublerEnabled = (cc.sys.localStorage.getItem('isDoublerEnabled') || 'false') == 'true';
-            cc.log(cc.sys.localStorage.getItem('isDoublerEnabled'));
-            cc.log(isDoublerEnabled);
         },
 
         save: function() {

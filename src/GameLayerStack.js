@@ -18,7 +18,7 @@ var StackGameLayer = BaseGameLayer.extend({
     ],
 
     // initial # of blocks dropped every turn (increases at each level)
-    _blocksToDrop: 3,
+    _blocksToDrop: 4,
     _initialSpawnAmount: null,
 
 

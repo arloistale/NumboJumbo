@@ -253,7 +253,8 @@ var ShopMenuLayer = (function() {
             //buyCoinsButton.offsetLabel(cc.p(coinSize.height * 1.5, 0));
 
             // generate sounds toggle
-            this._currencyInfoLabel = this.generateLabel("Buy or earn bubbles for pretty themes!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            var coinProduct = NJ.purchases.getProductByName("coin1");
+            this._currencyInfoLabel = this.generateLabel("25000 Bubbles - " + (coinProduct ? coinProduct.price : "?"), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
 
             this._bubblesMenu.addChild(this._currencyLabel);
             this._bubblesMenu.addChild(buyCoinsButton);
@@ -314,7 +315,7 @@ var ShopMenuLayer = (function() {
                     themeButton.setTag(666);
                     var labelStr = themes[i].themeName + " - ";
                     if(!themes[i].isPurchased) {
-                        labelStr += themes[i].themeCost + "";
+                        labelStr += themes[i].themeCost + " Bubbles";
                     } else {
                         labelStr += isCurrentTheme ? "Active" : "Owned";
                     }
@@ -336,6 +337,19 @@ var ShopMenuLayer = (function() {
 
             this._themeMenu.alignItemsVerticallyWithPadding(cc.visibleRect.height * 0.07);
 
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+
+            var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            divider.setTag(444);
+            divider.setBackgroundImage(res.alertImage);
+            divider.setBackgroundColor(NJ.themes.defaultLabelColor);
+            divider.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: -this._themeMenu.getContentSize().height / 2
+            });
+            this._themeMenu.addChild(divider);
+
             this._contentScrollView.addChild(this._themeMenu);
         },
 
@@ -352,9 +366,6 @@ var ShopMenuLayer = (function() {
 
             this._doublerInfoLabel = this.generateLabel("Earning bubbles too slowly?\nBuy the Bubble Doubler for doubled bubble rate!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
 
-            if(NJ.stats.isDoubleEnabled())
-                this._enableDoubler();
-
             var buyDoublerButton = new NJMenuButton(cc.size(NJ.calculateScreenDimensionFromRatio(0.12), NJ.calculateScreenDimensionFromRatio(0.12)), onBuyDoubler.bind(this), this);
             buyDoublerButton.attr({
                 anchorX: 0.5,
@@ -362,8 +373,17 @@ var ShopMenuLayer = (function() {
             });
             buyDoublerButton.setImageRes(res.skipImage);
 
+            var product = NJ.purchases.getProductByName("doubler");
+            var priceLabel = this.generateLabel("Bubble Doubler - " + (product ? product.price : "?"), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+
             this._doublerMenu.addChild(this._doublerInfoLabel);
             this._doublerMenu.addChild(buyDoublerButton);
+
+            if(NJ.stats.isDoubleEnabled())
+                this._enableDoubler();
+            else {
+                this._doublerMenu.addChild(priceLabel);
+            }
 
             this._doublerMenu.alignItemsVerticallyWithPadding(10);
 
@@ -546,7 +566,7 @@ var ShopMenuLayer = (function() {
 
                 var labelStr = themes[i].themeName + " - ";
                 if(!themes[i].isPurchased) {
-                    labelStr += themes[i].themeCost + "";
+                    labelStr += themes[i].themeCost + " Bubbles";
                 } else {
                     labelStr += isCurrentTheme ? "Active" : "Owned";
                 }
