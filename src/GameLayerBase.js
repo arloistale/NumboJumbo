@@ -91,6 +91,8 @@ var BaseGameLayer = (function() {
 		// Selection Data
 		_lastTouchPosition: null,
 
+		_touchID: null,
+
 		// amount of time to wait before destroying bonus blocks
 		_killDelay: null,
 		// amount of time to wait before spawning blocks in turn-based moves
@@ -142,6 +144,8 @@ var BaseGameLayer = (function() {
 		_reset: function() {
 			var that = this;
 			NJ.gameState.init();
+
+			this._touchID = null;
 
 			this.unscheduleAllCallbacks();
 			this.stopAllActions();
@@ -199,6 +203,8 @@ var BaseGameLayer = (function() {
 		_initInput: function() {
 			cc.eventManager.removeAllListeners();
 
+            var that = this;
+
 			if ('mouse' in cc.sys.capabilities) {
 				cc.eventManager.addListener({
 					event: cc.EventListener.MOUSE,
@@ -235,21 +241,37 @@ var BaseGameLayer = (function() {
 					event: cc.EventListener.TOUCH_ONE_BY_ONE,
 					swallowTouches: true,
 					onTouchBegan: function(touch, event) {
-						event.getCurrentTarget().onTouchBegan(touch.getLocation());
-						return true;
+                        var touchID = touch.getID();
+                        cc.log(touchID);
+                        if(!touchID) {
+                            that._touchID = touchID;
+                            event.getCurrentTarget().onTouchBegan(touch.getLocation());
+                        }
+
+                        return true;
 					},
 					onTouchMoved: function(touch, event) {
-						event.getCurrentTarget().onTouchMoved(touch.getLocation());
+                        var touchID = touch.getID();
+                        cc.log(touchID);
+
+                        if(that._touchID == touchID) {
+                            event.getCurrentTarget().onTouchMoved(touch.getLocation());
+                        }
+
 						return true;
 					},
 					onTouchEnded: function(touch, event) {
-						event.getCurrentTarget().onTouchEnded(touch.getLocation());
+                        var touchID = touch.getID();
+
+                        if(that._touchID == touchID) {
+                            that._touchID = null;
+                            event.getCurrentTarget().onTouchEnded(touch.getLocation());
+                        }
+
 						return true;
 					}
 				}, this);
 			}
-
-			var that = this;
 
 			cc.eventManager.addListener({
 				event: cc.EventListener.KEYBOARD,

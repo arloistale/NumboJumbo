@@ -33,7 +33,7 @@
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "Apple_Icon_PinkBlue_57x57.png",
+      "filename" : "Icon.png",
       "scale" : "1x"
     },
     {
@@ -93,7 +93,7 @@
     {
       "size" : "72x72",
       "idiom" : "ipad",
-      "filename" : "Apple_Icon_PinkBlue_72x72.png",
+      "filename" : "Icon-72.png",
       "scale" : "1x"
     },
     {
