@@ -117,7 +117,14 @@ NJ.themes = (function() {
             themeCost: 25000,
             isPurchased: false,
 
+            // lighter brown
             backgroundColor: cc.color("#865810"),
+
+            // darker brown
+            //backgroundColor: cc.color("5a3111"),
+
+            //light shrimpy salmon
+            //backgroundColor: cc.color("ffcba6"),
             levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#ffffff"),
@@ -130,29 +137,51 @@ NJ.themes = (function() {
             dividerColor: cc.color("#ffffff"),
 
             blockColors: [
-                // vomit green
-                cc.color("#4A5200"),
 
-                // old brick red
-                cc.color("#BB1414"),
 
-                // burnt orange
-                cc.color("#F1540F"),
+                // grey-blue            1
+                cc.color("5F715B"),
 
-                // gold
+                // gold                 2
                 cc.color("#E6A60F"),
 
+                // cayenne              3
+                cc.color("d55023"),
+
+                // faded purple         4
+                cc.color("957568"),
+
+                // vomit green          5
+                cc.color("#4A5200"),
+
+                // burnt orange         6
+                cc.color("#F1540F"),
+
+                //forest green          7
+                cc.color("3D5E29"),
+
+                // old brick red        8
+                cc.color("#BB1414"),
+
+                // chartreuse           9
+                cc.color("A6AD3C"),
+
+
+
+                /*
                 // faded blue
                 cc.color("#80BCA3"),
 
                 // ash
                 cc.color("#95877E"),
 
-                // cheutreuse
-                cc.color("A6AD3C"),
-
                 // dying rose
-                cc.color("E28B7D")
+                cc.color("E28B7D"),
+
+                // purple
+                cc.color("7c2130"),
+*/
+
 
 
 
