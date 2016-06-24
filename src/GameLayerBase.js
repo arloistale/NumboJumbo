@@ -91,7 +91,7 @@ var BaseGameLayer = (function() {
 		// Selection Data
 		_lastTouchPosition: null,
 
-		_touchID: null,
+		_touchID: -1,
 
 		// amount of time to wait before destroying bonus blocks
 		_killDelay: null,
@@ -145,7 +145,7 @@ var BaseGameLayer = (function() {
 			var that = this;
 			NJ.gameState.init();
 
-			this._touchID = null;
+			this._touchID = -1;
 
 			this.unscheduleAllCallbacks();
 			this.stopAllActions();
@@ -241,30 +241,21 @@ var BaseGameLayer = (function() {
 					event: cc.EventListener.TOUCH_ONE_BY_ONE,
 					swallowTouches: true,
 					onTouchBegan: function(touch, event) {
-                        var touchID = touch.getID();
-                        cc.log(touchID);
-                        if(!touchID) {
-                            that._touchID = touchID;
+                        if(touch.getID() == 0) {
                             event.getCurrentTarget().onTouchBegan(touch.getLocation());
                         }
 
                         return true;
 					},
 					onTouchMoved: function(touch, event) {
-                        var touchID = touch.getID();
-                        cc.log(touchID);
-
-                        if(that._touchID == touchID) {
+                        if(touch.getID() == 0) {
                             event.getCurrentTarget().onTouchMoved(touch.getLocation());
                         }
 
 						return true;
 					},
 					onTouchEnded: function(touch, event) {
-                        var touchID = touch.getID();
-
-                        if(that._touchID == touchID) {
-                            that._touchID = null;
+                        if(touch.getID() == 0) {
                             event.getCurrentTarget().onTouchEnded(touch.getLocation());
                         }
 
