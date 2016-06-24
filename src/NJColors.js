@@ -109,6 +109,54 @@ NJ.themes = (function() {
                 // warm purple
                 cc.color("#C658AC")
             ]
+        },
+
+        // fall theme
+        {
+            themeName: "Fall",
+            themeCost: 25000,
+            isPurchased: false,
+
+            backgroundColor: cc.color("#865810"),
+            levelColor: cc.color("#6C6760"),
+
+            defaultLabelColor: cc.color("#ffffff"),
+            specialLabelColor: cc.color("#33A5BA"),
+            specialLabelColor2: cc.color("#00A896"),
+            defaultButtonColor: cc.color("#6C6760"),
+
+            shadowColor: cc.color("#ffffff"),
+
+            dividerColor: cc.color("#ffffff"),
+
+            blockColors: [
+                // vomit green
+                cc.color("#4A5200"),
+
+                // old brick red
+                cc.color("#BB1414"),
+
+                // burnt orange
+                cc.color("#F1540F"),
+
+                // gold
+                cc.color("#E6A60F"),
+
+                // faded blue
+                cc.color("#80BCA3"),
+
+                // ash
+                cc.color("#95877E"),
+
+                // cheutreuse
+                cc.color("A6AD3C"),
+
+                // dying rose
+                cc.color("E28B7D")
+
+
+
+            ]
         }
     ];
 
