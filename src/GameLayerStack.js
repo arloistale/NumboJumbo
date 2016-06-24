@@ -18,7 +18,7 @@ var StackGameLayer = BaseGameLayer.extend({
     ],
 
     // initial # of blocks dropped every turn (increases at each level)
-    _blocksToDrop: 4,
+    _blocksToDrop: 3,
     _initialSpawnAmount: null,
 
 
@@ -57,7 +57,7 @@ var StackGameLayer = BaseGameLayer.extend({
                         that._isInGame = true;
 
                         // fill the board with blocks initially
-                        that.spawnBlocksAfterDelay(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 3), 0.5);
+                        that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 3));
                         NJ.audio.playSound(res.plipSound);
                     })));
                 });
@@ -204,7 +204,13 @@ var StackGameLayer = BaseGameLayer.extend({
 
         var numBlocksToSpawn = Math.min(this._blocksToDrop, NJ.NUM_COLS * NJ.NUM_ROWS - this._numboController.getNumBlocks());
 
-        this.spawnBlocksAfterDelay(numBlocksToSpawn, this._spawnDelay);
+        this.spawnDropRandomBlocks(numBlocksToSpawn);
+
+        while (this._numboController.findHint().length == 0){
+            cc.log("oh shit, still have no moves. better scramble the board i guess!");
+            this.scrambleBoard();
+        }
+
         this.checkGameOver();
     }
 });
