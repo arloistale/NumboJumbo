@@ -8,7 +8,7 @@ var NJ = NJ || {};
 NJ.uiSizes = {
     // elements
     headerBar: 0.12,
-    promoArea: 0.24,
+    promoArea: 0.25,
     toolbar: 0.12,
 
     // shop elements
