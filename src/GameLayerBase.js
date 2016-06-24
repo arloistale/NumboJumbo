@@ -548,6 +548,30 @@ var BaseGameLayer = (function() {
 			this.moveBlockIntoPlace(spawnBlock);
 		},
 
+		scrambleBoard: function(){
+			var blockList = this._numboController.getBlocksList();
+			var positionList = [];
+			var numBlocks = blockList.length;
+
+			for (var i = 0; i < blockList.length; ++i){
+				var block = blockList[i];
+				positionList.push(block.getPosition());
+			}
+
+			this._numboController.removeAllBlocks();
+			positionList = NJ.shuffleArray(positionList);
+
+			for (var i = 0; i < positionList.length; ++i) {
+				var block = NumboBlock.recreate(this._blockSize);
+				this._numboController.spawnDropRandomBlock(block);
+				this._instantiateBlock(block);
+				block.setPosition(positionList[i]);
+				this.moveBlockIntoPlace(block);
+			}
+
+		},
+
+
 		// spawns a specified amount of blocks randomly
 		// plays the drop random blocks sound
 		spawnDropRandomBlocks: function(amount) {
@@ -980,11 +1004,6 @@ var BaseGameLayer = (function() {
 				}
 			}
 
-			/*
-			if (that._numboController.findHint().length == 0){
-				//cc.log("oh shit, still have no moves. keep spawning more i guess!");
-				that.spawnBlocksAfterDelay(1, 0, callback);
-			}*/
 
 			if (that.callback) {
 				callback();

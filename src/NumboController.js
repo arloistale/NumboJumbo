@@ -448,6 +448,8 @@ var NumboController = (function() {
             this._knownPath = [];
         },
 
+
+
 		/**
 		 * Meander search generates a path randomly until the criteria boolean expression is met.
 		 * @param col
@@ -522,6 +524,12 @@ var NumboController = (function() {
 			this._numboLevel.updateRowsAndColumns();
         },
 
+		removeAllBlocks: function(){
+			this._numboLevel.killAllBlocks();
+
+			this._numboLevel.updateRowsAndColumns();
+		},
+
 		/////////////
 		// GETTERS //
 		/////////////
@@ -577,7 +585,7 @@ var NumboController = (function() {
 		},
 
 		getBlocksList: function() {
-			return this._numboLevel.getCurrentBlocks();
+			return this._numboLevel.getBlocksAsList();
 		},
 
 		areAllBlocksTheSameValue: function() {

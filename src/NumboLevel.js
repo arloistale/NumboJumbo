@@ -92,6 +92,14 @@ var NumboLevel = (function() {
 			this._blocks[col][row] = null;
 		},
 
+		removeAllBlocks: function(){
+			var blockList = this.getBlocksAsList();
+			for (var i = 0; i < blockList.length; ++i){
+				var block = blockList[i];
+				this.removeBlock(block);
+			}
+		},
+
 		fadeKillBlock: function(block) {
 			cc.assert(block, "Invalid block");
 
@@ -127,6 +135,7 @@ var NumboLevel = (function() {
 				}
 			}
 		},
+
 
 		/////////////
 		// GETTERS //
@@ -204,8 +213,28 @@ var NumboLevel = (function() {
 			return weightObjects;
 		},
 
+		// returns a block if one exists at given coords
+		getBlock: function(col, row) {
+			cc.assert(0 <= col && col < NJ.NUM_COLS &&
+				0 <= row && NJ.NUM_ROWS,
+				"block coordinates out of bounds! (col: " + col + ", row: " + row + ")");
+
+			return row < this._blocks[col].length ? this._blocks[col][row] : null;
+		},
+
 		getBlocks: function() {
 			return this._blocks;
+		},
+
+		getBlocksAsList: function() {
+			var blockList = [];
+			for (var col = 0; col < NJ.NUM_COLS; ++col){
+				for (var row = 0; row < this._blocks[col].length; ++row){
+					var block = this.getBlock(col, row);
+					blockList.push(block);
+				}
+			}
+			return blockList;
 		},
 
 		// Returns the number of this._blocks in the level
@@ -310,26 +339,6 @@ var NumboLevel = (function() {
 			return neighbors;
 		},
 
-		// returns whether a block exists at given coords
-		getBlock: function(col, row) {
-			cc.assert(0 <= col && col < NJ.NUM_COLS &&
-				0 <= row && NJ.NUM_ROWS,
-				"block coordinates out of bounds! (col: " + col + ", row: " + row + ")");
-
-			return row < this._blocks[col].length ? this._blocks[col][row] : null;
-		},
-
-		getCurrentBlocks: function() {
-			var currentBlocks = [];
-			for(var i=0; i<NJ.NUM_COLS; i++) {
-				for(var j=0; j< NJ.NUM_ROWS; j++) {
-					var block = this.getBlock(i,j);
-					if(block != null)
-						currentBlocks.push(block);
-				}
-			}
-			return currentBlocks;
-		},
 
 		getNumBlocksInColumn: function(col) {
 			cc.assert(0 <= col && col < NJ.NUM_COLS,
