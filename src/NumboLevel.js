@@ -117,7 +117,7 @@ var NumboLevel = (function() {
 			this._blocks[col][row] = null;
 		},
 
-		killAllBlocks: function(clean) {
+		killAllBlocks: function() {
 			for (var col = 0; col < NJ.NUM_COLS; ++col){
 				for (var row = this._blocks[col].length - 1; row >= 0; --row){
 					var block = this._blocks[col][row];

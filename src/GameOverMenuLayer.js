@@ -132,7 +132,7 @@ var GameOverMenuLayer = (function() {
                 y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2
             });
 
-            var headerLabel = this.generateLabel(NJ.modeNames[this._modeKey].toUpperCase() + " SCORES", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
+            var headerLabel = this.generateLabel(NJ.modeNames[this._modeKey].toUpperCase(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
             headerLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
@@ -185,7 +185,7 @@ var GameOverMenuLayer = (function() {
 
                 var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
 
-                var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+                var divider = new NJMenuItem(cc.size(dividerHeight, this._statsMenu.getContentSize().height * 0.8));
                 divider.setTag(444);
                 divider.setBackgroundImage(res.alertImage);
                 divider.setBackgroundColor(NJ.themes.defaultLabelColor);
@@ -197,15 +197,29 @@ var GameOverMenuLayer = (function() {
                 bestTitleLabel = this.generateLabel("Best", header2Size);
                 this._bestLabel = this.generateLabel(NJ.stats.getHighscore(key), largeSize, NJ.themes.specialLabelColor);
 
+                var combinedHeight = bestTitleLabel.getContentSize().height + this._bestLabel.getContentSize().height;
+                var combinedOriginY = combinedHeight / 2;
+                //bestTitleLabel.setPositionY(this._statsMenu.getContentSize().height / 2 combinedHeight / 2);
+
+                var scoreX = -cc.visibleRect.width / 4;
+
+                scoreTitleLabel.setPosition(cc.p(scoreX, combinedOriginY - scoreTitleLabel.getContentSize().height / 2));
+                this._scoreLabel.setPosition(cc.p(scoreX, scoreTitleLabel.getPositionY() - scoreTitleLabel.getContentSize().height / 2 - this._bestLabel.getContentSize().height / 2));
+
+                scoreX += cc.visibleRect.width / 2;
+
+                bestTitleLabel.setPosition(cc.p(scoreX, combinedOriginY - bestTitleLabel.getContentSize().height / 2));
+                this._bestLabel.setPosition(cc.p(scoreX, this._scoreLabel.getPositionY()));
+
                 this._statsMenu.addChild(scoreTitleLabel);
                 this._statsMenu.addChild(this._scoreLabel);
 
-                //this._statsMenu.addChild(divider);
+                this._statsMenu.addChild(divider);
 
                 this._statsMenu.addChild(bestTitleLabel);
                 this._statsMenu.addChild(this._bestLabel);
 
-                this._statsMenu.alignItemsInColumns(2)
+                //this._statsMenu.alignItemsInRows(2, 2);
             }
             this.addChild(this._statsMenu, 100);
         },
