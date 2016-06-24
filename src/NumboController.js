@@ -317,6 +317,57 @@ var NumboController = (function() {
 
 		},
 
+		// count and a col/row coordinate pair.
+		// returns an array of <= COUNT blocks near that coordinate,
+		// excluding the block at that location and any selected blocks.
+		// should run in O(S*R*C) time, where and S is the number of selected blocks,
+		// and R and C are the maximum number of rows and cols (so R*C is the board size).
+		spiralSearch: function(col, row, count){
+			// begin by traversing to the right
+			var blocks = [];
+
+			// begin the search here
+			var colIndex = col;
+			var rowIndex = row;
+
+			// start searching in this direction
+			var colStep = 0;
+			var rowStep = 1;
+
+			var tries = 0;
+			while (blocks.length < count && tries < Math.pow((NJ.NUM_COLS + NJ.NUM_ROWS), 2) ) {
+				++tries;
+
+				if (0 <= colIndex && colIndex < NJ.NUM_COLS && 0 <= rowIndex && rowIndex < NJ.NUM_ROWS) {
+					var block = this._numboLevel.getBlock(colIndex, rowIndex);
+					if (block && this._selectedBlocks.indexOf(block) < 0) { // not already selected
+						blocks.push(block);
+					}
+				}
+
+				// distance from the starting point
+				colDistance = col - colIndex;
+				rowDistance = row - rowIndex;
+
+				// we hit a corner, change the step direction counter-clockwise
+				if ((colDistance) == (rowDistance) ||							// top-right or btm-left
+					(colDistance < 0) && (colDistance) == -(rowDistance) ||		// top-left
+					(colDistance > 0) && (colDistance) == 1 - (rowDistance)) {	// btm-right
+					var prevColStep = colStep;
+					var prevRowStep = rowStep;
+					colStep = -prevRowStep;
+					rowStep = prevColStep;
+				}
+
+				// step forward
+				colIndex += colStep;
+				rowIndex += rowStep;
+			}
+
+			return blocks;
+
+		},
+
 		findLocationAndValueForTwoNewBlocks: function (){
 			var valA = null;
 			var valB = null;
@@ -549,6 +600,17 @@ var NumboController = (function() {
 			return Math.max.apply(null, selectedNums);
 		},
 
+		getMaxSelectedBlock: function(){
+			var maxBlock = this._selectedBlocks[0];
+			for (var i = 1; i < this._selectedBlocks.length; ++i){
+				var block = this._selectedBlocks[i];
+				if (block.val > maxBlock.val){
+					maxBlock = block;
+				}
+			}
+			return maxBlock;
+		},
+
 		// returns the number of bonus blocks to clear, given a wombocombo of a certain length
 		getBonusBlocks: function(length) {
 			cc.assert(length, "uh-oh! bad LENGTH value in numboController::getBonusBlocks()");
@@ -579,7 +641,7 @@ var NumboController = (function() {
 					break;
 			}
 
-			var womboComboType = 0;
+			var womboComboType = 2;
 			var itorBlock;
 			var result = [];
 
@@ -595,6 +657,7 @@ var NumboController = (function() {
 						}
 					}
 					break;
+
 				// highest
 				case 1:
 					var sortedBlocks = this.getBlocksList().sort(function(a, b) {
@@ -611,6 +674,13 @@ var NumboController = (function() {
 					}
 
 					break;
+
+				// blocks near the highest selected block
+				case 2:
+					var maxBlock = this.getMaxSelectedBlock();
+					result = this.spiralSearch(maxBlock.col, maxBlock.row, numBonusBlocks);
+					break;
+
 			}
 
 			return result;
