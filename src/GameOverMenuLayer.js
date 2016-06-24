@@ -67,6 +67,7 @@ var GameOverMenuLayer = (function() {
         // UI Data
         _headerMenu: null,
         _statsMenu: null,
+        _shopMenu: null,
         _promoMenu: null,
         _toolMenu: null,
 
@@ -102,6 +103,7 @@ var GameOverMenuLayer = (function() {
             // this order must be exact as each menu calculates its geometry in order based on the previous menu
             this._initHeaderUI();
             this._initStatsUI();
+            this._initShopUI();
             this._initPromoUI();
             this._initToolUI();
 
@@ -226,6 +228,43 @@ var GameOverMenuLayer = (function() {
             this.addChild(this._statsMenu, 100);
         },
 
+        _initShopUI: function() {
+            this._shopMenu = new cc.Menu();
+            this._shopMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.shopArea));
+            var shopSize = this._shopMenu.getContentSize();
+            this._shopMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: cc.visibleRect.center.x + shopSize.width,
+                y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - this._statsMenu.getContentSize().height - shopSize.height / 2
+            });
+
+            var bubblesLabel = this.generateLabel("Bubbles", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+
+            var howManyBubblesLabel = this.generateLabel(NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+
+            this._shopMenu.addChild(bubblesLabel);
+            this._shopMenu.addChild(howManyBubblesLabel);
+
+            this._shopMenu.alignItemsVerticallyWithPadding(10);
+
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+
+            var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            divider.setTag(444);
+            divider.setBackgroundImage(res.alertImage);
+            divider.setBackgroundColor(NJ.themes.defaultLabelColor);
+            divider.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: this._shopMenu.getContentSize().height / 2
+            });
+
+            this._shopMenu.addChild(divider);
+
+            this.addChild(this._shopMenu, 100);
+        },
+
         _initPromoUI: function() {
             if(NJ.settings.hasInteractedReview)
                 return;
@@ -237,7 +276,7 @@ var GameOverMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: cc.visibleRect.center.x + promoSize.width,
-                y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - this._statsMenu.getContentSize().height - promoSize.height / 2
+                y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - this._statsMenu.getContentSize().height - this._shopMenu.getContentSize().height - promoSize.height / 2
             });
 
             var promoLabel = this.generateLabel("Review Numbo Jumbo", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
@@ -321,8 +360,8 @@ var GameOverMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            this._toolMenu.addChild(retryButton);
             this._toolMenu.addChild(menuButton);
+            this._toolMenu.addChild(retryButton);
             this._toolMenu.addChild(shopButton);
 
             this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
@@ -448,10 +487,14 @@ var GameOverMenuLayer = (function() {
                 }
             }
 
-            this._promoButton.setBackgroundColor(NJ.themes.blockColors[1]);
+            if(this._promoButton)
+                this._promoButton.setBackgroundColor(NJ.themes.blockColors[1]);
 
-            this._scoreLabel.setLabelColor(NJ.themes.specialLabelColor);
-            this._bestLabel.setLabelColor(NJ.themes.specialLabelColor);
+            if(this._scoreLabel)
+                this._scoreLabel.setLabelColor(NJ.themes.specialLabelColor);
+
+            if(this._bestLabel)
+                this._bestLabel.setLabelColor(NJ.themes.specialLabelColor);
         }
     });
 }());

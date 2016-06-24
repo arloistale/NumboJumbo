@@ -96,7 +96,11 @@ var MovesGameLayer = BaseGameLayer.extend({
 
 		var that = this;
 
-		NJ.stats.addCurrency(NJ.gameState.getScore());
+		var scoreDiff = NJ.gameState.getScore();
+		if(NJ.stats.isDoubleEnabled())
+			scoreDiff *= 2;
+
+		NJ.stats.addCurrency(scoreDiff);
 
 		var key = NJ.modekeys.moves;
 		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());

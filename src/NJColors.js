@@ -66,7 +66,7 @@ NJ.themes = (function() {
         // dark theme
         {
             themeName: "Dark",
-            themeCost: 25000,
+            themeCost: 15000,
             isPurchased: false,
 
             backgroundColor: cc.color("#332F2A"),
@@ -115,7 +115,7 @@ NJ.themes = (function() {
         // fall theme
         {
             themeName: "Fall",
-            themeCost: 25000,
+            themeCost: 50000,
             isPurchased: false,
 
             // lighter brown
@@ -192,11 +192,8 @@ NJ.themes = (function() {
         // pruple theme
         {
             themeName: "Prince",
-            themeCost: 25000,
+            themeCost: 100000,
             isPurchased: false,
-
-            // evening cloud
-            backgroundColor: cc.color("#2E2633"),
 
             // more lighter grayer
             backgroundColor: cc.color("#635063"),
@@ -243,9 +240,7 @@ NJ.themes = (function() {
 
 
                 // dying rose
-                cc.color("E28B7D"),
-
-
+                cc.color("E28B7D")
             ]
         },
 

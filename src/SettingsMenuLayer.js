@@ -240,8 +240,6 @@ var SettingsMenuLayer = (function() {
                 anchorY: 0.5
             });
 
-            this._toolMenu.addChild(backButton);
-
             if(this._isInGame) {
                 buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
 
@@ -260,7 +258,10 @@ var SettingsMenuLayer = (function() {
                 });
 
                 this._toolMenu.addChild(retryButton);
+                this._toolMenu.addChild(backButton);
                 this._toolMenu.addChild(menuButton);
+            } else {
+                this._toolMenu.addChild(backButton);
             }
 
             this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
