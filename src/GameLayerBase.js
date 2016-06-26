@@ -241,6 +241,7 @@ var BaseGameLayer = (function() {
 					event: cc.EventListener.TOUCH_ONE_BY_ONE,
 					swallowTouches: true,
 					onTouchBegan: function(touch, event) {
+						cc.log(Date.now() + " : " + touch.getID());
                         if(touch.getID() == 0) {
                             event.getCurrentTarget().onTouchBegan(touch.getLocation());
                         }
@@ -562,8 +563,10 @@ var BaseGameLayer = (function() {
 			var positionList = [];
 			var numBlocks = blockList.length;
 
+			var block;
+
 			for (var i = 0; i < blockList.length; ++i){
-				var block = blockList[i];
+				block = blockList[i];
 				positionList.push(block.getPosition());
 			}
 
@@ -571,7 +574,7 @@ var BaseGameLayer = (function() {
 			positionList = NJ.shuffleArray(positionList);
 
 			for (var i = 0; i < positionList.length; ++i) {
-				var block = NumboBlock.recreate(this._blockSize);
+				block = NumboBlock.recreate(this._blockSize);
 				this._numboController.spawnDropRandomBlock(block);
 				this._instantiateBlock(block);
 				block.setPosition(positionList[i]);
@@ -852,11 +855,11 @@ var BaseGameLayer = (function() {
 						selectedBlock.highlight();
 
 						if(this._numboController.getSelectedBlocks().length >= 7) {
-							NJ.audio.playSound(res.tensionSound3);
+							NJ.audio.playSound(res.tensionSound3, 1);
 						} else if(this._numboController.getSelectedBlocks().length >= 5) {
-							NJ.audio.playSound(res.tensionSound2);
+							NJ.audio.playSound(res.tensionSound2, 0.9);
 						} else if(this._numboController.getSelectedBlocks().length >= 3) {
-							NJ.audio.playSound(res.tensionSound);
+							NJ.audio.playSound(res.tensionSound, 0.8);
 						}
 					}
 

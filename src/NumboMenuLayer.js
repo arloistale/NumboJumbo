@@ -51,7 +51,6 @@ var NumboMenuLayer = (function() {
         ctor: function () {
             this._super();
 
-            cc.log(NJ.themes.backgroundColor);
             this.init(NJ.themes.backgroundColor);
 
             this._initHeaderUI();
@@ -266,7 +265,7 @@ var NumboMenuLayer = (function() {
                 event: cc.EventListener.KEYBOARD,
                 onKeyPressed: function(key, event) {
                     if(key == cc.KEY.back) {
-                        console.log("back");
+                        cc.director.end();
                     }
                 }
             }, this);
@@ -294,42 +293,6 @@ var NumboMenuLayer = (function() {
                         if(!NJ.social.isLoggedIn() && !NJ.settings.hasAttemptedAutoSignin) {
                             NJ.settings.hasAttemptedAutoSignin = true;
                             NJ.social.login();
-
-                            /*
-                             if (NJ.social.isLoggedIn()) {
-                             this._toolMenu.addChild(this._achievementsButton);
-                             this._toolMenu.addChild(this._statsButton);
-                             } else {
-                             if (true) {//(cc.sys.os == cc.sys.OS_IOS) {
-                             NJ.social.login();
-                             } else {
-                             this._toolMenu.addChild(this._loginButton);
-                             }
-
-                             // poll every second until we are logged in
-                             this.schedule(function() {
-                             if(NJ.social.isLoggedIn()) {
-                             that.leaveTools(function () {
-                             that._toolMenu.removeChild(that._settingsButton);
-
-                             // remove the login button on android
-                             if(cc.sys.os != cc.sys.OS_IOS)
-                             that._toolMenu.removeChild(that._loginButton);
-
-                             that._toolMenu.addChild(that._achievementsButton);
-                             that._toolMenu.addChild(that._statsButton);
-                             that._toolMenu.addChild(that._settingsButton);
-
-                             that._toolMenu.alignItemsHorizontallyWithPadding(10);
-
-                             that.enterTools();
-                             });
-
-                             that.unscheduleAllCallbacks();
-                             }
-                             }, 1);
-                             }
-                             */
                         }
                     }
                 })));

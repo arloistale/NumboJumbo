@@ -46,14 +46,14 @@ NJ.audio = (function() {
             }
         },
 
-        playSound: function(res) {
+        playSound: function(res, customVolume) {
             if(!NJ.settings.sounds)
                 return;
 
             if(cc.sys.isNative && shouldUseJSB)
-                jsb.AudioEngine.play2d(res, false, NJ.SOUNDS_VOLUME);
+                jsb.AudioEngine.play2d(res, false, customVolume || NJ.SOUNDS_VOLUME);
             else {
-                cc.audioEngine.setEffectsVolume(NJ.SOUNDS_VOLUME);
+                cc.audioEngine.setEffectsVolume(customVolume || NJ.SOUNDS_VOLUME);
                 cc.audioEngine.playEffect(res, false);
             }
         },

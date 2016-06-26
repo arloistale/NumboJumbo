@@ -258,7 +258,6 @@ var ShopMenuLayer = (function() {
 
             this._bubblesMenu.addChild(this._currencyLabel);
             this._bubblesMenu.addChild(buyCoinsButton);
-
             this._bubblesMenu.addChild(this._currencyInfoLabel);
 
             this._bubblesMenu.alignItemsVerticallyWithPadding(10);
@@ -566,7 +565,7 @@ var ShopMenuLayer = (function() {
 
                 var labelStr = themes[i].themeName + " - ";
                 if(!themes[i].isPurchased) {
-                    labelStr += themes[i].themeCost + " Bubbles";
+                    labelStr += themes[i].themeCost + "";
                 } else {
                     labelStr += isCurrentTheme ? "Active" : "Owned";
                 }

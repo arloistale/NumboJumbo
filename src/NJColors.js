@@ -119,7 +119,10 @@ NJ.themes = (function() {
             isPurchased: false,
 
             // lighter brown
-            backgroundColor: cc.color("#865810"),
+            //backgroundColor: cc.color("#865810"),
+            
+            // new hotfix color because ewwww
+            backgroundColor: cc.color("#d7d7b8"),
 
             // darker brown
             //backgroundColor: cc.color("5a3111"),
@@ -128,7 +131,7 @@ NJ.themes = (function() {
             //backgroundColor: cc.color("ffcba6"),
             levelColor: cc.color("#6C6760"),
 
-            defaultLabelColor: cc.color("#ffffff"),
+            defaultLabelColor: cc.color("#635063"),
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#6C6760"),
@@ -196,14 +199,14 @@ NJ.themes = (function() {
 
             blockColors: [
 
+                // fricking pink!
+                cc.color("#DE0569"),
+                          
                 // light pruple?!
                 cc.color("#800080"),
 
                 // rich maroon
                 cc.color("#99173C"),
-
-                // fricking pink!
-                cc.color("#DE0569"),
 
                 // favorite jeans
                 cc.color("#424254"),

@@ -47,8 +47,13 @@ NJ.purchases = (function() {
                 var that = this;
                 sdkbox.IAP.setListener({
                     onSuccess: function (product) {
-                        if(onSuccessCallback)
-                            onSuccessCallback(product);
+                        if(product) {
+                            if (onSuccessCallback)
+                                onSuccessCallback(product);
+                        } else {
+                            if(onFailureCallback)
+                                onFailureCallback(product, "Product Data not loaded");
+                        }
                     },
                     onFailure: function (product, message) {
                         if(onFailureCallback)
@@ -133,8 +138,6 @@ NJ.purchases = (function() {
             if (cc.sys.isNative) {
                 sdkbox.IAP.purchase(this.itemKeys[key]);
                 this.setSuccessCallback(callback);
-                this.setCanceledCallback(callback);
-                this.setFailureCallback(callback);
             }
         },
 

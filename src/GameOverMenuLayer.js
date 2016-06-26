@@ -171,21 +171,22 @@ var GameOverMenuLayer = (function() {
             var header2Size = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
             var largeSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.large);
             var headerSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header);
+            var subSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub);
 
             var bestTitleLabel, scoreTitleLabel;
 
             if(this._isHighscore) {
-                scoreTitleLabel = this.generateLabel("HIGH SCORE", headerSize);
+                scoreTitleLabel = this.generateLabel("HIGH SCORE!", header2Size);
                 this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
-                bestTitleLabel = this.generateLabel(highscoreMessages[Math.floor(Math.random() * highscoreMessages.length)], header2Size);
+                bestTitleLabel = this.generateLabel(highscoreMessages[Math.floor(Math.random() * highscoreMessages.length)], subSize);
 
                 this._statsMenu.addChild(scoreTitleLabel);
                 this._statsMenu.addChild(this._scoreLabel);
 
                 this._statsMenu.addChild(bestTitleLabel);
 
-                this._statsMenu.alignItemsVerticallyWithPadding(10);
+                this._statsMenu.alignItemsVerticallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.0025));
             } else {
                 scoreTitleLabel = this.generateLabel("Score", header2Size);
                 this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
@@ -249,7 +250,7 @@ var GameOverMenuLayer = (function() {
             this._shopMenu.addChild(bubblesLabel);
             this._shopMenu.addChild(this._howManyBubblesLabel);
 
-            this._shopMenu.alignItemsVerticallyWithPadding(10);
+            this._shopMenu.alignItemsVerticallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.0025));
 
             var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
 
