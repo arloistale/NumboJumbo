@@ -168,9 +168,7 @@ NJ.themes = (function() {
                 cc.color("#BB1414"),
 
                 // chartreuse           9
-                cc.color("A6AD3C"),
-
-
+                cc.color("A6AD3C")
             ]
         },
 

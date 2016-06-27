@@ -217,6 +217,7 @@ var ShopMenuLayer = (function() {
             this._contentScrollView.setBounceEnabled(true);
             this._contentScrollView.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (1 - NJ.uiSizes.header - NJ.uiSizes.toolbar)));
             this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.themesArea + NJ.uiSizes.doublerArea)));
+            this._contentScrollView.setCanCancel
             this._contentScrollView.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -242,14 +243,13 @@ var ShopMenuLayer = (function() {
             this._currencyLabel = this.generateLabel("Bubbles: " + NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             var coinSize = cc.size(NJ.calculateScreenDimensionFromRatio(0.12), NJ.calculateScreenDimensionFromRatio(0.12));
 
-            var buyCoinsButton = new NJMenuButton(cc.size(coinSize.height, coinSize.height), onBuyBubbles.bind(this), this);
-            //buyCoinsButton.setLabelTitle("1000");
-            //buyCoinsButton.setLabelColor(NJ.themes.defaultLabelColor);
+            var buyCoinsButton = new ccui.Button();//new NJMenuButton(cc.size(coinSize.height, coinSize.height), onBuyBubbles.bind(this), this);
+            buyCoinsButton.loadTextureNormal(res.buttonImage);
             buyCoinsButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5
             });
-            buyCoinsButton.setImageRes(res.plusImage);
+            //buyCoinsButton.setImageRes(res.plusImage);
             //buyCoinsButton.offsetLabel(cc.p(coinSize.height * 1.5, 0));
 
             // generate sounds toggle
