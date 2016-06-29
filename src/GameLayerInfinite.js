@@ -5,7 +5,6 @@
 var InfiniteGameLayer = BaseGameLayer.extend({
 
     // time limit for minute madness
-    _elapsedTimeLimit: 60,
     _spawnTime: 1.0,
 
     // domain of spawning

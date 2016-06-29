@@ -23,7 +23,8 @@ NJ.modekeys = {
     minuteMadness: "mm",
     moves: "mov",
     react: "re",
-    infinite: "inf"
+    infinite: "inf",
+    mania: "man"
 };
 
 // each name corresponds to the keys above
@@ -31,45 +32,9 @@ NJ.modeNames = {
     mm: "Timed",
     mov: "Moves",
     re: "Stack",
-    inf: "Infinite"
+    inf: "Infinite",
+    man: "Mania"
 };
-
-// combo thresholds
-NJ.comboThresholds = (function() {
-    var data = [
-        {
-            lengthThreshold: 5,
-            title: "Nice!",
-            color: cc.color("#11ff11"),
-            scoreBonus: 250
-        },
-        {
-            lengthThreshold: 6,
-            title: "Amazing!",
-            color: cc.color("#ffee11"),
-            scoreBonus: 1000
-        },
-        {
-            lengthThreshold: 7,
-            title: "Holy SHIT!!!",
-            color: cc.color("ff0011"),
-            scoreBonus: 5000
-        }
-    ];
-
-    return {
-        get: function(comboLength) {
-            var curr = null;
-
-            for(var i = 0; i < data.length; i++) {
-                if(comboLength >= data[i].lengthThreshold)
-                    curr = data[i];
-            }
-
-            return curr;
-        }
-    }
-}());
 
 // game settings
 NJ.DANGER_THRESHOLD = 0.85;

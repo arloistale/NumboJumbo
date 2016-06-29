@@ -387,7 +387,7 @@ var NumboMenuLayer = (function() {
                         gameLayer = new StackGameLayer();
                         break;
                     case NJ.modekeys.infinite:
-                        gameLayer = new InfiniteGameLayer();
+                        gameLayer = new ManiaGameLayer();
                         break;
                 }
 

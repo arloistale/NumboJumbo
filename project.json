@@ -25,6 +25,7 @@
         "src/GameLayerTimed.js",
         "src/GameLayerStack.js",
         "src/GameLayerInfinite.js",
+        "src/GameLayerMania.js",
         "src/GameLayerMoves.js",
 
         "src/TutorialDriverLayer.js",

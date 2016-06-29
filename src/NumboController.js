@@ -442,13 +442,10 @@ var NumboController = (function() {
 				" crap, might as well throw our hands in the air and spawn random stuff");
 			return [];
 		},
-
-
+		
         resetKnownPath: function(){
             this._knownPath = [];
         },
-
-
 
 		/**
 		 * Meander search generates a path randomly until the criteria boolean expression is met.
@@ -644,9 +641,10 @@ var NumboController = (function() {
 				case 9:
 					numBonusBlocks = 21;
 					break;
-				case 10:
-					numBonusBlocks = 28;
-					break;
+			}
+
+			if(length >= 10) {
+				numBonusBlocks = 28;
 			}
 
 			var womboComboType = 2;
