@@ -252,7 +252,7 @@ var ShopMenuLayer = (function() {
             // generate music toggle
             this._currencyLabel = this.generateLabel("Bubbles: " + NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             var currencyLayout = new ccui.LinearLayoutParameter();
-            var currencyMargin = new ccui.Margin(0, -this._currencyLabel.getContentSize().height / 2, 0, -this._currencyLabel.getContentSize().height / 2);
+            var currencyMargin = new ccui.Margin(0, 0, 0, -this._currencyLabel.getContentSize().height / 2);
             currencyLayout.setGravity(ccui.LinearLayoutParameter.CENTER_HORIZONTAL);
             currencyLayout.setMargin(currencyMargin);
             this._currencyLabel.setLayoutParameter(currencyLayout);
@@ -281,7 +281,7 @@ var ShopMenuLayer = (function() {
             var coinProduct = NJ.purchases.getProductByName("coin1");
             this._currencyInfoLabel = this.generateLabel("25000 Bubbles - " + (coinProduct ? coinProduct.price : "?"), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
             var infoLayout = new ccui.LinearLayoutParameter();
-            var infoMargin = new ccui.Margin(0, 0, 0, 0);
+            var infoMargin = new ccui.Margin(0, -this._currencyInfoLabel.getContentSize().height / 2, 0, 0);
             infoLayout.setGravity(ccui.LinearLayoutParameter.CENTER_HORIZONTAL);
             infoLayout.setMargin(infoMargin);
             this._currencyInfoLabel.setLayoutParameter(infoLayout);
