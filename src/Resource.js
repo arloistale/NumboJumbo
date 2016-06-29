@@ -81,6 +81,9 @@ var res = {
 
     clickSound: resRoot + "Sounds/clickSound.wav",
 
+    nopeSound:  resRoot + "Sounds/nopeSound.mp3",
+    swooshSound: resRoot + "Sounds/swooshSound.wav",
+
     tensionSound: resRoot + "Sounds/plangs/plang1.wav",
     tensionSound2: resRoot + "Sounds/plangs/plang2.wav",
     tensionSound3: resRoot + "Sounds/plangs/plang8.wav",
@@ -139,12 +142,14 @@ var sounds = (function() {
     var g = [
         res.tickSound,
         res.plipSound,
-
+        res.nopeSound,
+        res.swooshSound,
         res.overSound,
         res.coinSound,
         res.tensionSound2,
         res.tensionSound,
         res.tensionSound3
+
     ];
 
     return g.concat(plops).concat(bloops);

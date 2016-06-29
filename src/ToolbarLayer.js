@@ -8,6 +8,29 @@ var ToolbarLayer = (function() {
             this._onPauseCallback();
     };
 
+    var onScramble = function(){
+
+        if (this._onScrambleCallback){
+            if (NJ.gameState.getScramblesRemaining() > 0) {
+                NJ.audio.playSound(res.clickSound);
+                NJ.gameState.decrementScramblesRemaining();
+
+                this._onScrambleCallback();
+            }
+            else {
+                NJ.audio.playSound(res.nopeSound);
+            }
+
+            if (NJ.gameState.getScramblesRemaining() == 0) {
+                this._scrambleButton.setChildrenOpacity(0.5 * 255);
+            }
+
+        }
+        else {
+            cc.log("*** scramble callback not set!");
+        }
+    };
+
     return cc.Layer.extend({
 
         // UI Data
@@ -15,8 +38,11 @@ var ToolbarLayer = (function() {
 
         _pauseButton: null,
 
+        _scrambleButton: null,
+
         // callback
         _onPauseCallback: null,
+        _onScrambleCallback: null,
 
         ctor: function(size) {
             this._super();
@@ -65,11 +91,17 @@ var ToolbarLayer = (function() {
                 y: contentSize.height / 2
             });
 
-            var buttonSize = cc.size(contentSize.height * NJ.uiSizes.barButton, contentSize.height * NJ.uiSizes.barButton);
+            var buttonSize = cc.size(contentSize.height * NJ.uiSizes.barButton,
+                contentSize.height * NJ.uiSizes.barButton);
 
             this._pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
             this._pauseButton.setImageRes(res.pauseImage);
             this._buttonsMenu.addChild(this._pauseButton);
+
+            this._scrambleButton = new NJMenuButton(buttonSize, onScramble.bind(this), this);
+            this._scrambleButton.setImageRes(res.retryImage);
+            this._buttonsMenu.addChild(this._scrambleButton);
+            this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
 
             this.addChild(this._buttonsMenu);
         },
@@ -114,6 +146,10 @@ var ToolbarLayer = (function() {
 
         setOnPauseCallback: function(callback) {
             this._onPauseCallback = callback;
+        },
+
+        setOnScrambleCallback: function(callback){
+            this._onScrambleCallback = callback;
         }
     });
 }());
