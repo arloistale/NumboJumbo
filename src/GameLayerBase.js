@@ -310,6 +310,11 @@ var BaseGameLayer = (function() {
 			this._toolbarLayer.setOnPauseCallback(function() {
 				that.onPause();
 			});
+
+			this._toolbarLayer.setOnScrambleCallback(function(){
+				that.scrambleBoard();
+			});
+
 			this.addChild(this._toolbarLayer, 999);
 		},
 
@@ -559,10 +564,10 @@ var BaseGameLayer = (function() {
 		},
 
 		scrambleBoard: function(){
+			NJ.audio.playSound(res.swooshSound);
+
 			var blockList = this._numboController.getBlocksList();
 			var positionList = [];
-			var numBlocks = blockList.length;
-
 			var block;
 
 			for (var i = 0; i < blockList.length; ++i){
