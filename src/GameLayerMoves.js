@@ -103,24 +103,22 @@ var MovesGameLayer = BaseGameLayer.extend({
 		NJ.stats.addCurrency(scoreDiff);
 
 		var key = NJ.modekeys.moves;
-		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
+		NJ.stats.offerHighscore(key, NJ.gameState.getScore());
 
-		if(highscoreAccepted) {
-			var highscore = NJ.stats.getHighscore(key);
-			NJ.social.submitScore(key, highscore);
+		var highscore = NJ.stats.getHighscore(key);
+		NJ.social.submitScore(key, highscore);
 
-			if(highscore >= 500) {
-				NJ.social.unlockAchievement(NJ.social.achievementKeys.mov1);
+		if(highscore >= 500) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.mov1);
 
-				if(highscore >= 750) {
-					NJ.social.unlockAchievement(NJ.social.achievementKeys.mov2);
+			if(highscore >= 750) {
+				NJ.social.unlockAchievement(NJ.social.achievementKeys.mov2);
 
-					if(highscore >= 1000) {
-						NJ.social.unlockAchievement(NJ.social.achievementKeys.mov3);
+				if(highscore >= 1000) {
+					NJ.social.unlockAchievement(NJ.social.achievementKeys.mov3);
 
-						if(highscore >= 1250) {
-							NJ.social.unlockAchievement(NJ.social.achievementKeys.mov4);
-						}
+					if(highscore >= 1250) {
+						NJ.social.unlockAchievement(NJ.social.achievementKeys.mov4);
 					}
 				}
 			}

@@ -87,7 +87,7 @@ var NumboBlock = cc.Sprite.extend({
         this.row = rowVal;
         this.val = valVal;
 
-        this._valueLabel.setString(this.val + (this.val != 1 ? "" : " "));
+        this._valueLabel.setString(this.val);
 
         this.updateTheme();
     },

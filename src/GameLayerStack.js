@@ -101,26 +101,24 @@ var StackGameLayer = BaseGameLayer.extend({
         NJ.stats.addCurrency(scoreDiff);
 
         var key = NJ.modekeys.react;
-        var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
+        NJ.stats.offerHighscore(key, NJ.gameState.getScore());
 
         // only submit score after all desired achievements have been pushed
         // because the achievement
-        if(highscoreAccepted) {
-            var highscore = NJ.stats.getHighscore(key);
-            NJ.social.submitScore(key, highscore);
+        var highscore = NJ.stats.getHighscore(key);
+        NJ.social.submitScore(key, highscore);
 
-            if(highscore >= 500) {
-                NJ.social.unlockAchievement(NJ.social.achievementKeys.re1);
+        if(highscore >= 500) {
+            NJ.social.unlockAchievement(NJ.social.achievementKeys.re1);
 
-                if(highscore >= 1000) {
-                    NJ.social.unlockAchievement(NJ.social.achievementKeys.re2);
+            if(highscore >= 1000) {
+                NJ.social.unlockAchievement(NJ.social.achievementKeys.re2);
 
-                    if(highscore >= 1500) {
-                        NJ.social.unlockAchievement(NJ.social.achievementKeys.re3);
+                if(highscore >= 1500) {
+                    NJ.social.unlockAchievement(NJ.social.achievementKeys.re3);
 
-                        if(highscore >= 2000) {
-                            NJ.social.unlockAchievement(NJ.social.achievementKeys.re4);
-                        }
+                    if(highscore >= 2000) {
+                        NJ.social.unlockAchievement(NJ.social.achievementKeys.re4);
                     }
                 }
             }

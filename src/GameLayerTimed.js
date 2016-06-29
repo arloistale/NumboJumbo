@@ -113,24 +113,22 @@ var TimedGameLayer = BaseGameLayer.extend({
 		NJ.stats.addCurrency(scoreDiff);
 
 		var key = NJ.modekeys.minuteMadness;
-		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
+		NJ.stats.offerHighscore(key, NJ.gameState.getScore());
 
-		if(highscoreAccepted) {
-			var highscore = NJ.stats.getHighscore(key);
-			NJ.social.submitScore(key, highscore);
+		var highscore = NJ.stats.getHighscore(key);
+		NJ.social.submitScore(key, highscore);
 
-			if(highscore >= 300) {
-				NJ.social.unlockAchievement(NJ.social.achievementKeys.mm1);
+		if(highscore >= 300) {
+			NJ.social.unlockAchievement(NJ.social.achievementKeys.mm1);
 
-				if(highscore >= 450) {
-					NJ.social.unlockAchievement(NJ.social.achievementKeys.mm2);
+			if(highscore >= 450) {
+				NJ.social.unlockAchievement(NJ.social.achievementKeys.mm2);
 
-					if(highscore >= 600) {
-						NJ.social.unlockAchievement(NJ.social.achievementKeys.mm3);
+				if(highscore >= 600) {
+					NJ.social.unlockAchievement(NJ.social.achievementKeys.mm3);
 
-						if(highscore >= 750) {
-							NJ.social.unlockAchievement(NJ.social.achievementKeys.mm4);
-						}
+					if(highscore >= 750) {
+						NJ.social.unlockAchievement(NJ.social.achievementKeys.mm4);
 					}
 				}
 			}

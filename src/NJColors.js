@@ -14,14 +14,14 @@ NJ.colors = {
 NJ.themes = (function() {
 
     var data = [
+            /*
         // light theme
         {
-            themeName: "Light",
-            themeCost: 0,
+            themeName: "Sandy",
+            themeCost: 15000,
             isPurchased: true,
 
             backgroundColor: cc.color("#F0EBD0"),
-            levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#6C6760"),
             specialLabelColor: cc.color("#50aa91"),
@@ -62,6 +62,54 @@ NJ.themes = (function() {
                 cc.color("#9c3783")
             ]
         },
+        */
+        // white theme
+        {
+            themeName: "White",
+            themeCost: 0,
+            isPurchased: true,
+
+            backgroundColor: cc.color("#ffffff"),
+
+            defaultLabelColor: cc.color("#6C6760"),
+            specialLabelColor: cc.color("#50aa91"),
+            specialLabelColor2: cc.color("#00A896"),
+            defaultButtonColor: cc.color("#424242"),
+
+            shadowColor: cc.color("#ffffff"),
+
+            dividerColor: cc.color("#6c6760"),
+
+            blockColors: [
+                // aqua
+                cc.color("#33A5BA"),
+
+                // warm yellow
+                cc.color("#f7b52b"),
+
+                // pinkish red
+                cc.color("#E81B58"),
+
+                // warm teal
+                cc.color("#52C9A8"),
+                //cc.color("33ee33"),
+
+                // intense blue
+                cc.color("#5D74C9"),
+
+                // orange
+                cc.color("#F88A2D"),
+
+                // dark red orange
+                cc.color("#F55D16"),
+
+                // violent red
+                cc.color("#F02A31"),
+
+                // warm purple
+                cc.color("#C658AC")
+            ]
+        },
 
         // dark theme
         {
@@ -70,7 +118,6 @@ NJ.themes = (function() {
             isPurchased: false,
 
             backgroundColor: cc.color("#332F2A"),
-            levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#ffffff"),
             specialLabelColor: cc.color("#33A5BA"),
@@ -129,7 +176,6 @@ NJ.themes = (function() {
 
             //light shrimpy salmon
             //backgroundColor: cc.color("ffcba6"),
-            levelColor: cc.color("#6C6760"),
 
             defaultLabelColor: cc.color("#635063"),
             specialLabelColor: cc.color("#33A5BA"),
@@ -184,8 +230,6 @@ NJ.themes = (function() {
             //pale yellow???
             //backgroundColor: cc.color("#FFFDAA"),
 
-            levelColor: cc.color("#6C6760"),
-
             defaultLabelColor: cc.color("#FFFDAA"),
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
@@ -224,7 +268,7 @@ NJ.themes = (function() {
                 // dying rose
                 cc.color("E28B7D")
             ]
-        },
+        }
 
         /*
 
@@ -242,8 +286,6 @@ NJ.themes = (function() {
 
              //pale yellow???
              //backgroundColor: cc.color("#FFFDAA"),
-
-             levelColor: cc.color("#6C6760"),
 
              defaultLabelColor: cc.color("#FFFDAA"),
              specialLabelColor: cc.color("#33A5BA"),
@@ -305,7 +347,6 @@ NJ.themes = (function() {
         themeName: main.themeName,
 
         backgroundColor: main.backgroundColor,
-        levelColor: main.levelColor,
 
         defaultLabelColor: main.defaultLabelColor,
         specialLabelColor: main.specialLabelColor,
