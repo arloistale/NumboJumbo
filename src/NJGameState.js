@@ -20,6 +20,7 @@ NJ.gameState = (function() {
     var currentLevel = 1;
     var currentScore = 0;
     var scramblesRemaining = null;
+    var hintsRemaining = null;
 
     // returns the number of blocks left needed to get to the next level.
     // this is quadratic in the current level L, ie, aL^2 + bL + c.
@@ -57,6 +58,7 @@ NJ.gameState = (function() {
             blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             blocksCleared = 0;
             scramblesRemaining = 3;
+            hintsRemaining = 10;
         },
 
         ///////////////////////
@@ -71,6 +73,22 @@ NJ.gameState = (function() {
             scramblesRemaining--;
         },
 
+        incrementScramblesRemaining: function(){
+            scramblesRemaining++;
+        },
+
+        getHintsRemaining: function(){
+            return hintsRemaining;
+        },
+
+        decrementHintsRemaining: function(){
+            cc.assert(hintsRemaining > 0, "ERROR: attempted to get a hint too many times!");
+            hintsRemaining--;
+        },
+
+        incrementHintsRemaining: function(){
+            hintsRemaining++;
+        },
 
         ///////////////////
         // Metrics Logic //
