@@ -12,7 +12,6 @@ var ToolbarLayer = (function() {
 
         if (this._onScrambleCallback){
             if (NJ.gameState.getScramblesRemaining() > 0) {
-                NJ.audio.playSound(res.clickSound);
                 NJ.gameState.decrementScramblesRemaining();
 
                 this._onScrambleCallback();
@@ -27,7 +26,27 @@ var ToolbarLayer = (function() {
 
         }
         else {
-            cc.log("*** scramble callback not set!");
+            cc.log("*** toolbar layer: scramble callback not set!");
+        }
+    };
+
+    var onHint = function(){
+        if (this._onHintCallback){
+            if (NJ.gameState.getHintsRemaining() > 0){
+                NJ.gameState.decrementHintsRemaining();
+
+                this._onHintCallback();
+            }
+            else {
+                NJ.audio.playSound(res.nopeSound);
+            }
+
+            if (NJ.gameState.getHintsRemaining() == 0){
+                this._hintButton.setChildrenOpacity(0.5*255);
+            }
+        }
+        else {
+            cc.log("*** toolbar layer: hint callback not set!")
         }
     };
 
@@ -39,10 +58,14 @@ var ToolbarLayer = (function() {
         _pauseButton: null,
 
         _scrambleButton: null,
+        _hintButton: null,
 
         // callback
         _onPauseCallback: null,
+
         _onScrambleCallback: null,
+        _onHintCallback:null,
+
 
         ctor: function(size) {
             this._super();
@@ -101,8 +124,13 @@ var ToolbarLayer = (function() {
             this._scrambleButton = new NJMenuButton(buttonSize, onScramble.bind(this), this);
             this._scrambleButton.setImageRes(res.retryImage);
             this._buttonsMenu.addChild(this._scrambleButton);
-            this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
 
+            this._hintButton = new NJMenuButton(buttonSize, onHint.bind(this), this);
+            this._hintButton.setImageRes(res.helpImage);
+            this._buttonsMenu.addChild(this._hintButton);
+
+
+            this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
             this.addChild(this._buttonsMenu);
         },
 
@@ -150,6 +178,10 @@ var ToolbarLayer = (function() {
 
         setOnScrambleCallback: function(callback){
             this._onScrambleCallback = callback;
+        },
+
+        setOnHintCallback: function(callback){
+            this._onHintCallback = callback;
         }
     });
 }());

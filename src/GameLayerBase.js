@@ -315,6 +315,10 @@ var BaseGameLayer = (function() {
 				that.scrambleBoard();
 			});
 
+			this._toolbarLayer.setOnHintCallback(function(){
+				that.jiggleHintBlocksAndReset();
+			});
+
 			this.addChild(this._toolbarLayer, 999);
 		},
 
@@ -623,6 +627,24 @@ var BaseGameLayer = (function() {
 			this.jiggleCount++;
 			if(this.jiggleCount < 2 || NJ.gameState.getBlocksCleared() == 0)
 				this.schedule(this.jiggleHintBlocks, 5);
+		},
+
+		jiggleHintBlocksAndReset: function(){
+			var hint = this._numboController.findHint();
+
+			if (hint.length > 0) {
+				NJ.audio.playSound(res.plipSound);
+
+				for (var i in hint) {
+					if (hint.hasOwnProperty(i))
+						hint[i].jiggleSprite();
+				}
+				this._numboController.resetKnownPath();
+			}
+			else { // refund the spent hint
+
+				NJ.gameState.incrementHintsRemaining();
+			}
 		},
 
 		///////////////////////
