@@ -101,7 +101,7 @@ var StackGameLayer = BaseGameLayer.extend({
         NJ.stats.addCurrency(scoreDiff);
 
         var key = NJ.modekeys.react;
-        NJ.stats.offerHighscore(key, NJ.gameState.getScore());
+        var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
 
         // only submit score after all desired achievements have been pushed
         // because the achievement

@@ -6,19 +6,19 @@
         "sdkboxplay": {
             "leaderboards": [
                 {
-                    "id": "CgkIjJ-toeEIEAIQIA",
+                    "id": "CgkIjJ-toeEIEAIQIA", 
                     "name": "ldb-mm"
                 }, 
                 {
-                    "id": "CgkIjJ-toeEIEAIQIQ",
+                    "id": "CgkIjJ-toeEIEAIQIQ", 
                     "name": "ldb-mov"
                 }, 
                 {
-                    "id": "CgkIjJ-toeEIEAIQHw",
+                    "id": "CgkIjJ-toeEIEAIQHw", 
                     "name": "ldb-re"
                 }, 
                 {
-                    "id": "CgkIjJ-toeEIEAIQHg",
+                    "id": "CgkIjJ-toeEIEAIQHg", 
                     "name": "ldb-inf"
                 }
             ], 
@@ -134,12 +134,12 @@
         }, 
         "iap": {
             "items": {
+                "doubler": {
+                    "type": "non_consumable", 
+                    "id": "com.numbo.jumbo.doubler"
+                },
                 "coin1": {
                     "id": "com.numbo.jumbo.coin1"
-                },
-                "doubler": {
-                    "id": "com.numbo.jumbo.doubler",
-                    "type": "non_consumable"
                 }
             }, 
             "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiGTynDrSub9dsFaUGhkrK8njVT6VEDuATrnah2sueLi0+HArB3EZyx/g1VNMjIMq0qK2aSwvKymgILynU1xKxT+lxqUnrGMbR4yZSClMgsbuooNbfp4QH4W5Dl3mgkxnQIibxz63/FjznlCI8doJQ7+cPrfx2lr+s0kMp8bU8rVd/iKzbIvUYO6eNi9dKtJ4dHPomps6c5IFYzvfyctnW9pNTMRmRol3ssGNsU57j0QztR67G9EKyXcAKIIjkmXPkisPmuFv3CyDVCn0o7T8MfUAk2cTbhQyVJC1cX030byOmn12syJXIJnYrUQbfqlSpshuvpKfWfPL+2fWZ55YLQIDAQAB"
@@ -283,9 +283,22 @@
             "items": {
                 "coin1": {
                     "id": "com.wombocombo.numbojumbo.coin1"
-                },
+                }, 
                 "doubler": {
                     "id": "com.wombocombo.numbojumbo.doubler"
+                }
+            }
+        }
+    }, 
+    "amazon": {
+        "iap": {
+            "items": {
+                "coin1": {
+                    "id": "com.numbo.jumbo.coin1"
+                }, 
+                "doubler": {
+                    "type": "non_consumable", 
+                    "id": "com.numbo.jumbo.doubler"
                 }
             }
         }

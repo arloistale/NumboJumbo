@@ -241,7 +241,7 @@ var BaseGameLayer = (function() {
 					event: cc.EventListener.TOUCH_ONE_BY_ONE,
 					swallowTouches: true,
 					onTouchBegan: function(touch, event) {
-						cc.log(Date.now() + " : " + touch.getID());
+						cc.log("Touch -> " + Date.now() + " : " + touch.getID());
                         if(touch.getID() == 0) {
                             event.getCurrentTarget().onTouchBegan(touch.getLocation());
                         }

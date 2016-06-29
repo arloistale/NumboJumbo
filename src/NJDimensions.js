@@ -12,6 +12,8 @@ NJ.uiSizes = {
     promoArea: 0.24,
     toolbar: 0.12,
 
+    divider: 0.0025,
+
     // shop elements
     bubblesArea: 0.24,
     themesArea: 0.85,

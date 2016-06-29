@@ -113,7 +113,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 		NJ.stats.addCurrency(scoreDiff);
 
 		var key = NJ.modekeys.minuteMadness;
-		NJ.stats.offerHighscore(key, NJ.gameState.getScore());
+		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
 
 		var highscore = NJ.stats.getHighscore(key);
 		NJ.social.submitScore(key, highscore);

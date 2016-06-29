@@ -252,7 +252,7 @@ var ShopMenuLayer = (function() {
             // generate music toggle
             this._currencyLabel = this.generateLabel("Bubbles: " + NJ.stats.getCurrency(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             var currencyLayout = new ccui.LinearLayoutParameter();
-            var currencyMargin = new ccui.Margin(0, 10, 0, 10);
+            var currencyMargin = new ccui.Margin(0, -this._currencyLabel.getContentSize().height / 2, 0, -this._currencyLabel.getContentSize().height / 2);
             currencyLayout.setGravity(ccui.LinearLayoutParameter.CENTER_HORIZONTAL);
             currencyLayout.setMargin(currencyMargin);
             this._currencyLabel.setLayoutParameter(currencyLayout);
@@ -270,7 +270,7 @@ var ShopMenuLayer = (function() {
                 anchorY: 0.5
             });
             var buttonLayout = new ccui.LinearLayoutParameter();
-            var buttonMargin = new ccui.Margin(0, 10, 0, 10);
+            var buttonMargin = new ccui.Margin(0, -coinSize.height / 2, 0, -coinSize.height / 2);
             buttonLayout.setGravity(ccui.LinearLayoutParameter.CENTER_HORIZONTAL);
             buttonLayout.setMargin(buttonMargin);
             buyCoinsButton.setLayoutParameter(buttonLayout);
@@ -281,7 +281,7 @@ var ShopMenuLayer = (function() {
             var coinProduct = NJ.purchases.getProductByName("coin1");
             this._currencyInfoLabel = this.generateLabel("25000 Bubbles - " + (coinProduct ? coinProduct.price : "?"), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
             var infoLayout = new ccui.LinearLayoutParameter();
-            var infoMargin = new ccui.Margin(0, 10, 0, 10);
+            var infoMargin = new ccui.Margin(0, 0, 0, 0);
             infoLayout.setGravity(ccui.LinearLayoutParameter.CENTER_HORIZONTAL);
             infoLayout.setMargin(infoMargin);
             this._currencyInfoLabel.setLayoutParameter(infoLayout);
@@ -431,6 +431,7 @@ var ShopMenuLayer = (function() {
             });
 
             var background = new cc.Sprite(res.alertImage);
+            var backgroundSize = background.getContentSize();
             background.setColor(NJ.themes.backgroundColor);
             background.attr({
                 anchorX: 0.5,
@@ -438,6 +439,7 @@ var ShopMenuLayer = (function() {
                 x: toolSize.width / 2,
                 y: toolSize.height / 2
             });
+            background.setScale(toolSize.width / backgroundSize.width, toolSize.height / backgroundSize.height);
             background.setTag(333);
             this._toolMenu.addChild(background);
 

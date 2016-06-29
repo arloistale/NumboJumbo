@@ -25,9 +25,11 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-f93b109430a3f537259c1fee8b126e6e.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-36b7fb7e7fc81ff5437e8c376bb8db11.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/android-async-http-1.4.8-f1cd50a1c5325c0ff06c4ea025e18dc2.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/amazon-iap-7132b94e98fa5f8174911623ebe4c5bd.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginGoogleAnalytics-502430e5a697752f61c660c1377a2fe8.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/android-support-v4-e73ff3009d89ded987d0a7a30f39cdb1.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/google-play-services-cc58d816c68eae4523aad231ea1b1b9f.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginAmazon-914ef8275c52e5e400e74da32bb246fc.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginIAP-84288a9addff94799b08ec24fd00eee5.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/sdkbox-007279c4d5f63566d62b328ac45cd80b.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginSdkboxPlay-9e74d681bbf168cebf8f8147dbfecb58.jar \

@@ -159,7 +159,7 @@ var SettingsMenuLayer = (function() {
             });
 
             // divider cuts the middle
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
             var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
             divider.setTag(444);
@@ -323,7 +323,7 @@ var SettingsMenuLayer = (function() {
 
         // generate dividers on headers and toolbars
         _generateBaseDividers: function() {
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
             var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
             headerDivider.setBackgroundImage(res.alertImage);

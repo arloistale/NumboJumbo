@@ -191,7 +191,7 @@ var GameOverMenuLayer = (function() {
                 scoreTitleLabel = this.generateLabel("Score", header2Size);
                 this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
-                var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+                var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
                 var divider = new NJMenuItem(cc.size(dividerHeight, this._statsMenu.getContentSize().height * 0.8));
                 divider.setTag(444);
@@ -252,7 +252,7 @@ var GameOverMenuLayer = (function() {
 
             this._shopMenu.alignItemsVerticallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.0025));
 
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
             var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
             divider.setTag(444);
@@ -306,7 +306,7 @@ var GameOverMenuLayer = (function() {
 
             this._promoMenu.alignItemsVerticallyWithPadding(10);
 
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
             var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
             divider.setTag(444);
@@ -434,7 +434,7 @@ var GameOverMenuLayer = (function() {
 
         // generate dividers on headers and toolbars
         _generateBaseDividers: function() {
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
             var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
             headerDivider.setTag(444);
