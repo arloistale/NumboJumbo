@@ -129,8 +129,7 @@ var ToolbarLayer = (function() {
             this._hintButton.setImageRes(res.helpImage);
             this._buttonsMenu.addChild(this._hintButton);
 
-
-            this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
+            this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
             this.addChild(this._buttonsMenu);
         },
 

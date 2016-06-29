@@ -62,6 +62,7 @@ var res = {
     // ingame
     blockImage: resRoot + "Images/blockImage/blockImage1x.png",
     blockImage2x: resRoot + "Images/blockImage/blockImage2x.png",
+    blockImageFaded: resRoot + "Images/blockImage/blockImageFaded.png",
     alertImage: resRoot + "Images/alertOverlay.png",
     handImage: resRoot + "Images/ic_hand/Hand2.png",
     cancelImage: resRoot + "Images/ic_cancel/ic_cancel_2x.png",

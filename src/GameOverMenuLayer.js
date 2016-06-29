@@ -368,7 +368,7 @@ var GameOverMenuLayer = (function() {
             this._toolMenu.addChild(retryButton);
             this._toolMenu.addChild(menuButton);
 
-            this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
+            this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
 
             this.addChild(this._toolMenu, 100);
         },

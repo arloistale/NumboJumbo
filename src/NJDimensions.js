@@ -20,12 +20,15 @@ NJ.uiSizes = {
     doublerArea: 0.24,
 
     // bar buttons are calculated based on their bar content sizes
-    barButton: 0.7,
+    barButton: 0.5,
+    barSpacing: 0.1,
 
     // buttons
     playButton: 0.28,
     optionButton: 0.15,
     textButton: 0.075,
+
+    shopButton: 0.1,
 
     // labels
     large: 0.2,
