@@ -62,6 +62,9 @@ var NumboMenuLayer = (function() {
             this._updateTheme();
 
             this._initAudio();
+
+            this._generateBaseDividers();
+
 /*
             NJ.settings.hasLoadedMM = false;
             NJ.settings.hasLoadedMOV = false;
@@ -86,14 +89,14 @@ var NumboMenuLayer = (function() {
 
         _initHeaderUI: function() {
             this._headerMenu = new cc.Menu();
-            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 1.5));
+            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
             this._headerMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
                 y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2
             });
 
-            var logo = new NJMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar * 1.5));
+            var logo = new NJMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
             logo.setImageRes(res.logoImage);
             var logoSize = logo.getContentSize();
             var rawSize = logo.getRawImageSize();
@@ -472,8 +475,66 @@ var NumboMenuLayer = (function() {
             });
         },
 
+        // UI Helpers //
+
+        // generate dividers on headers and toolbars
+        _generateBaseDividers: function() {
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
+
+            var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            headerDivider.setTag(444);
+            headerDivider.setBackgroundImage(res.alertImage);
+            headerDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
+            headerDivider.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: -this._headerMenu.getContentSize().height / 2 + dividerHeight
+            });
+            this._headerMenu.addChild(headerDivider);
+
+            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            toolDivider.setTag(444);
+            toolDivider.setBackgroundImage(res.alertImage);
+            toolDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
+            toolDivider.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: this._toolMenu.getContentSize().height / 2 - dividerHeight
+            });
+            this._toolMenu.addChild(toolDivider);
+        },
+
         _updateTheme: function() {
             this.setColor(NJ.themes.backgroundColor);
+
+            var i;
+
+            var children = this.getChildren();
+
+            for(i = 0; i < children.length; i++) {
+                if(children[i].mType && children[i].mType == "NJMenuItem")
+                    children[i].updateTheme();
+                else {
+                    var childrenChildrenStack = [children[i].getChildren()];
+
+                    while(childrenChildrenStack.length > 0) {
+                        var childrenChildren = childrenChildrenStack.pop();
+
+                        for(var j = 0; j < childrenChildren.length; ++j) {
+                            if(childrenChildren[j] && childrenChildren[j].getTag() != 666 && childrenChildren[j].mType && childrenChildren[j].mType == "NJMenuItem") {
+                                childrenChildren[j].updateTheme();
+
+                                if(childrenChildren[j].getTag() == 333)
+                                    childrenChildren[j].setBackgroundColor(NJ.themes.backgroundColor);
+                                else if(childrenChildren[j].getTag() == 444)
+                                    childrenChildren[j].setBackgroundColor(NJ.themes.defaultLabelColor);
+
+                            } else if(childrenChildren[j])
+                                childrenChildrenStack.push(childrenChildren[j].getChildren());
+                        }
+                    }
+                }
+            }
 
             var index = 0;
 
@@ -485,12 +546,6 @@ var NumboMenuLayer = (function() {
                 this._modeData[key].button.setLabelColor(NJ.themes.defaultLabelColor);
 
                 index++;
-            }
-
-            var children = this._toolMenu.getChildren();
-
-            for(var i = 0; i < children.length; i++) {
-                children[i].updateTheme();
             }
         }
     });

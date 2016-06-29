@@ -21,7 +21,7 @@ NJ.uiSizes = {
 
     // bar buttons are calculated based on their bar content sizes
     barButton: 0.5,
-    barSpacing: 0.1,
+    barSpacing: 0.05,
 
     // buttons
     playButton: 0.28,

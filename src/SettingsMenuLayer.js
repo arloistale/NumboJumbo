@@ -264,7 +264,7 @@ var SettingsMenuLayer = (function() {
                 this._toolMenu.addChild(backButton);
             }
 
-            this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.02));
+            this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
 
             this.addChild(this._toolMenu, 100);
         },

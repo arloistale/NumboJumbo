@@ -37,8 +37,6 @@ var NJMenuButton = NJMenuItem.extend({
         buyCoinsButton.addTouchEventListener(function(sender, type) {
             switch(type) {
                 case ccui.Widget.TOUCH_ENDED:
-                    cc.log(sender);
-                    cc.log(type);
                     if(callback)
                         callback();
                     break;
