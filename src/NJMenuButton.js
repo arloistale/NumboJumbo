@@ -4,15 +4,18 @@
 
 var NJMenuButton = NJMenuItem.extend({
 
-
     // Highlight Data
     _highlightSprite: null,
     _highlightScale: null,
 
     _isHighlightEnabled: false,
 
+    _touchMoveThreshold: -1,
+
     ctor: function(size, callback, target) {
         this._super(size, callback, target);
+
+        var that = this;
 
         if(size.height >= NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.large)) {
             this.setBackgroundImage(res.blockImage2x);
@@ -37,12 +40,29 @@ var NJMenuButton = NJMenuItem.extend({
         buyCoinsButton.addTouchEventListener(function(sender, type) {
             switch(type) {
                 case ccui.Widget.TOUCH_ENDED:
-                    if(callback)
+                    var dist = cc.pDistance(sender._touchBeganPosition, sender._touchEndPosition);
+                    if((dist <= NJ.calculateScreenDimensionFromRatio(that._touchMoveThreshold) || that._touchMoveThreshold < 0) && callback)
                         callback();
                     break;
             }
         }, this);
 
         this.addChild(buyCoinsButton, 70);
+    },
+
+    setImageRes: function(res) {
+        this._super(res);
+
+        this.setImageColor(NJ.themes.defaultButtonForegroundColor);
+    },
+
+    updateTheme: function() {
+        this._super();
+
+        this.setImageColor(NJ.themes.defaultButtonForegroundColor);
+    },
+
+    setTouchMoveThreshold: function(threshold) {
+        this._touchMoveThreshold = threshold;
     }
 });

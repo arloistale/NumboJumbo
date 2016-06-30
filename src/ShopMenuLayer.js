@@ -78,6 +78,36 @@ var ShopMenuLayer = (function() {
         }
     };
 
+    var onBuyHints = function() {
+        NJ.audio.playSound(res.coinSound);
+
+        var that = this;
+
+        if(NJ.stats.getCurrency() >= NJ.purchases.hintsCost) {
+            NJ.stats.addCurrency(-NJ.purchases.hintsCost);
+            that.updateCurrencyLabel();
+            that.updatePowerups();
+            NJ.stats.save();
+        } else {
+            that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
+        }
+    };
+
+    var onBuyScramblers = function() {
+        NJ.audio.playSound(res.coinSound);
+
+        var that = this;
+
+        if(NJ.stats.getCurrency() >= NJ.purchases.scramblersCost) {
+            NJ.stats.addCurrency(-NJ.purchases.scramblersCost);
+            that.updateCurrencyLabel();
+            that.updatePowerups();
+            NJ.stats.save();
+        } else {
+            that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
+        }
+    };
+
     var onActivateTheme = function(index) {
         NJ.audio.playSound(res.coinSound);
 
@@ -117,6 +147,7 @@ var ShopMenuLayer = (function() {
         _contentScrollView: null,
 
         _bubblesMenu: null,
+        _powerupsMenu: null,
         _themesMenu: null,
         _doublerMenu: null,
 
@@ -149,6 +180,7 @@ var ShopMenuLayer = (function() {
             this._initHeaderUI();
             this._initContentUI();
             this._initBubblesUI();
+            this._initPowerupsUI();
             this._initThemesUI();
             this._initDoublerUI();
             this._initToolUI(shouldShowBackButton);
@@ -216,7 +248,7 @@ var ShopMenuLayer = (function() {
             this._contentScrollView.setTouchEnabled(true);
             this._contentScrollView.setBounceEnabled(true);
             this._contentScrollView.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (1 - NJ.uiSizes.header - NJ.uiSizes.toolbar)));
-            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.themesArea + NJ.uiSizes.doublerArea)));
+            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.powerupsArea + NJ.uiSizes.themesArea + NJ.uiSizes.doublerArea)));
             this._contentScrollView.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -275,6 +307,72 @@ var ShopMenuLayer = (function() {
             this._contentScrollView.addChild(this._bubblesMenu);
         },
 
+        _initPowerupsUI: function() {
+            this._powerupsMenu = new cc.Menu();
+            this._powerupsMenu.setContentSize(cc.size(cc.visibleRect.width, NJ.uiSizes.powerupsArea * cc.visibleRect.height));
+
+            this._powerupsMenu.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: this._contentScrollView.width / 2,
+                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.powerupsArea / 2))
+            });
+
+            // generate music toggle
+            var powerupsLabel = this.generateLabel("POWERUPS", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            var coinSize = cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.shopButton), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.shopButton));
+
+            this._buyHintsButton = new NJMenuButton(cc.size(coinSize.height, coinSize.height), onBuyHints.bind(this), this);
+            this._buyHintsButton.setBackgroundColor(NJ.themes.hintsColor);
+            this._buyHintsButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
+            this._buyHintsButton.setImageRes(res.helpImage);
+            this._buyHintsButton.setLabelTitle("5 Hints - 500");
+            this._buyHintsButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            this._buyHintsButton.offsetLabel(cc.p(0, -this._buyHintsButton.getContentSize().height / 1.25));
+
+            this._buyScramblersButton = new NJMenuButton(cc.size(coinSize.height, coinSize.height), onBuyScramblers.bind(this), this);
+            this._buyScramblersButton.setBackgroundColor(NJ.themes.scramblersColor);
+            this._buyScramblersButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
+            this._buyScramblersButton.setImageRes(res.retryImage);
+            this._buyScramblersButton.setLabelTitle("3 Scramblers - 1000");
+            this._buyScramblersButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            this._buyScramblersButton.offsetLabel(cc.p(0, -this._buyScramblersButton.getContentSize().height / 1.25));
+
+            this._powerupsMenu.addChild(this._buyHintsButton);
+            this._powerupsMenu.addChild(this._buyScramblersButton);
+
+            this._powerupsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.32));
+
+            this._powerupsMenu.addChild(powerupsLabel);
+            powerupsLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: 0,
+                y: this._buyScramblersButton.getContentSize().height / 2 + powerupsLabel.getContentSize().height
+            });
+
+            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
+
+            var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            divider.setTag(444);
+            divider.setBackgroundImage(res.alertImage);
+            divider.setBackgroundColor(NJ.themes.defaultLabelColor);
+            divider.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                y: -this._powerupsMenu.getContentSize().height / 2
+            });
+            this._powerupsMenu.addChild(divider);
+
+            this._contentScrollView.addChild(this._powerupsMenu);
+        },
+
         _initThemesUI: function() {
             var that = this;
 
@@ -285,7 +383,7 @@ var ShopMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: this._contentScrollView.width / 2,
-                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.themesArea / 2))
+                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.powerupsArea + NJ.uiSizes.themesArea / 2))
             });
 
             var titleLabel = this.generateLabel("THEMES", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
@@ -311,7 +409,7 @@ var ShopMenuLayer = (function() {
                     themeButton.setTag(666);
                     var labelStr = themes[i].themeName + " - ";
                     if(!themes[i].isPurchased) {
-                        labelStr += themes[i].themeCost + " Bubbles";
+                        labelStr += themes[i].themeCost + "";
                     } else {
                         labelStr += isCurrentTheme ? "Active" : "Owned";
                     }
@@ -357,7 +455,7 @@ var ShopMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: this._contentScrollView.width / 2,
-                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.themesArea + NJ.uiSizes.doublerArea / 2))
+                y: this._contentScrollView.innerHeight - (cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.powerupsArea + NJ.uiSizes.themesArea + NJ.uiSizes.doublerArea / 2))
             });
 
             this._doublerInfoLabel = this.generateLabel("Earning bubbles too slowly?\nBuy the Bubble Doubler for doubled bubble rate!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
@@ -484,6 +582,10 @@ var ShopMenuLayer = (function() {
             this._currencyLabel.setLabelTitle("Bubbles: " + NJ.stats.getCurrency());
         },
 
+        updatePowerups: function() {
+
+        },
+
         // generate dividers on headers and toolbars
         _generateBaseDividers: function() {
             var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
@@ -549,6 +651,9 @@ var ShopMenuLayer = (function() {
                     }
                 }
             }
+
+            this._buyHintsButton.setBackgroundColor(NJ.themes.hintsColor);
+            this._buyScramblersButton.setBackgroundColor(NJ.themes.scramblersColor);
 
             var themes = NJ.themes.getList();
             var themeButton;

@@ -74,7 +74,11 @@ NJ.themes = (function() {
             defaultLabelColor: cc.color("#6C6760"),
             specialLabelColor: cc.color("#50aa91"),
             specialLabelColor2: cc.color("#00A896"),
-            defaultButtonColor: cc.color("#424242"),
+            defaultButtonColor: cc.color("#eeeeee"),
+            defaultButtonForegroundColor: cc.color("#ffffff"),
+
+            hintsColor: cc.color("#50aa91"),
+            scramblersColor: cc.color("#00a896"),
 
             shadowColor: cc.color("#ffffff"),
 
@@ -123,6 +127,10 @@ NJ.themes = (function() {
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#6C6760"),
+            defaultButtonForegroundColor: cc.color("#ffffff"),
+
+            hintsColor: cc.color("#33a5ba"),
+            scramblersColor: cc.color("#00a896"),
 
             shadowColor: cc.color("#ffffff"),
 
@@ -181,6 +189,10 @@ NJ.themes = (function() {
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#6C6760"),
+            defaultButtonForegroundColor: cc.color("#ffffff"),
+
+            hintsColor: cc.color("#33a5ba"),
+            scramblersColor: cc.color("#00a896"),
 
             shadowColor: cc.color("#ffffff"),
 
@@ -234,6 +246,10 @@ NJ.themes = (function() {
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#6C6760"),
+            defaultButtonForegroundColor: cc.color("#fffdaa"),
+
+            hintsColor: cc.color("#33a5ba"),
+            scramblersColor: cc.color("#00a896"),
 
             shadowColor: cc.color("#FFFDAA"),
 
@@ -329,8 +345,6 @@ NJ.themes = (function() {
 
 
  */
-
-
     ];
 
     var _lightTheme = data[0];
@@ -352,6 +366,10 @@ NJ.themes = (function() {
         specialLabelColor: main.specialLabelColor,
         specialLabelColor2: main.specialLabelColor2,
         defaultButtonColor: main.defaultButtonColor,
+        defaultButtonForegroundColor: main.defaultButtonForegroundColor,
+
+        hintsColor: main.hintsColor,
+        scramblersColor: main.scramblersColor,
 
         shadowColor: main.shadowColor,
 

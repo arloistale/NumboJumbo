@@ -16,6 +16,7 @@ NJ.uiSizes = {
 
     // shop elements
     bubblesArea: 0.24,
+    powerupsArea: 0.24,
     themesArea: 0.85,
     doublerArea: 0.24,
 

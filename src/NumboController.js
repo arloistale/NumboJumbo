@@ -442,7 +442,7 @@ var NumboController = (function() {
 				" crap, might as well throw our hands in the air and spawn random stuff");
 			return [];
 		},
-		
+
         resetKnownPath: function(){
             this._knownPath = [];
         },

@@ -30,6 +30,10 @@ NJ.purchases = (function() {
 
         productsData: {},
 
+        // non IAP products
+        hintsCost: 500,
+        scramblersCost: 1000,
+
         // Initialization //
 
         init: function () {

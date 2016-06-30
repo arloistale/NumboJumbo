@@ -328,6 +328,7 @@ var NJMenuItem = (function() {
         // Image Logic //
         /////////////////
 
+        // set the image file shown in the foreground of the menu item
         setImageRes: function(res) {
             if(this._spriteStates.normal.getChildByTag(117))
                 this._spriteStates.normal.removeChildByTag(117);
@@ -346,6 +347,16 @@ var NJMenuItem = (function() {
             this._spriteStates.normal.addChild(this._imageStates.normal, 1, 117);
             this._spriteStates.selected.addChild(this._imageStates.selected, 1, 117);
             this._spriteStates.disabled.addChild(this._imageStates.disabled, 1, 117);
+        },
+
+        // changes the color of the menu item foreground image
+        setImageColor: function(color) {
+            for(var key in this._imageStates) {
+                if(!this._imageStates.hasOwnProperty(key))
+                    continue;
+
+                this._imageStates[key].setColor(color);
+            }
         },
 
         // Assumes sizes is a cc.Size
