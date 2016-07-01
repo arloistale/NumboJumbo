@@ -58,8 +58,8 @@ NJ.gameState = (function() {
             blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             blocksCleared = 0;
 
-            scramblesRemaining = 3;
-            hintsRemaining = 10;
+            scramblesRemaining = Math.min(3, NJ.stats.getNumScramblers());
+            hintsRemaining = Math.min(10, NJ.stats.getNumHints());
         },
 
         ///////////////////////
