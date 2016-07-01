@@ -5,7 +5,14 @@
 var NJ = NJ || {};
 
 NJ.stats = (function() {
+
+    const MAX_NUM_HINTS = 99;
+    const MAX_NUM_SCRAMBLERS = 99;
+
     var currency = 0;
+
+    var hints = 0;
+    var scramblers = 0;
 
     var isDoublerEnabled = false;
 
@@ -15,6 +22,10 @@ NJ.stats = (function() {
     var numGamesCompleted = 0;
 
     return {
+
+        // expose constants
+        MAX_NUM_HINTS: MAX_NUM_HINTS,
+        MAX_NUM_SCRAMBLERS: MAX_NUM_SCRAMBLERS,
 
         ///////////////////
         // Serialization //
@@ -36,6 +47,9 @@ NJ.stats = (function() {
             currency = parseInt(cc.sys.localStorage.getItem('currency')) || 0;
             numGamesCompleted = parseInt(cc.sys.localStorage.getItem('numGamesCompleted')) || 0;
 
+            hints = parseInt(cc.sys.localStorage.getItem('hints')) || 0;
+            scramblers = parseInt(cc.sys.localStorage.getItem('scramblers')) || 0;
+
             isDoublerEnabled = (cc.sys.localStorage.getItem('isDoublerEnabled') || 'false') == 'true';
         },
 
@@ -52,6 +66,9 @@ NJ.stats = (function() {
             // save misc
             cc.sys.localStorage.setItem('currency', JSON.stringify(currency));
             cc.sys.localStorage.setItem('numGamesCompleted', JSON.stringify(numGamesCompleted));
+
+            cc.sys.localStorage.setItem('hints', JSON.stringify(hints));
+            cc.sys.localStorage.setItem('scramblers', JSON.stringify(scramblers));
 
             cc.sys.localStorage.setItem('isDoublerEnabled', JSON.stringify(isDoublerEnabled));
         },
@@ -122,6 +139,30 @@ NJ.stats = (function() {
 
         isDoubleEnabled: function() {
             return isDoublerEnabled;
+        },
+
+        getNumHints: function() {
+            return hints;
+        },
+
+        getNumScramblers: function() {
+            return scramblers;
+        },
+
+        addHints: function(amount) {
+            hints += amount;
+        },
+
+        addScramblers: function(amount) {
+            scramblers += amount;
+        },
+
+        depleteHints: function() {
+            hints--;
+        },
+
+        depleteScramblers: function() {
+            scramblers--;
         }
     }
 }());

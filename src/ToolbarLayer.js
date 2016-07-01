@@ -71,20 +71,6 @@ var ToolbarLayer = (function() {
             this._super();
 
             this.setContentSize(size.width, size.height);
-/*
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
-
-            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
-            toolDivider.setBackgroundImage(res.alertImage);
-            toolDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
-            toolDivider.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: this.getContentSize().width / 2,
-                y: this.getContentSize().height - dividerHeight
-            });
-            this.addChild(toolDivider);
-            */
 
             this._initButtons();
             this._initLabels();
@@ -119,15 +105,17 @@ var ToolbarLayer = (function() {
 
             this._pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
             this._pauseButton.setImageRes(res.pauseImage);
-            this._buttonsMenu.addChild(this._pauseButton);
+            //this._buttonsMenu.addChild(this._pauseButton);
 
             this._scrambleButton = new NJMenuButton(buttonSize, onScramble.bind(this), this);
+            this._scrambleButton.setBackgroundColor(NJ.themes.scramblersColor);
             this._scrambleButton.setImageRes(res.retryImage);
-            //this._buttonsMenu.addChild(this._scrambleButton);
+            this._buttonsMenu.addChild(this._scrambleButton);
 
             this._hintButton = new NJMenuButton(buttonSize, onHint.bind(this), this);
+            this._hintButton.setBackgroundColor(NJ.themes.hintsColor);
             this._hintButton.setImageRes(res.helpImage);
-            //this._buttonsMenu.addChild(this._hintButton);
+            this._buttonsMenu.addChild(this._hintButton);
 
             this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
             this.addChild(this._buttonsMenu);

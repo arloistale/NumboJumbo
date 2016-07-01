@@ -40,8 +40,9 @@ var NJMenuButton = NJMenuItem.extend({
         buyCoinsButton.addTouchEventListener(function(sender, type) {
             switch(type) {
                 case ccui.Widget.TOUCH_ENDED:
-                    var dist = cc.pDistance(sender._touchBeganPosition, sender._touchEndPosition);
-                    if((dist <= NJ.calculateScreenDimensionFromRatio(that._touchMoveThreshold) || that._touchMoveThreshold < 0) && callback)
+                    //var dist = cc.pDistance(sender._touchBeganPosition, sender._touchEndPosition);
+                    //if((dist <= NJ.calculateScreenDimensionFromRatio(that._touchMoveThreshold) || that._touchMoveThreshold < 0) && callback)
+                    if(callback)
                         callback();
                     break;
             }
