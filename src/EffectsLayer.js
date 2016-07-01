@@ -178,8 +178,8 @@ var EffectsLayer = cc.Layer.extend({
 
         particleSystem.runAction(cc.sequence(cc.delayTime(1), invisibleAction));
 
-        if(shouldLaunchShadow)
-            this.launchShadow(col, row, NJ.themes.shadowColor);
+        //if(shouldLaunchShadow)
+          //  this.launchShadow(col, row, NJ.themes.shadowColor);
     },
 
     launchShadow: function(col, row, color){

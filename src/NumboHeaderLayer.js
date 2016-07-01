@@ -27,20 +27,6 @@ var NumboHeaderLayer = (function() {
             this.setContentSize(size.width, size.height);
 
             this.initLabels();
-/*
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(0.005);
-
-            var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
-            headerDivider.setBackgroundImage(res.alertImage);
-            headerDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
-            headerDivider.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: this.getContentSize().width / 2,
-                y: dividerHeight
-            });
-            this.addChild(headerDivider);
-            */
         },
 
         // Create the labels used to communicate game state with text.

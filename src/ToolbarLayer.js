@@ -95,6 +95,7 @@ var ToolbarLayer = (function() {
 
             // initialize pause button
             this._buttonsMenu = new cc.Menu();
+            this._buttonsMenu.setContentSize(contentSize);
             this._buttonsMenu.attr({
                 x: contentSize.width / 2,
                 y: contentSize.height / 2
@@ -110,21 +111,26 @@ var ToolbarLayer = (function() {
             this._scrambleButton.setBackgroundColor(NJ.themes.scramblersColor);
             this._scrambleButton.setLabelColor(NJ.themes.defaultLabelColor);
             this._scrambleButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
-            this._scrambleButton.offsetLabel(cc.p(0, -this._scrambleButton.getContentSize().height));
+            this._scrambleButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            this._scrambleButton.offsetLabel(cc.p(0, -this._scrambleButton.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2));
             this._scrambleButton.setImageRes(res.retryImage);
 
             this._hintButton = new NJMenuButton(buttonSize, onHint.bind(this), this);
             this._hintButton.setBackgroundColor(NJ.themes.hintsColor);
             this._hintButton.setLabelColor(NJ.themes.defaultLabelColor);
             this._hintButton.setLabelTitle(NJ.stats.getNumHints() + "");
-            this._hintButton.offsetLabel(cc.p(0, -this._hintButton.getContentSize().height));
+            this._hintButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            this._hintButton.offsetLabel(cc.p(0, -this._hintButton.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2));
             this._hintButton.setImageRes(res.helpImage);
 
             this._buttonsMenu.addChild(this._hintButton);
-            this._buttonsMenu.addChild(this._pauseButton);
+            //this._buttonsMenu.addChild(this._pauseButton);
             this._buttonsMenu.addChild(this._scrambleButton);
 
             this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
+
+            this._scrambleButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
+            this._hintButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
             this.addChild(this._buttonsMenu);
         },
 
@@ -135,6 +141,8 @@ var ToolbarLayer = (function() {
         enterTutorialMode: function() {
             var imageRes = res.homeImage;
             this._pauseButton.setImageRes(imageRes);
+            this._hintButton.setChildrenOpacity(0);
+            this._scrambleButton.setChildrenOpacity(0);
         },
 
         reset: function() {
