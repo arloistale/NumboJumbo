@@ -57,6 +57,7 @@ NJ.gameState = (function() {
             prevBlocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel - 1);
             blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             blocksCleared = 0;
+
             scramblesRemaining = 3;
             hintsRemaining = 10;
         },
