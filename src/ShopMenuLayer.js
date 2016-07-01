@@ -4,6 +4,12 @@
 
 var ShopMenuLayer = (function() {
 
+    const NUM_HINTS_PER_PURCHASE = 5;
+    const NUM_SCRAMBLERS_PER_PURCHASE = 3;
+
+    const COST_HINTS = 2500;
+    const COST_SCRAMBLERS = 4000;
+
     var _devCount = 0;
     var _logCount = 0;
 
@@ -83,13 +89,16 @@ var ShopMenuLayer = (function() {
 
         var that = this;
 
-        if(NJ.stats.getCurrency() >= NJ.purchases.hintsCost) {
-            NJ.stats.addCurrency(-NJ.purchases.hintsCost);
-            that.updateCurrencyLabel();
-            that.updatePowerups();
-            NJ.stats.save();
-        } else {
-            that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
+        if(NJ.stats.getNumHints() + NUM_HINTS_PER_PURCHASE <= NJ.stats.MAX_NUM_HINTS) {
+            if (NJ.stats.getCurrency() >= COST_HINTS) {
+                NJ.stats.addCurrency(-COST_HINTS);
+                NJ.stats.addHints(5);
+                that.updateCurrencyLabel();
+                that.updatePowerups();
+                NJ.stats.save();
+            } else {
+                that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
+            }
         }
     };
 
@@ -98,13 +107,16 @@ var ShopMenuLayer = (function() {
 
         var that = this;
 
-        if(NJ.stats.getCurrency() >= NJ.purchases.scramblersCost) {
-            NJ.stats.addCurrency(-NJ.purchases.scramblersCost);
-            that.updateCurrencyLabel();
-            that.updatePowerups();
-            NJ.stats.save();
-        } else {
-            that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
+        if(NJ.stats.getNumScramblers() + NUM_SCRAMBLERS_PER_PURCHASE <= NJ.stats.MAX_NUM_SCRAMBLERS) {
+            if (NJ.stats.getCurrency() >= COST_SCRAMBLERS) {
+                NJ.stats.addCurrency(-COST_SCRAMBLERS);
+                NJ.stats.addScramblers(NUM_SCRAMBLERS_PER_PURCHASE);
+                that.updateCurrencyLabel();
+                that.updatePowerups();
+                NJ.stats.save();
+            } else {
+                that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
+            }
         }
     };
 
@@ -320,42 +332,70 @@ var ShopMenuLayer = (function() {
 
             // generate music toggle
             var powerupsLabel = this.generateLabel("POWERUPS", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+
+            // create a menu item container to store buttons and
             var coinSize = cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.shopButton), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.shopButton));
+            var labelSize = cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+
+            var buttonContainer = new cc.MenuItem();
+            buttonContainer.setContentSize(cc.visibleRect.width, coinSize.height + labelSize.height + NJ.calculateScreenDimensionFromRatio(0.025));
+            buttonContainer.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
 
             this._buyHintsButton = new NJMenuButton(cc.size(coinSize.height, coinSize.height), onBuyHints.bind(this), this);
             this._buyHintsButton.setBackgroundColor(NJ.themes.hintsColor);
             this._buyHintsButton.attr({
                 anchorX: 0.5,
-                anchorY: 0.5
+                anchorY: 0.5,
+                x: cc.visibleRect.width / 3,
+                y: buttonContainer.getContentSize().height / 2 + this._buyHintsButton.getContentSize().height / 2
             });
+            this._buyHintsButton.setLabelColor(NJ.themes.defaultLabelColor);
+            this._buyHintsButton.setLabelTitle(NJ.stats.getNumHints() + "");
+            this._buyHintsButton.offsetLabel(cc.p(this._buyHintsButton.getContentSize().width, 0));
             this._buyHintsButton.setImageRes(res.helpImage);
-            this._buyHintsButton.setLabelTitle("5 Hints - 500");
-            this._buyHintsButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
-            this._buyHintsButton.offsetLabel(cc.p(0, -this._buyHintsButton.getContentSize().height / 1.25));
+
+            var buyHintsLabel = this.generateLabel("5 Hints\n" + COST_HINTS, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            buyHintsLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: cc.visibleRect.width / 3,
+                y: buttonContainer.getContentSize().height / 2 - buyHintsLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
+            });
 
             this._buyScramblersButton = new NJMenuButton(cc.size(coinSize.height, coinSize.height), onBuyScramblers.bind(this), this);
             this._buyScramblersButton.setBackgroundColor(NJ.themes.scramblersColor);
             this._buyScramblersButton.attr({
                 anchorX: 0.5,
-                anchorY: 0.5
+                anchorY: 0.5,
+                x: cc.visibleRect.width * 2 / 3,
+                y: buttonContainer.getContentSize().height / 2 + this._buyScramblersButton.getContentSize().height / 2
             });
+            this._buyScramblersButton.setLabelColor(NJ.themes.defaultLabelColor);
+            this._buyScramblersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
+            this._buyScramblersButton.offsetLabel(cc.p(this._buyScramblersButton.getContentSize().width, 0));
             this._buyScramblersButton.setImageRes(res.retryImage);
-            this._buyScramblersButton.setLabelTitle("3 Scramblers - 1000");
-            this._buyScramblersButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
-            this._buyScramblersButton.offsetLabel(cc.p(0, -this._buyScramblersButton.getContentSize().height / 1.25));
 
-            this._powerupsMenu.addChild(this._buyHintsButton);
-            this._powerupsMenu.addChild(this._buyScramblersButton);
-
-            this._powerupsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.32));
-
-            this._powerupsMenu.addChild(powerupsLabel);
-            powerupsLabel.attr({
+            var buyScramblersLabel = this.generateLabel("3 Scramblers\n" + COST_SCRAMBLERS, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            buyScramblersLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: 0,
-                y: this._buyScramblersButton.getContentSize().height / 2 + powerupsLabel.getContentSize().height
+                x: cc.visibleRect.width * 2 / 3,
+                y: buttonContainer.getContentSize().height / 2 - buyScramblersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
             });
+
+            buttonContainer.addChild(this._buyHintsButton);
+            buttonContainer.addChild(buyHintsLabel);
+
+            buttonContainer.addChild(this._buyScramblersButton);
+            buttonContainer.addChild(buyScramblersLabel);
+
+            this._powerupsMenu.addChild(powerupsLabel);
+            this._powerupsMenu.addChild(buttonContainer);
+
+            this._powerupsMenu.alignItemsVerticallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.025));
 
             var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
@@ -583,7 +623,8 @@ var ShopMenuLayer = (function() {
         },
 
         updatePowerups: function() {
-
+            this._buyHintsButton.setLabelTitle(NJ.stats.getNumHints() + "");
+            this._buyScramblersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
         },
 
         // generate dividers on headers and toolbars

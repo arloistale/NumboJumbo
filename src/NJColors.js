@@ -74,7 +74,7 @@ NJ.themes = (function() {
             defaultLabelColor: cc.color("#6C6760"),
             specialLabelColor: cc.color("#50aa91"),
             specialLabelColor2: cc.color("#00A896"),
-            defaultButtonColor: cc.color("#eeeeee"),
+            defaultButtonColor: cc.color("#6C6760"),
             defaultButtonForegroundColor: cc.color("#ffffff"),
 
             hintsColor: cc.color("#50aa91"),
@@ -246,7 +246,7 @@ NJ.themes = (function() {
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
             defaultButtonColor: cc.color("#6C6760"),
-            defaultButtonForegroundColor: cc.color("#fffdaa"),
+            defaultButtonForegroundColor: cc.color("#ffffff"),
 
             hintsColor: cc.color("#33a5ba"),
             scramblersColor: cc.color("#00a896"),

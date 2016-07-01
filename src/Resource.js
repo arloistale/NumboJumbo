@@ -84,7 +84,6 @@ var res = {
 
     clickSound: resRoot + "Sounds/clickSound.wav",
 
-    nopeSound:  resRoot + "Sounds/nopeSound.mp3",
     swooshSound: resRoot + "Sounds/swooshSound.wav",
 
     tensionSound: resRoot + "Sounds/plangs/plang1.wav",

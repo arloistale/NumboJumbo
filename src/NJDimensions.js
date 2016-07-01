@@ -8,7 +8,7 @@ var NJ = NJ || {};
 NJ.uiSizes = {
     // elements
     headerBar: 0.12,
-    shopArea: 0.24,
+    shopArea: 0.22,
     promoArea: 0.24,
     toolbar: 0.12,
 
@@ -18,7 +18,7 @@ NJ.uiSizes = {
     bubblesArea: 0.24,
     powerupsArea: 0.24,
     themesArea: 0.85,
-    doublerArea: 0.24,
+    doublerArea: 0.25,
 
     // bar buttons are calculated based on their bar content sizes
     barButton: 0.5,
