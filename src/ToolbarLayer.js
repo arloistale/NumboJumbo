@@ -122,12 +122,12 @@ var ToolbarLayer = (function() {
             this._buttonsMenu.addChild(this._pauseButton);
 
             this._scrambleButton = new NJMenuButton(buttonSize, onScramble.bind(this), this);
-            this._scrambleButton.setImageRes(res.retryImage);
-            //this._buttonsMenu.addChild(this._scrambleButton);
+            this._scrambleButton.setImageRes(res.scrambleImage);
+            this._buttonsMenu.addChild(this._scrambleButton);
 
             this._hintButton = new NJMenuButton(buttonSize, onHint.bind(this), this);
-            this._hintButton.setImageRes(res.helpImage);
-            //this._buttonsMenu.addChild(this._hintButton);
+            this._hintButton.setImageRes(res.searchImage);
+            this._buttonsMenu.addChild(this._hintButton);
 
             this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
             this.addChild(this._buttonsMenu);
