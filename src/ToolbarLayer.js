@@ -92,9 +92,6 @@ var ToolbarLayer = (function() {
             var buttonSize = cc.size(contentSize.height * NJ.uiSizes.barButton,
                 contentSize.height * NJ.uiSizes.barButton);
 
-            this._pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
-            this._pauseButton.setImageRes(res.pauseImage);
-
             this._scrambleButton = new NJMenuButton(buttonSize, onScramble.bind(this), this);
             this._scrambleButton.setBackgroundColor(NJ.themes.scramblersColor);
             this._scrambleButton.setLabelColor(NJ.themes.defaultLabelColor);
@@ -128,7 +125,15 @@ var ToolbarLayer = (function() {
 
         enterTutorialMode: function() {
             var imageRes = res.homeImage;
+            var contentSize = this.getContentSize();
+            var buttonSize = cc.size(contentSize.height * NJ.uiSizes.barButton,
+                contentSize.height * NJ.uiSizes.barButton);
+            this._pauseButton = new NJMenuButton(buttonSize, onPause.bind(this), this);
+            this._pauseButton.setImageRes(res.pauseImage);
             this._pauseButton.setImageRes(imageRes);
+            this._buttonsMenu.removeAllChildren();
+            this._buttonsMenu.addChild(this._pauseButton);
+
             this._hintButton.setChildrenOpacity(0);
             this._scrambleButton.setChildrenOpacity(0);
         },
