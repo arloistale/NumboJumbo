@@ -317,11 +317,11 @@ var BaseGameLayer = (function() {
 			});
 
 			this._toolbarLayer.setOnScrambleCallback(function(){
-				that.scrambleBoard();
+				return that.scrambleBoard();
 			});
 
 			this._toolbarLayer.setOnHintCallback(function(){
-				that.jiggleHintBlocksAndReset();
+				return that.jiggleHintBlocksAndReset();
 			});
 
 			this.addChild(this._toolbarLayer, 999);
@@ -647,11 +647,11 @@ var BaseGameLayer = (function() {
 						hint[i].jiggleSprite();
 				}
 				this._numboController.resetKnownPath();
-			}
-			else { // refund the spent hint
 
-				NJ.gameState.incrementHintsRemaining();
+				return true;
 			}
+
+			return false;
 		},
 
 		///////////////////////

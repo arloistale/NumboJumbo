@@ -27,12 +27,16 @@ var ToolbarLayer = (function() {
     var onHint = function(){
         if (this._onHintCallback) {
             if (NJ.stats.getNumHints() > 0 && NJ.gameState.getHintsRemaining() > 0) {
-                NJ.stats.depleteHints();
-                NJ.stats.save();
-                NJ.gameState.decrementHintsRemaining();
 
-                this.updatePowerups();
-                this._onHintCallback();
+                if (this._onHintCallback()) {
+                    NJ.stats.depleteHints();
+                    NJ.stats.save();
+                    NJ.gameState.decrementHintsRemaining();
+                    this.updatePowerups();
+                }
+                else {
+                    cc.log("no hint found -- leaving hint counts alone!");
+                }
             }
         } else {
             cc.log("*** toolbar layer: hint callback not set!")
