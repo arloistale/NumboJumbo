@@ -236,12 +236,12 @@ NJ.themes = (function() {
             themeCost: 100000,
             isPurchased: false,
 
-            // more lighter grayer
-            backgroundColor: cc.color("#635063"),
+            // greyish light purple
+            //backgroundColor: cc.color("#635063"),
 
-            //pale yellow???
-            //backgroundColor: cc.color("#FFFDAA"),
-
+            // fuckin black
+            backgroundColor: cc.color("000000"),
+            
             defaultLabelColor: cc.color("#FFFDAA"),
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
@@ -258,31 +258,31 @@ NJ.themes = (function() {
             blockColors: [
 
                 // fricking pink!
-                cc.color("#DE0569"),
+                cc.color("#dd156a"),
                           
-                // light pruple?!
-                cc.color("#800080"),
+                // softer pink
+                cc.color("#da509d"),
 
                 // rich maroon
-                cc.color("#99173C"),
+                cc.color("#991a3d"),
 
-                // favorite jeans
-                cc.color("#424254"),
+                // pure cyan
+                cc.color("#00adef"),
 
                 // amaranth
-                cc.color("#CC2A41"),
+                cc.color("#Cb2e91"),
 
-                // some kinda damn purple, what do you want from me
-                cc.color("#480048"),
+                // facebook blue
+                cc.color("#384fa2"),
 
                 // bitch goddess
-                cc.color("#601848"),
+                cc.color("#7d51a1"),
 
                 // chicken pox
-                cc.color("#FA023C"),
+                cc.color("#ed1940"),
 
                 // dying rose
-                cc.color("E28B7D")
+                cc.color("e18a7c")
             ]
         }
 
