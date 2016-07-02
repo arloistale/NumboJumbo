@@ -237,6 +237,12 @@ var NJMenuItem = (function() {
 
             var contentSize = this.getContentSize();
 
+            if(this._backgroundStates) {
+                this._spriteStates.normal.removeChild(this._backgroundStates.normal);
+                this._spriteStates.selected.removeChild(this._backgroundStates.selected);
+                this._spriteStates.disabled.removeChild(this._backgroundStates.disabled);
+            }
+
             this._backgroundStates = generateImageStates(res, contentSize,
                 cc.p(contentSize.width / 2, contentSize.height / 2));
 

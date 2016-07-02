@@ -177,8 +177,8 @@ var NumboBlock = cc.Sprite.extend({
     },
 
     jiggleSprite: function() {
-        var upAction = cc.moveBy(0.1, cc.p(0, 10));
-        var downAction = cc.moveBy(0.1, cc.p(0, -10));
+        var upAction = cc.moveBy(0.2, cc.p(0, NJ.calculateScreenDimensionFromRatio(0.05))).easing(cc.easeExponentialOut());
+        var downAction = cc.moveBy(0.5, cc.p(0, -NJ.calculateScreenDimensionFromRatio(0.05))).easing(cc.easeBounceOut());
 
         this.runAction(cc.sequence(upAction, downAction));
     },

@@ -4,16 +4,27 @@ var NumboHeaderLayer = (function() {
     var scorePrefix = "Points: ";
     var condPrefix = "Cond: ";
 
+    // Touch Events
+    var onPause = function() {
+        NJ.audio.playSound(res.clickSound);
+
+        if(this._onPauseCallback && !this._isTutorialMode)
+            this._onPauseCallback();
+    };
+
     return cc.Layer.extend({
 
         // menu for buttons in the header
-        buttonsMenu: null,
+        _buttonsMenu: null,
 
         // labels
         _scoreLabel: null,
         _condLabel: null,
 
         _equationLabel: null,
+
+        // callback
+        _onPauseCallback: null,
 
         // data
         _isTutorialMode: false,
@@ -26,7 +37,30 @@ var NumboHeaderLayer = (function() {
 
             this.setContentSize(size.width, size.height);
 
+            this.initButtons();
             this.initLabels();
+        },
+
+        initButtons: function() {
+            var contentSize = this.getContentSize();
+
+            this._buttonsMenu = new cc.Menu();
+            this._buttonsMenu.setContentSize(contentSize);
+            this._buttonsMenu.attr({
+                x: contentSize.width / 2,
+                y: contentSize.height / 2
+            });
+
+            // header button encompasses menu so pause functionality is activated by pressing anywhere in header
+            var headerButton = new NJMenuButton(this._buttonsMenu.getContentSize(), onPause.bind(this), this);
+            headerButton.setBackgroundImage(res.alertImage);
+            headerButton.setChildrenOpacity(0);
+
+            this._buttonsMenu.addChild(headerButton);
+
+            this._buttonsMenu.alignItemsHorizontally();
+
+            this.addChild(this._buttonsMenu);
         },
 
         // Create the labels used to communicate game state with text.
@@ -123,6 +157,12 @@ var NumboHeaderLayer = (function() {
 
             this._scoreLabel.setString(" ");
             this._condLabel.setString(" ");
+        },
+
+        // UI Callbacks //
+
+        setOnPauseCallback: function(callback) {
+            this._onPauseCallback = callback;
         },
 
 ////////////////

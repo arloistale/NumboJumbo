@@ -4,11 +4,8 @@
 
 var NJMenuButton = NJMenuItem.extend({
 
-    // Highlight Data
-    _highlightSprite: null,
-    _highlightScale: null,
-
-    _isHighlightEnabled: false,
+    // UI Data
+    _uiButton: null,
 
     _touchMoveThreshold: -1,
 
@@ -17,29 +14,30 @@ var NJMenuButton = NJMenuItem.extend({
 
         var that = this;
 
-        if(size.height >= NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.large)) {
-            this.setBackgroundImage(res.blockImage2x);
-        } else {
-            this.setBackgroundImage(res.blockImage);
-        }
-
-        var buyCoinsButton = new ccui.Button();
-        buyCoinsButton.loadTextures(res.alertImage, res.alertImage, res.alertImage);
-        buyCoinsButton.setTouchEnabled(true);
-        buyCoinsButton.setScale(this.getContentSize().width / buyCoinsButton.getContentSize().width, this.getContentSize().height / buyCoinsButton.getContentSize().height);
-        //buyCoinsButton.setContentSize(this.getContentSize());
-        buyCoinsButton.setColor(cc.color(255, 255, 255));
-        buyCoinsButton.setOpacity(0);
-        buyCoinsButton.attr({
+        this._uiButton = new ccui.Button();
+        this._uiButton.setTouchEnabled(true);
+        this._uiButton.setColor(cc.color(255, 255, 255));
+        this._uiButton.setOpacity(0);
+        this._uiButton.attr({
             anchorX: 0.5,
             anchorY: 0.5,
             x: this.getContentSize().width / 2,
             y: this.getContentSize().height / 2
         });
-        buyCoinsButton.setSwallowTouches(false);
-        buyCoinsButton.addTouchEventListener(function(sender, type) {
+        this._uiButton.setSwallowTouches(false);
+        this._uiButton.addTouchEventListener(function(sender, type) {
             switch(type) {
+                case ccui.Widget.TOUCH_BEGAN:
+                    that._uiButton.setOpacity(64);
+                    break;
+                case ccui.Widget.TOUCH_MOVED:
+                    if(!that._uiButton.isHighlighted()) {
+                        that._uiButton.setOpacity(0);
+                    }
+
+                    break;
                 case ccui.Widget.TOUCH_ENDED:
+                    that._uiButton.setOpacity(0);
                     //var dist = cc.pDistance(sender._touchBeganPosition, sender._touchEndPosition);
                     //if((dist <= NJ.calculateScreenDimensionFromRatio(that._touchMoveThreshold) || that._touchMoveThreshold < 0) && callback)
                     if(callback)
@@ -48,7 +46,29 @@ var NJMenuButton = NJMenuItem.extend({
             }
         }, this);
 
-        this.addChild(buyCoinsButton, 70);
+        if(size.height >= NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.large)) {
+            this.setBackgroundImage(res.blockImage2x);
+        } else {
+            this.setBackgroundImage(res.blockImage);
+        }
+
+        this.addChild(this._uiButton, 70);
+    },
+
+    setEnabled: function(flag) {
+        this._super(flag);
+
+        if(this._uiButton)
+            this._uiButton.setEnabled(flag);
+    },
+
+    setBackgroundImage: function(res) {
+        this._super(res);
+
+        if(this._uiButton) {
+            this._uiButton.loadTextures(res, res, res);
+            this._uiButton.setScale(this.getContentSize().width / this._uiButton.getContentSize().width, this.getContentSize().height / this._uiButton.getContentSize().height);
+        }
     },
 
     setImageRes: function(res) {

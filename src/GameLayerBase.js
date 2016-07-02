@@ -132,6 +132,8 @@ var BaseGameLayer = (function() {
 
 			// extranneous initialization
 			this._reset();
+
+			this._toolbarLayer.updatePowerups();
 		},
 
 		onExit: function() {
@@ -304,6 +306,9 @@ var BaseGameLayer = (function() {
 			this.addChild(this._numboHeaderLayer, 999);
 			this._numboHeaderLayer.setScoreValue(0);
 			this._numboHeaderLayer.setConditionValue(0);
+			this._numboHeaderLayer.setOnPauseCallback(function() {
+				that.onPause();
+			});
 
 			// toolbar
 			this._toolbarLayer = new ToolbarLayer( this._toolBarSize);
@@ -574,7 +579,9 @@ var BaseGameLayer = (function() {
 			var positionList = [];
 			var block;
 
-			for (var i = 0; i < blockList.length; ++i){
+			var i;
+
+			for (i = 0; i < blockList.length; ++i){
 				block = blockList[i];
 				positionList.push(block.getPosition());
 			}
@@ -582,7 +589,7 @@ var BaseGameLayer = (function() {
 			this._numboController.removeAllBlocks();
 			positionList = NJ.shuffleArray(positionList);
 
-			for (var i = 0; i < positionList.length; ++i) {
+			for (i = 0; i < positionList.length; ++i) {
 				block = NumboBlock.recreate(this._blockSize);
 				this._numboController.spawnDropRandomBlock(block);
 				this._instantiateBlock(block);

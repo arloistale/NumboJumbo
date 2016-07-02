@@ -355,7 +355,7 @@ var ShopMenuLayer = (function() {
             this._buyHintsButton.setLabelColor(NJ.themes.defaultLabelColor);
             this._buyHintsButton.setLabelTitle(NJ.stats.getNumHints() + "");
             this._buyHintsButton.offsetLabel(cc.p(this._buyHintsButton.getContentSize().width, 0));
-            this._buyHintsButton.setImageRes(res.helpImage);
+            this._buyHintsButton.setImageRes(res.searchImage);
 
             var buyHintsLabel = this.generateLabel("5 Hints\n" + COST_HINTS, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
             buyHintsLabel.attr({
@@ -376,7 +376,7 @@ var ShopMenuLayer = (function() {
             this._buyScramblersButton.setLabelColor(NJ.themes.defaultLabelColor);
             this._buyScramblersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
             this._buyScramblersButton.offsetLabel(cc.p(this._buyScramblersButton.getContentSize().width, 0));
-            this._buyScramblersButton.setImageRes(res.retryImage);
+            this._buyScramblersButton.setImageRes(res.scrambleImage);
 
             var buyScramblersLabel = this.generateLabel("3 Scramblers\n" + COST_SCRAMBLERS, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
             buyScramblersLabel.attr({

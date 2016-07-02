@@ -19,20 +19,14 @@ var ToolbarLayer = (function() {
                 this.updatePowerups();
                 this._onScrambleCallback();
             }
-
-            if (NJ.gameState.getScramblesRemaining() == 0) {
-                this._scrambleButton.setChildrenOpacity(0.5 * 255);
-            }
-
-        }
-        else {
+        } else {
             cc.log("*** toolbar layer: scramble callback not set!");
         }
     };
 
     var onHint = function(){
         if (this._onHintCallback) {
-            if (NJ.stats.getNumHints() > 0 && NJ.gameState.getHintsRemaining() > 0){
+            if (NJ.stats.getNumHints() > 0 && NJ.gameState.getHintsRemaining() > 0) {
                 NJ.stats.depleteHints();
                 NJ.stats.save();
                 NJ.gameState.decrementHintsRemaining();
@@ -40,12 +34,7 @@ var ToolbarLayer = (function() {
                 this.updatePowerups();
                 this._onHintCallback();
             }
-
-            if (NJ.gameState.getHintsRemaining() == 0){
-                this._hintButton.setChildrenOpacity(0.5*255);
-            }
-        }
-        else {
+        } else {
             cc.log("*** toolbar layer: hint callback not set!")
         }
     };
@@ -65,7 +54,6 @@ var ToolbarLayer = (function() {
 
         _onScrambleCallback: null,
         _onHintCallback:null,
-
 
         ctor: function(size) {
             this._super();
@@ -123,7 +111,7 @@ var ToolbarLayer = (function() {
             this._hintButton.offsetLabel(cc.p(0, -this._hintButton.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2));
             this._hintButton.setImageRes(res.searchImage);
 
-            this._buttonsMenu.addChild(this._pauseButton);
+            //this._buttonsMenu.addChild(this._pauseButton);
             this._buttonsMenu.addChild(this._hintButton);
             this._buttonsMenu.addChild(this._scrambleButton);
 
@@ -191,6 +179,16 @@ var ToolbarLayer = (function() {
         updatePowerups: function() {
             this._hintButton.setLabelTitle(NJ.stats.getNumHints());
             this._scrambleButton.setLabelTitle(NJ.stats.getNumScramblers());
+
+            if (NJ.gameState.getScramblesRemaining() == 0) {
+                this._scrambleButton.setChildrenOpacity(0.5 * 255);
+                this._scrambleButton.setEnabled(false);
+            }
+
+            if (NJ.gameState.getHintsRemaining() == 0) {
+                this._hintButton.setChildrenOpacity(0.5*255);
+                this._hintButton.setEnabled(false);
+            }
         }
     });
 }());
