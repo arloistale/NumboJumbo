@@ -241,7 +241,7 @@ NJ.themes = (function() {
 
             // fuckin black
             backgroundColor: cc.color("000000"),
-            
+
             defaultLabelColor: cc.color("#FFFDAA"),
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
