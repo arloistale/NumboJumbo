@@ -50,7 +50,7 @@ var res = {
     promoImage: resRoot + "Images/ic_thumb/ic_thumb_2x.png",
     shopImage: resRoot + "Images/ic_shop/ic_shop_2x.png",
     plusImage: resRoot + "Images/ic_plus/ic_plus_2x.png",
-    rateImage: resRoot + "Images/ic_rate/ic_rate_2x.png",
+    rateImage: resRoot + "Images/ic_star/ic_star.png",
     skipImage: resRoot + "Images/ic_skip/ic_skip_2x.png",
     searchImage: resRoot + "Images/ic_search/ic_search.png",
     scrambleImage: resRoot + "Images/ic_scramble/ic_scramble.png",
