@@ -16,7 +16,7 @@ var NJMenuButton = NJMenuItem.extend({
 
         this._uiButton = new ccui.Button();
         this._uiButton.setTouchEnabled(true);
-        this._uiButton.setColor(cc.color(255, 255, 255));
+        this._uiButton.setColor(NJ.themes.defaultButtonColor);
         this._uiButton.setOpacity(0);
         this._uiButton.attr({
             anchorX: 0.5,

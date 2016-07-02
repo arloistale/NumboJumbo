@@ -63,6 +63,7 @@ cc.game.onStart = function() {
         if(NJ.settings.hasLoadedTUT) {
             scene.addChild(new NumboMenuLayer());
         } else {
+
             scene.addChild(new TutorialDriverLayer());
         }
 

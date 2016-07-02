@@ -7,8 +7,8 @@ var ShopMenuLayer = (function() {
     const NUM_HINTS_PER_PURCHASE = 5;
     const NUM_SCRAMBLERS_PER_PURCHASE = 3;
 
-    const COST_HINTS = 2500;
-    const COST_SCRAMBLERS = 4000;
+    const COST_HINTS = 1000;
+    const COST_SCRAMBLERS = 1500;
 
     var _devCount = 0;
     var _logCount = 0;

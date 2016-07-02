@@ -303,7 +303,15 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 				// first send the analytics for the current game session
 				NJ.sendAnalytics("Tutorial");
-				NJ.settings.hasLoadedTUT = true;
+
+				// first time playing? give them some starters
+				if(!NJ.settings.hasLoadedTUT) {
+					NJ.settings.hasLoadedTUT = true;
+					NJ.stats.addHints(10);
+					NJ.stats.addScramblers(3);
+					NJ.stats.save();
+				}
+
 				NJ.saveSettings();
 
 				this.runAction(cc.sequence(cc.delayTime(4), cc.callFunc(function() {
