@@ -170,8 +170,8 @@ var NumboBlock = cc.Sprite.extend({
         this._highlightSprite.setScale(this._backgroundScale.width, this._backgroundScale.height);
 
         this._highlightSprite.stopAllActions();
-        this._highlightSprite.runAction(cc.scaleBy(0.3, 2, 2));
-        this._highlightSprite.runAction(cc.sequence(cc.fadeTo(0.3, 0), cc.callFunc(function() {
+        this._highlightSprite.runAction(cc.scaleBy(0.4, 2.5, 2.5));
+        this._highlightSprite.runAction(cc.sequence(cc.fadeTo(0.4, 0), cc.callFunc(function() {
             that._highlightSprite.setVisible(false);
         })));
     },
