@@ -597,6 +597,11 @@ var BaseGameLayer = (function() {
 				this.moveBlockIntoPlace(block);
 			}
 
+			this._numboController.resetKnownPath();
+			if (this._numboController.haveNoMoves()){
+				this.scrambleBoard();
+			}
+
 		},
 
 

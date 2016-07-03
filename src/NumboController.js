@@ -266,6 +266,11 @@ var NumboController = (function() {
         // Level Search //
         //////////////////
 
+		haveNoMoves: function(){
+			this.findHint();
+			return this._knownPath.length == 0;
+		},
+
 		findHint: function() {
 			var tries = 50; // try no more than 50 times
 			while (tries > 0 && this._knownPath.length == 0) {
