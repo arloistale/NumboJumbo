@@ -33,18 +33,16 @@ var TimedGameLayer = BaseGameLayer.extend({
 
 		var that = this;
 
+		this.pauseGame();
+
 		this._numboController.initDistribution(this._numberList);
 
 		// here is our schedule
 		that._numboHeaderLayer.setConditionValue(this._elapsedTimeLimit);
 
 		if(!NJ.settings.hasLoadedMM) {
-			this.pauseGame();
-
 			this._prepLayer = new PrepLayer(res.timedImage, NJ.themes.blockColors[0], "Timed", "As many numbers\nas you need.\n\n\nClear as many numbers\nas you can in 60 seconds.\n\n\nLet\'s go!");
 			this._prepLayer.setOnCloseCallback(function() {
-				that.onResume();
-
 				that.removeChild(that._prepLayer);
 				that._prepLayer = null;
 
@@ -58,6 +56,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 			this.runAction(cc.sequence(cc.delayTime(0.2), cc.callFunc(function () {
 				that.enter(function () {
 					that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+						that.resumeGame();
 						that._isInGame = true;
 
 						// fill the board with blocks initially

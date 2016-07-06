@@ -400,9 +400,7 @@ var NumboMenuLayer = (function() {
 
         _onHelp: function() {
             NJ.audio.playSound(res.clickSound);
-
             NJ.audio.stopMusic();
-            cc.eventManager.pauseTarget(this, true);
 
             this.leave(function() {
                 var scene = new cc.Scene();
@@ -438,11 +436,9 @@ var NumboMenuLayer = (function() {
 
             var that = this;
 
-            cc.eventManager.pauseTarget(this, true);
             this.leave(function() {
                 that._shopMenuLayer = new ShopMenuLayer();
                 that._shopMenuLayer.setOnCloseCallback(function() {
-                    cc.eventManager.resumeTarget(that, true);
                     that.removeChild(that._shopMenuLayer);
 
                     that.enter();
@@ -459,11 +455,9 @@ var NumboMenuLayer = (function() {
 
             var that = this;
 
-            cc.eventManager.pauseTarget(this, true);
             this.leave(function() {
                 that._settingsMenuLayer = new SettingsMenuLayer();
                 that._settingsMenuLayer.setOnCloseCallback(function() {
-                    cc.eventManager.resumeTarget(that, true);
                     that.removeChild(that._settingsMenuLayer);
 
                     that.enter();

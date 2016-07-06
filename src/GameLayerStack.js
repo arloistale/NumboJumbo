@@ -31,16 +31,14 @@ var StackGameLayer = BaseGameLayer.extend({
 
         var that = this;
 
+        this.pauseGame();
+
         this._numboController.initDistribution(this._numberList);
         this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
 
         if(!NJ.settings.hasLoadedRE) {
-            this.pauseGame();
-
             this._prepLayer = new PrepLayer(res.stackImage, NJ.themes.blockColors[2], "Stack", "Numbers appear\nwhen you make moves.\n\n\nThe game ends\nwhen the board fills up.\n\n\nLet's go!");
             this._prepLayer.setOnCloseCallback(function() {
-                that.onResume();
-
                 that.removeChild(that._prepLayer);
                 that._prepLayer = null;
 
@@ -54,6 +52,7 @@ var StackGameLayer = BaseGameLayer.extend({
             this.runAction(cc.sequence(cc.delayTime(0.2), cc.callFunc(function () {
                 that.enter(function () {
                     that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+                        that.resumeGame();
                         that._isInGame = true;
 
                         // fill the board with blocks initially

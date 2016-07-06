@@ -24,6 +24,7 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-f93b109430a3f537259c1fee8b126e6e.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-36b7fb7e7fc81ff5437e8c376bb8db11.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/batch-e4102e673926d10e06a06ea4d994e428.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/android-async-http-1.4.8-f1cd50a1c5325c0ff06c4ea025e18dc2.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/amazon-iap-7132b94e98fa5f8174911623ebe4c5bd.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginGoogleAnalytics-502430e5a697752f61c660c1377a2fe8.jar \

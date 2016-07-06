@@ -859,7 +859,6 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/FeedbackLayer.jsc \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/GameLayerBase.jsc \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/GameLayerInfinite.jsc \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/GameLayerMania.jsc \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/GameLayerMoves.jsc \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/GameLayerStack.jsc \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/assets/src/GameLayerTimed.jsc \

@@ -56,13 +56,11 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         this._numboController.initDistribution(this._numberList, this._thresholdNumbers);
         this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
 
-        if(!NJ.settings.hasLoadedINF) {
-            this.pauseGame();
+        this.pauseGame();
 
+        if(!NJ.settings.hasLoadedINF) {
             this._prepLayer = new PrepLayer(res.infiniteImage, NJ.themes.blockColors[3], "Infinite", "Numbers appear\nevery few seconds.\n\n\nThe game ends\nwhen the board fills up.\n\n\nLet's go!");
             this._prepLayer.setOnCloseCallback(function() {
-                that.onResume();
-
                 that.removeChild(that._prepLayer);
                 that._prepLayer = null;
 
@@ -76,6 +74,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
             this.runAction(cc.sequence(cc.delayTime(0.2), cc.callFunc(function () {
                 that.enter(function () {
                     that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+                        that.resumeGame();
                         that._isInGame = true;
 
                         // spawn blocks until the board is 1/3 full initially fill the board with blocks initially

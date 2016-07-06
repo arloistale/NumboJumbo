@@ -33,16 +33,15 @@ var MovesGameLayer = BaseGameLayer.extend({
 
 		var that = this;
 
+		this.pauseGame();
+
 		this._numboController.initDistribution(this._numberList);
 		this._numboHeaderLayer.setConditionValue(this._movesLimit);
 
 		if(!NJ.settings.hasLoadedMOV) {
-			this.pauseGame();
 
 			this._prepLayer = new PrepLayer(res.movesImage, NJ.themes.blockColors[1], "Moves", "As many numbers\nas you need.\n\n\nClear as many numbers\nas you can in 20 moves.\n\n\nLet's go!");
 			this._prepLayer.setOnCloseCallback(function() {
-				that.onResume();
-
 				that.removeChild(that._prepLayer);
 				that._prepLayer = null;
 
@@ -56,6 +55,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 			this.runAction(cc.sequence(cc.delayTime(0.2), cc.callFunc(function () {
 				that.enter(function () {
 					that.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+						that.resumeGame();
 						that._isInGame = true;
 
 						// fill the board with blocks initially

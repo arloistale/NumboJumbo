@@ -55,8 +55,7 @@ NJ.social = (function() {
         isLoggedIn: function () {
             // TODO: There is a problem when the user signs out using Settings option, will still be connected
             if (cc.sys.isNative) {
-                var isLoggedIn = sdkbox.PluginSdkboxPlay.isSignedIn();
-                return isLoggedIn;
+                return sdkbox.PluginSdkboxPlay.isSignedIn();
             }
         },
 
@@ -70,7 +69,6 @@ NJ.social = (function() {
             if (cc.sys.isNative) {
                 var isLoggedIn = this.isLoggedIn();
                 if(isLoggedIn) {
-                    cc.log("Executing command submit: " + key + ", " + score);
                     sdkbox.PluginSdkboxPlay.submitScore(leaderboardPrefix + key, score);
                 } else {
                     cc.log("Could not submit score due to unauthenticated player");
@@ -91,7 +89,6 @@ NJ.social = (function() {
 
                      sdkbox.PluginSdkboxPlay.showLeaderboard(ldbName);
                  } else {
-                     cc.log("Show Leaderboards unauthenticated player, logging in");
                      this.login();
                  }
             }
@@ -108,7 +105,6 @@ NJ.social = (function() {
                 var isLoggedIn = this.isLoggedIn();
 
                 if(isLoggedIn) {
-                    cc.log("Executing command unlock: " + key);
                     sdkbox.PluginSdkboxPlay.unlockAchievement(key);
                 } else {
                     cc.log("Could not unlock achievement due to unauthenticated player");
@@ -123,7 +119,6 @@ NJ.social = (function() {
                 if(isLoggedIn) {
                     sdkbox.PluginSdkboxPlay.showAchievements();
                 } else {
-                    cc.log("Show achievements unauthenticated player, logging in");
                     this.login();
                 }
             }

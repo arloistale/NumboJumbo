@@ -7,8 +7,8 @@ var ShopMenuLayer = (function() {
     const NUM_HINTS_PER_PURCHASE = 5;
     const NUM_SCRAMBLERS_PER_PURCHASE = 3;
 
-    const COST_HINTS = 1000;
-    const COST_SCRAMBLERS = 1500;
+    const COST_HINTS = 1500;
+    const COST_SCRAMBLERS = 2000;
 
     var _devCount = 0;
     var _logCount = 0;
@@ -354,7 +354,8 @@ var ShopMenuLayer = (function() {
             });
             this._buyHintsButton.setLabelColor(NJ.themes.defaultLabelColor);
             this._buyHintsButton.setLabelTitle(NJ.stats.getNumHints() + "");
-            this._buyHintsButton.offsetLabel(cc.p(this._buyHintsButton.getContentSize().width, 0));
+            this._buyHintsButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            this._buyHintsButton.offsetLabel(cc.p(this._buyHintsButton.getContentSize().width / 1.1, 0));
             this._buyHintsButton.setImageRes(res.searchImage);
 
             var buyHintsLabel = this.generateLabel("5 Hints\n" + COST_HINTS, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
@@ -375,7 +376,8 @@ var ShopMenuLayer = (function() {
             });
             this._buyScramblersButton.setLabelColor(NJ.themes.defaultLabelColor);
             this._buyScramblersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
-            this._buyScramblersButton.offsetLabel(cc.p(this._buyScramblersButton.getContentSize().width, 0));
+            this._buyScramblersButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            this._buyScramblersButton.offsetLabel(cc.p(this._buyScramblersButton.getContentSize().width / 1.1, 0));
             this._buyScramblersButton.setImageRes(res.scrambleImage);
 
             var buyScramblersLabel = this.generateLabel("3 Scramblers\n" + COST_SCRAMBLERS, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
@@ -426,14 +428,22 @@ var ShopMenuLayer = (function() {
                 y: this._contentScrollView.innerHeight - (cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.powerupsArea + NJ.uiSizes.themesArea / 2))
             });
 
-            var titleLabel = this.generateLabel("THEMES", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            // initialize themes title
 
+            var titleLabel = this.generateLabel("THEMES", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            titleLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
             this._themeMenu.addChild(titleLabel);
 
             var themes = NJ.themes.getList();
 
             var buttonSize = cc.size(cc.visibleRect.width * 0.8, cc.visibleRect.height * 0.1);
+            var blockSize = cc.size(buttonSize.height * 0.75, buttonSize.height * 0.75);
             var themeButton;
+
+            const numbersToShow = [1, 2, 3, 6];
 
             this._themeButtons = [];
 
@@ -454,9 +464,9 @@ var ShopMenuLayer = (function() {
                         labelStr += isCurrentTheme ? "Active" : "Owned";
                     }
                     themeButton.setLabelTitle(labelStr);
-                    themeButton.setLabelColor(isCurrentTheme ? themes[i].blockColors[0] : themes[i].defaultLabelColor);
+                    themeButton.setLabelColor(isCurrentTheme ? themes[i].blockColors[0] : NJ.themes.defaultLabelColor);
                     themeButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-                    //themeButton.offsetLabel(cc.p(0, -buttonSize.height / 1.5));
+                    themeButton.offsetLabel(cc.p(0, -buttonSize.height / 1.25));
                     themeButton.setBackgroundImage(res.alertImage);
                     themeButton.setBackgroundColor(themes[i].backgroundColor);
                     themeButton.attr({
@@ -464,12 +474,47 @@ var ShopMenuLayer = (function() {
                         anchorY: 0.5
                     });
 
+                    // add block color samples
+
+                    var numberMenu = new cc.Menu();
+                    numberMenu.setContentSize(buttonSize);
+                    numberMenu.attr({
+                        anchorX: 0.5,
+                        anchorY: 0.5,
+                        x: buttonSize.width / 2,
+                        y: buttonSize.height / 2
+                    });
+
+                    var currNumber;
+                    var numberItem;
+
+                    for(var j = 0; j < numbersToShow.length; ++j) {
+                        currNumber = numbersToShow[j];
+
+                        numberItem = new NJMenuItem(blockSize);
+                        numberItem.setTag(666);
+                        numberItem.setBackgroundImage(res.blockImage);
+                        numberItem.setBackgroundColor(themes[i].blockColors[currNumber - 1]);
+                        numberItem.setLabelTitle(currNumber + "");
+                        numberItem.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+                        numberItem.setLabelColor(cc.color("#ffffff"));
+                        numberItem.attr({
+                            anchorX: 0.5,
+                            anchorY: 0.5
+                        });
+                        numberMenu.addChild(numberItem);
+                    }
+
+                    numberMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.05));
+
+                    themeButton.addChild(numberMenu);
+
                     that._themeMenu.addChild(themeButton);
                     that._themeButtons.push(themeButton);
                 })();
             }
 
-            this._themeMenu.alignItemsVerticallyWithPadding(cc.visibleRect.height * 0.07);
+            this._themeMenu.alignItemsVerticallyWithPadding(cc.visibleRect.height * 0.1);
 
             var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
@@ -713,7 +758,7 @@ var ShopMenuLayer = (function() {
                     labelStr += isCurrentTheme ? "Active" : "Owned";
                 }
                 themeButton.setLabelTitle(labelStr);
-                themeButton.setLabelColor(isCurrentTheme ? themes[i].blockColors[0] : themes[i].defaultLabelColor);
+                themeButton.setLabelColor(isCurrentTheme ? themes[i].blockColors[0] : NJ.themes.defaultLabelColor);
                 themeButton.setBackgroundColor(themes[i].backgroundColor);
             }
         }

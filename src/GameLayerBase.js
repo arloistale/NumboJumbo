@@ -137,7 +137,12 @@ var BaseGameLayer = (function() {
 		},
 
 		onExit: function() {
+			this.unscheduleAllCallbacks();
+			this.stopAllActions();
 			cc.pool.drainAllPools();
+
+			cc.eventManager.removeCustomListeners("game_on_hide");
+			cc.eventManager.removeCustomListeners("game_on_show");
 
 			this._super();
 		},
@@ -203,8 +208,6 @@ var BaseGameLayer = (function() {
 
 		// Initialize input depending on the device.
 		_initInput: function() {
-			cc.eventManager.removeAllListeners();
-
             var that = this;
 
 			if ('mouse' in cc.sys.capabilities) {
@@ -243,7 +246,6 @@ var BaseGameLayer = (function() {
 					event: cc.EventListener.TOUCH_ONE_BY_ONE,
 					swallowTouches: true,
 					onTouchBegan: function(touch, event) {
-						cc.log("Touch -> " + Date.now() + " : " + touch.getID());
                         if(touch.getID() == 0) {
                             event.getCurrentTarget().onTouchBegan(touch.getLocation());
                         }
@@ -290,7 +292,7 @@ var BaseGameLayer = (function() {
 				event: cc.EventListener.CUSTOM,
 				eventName: "game_on_show",
 				callback: function(event) {
-					if(that._prepLayer) {
+					if(that._isInGame) {
 						that.onResume();
 					}
 				}
@@ -716,10 +718,6 @@ var BaseGameLayer = (function() {
 
 			this.pauseGame();
 
-			if(this._prepLayer) {
-				return;
-			}
-
             this.leaveBoard();
 
 			var callback = function() {
@@ -750,10 +748,7 @@ var BaseGameLayer = (function() {
 
 			that._isInGame = true;
 
-			if(this._prepLayer) {
-				that.resumeGame();
-				return;
-			}
+			that.resumeGame();
 
             this.enterBoard();
 
@@ -762,8 +757,6 @@ var BaseGameLayer = (function() {
 			this.enter(function() {
                 if(that.isInDanger())
                     that._feedbackLayer.launchDoomsayer();
-
-                that.resumeGame();
 
                 // play music again if music settings turned on
                 NJ.audio.playMusic(that._backgroundTrack);
