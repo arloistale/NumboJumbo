@@ -9,6 +9,8 @@
 #ifndef  _APP_DELEGATE_H_
 #define  _APP_DELEGATE_H_
 
+#include <string>
+
 #include "platform/CCApplication.h"
 /**
  @brief    The cocos2d Application.
@@ -41,6 +43,10 @@ public:
      @param  the pointer of the application
      */
     virtual void applicationWillEnterForeground();
+
+private:
+
+    void shareScreenCallback(bool succeed, const std::string& outputFile);
 };
 
 #endif // _APP_DELEGATE_H_

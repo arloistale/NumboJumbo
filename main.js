@@ -1,4 +1,5 @@
 cc.game.onStart = function() {
+    cc.log("on start");
     var designResolutionSize = cc.size(320, 480);
     var smallResolutionSize = cc.size(320, 480);
     var mediumResolutionSize = cc.size(768, 1024);

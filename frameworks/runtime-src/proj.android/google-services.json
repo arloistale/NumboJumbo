@@ -1,0 +1,52 @@
+{
+  "project_info": {
+    "project_number": "300986093452",
+    "project_id": "numbo-jumbo-20605259"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300986093452:android:2d899e821867551c",
+        "android_client_info": {
+          "package_name": "com.numbo.jumbo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300986093452-ggiqvhmb4jef80boqbdsm2otjc019mnm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.numbo.jumbo",
+            "certificate_hash": "2214A434F70EF1CCC2E447A9C2AA26063B575266"
+          }
+        },
+        {
+          "client_id": "300986093452-4nud0h6asfh4s59mkhbh2etav0kvvs97.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.numbo.jumbo",
+            "certificate_hash": "FA2A8A3105CFEE59D8B42F7510F1493E3FE86EEC"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa3VkLC4kOwkpCCjLtShIJy9G_wQGtjsk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -54,6 +54,7 @@ var res = {
     skipImage: resRoot + "Images/ic_skip/ic_skip_2x.png",
     searchImage: resRoot + "Images/ic_search/ic_search.png",
     scrambleImage: resRoot + "Images/ic_scramble/ic_scramble.png",
+    shareImage: resRoot + "Images/ic_share/ic_share_2x.png",
 
     playImage: resRoot + "Images/ic_play/ic_play_2x.png",
     timedImage: resRoot + "Images/ic_timed.png",

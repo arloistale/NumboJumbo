@@ -43,6 +43,14 @@
 
 #endif
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+#endif
+
+// iOS Objective C Bridge
+#include "SharingBridge.h"
+
 USING_NS_CC;
 
 AppDelegate::AppDelegate()
@@ -139,6 +147,14 @@ bool AppDelegate::applicationDidFinishLaunching()
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
     ScriptingCore::getInstance()->runScript("main.js");
 
+    // For Screen Sharing
+
+    director->getEventDispatcher()->addEventListenerWithFixedPriority(EventListenerCustom::create("share_screen", [=](EventCustom* event) {
+
+        cocos2d::utils::captureScreen(CC_CALLBACK_2(AppDelegate::shareScreenCallback, this), "epilogue.png");
+
+    }), 9001);
+
     return true;
 }
 
@@ -158,4 +174,33 @@ void AppDelegate::applicationWillEnterForeground()
     director->startAnimation();
     director->getEventDispatcher()->dispatchCustomEvent("game_on_show");
     cocos2d::experimental::AudioEngine::resumeAll();
+}
+
+void AppDelegate::shareScreenCallback(bool succeed, const std::string& outputFile) {
+    if(!succeed) {
+        CCLOG("Capturing screen failed!");
+        return;
+    }
+    
+    const char* outputFileChars = outputFile.c_str();
+    const char* message = "Check out my score in Numbo Jumbo! http://numbojumbo.com";
+
+    CCLOG("Capturing screenshot to: %s", outputFileChars);
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo methodInfo;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(methodInfo, "org/cocos2dx/javascript/AppActivity", "shareScreen", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring outputFileArg = methodInfo.env->NewStringUTF(outputFileChars);
+
+    methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, outputFileArg);
+    methodInfo.env->DeleteLocalRef(methodInfo.classID);
+    methodInfo.env->DeleteLocalRef(outputFileArg);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    shareTextWithImage(outputFileChars, message);
+#endif
+
 }

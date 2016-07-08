@@ -38,7 +38,7 @@ var GameOverMenuLayer = (function() {
     var onShare = function() {
         NJ.audio.playSound(res.clickSound);
 
-        var that = this;
+        NJ.shareScreen();
     };
 
     var onShop = function() {
@@ -62,6 +62,18 @@ var GameOverMenuLayer = (function() {
 
             that.addChild(that._shopMenuLayer, 999);
         });
+    };
+
+    var _onLeaderboard = function() {
+        NJ.audio.playSound(res.clickSound);
+
+        NJ.social.showLeaderboard();
+    };
+
+    var _onAchievements = function() {
+        NJ.audio.playSound(res.clickSound);
+
+        NJ.social.showAchievements();
     };
 
     return cc.LayerColor.extend({
@@ -338,33 +350,23 @@ var GameOverMenuLayer = (function() {
 
             var retryButton = new NJMenuButton(buttonSize, onRetry.bind(this), this);
             retryButton.setImageRes(res.retryImage);
-            retryButton.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
 
             var menuButton = new NJMenuButton(buttonSize, onMenu.bind(this), this);
             menuButton.setImageRes(res.homeImage);
-            menuButton.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
 
             var shopButton = new NJMenuButton(buttonSize, onShop.bind(this), this);
             shopButton.setImageRes(res.shopImage);
-            shopButton.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
 
             var shareButton = new NJMenuButton(buttonSize, onShare.bind(this), this);
-            shareButton.setImageRes(res.homeImage);
-            shareButton.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
+            shareButton.setImageRes(res.shareImage);
 
-            this._toolMenu.addChild(shopButton);
+            var leaderboardButton = new NJMenuButton(buttonSize, _onLeaderboard.bind(this), this);
+            leaderboardButton.setImageRes(res.statsImage);
+
+            var achievementsButton = new NJMenuButton(buttonSize, _onAchievements.bind(this), this);
+            achievementsButton.setImageRes(res.trophyImage);
+
+            this._toolMenu.addChild(shareButton);
             this._toolMenu.addChild(retryButton);
             this._toolMenu.addChild(menuButton);
 

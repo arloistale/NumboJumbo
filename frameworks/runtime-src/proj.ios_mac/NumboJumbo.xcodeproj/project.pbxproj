@@ -16,6 +16,8 @@
 		1AD7E0A918C9DBE3004817A6 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AE159EC18C9DF3600FCA372 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A081B18C9DF05005C6854 /* project.json */; };
 		209E4950B0AC9BB39D6AE0AB /* PluginSdkboxPlayJSHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67C4447D945516142162E66B /* PluginSdkboxPlayJSHelper.cpp */; };
+		221D94841D2F2B9C007D72D5 /* SharingBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 221D94831D2F2B9C007D72D5 /* SharingBridge.mm */; };
+		2255AE9E1D2EDB6F00DC989E /* SharingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2255AE9D1D2EDB6F00DC989E /* SharingController.m */; };
 		22C4092E1D0A241C00FB0601 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22C4092D1D0A241C00FB0601 /* Images.xcassets */; };
 		22C409331D0A264B00FB0601 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */; };
 		22C409341D0A264B00FB0601 /* Default-667h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C409301D0A264B00FB0601 /* Default-667h@2x.png */; };
@@ -175,6 +177,10 @@
 		1C5842409AED801982F7F8D0 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "plugin_review_res_bundle/zh-Hant.lproj/SdkboxReviewResLocalizable.strings"; sourceTree = SOURCE_ROOT; };
 		204C4D82A47426462D496ECD /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = plugin_review_res_bundle/id.lproj/SdkboxReviewResLocalizable.strings; sourceTree = SOURCE_ROOT; };
 		21E44798B37C801F56D90AA8 /* SDKBoxJSHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SDKBoxJSHelper.cpp; path = ../Classes/SDKBoxJSHelper.cpp; sourceTree = SOURCE_ROOT; };
+		221D947E1D2F0BE6007D72D5 /* SharingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharingController.h; path = ios/SharingController.h; sourceTree = "<group>"; };
+		221D94821D2F27AA007D72D5 /* SharingBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharingBridge.h; path = ios/SharingBridge.h; sourceTree = "<group>"; };
+		221D94831D2F2B9C007D72D5 /* SharingBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SharingBridge.mm; path = ios/SharingBridge.mm; sourceTree = "<group>"; };
+		2255AE9D1D2EDB6F00DC989E /* SharingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SharingController.m; path = ios/SharingController.m; sourceTree = "<group>"; };
 		22C4092D1D0A241C00FB0601 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "NumboJumbo-mobile/Images.xcassets"; sourceTree = "<group>"; };
 		22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		22C409301D0A264B00FB0601 /* Default-667h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667h@2x.png"; sourceTree = "<group>"; };
@@ -466,6 +472,7 @@
 		D45446CC156DE73F00887EB5 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				221D94831D2F2B9C007D72D5 /* SharingBridge.mm */,
 				22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */,
 				22C409301D0A264B00FB0601 /* Default-667h@2x.png */,
 				22C409311D0A264B00FB0601 /* Default.png */,
@@ -477,6 +484,9 @@
 				509D4AB917EBB2AB00697056 /* Prefix.pch */,
 				509D4ABA17EBB2AB00697056 /* RootViewController.h */,
 				509D4ABB17EBB2AB00697056 /* RootViewController.mm */,
+				2255AE9D1D2EDB6F00DC989E /* SharingController.m */,
+				221D947E1D2F0BE6007D72D5 /* SharingController.h */,
+				221D94821D2F27AA007D72D5 /* SharingBridge.h */,
 			);
 			name = ios;
 			sourceTree = "<group>";
@@ -690,9 +700,11 @@
 				C9CD43A597B21371F871764C /* SDKBoxJSHelper.cpp in Sources */,
 				D9494536A269E0757E0BAA2B /* PluginReviewJS.cpp in Sources */,
 				175E4BBA994CA30D66D2E07F /* PluginReviewJSHelper.cpp in Sources */,
+				221D94841D2F2B9C007D72D5 /* SharingBridge.mm in Sources */,
 				39E74D97A9538E36357BBA3E /* PluginSdkboxPlayJS.cpp in Sources */,
 				209E4950B0AC9BB39D6AE0AB /* PluginSdkboxPlayJSHelper.cpp in Sources */,
 				DF2D48ADA3D046C386B73543 /* PluginIAPJS.cpp in Sources */,
+				2255AE9E1D2EDB6F00DC989E /* SharingController.m in Sources */,
 				EC59406A95D73BF5228CB967 /* PluginIAPJSHelper.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
+
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -93,7 +94,7 @@ public class Cocos2dxHelper {
             final ApplicationInfo applicationInfo = activity.getApplicationInfo();
                     
             Cocos2dxHelper.sPackageName = applicationInfo.packageName;
-            Cocos2dxHelper.sFileDirectory = activity.getFilesDir().getAbsolutePath();
+            Cocos2dxHelper.sFileDirectory = activity.getExternalFilesDir(null).getAbsolutePath();//activity.getFilesDir().getAbsolutePath();
             
             Cocos2dxHelper.nativeSetApkPath(applicationInfo.sourceDir);
     

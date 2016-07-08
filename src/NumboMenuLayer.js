@@ -53,6 +53,9 @@ var NumboMenuLayer = (function() {
 
             this.init(NJ.themes.backgroundColor);
 
+            // promo listeners are initialized on menu once
+            this._initPromoListeners();
+
             this._initHeaderUI();
             this._initModesUI();
             this._initToolsUI();
@@ -85,6 +88,16 @@ var NumboMenuLayer = (function() {
             this._statsButton.release();
 
             this._super();
+        },
+
+        _initPromoListeners: function() {
+            cc.eventManager.addListener(cc.EventListener.create({
+                event: cc.EventListener.CUSTOM,
+                eventName: "batch_unlock_feature",
+                callback: function(event) {
+
+                }
+            }), 1001);
         },
 
         _initHeaderUI: function() {
