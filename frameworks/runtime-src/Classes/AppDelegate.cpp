@@ -44,12 +44,16 @@
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
-#endif
+
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 // iOS Objective C Bridge
 #include "SharingBridge.h"
+
+#endif
 
 USING_NS_CC;
 

@@ -339,7 +339,26 @@ obj/local/armeabi/objs/cocos2djs_shared/hellojavascript/main.o: \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../deprecated/CCNotificationCenter.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../deprecated/CCSet.h \
  /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../deprecated/CCString.h \
- /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../deprecated/CCDeprecated.h
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../deprecated/CCDeprecated.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../storage/local-storage/LocalStorage.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/document.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/reader.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/rapidjson.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/allocators.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/encodings.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/meta.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/../rapidjson.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/stack.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/strtod.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/ieee754.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/biginteger.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/diyfp.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/pow10.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/error/error.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/error/../rapidjson.h \
+ /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/strfunc.h \
+ /Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator
 
 jni/../../Classes/AppDelegate.h:
 
@@ -1022,3 +1041,41 @@ jni/../../Classes/AppDelegate.h:
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../deprecated/CCString.h:
 
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../deprecated/CCDeprecated.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/3d/../storage/local-storage/LocalStorage.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/document.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/reader.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/rapidjson.h:
+
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/allocators.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/encodings.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/meta.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/../rapidjson.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/stack.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/strtod.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/ieee754.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/biginteger.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/diyfp.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/pow10.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/error/error.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/error/../rapidjson.h:
+
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/../../cocos2d-x/cocos/./../external/json/internal/strfunc.h:
+
+/Users/jonathanlu/Desktop/DevTools/Android/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator:
