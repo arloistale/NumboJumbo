@@ -438,7 +438,7 @@ var GameOverMenuLayer = (function() {
         _generateBaseDividers: function() {
             var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
-            var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
             headerDivider.setTag(444);
             headerDivider.setBackgroundImage(res.alertImage);
             headerDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
@@ -449,7 +449,7 @@ var GameOverMenuLayer = (function() {
             });
             this._headerMenu.addChild(headerDivider);
 
-            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
             toolDivider.setTag(444);
             toolDivider.setBackgroundImage(res.alertImage);
             toolDivider.setBackgroundColor(NJ.themes.defaultLabelColor);

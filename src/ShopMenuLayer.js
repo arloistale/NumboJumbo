@@ -254,12 +254,14 @@ var ShopMenuLayer = (function() {
         _initContentUI: function() {
             var that = this;
 
+            var shouldIncludeBubblesArea = (NJ.purchases.getProductByName("doubler") ? true : false);
+
             this._contentScrollView = new ccui.ScrollView();
             this._contentScrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
             this._contentScrollView.setTouchEnabled(true);
             this._contentScrollView.setBounceEnabled(true);
             this._contentScrollView.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (1 - NJ.uiSizes.header - NJ.uiSizes.toolbar)));
-            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.powerupsArea + NJ.uiSizes.themesArea)));
+            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * ((shouldIncludeBubblesArea ? NJ.uiSizes.bubblesArea : 0) + NJ.uiSizes.powerupsArea + NJ.uiSizes.themesArea)));
             this._contentScrollView.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -273,6 +275,13 @@ var ShopMenuLayer = (function() {
         },
 
         _initBubblesUI: function() {
+
+            var product = NJ.purchases.getProductByName("doubler");
+            if(!product)
+                return;
+
+            var that = this;
+
             this._bubblesMenu = new cc.Menu();
             this._bubblesMenu.setContentSize(cc.size(cc.visibleRect.width, NJ.uiSizes.bubblesArea * cc.visibleRect.height));
 
@@ -287,25 +296,17 @@ var ShopMenuLayer = (function() {
 
             this._currentYPos -= cc.visibleRect.height * NJ.uiSizes.bubblesArea / 2;
 
-            // generate music toggle
-            //this._currencyLabel = this.generateLabel(NJ.stats.getCurrency() + " Bubbles", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            //this._currencyLabel.setLabelColor(NJ.themes.specialLabelColor);
+            this._doublerTitleLabel = this.generateLabel("BUBBLE DOUBLER", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
 
             this._doublerInfoLabel = this.generateLabel("Earning bubbles too slowly?\nBuy the Bubble Doubler for doubled bubble rate!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
 
-            var buyDoublerButton = new NJMenuButton(cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.shopButton), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.shopButton)), onBuyDoubler.bind(this), this);
-            buyDoublerButton.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
+            var buyDoublerButton = new NJMenuButton(cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.shopButton),
+                NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.shopButton)), onBuyDoubler.bind(this), this);
             buyDoublerButton.setImageRes(res.skipImage);
 
-            var product = NJ.purchases.getProductByName("doubler");
-            var priceLabel = this.generateLabel("Bubble Doubler - " + (product ? product.price : "?"), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            var priceLabel = this.generateLabel("" + (product ? product.price : "?"), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
 
-            //this._bubblesMenu.addChild(this._currencyLabel);
-            //this._bubblesMenu.addChild(this._currencyInfoLabel);
-
+            this._bubblesMenu.addChild(this._doublerTitleLabel);
             this._bubblesMenu.addChild(this._doublerInfoLabel);
             this._bubblesMenu.addChild(buyDoublerButton);
 
@@ -462,7 +463,7 @@ var ShopMenuLayer = (function() {
             var themes = NJ.themes.getList();
 
             var buttonSize = cc.size(cc.visibleRect.width * 0.8, cc.visibleRect.height * 0.1);
-            var blockSize = cc.size(buttonSize.height * 0.75, buttonSize.height * 0.75);
+            var blockSize = cc.size(buttonSize.height * 0.5, buttonSize.height * 0.5);
             var themeButton;
 
             const numbersToShow = [1, 2, 3, 6];
@@ -538,18 +539,22 @@ var ShopMenuLayer = (function() {
 
             this._themeMenu.alignItemsVerticallyWithPadding(cc.visibleRect.height * 0.1);
 
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
+            var shouldIncludeBubblesArea = (NJ.purchases.getProductByName("doubler") ? true : false);
 
-            var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
-            divider.setTag(444);
-            divider.setBackgroundImage(res.alertImage);
-            divider.setBackgroundColor(NJ.themes.defaultLabelColor);
-            divider.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                y: -this._themeMenu.getContentSize().height / 2
-            });
-            this._themeMenu.addChild(divider);
+            if(shouldIncludeBubblesArea) {
+                var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
+
+                var divider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+                divider.setTag(444);
+                divider.setBackgroundImage(res.alertImage);
+                divider.setBackgroundColor(NJ.themes.defaultLabelColor);
+                divider.attr({
+                    anchorX: 0.5,
+                    anchorY: 0.5,
+                    y: -this._themeMenu.getContentSize().height / 2
+                });
+                this._themeMenu.addChild(divider);
+            }
 
             this._contentScrollView.addChild(this._themeMenu);
         },
@@ -598,8 +603,14 @@ var ShopMenuLayer = (function() {
 
         // makes menu elements transition in
         enter: function() {
+
             var headerSize = this._headerMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
+
+            this._headerMenu.stopAllActions();
+            this._headerMenu.setPositionY(this._headerMenu.getPositionX(), cc.visibleRect.top.y + headerSize.height / 2);
+
+            cc.log(this._headerMenu.getPositionY());
 
             var easing = cc.easeBackOut();
 
@@ -607,14 +618,11 @@ var ShopMenuLayer = (function() {
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
             this._contentScrollView.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
-
-            //this._dividersNode.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
         },
 
         // transition out
         leave: function(callback) {
             var headerSize = this._headerMenu.getContentSize();
-            var contentSize = this._bubblesMenu.getContentSize();
             var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
@@ -623,8 +631,6 @@ var ShopMenuLayer = (function() {
             this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
             this._contentScrollView.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y - cc.visibleRect.height)).easing(easing));
-
-            //this._dividersNode.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.left.x, cc.visibleRect.left.y)).easing(easing));
 
             this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
                 if(callback)
@@ -661,7 +667,7 @@ var ShopMenuLayer = (function() {
         _generateBaseDividers: function() {
             var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
-            var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
             headerDivider.setTag(444);
             headerDivider.setBackgroundImage(res.alertImage);
             headerDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
@@ -672,7 +678,7 @@ var ShopMenuLayer = (function() {
             });
             this._headerMenu.addChild(headerDivider);
 
-            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
             toolDivider.setTag(444);
             toolDivider.setBackgroundImage(res.alertImage);
             toolDivider.setBackgroundColor(NJ.themes.defaultLabelColor);

@@ -301,7 +301,7 @@ var NumboMenuLayer = (function() {
             var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
-
+            
             this._headerMenu.runAction(cc.sequence(
                 cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing),
                 cc.callFunc(function() {
@@ -453,10 +453,11 @@ var NumboMenuLayer = (function() {
                 that._shopMenuLayer = new ShopMenuLayer();
                 that._shopMenuLayer.setOnCloseCallback(function() {
                     that.removeChild(that._shopMenuLayer);
-
-                    that.enter();
+                    that._shopMenuLayer = null;
 
                     that._updateTheme();
+
+                    that.enter();
                 });
 
                 that.addChild(that._shopMenuLayer, 999);
@@ -488,7 +489,7 @@ var NumboMenuLayer = (function() {
         _generateBaseDividers: function() {
             var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
-            var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            var headerDivider = new NJMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
             headerDivider.setTag(444);
             headerDivider.setBackgroundImage(res.alertImage);
             headerDivider.setBackgroundColor(NJ.themes.defaultLabelColor);
@@ -499,7 +500,7 @@ var NumboMenuLayer = (function() {
             });
             this._headerMenu.addChild(headerDivider);
 
-            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+            var toolDivider = new NJMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
             toolDivider.setTag(444);
             toolDivider.setBackgroundImage(res.alertImage);
             toolDivider.setBackgroundColor(NJ.themes.defaultLabelColor);

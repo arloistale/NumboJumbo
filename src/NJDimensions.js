@@ -4,21 +4,25 @@
 
 var NJ = NJ || {};
 
-// button sizes as a percentage of reference dimension (the minimum of the visible width and height)
+// UI elements in the game have their sizes calculated according to a percentage of the screen width
 NJ.uiSizes = {
-    // elements
+    // common elements
     headerBar: 0.12,
+    toolbar: 0.12,
+    divider: 0.0025,
+
+    // game over elements
     shopArea: 0.22,
     promoArea: 0.24,
-    toolbar: 0.12,
-
-    divider: 0.0025,
 
     // shop elements
     bubblesArea: 0.27,
     powerupsArea: 0.24,
     themesArea: 1.05,
     doublerArea: 0.25,
+
+    // pop over elements
+    optionsArea: 0.24,
 
     // bar buttons are calculated based on their bar content sizes
     barButton: 0.5,
