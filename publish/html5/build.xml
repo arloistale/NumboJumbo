@@ -315,8 +315,8 @@
                 <file name="src/TutorialDriverLayer.js"/>
                 <file name="src/NumboHeaderLayer.js"/>
                 <file name="src/GameOverMenuLayer.js"/>
-                <file name="src/NJMenuItem.js"/>
-                <file name="src/NJMenuButton.js"/>
+                <file name="src/NumboMenuItem.js"/>
+                <file name="src/NumboMenuButton.js"/>
                 <file name="src/EffectsLayer.js"/>
                 <file name="src/FeedbackLayer.js"/>
                 <file name="src/Snippet.js"/>
