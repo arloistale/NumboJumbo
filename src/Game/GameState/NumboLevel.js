@@ -45,12 +45,12 @@ var NumboLevel = (function() {
 		// intended to clear the level of all blocks by killing them
 		// used at game over
 		clear: function() {
-			this.killAllBlocks(false);
+			this.killAllBlocks();
 		},
 
 		// intended to reset level
 		reset: function() {
-			this.killAllBlocks(true);
+			this.killAllBlocks();
 
 			this.init();
 		},

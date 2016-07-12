@@ -48,7 +48,7 @@ NumboLoaderScene = cc.Scene.extend({
     onEnter: function () {
         var self = this;
         cc.Node.prototype.onEnter.call(self);
-        self.schedule(self._startLoading, 0.3);
+        self.schedule(self._startLoading, 0.4);
     },
     /**
      * custom onExit
@@ -79,13 +79,26 @@ NumboLoaderScene = cc.Scene.extend({
 
         var shouldPreload = false;//(cc.sys.os == cc.sys.OS_IOS);
 
+        // load resources first
         cc.loader.load(res, function() {}, function () {
             var i;
 
+            // load modules
+            NJ.loadSettings();
+            NJ.loadThemes();
+
+            NJ.initAnalytics();
+
+            NJ.social.init();
+            NJ.purchases.init();
+            NJ.stats.load();
+
+            // preload numbo blocks
             for(i = 0; i < NJ.NUM_COLS * NJ.NUM_ROWS; ++i) {
                 NumboBlock.createAndPool();
             }
 
+            // preload audio
             if(!shouldPreload) {
                 if (self.cb)
                     self.cb.call(self.target);

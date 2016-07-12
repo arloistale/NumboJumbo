@@ -48,6 +48,12 @@ var SettingsMenuLayer = (function() {
         NJ.audio.playSound(res.clickSound);
     };
 
+    var onBatteryControl = function() {
+        NJ.settings.battery = !NJ.settings.battery;
+
+        NJ.audio.playSound(res.clickSound);
+    };
+
     return BaseMenuLayer.extend({
 
         // UI Data
@@ -75,8 +81,6 @@ var SettingsMenuLayer = (function() {
             this._super();
 
             this._initContentUI();
-
-            this.enter();
         },
 
         _initHeaderUI: function() {
@@ -100,20 +104,10 @@ var SettingsMenuLayer = (function() {
                 x: -this._contentMenu.getContentSize().width
             });
 
-            // divider cuts the middle
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
-
-            var divider = new NumboMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
-            divider.setTag(444);
-            divider.setBackgroundImage(res.alertImage);
-            divider.setBackgroundColor(NJ.themes.dividerColor);
-            divider.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
+            var contentSize = this._contentMenu.getContentSize();
 
             // generate music toggle
-            var musicY = this._contentMenu.getContentSize().height * 0.25;
+            var musicY = contentSize.height / 2 - contentSize.height / 6;
 
             var musicLabel = this.generateLabel("Music", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             musicLabel.setPositionY(musicY + musicLabel.getContentSize().height / 2);
@@ -122,14 +116,31 @@ var SettingsMenuLayer = (function() {
             musicToggle.setSelectedIndex(state);
             musicToggle.setPositionY(musicY - musicToggle.getContentSize().height / 2);
 
+            // first divider
+            var divider = this._generateSupportDivider();
+            divider.setPositionY(musicY - contentSize.height / 6);
+
             // generate sounds toggle
-            musicY = -this._contentMenu.getContentSize().height * 0.25;
+            musicY -= contentSize.height / 3;
             var soundsLabel = this.generateLabel("Sounds", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             var soundsToggle = this.generateToggle(onSoundsControl.bind(this));
-            soundsLabel.setPositionY(musicY + musicLabel.getContentSize().height / 2);
+            soundsLabel.setPositionY(musicY + soundsLabel.getContentSize().height / 2);
             state = (NJ.settings.sounds ? 0 : 1);
             soundsToggle.setSelectedIndex(state);
             soundsToggle.setPositionY(musicY - soundsToggle.getContentSize().height / 2);
+
+            // second divider
+            var dividerSecondary = this._generateSupportDivider();
+            dividerSecondary.setPositionY(musicY - contentSize.height / 6);
+
+            // generate battery toggle
+            musicY -= contentSize.height / 3;
+            var batteryLabel = this.generateLabel("Battery Saving", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            var batteryToggle = this.generateToggle(onBatteryControl.bind(this));
+            batteryLabel.setPositionY(musicY + batteryLabel.getContentSize().height / 2);
+            state = (NJ.settings.battery ? 0 : 1);
+            batteryToggle.setSelectedIndex(state);
+            batteryToggle.setPositionY(musicY - batteryToggle.getContentSize().height / 2);
 
             this._contentMenu.addChild(musicLabel);
             this._contentMenu.addChild(musicToggle);
@@ -138,6 +149,11 @@ var SettingsMenuLayer = (function() {
 
             this._contentMenu.addChild(soundsLabel);
             this._contentMenu.addChild(soundsToggle);
+
+            this._contentMenu.addChild(dividerSecondary);
+
+            this._contentMenu.addChild(batteryLabel);
+            this._contentMenu.addChild(batteryToggle);
 
             this.addChild(this._contentMenu);
         },
@@ -192,36 +208,30 @@ var SettingsMenuLayer = (function() {
             this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
         },
 
+        reset: function() {
+            this._super();
+
+            this._contentMenu.setPositionX(-this._contentMenu.getContentSize().width);
+        },
+
         // makes menu elements transition in
         enter: function() {
-            var headerSize = this._headerMenu.getContentSize();
-            var toolSize = this._toolMenu.getContentSize();
+            this._super();
 
             var easing = cc.easeBackOut();
-
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
             this._contentMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
         },
 
         // transition out
         leave: function(callback) {
-            var headerSize = this._headerMenu.getContentSize();
+            this._super(callback);
+
             var contentSize = this._contentMenu.getContentSize();
-            var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
 
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
-
             this._contentMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - contentSize.width, cc.visibleRect.center.y)).easing(easing));
-
-            this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
-                if(callback)
-                    callback();
-            })));
         },
 
         ///////////////

@@ -1,7 +1,7 @@
 
 var BackgroundLayer = cc.LayerColor.extend({
 
-    ctor: function(staticSprites, dynamicSprites) {
+    ctor: function() {
         this._super();
                                            
         this.init(NJ.themes.backgroundColor);

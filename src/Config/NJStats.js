@@ -6,11 +6,14 @@ var NJ = NJ || {};
 
 NJ.stats = (function() {
 
+    // constants
     const MAX_NUM_HINTS = 99;
     const MAX_NUM_SCRAMBLERS = 99;
 
+    // data
     var currency = 0;
 
+    var converters = 0;
     var hints = 0;
     var scramblers = 0;
 
@@ -47,6 +50,7 @@ NJ.stats = (function() {
             currency = parseInt(cc.sys.localStorage.getItem('currency')) || 0;
             numGamesCompleted = parseInt(cc.sys.localStorage.getItem('numGamesCompleted')) || 0;
 
+            converters = parseInt(cc.sys.localStorage.getItem('converters')) || 0;
             hints = parseInt(cc.sys.localStorage.getItem('hints')) || 0;
             scramblers = parseInt(cc.sys.localStorage.getItem('scramblers')) || 0;
 
@@ -67,6 +71,7 @@ NJ.stats = (function() {
             cc.sys.localStorage.setItem('currency', JSON.stringify(currency));
             cc.sys.localStorage.setItem('numGamesCompleted', JSON.stringify(numGamesCompleted));
 
+            cc.sys.localStorage.setItem('converters', JSON.stringify(converters));
             cc.sys.localStorage.setItem('hints', JSON.stringify(hints));
             cc.sys.localStorage.setItem('scramblers', JSON.stringify(scramblers));
 
@@ -141,12 +146,20 @@ NJ.stats = (function() {
             return isDoublerEnabled;
         },
 
+        getNumConverters: function() {
+            return converters;
+        },
+
         getNumHints: function() {
             return hints;
         },
 
         getNumScramblers: function() {
             return scramblers;
+        },
+
+        addConverters: function(amount) {
+            converters += amount;
         },
 
         addHints: function(amount) {
@@ -157,12 +170,16 @@ NJ.stats = (function() {
             scramblers += amount;
         },
 
+        depleteConverters: function() {
+            --converters;
+        },
+
         depleteHints: function() {
-            hints--;
+            --hints;
         },
 
         depleteScramblers: function() {
-            scramblers--;
+            --scramblers;
         }
     }
 }());

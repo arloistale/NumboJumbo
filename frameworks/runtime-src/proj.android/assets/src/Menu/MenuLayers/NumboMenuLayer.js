@@ -65,6 +65,9 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     },
 
     onExit: function() {
+        if(this._shopMenuLayer)
+            this._shopMenuLayer.release();
+
         this._shopButton.release();
         this._settingsButton.release();
         this._achievementsButton.release();
@@ -254,23 +257,30 @@ var NumboMenuLayer = BaseMenuLayer.extend({
 
     // makes menu elements transition in
     enter: function() {
-        var headerSize = this._headerMenu.getContentSize();
-        var toolSize = this._toolMenu.getContentSize();
+        this._super();
 
         var easing = cc.easeBackOut();
 
-        this._headerMenu.runAction(cc.sequence(
-            cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing),
-            cc.callFunc(function() {
-                if(cc.sys.isNative) {
-                    if(!NJ.social.isLoggedIn() && !NJ.settings.hasAttemptedAutoSignin) {
+        this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
+            if(cc.sys.isNative) {
+                if(NJ.purchases.campaignName) {
+                    cc.log("Campaign Running with name: " + NJ.purchases.campaignName);
+                    cc.log("Campaign message: " + NJ.purchases.campaignMessage);
+
+                    // now try to login
+                    if (!NJ.social.isLoggedIn() && !NJ.settings.hasAttemptedAutoSignin) {
+                        NJ.settings.hasAttemptedAutoSignin = true;
+                        NJ.social.login();
+                    }
+                } else {
+                    // now try to login
+                    if (!NJ.social.isLoggedIn() && !NJ.settings.hasAttemptedAutoSignin) {
                         NJ.settings.hasAttemptedAutoSignin = true;
                         NJ.social.login();
                     }
                 }
-            })));
-
-        this.enterTools();
+            }
+        })));
 
         var data;
         var delay = 0.4;
@@ -286,22 +296,11 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         }
     },
 
-    enterTools: function() {
-        var easing = cc.easeBackOut();
-        var toolSize = this._toolMenu.getContentSize();
-
-        this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
-    },
-
     // transition out
     leave: function(callback) {
-        var headerSize = this._headerMenu.getContentSize();
-        var toolSize = this._toolMenu.getContentSize();
+        this._super(callback);
 
         var easing = cc.easeBackOut();
-
-        this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
-        this.leaveTools();
 
         var data;
         for(var key in this._modeData) {
@@ -311,24 +310,6 @@ var NumboMenuLayer = BaseMenuLayer.extend({
             data = this._modeData[key];
 
             data.button.runAction(cc.moveTo(0.4, data.startPos).easing(easing));
-        }
-
-        if(callback) {
-            this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function () {
-                callback();
-            })));
-        }
-    },
-
-    leaveTools: function(callback) {
-        var toolSize = this._toolMenu.getContentSize();
-
-        this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(cc.easeBackOut()));
-
-        if(callback) {
-            this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function () {
-                callback();
-            })));
         }
     },
 
@@ -415,18 +396,24 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         var that = this;
 
         this.leave(function() {
-            that._shopMenuLayer = new ShopMenuLayer();
-            that._shopMenuLayer.setOnCloseCallback(function() {
-                that.removeChild(that._shopMenuLayer);
-                that._shopMenuLayer = null;
+            if(!that._shopMenuLayer) {
+                that._shopMenuLayer = new ShopMenuLayer();
+                that._shopMenuLayer.setOnCloseCallback(function () {
+                    that.removeChild(that._shopMenuLayer);
+                    that._shopMenuLayer = null;
 
-                that._updateTheme();
+                    that._updateTheme();
 
-                that.resume();
-                that.enter();
-            });
+                    that.resume();
+                    that.enter();
+                });
+                that._shopMenuLayer.retain();
+            }
+
+            that._shopMenuLayer.reset();
 
             that.addChild(that._shopMenuLayer, 999);
+            that._shopMenuLayer.enter();
         });
     },
 
@@ -449,6 +436,8 @@ var NumboMenuLayer = BaseMenuLayer.extend({
             });
 
             that.addChild(that._settingsMenuLayer, 999);
+
+            that._settingsMenuLayer.enter();
         });
     },
 

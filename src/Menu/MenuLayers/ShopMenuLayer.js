@@ -17,31 +17,6 @@ var ShopMenuLayer = (function() {
     // UI Events //
     ///////////////
 
-    var onBuyBubbles = function() {
-        NJ.audio.playSound(res.coinSound);
-
-        var that = this;
-
-        if(cc.sys.isNative) {
-            NJ.purchases.buy(NJ.purchases.itemKeys.coin1, function (product, error) {
-                _logCount++;
-
-                if (!error) {
-                    that.devModeLog("Log " + _logCount + ": Success = " + product);
-                    NJ.stats.addCurrency(25000);
-                    that.updateCurrencyLabel();
-                    NJ.stats.save();
-                } else {
-                    that.devModeLog("Log " + _logCount + ": Failure = " + product + " : " + error);
-                }
-            });
-        } else {
-            NJ.stats.addCurrency(25000);
-            that.updateCurrencyLabel();
-            NJ.stats.save();
-        }
-    };
-
     var onBuyDoubler = function() {
         NJ.audio.playSound(res.coinSound);
 
@@ -176,10 +151,6 @@ var ShopMenuLayer = (function() {
             this._initPowerupsUI();
             this._initThemesUI();
             this._initBubblesUI();
-
-            this._updateTheme();
-
-            this.enter();
         },
 
         _initHeaderUI: function() {
@@ -198,6 +169,7 @@ var ShopMenuLayer = (function() {
             var background = new NumboMenuItem(this._headerMenu.getContentSize());
             background.setTag(333);
             background.setBackgroundImage(res.alertImage);
+            background.setBackgroundColor(NJ.themes.backgroundColor);
 
             this._headerMenu.addChild(background, -1);
         },
@@ -209,6 +181,7 @@ var ShopMenuLayer = (function() {
 
             this._contentScrollView = new ccui.ScrollView();
             this._contentScrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+            this._contentScrollView.setScrollBarEnabled(false);
             this._contentScrollView.setTouchEnabled(true);
             this._contentScrollView.setBounceEnabled(true);
             this._contentScrollView.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (1 - NJ.uiSizes.header - NJ.uiSizes.toolbar)));
@@ -268,20 +241,7 @@ var ShopMenuLayer = (function() {
             }
 
             this._bubblesMenu.alignItemsVerticallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.025));
-/*
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
-            var divider = new NumboMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
-            divider.setTag(444);
-            divider.setBackgroundImage(res.alertImage);
-            divider.setBackgroundColor(NJ.themes.defaultLabelColor);
-            divider.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                y: -this._bubblesMenu.getContentSize().height / 2
-            });
-            this._bubblesMenu.addChild(divider);
-*/
             this._contentScrollView.addChild(this._bubblesMenu);
         },
 
@@ -369,17 +329,8 @@ var ShopMenuLayer = (function() {
 
             this._powerupsMenu.alignItemsVerticallyWithPadding(NJ.calculateScreenDimensionFromRatio(0.025));
 
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
-
-            var divider = new NumboMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
-            divider.setTag(444);
-            divider.setBackgroundImage(res.alertImage);
-            divider.setBackgroundColor(NJ.themes.defaultLabelColor);
-            divider.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                y: -this._powerupsMenu.getContentSize().height / 2
-            });
+            var divider = this._generateSupportDivider();
+            divider.setPositionY(-this._powerupsMenu.getContentSize().height / 2);
             this._powerupsMenu.addChild(divider);
 
             this._contentScrollView.addChild(this._powerupsMenu);
@@ -493,17 +444,8 @@ var ShopMenuLayer = (function() {
             var shouldIncludeBubblesArea = (NJ.purchases.getProductByName("doubler") ? true : false);
 
             if(shouldIncludeBubblesArea) {
-                var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
-
-                var divider = new NumboMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
-                divider.setTag(444);
-                divider.setBackgroundImage(res.alertImage);
-                divider.setBackgroundColor(NJ.themes.defaultLabelColor);
-                divider.attr({
-                    anchorX: 0.5,
-                    anchorY: 0.5,
-                    y: -this._themeMenu.getContentSize().height / 2
-                });
+                var divider = this._generateSupportDivider();
+                divider.setPositionY(-this._themeMenu.getContentSize().height / 2);
                 this._themeMenu.addChild(divider);
             }
 
@@ -545,35 +487,20 @@ var ShopMenuLayer = (function() {
 
         // makes menu elements transition in
         enter: function() {
-
-
-            var headerSize = this._headerMenu.getContentSize();
-            var toolSize = this._toolMenu.getContentSize();
+            this._super();
 
             var easing = cc.easeBackOut();
-
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
             this._contentScrollView.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
         },
 
         // transition out
         leave: function(callback) {
-            var headerSize = this._headerMenu.getContentSize();
-            var toolSize = this._toolMenu.getContentSize();
+            this._super(callback);
 
             var easing = cc.easeBackOut();
 
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
-
             this._contentScrollView.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y - cc.visibleRect.height)).easing(easing));
-
-            this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
-                if(callback)
-                    callback();
-            })));
         },
 
         ///////////////
@@ -611,7 +538,7 @@ var ShopMenuLayer = (function() {
         },
 
         updateCurrencyLabel: function() {
-            this._currencyLabel.setLabelTitle("Bubbles: " + NJ.stats.getCurrency());
+            this._currencyLabel.setLabelTitle(NJ.stats.getCurrency() + " Bubbles");
         },
 
         updatePowerups: function() {
@@ -622,15 +549,22 @@ var ShopMenuLayer = (function() {
         _updateTheme: function() {
             this._super();
 
-            this._currencyLabel.setLabelColor(NJ.themes.specialLabelColor);
+            if(this._currencyLabel)
+                this._currencyLabel.setLabelColor(NJ.themes.specialLabelColor);
 
-            this._buyHintsButton.setBackgroundColor(NJ.themes.hintsColor);
-            this._buyScramblersButton.setBackgroundColor(NJ.themes.scramblersColor);
+            if(this._buyHintsButton)
+                this._buyHintsButton.setBackgroundColor(NJ.themes.hintsColor);
+
+            if(this._buyScramblersButton)
+                this._buyScramblersButton.setBackgroundColor(NJ.themes.scramblersColor);
+
+            if(!this._themeMenu)
+                return;
 
             var themes = NJ.themes.getList();
             var themeButton;
 
-            for(i = 0; i < themes.length; ++i) {
+            for(var i = 0; i < themes.length; ++i) {
                 var index = i;
 
                 themeButton = this._themeButtons[i];

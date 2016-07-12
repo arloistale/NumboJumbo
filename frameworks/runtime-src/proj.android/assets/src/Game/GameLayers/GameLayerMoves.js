@@ -18,7 +18,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 	],
 
 	// maximum number of moves allowed
-	_movesLimit: 2,
+	_movesLimit: 20,
 
 	////////////////////
 	// Initialization //
@@ -96,56 +96,9 @@ var MovesGameLayer = BaseGameLayer.extend({
 
 		var that = this;
 
-		var scoreDiff = NJ.gameState.getScore();
-		if(NJ.stats.isDoubleEnabled())
-			scoreDiff *= 2;
-
-		NJ.stats.addCurrency(scoreDiff);
-
-		var key = NJ.modekeys.moves;
-		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
-
-		var highscore = NJ.stats.getHighscore(key);
-		NJ.social.submitScore(key, highscore);
-
-		if(highscore >= 500) {
-			NJ.social.unlockAchievement(NJ.social.achievementKeys.mov1);
-
-			if(highscore >= 750) {
-				NJ.social.unlockAchievement(NJ.social.achievementKeys.mov2);
-
-				if(highscore >= 1000) {
-					NJ.social.unlockAchievement(NJ.social.achievementKeys.mov3);
-
-					if(highscore >= 1250) {
-						NJ.social.unlockAchievement(NJ.social.achievementKeys.mov4);
-					}
-				}
-			}
-		}
-
-		NJ.stats.save();
-
-		// first send the analytics for the current game session
-		NJ.sendAnalytics("Moves");
-
-		this.runAction(cc.sequence(cc.callFunc(function() {
-			that._numboHeaderLayer.leave();
-			that._toolbarLayer.leave();
-		}), cc.delayTime(1), cc.callFunc(function() {
-			that._numboController.clearLevel();
-		}), cc.delayTime(1), cc.callFunc(function() {
-			that.pauseGame();
-
-			that._gameOverMenuLayer = new GameOverMenuLayer(key, highscoreAccepted);
-			that._gameOverMenuLayer.setOnRetryCallback(function() {
-				that.onRetry();
-			});
-			that._gameOverMenuLayer.setOnMenuCallback(function() {
-				that.onMenu();
-			});
-			that.addChild(that._gameOverMenuLayer, 999);
-		})));
+		this.leave(function() {
+			that.endToEpilogue(NJ.modekeys.moves);
+		});
 	},
 
 	// whether the game is over or not

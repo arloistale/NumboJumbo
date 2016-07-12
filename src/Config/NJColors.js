@@ -423,13 +423,7 @@ NJ.themes = (function() {
 NJ.loadThemes = function() {
     NJ.themes.hasLoaded = true;
 
-    // if this is our first time then save defaults
-    if(!(cc.sys.localStorage.getItem('themesHasLoaded') == 'true')) {
-        NJ.saveThemes();
-        return;
-    }
-
-    var rawIndex = cc.sys.localStorage.getItem("themeIndex");
+    var rawIndex = cc.sys.localStorage.getItem("themeIndex") || 0;
 
     NJ.themes.setThemeByIndex(parseInt(rawIndex));
 
@@ -439,13 +433,14 @@ NJ.loadThemes = function() {
         themesList[i].isPurchased = cc.sys.localStorage.getItem("themesPurchased_" + i) == 'true';
     }
 
+    themesList[0].isPurchased = true;
+
     NJ.themes.updateList(themesList);
 };
 
 // save settings to local store
 // NOTE: Must be called to persist changes in settings
 NJ.saveThemes = function() {
-    cc.sys.localStorage.setItem("themesHasLoaded", JSON.stringify(true));
     cc.sys.localStorage.setItem("themeIndex", JSON.stringify(NJ.themes.getThemeIndex()));
     //cc.log("Saving" + NJ.themes.getThemeIndex());
 

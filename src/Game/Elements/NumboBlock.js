@@ -171,7 +171,7 @@ var NumboBlock = cc.Sprite.extend({
 
         this._highlightSprite.stopAllActions();
         this._highlightSprite.runAction(cc.scaleBy(0.4, 2.5, 2.5));
-        this._highlightSprite.runAction(cc.sequence(cc.fadeTo(0.4, 0), cc.callFunc(function() {
+        this._highlightSprite.runAction(cc.sequence(cc.fadeOut(0.4), cc.callFunc(function() {
             that._highlightSprite.setVisible(false);
         })));
     },

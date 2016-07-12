@@ -24,7 +24,7 @@ NJ.settings = {
 
     music: true,
     sounds: true,
-    vibration: true
+    battery: false
 };
 
 // load settings from local store

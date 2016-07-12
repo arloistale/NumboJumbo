@@ -6,32 +6,32 @@ NJ.social = (function() {
 
     return {
         // expose achievement keys
-        achievementKeys: {
+        achievements: {
             played1: "played1",
             played2: "played2",
             played3: "played3",
             played4: "played4",
             played5: "played5",
 
-            mm1: "mm1",
-            mm2: "mm2",
-            mm3: "mm3",
-            mm4: "mm4",
+            // achievement keys are named with the following classification
+            // Key = Mode Key + Tier Index
+            // Example: mm1 (Mode key for Minute Madness with Tier 1)
 
-            mov1: "mov1",
-            mov2: "mov2",
-            mov3: "mov3",
-            mov4: "mov4",
+            mm: {
+                scoreThresholds: [300, 450, 600, 750]
+            },
 
-            re1: "re1",
-            re2: "re2",
-            re3: "re3",
-            re4: "re4",
+            mov: {
+                scoreThresholds: [500, 750, 1000, 1250]
+            },
 
-            inf1: "inf1",
-            inf2: "inf2",
-            inf3: "inf3",
-            inf4: "inf4"
+            re: {
+                scoreThresholds: [500, 1000, 1500, 2000]
+            },
+
+            inf: {
+                scoreThresholds: [2500, 5000, 7500, 10000]
+            }
         },
 
         init: function () {
@@ -108,6 +108,22 @@ NJ.social = (function() {
                     sdkbox.PluginSdkboxPlay.unlockAchievement(key);
                 } else {
                     cc.log("Could not unlock achievement due to unauthenticated player");
+                }
+            }
+        },
+
+        // helper function to unlock achievement based on current mode key and score
+        offerAchievementForModeWithScore: function(modeKey, score) {
+            if(!cc.sys.isNative)
+                return;
+
+            var thresholdsContainer = NJ.social.achievements[modeKey];
+
+            cc.assert(thresholdsContainer, "Invalid modeKey assigned to achievement");
+
+            for(var i = 0; i < thresholdsContainer.length; ++i) {
+                if (score >= thresholdsContainer[i]) {
+                    NJ.social.unlockAchievement(modeKey + "" + (i + 1));
                 }
             }
         },

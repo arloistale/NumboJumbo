@@ -272,54 +272,22 @@ var NumboController = (function() {
 		},
 
 		findHint: function() {
-			var tries = 50; // try no more than 50 times
-			while (tries > 0 && this._knownPath.length == 0) {
-				var block = this._numboLevel.getRandomBlock();
+			if(!this._knownPath || !this._knownPath.length) {
+				var block;
+				var tries = 50; // try no more than 50 times
+				while (tries > 0 && !this._knownPath.length) {
+					block = this._numboLevel.getRandomBlock();
 
-				if(block) {
-					this._knownPath = this.meanderSearch(block.col, block.row,
-						meanderSearchCriteria.threeBlocksSumsToLast, [block]);
+					if (block) {
+						this._knownPath = this.meanderSearch(block.col, block.row,
+							meanderSearchCriteria.threeBlocksSumsToLast, [block]);
+					}
+
+					--tries;
 				}
-
-				--tries;
 			}
 
 			return this._knownPath;
-		},
-
-		// returns a col/val pair such that the column is legal to spawn in,
-		// and the value has at least one solution associated with it
-		// useful if we want to guarantee spawning a 'good' block
-		findLocationAndValueForNewBlock: function(){
-			var maxTries = 100;
-			var path = [];
-			var col = null;
-			var val = null;
-			var i;
-			for (i = 0; i < maxTries && path.length == 0; ++i){
-				col = this._numboLevel.getRandomValidCol();
-				var row = this._numboLevel.getNumBlocksInColumn(col);
-				if (row >= 0){
-					path = this.meanderSearch(col, row,
-						meanderSearchCriteria.sumOrDifferenceIsValid, []);
-				}
-			}
-
-			if (path.length == 2){
-				var valA = path[0].val;
-				var valB = path[1].val;
-				var maxVal = this.getSpawnDistributionMaxNumber();
-				if (valA + valB <= maxVal) {
-					val = valA + valB;
-				}
-				else if (valB - valA >= 1){
-					val = valB - valA;
-				}
-
-
-			}
-			return {col: col, val: val};
-
 		},
 
 		// count and a col/row coordinate pair.
@@ -702,15 +670,10 @@ var NumboController = (function() {
 			if (!this._selectedBlocks.length || this._selectedBlocks.length < 3)
 				return false;
 
-
-			// "order-less"
-			return this.sumToHighest();
-
-			// "order matters"
-			// return this.sumToLast();
+			return this.sumToLast();
 		},
 
-		sumToLast: function(){
+		sumToLast: function() {
 			var selectedBlocksLength = this._selectedBlocks.length;
 			var sum = 0;
 

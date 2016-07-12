@@ -8,6 +8,7 @@ LOCAL_MODULE := cocos2djs_shared
 LOCAL_MODULE_FILENAME := libcocos2djs
 
 LOCAL_SRC_FILES := hellojavascript/main.cpp \
+../../Classes/CampaignManager.cpp \
 ../../Classes/AppDelegate.cpp \
 ../../Classes/PluginGoogleAnalyticsJS.cpp \
 ../../Classes/PluginGoogleAnalyticsJS.hpp \

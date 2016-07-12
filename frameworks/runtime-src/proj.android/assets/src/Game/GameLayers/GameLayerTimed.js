@@ -105,54 +105,8 @@ var TimedGameLayer = BaseGameLayer.extend({
 
 		var that = this;
 
-		var scoreDiff = NJ.gameState.getScore();
-		if(NJ.stats.isDoubleEnabled())
-			scoreDiff *= 2;
-
-		NJ.stats.addCurrency(scoreDiff);
-
-		var key = NJ.modekeys.minuteMadness;
-		var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
-
-		var highscore = NJ.stats.getHighscore(key);
-		NJ.social.submitScore(key, highscore);
-
-		if(highscore >= 300) {
-			NJ.social.unlockAchievement(NJ.social.achievementKeys.mm1);
-
-			if(highscore >= 450) {
-				NJ.social.unlockAchievement(NJ.social.achievementKeys.mm2);
-
-				if(highscore >= 600) {
-					NJ.social.unlockAchievement(NJ.social.achievementKeys.mm3);
-
-					if(highscore >= 750) {
-						NJ.social.unlockAchievement(NJ.social.achievementKeys.mm4);
-					}
-				}
-			}
-		}
-
-		NJ.stats.save();
-
-		// first send the analytics for the current game session
-		NJ.sendAnalytics("Timed");
-
 		this.leave(function() {
-			that.runAction(cc.sequence(cc.delayTime(0.6), cc.callFunc(function() {
-				that._numboController.clearLevel();
-			}), cc.delayTime(1), cc.callFunc(function() {
-				that.pauseGame();
-
-				that._gameOverMenuLayer = new GameOverMenuLayer(key, highscoreAccepted);
-				that._gameOverMenuLayer.setOnRetryCallback(function() {
-					that.onRetry();
-				});
-				that._gameOverMenuLayer.setOnMenuCallback(function() {
-					that.onMenu();
-				});
-				that.addChild(that._gameOverMenuLayer, 999);
-			})));
+			that.endToEpilogue(NJ.modekeys.minuteMadness);
 		});
 	},
 

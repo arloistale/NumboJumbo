@@ -102,16 +102,26 @@ var GameOverMenuLayer = (function() {
             this._initStatsUI();
             this._initShopUI();
             this._initPromoUI();
-
-            this._updateTheme();
-
-            this.enter();
         },
 
         _initHeaderUI: function() {
             this._super();
 
             var headerLabel = this.generateLabel(NJ.modeNames[this._modeKey].toUpperCase(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
+            switch(this._modeKey) {
+                case NJ.modekeys.minuteMadness:
+                    headerLabel.setLabelColor(NJ.themes.blockColors[0]);
+                    break;
+                case NJ.modekeys.moves:
+                    headerLabel.setLabelColor(NJ.themes.blockColors[1]);
+                    break;
+                case NJ.modekeys.react:
+                    headerLabel.setLabelColor(NJ.themes.blockColors[2]);
+                    break;
+                case NJ.modekeys.infinite:
+                    headerLabel.setLabelColor(NJ.themes.blockColors[3]);
+                    break;
+            }
             headerLabel.setTag(1000);
 
             this._headerMenu.addChild(headerLabel);
@@ -274,16 +284,8 @@ var GameOverMenuLayer = (function() {
 
             var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
 
-            var divider = new NumboMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
-            divider.setTag(444);
-            divider.setBackgroundImage(res.alertImage);
-            divider.setBackgroundColor(NJ.themes.dividerColor);
-            divider.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                y: this._promoMenu.getContentSize().height / 2
-            });
-
+            var divider = this._generateSupportDivider();
+            divider.setPositionY(this._promoMenu.getContentSize().height / 2);
             this._promoMenu.addChild(divider);
 
             this.addChild(this._promoMenu, 100);
@@ -328,13 +330,9 @@ var GameOverMenuLayer = (function() {
 
         // makes menu elements transition in
         enter: function() {
-            var headerSize = this._headerMenu.getContentSize();
-            var toolSize = this._toolMenu.getContentSize();
+            this._super();
 
             var easing = cc.easeBackOut();
-
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
 
             this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._statsMenu.getPositionY())).easing(easing));
 
@@ -346,15 +344,12 @@ var GameOverMenuLayer = (function() {
 
         // transition out
         leave: function(callback) {
-            var headerSize = this._headerMenu.getContentSize();
+            this._super(callback);
+
             var statsSize = this._statsMenu.getContentSize();
             var shopSize = this._shopMenu.getContentSize();
-            var toolSize = this._toolMenu.getContentSize();
 
             var easing = cc.easeBackOut();
-
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
 
             this._statsMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - statsSize.width, this._statsMenu.getPositionY())).easing(easing));
 
@@ -362,11 +357,6 @@ var GameOverMenuLayer = (function() {
 
             if(this._promoMenu)
                 this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x + this._promoMenu.getContentSize().width, this._promoMenu.getPositionY())).easing(easing));
-
-            this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
-                if(callback)
-                    callback();
-            })));
         },
 
 //////////////////

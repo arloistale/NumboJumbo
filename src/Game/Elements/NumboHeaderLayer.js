@@ -194,8 +194,8 @@ var NumboHeaderLayer = (function() {
             var i;
 
             // just print the values, no + or =
-            if (!this.sumToHighest(nums) ) {
-                for (i = 0; i < nums.length; ++i){
+            if (!this.sumToLast(nums) ) {
+                for (i = 0; i < nums.length; ++i) {
                     equationStr += nums[i] + "     ";
                 }
                 this._equationLabel.setColor(NJ.themes.defaultLabelColor);
@@ -246,11 +246,26 @@ var NumboHeaderLayer = (function() {
             return maxIndex;
         },
 
-        sumToHighest: function(nums){
+        sumToLast: function(nums) {
             if (!nums || nums.length < 3){
                 return false;
             }
 
+            var selectedBlocksLength = nums.length;
+            var sum = 0;
+            var i = 0;
+
+            for(; i < selectedBlocksLength; ++i) {
+                sum += nums[i];
+            }
+
+            return (sum - nums[i - 1] == nums[i - 1]);
+        },
+
+        sumToHighest: function(nums){
+            if (!nums || nums.length < 3){
+                return false;
+            }
 
             var sum = 0;
             for(var i = 0; i < nums.length; ++i) {

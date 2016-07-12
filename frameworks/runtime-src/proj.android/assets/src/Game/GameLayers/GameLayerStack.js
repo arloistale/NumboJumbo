@@ -93,56 +93,8 @@ var StackGameLayer = BaseGameLayer.extend({
 
         var that = this;
 
-        var scoreDiff = NJ.gameState.getScore();
-        if(NJ.stats.isDoubleEnabled())
-            scoreDiff *= 2;
-
-        NJ.stats.addCurrency(scoreDiff);
-
-        var key = NJ.modekeys.react;
-        var highscoreAccepted = NJ.stats.offerHighscore(key, NJ.gameState.getScore());
-
-        // only submit score after all desired achievements have been pushed
-        // because the achievement
-        var highscore = NJ.stats.getHighscore(key);
-        NJ.social.submitScore(key, highscore);
-
-        if(highscore >= 500) {
-            NJ.social.unlockAchievement(NJ.social.achievementKeys.re1);
-
-            if(highscore >= 1000) {
-                NJ.social.unlockAchievement(NJ.social.achievementKeys.re2);
-
-                if(highscore >= 1500) {
-                    NJ.social.unlockAchievement(NJ.social.achievementKeys.re3);
-
-                    if(highscore >= 2000) {
-                        NJ.social.unlockAchievement(NJ.social.achievementKeys.re4);
-                    }
-                }
-            }
-        }
-
-        NJ.stats.save();
-
-        // first send the analytics for the current game session
-        NJ.sendAnalytics("Stack");
-
         this.leave(function() {
-            that.runAction(cc.sequence(cc.delayTime(0.6), cc.callFunc(function() {
-                that._numboController.clearLevel();
-            }), cc.delayTime(1), cc.callFunc(function() {
-                that.pauseGame();
-
-                that._gameOverMenuLayer = new GameOverMenuLayer(key, highscoreAccepted);
-                that._gameOverMenuLayer.setOnRetryCallback(function() {
-                    that.onRetry();
-                });
-                that._gameOverMenuLayer.setOnMenuCallback(function() {
-                    that.onMenu();
-                });
-                that.addChild(that._gameOverMenuLayer, 999);
-            })));
+            that.endToEpilogue(NJ.modekeys.react);
         });
     },
 

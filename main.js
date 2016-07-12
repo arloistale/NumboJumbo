@@ -41,18 +41,7 @@ cc.game.onStart = function() {
         
         cc.view.resizeWithBrowserSize(true);
     }
-    
-    // load data
-    NJ.loadSettings();
-    NJ.loadThemes();
 
-    NJ.initAnalytics();
-
-    NJ.social.init();
-    NJ.purchases.init();
-    NJ.stats.load();
-
-    // load jumbos then we're good to go
     var that = this;
     
     // load resources

@@ -26,12 +26,6 @@ var BaseMenuLayer = cc.LayerColor.extend({
         this._generateBaseDividers();
     },
 
-    onExit: function() {
-        this.unscheduleAllCallbacks();
-
-        this._super();
-    },
-
     _initHeaderUI: function() {
         this._headerMenu = new cc.Menu();
         this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
@@ -41,7 +35,7 @@ var BaseMenuLayer = cc.LayerColor.extend({
             y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2
         });
 
-        this.addChild(this._headerMenu);
+        this.addChild(this._headerMenu, 100);
     },
 
     // initialize menu elements
@@ -72,13 +66,46 @@ var BaseMenuLayer = cc.LayerColor.extend({
         }, this);
     },
 
+    // reset the elements of the menu layer
+    reset: function() {
+        this._headerMenu.setPositionY(cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2);
+        this._toolMenu.setPositionY(cc.visibleRect.bottom.y - this._toolMenu.getContentSize().height / 2);
+    },
+
     // makes menu elements transition in,
     // overridden in sub classes
-    enter: function() {},
+    enter: function() {
+        var headerSize = this._headerMenu.getContentSize();
+        var toolSize = this._toolMenu.getContentSize();
+
+        var easing = cc.easeBackOut();
+
+        this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
+        this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
+    },
 
     // transition out,
     // overridden in sub classes
-    leave: function(callback) {},
+    leave: function(callback) {
+        var headerSize = this._headerMenu.getContentSize();
+        var toolSize = this._toolMenu.getContentSize();
+
+        var easing = cc.easeBackOut();
+
+        this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
+        this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
+
+        if(callback) {
+            // need to do this because our original node will usually be paused
+            // Why did we pause original node?
+            // One bad effect of not pausing the original node is that input for example:
+            // On Back Button on Android listener will be invoked on both original node (NumboMenuLayer)
+            // and on new node (SettingsMenuLayer) meaning that Back Button will exit the game from all menu screens
+            this._headerMenu.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function () {
+                callback();
+            })));
+        }
+    },
 
     ///////////////
     // UI Events //
@@ -115,10 +142,22 @@ var BaseMenuLayer = cc.LayerColor.extend({
         this._toolMenu.addChild(toolDivider);
     },
 
-    generateLabel: function(title, size) {
+    // generates a horizontal divider spanning 80% of the width of the screen
+    // positioning and other attributes are left to the caller
+    _generateSupportDivider: function() {
+        var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
+
+        var divider = new NumboMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
+        divider.setTag(444);
+        divider.setBackgroundImage(res.alertImage);
+        divider.setBackgroundColor(NJ.themes.dividerColor);
+        return divider;
+    },
+
+    generateLabel: function(title, size, color) {
         var toggleItem = new NumboMenuItem(size);
         toggleItem.setLabelTitle(title);
-        toggleItem.setLabelColor(NJ.themes.defaultLabelColor);
+        toggleItem.setLabelColor(color || NJ.themes.defaultLabelColor);
         return toggleItem;
     },
 

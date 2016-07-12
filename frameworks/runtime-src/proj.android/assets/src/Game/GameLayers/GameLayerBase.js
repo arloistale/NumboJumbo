@@ -93,11 +93,7 @@ var BaseGameLayer = (function() {
 
 		_touchID: -1,
 
-		// amount of time to wait before destroying bonus blocks
-		_killDelay: null,
-		// amount of time to wait before spawning blocks in turn-based moves
-		// (must be strictly greater than _killDelay!)
-		_spawnDelay: null,
+		_spawnDelay: 0,
 
 		// data
 		_isInGame: false,
@@ -122,13 +118,7 @@ var BaseGameLayer = (function() {
 			this._initGeometry();
 			this._initAudio();
 			this._initParticles();
-			this._initShadows();
 			this._initUI();
-
-			//this._killDelay = 0.35;
-			this._killDelay = 0.0;
-			//this._spawnDelay = this._killDelay + 0.1;
-			this._spawnDelay = 0.0;
 
 			// extranneous initialization
 			this._reset();
@@ -149,7 +139,6 @@ var BaseGameLayer = (function() {
 
 		// Override this for extranneous
 		_reset: function() {
-			var that = this;
 			NJ.gameState.init();
 
 			this._touchID = -1;
@@ -167,14 +156,10 @@ var BaseGameLayer = (function() {
 			this._feedbackLayer.reset();
 			this._effectsLayer.reset();
 
-            //this._drawDividersGeometry();
+			this._numboController.findHint();
 
             // play music again if music settings turned on
-            NJ.audio.playMusic(that._backgroundTrack);
-
-			this.schedule(function() {
-				that._numboController.findHint();
-			}, 0.1);
+            NJ.audio.playMusic(this._backgroundTrack);
 		},
 
 		_initParticles: function() {
@@ -186,21 +171,6 @@ var BaseGameLayer = (function() {
 						y: coords.y,
 						col: col,
 						row: row
-					});
-				}
-			}
-		},
-
-		_initShadows: function(){
-			for (var col = 0; col < NJ.NUM_COLS; ++col){
-				for (var row = 0; row < NJ.NUM_ROWS; ++row) {
-					var coords = this._convertLevelCoordsToPoint(col, row);
-					this._effectsLayer.initializeShadowAt({
-						x: coords.x,
-						y: coords.y,
-						col: col,
-						row: row,
-						blockSize: this._levelCellSize
 					});
 				}
 			}
@@ -273,7 +243,6 @@ var BaseGameLayer = (function() {
 				event: cc.EventListener.KEYBOARD,
 				onKeyPressed: function(key, event) {
 					if(key == cc.KEY.back) {
-						cc.log("hi");
 						that.onPause();
 					}
 				}
@@ -449,6 +418,48 @@ var BaseGameLayer = (function() {
 		/////////////////////////
 		// Game State Handling //
 		/////////////////////////
+
+		// ends the session and goes to the game over screen
+		// for the appropriate mode
+		endToEpilogue: function(modeKey) {
+			var that = this;
+
+			var score = NJ.gameState.getScore();
+			var highscoreAccepted = NJ.stats.offerHighscore(modeKey, score);
+
+			var scoreDiff = NJ.gameState.getScore();
+			if(NJ.stats.isDoubleEnabled())
+				scoreDiff *= 2;
+
+			NJ.stats.addCurrency(scoreDiff);
+
+			this._backgroundLayer.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
+				// now clear the level once all that is dealt with
+				that._numboController.clearLevel();
+			}), cc.delayTime(0.5), cc.callFunc(function() {
+				// deal with saving high scores and achievements
+				var highscore = NJ.stats.getHighscore(modeKey);
+				NJ.social.submitScore(modeKey, highscore);
+				NJ.social.offerAchievementForModeWithScore(modeKey, highscore);
+				NJ.stats.save();
+
+				// send the analytics for the current game session
+				NJ.sendAnalytics(NJ.modeNames[modeKey]);
+			}), cc.delayTime(0.5), cc.callFunc(function() {
+				that.pauseGame();
+
+				that._gameOverMenuLayer = new GameOverMenuLayer(modeKey, highscoreAccepted);
+				that._gameOverMenuLayer.setOnRetryCallback(function() {
+					that.onRetry();
+				});
+				that._gameOverMenuLayer.setOnMenuCallback(function() {
+					that.onMenu();
+				});
+				that.addChild(that._gameOverMenuLayer, 999);
+
+				that._gameOverMenuLayer.enter();
+			})));
+		},
 
 		// checks whether the game has ended and performs actions appropriately
 		// this function also triggers the doom sayer if in danger
@@ -632,18 +643,6 @@ var BaseGameLayer = (function() {
 		// Hint Finding //
 		//////////////////
 
-		jiggleHintBlocks: function() {
-			var hint = this._numboController.findHint();
-			for (var i in hint) {
-				if (hint.hasOwnProperty(i))
-					hint[i].jiggleSprite();
-			}
-			this.unschedule(this.jiggleHintBlocks);
-			this.jiggleCount++;
-			if(this.jiggleCount < 2 || NJ.gameState.getBlocksCleared() == 0)
-				this.schedule(this.jiggleHintBlocks, 5);
-		},
-
 		jiggleHintBlocksAndReset: function(){
 			var hint = this._numboController.findHint();
 
@@ -685,19 +684,19 @@ var BaseGameLayer = (function() {
 			var numGames = NJ.stats.incrementNumGamesCompleted();
 
 			if(numGames >= 5) {
-				NJ.social.unlockAchievement(NJ.social.achievementKeys.played1);
+				NJ.social.unlockAchievement(NJ.social.achievements.played1);
 
 				if(numGames == 10) {
-					NJ.social.unlockAchievement(NJ.social.achievementKeys.played2);
+					NJ.social.unlockAchievement(NJ.social.achievements.played2);
 
 					if (numGames == 25) {
-						NJ.social.unlockAchievement(NJ.social.achievementKeys.played3);
+						NJ.social.unlockAchievement(NJ.social.achievements.played3);
 
 						if (numGames == 50) {
-							NJ.social.unlockAchievement(NJ.social.achievementKeys.played4);
+							NJ.social.unlockAchievement(NJ.social.achievements.played4);
 
 							if (numGames == 100) {
-								NJ.social.unlockAchievement(NJ.social.achievementKeys.played5);
+								NJ.social.unlockAchievement(NJ.social.achievements.played5);
 							}
 						}
 					}
@@ -734,6 +733,7 @@ var BaseGameLayer = (function() {
 					that.onMenu();
 				});
 				that.addChild(that._settingsMenuLayer, 999);
+				that._settingsMenuLayer.enter();
 			};
 
 			if(isInstant) {
@@ -943,7 +943,7 @@ var BaseGameLayer = (function() {
 			var scoreDifference = 0;
 
 			// loop through the blocks, giving each one a particle explosion and also computing some values
-			for(i = 0; i < blocks.length; i++) {
+			for (i = 0; i < blocks.length; i++) {
 				block = blocks[i];
 				// we need to find the target value which will be the maximum value in the cleared blocks
 				scoreDifference += block.val;
@@ -951,7 +951,7 @@ var BaseGameLayer = (function() {
 				color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
 				if (block) {
 					var coords = this._convertPointToLevelCoords({x: block.x, y: block.y});
-					if (coords) {
+					if (coords && !NJ.settings.battery) {
 						this._effectsLayer.launchExplosion(coords.col, coords.row, color, shouldLaunchShadow);
 					}
 				}
@@ -965,89 +965,6 @@ var BaseGameLayer = (function() {
 
 			this._numboHeaderLayer.setScoreValue(NJ.gameState.getScore());
 		},
-
-		// spawns N blocks after a certain amount of time, then executes the callback (if given).
-		// ensures that there will also be at least one move present on the board.
-		// to accomplish this, we spawn (n-2) blocks. at this point, there are 3 cases:
-		//		case 1: there is a known hint, so we just spawn more random blocks
-		//			(this is the most common & easiest case by far!)
-		//	 	case 2: all blocks within 2 spaces of the frontier have the same value X. here, we must
-		//			generate 2 more blocks that add up to X, and place them next to each-other
-		//		case 3: not all blocks have the same value, but there still isn't an equation
-		//			(eg, board is all 3's and 5's). here the strategy is simple. grab a random
-		//			block A, and a random one of its neigbhoring blocks B.
-		//			if the sum of their values is legal, use that.
-		//			if the difference of their values is legal, use that.
-		//			if neither, try a different block pair.
-		// 			(note that b/c not all blocks have the same value, this will work eventually)
-
-		spawnBlocksAfterDelayOld: function(count, delay, callback){
-			var that = this;
-
-			// case 1: known hint exists
-			if (that._numboController.findHint().length > 0){
-				that.spawnDropRandomBlocks(count);
-			}
-
-			// case 2: all have same value near frontier
-			else if (that._numboController.areAllBlocksTheSameValue()){
-				that.spawnDropRandomBlocks(count-2);
-				var colsAndVals = that._numboController.findLocationAndValueForTwoNewBlocks();
-				if (colsAndVals) {
-					that.spawnDropBlock(colsAndVals[0].col, colsAndVals[0].val);
-					that.spawnDropBlock(colsAndVals[1].col, colsAndVals[1].val);
-				}
-				else {
-					that.spawnDropRandomBlocks(2);
-				}
-			}
-			// case 3: find a col/val pair based on existing board
-			else {
-				that.spawnDropRandomBlocks(count-1);
-				var colAndVal = that._numboController.findLocationAndValueForNewBlock();
-				if(colAndVal) {
-					that.spawnDropBlock(colAndVal.col, colAndVal.val, res.plipSound);
-				}
-				else {
-					that.spawnDropRandomBlocks(1);
-				}
-
-			}
-
-			that.relocateBlocks();
-
-			if (callback) {
-				callback();
-			}
-			//})));
-		},
-
-		spawnBlocksAfterDelay: function(count, delay, callback) {
-			var that = this;
-
-			//that.runAction(cc.sequence( cc.delayTime(delay), function(){
-			for (var i = 0; i < count; ++i) {
-				if (that._numboController.findHint().length == 0) {
-					var colAndVal = that._numboController.findLocationAndValueForNewBlock();
-					var col = colAndVal.col, val = colAndVal.val;
-					if (col && val) {
-						that.spawnDropBlock(col, val);
-					}
-					else {
-						that.spawnDropRandomBlock();
-					}
-				}
-				else {
-					that.spawnDropRandomBlock();
-				}
-			}
-
-
-			if (that.callback) {
-				callback();
-			}
-		},
-
 
 		relocateBlocks: function (){
 			// Gaps may be created; shift all affected blocks down.

@@ -269,53 +269,24 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
                 break;
 
-			case slides.wombo:
-
-				centerCol = Math.floor((NJ.NUM_COLS) / 2);
-
-				this._clearHand();
-
-				this.runAction(cc.sequence(cc.delayTime(4),
-					cc.callFunc(function() {
-						NJ.audio.playSound(res.plipSound);
-						that.spawnDropBlock(centerCol - 2, 1);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 4);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 1);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 1);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 2, 7);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol - 1, 7);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol, 7);
-					}), cc.callFunc(function() {
-						that.spawnDropBlock(centerCol + 1, 7);
-					})
-
-				));
-
-				break;
-
 			case slides.end:
-
-				// first send the analytics for the current game session
-				NJ.sendAnalytics("Tutorial");
-
-				// first time playing? give them some starters
-				if(!NJ.settings.hasLoadedTUT) {
-					NJ.settings.hasLoadedTUT = true;
-					NJ.stats.addHints(10);
-					NJ.stats.addScramblers(3);
-					NJ.stats.save();
-				}
-
-				NJ.saveSettings();
 
 				this.runAction(cc.sequence(cc.delayTime(4), cc.callFunc(function() {
 					that.leave(function() {
+
+						// first send the analytics for the current game session
+						NJ.sendAnalytics("Tutorial");
+
+						// first time playing? give them some starters
+						if(!NJ.settings.hasLoadedTUT) {
+							NJ.settings.hasLoadedTUT = true;
+							NJ.stats.addHints(10);
+							NJ.stats.addScramblers(3);
+							NJ.stats.save();
+						}
+
+						NJ.saveSettings();
+
 						// load resources
 						var scene = new cc.Scene();
 						scene.addChild(new NumboMenuLayer());

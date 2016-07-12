@@ -7,7 +7,6 @@ var EffectsLayer = cc.Layer.extend({
 
     _shadowGrid: null,
 
-
     // feedback doomsayer
     _comboOverlay: null,
     _isComboLaunched: false,
@@ -44,7 +43,7 @@ var EffectsLayer = cc.Layer.extend({
                 this._explosionGrid[col][row] = null;
             }
         }
-
+/*
         // initialize block shadow grid
         this._shadowGrid = new Array(NJ.NUM_COLS);
         for (col = 0; col < NJ.NUM_COLS; ++col){
@@ -53,8 +52,8 @@ var EffectsLayer = cc.Layer.extend({
                 this._shadowGrid[col][row] = null;
             }
         }
+        */
 	},
-
 
 
     // to be called by the gameLayer during its initialization
@@ -75,7 +74,7 @@ var EffectsLayer = cc.Layer.extend({
             this._explosionGrid[data.col][data.row] = particleSystem;
         }
     },
-
+/*
     initializeShadowAt: function(data){
         cc.assert(typeof data.x == 'number' && typeof data.y == 'number'
             && typeof data.col == 'number' && typeof data.row == 'number',
@@ -101,7 +100,7 @@ var EffectsLayer = cc.Layer.extend({
         }
 
     },
-
+*/
     reset: function(){
         // not sure why this exists -- maybe we should delete old particle systems? idk
     },
