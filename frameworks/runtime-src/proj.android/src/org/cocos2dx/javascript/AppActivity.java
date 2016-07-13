@@ -31,6 +31,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.content.Context;
 
+import java.util.Map;
+
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
@@ -53,6 +55,7 @@ public class AppActivity extends Cocos2dxActivity {
     // Native bridge
 
     // Java to C++
+    public static native void prepareCampaignDetails(String campaignName, String campaignMessage);
     public static native void unlockFeatureBatch(String featureRef, String featureValue);
     public static native void unlockResourceBatch(String resourceRef, int quantity);
 
@@ -82,9 +85,15 @@ public class AppActivity extends Cocos2dxActivity {
             @Override
             public void onRedeemAutomaticOffer(Offer offer) {
 
-                Log.i(BATCH_TAG, "Redeeming automatic offer");
-
                 String offerReference = offer.getOfferReference();
+
+                Log.i(BATCH_TAG, "Redeeming automatic offer: " + offerReference);
+
+                Map<String, String> additionalParameters = offer.getOfferAdditionalParameters();
+
+                if(additionalParameters.containsKey("reward_name") && additionalParameters.containsKey("reward_message")) {
+                    prepareCampaignDetails(additionalParameters.get("reward_name"), additionalParameters.get("reward_message"));
+                }
 
                 for(Feature feature : offer.getFeatures()) {
                     String featureRef = feature.getReference();

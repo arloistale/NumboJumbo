@@ -22,7 +22,9 @@ NJ.uiSizes = {
     doublerArea: 0.25,
 
     // pop over elements
+    popOverHeaderBar: 0.24,
     optionsArea: 0.24,
+    popOverToolBar: 0.24,
 
     // bar buttons are calculated based on their bar content sizes
     barButton: 0.5,

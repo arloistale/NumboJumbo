@@ -175,6 +175,9 @@ NJ.purchases = (function() {
         // have been successfully exposed to the user
         // so that they don't appear more than once
         discardCampaignDetails: function() {
+            this.campaignName = null;
+            this.campaignMessage = null;
+
             cc.sys.localStorage.setItem("campaignName", "");
             cc.sys.localStorage.setItem("campaignMessage", "");
         }

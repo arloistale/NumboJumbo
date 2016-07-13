@@ -72,6 +72,66 @@ var BaseMenuLayer = cc.LayerColor.extend({
         this._toolMenu.setPositionY(cc.visibleRect.bottom.y - this._toolMenu.getContentSize().height / 2);
     },
 
+    pauseInput: function() {
+        cc.eventManager.pauseTarget(this, true);
+    },
+
+    resumeInput: function() {
+        cc.eventManager.resumeTarget(this, true);
+    },
+
+    // Pauses the menu, halting all actions and schedulers.
+    pauseMenu: function() {
+        // use breadth first search to pause all valid children
+        var children = [this];
+        var visited = [this];
+
+        this.pauseInput();
+        this.pause();
+
+        var child, i, newChildren;
+        while(children.length > 0) {
+            child = children.pop();
+
+            if (child.getTag() == NJ.tags.PAUSABLE)
+                child.pause();
+
+            newChildren = child.getChildren();
+            for(i = 0; i < newChildren.length; i++) {
+                cc.assert(visited.indexOf(newChildren[i]) < 0, "Circular node references detected!");
+
+                visited.push(newChildren[i]);
+                children.push(newChildren[i]);
+            }
+        }
+    },
+
+    // Unpause menu, resuming all actions and schedulers.
+    resumeMenu: function() {
+        // use breadth first search to resume all valid children
+        var children = [this];
+        var visited = [this];
+
+        this.resume();
+        this.resumeInput();
+
+        var child, i, newChildren;
+        while(children.length > 0) {
+            child = children.pop();
+
+            if (child.getTag() == NJ.tags.PAUSABLE)
+                child.resume();
+
+            newChildren = child.getChildren();
+            for(i = 0; i < newChildren.length; i++) {
+                cc.assert(visited.indexOf(newChildren[i]) < 0, "Circular node references detected");
+
+                visited.push(newChildren[i]);
+                children.push(newChildren[i]);
+            }
+        }
+    },
+
     // makes menu elements transition in,
     // overridden in sub classes
     enter: function() {

@@ -2,295 +2,219 @@
  * Base definition for pop over layer that appears over the current layer.
  */
 
-var PopOverLayer = (function() {
+var PopOverLayer = cc.LayerColor.extend({
 
-    return cc.LayerColor.extend({
+    // UI Data
+    _popOverContainer: null,
 
-        // UI Data
-        _headerMenu: null,
-        _contentMenu: null,
-        _toolMenu: null,
+    _headerMenu: null,
+    _contentMenu: null,
+    _toolMenu: null,
 
-        // Geometry Data
-        _containerSprite: null,
+    _headerLabel: null,
+    _contentLabel: null,
 
-        // Callbacks Data
-        _onCloseCallback: null,
+    // Geometry Data
+    _containerSprite: null,
+
+    // Callbacks Data
+    _onCloseCallback: null,
 
 ////////////////////
 // Initialization //
 ////////////////////
 
-        ctor: function() {
-            this._super();
+    ctor: function() {
+        this._super();
 
-            this.init(cc.color(255, 255, 255, 128));
+        this.init(cc.color(0, 0, 0, 128));
 
-            this._initInput();
+        this._initInput();
 
-            this._initContainerUI();
-            this._initHeaderUI();
-            //this._initContentUI();
-            //this._initOptionsUI();
-            this._initToolUI();
+        this._initContainerUI();
+        this._initHeaderUI();
+        this._initContentUI();
+        this._initToolUI();
+    },
 
-            this._generateBaseDividers();
+    // Initialize input depending on the device.
+    _initInput: function() {
+        var that = this;
 
-            this.enter();
-        },
-
-        // Initialize input depending on the device.
-        _initInput: function() {
-            var that = this;
-
-            cc.eventManager.addListener({
-                event: cc.EventListener.KEYBOARD,
-                onKeyPressed: function(key, event) {
-                    if(key == cc.KEY.back) {
-                        that._onBack();
-                    }
+        cc.eventManager.addListener({
+            event: cc.EventListener.KEYBOARD,
+            onKeyPressed: function(key, event) {
+                if(key == cc.KEY.back) {
+                    that._onBack();
                 }
-            }, this);
-        },
+            }
+        }, this);
+    },
 
-        _initHeaderUI: function() {
-            this._headerMenu = new cc.Menu();
-            this._headerMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
-            this._headerMenu.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                y: cc.visibleRect.top.y + this._headerMenu.getContentSize().height / 2
-            });
+    _initContainerUI: function() {
+        var that = this;
 
-            var headerLabel = this.generateLabel("", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
+        var containerSize = cc.size(cc.visibleRect.width * 0.8, cc.visibleRect.height * 0.35);
 
-            this._headerMenu.addChild(headerLabel);
+        var container = this._popOverContainer = new cc.Node();
+        container.setContentSize(containerSize);
+        container.attr({
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: cc.visibleRect.center.x - cc.visibleRect.width,
+            y: cc.visibleRect.center.y
+        });
 
-            this.addChild(this._headerMenu);
-        },
+        this._containerSprite = new cc.Sprite(res.alertImage);
+        this._containerSprite.setColor(NJ.themes.backgroundColor);
+        var imageSize = this._containerSprite.getContentSize();
+        this._containerSprite.setScale(containerSize.width / imageSize.width, containerSize.height / imageSize.height);
 
-        _initContainerUI: function() {
-            var that = this;
+        this._containerSprite.attr({
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: containerSize.width / 2,
+            y: containerSize.height / 2
+        });
 
-            this._containerSprite = new ccui.Scale9Sprite(res.buttonImage);
-            this._containerSprite.setContentSize(cc.size(cc.visibleRect.width,
-                (1 - NJ.uiSizes.headerBar - NJ.uiSizes.optionsArea - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+        container.addChild(this._containerSprite, -1);
 
-            this._containerSprite.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: -this._containerSprite.getContentSize().width
-            });
+        this.addChild(container);
+    },
 
-            this.addChild(this._contentMenu);
-        },
+    _initHeaderUI: function() {
+        var containerSize = this._popOverContainer.getContentSize();
 
-        _initContentUI: function() {
-            var that = this;
+        this._headerMenu = new cc.Menu();
+        this._headerMenu.setContentSize(cc.size(containerSize.width, containerSize.height * NJ.uiSizes.popOverHeaderBar));
+        this._headerMenu.attr({
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: containerSize.width / 2,
+            y: containerSize.height - this._headerMenu.getContentSize().height / 2
+        });
 
-            this._contentMenu = new cc.Menu();
-            this._contentMenu.setContentSize(cc.size(cc.visibleRect.width,
-                (1 - NJ.uiSizes.headerBar - NJ.uiSizes.optionsArea - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+        this._headerLabel = this.generateLabel("Default Label", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
 
-            this._contentMenu.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: -this._contentMenu.getContentSize().width
-            });
+        this._headerMenu.addChild(this._headerLabel);
 
-            // generate music toggle
-            var musicY = this._contentMenu.getContentSize().height * 0.25;
+        this._popOverContainer.addChild(this._headerMenu);
+    },
 
-            var musicLabel = this.generateLabel("Music", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            musicLabel.setPositionY(musicY + musicLabel.getContentSize().height / 2);
-            var musicToggle = this.generateToggle(onMusicControl.bind(this));
-            var state = (NJ.settings.music ? 0 : 1);
-            musicToggle.setSelectedIndex(state);
-            musicToggle.setPositionY(musicY - musicToggle.getContentSize().height / 2);
+    _initContentUI: function() {
+        var containerSize = this._popOverContainer.getContentSize();
 
-            // generate sounds toggle
-            musicY = -this._contentMenu.getContentSize().height * 0.25;
-            var soundsLabel = this.generateLabel("Sounds", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            var soundsToggle = this.generateToggle(onSoundsControl.bind(this));
-            soundsLabel.setPositionY(musicY + musicLabel.getContentSize().height / 2);
-            state = (NJ.settings.sounds ? 0 : 1);
-            soundsToggle.setSelectedIndex(state);
-            soundsToggle.setPositionY(musicY - soundsToggle.getContentSize().height / 2);
+        this._contentMenu = new cc.Menu();
+        this._contentMenu.setContentSize(cc.size(containerSize.width,
+            (1 - NJ.uiSizes.headerBar - NJ.uiSizes.toolbar) * containerSize.height));
 
-            this._contentMenu.addChild(soundsLabel);
-            this._contentMenu.addChild(soundsToggle);
+        this._contentMenu.attr({
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: containerSize.width / 2,
+            y: containerSize.height / 2
+        });
 
-            //this._contentMenu.addChild(vibrationLabel);
-            //this._contentMenu.addChild(vibrationToggle);
+        this._contentLabel = this.generateLabel("Whoops! There should be a campaign message here but we forgot to include it. Sorry about that.", cc.size(containerSize.width, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub)));
+        this._contentLabel.setLabelBoundingWidth(containerSize.width);
+        this._contentMenu.addChild(this._contentLabel);
 
-            //this._contentMenu.alignItemsVerticallyWithPadding(this._contentMenu.getContentSize().height / 6);
+        this._popOverContainer.addChild(this._contentMenu);
+    },
 
-            this.addChild(this._contentMenu);
-        },
+    _initToolUI: function() {
+        var that = this;
 
-        _initOptionsUI: function() {
-            var that = this;
+        var containerSize = this._popOverContainer.getContentSize();
 
-            this._contentMenu = new cc.Menu();
-            this._contentMenu.setContentSize(cc.size(cc.visibleRect.width,
-                (1 - NJ.uiSizes.headerBar - NJ.uiSizes.optionsArea - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+        this._toolMenu = new cc.Menu();
+        this._toolMenu.setContentSize(cc.size(containerSize.width, containerSize.height * NJ.uiSizes.popOverToolBar));
+        var toolSize = this._toolMenu.getContentSize();
+        this._toolMenu.attr({
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: containerSize.width / 2,
+            y: toolSize.height / 2
+        });
 
-            this._contentMenu.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: -this._contentMenu.getContentSize().width
-            });
+        var buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
 
-            // divider cuts the middle
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
+        var backButton = new NumboMenuButton(buttonSize, function() {
+            that._onBack();
+        }, this);
+        backButton.setImageRes(res.backImage);
 
-            var divider = new NumboMenuItem(cc.size(cc.visibleRect.width * 0.8, dividerHeight));
-            divider.setTag(444);
-            divider.setBackgroundImage(res.alertImage);
-            divider.setBackgroundColor(NJ.themes.defaultLabelColor);
-            divider.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
+        this._toolMenu.addChild(backButton);
 
-            // generate music toggle
-            var musicY = this._contentMenu.getContentSize().height * 0.25;
+        this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
 
-            var musicLabel = this.generateLabel("Music", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            musicLabel.setPositionY(musicY + musicLabel.getContentSize().height / 2);
-            var musicToggle = this.generateToggle(onMusicControl.bind(this));
-            var state = (NJ.settings.music ? 0 : 1);
-            musicToggle.setSelectedIndex(state);
-            musicToggle.setPositionY(musicY - musicToggle.getContentSize().height / 2);
+        this._popOverContainer.addChild(this._toolMenu, 100);
+    },
 
-            // generate sounds toggle
-            musicY = -this._contentMenu.getContentSize().height * 0.25;
-            var soundsLabel = this.generateLabel("Sounds", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            var soundsToggle = this.generateToggle(onSoundsControl.bind(this));
-            soundsLabel.setPositionY(musicY + musicLabel.getContentSize().height / 2);
-            state = (NJ.settings.sounds ? 0 : 1);
-            soundsToggle.setSelectedIndex(state);
-            soundsToggle.setPositionY(musicY - soundsToggle.getContentSize().height / 2);
+    // makes menu elements transition in
+    enter: function() {
+        var easing = cc.easeBackOut();
 
-            this._contentMenu.addChild(soundsLabel);
-            this._contentMenu.addChild(soundsToggle);
+        this._popOverContainer.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._popOverContainer.getPositionY())).easing(easing));
+    },
 
-            //this._contentMenu.addChild(vibrationLabel);
-            //this._contentMenu.addChild(vibrationToggle);
+    // transition out
+    leave: function(callback) {
+        var easing = cc.easeBackOut();
 
-            //this._contentMenu.alignItemsVerticallyWithPadding(this._contentMenu.getContentSize().height / 6);
+        this._popOverContainer.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - cc.visibleRect.width, this._popOverContainer.getPositionY())).easing(easing));
 
-            this.addChild(this._contentMenu);
-        },
+        this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
+            if(callback)
+                callback();
+        })));
+    },
 
-        _initToolUI: function() {
+    //////////////////
+    // UI Modifiers //
+    //////////////////
 
-            this._toolMenu = new cc.Menu();
-            this._toolMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.toolbar));
-            var toolSize = this._toolMenu.getContentSize();
-            this._toolMenu.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                y: cc.visibleRect.bottom.y - toolSize.height / 2
-            });
+    setHeaderLabel: function(headerStr) {
+        this._headerLabel.setLabelTitle(headerStr);
+        this._headerMenu.alignItemsVertically();
+    },
 
-            var buttonSize = cc.size(toolSize.height * NJ.uiSizes.barButton, toolSize.height * NJ.uiSizes.barButton);
-
-            var backButton = new NumboMenuButton(buttonSize, onBack.bind(this), this);
-            backButton.setImageRes(res.backImage);
-
-            this._toolMenu.addChild(backButton);
-
-            this._toolMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
-
-            this.addChild(this._toolMenu, 100);
-        },
-
-        // makes menu elements transition in
-        enter: function() {
-            var headerSize = this._headerMenu.getContentSize();
-            var toolSize = this._toolMenu.getContentSize();
-
-            var easing = cc.easeBackOut();
-
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y - headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y + toolSize.height / 2)).easing(easing));
-
-            this._contentMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, cc.visibleRect.center.y)).easing(easing));
-        },
-
-        // transition out
-        leave: function(callback) {
-            var headerSize = this._headerMenu.getContentSize();
-            var contentSize = this._contentMenu.getContentSize();
-            var toolSize = this._toolMenu.getContentSize();
-
-            var easing = cc.easeBackOut();
-
-            this._headerMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.top.x, cc.visibleRect.top.y + headerSize.height / 2)).easing(easing));
-            this._toolMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.bottom.x, cc.visibleRect.bottom.y - toolSize.height / 2)).easing(easing));
-
-            this._contentMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - contentSize.width, cc.visibleRect.center.y)).easing(easing));
-
-            this.runAction(cc.sequence(cc.delayTime(0.4), cc.callFunc(function() {
-                if(callback)
-                    callback();
-            })));
-        },
+    setContentLabel: function(labelStr) {
+        this._contentLabel.setLabelTitle(labelStr);
+        this._contentMenu.alignItemsVertically();
+    },
 
 //////////////////
 // UI Callbacks //
 //////////////////
 
-        setOnCloseCallback: function(callback) {
-            this.onCloseCallback = callback;
-        },
+    setOnCloseCallback: function(callback) {
+        this._onCloseCallback = callback;
+    },
 
 ////////////////
 // UI Helpers //
 ////////////////
 
-        generateLabel: function(title, size) {
-            var toggleItem = new NumboMenuItem(size);
-            toggleItem.setLabelTitle(title);
-            toggleItem.setLabelColor(NJ.themes.defaultLabelColor);
-            return toggleItem;
-        },
+    generateLabel: function(title, size) {
+        var toggleItem = new NumboMenuItem(size);
+        toggleItem.setLabelTitle(title);
+        toggleItem.setLabelColor(NJ.themes.defaultLabelColor);
+        return toggleItem;
+    },
 
-        generateToggle: function(callback, opts) {
-            opts = opts || [
-                    { name: "ON", color: NJ.themes.specialLabelColor },
-                    { name: "OFF", color: NJ.themes.specialLabelColor }
-                ];
-            var items = [];
-            var item;
-            for(var i = 0; i < opts.length; ++i) {
-                item = new NumboMenuItem(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
-                item.setLabelTitle(opts[i].name);
-                item.setLabelColor(opts[i].color);
-                items.push(item);
-            }
+    ///////////////
+    // UI Events //
+    ///////////////
 
-            var toggle = new cc.MenuItemToggle(items[0], items[1]);
+    _onBack: function() {
+        NJ.audio.playSound(res.clickSound);
 
-            toggle.setCallback(callback);
+        var that = this;
 
-            return toggle;
-        },
-
-        ///////////////
-        // UI Events //
-        ///////////////
-
-        _onBack: function() {
-            NJ.audio.playSound(res.clickSound);
-
-            var that = this;
-
-            this.leave(function() {
-                if(that._onCloseCallback)
-                    that._onCloseCallback();
-            });
-        }
-    });
-}());
+        this.leave(function() {
+            if(that._onCloseCallback)
+                that._onCloseCallback();
+        });
+    }
+});

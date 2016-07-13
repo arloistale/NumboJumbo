@@ -21,6 +21,8 @@ const std::string CampaignManager::KEY_HINTS = "HINTS";
 const std::string CampaignManager::KEY_SCRAMBLERS = "SCRAMBLERS";
 
 void CampaignManager::prepareCampaignDetails(const std::string& name, const std::string& message) {
+    CCLOG("Preparing campaign details > %s : %s", name.c_str(), message.c_str());
+    
     localStorageSetItem("campaignName", name);
     localStorageSetItem("campaignMessage", message);
 }

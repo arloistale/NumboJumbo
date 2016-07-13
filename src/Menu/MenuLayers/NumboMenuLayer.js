@@ -259,19 +259,20 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     enter: function() {
         this._super();
 
+        var that = this;
+
         var easing = cc.easeBackOut();
 
-        this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
+        this.runAction(cc.sequence(cc.delayTime(0.7), cc.callFunc(function() {
             if(cc.sys.isNative) {
                 if(NJ.purchases.campaignName) {
-                    cc.log("Campaign Running with name: " + NJ.purchases.campaignName);
-                    cc.log("Campaign message: " + NJ.purchases.campaignMessage);
-
-                    // now try to login
-                    if (!NJ.social.isLoggedIn() && !NJ.settings.hasAttemptedAutoSignin) {
-                        NJ.settings.hasAttemptedAutoSignin = true;
-                        NJ.social.login();
-                    }
+                    that._displayCampaignPopOver(function() {
+                        // now try to login
+                        if (!NJ.social.isLoggedIn() && !NJ.settings.hasAttemptedAutoSignin) {
+                            NJ.settings.hasAttemptedAutoSignin = true;
+                            NJ.social.login();
+                        }
+                    });
                 } else {
                     // now try to login
                     if (!NJ.social.isLoggedIn() && !NJ.settings.hasAttemptedAutoSignin) {
@@ -442,6 +443,37 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     },
 
     // UI Helpers //
+
+    // Displays a popover for the current campaign
+    // This is purely cosmetic as the items are rewarded
+    // as soon as the app is opened
+    //
+    // Must define a callback for when the popover is closed
+    _displayCampaignPopOver: function(callback) {
+        var that = this;
+
+        this.pauseMenu();
+
+        var campaignPopOver = new PopOverLayer();
+        //campaignPopOver.setHeaderLabel(NJ.purchases.campaignName.toUpperCase());
+
+        if(NJ.purchases.campaignMessage)
+            campaignPopOver.setContentLabel(NJ.purchases.campaignMessage);
+
+        NJ.purchases.discardCampaignDetails();
+        campaignPopOver.setOnCloseCallback(function() {
+
+            that.removeChild(campaignPopOver);
+
+            that.resumeMenu();
+
+            if(callback)
+                callback();
+        });
+        this.addChild(campaignPopOver, 500);
+
+        campaignPopOver.enter();
+    },
 
     _updateTheme: function() {
         this._super();

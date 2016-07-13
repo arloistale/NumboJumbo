@@ -138,6 +138,8 @@ var NumboMenuItem = (function() {
 
             this._super(normalSprite, selectedSprite, disabledSprite, callback, target);
 
+            this.setTag(NJ.tags.PAUSABLE);
+
             this.setEnabled(false);
         },
 
@@ -294,6 +296,14 @@ var NumboMenuItem = (function() {
                 if (this._titleStates.hasOwnProperty(key)) {
                     spriteSize = this._titleStates[key].getContentSize();
                     this._titleStates[key].setScale(size / spriteSize.height, size / spriteSize.height);
+                }
+            }
+        },
+
+        setLabelBoundingWidth: function(width) {
+            for(var key in this._titleStates) {
+                if(this._titleStates.hasOwnProperty(key)) {
+                    this._titleStates[key].setBoundingWidth(width / this._titleStates[key].getScaleX());
                 }
             }
         },
