@@ -499,6 +499,7 @@
 			children = (
 				D4545215156E28EF00887EB5 /* AppDelegate.cpp */,
 				D4545216156E28EF00887EB5 /* AppDelegate.h */,
+				C49F4E598CB4C4B63F2FA968 /* PluginSdkboxPlayJS.hpp */,
 				585D4D98B524C86DFFEDBDE5 /* PluginGoogleAnalyticsJS.cpp */,
 				A9A94FB79A3315DAB78F63FE /* PluginGoogleAnalyticsJS.hpp */,
 				21E44798B37C801F56D90AA8 /* SDKBoxJSHelper.cpp */,
@@ -508,7 +509,6 @@
 				B1684BBEB7C0BACA363E6E1C /* PluginReviewJSHelper.cpp */,
 				C9F74A06A3C20712DE22CA30 /* PluginReviewJSHelper.h */,
 				6E5E4659B60E2AA0C03FCF63 /* PluginSdkboxPlayJS.cpp */,
-				C49F4E598CB4C4B63F2FA968 /* PluginSdkboxPlayJS.hpp */,
 				67C4447D945516142162E66B /* PluginSdkboxPlayJSHelper.cpp */,
 				9851420F948AFE447215C748 /* PluginSdkboxPlayJSHelper.h */,
 				90F54032AAFEC894E3EE8A94 /* PluginIAPJS.cpp */,
