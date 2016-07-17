@@ -670,7 +670,8 @@ var NumboController = (function() {
 			if (!this._selectedBlocks.length || this._selectedBlocks.length < 3)
 				return false;
 
-			return this.sumToLast();
+			//return this.sumToLast();
+			return this.sumToHighest();
 		},
 
 		sumToLast: function() {
