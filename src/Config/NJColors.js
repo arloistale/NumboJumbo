@@ -14,55 +14,6 @@ NJ.colors = {
 NJ.themes = (function() {
 
     var data = [
-            /*
-        // light theme
-        {
-            themeName: "Sandy",
-            themeCost: 15000,
-            isPurchased: true,
-
-            backgroundColor: cc.color("#F0EBD0"),
-
-            defaultLabelColor: cc.color("#6C6760"),
-            specialLabelColor: cc.color("#50aa91"),
-            specialLabelColor2: cc.color("#00A896"),
-            defaultButtonColor: cc.color("#424242"),
-
-            shadowColor: cc.color("#ffffff"),
-
-            dividerColor: cc.color("#6c6760"),
-
-            blockColors: [
-
-                // warm teal
-                cc.color("#50aa91"),
-
-                // warm yellow
-                cc.color("e2b349"),
-
-                // pinkish red
-                cc.color("#c53e66"),
-
-                // chartreuse
-                cc.color("#52ab73"),
-
-                // intense blue
-                cc.color("#6977a8"),
-
-                // orange
-                cc.color("#cc7b43"),
-
-                // darkish green teal
-                cc.color("#794e84"),
-
-                // violent red
-                cc.color("#c23d42"),
-
-                // warm purple
-                cc.color("#9c3783")
-            ]
-        },
-        */
         // white theme
         {
             themeName: "White",
@@ -177,7 +128,7 @@ NJ.themes = (function() {
 
             // lighter brown
             //backgroundColor: cc.color("#865810"),
-            
+
             // new hotfix color because ewwww
             backgroundColor: cc.color("#d7d7b8"),
 
@@ -263,7 +214,7 @@ NJ.themes = (function() {
 
                 // fricking pink!
                 cc.color("#dd156a"),
-                          
+
                 // softer pink
                 cc.color("#da509d"),
 
@@ -288,67 +239,115 @@ NJ.themes = (function() {
                 // dying rose
                 cc.color("e18a7c")
             ]
+        },
+
+        // sandy theme
+        {
+            themeName: "Sandy",
+            themeCost: 15000,
+            isPurchased: true,
+
+            backgroundColor: cc.color("#F0EBD0"),
+
+            defaultLabelColor: cc.color("#6C6760"),
+            specialLabelColor: cc.color("#50aa91"),
+            specialLabelColor2: cc.color("#00A896"),
+            defaultButtonColor: cc.color("#424242"),
+            defaultButtonForegroundColor: cc.color("#ffffff"),
+
+            hintsColor: cc.color("#50aa91"),
+            scramblersColor: cc.color("#00a896"),
+
+            shadowColor: cc.color("#ffffff"),
+
+            dividerColor: cc.color("#6c6760"),
+
+            blockColors: [
+
+                // warm teal
+                cc.color("#50aa91"),
+
+                // warm yellow
+                cc.color("e2b349"),
+
+                // pinkish red
+                cc.color("#c53e66"),
+
+                // chartreuse
+                cc.color("#52ab73"),
+
+                // intense blue
+                cc.color("#6977a8"),
+
+                // orange
+                cc.color("#cc7b43"),
+
+                // darkish green teal
+                cc.color("#794e84"),
+
+                // violent red
+                cc.color("#c23d42"),
+
+                // warm purple
+                cc.color("#9c3783")
+            ]
+        },
+
+        // sweet lolita theme
+        {
+            themeName: "Sweet Lolita",
+            themeCost: 30000,
+            isPurchased: true,
+
+            // princess
+            backgroundColor: cc.color("F8BAC6"),
+
+            // barbie
+            defaultLabelColor: cc.color("#FF48C3"),
+
+            specialLabelColor: cc.color("#33A5BA"),
+            specialLabelColor2: cc.color("#00A896"),
+            defaultButtonColor: cc.color("#6C6760"),
+            defaultButtonForegroundColor: cc.color("#ffffff"),
+
+            hintsColor: cc.color("#33a5ba"),
+            scramblersColor: cc.color("#00a896"),
+
+            shadowColor: cc.color("#FFFDAA"),
+
+            dividerColor: cc.color("#FFFDAA"),
+
+            blockColors: [
+
+                // lime
+                cc.color("#A1CE57"),
+
+                // lemon
+                cc.color("#EAD65B"),
+
+                // bubble gum
+                cc.color("#F1718E"),
+
+                // sky
+                cc.color("#A9C0E3"),
+
+                // pinky pie
+                cc.color("#EC0774"),
+
+                // salmon
+                cc.color("#F5896B"),
+
+                // dreamsicle
+                cc.color("#F9A961"),
+
+                // lilac
+                cc.color("#A288BF"),
+
+                // mint
+                cc.color("#7BBF9A")
+            ]
         }
 
-        /*
-
-        // pastel theme
-        {
-             themeName: "Pastels",
-             themeCost: 25000,
-             isPurchased: false,
-
-             // evening cloud
-             backgroundColor: cc.color("#2E2633"),
-
-             // more lighter grayer
-             //backgroundColor: cc.color("#635063"),
-
-             //pale yellow???
-             //backgroundColor: cc.color("#FFFDAA"),
-
-             defaultLabelColor: cc.color("#FFFDAA"),
-             specialLabelColor: cc.color("#33A5BA"),
-             specialLabelColor2: cc.color("#00A896"),
-             defaultButtonColor: cc.color("#6C6760"),
-
-             shadowColor: cc.color("#FFFDAA"),
-
-             dividerColor: cc.color("#FFFDAA"),
-
-             blockColors: [
-
-             // faded green
-             cc.color("#A4D05F"),
-
-             // above the world
-             cc.color("#3FB8AF"),
-
-             // high heel
-             cc.color("#FF3D7F"),
-
-             // some kinda yellow w/ some orange shit
-             cc.color("#FFBE40"),
-
-             // periwinkle
-             cc.color("#906CD7"),
-
-             // salmon
-             cc.color("#F45639"),
-
-             // ash
-             cc.color("#95877E"),
-
-             // purple
-             cc.color("#D662A8"),
-
-             // GREEN
-             cc.color("#57BA50")
-             ]
-         },
-
-
- */
     ];
 
     var _lightTheme = data[0];
@@ -390,6 +389,16 @@ NJ.themes = (function() {
         // get list of themes
         getList: function() {
             return data;
+        },
+
+        getListSorted: function(){
+            return data.sort(function(a, b){
+                return a.themeCost - b.themeCost;
+            })
+        },
+
+        getNumThemes: function(){
+            return data.length;
         },
 
         updateList: function(list) {

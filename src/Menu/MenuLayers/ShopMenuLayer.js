@@ -13,6 +13,8 @@ var ShopMenuLayer = (function() {
     var _devCount = 0;
     var _logCount = 0;
 
+    var _themesAreaSize = null;
+
     ///////////////
     // UI Events //
     ///////////////
@@ -203,13 +205,15 @@ var ShopMenuLayer = (function() {
 
             var shouldIncludeBubblesArea = (NJ.purchases.getProductByName("doubler") ? true : false);
 
+            this._themesAreaSize = 0.18 + 0.20 * NJ.themes.getNumThemes();
+
             this._contentScrollView = new ccui.ScrollView();
             this._contentScrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
             this._contentScrollView.setScrollBarEnabled(false);
             this._contentScrollView.setTouchEnabled(true);
             this._contentScrollView.setBounceEnabled(true);
             this._contentScrollView.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (1 - NJ.uiSizes.header - NJ.uiSizes.toolbar)));
-            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * ((shouldIncludeBubblesArea ? NJ.uiSizes.bubblesArea : 0) + NJ.uiSizes.powerupsArea + NJ.uiSizes.themesArea)));
+            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * ((shouldIncludeBubblesArea ? NJ.uiSizes.bubblesArea : 0) + NJ.uiSizes.powerupsArea + this._themesAreaSize)));
             this._contentScrollView.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -305,7 +309,7 @@ var ShopMenuLayer = (function() {
             this._buyHintsButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width / 4,
+                x: cc.visibleRect.width / 5,
                 y: buttonContainer.getContentSize().height / 2 + this._buyHintsButton.getContentSize().height / 2
             });
             this._buyHintsButton.setLabelColor(NJ.themes.defaultLabelColor);
@@ -318,7 +322,7 @@ var ShopMenuLayer = (function() {
             buyHintsLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width / 4,
+                x: cc.visibleRect.width / 5,
                 y: buttonContainer.getContentSize().height / 2 - buyHintsLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
             });
 
@@ -349,7 +353,7 @@ var ShopMenuLayer = (function() {
             this._buyScramblersButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width * 3 / 4,
+                x: cc.visibleRect.width * 4 / 5,
                 y: buttonContainer.getContentSize().height / 2 + this._buyScramblersButton.getContentSize().height / 2
             });
             this._buyScramblersButton.setLabelColor(NJ.themes.defaultLabelColor);
@@ -362,7 +366,7 @@ var ShopMenuLayer = (function() {
             buyScramblersLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width * 3 / 4,
+                x: cc.visibleRect.width * 4 / 5,
                 y: buttonContainer.getContentSize().height / 2 - buyScramblersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
             });
 
@@ -391,9 +395,9 @@ var ShopMenuLayer = (function() {
             var that = this;
 
             this._themeMenu = new cc.Menu();
-            this._themeMenu.setContentSize(cc.size(cc.visibleRect.width, NJ.uiSizes.themesArea * cc.visibleRect.height));
+            this._themeMenu.setContentSize(cc.size(cc.visibleRect.width, this._themesAreaSize * cc.visibleRect.height));
 
-            this._currentYPos -= cc.visibleRect.height * NJ.uiSizes.themesArea / 2;
+            this._currentYPos -= cc.visibleRect.height * this._themesAreaSize * 0.48 ;
 
             this._themeMenu.attr({
                 anchorX: 0.5,
@@ -402,7 +406,7 @@ var ShopMenuLayer = (function() {
                 y: this._currentYPos
             });
 
-            this._currentYPos -= cc.visibleRect.height * NJ.uiSizes.themesArea / 2;
+            this._currentYPos -= cc.visibleRect.height * this._themesAreaSize / 2;
 
             // initialize themes title
 
@@ -413,7 +417,8 @@ var ShopMenuLayer = (function() {
             });
             this._themeMenu.addChild(titleLabel);
 
-            var themes = NJ.themes.getList();
+            var themes = NJ.themes.getListSorted();
+            //var themes = NJ.themes.getList();
 
             var buttonSize = cc.size(cc.visibleRect.width * 0.8, cc.visibleRect.height * 0.1);
             var blockSize = cc.size(buttonSize.height * 0.5, buttonSize.height * 0.5);
@@ -471,7 +476,7 @@ var ShopMenuLayer = (function() {
                         numberItem.setTag(666);
                         numberItem.setBackgroundImage(res.blockImage);
                         numberItem.setBackgroundColor(themes[i].blockColors[currNumber - 1]);
-                        numberItem.setLabelTitle(currNumber + "");
+                        numberItem.setLabelTitle(currNumber + (currNumber != 1 ? "" : " "));
                         numberItem.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
                         numberItem.setLabelColor(cc.color("#ffffff"));
                         numberItem.attr({
@@ -612,7 +617,8 @@ var ShopMenuLayer = (function() {
             if(!this._themeMenu)
                 return;
 
-            var themes = NJ.themes.getList();
+            var themes = NJ.themes.getListSorted();
+
             var themeButton;
 
             for(var i = 0; i < themes.length; ++i) {

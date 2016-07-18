@@ -59,7 +59,7 @@ var ToolbarLayer = (function() {
         }
     };
 
-    return cc.Layer.extend({
+    return cc.LayerColor.extend({
 
         // UI Data
         buttonsMenu: null,
@@ -79,7 +79,7 @@ var ToolbarLayer = (function() {
         ctor: function(size) {
             this._super();
 
-            this.setContentSize(size.width, size.height);
+            this.init(NJ.themes.backgroundColor, size.width, size.height);
 
             this._initButtons();
             this._initLabels();

@@ -54,6 +54,7 @@ var BaseGameLayer = (function() {
 		}
 	];
 
+
 	return cc.Layer.extend({
 
 		// Level Data
@@ -74,6 +75,7 @@ var BaseGameLayer = (function() {
 		_gameOverMenuLayer: null,
 		_effectsLayer: null,
 		_feedbackLayer: null,
+
 
 		// Audio Data
 		_backgroundTrack: null,
@@ -119,6 +121,8 @@ var BaseGameLayer = (function() {
 			this._initAudio();
 			this._initParticles();
 			this._initUI();
+
+			this._generateBaseDividers();
 
 			// extranneous initialization
 			this._reset();
@@ -303,6 +307,7 @@ var BaseGameLayer = (function() {
 			this.addChild(this._toolbarLayer, 999);
 		},
 
+
 		// Initialize dimensions and geometry
 		_initGeometry: function() {
 			// background
@@ -363,28 +368,6 @@ var BaseGameLayer = (function() {
 			// start the music
 			this._backgroundTrack = res.trackChill2;
 		},
-
-        // call this function AFTER initlalizing UI.
-        _drawDividersGeometry: function() {
-            if(!this._dividersNode) {
-                this._dividersNode = cc.DrawNode.create();
-                this.addChild(this._dividersNode, 2);
-            } else
-                this._dividersNode.clear();
-
-            // define header and lower dividers
-			var startX = this._convertLevelCoordsToPoint(0, 0).x - this._blockSize.width/2;
-			var endX = this._convertLevelCoordsToPoint(NJ.NUM_COLS-1, 0).x + this._blockSize.width/2;
-			var topY = this._levelBounds.y + this._levelBounds.height + this._blockSize.height/2;
-			var botY = this._levelBounds.y - this._blockSize.height/2;
-
-			var color = NJ.themes.dividerColor;
-			var strokeWidth = 2;
-
-            this._dividersNode.drawSegment(cc.p(startX, topY), cc.p(endX, topY), strokeWidth, color);
-            this._dividersNode.drawSegment(cc.p(startX, botY), cc.p(endX, botY), strokeWidth, color);
-
-        },
 
 		enter: function(callback) {
 			var that = this;
@@ -999,6 +982,35 @@ var BaseGameLayer = (function() {
 /////////////
 // Drawing //
 /////////////
+
+		// generate dividers on headers and toolbars
+		_generateBaseDividers: function() {
+			var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
+
+			var headerDivider = new NumboMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
+			headerDivider.setTag(444);
+			headerDivider.setBackgroundImage(res.alertImage);
+			headerDivider.setBackgroundColor(NJ.themes.dividerColor);
+			headerDivider.attr({
+				anchorX: 0.5,
+				anchorY: 0.5,
+				x: this._numboHeaderLayer.getContentSize().width / 2,
+				y: dividerHeight
+			});
+			this._numboHeaderLayer.addChild(headerDivider);
+
+			var toolDivider = new NumboMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
+			toolDivider.setTag(444);
+			toolDivider.setBackgroundImage(res.alertImage);
+			toolDivider.setBackgroundColor(NJ.themes.dividerColor);
+			toolDivider.attr({
+				anchorX: 0.5,
+				anchorY: 0.5,
+				x: this._toolbarLayer.getContentSize().width / 2,
+				y: this._toolbarLayer.getContentSize().height - dividerHeight
+			});
+			this._toolbarLayer.addChild(toolDivider);
+		},
 
 		// redraw lines indicating selected blocks
 		redrawSelectedLines: function(selectedBlocks) {

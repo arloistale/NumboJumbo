@@ -12,7 +12,7 @@ var NumboHeaderLayer = (function() {
             this._onPauseCallback();
     };
 
-    return cc.Layer.extend({
+    return cc.LayerColor.extend({
 
         // menu for buttons in the header
         _buttonsMenu: null,
@@ -35,7 +35,7 @@ var NumboHeaderLayer = (function() {
         ctor: function(size) {
             this._super();
 
-            this.setContentSize(size.width, size.height);
+            this.init(NJ.themes.backgroundColor, size.width, size.height);
 
             this.initButtons();
             this.initLabels();
