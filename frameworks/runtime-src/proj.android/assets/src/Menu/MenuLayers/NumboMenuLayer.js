@@ -455,7 +455,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         this.pauseMenu();
 
         var campaignPopOver = new PopOverLayer();
-        //campaignPopOver.setHeaderLabel(NJ.purchases.campaignName.toUpperCase());
+        campaignPopOver.setHeaderLabel(NJ.purchases.campaignName.toUpperCase());
 
         if(NJ.purchases.campaignMessage)
             campaignPopOver.setContentLabel(NJ.purchases.campaignMessage);

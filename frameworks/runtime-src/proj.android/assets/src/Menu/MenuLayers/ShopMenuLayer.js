@@ -106,7 +106,7 @@ var ShopMenuLayer = (function() {
     var onActivateTheme = function(index) {
         NJ.audio.playSound(res.coinSound);
 
-        if(NJ.themes.getThemeIndex() == index)
+        if(NJ.themes.getActiveThemeIndex() == index)
             return;
 
         var that = this;
@@ -114,7 +114,7 @@ var ShopMenuLayer = (function() {
         var theme = NJ.themes.getThemeByIndex(index);
 
         if(theme.isPurchased) {
-            NJ.themes.setThemeByIndex(index);
+            NJ.themes.activateThemeByIndex(index);
             NJ.saveThemes();
             that._updateTheme();
         } else {
@@ -123,7 +123,7 @@ var ShopMenuLayer = (function() {
                 that.updateCurrencyLabel();
                 NJ.stats.save();
                 NJ.themes.purchaseThemeByIndex(index);
-                NJ.themes.setThemeByIndex(index);
+                NJ.themes.activateThemeByIndex(index);
                 NJ.saveThemes();
                 that._updateTheme();
             } else {
@@ -335,7 +335,7 @@ var ShopMenuLayer = (function() {
                 y: buttonContainer.getContentSize().height / 2 + this._buyConvertersButton.getContentSize().height / 2
             });
             this._buyConvertersButton.setLabelColor(NJ.themes.defaultLabelColor);
-            this._buyConvertersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
+            this._buyConvertersButton.setLabelTitle(NJ.stats.getNumConverters() + "");
             this._buyConvertersButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
             this._buyConvertersButton.offsetLabel(cc.p(this._buyConvertersButton.getContentSize().width / 1.1, 0));
             this._buyConvertersButton.setImageRes(res.scrambleImage);
@@ -417,7 +417,7 @@ var ShopMenuLayer = (function() {
             });
             this._themeMenu.addChild(titleLabel);
 
-            var themes = NJ.themes.getListSorted();
+            var themes = NJ.themes.getListSortedByCost();
             //var themes = NJ.themes.getList();
 
             var buttonSize = cc.size(cc.visibleRect.width * 0.8, cc.visibleRect.height * 0.1);
@@ -432,7 +432,7 @@ var ShopMenuLayer = (function() {
                 (function() {
                     var index = i;
 
-                    var isCurrentTheme = (NJ.themes.getThemeIndex() == i);
+                    var isCurrentTheme = (NJ.themes.getActiveThemeIndex() == i);
 
                     themeButton = new NumboMenuButton(buttonSize, function() {
                         (onActivateTheme.bind(that))(index);
@@ -600,6 +600,7 @@ var ShopMenuLayer = (function() {
         updatePowerups: function() {
             this._buyHintsButton.setLabelTitle(NJ.stats.getNumHints() + "");
             this._buyScramblersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
+            this._buyConvertersButton.setLabelTitle(NJ.stats.getNumConverters() + "");
         },
 
         _updateTheme: function() {
@@ -617,7 +618,7 @@ var ShopMenuLayer = (function() {
             if(!this._themeMenu)
                 return;
 
-            var themes = NJ.themes.getListSorted();
+            var themes = NJ.themes.getListSortedByCost();
 
             var themeButton;
 
@@ -626,7 +627,7 @@ var ShopMenuLayer = (function() {
 
                 themeButton = this._themeButtons[i];
 
-                var isCurrentTheme = (NJ.themes.getThemeIndex() == i);
+                var isCurrentTheme = (NJ.themes.getActiveThemeIndex() == i);
 
                 var labelStr = themes[i].themeName + " - ";
                 if(!themes[i].isPurchased) {

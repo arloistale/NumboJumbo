@@ -391,7 +391,7 @@ NJ.themes = (function() {
             return data;
         },
 
-        getListSorted: function(){
+        getListSortedByCost: function(){
             return data.sort(function(a, b){
                 return a.themeCost - b.themeCost;
             })
@@ -408,7 +408,7 @@ NJ.themes = (function() {
         /**
          * Set theme according to theme index
          */
-        setThemeByIndex: function(index) {
+        activateThemeByIndex: function(index) {
             _themeIndex = index;
             main = data[_themeIndex];
 
@@ -427,7 +427,7 @@ NJ.themes = (function() {
             return data[index];
         },
 
-        getThemeIndex: function() {
+        getActiveThemeIndex: function() {
             return _themeIndex;
         }
     }
@@ -439,7 +439,7 @@ NJ.loadThemes = function() {
 
     var rawIndex = cc.sys.localStorage.getItem("themeIndex") || 0;
 
-    NJ.themes.setThemeByIndex(parseInt(rawIndex));
+    NJ.themes.activateThemeByIndex(parseInt(rawIndex));
 
     var themesList = NJ.themes.getList();
 
@@ -455,8 +455,8 @@ NJ.loadThemes = function() {
 // save settings to local store
 // NOTE: Must be called to persist changes in settings
 NJ.saveThemes = function() {
-    cc.sys.localStorage.setItem("themeIndex", JSON.stringify(NJ.themes.getThemeIndex()));
-    //cc.log("Saving" + NJ.themes.getThemeIndex());
+    cc.sys.localStorage.setItem("themeIndex", JSON.stringify(NJ.themes.getActiveThemeIndex()));
+    //cc.log("Saving" + NJ.themes.getActiveThemeIndex());
 
     var themesList = NJ.themes.getList();
 

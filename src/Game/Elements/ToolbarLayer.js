@@ -11,30 +11,16 @@ var ToolbarLayer = (function() {
     var onConvert = function(){
 
         if (this._onConvertCallback) {
-            if (NJ.stats.getNumScramblers() > 0 && NJ.gameState.getScramblesRemaining() > 0) {
-                NJ.stats.depleteConverters();
-                NJ.stats.save();
-                //NJ.gameState.decrementConvertersRemaining();
-
-                this.updatePowerups();
-                this._onConvertCallback();
-            }
+            this._onConvertCallback();
         } else {
             cc.log("*** toolbar layer: convert callback not set!");
         }
     };
 
-    var onScramble = function(){
+    var onScramble = function() {
 
         if (this._onScrambleCallback) {
-            if (NJ.stats.getNumScramblers() > 0 && NJ.gameState.getScramblesRemaining() > 0) {
-                NJ.stats.depleteScramblers();
-                NJ.stats.save();
-                NJ.gameState.decrementScramblesRemaining();
-
-                this.updatePowerups();
-                this._onScrambleCallback();
-            }
+            this._onScrambleCallback();
         } else {
             cc.log("*** toolbar layer: scramble callback not set!");
         }
@@ -42,24 +28,13 @@ var ToolbarLayer = (function() {
 
     var onHint = function(){
         if (this._onHintCallback) {
-            if (NJ.stats.getNumHints() > 0 && NJ.gameState.getHintsRemaining() > 0) {
-
-                if (this._onHintCallback()) {
-                    NJ.stats.depleteHints();
-                    NJ.stats.save();
-                    NJ.gameState.decrementHintsRemaining();
-                    this.updatePowerups();
-                }
-                else {
-                    cc.log("no hint found -- leaving hint counts alone!");
-                }
-            }
+            this._onHintCallback();
         } else {
             cc.log("*** toolbar layer: hint callback not set!")
         }
     };
 
-    return cc.LayerColor.extend({
+    return cc.Layer.extend({
 
         // UI Data
         buttonsMenu: null,
@@ -79,7 +54,7 @@ var ToolbarLayer = (function() {
         ctor: function(size) {
             this._super();
 
-            this.init(NJ.themes.backgroundColor, size.width, size.height);
+            this.setContentSize(size.width, size.height);
 
             this._initButtons();
             this._initLabels();
@@ -119,7 +94,7 @@ var ToolbarLayer = (function() {
             this._converterButton.setLabelTitle(NJ.stats.getNumConverters() + "");
             this._converterButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
             this._converterButton.offsetLabel(cc.p(0, -buttonSize.height / 2 - NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2));
-            this._converterButton.setImageRes(res.scrambleImage);
+            this._converterButton.setImageRes(res.convertImage);
 
             this._scrambleButton = new NumboMenuButton(buttonSize, onScramble.bind(this), this);
             this._scrambleButton.setBackgroundColor(NJ.themes.scramblersColor);
@@ -220,6 +195,21 @@ var ToolbarLayer = (function() {
             this._converterButton.setLabelTitle(NJ.stats.getNumConverters());
             this._hintButton.setLabelTitle(NJ.stats.getNumHints());
             this._scrambleButton.setLabelTitle(NJ.stats.getNumScramblers());
+
+            if(NJ.gameState.getConvertersRemaining() <= 0) {
+                this._converterButton.setEnabled(false);
+                this._converterButton.setOpacity(128);
+            }
+
+            if(NJ.gameState.getHintsRemaining() <= 0) {
+                this._hintButton.setEnabled(false);
+                this._hintButton.setOpacity(128);
+            }
+
+            if(NJ.gameState.getScramblesRemaining() <= 0) {
+                this._scrambleButton.setEnabled(false);
+                this._scrambleButton.setOpacity(128);
+            }
         }
     });
 }());

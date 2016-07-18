@@ -350,11 +350,13 @@ NJ.themes = (function() {
 
     ];
 
-    var _lightTheme = data[0];
-    var _darkTheme = data[1];
-
-    var main = _lightTheme;
+    var main = data[0];
     var _themeIndex = 0;
+
+    // all themes must be indexed
+    for(var i = 0; i < data.length; ++i) {
+        data[i].index = i;
+    }
 
     return {
         // meta data
@@ -386,30 +388,56 @@ NJ.themes = (function() {
 
         blockColors: main.blockColors,
 
+        // Initialization
+
+        // load settings from local store
+        load: function() {
+            this.hasLoaded = true;
+
+            var rawIndex = cc.sys.localStorage.getItem("themeIndex") || 0;
+
+            this.activateThemeByIndex(parseInt(rawIndex));
+
+            for(var i = 0; i < data.length; ++i) {
+                data[i].isPurchased = cc.sys.localStorage.getItem("themesPurchased_" + i) == 'true';
+            }
+
+            data[0].isPurchased = true;
+        },
+
+        // save settings to local store
+        // NOTE: Must be called to persist changes in settings
+        save: function() {
+            cc.sys.localStorage.setItem("themeIndex", JSON.stringify(NJ.themes.getActiveThemeIndex()));
+            //cc.log("Saving" + NJ.themes.getActiveThemeIndex());
+
+            for(var i = 0; i < data.length; ++i) {
+                cc.sys.localStorage.setItem("themesPurchased_" + i, JSON.stringify(data[i].isPurchased));
+            }
+        },
+
         // get list of themes
         getList: function() {
             return data;
         },
 
-        getListSorted: function(){
-            return data.sort(function(a, b){
+        // get list of themes sorted by their cost
+        getListSortedByCost: function() {
+            return data.concat().sort(function(a, b){
                 return a.themeCost - b.themeCost;
-            })
+            });
         },
 
+        // get the number of available themes
         getNumThemes: function(){
             return data.length;
         },
 
-        updateList: function(list) {
-            data = list;
-        },
-
-        /**
-         * Set theme according to theme index
-         */
-        setThemeByIndex: function(index) {
+        // Activate a theme by its index,
+        // which updates all the exposed properties
+        activateThemeByIndex: function(index) {
             _themeIndex = index;
+
             main = data[_themeIndex];
 
             for(var key in main) {
@@ -419,51 +447,23 @@ NJ.themes = (function() {
             }
         },
 
+        // purchase a theme according to its index
+        // Note: this does not activate the theme for the user,
         purchaseThemeByIndex: function(index) {
             data[index].isPurchased = true;
         },
 
+        // Get an arbitrary theme by its index
         getThemeByIndex: function(index) {
             return data[index];
         },
 
-        getThemeIndex: function() {
+        // Get the currently active theme index
+        getActiveThemeIndex: function() {
             return _themeIndex;
         }
     }
 }());
-
-// load settings from local store
-NJ.loadThemes = function() {
-    NJ.themes.hasLoaded = true;
-
-    var rawIndex = cc.sys.localStorage.getItem("themeIndex") || 0;
-
-    NJ.themes.setThemeByIndex(parseInt(rawIndex));
-
-    var themesList = NJ.themes.getList();
-
-    for(var i = 0; i < themesList.length; ++i) {
-        themesList[i].isPurchased = cc.sys.localStorage.getItem("themesPurchased_" + i) == 'true';
-    }
-
-    themesList[0].isPurchased = true;
-
-    NJ.themes.updateList(themesList);
-};
-
-// save settings to local store
-// NOTE: Must be called to persist changes in settings
-NJ.saveThemes = function() {
-    cc.sys.localStorage.setItem("themeIndex", JSON.stringify(NJ.themes.getThemeIndex()));
-    //cc.log("Saving" + NJ.themes.getThemeIndex());
-
-    var themesList = NJ.themes.getList();
-
-    for(var i = 0; i < themesList.length; ++i) {
-        cc.sys.localStorage.setItem("themesPurchased_" + i, JSON.stringify(themesList[i].isPurchased));
-    }
-};
 
 NJ.getColor = function (index) {
     var colorArray = NJ.themes.blockColors;

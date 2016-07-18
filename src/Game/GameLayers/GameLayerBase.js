@@ -76,6 +76,7 @@ var BaseGameLayer = (function() {
 		_effectsLayer: null,
 		_feedbackLayer: null,
 
+		_infoInterfaceLayer: null,
 
 		// Audio Data
 		_backgroundTrack: null,
@@ -122,7 +123,7 @@ var BaseGameLayer = (function() {
 			this._initParticles();
 			this._initUI();
 
-			this._generateBaseDividers();
+			//this._generateBaseDividers();
 
 			// extranneous initialization
 			this._reset();
@@ -293,18 +294,49 @@ var BaseGameLayer = (function() {
 			});
 
 			this._toolbarLayer.setOnConvertCallback(function() {
-				// bring up interface to convert a block
+				if (NJ.gameState.getConvertersRemaining() > 0) {
+					if(NJ.stats.getNumConverters() > 0) {
+						that.showReduceInterface();
+					} else {
+						// show the shit
+					}
+				}
 			});
 
 			this._toolbarLayer.setOnScrambleCallback(function(){
-				return that.scrambleBoard();
+				if (NJ.gameState.getScramblesRemaining() > 0) {
+					if(NJ.stats.getNumScramblers() > 0) {
+						that.scrambleBoard();
+						NJ.stats.depleteScramblers();
+						NJ.stats.save();
+						NJ.gameState.decrementScramblesRemaining();
+						that._toolbarLayer.updatePowerups();
+					} else {
+						// show the shit
+					}
+				}
 			});
 
 			this._toolbarLayer.setOnHintCallback(function(){
-				return that.jiggleHintBlocksAndReset();
+				if (NJ.gameState.getHintsRemaining() > 0) {
+					if(NJ.stats.getNumHints() > 0) {
+						if (that.jiggleHintBlocksAndReset()) {
+							NJ.stats.depleteHints();
+							NJ.stats.save();
+							NJ.gameState.decrementHintsRemaining();
+							that._toolbarLayer.updatePowerups();
+						}
+					} else {
+						// show the shit
+					}
+				}
 			});
 
 			this.addChild(this._toolbarLayer, 999);
+
+			// info for power ups
+			this._infoInterfaceLayer = new InfoInterfaceLayer(cc.size(this._levelBounds.width, this._levelBounds.height));
+			this.addChild(this._infoInterfaceLayer, 999);
 		},
 
 
@@ -324,7 +356,7 @@ var BaseGameLayer = (function() {
 				x: cc.visibleRect.bottomLeft.x,
 				y: cc.visibleRect.bottomLeft.y +  this._toolBarSize.height,
 				width: cc.visibleRect.width,
-				height: cc.visibleRect.height -  this._headerSize.height -  this._toolBarSize.height
+				height: cc.visibleRect.height - this._headerSize.height -  this._toolBarSize.height
 			});
 
 			var refDim = Math.min(playableRect.width, playableRect.height);
@@ -799,12 +831,12 @@ var BaseGameLayer = (function() {
 					if(selectedBlock) {
 						// if we have already selected then we are trying to use the quick convert feature
 						if(selectedBlock.val != 1) {
-							if (selectedBlock.isSelected) {
+							if (selectedBlock.isSelected && NJ.gameState.getConvertersRemaining() > 0) {
 								if (NJ.stats.getNumConverters() > 0) {
 									selectedBlock.convertValue(1);
-									NJ.stats.depleteScramblers();
+									NJ.stats.depleteConverters();
 									NJ.stats.save();
-									//NJ.gameState.decrementScramblesRemaining();
+									NJ.gameState.decrementConvertersRemaining();
 
 									this._toolbarLayer.updatePowerups();
 								} else {
@@ -971,7 +1003,7 @@ var BaseGameLayer = (function() {
 			this._numboHeaderLayer.setScoreValue(NJ.gameState.getScore());
 		},
 
-		relocateBlocks: function (){
+		relocateBlocks: function () {
 			// Gaps may be created; shift all affected blocks down.
 			var blocks = this._numboController.getBlocksList();
 			for (var i = 0; i < blocks.length; ++i){
@@ -982,6 +1014,13 @@ var BaseGameLayer = (function() {
 /////////////
 // Drawing //
 /////////////
+
+		showReduceInterface: function() {
+			var blocks = this._numboController.getBlocksList();
+			for(var i = 0; i < blocks.length; ++i) {
+				blocks[i].highlight(true);
+			}
+		},
 
 		// generate dividers on headers and toolbars
 		_generateBaseDividers: function() {

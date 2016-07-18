@@ -85,7 +85,7 @@ NumboLoaderScene = cc.Scene.extend({
 
             // load modules
             NJ.loadSettings();
-            NJ.loadThemes();
+            NJ.themes.load();
 
             NJ.initAnalytics();
 

@@ -186,20 +186,30 @@ var NumboBlock = cc.Sprite.extend({
     },
 
     // highlight the sprite indicating selection
-    highlight: function() {
+    highlight: function(persists) {
         var that = this;
 
         this._highlightSprite.setVisible(true);
         this._highlightSprite.setOpacity(255);
 
+        this._highlightSprite.stopAllActions();
+
         this._highlightSprite.setScale(this._backgroundScale.width, this._backgroundScale.height);
 
-        this._highlightSprite.stopAllActions();
-        this._highlightSprite.runAction(cc.scaleBy(0.4, 2.5, 2.5));
-        this._highlightSprite.runAction(cc.sequence(cc.fadeOut(0.4), cc.callFunc(function() {
-            that.isHighlighting = false;
-            that._highlightSprite.setVisible(false);
-        })));
+        if(!persists) {
+            this._highlightSprite.runAction(cc.scaleBy(0.4, 2.5, 2.5));
+            this._highlightSprite.runAction(cc.sequence(cc.fadeOut(0.4), cc.callFunc(function () {
+                that.isHighlighting = false;
+                that._highlightSprite.setVisible(false);
+            })));
+        } else {
+            //this._highlightSprite.setOpacity(128);
+            //this._highlightSprite.runAction(cc.scaleBy(0.1, 1.4, 1.4));
+        }
+    },
+
+    clearHighlight: function() {
+        this._highlightSprite.setVisible(false);
     },
 
     jiggleSprite: function() {

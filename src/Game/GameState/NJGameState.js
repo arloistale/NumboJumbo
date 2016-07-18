@@ -19,8 +19,10 @@ NJ.gameState = (function() {
     var movesMade = 0;
     var currentLevel = 1;
     var currentScore = 0;
-    var scramblesRemaining = null;
-    var hintsRemaining = null;
+
+    var convertersRemaining = -1;
+    var scramblesRemaining = -1;
+    var hintsRemaining = -1;
 
     // returns the number of blocks left needed to get to the next level.
     // this is quadratic in the current level L, ie, aL^2 + bL + c.
@@ -58,36 +60,51 @@ NJ.gameState = (function() {
             blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             blocksCleared = 0;
 
-            scramblesRemaining = Math.min(3, NJ.stats.getNumScramblers());
-            hintsRemaining = Math.min(10, NJ.stats.getNumHints());
+            convertersRemaining = 5;
+            scramblesRemaining = 3;
+            hintsRemaining = 10;
         },
 
         ///////////////////////
         // Consumables Logic //
         ///////////////////////
-        getScramblesRemaining: function(){
+
+        getConvertersRemaining: function() {
+            return convertersRemaining;
+        },
+
+        decrementConvertersRemaining: function() {
+            cc.assert(convertersRemaining > 0, "ERROR: attempted to convert too many times!");
+            convertersRemaining--;
+        },
+
+        incrementConvertersRemaining: function() {
+            convertersRemaining++;
+        },
+
+        getScramblesRemaining: function() {
             return scramblesRemaining;
         },
 
-        decrementScramblesRemaining: function(){
+        decrementScramblesRemaining: function() {
             cc.assert(scramblesRemaining > 0, "ERROR: attempted to scramble board too many times!");
             scramblesRemaining--;
         },
 
-        incrementScramblesRemaining: function(){
+        incrementScramblesRemaining: function() {
             scramblesRemaining++;
         },
 
-        getHintsRemaining: function(){
+        getHintsRemaining: function() {
             return hintsRemaining;
         },
 
-        decrementHintsRemaining: function(){
+        decrementHintsRemaining: function() {
             cc.assert(hintsRemaining > 0, "ERROR: attempted to get a hint too many times!");
             hintsRemaining--;
         },
 
-        incrementHintsRemaining: function(){
+        incrementHintsRemaining: function() {
             hintsRemaining++;
         },
 
