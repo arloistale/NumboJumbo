@@ -29,6 +29,8 @@ var StackGameLayer = BaseGameLayer.extend({
     _reset: function() {
         this._super();
 
+        this._modeKey = NJ.modekeys.react;
+
         var that = this;
 
         this.pauseGame();
@@ -86,16 +88,6 @@ var StackGameLayer = BaseGameLayer.extend({
         var scene = new cc.Scene();
         scene.addChild(new StackGameLayer());
         cc.director.runScene(scene);
-    },
-
-    onGameOver: function() {
-        this._super();
-
-        var that = this;
-
-        this.leave(function() {
-            that.endToEpilogue(NJ.modekeys.react);
-        });
     },
 
     // whether the game is over or not
@@ -159,8 +151,7 @@ var StackGameLayer = BaseGameLayer.extend({
 
         this.spawnDropRandomBlocks(numBlocksToSpawn);
 
-        while (this._numboController.findHint().length == 0){
-            cc.log("oh shit, still have no moves. better scramble the board i guess!");
+        if (this._numboController.haveNoMoves()) {
             this.scrambleBoard();
         }
 

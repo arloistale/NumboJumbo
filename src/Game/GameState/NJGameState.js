@@ -9,6 +9,11 @@ var NJ = NJ || {};
 // USE the given getters and setters
 NJ.gameState = (function() {
 
+    // constants
+    const NUM_HINTS_PER_ROUND = 10;
+    const NUM_CONVERTS_PER_ROUND = 500;
+    const NUM_SCRAMBLES_PER_ROUND = 3;
+
     // meta data
     var startTime = 0;
 
@@ -60,9 +65,9 @@ NJ.gameState = (function() {
             blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             blocksCleared = 0;
 
-            convertersRemaining = 5;
-            scramblesRemaining = 3;
-            hintsRemaining = 10;
+            convertersRemaining = NUM_CONVERTS_PER_ROUND;
+            scramblesRemaining = NUM_SCRAMBLES_PER_ROUND;
+            hintsRemaining = NUM_HINTS_PER_ROUND;
         },
 
         ///////////////////////

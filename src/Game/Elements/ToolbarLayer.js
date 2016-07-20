@@ -1,14 +1,8 @@
 var ToolbarLayer = (function() {
 
     // Touch Events
-    var onPause = function() {
+    var onConvert = function() {
         NJ.audio.playSound(res.clickSound);
-
-        if(this._onPauseCallback)
-            this._onPauseCallback();
-    };
-
-    var onConvert = function(){
 
         if (this._onConvertCallback) {
             this._onConvertCallback();
@@ -18,6 +12,7 @@ var ToolbarLayer = (function() {
     };
 
     var onScramble = function() {
+        // we do not play a sound here because scrambleBoard in the Game Layer handles all that
 
         if (this._onScrambleCallback) {
             this._onScrambleCallback();
@@ -27,6 +22,8 @@ var ToolbarLayer = (function() {
     };
 
     var onHint = function(){
+        NJ.audio.playSound(res.plipSound);
+
         if (this._onHintCallback) {
             this._onHintCallback();
         } else {
@@ -39,15 +36,12 @@ var ToolbarLayer = (function() {
         // UI Data
         buttonsMenu: null,
 
-        _pauseButton: null,
-
         _converterButton: null,
         _scrambleButton: null,
         _hintButton: null,
 
-        // callback
-        _onPauseCallback: null,
-
+        // callbacks
+        _onConvertCallback: null,
         _onScrambleCallback: null,
         _onHintCallback:null,
 
@@ -62,22 +56,15 @@ var ToolbarLayer = (function() {
             this.reset();
         },
 
-        _initLabels: function() {
-            var contentSize = this.getContentSize();
+        // create labels
+        _initLabels: function() {},
 
-            // Score Labels
-            var startPos = cc.p(contentSize.width / 2, contentSize.height / 2);
-            var elementSize = cc.size(contentSize.width * 0.5, contentSize.height * 0.5);
-            var spriteSize;
-        },
-
-        // create buttons (probably the only button will be pause button but w/e)
+        // create buttons
         _initButtons: function() {
             var that = this;
 
             var contentSize = this.getContentSize();
 
-            // initialize pause button
             this._buttonsMenu = new cc.Menu();
             this._buttonsMenu.setContentSize(contentSize);
             this._buttonsMenu.attr({
@@ -129,15 +116,8 @@ var ToolbarLayer = (function() {
         //////////////////
 
         enterTutorialMode: function() {
-            var imageRes = res.homeImage;
             var contentSize = this.getContentSize();
-            var buttonSize = cc.size(contentSize.height * NJ.uiSizes.barButton,
-                contentSize.height * NJ.uiSizes.barButton);
-            this._pauseButton = new NumboMenuButton(buttonSize, onPause.bind(this), this);
-            this._pauseButton.setImageRes(res.pauseImage);
-            this._pauseButton.setImageRes(imageRes);
             this._buttonsMenu.removeAllChildren();
-            this._buttonsMenu.addChild(this._pauseButton);
 
             this._hintButton.setChildrenOpacity(0);
             this._scrambleButton.setChildrenOpacity(0);
@@ -173,10 +153,6 @@ var ToolbarLayer = (function() {
 
         // UI callbacks //
 
-        setOnPauseCallback: function(callback) {
-            this._onPauseCallback = callback;
-        },
-
         setOnConvertCallback: function(callback) {
             this._onConvertCallback = callback;
         },
@@ -198,17 +174,17 @@ var ToolbarLayer = (function() {
 
             if(NJ.gameState.getConvertersRemaining() <= 0) {
                 this._converterButton.setEnabled(false);
-                this._converterButton.setOpacity(128);
+                this._converterButton.setChildrenOpacity(128);
             }
 
             if(NJ.gameState.getHintsRemaining() <= 0) {
                 this._hintButton.setEnabled(false);
-                this._hintButton.setOpacity(128);
+                this._hintButton.setChildrenOpacity(128);
             }
 
             if(NJ.gameState.getScramblesRemaining() <= 0) {
                 this._scrambleButton.setEnabled(false);
-                this._scrambleButton.setOpacity(128);
+                this._scrambleButton.setChildrenOpacity(128);
             }
         }
     });

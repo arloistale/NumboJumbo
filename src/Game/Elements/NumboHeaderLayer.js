@@ -8,7 +8,7 @@ var NumboHeaderLayer = (function() {
     var onPause = function() {
         NJ.audio.playSound(res.clickSound);
 
-        if(this._onPauseCallback && !this._isTutorialMode)
+        if(this._onPauseCallback)
             this._onPauseCallback();
     };
 
@@ -280,31 +280,6 @@ var NumboHeaderLayer = (function() {
 
             return false;
 
-        },
-
-        setEquationOld: function(nums) {
-            var equationStr = " ";
-
-            if(nums.length > 0) {
-                equationStr = nums[0] + "";
-
-                var sumSoFar = nums[0];
-
-                for (var i = 1; i < nums.length - 1; ++i) {
-                    equationStr += " + " + nums[i];
-                    sumSoFar += nums[i];
-                }
-
-                if (nums.length > 1) {
-                    if (sumSoFar != nums[i] || nums.length <= 2) {
-                        equationStr += " + " + nums[i];
-                    } else {
-                        equationStr += " = " + nums[i];
-                    }
-                }
-            }
-
-            this._equationLabel.setString(equationStr);
         },
 
         updateTheme: function() {

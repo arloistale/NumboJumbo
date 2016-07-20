@@ -29,17 +29,18 @@ var NumboController = (function() {
 			}
 
 			return false;
-
-
 		},
 
-		// search for a path of 3 blocks that sums to the last element
-		threeBlocksSumsToLast: function(path) {
+		// search for a path of 3-4 blocks that sums to the last element
+		sumsToLastValid: function(path) {
+			if(path.length < 3 || path.length > 10)
+				return false;
+
 			var sum = 0;
 			for (var i = 0; i < path.length - 1; ++i)
 				sum += path[i].val;
 
-			return path.length >= 3 && path.length <= 4 && sum == path[path.length - 1].val;
+			return sum == path[path.length - 1].val;
 		}
 	};
 
@@ -53,16 +54,10 @@ var NumboController = (function() {
         // numbers that added to the distribution dynamically
         _thresholdNumbers: [],
 
-        // factor for how much each number should be multiplied when spawning
-        _spawnScale: 1,
-
 		// level data
 		_numboLevel: null,
 		_knownPath: [],
 		_selectedBlocks: [],
-
-		// the element at index i of the cache represents the (i + 3) combo length bonus blocks image
-		_bonusBlocksImageCache: [],
 
 		blocksDropped: 0,
 
@@ -196,7 +191,7 @@ var NumboController = (function() {
 		spawnDropRandomBlock: function(block) {
 			// Set up val/col
 			var col = NJ.weightedRandom(this._numboLevel.getColWeights());
-			var val = NJ.weightedRandom(this._spawnDistribution) * this._spawnScale;
+			var val = NJ.weightedRandom(this._spawnDistribution);
 
 			return this.spawnDropBlock(block, col, val);
 		},
@@ -223,71 +218,34 @@ var NumboController = (function() {
             }
         },
 
-        // scale the numbers in the spawn distribution by a factor
-        scaleSpawnDistribution: function() {
-            // Check for Jumbo Swap
-            if (NJ.gameState.currentJumboId == "multiple-progression") {
-
-                // Get possible factors based on level
-                var possibleFactors = null;
-                var level = NJ.gameState.getLevel();
-
-                if (level == 3)
-                    possibleFactors = [2, 3, 4];
-                else if (level == 5)
-                    possibleFactors = [4, 5, 6];
-                else if (level == 7)
-                    possibleFactors = [6, 7, 8, 10];
-                else if (level == 9)
-                    possibleFactors = [8, 9, 10];
-                else if (level == 10)
-                    possibleFactors = [7, 8, 9, 11];
-                else if (level == 11 || level == 12)
-                    possibleFactors = [9, 12, 13];
-                else if (level > 12)
-                    possibleFactors = [12, 13, 14, 15];
-
-                if (possibleFactors != null) {
-                    // Change spawn scale factor
-                    var factor = NJ.gameState.currentLevel;
-                    while (factor == NJ.gameState.currentLevel)
-                        factor = possibleFactors[Math.floor(Math.random() * possibleFactors.length)];
-
-                    this._spawnScale = factor;
-
-                    // Update the blocks currently on the board.
-                    this._numboLevel.divideBlocksBy(NJ.gameState.currentLevel);
-                    this._numboLevel.multiplyBlocksBy(factor);
-                }
-            }
-        },
-
         //////////////////
         // Level Search //
         //////////////////
 
-		haveNoMoves: function(){
+		haveNoMoves: function() {
 			this.findHint();
 			return this._knownPath.length == 0;
 		},
 
 		findHint: function() {
-			//if(!this._knownPath || !this._knownPath.length) {
-				var block;
-				var tries = 50; // try no more than 50 times
-				while (tries > 0 && !this._knownPath.length) {
-					block = this._numboLevel.getRandomBlock();
+			var block;
+			var tries = 50; // try no more than 50 times
+			while (tries > 0 && !this._knownPath.length) {
+				block = this._numboLevel.getRandomBlock();
 
-					if (block) {
-						this._knownPath = this.meanderSearch(block.col, block.row,
-							meanderSearchCriteria.threeBlocksSumsToLast, [block]);
-					}
-
-					--tries;
+				if (block) {
+					this._knownPath = this.meanderSearch(block.col, block.row,
+						meanderSearchCriteria.sumsToLastValid, [block]);
 				}
-			//}
+
+				--tries;
+			}
 
 			return this._knownPath;
+		},
+
+		resetKnownPath: function(){
+			this._knownPath = [];
 		},
 
 		// count and a col/row coordinate pair.
@@ -340,85 +298,6 @@ var NumboController = (function() {
 			return blocks;
 
 		},
-
-		findLocationAndValueForTwoNewBlocks: function (){
-			var valA = null;
-			var valB = null;
-			var colA = null;
-			var colB = null;
-
-			// find the indices of non-empty columns, then shuffle them, then iterate over them
-			var colIndices = [];
-			for (var colI = 0; colI < NJ.NUM_COLS; ++colI){
-				var column = this._numboLevel.getBlocksInColumn(colI);
-				if (column && column.length < NJ.NUM_ROWS) {
-					colIndices.push(colI);
-				}
-			}
-			var colIndicesShuffled = colIndices.slice(0);
-			NJ.shuffleArray(colIndicesShuffled);
-
-
-			// attempt to place both blocks in a single column (because it's easier, that's why):
-			for (var colI = 0; colI < colIndicesShuffled.length; ++colI){
-				var column = this._numboLevel.getBlocksInColumn(colIndicesShuffled[colI]);
-				if (0 < column.length && column.length < NJ.NUM_ROWS - 2){
-					colA = colB = colIndicesShuffled[colI];
-					var valOfExisting = column[column.length-1].val;
-					valA = Math.floor( ( ( valOfExisting - 1) * Math.random() )+ 1);
-					valB = valOfExisting - valA;
-
-					return [{col: colA, val: valA}, {col: colB, val: valB}];
-				}
-			}
-
-			// ok, that didn't work, so lets try to find two neighboring non-empty columns
-			// such that adding a block to each will result in them being adjacent
-			// (ie, ignore spawning one block in a near-empty column and the other in a
-			// near-ful column, because that wouldn't help anything).
-			// note that here we ignore the far-left and far-right columns,
-			// so as not to have 3 different cases. but those will be covered
-			// by the check we do on their immedate neighbor.
-			var leftIndex = colIndices.indexOf(0);
-			if (leftIndex >= 0){
-				colIndices.splice(leftIndex, 1);
-			}
-			var rightIndex = colIndices.indexOf(NJ.NUM_COLS - 1);
-			if (rightIndex >= 0){
-				colIndices.splice(rightIndex, 1);
-			}
-
-			for (var colI = 0; colI < colIndices.length; ++colI){
-				var column = this._numboLevel.getBlocksInColumn(colIndices[colI]);
-				var leftLength = this._numboLevel.getBlocksInColumn(colIndices[colI] - 1).length;
-				var rightLength = this._numboLevel.getBlocksInColumn(colIndices[colI] + 1).length;
-				var colLength = column.length;
-				if (colLength < NJ.NUM_ROWS && leftLength < NJ.NUM_ROWS && Math.abs(colLength - leftLength) <= 1){
-					valA = Math.floor( ( ( column[colIndices[colI]].val - 1) * Math.random() )+ 1);
-					valB = column[colIndices[colI]].val - valA;
-					colA = colIndices[colI];
-					colB = colIndices[colI] - 1;
-
-					return [{col: colA, val: valA}, {col: colB, val: valB}];
-				}
-				else if (colLength < NJ.NUM_ROWS && rightLength < NJ.NUM_ROWS && Math.abs(colLength - rightLength) <= 1){
-					valA = Math.floor( ( ( column[colIndices[colI]].val - 1) * Math.random() )+ 1);
-					valB = column[colIndices[colI]].val - valA;
-					colA = colIndices[colI];
-					colB = colIndices[colI] + 1;
-
-					return [{col: colA, val: valA}, {col: colB, val: valB}];
-				}
-			}
-
-			cc.log("find location for two blocks did not return anything!" +
-				" crap, might as well throw our hands in the air and spawn random stuff");
-			return [];
-		},
-
-        resetKnownPath: function(){
-            this._knownPath = [];
-        },
 
 		/**
 		 * Meander search generates a path randomly until the criteria boolean expression is met.
@@ -495,9 +374,14 @@ var NumboController = (function() {
         },
 
 		removeAllBlocks: function(){
-			this._numboLevel.killAllBlocks();
-
+			this.deselectAllBlocks();
+			this._numboLevel.removeAllBlocks();
 			this._numboLevel.updateRowsAndColumns();
+		},
+
+		clearLevel: function() {
+			this.deselectAllBlocks();
+			this._numboLevel.killAllBlocks();
 		},
 
 		/////////////
@@ -506,10 +390,6 @@ var NumboController = (function() {
 
 		getSpawnDistributionMaxNumber: function() {
 			return this._spawnDistribution[this._spawnDistribution.length - 1].key;
-		},
-
-		clearLevel: function() {
-			this._numboLevel.clear();
 		},
 
 		levelIsClear: function() {
@@ -591,7 +471,7 @@ var NumboController = (function() {
 
 		// returns the number of bonus blocks to clear, given a wombocombo of a certain length
 		getBonusBlocks: function(length) {
-			cc.assert(length, "uh-oh! bad LENGTH value in numboController::getBonusBlocks()");
+			cc.assert(length, "uh-oh! bad LENGTH value in numboController getBonusBlocks()");
 
 			var numBonusBlocks = 0;
 
@@ -620,49 +500,8 @@ var NumboController = (function() {
 				numBonusBlocks = 28;
 			}
 
-			var womboComboType = 2;
-			var itorBlock;
-			var result = [];
-
-			switch(womboComboType) {
-				// random
-				case 0:
-					var randomBlocks = NJ.shuffleArray(this.getBlocksList());
-
-					for (var i = 0; i < randomBlocks.length && result.length < numBonusBlocks; ++i) {
-						itorBlock = randomBlocks[i];
-						if (this._selectedBlocks.indexOf(itorBlock) < 0) {
-							result.push(itorBlock);
-						}
-					}
-					break;
-
-				// highest
-				case 1:
-					var sortedBlocks = this.getBlocksList().sort(function(a, b) {
-						return a.val - b.val;
-					});
-
-					var count = numBonusBlocks;
-					while(sortedBlocks.length > 0 && count > 0) {
-						itorBlock = sortedBlocks.pop();
-						if(this._selectedBlocks.indexOf(itorBlock) < 0) {
-							result.push(itorBlock);
-							count--;
-						}
-					}
-
-					break;
-
-				// blocks near the highest selected block
-				case 2:
-					var maxBlock = this.getMaxSelectedBlock();
-					result = this.spiralSearch(maxBlock.col, maxBlock.row, numBonusBlocks);
-					break;
-
-			}
-
-			return result;
+			var maxBlock = this.getMaxSelectedBlock();
+			return this.spiralSearch(maxBlock.col, maxBlock.row, numBonusBlocks);
 		},
 
 		// checks if the current selected blocks can be activated (their equation is valid)
@@ -701,7 +540,6 @@ var NumboController = (function() {
 			}
 
 			return false;
-
 		}
 	});
 }());

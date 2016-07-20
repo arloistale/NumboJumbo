@@ -101,7 +101,7 @@ var SettingsMenuLayer = (function() {
             this._contentMenu.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: -this._contentMenu.getContentSize().width
+                x: -this._contentMenu.getContentSize().width / 2
             });
 
             var contentSize = this._contentMenu.getContentSize();

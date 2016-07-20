@@ -26,7 +26,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 			this._pauseEnabled = true;
 
 			// this seems like a hack but will work for now
-			this._toolbarLayer.setOnPauseCallback(function() {
+			this._numboHeaderLayer.setOnPauseCallback(function() {
 				that.leave(function() {
 					that.onMenu();
 				});
@@ -38,6 +38,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 				that._toolbarLayer.enter();
 			})));
 		} else {
+			this._numboHeaderLayer.setOnPauseCallback(null);
+
 			this.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
 				// cause UI elements to fall in
 				that._numboHeaderLayer.enter();
@@ -49,6 +51,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 		this._advanceTutorialSlide();
 	},
 
+	// init the tutorial overlay
 	_initTutorial: function() {
 		this._tutorialLayer = new TutorialLayer();
 		this.addChild(this._tutorialLayer, 999);
@@ -368,17 +371,9 @@ var TutorialDriverLayer = BaseGameLayer.extend({
             this._clearHand();
             this._tutorialLayer.fadeOutHelperLabel();
         }
-        var that = this;
 
-        if(this._tutorialLayer.getCurrSlide() == this._tutorialLayer.slides.wombo) {
-            this.runAction(cc.sequence(cc.delayTime(0.45), cc.callFunc(function() {
-                that._advanceTutorialSlide();
-            })));
-        } else {
-            //if (this._numboController.levelIsClear()) {
-			if (this._numboController.findHint().length == 0) {
-                this._advanceTutorialSlide();
-            }
-        }
+		if (this._numboController.findHint().length == 0) {
+			this._advanceTutorialSlide();
+		}
 	}
 });

@@ -57,6 +57,9 @@ var BaseGameLayer = (function() {
 
 	return cc.Layer.extend({
 
+		// Meta Data
+		_modeKey: null,
+
 		// Level Data
 		_levelBounds: null,
 		_levelCellSize: null,
@@ -78,12 +81,16 @@ var BaseGameLayer = (function() {
 
 		_infoInterfaceLayer: null,
 
+		_shopletLayer: null,
+
 		// Audio Data
 		_backgroundTrack: null,
 
 		// Geometry Data
 		_backgroundLayer: null,
         _boardContainer: null,
+
+		_playableRect: null,
 
 		_levelSprite: null,
 		_selectedLinesNode: null,
@@ -93,10 +100,6 @@ var BaseGameLayer = (function() {
 
 		// Selection Data
 		_lastTouchPosition: null,
-
-		_touchID: -1,
-
-		_spawnDelay: 0,
 
 		// data
 		_isInGame: false,
@@ -122,8 +125,6 @@ var BaseGameLayer = (function() {
 			this._initAudio();
 			this._initParticles();
 			this._initUI();
-
-			//this._generateBaseDividers();
 
 			// extranneous initialization
 			this._reset();
@@ -167,6 +168,7 @@ var BaseGameLayer = (function() {
             NJ.audio.playMusic(this._backgroundTrack);
 		},
 
+		// init particle systems in the game
 		_initParticles: function() {
 			for (var col = 0; col < NJ.NUM_COLS; ++col){
 				for (var row = 0; row < NJ.NUM_ROWS; ++row) {
@@ -289,16 +291,13 @@ var BaseGameLayer = (function() {
 
 			// toolbar
 			this._toolbarLayer = new ToolbarLayer( this._toolBarSize);
-			this._toolbarLayer.setOnPauseCallback(function() {
-				that.onPause();
-			});
 
 			this._toolbarLayer.setOnConvertCallback(function() {
 				if (NJ.gameState.getConvertersRemaining() > 0) {
 					if(NJ.stats.getNumConverters() > 0) {
-						that.showReduceInterface();
+						that.enterReduceInfoInterface();
 					} else {
-						// show the shit
+						that.showShoplet(NJ.purchases.ingameItemKeys.converter);
 					}
 				}
 			});
@@ -312,7 +311,7 @@ var BaseGameLayer = (function() {
 						NJ.gameState.decrementScramblesRemaining();
 						that._toolbarLayer.updatePowerups();
 					} else {
-						// show the shit
+                        that.showShoplet(NJ.purchases.ingameItemKeys.scrambler);
 					}
 				}
 			});
@@ -327,7 +326,7 @@ var BaseGameLayer = (function() {
 							that._toolbarLayer.updatePowerups();
 						}
 					} else {
-						// show the shit
+                        that.showShoplet(NJ.purchases.ingameItemKeys.hint);
 					}
 				}
 			});
@@ -335,10 +334,9 @@ var BaseGameLayer = (function() {
 			this.addChild(this._toolbarLayer, 999);
 
 			// info for power ups
-			this._infoInterfaceLayer = new InfoInterfaceLayer(cc.size(this._levelBounds.width, this._levelBounds.height));
+			this._infoInterfaceLayer = new InfoInterfaceLayer(cc.size(this._playableRect.width, this._playableRect.height));
 			this.addChild(this._infoInterfaceLayer, 999);
 		},
-
 
 		// Initialize dimensions and geometry
 		_initGeometry: function() {
@@ -352,7 +350,7 @@ var BaseGameLayer = (function() {
 			this._headerSize = cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar);
 			this._toolBarSize = cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.toolbar);
 
-			var playableRect = cc.rect({
+			var playableRect = this._playableRect = cc.rect({
 				x: cc.visibleRect.bottomLeft.x,
 				y: cc.visibleRect.bottomLeft.y +  this._toolBarSize.height,
 				width: cc.visibleRect.width,
@@ -366,6 +364,7 @@ var BaseGameLayer = (function() {
 
 			var levelDims = cc.size(cellSize * NJ.NUM_COLS, cellSize * NJ.NUM_ROWS);
 			var levelOrigin = cc.p(playableRect.x + playableRect.width / 2 - levelDims.width / 2, playableRect.y + playableRect.height / 2 - levelDims.height / 2);
+
 			this._levelCellSize = cc.size(cellSize, cellSize);
 			this._levelBounds = cc.rect(levelOrigin.x, levelOrigin.y, levelDims.width, levelDims.height);
 
@@ -605,7 +604,8 @@ var BaseGameLayer = (function() {
 			this.moveBlockIntoPlace(spawnBlock);
 		},
 
-		scrambleBoard: function(){
+        // Scrambles the board until there is a valid move
+		scrambleBoard: function() {
 			NJ.audio.playSound(res.swooshSound);
 
 			var blockList = this._numboController.getBlocksList();
@@ -631,12 +631,12 @@ var BaseGameLayer = (function() {
 			}
 
 			this._numboController.resetKnownPath();
-			if (this._numboController.haveNoMoves()){
+            // TODO: This recursively arranges the board
+			if (this._numboController.haveNoMoves()) {
 				this.scrambleBoard();
 			}
 
 		},
-
 
 		// spawns a specified amount of blocks randomly
 		// plays the drop random blocks sound
@@ -666,8 +666,6 @@ var BaseGameLayer = (function() {
 			var hint = this._numboController.findHint();
 
 			if (hint.length > 0) {
-				NJ.audio.playSound(res.plipSound);
-
 				for (var i in hint) {
 					if (hint.hasOwnProperty(i))
 						hint[i].jiggleSprite();
@@ -687,6 +685,8 @@ var BaseGameLayer = (function() {
 		// Halts game, children must handle what to do afterwards in terms of going to game over screen
 		// also increments number of times played overall
 		onGameOver: function() {
+			var that = this;
+
 			this._isInGame = false;
 
 			this._selectedLinesNode.clear();
@@ -705,22 +705,26 @@ var BaseGameLayer = (function() {
 			if(numGames >= 5) {
 				NJ.social.unlockAchievement(NJ.social.achievements.played1);
 
-				if(numGames == 10) {
+				if(numGames >= 10) {
 					NJ.social.unlockAchievement(NJ.social.achievements.played2);
 
-					if (numGames == 25) {
+					if (numGames >= 25) {
 						NJ.social.unlockAchievement(NJ.social.achievements.played3);
 
-						if (numGames == 50) {
+						if (numGames >= 50) {
 							NJ.social.unlockAchievement(NJ.social.achievements.played4);
 
-							if (numGames == 100) {
+							if (numGames >= 100) {
 								NJ.social.unlockAchievement(NJ.social.achievements.played5);
 							}
 						}
 					}
 				}
 			}
+
+			this.leave(function() {
+				that.endToEpilogue(that._modeKey);
+			})
 		},
 
 		///////////////
@@ -773,6 +777,10 @@ var BaseGameLayer = (function() {
             this.enterBoard();
 
 			that._updateTheme();
+
+            // clear the equation if it hasn't been cleared already
+            this._numboHeaderLayer.activateEquation();
+            this._numboController.deselectAllBlocks();
 
 			this.enter(function() {
                 if(that.isInDanger())
@@ -831,7 +839,7 @@ var BaseGameLayer = (function() {
 					if(selectedBlock) {
 						// if we have already selected then we are trying to use the quick convert feature
 						if(selectedBlock.val != 1) {
-							if (selectedBlock.isSelected && NJ.gameState.getConvertersRemaining() > 0) {
+							if ((this._isShowingReduceInterface || selectedBlock.isSelected) && NJ.gameState.getConvertersRemaining() > 0) {
 								if (NJ.stats.getNumConverters() > 0) {
 									selectedBlock.convertValue(1);
 									NJ.stats.depleteConverters();
@@ -839,8 +847,19 @@ var BaseGameLayer = (function() {
 									NJ.gameState.decrementConvertersRemaining();
 
 									this._toolbarLayer.updatePowerups();
+
+									if(this._isShowingReduceInterface) {
+										this.leaveReduceInfoInterface();
+									}
+
+                                    this._numboController.resetKnownPath();
+
+                                    // it's possible to have converted the board to no solutions
+                                    if (this._numboController.haveNoMoves()) {
+                                        this.scrambleBoard();
+                                    }
 								} else {
-									//this.showMiniShop(NJ.purchases.inGameItems.converter);
+									this.showShoplet(NJ.purchases.ingameItemKeys.converter);
 								}
 							} else {
 								selectedBlock.select();
@@ -1011,15 +1030,69 @@ var BaseGameLayer = (function() {
 			}
 		},
 
-/////////////
-// Drawing //
-/////////////
+		////////////////
+		// UI Helpers //
+		////////////////
 
-		showReduceInterface: function() {
+		// pause the game and enter the shoplet to buy more items
+		showShoplet: function(itemKey) {
+
+			var that = this;
+
+			that._isInGame = false;
+
+			this._feedbackLayer.clearDoomsayer();
+
+            // TODO: This is sort of a hack to get timed mode to function correctly
+            this._timePassed = (Date.now() - NJ.gameState.getStartTime()) / 1000;
+
+			this.pauseGame();
+			this.leaveBoard();
+
+			var callback = function() {
+				that._shopletLayer = new ShopletLayer(itemKey);
+				that._shopletLayer.setOnCloseCallback(function() {
+					that.removeChild(that._shopletLayer);
+					that._toolbarLayer.updatePowerups();
+					that.onResume();
+				});
+				that.addChild(that._shopletLayer, 999);
+				that._shopletLayer.enter();
+			};
+
+			this.leave(callback);
+		},
+
+		// enters the interface to show players
+		// how to use the reduce power up
+		enterReduceInfoInterface: function() {
+			this._isShowingReduceInterface = true;
+
 			var blocks = this._numboController.getBlocksList();
 			for(var i = 0; i < blocks.length; ++i) {
 				blocks[i].highlight(true);
 			}
+
+			this._infoInterfaceLayer.reset();
+			this._infoInterfaceLayer.setPrimaryInfo("Tap a number to reduce it to 1.");
+			this._infoInterfaceLayer.setSecondaryInfo("Double tap any number to quickly reduce.");
+			this._infoInterfaceLayer.enter();
+		},
+
+/////////////
+// Drawing //
+/////////////
+
+		// leave the interface for showing players how to reduce
+		leaveReduceInfoInterface: function() {
+			this._isShowingReduceInterface = false;
+
+			var blocks = this._numboController.getBlocksList();
+			for(var i = 0; i < blocks.length; ++i) {
+				blocks[i].clearHighlight();
+			}
+
+			this._infoInterfaceLayer.leave();
 		},
 
 		// generate dividers on headers and toolbars
@@ -1092,17 +1165,22 @@ var BaseGameLayer = (function() {
 		_playActivationSounds: function(selectedLength) {
 			if(NJ.settings.sounds) {
 
+				// cache the data from the correct activation sounds set
 				var activationSound = activationSounds[Math.min(activationSounds.length - 1, selectedLength - 3)];
 				var startingDelay = activationSound.startingDelay;
 				var midDelay = activationSound.midDelay;
 				var data = activationSound.data;
+
+				// start a sequence of Actions
 				var actionList = [];
 
+				// we always start with at least the first "boop" sound after a starting delay
 				actionList.push(cc.delayTime(startingDelay));
 				actionList.push(cc.callFunc(function() {
 					NJ.audio.playSound(bloops[data[0]]);
 				}));
 
+				// now push in the rest of the activation sounds
 				for(var i = 1; i < data.length; ++i) {
 					(function() {
 						var soundData = data[i];
@@ -1114,6 +1192,7 @@ var BaseGameLayer = (function() {
 					})();
 				}
 
+				// finally play the sequence in order
 				this._backgroundLayer.runAction(cc.sequence(actionList));
 			}
 		},
@@ -1122,6 +1201,8 @@ var BaseGameLayer = (function() {
 		// Helpers //
 		/////////////
 
+		// determines whether a given point is within
+		// a certain distance of the given grid coordinates
 		_isPointWithinCoordsDistanceThreshold: function(point, col, row) {
 			// return only if coordinates in certain radius of the block.
 			var radius = 0.52 *  this._blockSize.width;
@@ -1156,6 +1237,7 @@ var BaseGameLayer = (function() {
 				this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);
 		},
 
+		// update the color theme of the game
 		_updateTheme: function() {
 			this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
 			this._numboHeaderLayer.updateTheme();

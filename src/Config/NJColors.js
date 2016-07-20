@@ -32,8 +32,6 @@ NJ.themes = (function() {
             hintsColor: cc.color("#50aa91"),
             scramblersColor: cc.color("#50aa91"),
 
-            shadowColor: cc.color("#ffffff"),
-
             dividerColor: cc.color("#9e9e9e"),
 
             blockColors: [
@@ -85,8 +83,6 @@ NJ.themes = (function() {
             hintsColor: cc.color("#33a5ba"),
             scramblersColor: cc.color("#33a5ba"),
 
-            shadowColor: cc.color("#ffffff"),
-
             dividerColor: cc.color("#ffffff"),
 
             blockColors: [
@@ -126,17 +122,7 @@ NJ.themes = (function() {
             themeCost: 50000,
             isPurchased: false,
 
-            // lighter brown
-            //backgroundColor: cc.color("#865810"),
-
-            // new hotfix color because ewwww
             backgroundColor: cc.color("#d7d7b8"),
-
-            // darker brown
-            //backgroundColor: cc.color("5a3111"),
-
-            //light shrimpy salmon
-            //backgroundColor: cc.color("ffcba6"),
 
             defaultLabelColor: cc.color("#635063"),
             specialLabelColor: cc.color("#33A5BA"),
@@ -148,12 +134,9 @@ NJ.themes = (function() {
             hintsColor: cc.color("#00A896"),
             scramblersColor: cc.color("#00A896"),
 
-            shadowColor: cc.color("#ffffff"),
-
             dividerColor: cc.color("#6c6760"),
 
             blockColors: [
-
 
                 // grey-blue            1
                 cc.color("5F715B"),
@@ -206,8 +189,6 @@ NJ.themes = (function() {
             hintsColor: cc.color("#33a5ba"),
             scramblersColor: cc.color("#33a5ba"),
 
-            shadowColor: cc.color("#FFFDAA"),
-
             dividerColor: cc.color("#FFFDAA"),
 
             blockColors: [
@@ -258,8 +239,6 @@ NJ.themes = (function() {
             hintsColor: cc.color("#50aa91"),
             scramblersColor: cc.color("#00a896"),
 
-            shadowColor: cc.color("#ffffff"),
-
             dividerColor: cc.color("#6c6760"),
 
             blockColors: [
@@ -303,7 +282,7 @@ NJ.themes = (function() {
             backgroundColor: cc.color("F8BAC6"),
 
             // barbie
-            defaultLabelColor: cc.color("#FF48C3"),
+            defaultLabelColor: cc.color("#C51162"),
 
             specialLabelColor: cc.color("#33A5BA"),
             specialLabelColor2: cc.color("#00A896"),
@@ -313,9 +292,7 @@ NJ.themes = (function() {
             hintsColor: cc.color("#33a5ba"),
             scramblersColor: cc.color("#00a896"),
 
-            shadowColor: cc.color("#FFFDAA"),
-
-            dividerColor: cc.color("#FFFDAA"),
+            dividerColor: cc.color("#C51162"),
 
             blockColors: [
 
@@ -376,8 +353,6 @@ NJ.themes = (function() {
         convertersColor: main.convertersColor,
         hintsColor: main.hintsColor,
         scramblersColor: main.scramblersColor,
-
-        shadowColor: main.shadowColor,
 
         dividerColor: main.dividerColor,
 

@@ -4,10 +4,7 @@
 
 var InfiniteGameLayer = BaseGameLayer.extend({
 
-    // time limit for minute madness
-    _spawnTime: 1.0,
-
-    // domain of spawning
+    // initial domain of spawning
     _numberList: [
         { key: 1, weight: 100 },
         { key: 2, weight: 75 },
@@ -50,6 +47,8 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
     _reset: function() {
         this._super();
+
+        this._modeKey = NJ.modekeys.infinite;
 
         var that = this;
 
@@ -117,16 +116,6 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         var scene = new cc.Scene();
         scene.addChild(new InfiniteGameLayer());
         cc.director.runScene(scene);
-    },
-
-    onGameOver: function() {
-        this._super();
-
-        var that = this;
-
-        this.leave(function() {
-            that.endToEpilogue(NJ.modekeys.infinite);
-        });
     },
 
     // whether the game is over or not

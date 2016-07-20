@@ -31,6 +31,8 @@ var TimedGameLayer = BaseGameLayer.extend({
 	_reset: function() {
 		this._super();
 
+		this._modeKey = NJ.modekeys.minuteMadness;
+
 		var that = this;
 
 		this.pauseGame();
@@ -100,16 +102,6 @@ var TimedGameLayer = BaseGameLayer.extend({
 		cc.director.runScene(scene);
 	},
 
-	onGameOver: function() {
-		this._super();
-
-		var that = this;
-
-		this.leave(function() {
-			that.endToEpilogue(NJ.modekeys.minuteMadness);
-		});
-	},
-
 	checkGameOver: function() {
 		if(this._super())
 			return true;
@@ -176,9 +168,12 @@ var TimedGameLayer = BaseGameLayer.extend({
 		this._effectsLayer.clearComboOverlay();
 
 		this.spawnDropRandomBlocks(comboLength);
-		//NJ.audio.playSound(res.plipSound);
 
 		this._playActivationSounds(selectedBlocks.length);
+
+		if (this._numboController.haveNoMoves()) {
+			this.scrambleBoard();
+		}
 	},
 
 	onPause: function() {

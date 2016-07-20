@@ -5,6 +5,38 @@ var NJ = NJ || {};
  */
 NJ.purchases = (function() {
 
+    // Private Data Collection
+
+    // data of non in-app purchase items
+    var inGameItems = {
+        // here we define data for each non in app purchase
+        converter: {
+            name: "Reducers",
+            description: "Use reducers to change any number into 1.",
+            iconRes: res.convertImage,
+            amount: 5,
+            price: 1500
+        },
+        hint: {
+            name: "Hints",
+            description: "Use hints to reveal a sum on the board.",
+            iconRes: res.searchImage,
+            amount: 5,
+            price: 2000
+        },
+        scrambler: {
+            name: "Scramblers",
+            description: "Use scramblers to redistribute the board.",
+            iconRes: res.scrambleImage,
+            amount: 3,
+            price: 2500
+        }
+    };
+
+    // Gathered IAP product data
+    var productsData = {};
+
+    // callback definitions
     var onSuccessCallback = function(product) {
     };
 
@@ -29,26 +61,14 @@ NJ.purchases = (function() {
             doubler: "doubler"
         },
 
-        // expose the prices of non in-app purchase items
-        inGameItems: {
-            // for powerups, we define how many of each powerup is awarded for a purchase
-            // as well as the price point
-            converter: {
-                amount: 5,
-                price: 1500
-            },
-            hint: {
-                amount: 5,
-                price: 2000
-            },
-            scrambler: {
-                amount: 3,
-                price: 2500
-            }
+        // expose keys for in game purchases
+        ingameItemKeys: {
+            converter: "converter",
+            hint: "hint",
+            scrambler: "scrambler"
         },
 
-        productsData: {},
-
+        // Data about the current promotional campaign
         campaignName: null,
         campaignMessage: null,
 
@@ -107,7 +127,7 @@ NJ.purchases = (function() {
                             onRestoreCallback();
                     },
                     onProductRequestSuccess: function (products) {
-                        that.productsData = {};
+                        productsData = {};
 
                         var product;
                         for(var i = 0; i < products.length; ++i) {
@@ -116,7 +136,7 @@ NJ.purchases = (function() {
                             if(!product || !product.name || !product.price)
                                 continue;
 
-                            that.productsData[product.name] = {
+                            productsData[product.name] = {
                                 price: product.price
                             };
                         }
@@ -133,7 +153,6 @@ NJ.purchases = (function() {
         },
 
         // Event Handlers //
-
 
         // Usage: onSuccessCallback(product)
         setSuccessCallback: function(callback) {
@@ -165,6 +184,14 @@ NJ.purchases = (function() {
             onProductRequestFailureCallback = callback;
         },
 
+        //////////////////////
+        // In Game Products //
+        //////////////////////
+
+        getInGameItemByKey: function(key) {
+            return inGameItems[key];
+        },
+
         ////////////
         // Buying //
         ////////////
@@ -179,11 +206,11 @@ NJ.purchases = (function() {
         },
 
         getProducts: function() {
-            return this.productsData;
+            return productsData;
         },
 
         getProductByName: function(name) {
-            return this.productsData[name];
+            return productsData[name];
         },
 
         ///////////////////////////

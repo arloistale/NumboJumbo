@@ -24,12 +24,10 @@ var MovesGameLayer = BaseGameLayer.extend({
 	// Initialization //
 	////////////////////
 
-	ctor: function() {
-		this._super();
-	},
-
 	_reset: function() {
 		this._super();
+
+		this._modeKey = NJ.modekeys.moves;
 
 		var that = this;
 
@@ -91,16 +89,6 @@ var MovesGameLayer = BaseGameLayer.extend({
 		cc.director.runScene(scene);
 	},
 
-	onGameOver: function() {
-		this._super();
-
-		var that = this;
-
-		this.leave(function() {
-			that.endToEpilogue(NJ.modekeys.moves);
-		});
-	},
-
 	// whether the game is over or not
 	isGameOver: function() {
 		var movesMade = NJ.gameState.getMovesMade();
@@ -153,9 +141,12 @@ var MovesGameLayer = BaseGameLayer.extend({
 		this._playActivationSounds(selectedBlocks.length);
 
 		this.spawnDropRandomBlocks(comboLength);
-		//NJ.audio.playSound(res.plipSound);
 
 		this._numboHeaderLayer.setConditionValue(this._movesLimit - NJ.gameState.getMovesMade());
+
+		if (this._numboController.haveNoMoves()) {
+			this.scrambleBoard();
+		}
 
 		this.checkGameOver();
 	}

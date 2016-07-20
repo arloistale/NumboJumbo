@@ -101,7 +101,7 @@ var NumboBlock = cc.Sprite.extend({
         this.row = 0;
         this.val = 0;
 
-        this.retain();//if in jsb
+        this.retain(); //if in jsb
 
         this.setVisible(false);
         this.removeFromParent(true);
@@ -124,13 +124,13 @@ var NumboBlock = cc.Sprite.extend({
 
         // animate the conversion
         this._backgroundSprite.runAction(cc.sequence(cc.scaleBy(0.15, 2, 2), cc.scaleBy(0.05, 0.5, 0.5)));
-        this._valueLabel.runAction(cc.sequence(cc.scaleBy(0.15, 2, 2), cc.scaleTo(0.05, 0.5, 0.5)));
+        this._valueLabel.runAction(cc.sequence(cc.scaleBy(0.15, 2, 2), cc.scaleBy(0.05, 0.5, 0.5)));
     },
 
     // immediatley removes the block
-    // DO NOT call directly, use killblock in NumboLevel instead
+    // DO NOT call directly, use killBlock in NumboLevel instead
     remove: function() {
-        this.unuse();
+        cc.pool.putInPool(this);
     },
 
     // fade kill the block
@@ -147,6 +147,9 @@ var NumboBlock = cc.Sprite.extend({
 
         this._highlightSprite.stopAllActions();
         this._highlightSprite.setVisible(false);
+
+        this._backgroundSprite.stopAllActions();
+        this._valueLabel.stopAllActions();
 
         this._backgroundSprite.runAction(cc.scaleBy(0.1, 0, 0));
         this._valueLabel.runAction(cc.scaleBy(0.1, 0, 0));
@@ -166,6 +169,9 @@ var NumboBlock = cc.Sprite.extend({
 
         this._highlightSprite.stopAllActions();
         this._highlightSprite.setVisible(false);
+
+        this._backgroundSprite.stopAllActions();
+        this._valueLabel.stopAllActions();
 
         this._backgroundSprite.runAction(cc.sequence(cc.scaleBy(0.15, 1.5, 1.5), cc.scaleBy(0.05, 0, 0)));
         this._valueLabel.runAction(cc.sequence(cc.scaleBy(0.15, 1.5, 1.5), cc.scaleBy(0.05, 0, 0)));

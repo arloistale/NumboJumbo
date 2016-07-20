@@ -42,12 +42,6 @@ var NumboLevel = (function() {
 			}
 		},
 
-		// intended to clear the level of all blocks by killing them
-		// used at game over
-		clear: function() {
-			this.killAllBlocks();
-		},
-
 		// intended to reset level
 		reset: function() {
 			this.killAllBlocks();
@@ -92,14 +86,6 @@ var NumboLevel = (function() {
 			this._blocks[col][row] = null;
 		},
 
-		removeAllBlocks: function(){
-			var blockList = this.getBlocksAsList();
-			for (var i = 0; i < blockList.length; ++i){
-				var block = blockList[i];
-				this.removeBlock(block);
-			}
-		},
-
 		fadeKillBlock: function(block) {
 			cc.assert(block, "Invalid block");
 
@@ -123,6 +109,17 @@ var NumboLevel = (function() {
 			// mark this block as null
 			// later when we update rows and columns we will remove from the array
 			this._blocks[col][row] = null;
+		},
+
+		removeAllBlocks: function() {
+			for (var col = 0; col < NJ.NUM_COLS; ++col){
+				for (var row = this._blocks[col].length - 1; row >= 0; --row){
+					var block = this._blocks[col][row];
+					// make sure block wasn't already cleared
+					if(block)
+						this.removeBlock(block);
+				}
+			}
 		},
 
 		killAllBlocks: function() {

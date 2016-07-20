@@ -39,6 +39,8 @@
         "src/Game/Elements/FeedbackLayer.js",
         "src/Game/Elements/Snippet.js",
         "src/Game/Elements/NumboBlock.js",
+        "src/Game/Elements/InfoInterfaceLayer.js",
+        "src/Game/Elements/ShopletLayer.js",
 
         "src/Game/GameState/NumboController.js",
         "src/Game/GameState/NumboLevel.js",
