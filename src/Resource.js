@@ -79,6 +79,7 @@ var res = {
     // audio
     tickSound: resRoot + "Sounds/tick.mp3",
     plipSound: resRoot + "Sounds/plipSound.mp3",
+    snapSound: resRoot + "Sounds/snap.wav",
 
     overSound: resRoot + "Sounds/over.mp3",
 

@@ -24,7 +24,7 @@ NJ.modekeys = {
     moves: "mov",
     react: "re",
     infinite: "inf",
-    mania: "man"
+    tutorial: "tut"
 };
 
 // each name corresponds to the keys above

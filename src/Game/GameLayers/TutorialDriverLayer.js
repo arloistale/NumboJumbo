@@ -19,6 +19,8 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 
 		var that = this;
 
+		this._modeKey = NJ.modekeys.tutorial;
+
 		this._numboHeaderLayer.enterTutorialMode();
 		this._toolbarLayer.enterTutorialMode();
 

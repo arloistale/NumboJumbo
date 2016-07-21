@@ -51,7 +51,7 @@ var ShopMenuLayer = (function() {
                 NJ.stats.addCurrency(-converterPurchaseData.price);
                 NJ.stats.addConverters(converterPurchaseData.amount);
                 that.updateCurrencyLabel();
-                that.updatePowerups();
+                that.updateItems();
                 NJ.stats.save();
             } else {
                 that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
@@ -71,7 +71,7 @@ var ShopMenuLayer = (function() {
                 NJ.stats.addCurrency(-hintsPurchaseData.price);
                 NJ.stats.addHints(hintsPurchaseData.amount);
                 that.updateCurrencyLabel();
-                that.updatePowerups();
+                that.updateItems();
                 NJ.stats.save();
             } else {
                 that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
@@ -91,7 +91,7 @@ var ShopMenuLayer = (function() {
                 NJ.stats.addCurrency(-scramblersPurchaseData.price);
                 NJ.stats.addScramblers(scramblersPurchaseData.amount);
                 that.updateCurrencyLabel();
-                that.updatePowerups();
+                that.updateItems();
                 NJ.stats.save();
             } else {
                 that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
@@ -173,6 +173,8 @@ var ShopMenuLayer = (function() {
             this._initPowerupsUI();
             this._initThemesUI();
             this._initBubblesUI();
+
+            this.updateItems();
         },
 
         _initHeaderUI: function() {
@@ -592,10 +594,45 @@ var ShopMenuLayer = (function() {
             this._currencyLabel.setLabelTitle(NJ.stats.getCurrency() + " Bubbles");
         },
 
-        updatePowerups: function() {
+        updateItems: function() {
             this._buyHintsButton.setLabelTitle(NJ.stats.getNumHints() + "");
             this._buyScramblersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
             this._buyConvertersButton.setLabelTitle(NJ.stats.getNumConverters() + "");
+
+            var currency = NJ.stats.getCurrency();
+
+            var hintsItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.hint);
+            var convertersItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.hint);
+            var scramblersItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.hint);
+
+            if(currency < hintsItem.price) {
+                this._buyHintsButton.setEnabled(false);
+                this._buyHintsButton.setChildrenOpacity(128);
+            }
+
+            if(currency < convertersItem.price) {
+                this._buyConvertersButton.setEnabled(false);
+                this._buyConvertersButton.setChildrenOpacity(128);
+            }
+
+            if(currency < scramblersItem.price) {
+                this._buyScramblersButton.setEnabled(false);
+                this._buyScramblersButton.setChildrenOpacity(128);
+            }
+
+            var themes = NJ.themes.getListSortedByCost();
+
+            var themeButton;
+
+            for(var i = 0; i < themes.length; ++i) {
+                themeButton = this._themeButtons[i];
+
+                if(!themes[i].isPurchased && currency < themes[i].themeCost) {
+                    themeButton.setEnabled(false);
+                } else {
+                    themeButton.setEnabled(true);
+                }
+            }
         },
 
         _updateTheme: function() {

@@ -253,6 +253,8 @@ var ShopletLayer = (function() {
         },
 
         updatePowerups: function() {
+            var item = NJ.purchases.getInGameItemByKey(this._itemKey);
+
             switch(this._itemKey) {
                 case NJ.purchases.ingameItemKeys.converter:
                     this._buyItemButton.setLabelTitle(NJ.stats.getNumConverters() + "");
@@ -263,6 +265,11 @@ var ShopletLayer = (function() {
                 case NJ.purchases.ingameItemKeys.scrambler:
                     this._buyItemButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
                     break;
+            }
+
+            if(NJ.stats.getCurrency() < item.price) {
+                this._buyItemButton.setEnabled(false);
+                this._buyItemButton.setChildrenOpacity(128);
             }
         },
 

@@ -205,17 +205,24 @@ var NumboBlock = cc.Sprite.extend({
         if(!persists) {
             this._highlightSprite.runAction(cc.scaleBy(0.4, 2.5, 2.5));
             this._highlightSprite.runAction(cc.sequence(cc.fadeOut(0.4), cc.callFunc(function () {
-                that.isHighlighting = false;
                 that._highlightSprite.setVisible(false);
             })));
         } else {
-            //this._highlightSprite.setOpacity(128);
-            //this._highlightSprite.runAction(cc.scaleBy(0.1, 1.4, 1.4));
+            this._highlightSprite.setOpacity(128);
+            this._highlightSprite.runAction(cc.scaleBy(0.1, 1.4, 1.4));
         }
     },
 
-    clearHighlight: function() {
-        this._highlightSprite.setVisible(false);
+    clearHighlight: function(animated) {
+        if(!animated) {
+            this._highlightSprite.setVisible(false);
+        } else {
+            var that = this;
+
+            this._highlightSprite.runAction(cc.sequence(cc.scaleBy(0.1, 1 / 1.4, 1 / 1.4), cc.callFunc(function() {
+                that._highlightSprite.setVisible(false);
+            })));
+        }
     },
 
     jiggleSprite: function() {

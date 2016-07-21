@@ -295,7 +295,10 @@ var BaseGameLayer = (function() {
 			this._toolbarLayer.setOnConvertCallback(function() {
 				if (NJ.gameState.getConvertersRemaining() > 0) {
 					if(NJ.stats.getNumConverters() > 0) {
-						that.enterReduceInfoInterface();
+						if(!that._isShowingReduceInterface)
+							that.enterReduceInfoInterface();
+						else
+							that.leaveReduceInfoInterface();
 					} else {
 						that.showShoplet(NJ.purchases.ingameItemKeys.converter);
 					}
@@ -743,6 +746,9 @@ var BaseGameLayer = (function() {
 
             this.leaveBoard();
 
+			if(this._isShowingReduceInterface)
+				this.leaveReduceInfoInterface();
+
 			var callback = function() {
 				that._settingsMenuLayer = new SettingsMenuLayer(true);
 				that._settingsMenuLayer.setOnRetryCallback(function() {
@@ -837,32 +843,43 @@ var BaseGameLayer = (function() {
 
 					// if selected block was returned then we have a new selected block deal with
 					if(selectedBlock) {
+                        // this audio may be changed
+                        var selectAudio = plops[Math.min(selectedBlocks.length, plops.length - 1)];
+
 						// if we have already selected then we are trying to use the quick convert feature
 						if(selectedBlock.val != 1) {
-							if ((this._isShowingReduceInterface || selectedBlock.isSelected) && NJ.gameState.getConvertersRemaining() > 0) {
-								if (NJ.stats.getNumConverters() > 0) {
-									selectedBlock.convertValue(1);
-									NJ.stats.depleteConverters();
-									NJ.stats.save();
-									NJ.gameState.decrementConvertersRemaining();
 
-									this._toolbarLayer.updatePowerups();
+							// we should not try to reduce if we're in the tutorial
+							if(this._modeKey != NJ.modekeys.tutorial) {
+								if ((this._isShowingReduceInterface || selectedBlock.isSelected) && NJ.gameState.getConvertersRemaining() > 0) {
+									if (NJ.stats.getNumConverters() > 0) {
+										//selectAudio = res.Sound;
 
-									if(this._isShowingReduceInterface) {
-										this.leaveReduceInfoInterface();
+										selectedBlock.convertValue(1);
+										NJ.stats.depleteConverters();
+										NJ.stats.save();
+										NJ.gameState.decrementConvertersRemaining();
+
+										this._toolbarLayer.updatePowerups();
+
+										if (this._isShowingReduceInterface) {
+											this.leaveReduceInfoInterface();
+										}
+
+										this._numboController.resetKnownPath();
+
+										// it's possible to have converted the board to no solutions
+										if (this._numboController.haveNoMoves()) {
+											this.scrambleBoard();
+										}
+									} else {
+										this.showShoplet(NJ.purchases.ingameItemKeys.converter);
 									}
-
-                                    this._numboController.resetKnownPath();
-
-                                    // it's possible to have converted the board to no solutions
-                                    if (this._numboController.haveNoMoves()) {
-                                        this.scrambleBoard();
-                                    }
 								} else {
-									this.showShoplet(NJ.purchases.ingameItemKeys.converter);
+									selectedBlock.select();
 								}
 							} else {
-								selectedBlock.select();
+								selectedBlock.highlight();
 							}
 						} else {
 							selectedBlock.highlight();
@@ -873,6 +890,8 @@ var BaseGameLayer = (function() {
 							return b.val;
 						});
 						this._numboHeaderLayer.setEquation(selectedNums);
+
+                        NJ.audio.playSound(selectAudio);
 					}
 
 					this.redrawSelectedLines(selectedBlocks);
@@ -918,6 +937,8 @@ var BaseGameLayer = (function() {
 			var selectedBlocks = this._numboController.getSelectedBlocks();
 
 			if(selectedBlock || deselectedBlock) {
+				NJ.audio.playSound(plops[Math.min(selectedBlocks.length, plops.length - 1)]);
+
 				// also update the equation
 				var selectedNums = selectedBlocks.map(function (b) {
 					return b.val;
@@ -1089,7 +1110,7 @@ var BaseGameLayer = (function() {
 
 			var blocks = this._numboController.getBlocksList();
 			for(var i = 0; i < blocks.length; ++i) {
-				blocks[i].clearHighlight();
+				blocks[i].clearHighlight(true);
 			}
 
 			this._infoInterfaceLayer.leave();

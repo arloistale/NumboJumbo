@@ -11,7 +11,7 @@ NJ.gameState = (function() {
 
     // constants
     const NUM_HINTS_PER_ROUND = 10;
-    const NUM_CONVERTS_PER_ROUND = 500;
+    const NUM_CONVERTS_PER_ROUND = 5;
     const NUM_SCRAMBLES_PER_ROUND = 3;
 
     // meta data
