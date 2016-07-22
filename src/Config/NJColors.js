@@ -297,10 +297,10 @@ NJ.themes = (function() {
             blockColors: [
 
                 // lime
-                cc.color("#A1CE57"),
+                cc.color("#C1DA6D"),
 
                 // lemon
-                cc.color("#EAD65B"),
+                cc.color("#EAD774"),
 
                 // bubble gum
                 cc.color("#F1718E"),

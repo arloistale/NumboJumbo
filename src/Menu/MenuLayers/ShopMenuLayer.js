@@ -100,6 +100,7 @@ var ShopMenuLayer = (function() {
     };
 
     var onActivateTheme = function(index) {
+        cc.log("go");
         NJ.audio.playSound(res.coinSound);
 
         if(NJ.themes.getActiveThemeIndex() == index)
@@ -628,9 +629,10 @@ var ShopMenuLayer = (function() {
                 themeButton = this._themeButtons[i];
 
                 if(!themes[i].isPurchased && currency < themes[i].themeCost) {
-                    themeButton.setEnabled(false);
+                    //themeButton.setEnabled(false);
                 } else {
-                    themeButton.setEnabled(true);
+                    //if(!theme)
+                    //themeButton.setEnabled(true);
                 }
             }
         },

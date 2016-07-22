@@ -1089,10 +1089,11 @@ var BaseGameLayer = (function() {
 		enterReduceInfoInterface: function() {
 			this._isShowingReduceInterface = true;
 
+			/*
 			var blocks = this._numboController.getBlocksList();
 			for(var i = 0; i < blocks.length; ++i) {
 				blocks[i].highlight(true);
-			}
+			}*/
 
 			this._infoInterfaceLayer.reset();
 			this._infoInterfaceLayer.setPrimaryInfo("Tap a number to reduce it to 1.");
@@ -1108,10 +1109,11 @@ var BaseGameLayer = (function() {
 		leaveReduceInfoInterface: function() {
 			this._isShowingReduceInterface = false;
 
+			/*
 			var blocks = this._numboController.getBlocksList();
 			for(var i = 0; i < blocks.length; ++i) {
 				blocks[i].clearHighlight(true);
-			}
+			}*/
 
 			this._infoInterfaceLayer.leave();
 		},

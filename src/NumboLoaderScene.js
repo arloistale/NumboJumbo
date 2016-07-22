@@ -87,11 +87,12 @@ NumboLoaderScene = cc.Scene.extend({
             NJ.loadSettings();
             NJ.themes.load();
 
+            NJ.stats.load();
+
             NJ.initAnalytics();
 
             NJ.social.init();
             NJ.purchases.init();
-            NJ.stats.load();
 
             // preload numbo blocks
             for(i = 0; i < NJ.NUM_COLS * NJ.NUM_ROWS; ++i) {
