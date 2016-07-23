@@ -129,8 +129,6 @@ var NumboController = (function() {
 
 			this._selectedBlocks.splice(this._selectedBlocks.length - 1, 1);
 
-			NJ.audio.playSound(plops[Math.min(Math.max(this._selectedBlocks.length - 3, 0), plops.length - 1)]);
-
 			return lastBlock;
 		},
 

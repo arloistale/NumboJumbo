@@ -1075,6 +1075,7 @@ var BaseGameLayer = (function () {
             // TODO: This is sort of a hack to get timed mode to function correctly
             this._timePassed = (Date.now() - NJ.gameState.getStartTime()) / 1000;
 
+<<<<<<< HEAD
             this.pauseGame();
             this.leaveBoard();
 
@@ -1107,11 +1108,47 @@ var BaseGameLayer = (function () {
             this._infoInterfaceLayer.setSecondaryInfo("Double tap any number to quickly reduce.");
             this._infoInterfaceLayer.enter();
         },
+=======
+			this.pauseGame();
+			this.leaveBoard();
+
+			var callback = function() {
+				that._shopletLayer = new ShopletLayer(itemKey);
+				that._shopletLayer.setOnCloseCallback(function() {
+					that.removeChild(that._shopletLayer);
+					that._toolbarLayer.updatePowerups();
+					that.onResume();
+				});
+				that.addChild(that._shopletLayer, 999);
+				that._shopletLayer.enter();
+			};
+
+			this.leave(callback);
+		},
+
+		// enters the interface to show players
+		// how to use the reduce power up
+		enterReduceInfoInterface: function() {
+			this._isShowingReduceInterface = true;
+
+			/*
+			var blocks = this._numboController.getBlocksList();
+			for(var i = 0; i < blocks.length; ++i) {
+				blocks[i].highlight(true);
+			}*/
+
+			this._infoInterfaceLayer.reset();
+			this._infoInterfaceLayer.setPrimaryInfo("Tap a number to reduce it to 1.");
+			this._infoInterfaceLayer.setSecondaryInfo("Double tap any number to quickly reduce.");
+			this._infoInterfaceLayer.enter();
+		},
+>>>>>>> 5cd4ef24fe39ef7165c69222260084465a6ecd1e
 
 /////////////
 // Drawing //
 /////////////
 
+<<<<<<< HEAD
         // leave the interface for showing players how to reduce
         leaveReduceInfoInterface: function () {
             this._isShowingReduceInterface = false;
@@ -1273,4 +1310,168 @@ var BaseGameLayer = (function () {
             this._numboController.updateTheme();
         }
     });
+=======
+		// leave the interface for showing players how to reduce
+		leaveReduceInfoInterface: function() {
+			this._isShowingReduceInterface = false;
+
+			/*
+			var blocks = this._numboController.getBlocksList();
+			for(var i = 0; i < blocks.length; ++i) {
+				blocks[i].clearHighlight(true);
+			}*/
+
+			this._infoInterfaceLayer.leave();
+		},
+
+		// generate dividers on headers and toolbars
+		_generateBaseDividers: function() {
+			var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
+
+			var headerDivider = new NumboMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
+			headerDivider.setTag(444);
+			headerDivider.setBackgroundImage(res.alertImage);
+			headerDivider.setBackgroundColor(NJ.themes.dividerColor);
+			headerDivider.attr({
+				anchorX: 0.5,
+				anchorY: 0.5,
+				x: this._numboHeaderLayer.getContentSize().width / 2,
+				y: dividerHeight
+			});
+			this._numboHeaderLayer.addChild(headerDivider);
+
+			var toolDivider = new NumboMenuItem(cc.size(cc.visibleRect.width, dividerHeight));
+			toolDivider.setTag(444);
+			toolDivider.setBackgroundImage(res.alertImage);
+			toolDivider.setBackgroundColor(NJ.themes.dividerColor);
+			toolDivider.attr({
+				anchorX: 0.5,
+				anchorY: 0.5,
+				x: this._toolbarLayer.getContentSize().width / 2,
+				y: this._toolbarLayer.getContentSize().height - dividerHeight
+			});
+			this._toolbarLayer.addChild(toolDivider);
+		},
+
+		// redraw lines indicating selected blocks
+		redrawSelectedLines: function(selectedBlocks) {
+			this._selectedLinesNode.clear();
+
+			if(!selectedBlocks)
+				return;
+
+			var i;
+
+			var currSum = 0;
+			var color;
+			var first, second;
+			for(i = 0; i < selectedBlocks.length - 1; i++) {
+				first = selectedBlocks[i];
+				second = selectedBlocks[i + 1];
+
+				currSum = first.val;
+
+				color = NJ.getColor(first.val-1);
+
+				this._selectedLinesNode.drawSegment(this._convertLevelCoordsToPoint(first.col, first.row),
+					this._convertLevelCoordsToPoint(second.col, second.row), this._blockSize.height / 8, color);
+			}
+		},
+
+		/////////////
+		// Virtual //
+		/////////////
+
+		isInDanger: function() {
+			return true;
+		},
+
+		///////////////////
+		// Audio Helpers //
+		///////////////////
+
+		// plays correct activations sounds based on original combo length
+		_playActivationSounds: function(selectedLength) {
+			if(NJ.settings.sounds) {
+
+				// cache the data from the correct activation sounds set
+				var activationSound = activationSounds[Math.min(activationSounds.length - 1, selectedLength - 3)];
+				var startingDelay = activationSound.startingDelay;
+				var midDelay = activationSound.midDelay;
+				var data = activationSound.data;
+
+				// start a sequence of Actions
+				var actionList = [];
+
+				// we always start with at least the first "boop" sound after a starting delay
+				actionList.push(cc.delayTime(startingDelay));
+				actionList.push(cc.callFunc(function() {
+					NJ.audio.playSound(bloops[data[0]]);
+				}));
+
+				// now push in the rest of the activation sounds
+				for(var i = 1; i < data.length; ++i) {
+					(function() {
+						var soundData = data[i];
+
+						actionList.push(cc.delayTime(midDelay));
+						actionList.push(cc.callFunc(function() {
+							NJ.audio.playSound(bloops[soundData]);
+						}));
+					})();
+				}
+
+				// finally play the sequence in order
+				this._backgroundLayer.runAction(cc.sequence(actionList));
+			}
+		},
+
+		/////////////
+		// Helpers //
+		/////////////
+
+		// determines whether a given point is within
+		// a certain distance of the given grid coordinates
+		_isPointWithinCoordsDistanceThreshold: function(point, col, row) {
+			// return only if coordinates in certain radius of the block.
+			var radius = 0.52 *  this._blockSize.width;
+
+			var cellCenter = cc.p(this._levelBounds.x + (col + 0.5) *  this._levelCellSize.width,
+				this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);
+
+			var diff = cc.pSub(point, cellCenter);
+			var distSq = cc.pDot(diff, diff);
+
+			// check distance
+			return distSq <= radius * radius;
+		},
+
+		// Attempt to convert point to location on grid.
+		_convertPointToLevelCoords: function(point) {
+			if (point.x >= this._levelBounds.x && point.x < this._levelBounds.x + this._levelBounds.width &&
+				point.y >= this._levelBounds.y && point.y < this._levelBounds.y + this._levelBounds.height) {
+
+				var col = Math.floor((point.x - this._levelBounds.x) /  this._levelCellSize.width);
+				var row = Math.floor((point.y - this._levelBounds.y) /  this._levelCellSize.height);
+
+				return { col: col, row: row };
+			}
+
+			return null;
+		},
+
+		// attempt to convert level coords to point
+		_convertLevelCoordsToPoint: function(col, row) {
+			return cc.p(this._levelBounds.x + (col + 0.5) *  this._levelCellSize.width,
+				this._levelBounds.y + (row + 0.5) *  this._levelCellSize.height);
+		},
+
+		// update the color theme of the game
+		_updateTheme: function() {
+			this._backgroundLayer.setBackgroundColor(NJ.themes.backgroundColor);
+			this._numboHeaderLayer.updateTheme();
+			this._numboController.updateTheme();
+		}
+	});
+>>>>>>> 5cd4ef24fe39ef7165c69222260084465a6ecd1e
 }());

@@ -79,14 +79,15 @@ NJ.purchases = (function() {
                 sdkbox.IAP.init();
 
                 this._initListener();
-                this._initCampaigns();
             }
         },
 
         // loads any currently running campaigns
         // so that we can expose them to the user
-        _initCampaigns: function() {
+        // intended to be run at the MenuLayer
+        initCampaigns: function() {
             var campaignName = cc.sys.localStorage.getItem("campaignName");
+
             if(campaignName && campaignName.length) {
                 this.campaignName = campaignName;
             }

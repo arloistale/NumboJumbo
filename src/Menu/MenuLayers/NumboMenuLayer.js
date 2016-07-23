@@ -54,6 +54,11 @@ var NumboMenuLayer = BaseMenuLayer.extend({
 
         this._updateTheme();
 
+        // we init non critical modules here to give
+        // a long buffer for loading
+        // not a very elegant solution but necessary
+        NJ.purchases.initCampaigns();
+
 /*
         NJ.settings.hasLoadedMM = false;
         NJ.settings.hasLoadedMOV = false;
