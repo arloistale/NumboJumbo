@@ -2,43 +2,59 @@
  * Created by jonathanlu on 1/19/16.
  */
 
-var GameOverMenuLayer = (function() {
+var GameOverMenuLayer = (function () {
 
     var highscoreMessages = [
         "You really did it.",
-        "Are we there yet?"
+        "Are we there yet?",
+        "Nice job!",
+        "Climbing to the top!",
+        "Shine on!",
+        "Admirable.",
+        "Another feather in the cap",
+        "What a performance!"
     ];
 
     ///////////////
     // UI Events //
     ///////////////
 
-    var onRetry = function() {
+    var onRetry = function () {
         NJ.audio.playSound(res.clickSound);
 
         var that = this;
 
-        this.leave(function() {
-            if(that.onRetryCallback)
+        this.leave(function () {
+            if (that.onRetryCallback)
                 that.onRetryCallback();
         });
     };
 
-    var onShare = function() {
+    var onRequestAd = function(){
+        NJ.audio.playSound(res.clickSound);
+        var that = this;
+        this.leave(function(){
+            if (that.onRequestAdCallback){
+                that.onRequestAdCallback();
+            }
+        });
+    };
+
+    var onShare = function () {
         NJ.audio.playSound(res.clickSound);
 
         NJ.shareScreen();
     };
 
-    var onShop = function() {
+    var onShop = function () {
         NJ.audio.playSound(res.clickSound);
 
         var that = this;
 
         cc.eventManager.pauseTarget(this, true);
-        this.leave(function() {
+        this.leave(function () {
             that._shopMenuLayer = new ShopMenuLayer(true);
-            that._shopMenuLayer.setOnCloseCallback(function() {
+            that._shopMenuLayer.setOnCloseCallback(function () {
                 cc.eventManager.resumeTarget(that, true);
                 that.removeChild(that._shopMenuLayer);
 
@@ -53,13 +69,13 @@ var GameOverMenuLayer = (function() {
         });
     };
 
-    var _onLeaderboard = function() {
+    var _onLeaderboard = function () {
         NJ.audio.playSound(res.clickSound);
 
         NJ.social.showLeaderboard();
     };
 
-    var _onAchievements = function() {
+    var _onAchievements = function () {
         NJ.audio.playSound(res.clickSound);
 
         NJ.social.showAchievements();
@@ -82,6 +98,7 @@ var GameOverMenuLayer = (function() {
         // Callbacks Data
         onRetryCallback: null,
         onMenuCallback: null,
+        onRequestAdCallback: null,
 
         // Data
         _isHighscore: false,
@@ -91,7 +108,7 @@ var GameOverMenuLayer = (function() {
 // Initialization //
 ////////////////////
 
-        ctor: function(modeKey, isHighscore) {
+        ctor: function (modeKey, isHighscore) {
             // mode key is used to retrieve high score data
             this._modeKey = modeKey;
             this._isHighscore = isHighscore;
@@ -104,11 +121,11 @@ var GameOverMenuLayer = (function() {
             this._initPromoUI();
         },
 
-        _initHeaderUI: function() {
+        _initHeaderUI: function () {
             this._super();
 
             var headerLabel = this.generateLabel(NJ.modeNames[this._modeKey].toUpperCase(), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header));
-            switch(this._modeKey) {
+            switch (this._modeKey) {
                 case NJ.modekeys.minuteMadness:
                     headerLabel.setLabelColor(NJ.themes.blockColors[0]);
                     break;
@@ -127,13 +144,13 @@ var GameOverMenuLayer = (function() {
             this._headerMenu.addChild(headerLabel);
         },
 
-        _initStatsUI: function() {
+        _initStatsUI: function () {
             var key = this._modeKey;
 
             this._statsMenu = new cc.Menu();
 
             this._statsMenu.setContentSize(cc.size(cc.visibleRect.width,
-                (1 - NJ.uiSizes.headerBar - (!NJ.settings.hasInteractedReview ? NJ.uiSizes.promoArea : 0) - NJ.uiSizes.shopArea - NJ.uiSizes.toolbar) * cc.visibleRect.height));
+                (1 - NJ.uiSizes.headerBar - (NJ.uiSizes.promoArea ) - NJ.uiSizes.shopArea - NJ.uiSizes.toolbar) * cc.visibleRect.height));
 
             var statsSize = this._statsMenu.getContentSize();
 
@@ -152,7 +169,7 @@ var GameOverMenuLayer = (function() {
 
             var bestTitleLabel, scoreTitleLabel;
 
-            if(this._isHighscore) {
+            if (this._isHighscore) {
                 scoreTitleLabel = this.generateLabel("HIGH SCORE!", header2Size);
                 this._scoreLabel = this.generateLabel(NJ.gameState.getScore(), largeSize, NJ.themes.specialLabelColor);
 
@@ -208,7 +225,7 @@ var GameOverMenuLayer = (function() {
             this.addChild(this._statsMenu, 100);
         },
 
-        _initShopUI: function() {
+        _initShopUI: function () {
             this._shopMenu = new cc.Menu();
             this._shopMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.shopArea));
             var shopSize = this._shopMenu.getContentSize();
@@ -245,53 +262,76 @@ var GameOverMenuLayer = (function() {
             this.addChild(this._shopMenu, 100);
         },
 
-        _initPromoUI: function() {
-            if(NJ.settings.hasInteractedReview)
-                return;
+        _initPromoUI: function () {
+            var that = this;
 
-            this._promoMenu = new cc.Menu();
-            this._promoMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.promoArea));
-            var promoSize = this._promoMenu.getContentSize();
-            this._promoMenu.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: cc.visibleRect.center.x + promoSize.width,
-                y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - this._statsMenu.getContentSize().height - this._shopMenu.getContentSize().height - promoSize.height / 2
-            });
+            var promoUseCase = null;
+            if (NJ.stats.isEnoughGamesForAd()) {
+                promoUseCase = "ad";
+            }
+            else if (NJ.settings.hasInteractedReview == false) {
+                promoUseCase = "review";
+            }
 
-            var promoLabel = this.generateLabel("Review Numbo Jumbo", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            if (promoUseCase != null) {
+                this._promoMenu = new cc.Menu();
+                this._promoMenu.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.promoArea));
+                var promoSize = this._promoMenu.getContentSize();
+                this._promoMenu.attr({
+                    anchorX: 0.5,
+                    anchorY: 0.5,
+                    x: cc.visibleRect.center.x + promoSize.width,
+                    y: cc.visibleRect.top.y - this._headerMenu.getContentSize().height - this._statsMenu.getContentSize().height - this._shopMenu.getContentSize().height - promoSize.height / 2
+                });
+                var buttonSize = cc.size(promoSize.height / 2.5, promoSize.height / 2.5);
 
-            var buttonSize = cc.size(promoSize.height / 2.5, promoSize.height / 2.5);
 
-            this._promoButton = new NumboMenuButton(buttonSize, function() {
-                NJ.settings.hasInteractedReview = true;
+                if (promoUseCase == "review") {
+                    var promoLabel = this.generateLabel("Review Numbo Jumbo", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+                    this._promoButton = new NumboMenuButton(buttonSize, function () {
+                        NJ.settings.hasInteractedReview = true;
+                        NJ.audio.playSound(res.clickSound);
+                        NJ.openAppDetails();
+                    }, this);
+                    this._promoButton.setBackgroundColor(NJ.themes.blockColors[1]);
+                    this._promoButton.setImageRes(res.rateImage);
+                    this._promoButton.runActionOnChildren(cc.sequence(cc.scaleBy(0.5, 1.25, 1.25).easing(cc.easeQuadraticActionInOut()), cc.scaleBy(0.5, 0.8, 0.8).easing(cc.easeQuadraticActionInOut())).repeatForever());
+                    this._promoButton.attr({
+                        anchorX: 0.5,
+                        anchorY: 0.5
+                    });
+                }
 
-                NJ.audio.playSound(res.clickSound);
-                NJ.openAppDetails();
-            }, this);
-            this._promoButton.setBackgroundColor(NJ.themes.blockColors[1]);
-            this._promoButton.setImageRes(res.rateImage);
-            this._promoButton.runActionOnChildren(cc.sequence(cc.scaleBy(0.5, 1.25, 1.25).easing(cc.easeQuadraticActionInOut()), cc.scaleBy(0.5, 0.8, 0.8).easing(cc.easeQuadraticActionInOut())).repeatForever());
-            this._promoButton.attr({
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
+                else if (promoUseCase == "ad"){
+                    var promoLabel = this.generateLabel("Watch an ad for awesome shit!", NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+                    this._promoButton = new NumboMenuButton(buttonSize, function () {
+                        NJ.audio.playSound(res.clickSound);
+                        that.onRequestAdCallback();
+                        NJ.stats.setNumGamesForNextAd();
+                    }, this);
+                    this._promoButton.setBackgroundColor(NJ.themes.blockColors[1]);
+                    this._promoButton.setImageRes(res.handImage);
+                    this._promoButton.runActionOnChildren(cc.sequence(cc.scaleBy(0.5, 1.25, 1.25).easing(cc.easeQuadraticActionInOut()), cc.scaleBy(0.5, 0.8, 0.8).easing(cc.easeQuadraticActionInOut())).repeatForever());
+                    this._promoButton.attr({
+                        anchorX: 0.5,
+                        anchorY: 0.5
+                    });
+                }
 
-            this._promoMenu.addChild(promoLabel);
-            this._promoMenu.addChild(this._promoButton);
+                this._promoMenu.addChild(promoLabel);
+                this._promoMenu.addChild(this._promoButton);
 
-            this._promoMenu.alignItemsVerticallyWithPadding(10);
+                this._promoMenu.alignItemsVerticallyWithPadding(10);
 
-            var dividerHeight = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.divider);
+                var divider = this._generateSupportDivider();
+                divider.setPositionY(this._promoMenu.getContentSize().height / 2);
+                this._promoMenu.addChild(divider);
 
-            var divider = this._generateSupportDivider();
-            divider.setPositionY(this._promoMenu.getContentSize().height / 2);
-            this._promoMenu.addChild(divider);
-
-            this.addChild(this._promoMenu, 100);
+                this.addChild(this._promoMenu, 100);
+            }
         },
 
-        _initToolUI: function() {
+        _initToolUI: function () {
 
             this._super();
 
@@ -304,7 +344,7 @@ var GameOverMenuLayer = (function() {
             var retryButton = new NumboMenuButton(buttonSize, onRetry.bind(this), this);
             retryButton.setImageRes(res.retryImage);
 
-            var menuButton = new NumboMenuButton(buttonSize, function() {
+            var menuButton = new NumboMenuButton(buttonSize, function () {
                 that._onBack();
             }, this);
             menuButton.setImageRes(res.homeImage);
@@ -329,7 +369,7 @@ var GameOverMenuLayer = (function() {
         },
 
         // makes menu elements transition in
-        enter: function() {
+        enter: function () {
             this._super();
 
             var easing = cc.easeBackOut();
@@ -338,12 +378,12 @@ var GameOverMenuLayer = (function() {
 
             this._shopMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._shopMenu.getPositionY())).easing(easing));
 
-            if(this._promoMenu)
+            if (this._promoMenu)
                 this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x, this._promoMenu.getPositionY())).easing(easing));
         },
 
         // transition out
-        leave: function(callback) {
+        leave: function (callback) {
             this._super(callback);
 
             var statsSize = this._statsMenu.getContentSize();
@@ -355,7 +395,7 @@ var GameOverMenuLayer = (function() {
 
             this._shopMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x - shopSize.width, this._shopMenu.getPositionY())).easing(easing));
 
-            if(this._promoMenu)
+            if (this._promoMenu)
                 this._promoMenu.runAction(cc.moveTo(0.4, cc.p(cc.visibleRect.center.x + this._promoMenu.getContentSize().width, this._promoMenu.getPositionY())).easing(easing));
         },
 
@@ -363,27 +403,31 @@ var GameOverMenuLayer = (function() {
 // UI Callbacks //
 //////////////////
 
-        setOnRetryCallback: function(callback) {
+        setOnRetryCallback: function (callback) {
             this.onRetryCallback = callback;
         },
 
-        setOnMenuCallback: function(callback) {
+        setOnMenuCallback: function (callback) {
             this.onMenuCallback = callback;
+        },
+
+        setOnRequestAdCallback: function(callback){
+            this.onRequestAdCallback = callback;
         },
 
         ///////////////
         // UI Events //
         ///////////////
 
-        _onBack: function() {
+        _onBack: function () {
             this._super();
 
             NJ.audio.playSound(res.clickSound);
 
             var that = this;
 
-            this.leave(function() {
-                if(that.onMenuCallback)
+            this.leave(function () {
+                if (that.onMenuCallback)
                     that.onMenuCallback();
             });
         },
@@ -392,19 +436,19 @@ var GameOverMenuLayer = (function() {
 // UI Helpers //
 ////////////////
 
-        _updateTheme: function() {
+        _updateTheme: function () {
             this._super();
 
-            if(this._promoButton)
+            if (this._promoButton)
                 this._promoButton.setBackgroundColor(NJ.themes.blockColors[1]);
 
-            if(this._scoreLabel)
+            if (this._scoreLabel)
                 this._scoreLabel.setLabelColor(NJ.themes.specialLabelColor);
 
-            if(this._bestLabel)
+            if (this._bestLabel)
                 this._bestLabel.setLabelColor(NJ.themes.specialLabelColor);
 
-            if(this._howManyBubblesLabel)
+            if (this._howManyBubblesLabel)
                 this._howManyBubblesLabel.setLabelColor(NJ.themes.specialLabelColor);
         }
     });
