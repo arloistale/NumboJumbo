@@ -1,6 +1,8 @@
 /**
  * Created by jonathanlu on 1/18/16.
  */
+const BASE_TIME = 60;
+const BONUS_TIME = 15;
 
 var TimedGameLayer = BaseGameLayer.extend({
 
@@ -18,7 +20,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 	],
 
 	// time limit for minute madness
-	_elapsedTimeLimit: 60,
+	_elapsedTimeLimit: 0,
 
 	////////////////////
 	// Initialization //
@@ -38,6 +40,14 @@ var TimedGameLayer = BaseGameLayer.extend({
 		this.pauseGame();
 
 		this._numboController.initDistribution(this._numberList);
+
+		this._elapsedTimeLimit = BASE_TIME
+		if (NJ.settings.needsBonusMM) {
+			this._elapsedTimeLimit += BONUS_TIME;
+
+			NJ.settings.needsBonusMM = false;
+			NJ.saveSettings();
+		}
 
 		// here is our schedule
 		that._numboHeaderLayer.setConditionValue(this._elapsedTimeLimit);
@@ -100,6 +110,13 @@ var TimedGameLayer = BaseGameLayer.extend({
 		var scene = new cc.Scene();
 		scene.addChild(new TimedGameLayer());
 		cc.director.runScene(scene);
+	},
+
+	onRequestAd: function(){
+		this._super();
+		cc.log("requesting ad in timed mode");
+		NJ.settings.needsBonusMM = true;
+
 	},
 
 	checkGameOver: function() {

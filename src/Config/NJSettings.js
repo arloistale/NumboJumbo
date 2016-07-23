@@ -19,6 +19,8 @@ NJ.settings = {
     hasLoadedINF: false,
 
     hasInteractedReview: false,
+    needsBonusMOV: false,
+    needsBonusMM: false,
 
     hasAttemptedAutoSignin: false,
 
