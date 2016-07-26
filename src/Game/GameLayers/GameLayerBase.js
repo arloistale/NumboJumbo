@@ -393,8 +393,14 @@ var BaseGameLayer = (function() {
 
 		// Initialize the Numbo Controller, which controls the level.
 		_initController: function() {
+			var that = this;
+
 			this._numboController = new NumboController();
 			this._numboController.init();
+
+			this.schedule(function() {
+				that._numboController.findHint();
+			}, 0.1);
 		},
 
 		// Initialize audio.
