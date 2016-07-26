@@ -603,8 +603,8 @@ var ShopMenuLayer = (function() {
             var currency = NJ.stats.getCurrency();
 
             var hintsItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.hint);
-            var convertersItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.hint);
-            var scramblersItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.hint);
+            var convertersItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.converter);
+            var scramblersItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.scrambler);
 
             if(currency < hintsItem.price) {
                 this._buyHintsButton.setEnabled(false);
