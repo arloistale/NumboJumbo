@@ -24,6 +24,9 @@
  ****************************************************************************/
 
 #import <UIKit/UIKit.h>
+
+#import <Batch/Batch.h>
+
 #import "cocos2d.h"
 
 #import "AppController.h"
@@ -43,6 +46,14 @@ static AppDelegate s_sharedApplication;
 {
 
     // Override point for customization after application launch.
+    
+    // Start Batch.
+    // TODO : switch to live api key before store release
+    [Batch startWithAPIKey:@"DEV5785D6C955E3F23704EC13FFA8D"]; // dev
+    // [Batch startWithAPIKey:@"5785D6C953F94F7CAB01B829DE8C71"]; // live
+    
+    // Register for push notifications
+    [BatchPush registerForRemoteNotifications];
 
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
