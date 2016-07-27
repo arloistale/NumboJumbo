@@ -100,7 +100,6 @@ var ShopMenuLayer = (function() {
     };
 
     var onActivateTheme = function(index) {
-        cc.log("go");
         NJ.audio.playSound(res.coinSound);
 
         if(NJ.themes.getActiveThemeIndex() == index)
@@ -202,8 +201,6 @@ var ShopMenuLayer = (function() {
         _initContentUI: function() {
             var that = this;
 
-            var shouldIncludeBubblesArea = (NJ.purchases.getProductByName("doubler") ? true : false);
-
             this._themesAreaSize = 0.18 + 0.20 * NJ.themes.getNumThemes();
 
             this._contentScrollView = new ccui.ScrollView();
@@ -212,7 +209,7 @@ var ShopMenuLayer = (function() {
             this._contentScrollView.setTouchEnabled(true);
             this._contentScrollView.setBounceEnabled(true);
             this._contentScrollView.setContentSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (1 - NJ.uiSizes.header - NJ.uiSizes.toolbar)));
-            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * ((shouldIncludeBubblesArea ? NJ.uiSizes.bubblesArea : 0) + NJ.uiSizes.powerupsArea + this._themesAreaSize)));
+            this._contentScrollView.setInnerContainerSize(cc.size(cc.visibleRect.width, cc.visibleRect.height * (NJ.uiSizes.bubblesArea + NJ.uiSizes.powerupsArea + this._themesAreaSize)));
             this._contentScrollView.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
@@ -226,10 +223,6 @@ var ShopMenuLayer = (function() {
         },
 
         _initBubblesUI: function() {
-
-            var product = NJ.purchases.getProductByName("doubler");
-            if(!product)
-                return;
 
             var that = this;
 
@@ -255,15 +248,17 @@ var ShopMenuLayer = (function() {
                 NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.shopButton)), onBuyDoubler.bind(this), this);
             buyDoublerButton.setImageRes(res.skipImage);
 
+            var product = NJ.purchases.getProductByName("doubler");
             var priceLabel = this.generateLabel("" + (product ? product.price : "?"), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
 
             this._bubblesMenu.addChild(this._doublerTitleLabel);
             this._bubblesMenu.addChild(this._doublerInfoLabel);
-            this._bubblesMenu.addChild(buyDoublerButton);
 
-            if(NJ.stats.isDoubleEnabled())
+            // only add the doubler button if we haven't purchased yet
+            if(NJ.stats.isDoubleEnabled()) {
                 this._enableDoubler();
-            else {
+            } else {
+                this._bubblesMenu.addChild(buyDoublerButton);
                 this._bubblesMenu.addChild(priceLabel);
             }
 
@@ -495,13 +490,9 @@ var ShopMenuLayer = (function() {
 
             this._themeMenu.alignItemsVerticallyWithPadding(cc.visibleRect.height * 0.1);
 
-            var shouldIncludeBubblesArea = (NJ.purchases.getProductByName("doubler") ? true : false);
-
-            if(shouldIncludeBubblesArea) {
-                var divider = this._generateSupportDivider();
-                divider.setPositionY(-this._themeMenu.getContentSize().height / 2);
-                this._themeMenu.addChild(divider);
-            }
+            var divider = this._generateSupportDivider();
+            divider.setPositionY(-this._themeMenu.getContentSize().height / 2);
+            this._themeMenu.addChild(divider);
 
             this._contentScrollView.addChild(this._themeMenu);
         },
@@ -588,7 +579,7 @@ var ShopMenuLayer = (function() {
 ////////////////
 
         _enableDoubler: function() {
-            this._doublerInfoLabel.setLabelTitle("Bubble Doubler enabled.\nTwice the rate of earning bubbles!");
+            this._doublerInfoLabel.setLabelTitle("Sweet, Bubble Doubler enabled.\nTwice the rate of earning bubbles!");
         },
 
         updateCurrencyLabel: function() {
