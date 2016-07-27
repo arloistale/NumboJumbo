@@ -10,7 +10,7 @@
 
 @implementation SharingController
 
-- (void) shareMethod: (const char *) path Message : (const char *) shareMessage {
+- (void) shareImage: (const char *) path withMessage: (const char *) shareMessage {
     NSString *imagePath = [NSString stringWithUTF8String:path];
     
     //    UIImage *image      = [UIImage imageNamed:imagePath];

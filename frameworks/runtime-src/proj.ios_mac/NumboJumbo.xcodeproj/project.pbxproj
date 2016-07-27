@@ -21,6 +21,7 @@
 		222FA4281D48102600377E72 /* Batch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 222FA4271D48102600377E72 /* Batch.framework */; };
 		2243F5541D3558DB00ADB82E /* CampaignManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2243F5531D3558DB00ADB82E /* CampaignManager.cpp */; };
 		2255AE9E1D2EDB6F00DC989E /* SharingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2255AE9D1D2EDB6F00DC989E /* SharingController.m */; };
+		2262FD5F1D4909A6008F7A8C /* CampaignBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2262FD5E1D4909A6008F7A8C /* CampaignBridge.mm */; };
 		22C4092E1D0A241C00FB0601 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22C4092D1D0A241C00FB0601 /* Images.xcassets */; };
 		22C409331D0A264B00FB0601 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */; };
 		22C409341D0A264B00FB0601 /* Default-667h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C409301D0A264B00FB0601 /* Default-667h@2x.png */; };
@@ -188,6 +189,8 @@
 		2243F5501D3555B900ADB82E /* CampaignManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CampaignManager.h; sourceTree = "<group>"; };
 		2243F5531D3558DB00ADB82E /* CampaignManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CampaignManager.cpp; sourceTree = "<group>"; };
 		2255AE9D1D2EDB6F00DC989E /* SharingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SharingController.m; path = ios/SharingController.m; sourceTree = "<group>"; };
+		2262FD5D1D4909A6008F7A8C /* CampaignBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CampaignBridge.h; path = ios/CampaignBridge.h; sourceTree = "<group>"; };
+		2262FD5E1D4909A6008F7A8C /* CampaignBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CampaignBridge.mm; path = ios/CampaignBridge.mm; sourceTree = "<group>"; };
 		22C4092D1D0A241C00FB0601 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "NumboJumbo-mobile/Images.xcassets"; sourceTree = "<group>"; };
 		22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		22C409301D0A264B00FB0601 /* Default-667h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667h@2x.png"; sourceTree = "<group>"; };
@@ -482,7 +485,8 @@
 		D45446CC156DE73F00887EB5 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				221D94831D2F2B9C007D72D5 /* SharingBridge.mm */,
+				2262FD5D1D4909A6008F7A8C /* CampaignBridge.h */,
+				2262FD5E1D4909A6008F7A8C /* CampaignBridge.mm */,
 				22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */,
 				22C409301D0A264B00FB0601 /* Default-667h@2x.png */,
 				22C409311D0A264B00FB0601 /* Default.png */,
@@ -497,6 +501,7 @@
 				2255AE9D1D2EDB6F00DC989E /* SharingController.m */,
 				221D947E1D2F0BE6007D72D5 /* SharingController.h */,
 				221D94821D2F27AA007D72D5 /* SharingBridge.h */,
+				221D94831D2F2B9C007D72D5 /* SharingBridge.mm */,
 			);
 			name = ios;
 			sourceTree = "<group>";
@@ -711,6 +716,7 @@
 				509D4ABC17EBB2AB00697056 /* AppController.mm in Sources */,
 				B85246E5BCA98B62F3D1BC60 /* PluginGoogleAnalyticsJS.cpp in Sources */,
 				C9CD43A597B21371F871764C /* SDKBoxJSHelper.cpp in Sources */,
+				2262FD5F1D4909A6008F7A8C /* CampaignBridge.mm in Sources */,
 				D9494536A269E0757E0BAA2B /* PluginReviewJS.cpp in Sources */,
 				175E4BBA994CA30D66D2E07F /* PluginReviewJSHelper.cpp in Sources */,
 				221D94841D2F2B9C007D72D5 /* SharingBridge.mm in Sources */,

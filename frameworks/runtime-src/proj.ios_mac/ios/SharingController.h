@@ -12,7 +12,7 @@
 @interface SharingController : UIViewController {
 }
 
-- (void) shareMethod: (const char *) path Message : (const char *) shareMessage;
+- (void) shareImage: (const char *) path withMessage: (const char *) shareMessage;
 
 @end
 

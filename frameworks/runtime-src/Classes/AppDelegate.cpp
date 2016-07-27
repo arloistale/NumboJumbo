@@ -204,7 +204,7 @@ void AppDelegate::shareScreenCallback(bool succeed, const std::string& outputFil
     methodInfo.env->DeleteLocalRef(methodInfo.classID);
     methodInfo.env->DeleteLocalRef(outputFileArg);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    shareTextWithImage(outputFileChars, message);
+    shareImageWithMessage(outputFileChars, message);
 #endif
 
 }

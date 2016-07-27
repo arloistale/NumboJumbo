@@ -23,9 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#import <Batch/Batch.h>
+
 @class RootViewController;
 
-@interface AppController : NSObject <UIApplicationDelegate>
+@interface AppController : NSObject <UIApplicationDelegate, BatchUnlockDelegate>
 {
     UIWindow *window;
     RootViewController    *viewController;

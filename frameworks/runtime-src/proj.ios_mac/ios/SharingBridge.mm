@@ -1,8 +1,8 @@
-#include "SharingController.h"
+#import "SharingController.h"
 
-#include "SharingBridge.h"
+#import "SharingBridge.h"
 
-void shareTextWithImage(const char* path, const char* message) {
+void shareImageWithMessage(const char* path, const char* message) {
     SharingController *vc = [[SharingController alloc] init];
-    [vc shareMethod:path Message:message];
+    [vc shareImage:path withMessage:message];
 }

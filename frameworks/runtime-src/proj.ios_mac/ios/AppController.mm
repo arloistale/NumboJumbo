@@ -25,14 +25,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import <Batch/Batch.h>
-
 #import "cocos2d.h"
 
 #import "AppController.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
 #import "platform/ios/CCEAGLView-ios.h"
+
+#import "CampaignBridge.h"
 
 @implementation AppController
 
@@ -48,12 +48,14 @@ static AppDelegate s_sharedApplication;
     // Override point for customization after application launch.
     
     // Start Batch.
+    [BatchUnlock setupUnlockWithDelegate:self];
+    
     // TODO : switch to live api key before store release
     [Batch startWithAPIKey:@"DEV5785D6C955E3F23704EC13FFA8D"]; // dev
     // [Batch startWithAPIKey:@"5785D6C953F94F7CAB01B829DE8C71"]; // live
     
     // Register for push notifications
-    [BatchPush registerForRemoteNotifications];
+    //[BatchPush registerForRemoteNotifications];
 
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
@@ -132,6 +134,59 @@ static AppDelegate s_sharedApplication;
      Called when the application is about to terminate.
      See also applicationDidEnterBackground:.
      */
+}
+
+#pragma mark -
+#pragma mark BatchUnlockDelegate
+
+- (void)automaticOfferRedeemed:(id<BatchOffer>)offer {
+    NSString *offerReference = [offer offerReference];
+    
+    NSLog(@"Redeeming automatic offer: %@", offerReference);
+    
+    NSDictionary *additionalParameters = [offer offerAdditionalParameters];
+    
+    NSString *rewardName = [additionalParameters objectForKey:@"reward_name"];
+    NSString *rewardMessage = [additionalParameters objectForKey:@"reward_message"];
+    
+    if(rewardName && rewardMessage) {
+        
+        const char *rewardNameChars = [rewardName UTF8String];
+        const char *rewardMessageChars = [rewardMessage UTF8String];
+        
+        NSLog(@"Preparing campaign details");
+        
+        [CampaignBridge prepareCampaignDetails:rewardNameChars withMessage:rewardMessageChars];
+    }
+    
+    // Features treatment.
+    for (id<BatchFeature> feature in [offer features])
+    {
+        NSString *reference = feature.reference;
+        NSString *value = feature.value;
+        
+        // Unlock this feature to the user.
+        NSLog(@"Feature = %@ : %@", reference, value);
+        
+        const char *referenceChars = [reference UTF8String];
+        const char *valueChars = [value UTF8String];
+        
+        [CampaignBridge unlockFeatureBatch:referenceChars withValue:valueChars];
+    }
+    
+    // Resources treatment.
+    for (id<BatchResource> resource in [offer resources])
+    {
+        NSString *reference = resource.reference;
+        NSUInteger quantity = resource.quantity;
+        
+        // Provide this resource quantity to the user.
+        NSLog(@"Resource = %@ : %tu", resource, quantity);
+        
+        const char *referenceChars = [reference UTF8String];
+        
+        [CampaignBridge unlockResourceBatch:referenceChars withQuantity:(int)quantity];
+    }
 }
 
 

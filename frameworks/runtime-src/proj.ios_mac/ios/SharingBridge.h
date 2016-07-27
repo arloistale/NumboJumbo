@@ -9,6 +9,6 @@
 #ifndef SharingBridge_h
 #define SharingBridge_h
 
-void shareTextWithImage(const char* path, const char* message);
+void shareImageWithMessage(const char* path, const char* message);
 
 #endif /* SharingBridge_h */
