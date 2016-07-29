@@ -24,8 +24,12 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R$xml.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity$1.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity$2.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity$3.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity$4.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/numbo/jumbo/MainApplication.class \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/numbo/jumbo/NumboRewardsManager.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-f93b109430a3f537259c1fee8b126e6e.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/classes-36b7fb7e7fc81ff5437e8c376bb8db11.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/batch-e4102e673926d10e06a06ea4d994e428.jar \
@@ -33,6 +37,7 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/amazon-iap-7132b94e98fa5f8174911623ebe4c5bd.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginGoogleAnalytics-502430e5a697752f61c660c1377a2fe8.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/android-support-v4-e73ff3009d89ded987d0a7a30f39cdb1.jar \
+/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/mediationsdk-6.4.10-79c2cd94b6d222ec50a9e015eb8b2deb.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/google-play-services-cc58d816c68eae4523aad231ea1b1b9f.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginAmazon-914ef8275c52e5e400e74da32bb246fc.jar \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/dexedLibs/PluginIAP-84288a9addff94799b08ec24fd00eee5.jar \

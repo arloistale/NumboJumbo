@@ -50,6 +50,8 @@
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
+#include "CampaignManager.h"
+
 // iOS Objective C Bridge
 #include "SharingBridge.h"
 
@@ -152,12 +154,20 @@ bool AppDelegate::applicationDidFinishLaunching()
     ScriptingCore::getInstance()->runScript("main.js");
 
     // For Screen Sharing
+    
+    auto eventDispatcher = director->getEventDispatcher();
 
-    director->getEventDispatcher()->addEventListenerWithFixedPriority(EventListenerCustom::create("share_screen", [=](EventCustom* event) {
+    eventDispatcher->addEventListenerWithFixedPriority(EventListenerCustom::create("share_screen", [=](EventCustom* event) {
 
         cocos2d::utils::captureScreen(CC_CALLBACK_2(AppDelegate::shareScreenCallback, this), "epilogue.png");
 
     }), 9001);
+    
+    eventDispatcher->addEventListenerWithFixedPriority(EventListenerCustom::create("showRewardVideo", [=](EventCustom* event) {
+        
+        CampaignManager::showRewardVideo();
+        
+    }), 9002);
 
     return true;
 }
@@ -188,8 +198,6 @@ void AppDelegate::shareScreenCallback(bool succeed, const std::string& outputFil
     
     const char* outputFileChars = outputFile.c_str();
     const char* message = "Check out my score in Numbo Jumbo! http://numbojumbo.com";
-
-    CCLOG("Capturing screenshot to: %s", outputFileChars);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo methodInfo;

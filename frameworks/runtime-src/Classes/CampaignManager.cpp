@@ -76,3 +76,24 @@ void CampaignManager::unlockResource(const std::string &key, int amount) {
     itos << newAmount;
     localStorageSetItem(convertedKey, itos.str());
 }
+
+void CampaignManager::showRewardVideo() {
+    CCLOG("Show reward video!");
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo methodInfo;
+    
+    if (!cocos2d::JniHelper::getStaticMethodInfo(methodInfo, "org/cocos2dx/javascript/AppActivity", "showRewardVideo", "()V")) {
+        return;
+    }
+    
+    methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID);
+    methodInfo.env->DeleteLocalRef(methodInfo.classID);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    //shareImageWithMessage(outputFileChars, message);
+#endif
+}
+
+void CampaignManager::rewardForVideoAd(const std::string &rewardName, const int rewardAmount) {
+    
+}

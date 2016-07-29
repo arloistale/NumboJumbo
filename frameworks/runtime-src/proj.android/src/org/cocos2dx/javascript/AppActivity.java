@@ -26,12 +26,16 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.javascript;
 
+import android.os.Bundle;
 import android.net.Uri;
 import android.content.Intent;
 import android.util.Log;
 import android.content.Context;
 
+import java.io.IOException;
+
 import java.util.Map;
+import java.util.Locale;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
@@ -42,17 +46,49 @@ import com.batch.android.Offer;
 import com.batch.android.Feature;
 import com.batch.android.Resource;
 
+import com.supersonic.mediationsdk.sdk.Supersonic;
+import com.supersonic.mediationsdk.sdk.SupersonicFactory;
+
+import com.supersonic.mediationsdk.logger.SupersonicLogger;
+import com.supersonic.mediationsdk.logger.LogListener;
+import com.supersonic.mediationsdk.logger.SupersonicError;
+
 import org.numbo.jumbo.MainApplication;
+import org.numbo.jumbo.NumboRewardsManager;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 
 public class AppActivity extends Cocos2dxActivity {
 
-    // Constants
+
+    // region Constants
+
+
+    private static final String SUPERSONIC_TAG = "Supersonic";
     private static final String SHARE_TAG = "Share";
     private static final String BATCH_TAG = "Batch";
 
+    private static final String SUPERSONIC_APP_KEY = "5134c84d";
+
+    private static final String SUPERSONIC_PLACEMENT_NAME = "DefaultRewardedVideo";
+
+
+    // endregion
+
+    // region Data
+
+
     private static Context mContext;
 
-    // Native bridge
+    private static Supersonic mMediationAgent;
+
+
+    // endregion
+
+    // region Native bridge
+
 
     // Java to C++
     public static native void prepareCampaignDetails(String campaignName, String campaignMessage);
@@ -73,13 +109,58 @@ public class AppActivity extends Cocos2dxActivity {
         mContext.startActivity(Intent.createChooser(shareIntent, "Sharing Score"));
     }
 
-    // Event Overrides
+    // upon successfully showing the video NumboRewardsManager will alert the native function rewardForVideoAd
+    public static void showRewardVideo() {
+        Log.i(SUPERSONIC_TAG, "Showing reward video");
+        mMediationAgent.showRewardedVideo(SUPERSONIC_PLACEMENT_NAME);
+    }
+
+
+    // endregion
+
+    // region Event Overrides
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mContext = this;
+
+        // init rewarded videos
+        mMediationAgent = SupersonicFactory.getInstance();
+        mMediationAgent.setLogListener (new LogListener() {
+            @Override
+            public void onLog (SupersonicLogger.SupersonicTag tag, String message, int logLevel) {
+                Log.i(SUPERSONIC_TAG, String.format(Locale.US,
+                    "%d/%s: %s", logLevel, tag, message));
+            }
+        });
+
+        // start the background thread that will get the goog advertising id
+        Thread idThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Context ctx = AppActivity.this.getApplicationContext();
+                    AdvertisingIdClient.Info adInfo = AdvertisingIdClient.getAdvertisingIdInfo(ctx);
+                    finished(adInfo);
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        idThread.start();
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        mContext = this;
 
         Batch.Unlock.setUnlockListener(new BatchUnlockListener() {
             @Override
@@ -119,24 +200,39 @@ public class AppActivity extends Cocos2dxActivity {
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onResume() {
+        super.onResume();
+
+        if (mMediationAgent != null) {
+            mMediationAgent.onResume (this);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mMediationAgent != null) {
+            mMediationAgent.onPause(this);
+        }
+    }
+
+    @Override
+    protected void onStop() {
         Batch.onStop(this);
 
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         Batch.onDestroy(this);
 
         super.onDestroy();
     }
 
     @Override
-    protected void onNewIntent(Intent intent)
-    {
+    protected void onNewIntent(Intent intent) {
         Batch.onNewIntent(this, intent);
 
         super.onNewIntent(intent);
@@ -150,4 +246,31 @@ public class AppActivity extends Cocos2dxActivity {
 
         return glSurfaceView;
     }
+
+
+    // endregion
+
+    // region Supersonic
+
+
+    private void finished(final AdvertisingIdClient.Info adInfo) {
+        if(adInfo != null) {
+            // In case you need to use adInfo in UI thread
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // when we are done we initialize the reward videos with the advertising id
+                    mMediationAgent.setRewardedVideoListener(new NumboRewardsManager());
+
+                    //Init Rewarded Video
+                    mMediationAgent.initRewardedVideo(AppActivity.this, SUPERSONIC_APP_KEY, adInfo.getId());
+
+                    Log.i(SUPERSONIC_TAG, "Init reward video with user id: " + adInfo.getId());
+                }
+            });
+        }
+    }
+
+
+    // endregion
 }

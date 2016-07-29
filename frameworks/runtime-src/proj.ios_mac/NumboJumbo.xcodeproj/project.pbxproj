@@ -17,11 +17,10 @@
 		1AE159EC18C9DF3600FCA372 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A081B18C9DF05005C6854 /* project.json */; };
 		209E4950B0AC9BB39D6AE0AB /* PluginSdkboxPlayJSHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67C4447D945516142162E66B /* PluginSdkboxPlayJSHelper.cpp */; };
 		221D94841D2F2B9C007D72D5 /* SharingBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 221D94831D2F2B9C007D72D5 /* SharingBridge.mm */; };
-		222FA4261D48100B00377E72 /* Batch.embeddedframework in Resources */ = {isa = PBXBuildFile; fileRef = 222FA4251D48100B00377E72 /* Batch.embeddedframework */; };
-		222FA4281D48102600377E72 /* Batch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 222FA4271D48102600377E72 /* Batch.framework */; };
 		2243F5541D3558DB00ADB82E /* CampaignManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2243F5531D3558DB00ADB82E /* CampaignManager.cpp */; };
 		2255AE9E1D2EDB6F00DC989E /* SharingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2255AE9D1D2EDB6F00DC989E /* SharingController.m */; };
 		2262FD5F1D4909A6008F7A8C /* CampaignBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2262FD5E1D4909A6008F7A8C /* CampaignBridge.mm */; };
+		227FCFAA1D4943CF001682F2 /* Batch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227FCFA91D4943CE001682F2 /* Batch.framework */; };
 		22C4092E1D0A241C00FB0601 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22C4092D1D0A241C00FB0601 /* Images.xcassets */; };
 		22C409331D0A264B00FB0601 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */; };
 		22C409341D0A264B00FB0601 /* Default-667h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C409301D0A264B00FB0601 /* Default-667h@2x.png */; };
@@ -184,13 +183,12 @@
 		221D947E1D2F0BE6007D72D5 /* SharingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharingController.h; path = ios/SharingController.h; sourceTree = "<group>"; };
 		221D94821D2F27AA007D72D5 /* SharingBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharingBridge.h; path = ios/SharingBridge.h; sourceTree = "<group>"; };
 		221D94831D2F2B9C007D72D5 /* SharingBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SharingBridge.mm; path = ios/SharingBridge.mm; sourceTree = "<group>"; };
-		222FA4251D48100B00377E72 /* Batch.embeddedframework */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Batch.embeddedframework; sourceTree = "<group>"; };
-		222FA4271D48102600377E72 /* Batch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Batch.framework; path = Batch.embeddedframework/Batch.framework; sourceTree = "<group>"; };
 		2243F5501D3555B900ADB82E /* CampaignManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CampaignManager.h; sourceTree = "<group>"; };
 		2243F5531D3558DB00ADB82E /* CampaignManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CampaignManager.cpp; sourceTree = "<group>"; };
 		2255AE9D1D2EDB6F00DC989E /* SharingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SharingController.m; path = ios/SharingController.m; sourceTree = "<group>"; };
 		2262FD5D1D4909A6008F7A8C /* CampaignBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CampaignBridge.h; path = ios/CampaignBridge.h; sourceTree = "<group>"; };
 		2262FD5E1D4909A6008F7A8C /* CampaignBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CampaignBridge.mm; path = ios/CampaignBridge.mm; sourceTree = "<group>"; };
+		227FCFA91D4943CE001682F2 /* Batch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Batch.framework; sourceTree = "<group>"; };
 		22C4092D1D0A241C00FB0601 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "NumboJumbo-mobile/Images.xcassets"; sourceTree = "<group>"; };
 		22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		22C409301D0A264B00FB0601 /* Default-667h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667h@2x.png"; sourceTree = "<group>"; };
@@ -320,7 +318,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				222FA4281D48102600377E72 /* Batch.framework in Frameworks */,
+				227FCFAA1D4943CF001682F2 /* Batch.framework in Frameworks */,
 				9FA3AE461BE9BBCA00FC9645 /* GameController.framework in Frameworks */,
 				ED545A821B68A21500C3958E /* libiconv.dylib in Frameworks */,
 				BA3A85EC1A724AE900924D24 /* Security.framework in Frameworks */,
@@ -429,8 +427,7 @@
 		A92275401517C094001B78AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				222FA4271D48102600377E72 /* Batch.framework */,
-				222FA4251D48100B00377E72 /* Batch.embeddedframework */,
+				227FCFA91D4943CE001682F2 /* Batch.framework */,
 				9FA3AE451BE9BBCA00FC9645 /* GameController.framework */,
 				ED545A831B68A21C00C3958E /* libiconv.dylib */,
 				ED545A811B68A21500C3958E /* libiconv.dylib */,
@@ -682,7 +679,6 @@
 				BAF426FB19484B3E002B22EF /* script in Resources */,
 				22C4092E1D0A241C00FB0601 /* Images.xcassets in Resources */,
 				1AE159EC18C9DF3600FCA372 /* project.json in Resources */,
-				222FA4261D48100B00377E72 /* Batch.embeddedframework in Resources */,
 				1AD7E0A818C9DB93004817A6 /* main.js in Resources */,
 				22C409341D0A264B00FB0601 /* Default-667h@2x.png in Resources */,
 				22C409361D0A264B00FB0601 /* Default@2x.png in Resources */,
@@ -902,6 +898,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)/Batch.embeddedframework",
+					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -944,6 +941,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)/Batch.embeddedframework",
+					"$(PROJECT_DIR)",
 				);
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

@@ -10,11 +10,15 @@ void cocos_android_app_init (JNIEnv* env) {
 
 // Java to C++
 extern "C" {
+    // campaign functions
     JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_prepareCampaignDetails(JNIEnv* env, jobject thiz, jstring campaignName, jstring campaignMessage);
 
     JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_unlockFeatureBatch(JNIEnv* env, jobject thiz, jstring featureRef, jstring featureValue);
 
     JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_unlockResourceBatch(JNIEnv* env, jobject thiz, jstring resourceRef, jint quantity);
+
+    // reward video functions
+    JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_rewardForVideoAd(JNIEnv* env, jobject thiz, jstring rewardName, jint rewardAmount);
 }
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_prepareCampaignDetails(JNIEnv* env, jobject thiz, jstring campaignName, jstring campaignMessage) {
@@ -84,5 +88,19 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_unlockResourceBa
         env->ReleaseStringUTFChars(resourceRef, resourceRefUTF);
     } else {
         CCLOG("Invalid resource was referenced from Batch!");
+    }
+}
+
+JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_rewardForVideoAd(JNIEnv* env, jobject thiz, jstring rewardName, jint rewardAmount) {
+    const char* rewardNameUTF = env->GetStringUTFChars(rewardName, NULL);
+
+    if(rewardNameUTF) {
+        const std::string rewardNameStr = std::string(rewardNameUTF);
+
+        CampaignManager::rewardForVideoAd(rewardNameStr, rewardAmount);
+
+        env->ReleaseStringUTFChars(rewardName, rewardNameUTF);
+    } else {
+        CCLOG("Invalid reward name for reward video!");
     }
 }

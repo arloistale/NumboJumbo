@@ -11,6 +11,8 @@
 
 #include <string>
 
+// This class handles everything related to promotions.
+// This includes promo codes, campaigns, and video ads.
 class CampaignManager {
 public:
     static const std::string KEY_DOUBLER;
@@ -20,6 +22,10 @@ public:
     static const std::string KEY_HINTS;
     static const std::string KEY_SCRAMBLERS;
     
+    // MARK: Promo Functionality
+    
+    
+    // Put details about the current promo campaign in local storage to be used later
     static void prepareCampaignDetails(const std::string& name, const std::string& message);
     
     // Unlocks a permanently unlocked feature with an optional value
@@ -29,7 +35,17 @@ public:
     static void unlockFeature(const std::string& key);
     
     // Unlocks a one time resource (such as an in game theme)
-    static void unlockResource(const std::string& key, int value);
+    static void unlockResource(const std::string& key, const int value);
+    
+    
+    // MARK: Reward Functionality
+    
+    
+    // show an ad to the user, will call back to rewardForVideoAd once finished
+    static void showRewardVideo();
+    
+    // To be used to call back to the game once a reward video ad has finished playing
+    static void rewardForVideoAd(const std::string& rewardName, const int rewardAmount);
 };
 
 
