@@ -25,8 +25,6 @@
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/com/numbo/jumbo/R.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity$1.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity$2.class \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity$3.class \
-/Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity$4.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/cocos2dx/javascript/AppActivity.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/numbo/jumbo/MainApplication.class \
 /Users/jonathanlu/Desktop/Github/NumboJumbo/frameworks/runtime-src/proj.android/bin/classes/org/numbo/jumbo/NumboRewardsManager.class \

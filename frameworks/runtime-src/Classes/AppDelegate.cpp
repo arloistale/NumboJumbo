@@ -50,12 +50,12 @@
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
-#include "CampaignManager.h"
-
 // iOS Objective C Bridge
 #include "SharingBridge.h"
 
 #endif
+
+#include "CampaignManager.h"
 
 USING_NS_CC;
 
