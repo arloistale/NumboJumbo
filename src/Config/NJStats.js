@@ -24,6 +24,7 @@ NJ.stats = (function() {
     var modeData = {};
 
     var numGamesCompleted = 0;
+    var numGamesForNextAd = 0;
 
     return {
 
@@ -51,6 +52,7 @@ NJ.stats = (function() {
             // load misc stat tracking
             currency = parseInt(cc.sys.localStorage.getItem('currency')) || 0;
             numGamesCompleted = parseInt(cc.sys.localStorage.getItem('numGamesCompleted')) || 0;
+            numGamesForNextAd = parseInt(cc.sys.localStorage.getItem('numGamesForNextAd')) || 0;
 
             converters = parseInt(cc.sys.localStorage.getItem('converters')) || 0;
             hints = parseInt(cc.sys.localStorage.getItem('hints')) || 0;
@@ -72,6 +74,7 @@ NJ.stats = (function() {
             // save misc
             cc.sys.localStorage.setItem('currency', JSON.stringify(currency));
             cc.sys.localStorage.setItem('numGamesCompleted', JSON.stringify(numGamesCompleted));
+            cc.sys.localStorage.setItem('numGamesForNextAd', JSON.stringify(numGamesForNextAd));
 
             cc.sys.localStorage.setItem('converters', JSON.stringify(converters));
             cc.sys.localStorage.setItem('hints', JSON.stringify(hints));
@@ -138,6 +141,23 @@ NJ.stats = (function() {
 
         getNumGamesCompleted: function() {
             return numGamesCompleted;
+        },
+
+        getNumGamesForNextAd: function(){
+            return numGamesForNextAd;
+        },
+
+        setNumGamesForNextAd: function(){
+            numGamesForNextAd = numGamesCompleted + 2; // every other game gets an ad (for now)
+        },
+
+        isEnoughGamesForAd: function(){
+            cc.log("numGames: ", numGamesCompleted, ";, num for ad:", numGamesForNextAd);
+            if (numGamesForNextAd < numGamesCompleted){
+                this.setNumGamesForNextAd();
+            }
+            cc.log ("enough for ad?", numGamesCompleted >= numGamesForNextAd);
+            return numGamesCompleted >= numGamesForNextAd;
         },
 
         enableDoubler: function() {

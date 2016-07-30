@@ -2,6 +2,9 @@
  * Created by jonathanlu on 1/18/16.
  */
 
+const BASE_MOVES = 20;
+const BONUS_MOVES = 5;
+
 var MovesGameLayer = BaseGameLayer.extend({
 
 	// domain of spawning
@@ -18,7 +21,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 	],
 
 	// maximum number of moves allowed
-	_movesLimit: 20,
+	_movesLimit: 0,
 
 	////////////////////
 	// Initialization //
@@ -32,6 +35,14 @@ var MovesGameLayer = BaseGameLayer.extend({
 		var that = this;
 
 		this.pauseGame();
+
+		this._movesLimit = BASE_MOVES;
+		if (NJ.settings.needsBonusMOV) {
+			this._movesLimit += BONUS_MOVES;
+
+			NJ.settings.needsBonusMOV = false;
+			NJ.saveSettings();
+		}
 
 		this._numboController.initDistribution(this._numberList);
 		this._numboHeaderLayer.setConditionValue(this._movesLimit);
@@ -89,10 +100,17 @@ var MovesGameLayer = BaseGameLayer.extend({
 		cc.director.runScene(scene);
 	},
 
+	onRequestAd: function(){
+		this._super();
+		cc.log("requesting ad in moves mode");
+		NJ.settings.needsBonusMOV = true;
+
+	},
+
 	// whether the game is over or not
 	isGameOver: function() {
 		var movesMade = NJ.gameState.getMovesMade();
-		return movesMade >= this._movesLimit;
+		return movesMade >= this._movesLimit ;
 	},
 
 	isInDanger: function() {
