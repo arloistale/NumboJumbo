@@ -22,7 +22,7 @@ public class MainApplication extends Application {
         super.onCreate();
 
         // TODO : switch to live Batch Api Key before shipping
-        Batch.setConfig(new Config("DEV5772A8771CB92F9DEEA90BBDF5C")); // devloppement
-        //Batch.setConfig(new Config("5772A8771ADE834DC72CC6DD27E3C8")); // live
+        //Batch.setConfig(new Config("DEV5772A8771CB92F9DEEA90BBDF5C")); // devloppement
+        Batch.setConfig(new Config("5772A8771ADE834DC72CC6DD27E3C8")); // live
     }
 }

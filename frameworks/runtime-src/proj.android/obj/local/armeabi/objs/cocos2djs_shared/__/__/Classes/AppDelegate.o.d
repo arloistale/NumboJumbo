@@ -542,7 +542,8 @@ obj/local/armeabi/objs/cocos2djs_shared/__/__/Classes/AppDelegate.o: \
  jni/../../Classes/SDKBoxJSHelper.h \
  jni/../../Classes/PluginSdkboxPlayJS.hpp \
  jni/../../Classes/PluginSdkboxPlayJSHelper.h \
- jni/../../Classes/PluginGoogleAnalyticsJS.hpp
+ jni/../../Classes/PluginGoogleAnalyticsJS.hpp \
+ jni/../../Classes/CampaignManager.h
 
 jni/../../Classes/AppDelegate.h:
 
@@ -1633,3 +1634,5 @@ jni/../../Classes/PluginSdkboxPlayJS.hpp:
 jni/../../Classes/PluginSdkboxPlayJSHelper.h:
 
 jni/../../Classes/PluginGoogleAnalyticsJS.hpp:
+
+jni/../../Classes/CampaignManager.h:
