@@ -78,7 +78,6 @@ void CampaignManager::unlockResource(const std::string &key, int amount) {
 }
 
 void CampaignManager::showRewardVideo() {
-    CCLOG("Show reward video!");
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo methodInfo;
@@ -94,6 +93,15 @@ void CampaignManager::showRewardVideo() {
 #endif
 }
 
-void CampaignManager::rewardForVideoAd(const std::string &rewardName, const int rewardAmount) {
+void CampaignManager::alertVideoAvailability(const bool available) {
+    auto eventDispatcher = Director::getInstance()->getEventDispatcher();
     
+    if(available)
+        eventDispatcher->dispatchCustomEvent("alertVideoAvailable");
+    else
+        eventDispatcher->dispatchCustomEvent("alertVideoUnavailable");
+}
+
+void CampaignManager::rewardForVideoAd(const std::string &rewardName, const int rewardAmount) {
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent("rewardForVideoAd");
 }

@@ -83,6 +83,7 @@ public class AppActivity extends Cocos2dxActivity {
     private static Context mContext;
 
     private static Supersonic mMediationAgent;
+    private static NumboRewardsManager mRewardsManager;
 
 
     // endregion
@@ -111,7 +112,12 @@ public class AppActivity extends Cocos2dxActivity {
 
     // upon successfully showing the video NumboRewardsManager will alert the native function rewardForVideoAd
     public static void showRewardVideo() {
-        Log.i(SUPERSONIC_TAG, "Showing reward video");
+        if(!mRewardsManager.isVideoAvailable()) {
+            Log.e(SUPERSONIC_TAG, "Tried to show video when unavailable!");
+            return;
+        }
+
+        Log.i(SUPERSONIC_TAG, "Showing reward video for placement: " + SUPERSONIC_PLACEMENT_NAME);
         mMediationAgent.showRewardedVideo(SUPERSONIC_PLACEMENT_NAME);
     }
 
@@ -127,7 +133,6 @@ public class AppActivity extends Cocos2dxActivity {
 
         mContext = this;
 
-/*
         // init rewarded videos
         mMediationAgent = SupersonicFactory.getInstance();
         mMediationAgent.setLogListener (new LogListener() {
@@ -137,6 +142,8 @@ public class AppActivity extends Cocos2dxActivity {
                     "%d/%s: %s", logLevel, tag, message));
             }
         });
+
+        mRewardsManager = new NumboRewardsManager();
 
         // start the background thread that will get the goog advertising id
         Thread idThread = new Thread(new Runnable() {
@@ -157,7 +164,6 @@ public class AppActivity extends Cocos2dxActivity {
         });
 
         idThread.start();
-        */
     }
 
     @Override
@@ -262,7 +268,7 @@ public class AppActivity extends Cocos2dxActivity {
                 @Override
                 public void run() {
                     // when we are done we initialize the reward videos with the advertising id
-                    mMediationAgent.setRewardedVideoListener(new NumboRewardsManager());
+                    mMediationAgent.setRewardedVideoListener(mRewardsManager);
 
                     //Init Rewarded Video
                     mMediationAgent.initRewardedVideo(AppActivity.this, SUPERSONIC_APP_KEY, adInfo.getId());

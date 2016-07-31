@@ -12,12 +12,11 @@ void cocos_android_app_init (JNIEnv* env) {
 extern "C" {
     // campaign functions
     JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_prepareCampaignDetails(JNIEnv* env, jobject thiz, jstring campaignName, jstring campaignMessage);
-
     JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_unlockFeatureBatch(JNIEnv* env, jobject thiz, jstring featureRef, jstring featureValue);
-
     JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_unlockResourceBatch(JNIEnv* env, jobject thiz, jstring resourceRef, jint quantity);
 
     // reward video functions
+    JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_alertVideoAvailability(JNIEnv* env, jobject thiz, jboolean available);
     JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_rewardForVideoAd(JNIEnv* env, jobject thiz, jstring rewardName, jint rewardAmount);
 }
 
@@ -89,6 +88,10 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_unlockResourceBa
     } else {
         CCLOG("Invalid resource was referenced from Batch!");
     }
+}
+
+JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_alertVideoAvailability(JNIEnv* env, jobject thiz, jboolean available) {
+    CampaignManager::alertVideoAvailability(available);
 }
 
 JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_rewardForVideoAd(JNIEnv* env, jobject thiz, jstring rewardName, jint rewardAmount) {

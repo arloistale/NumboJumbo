@@ -157,13 +157,13 @@ bool AppDelegate::applicationDidFinishLaunching()
     
     auto eventDispatcher = director->getEventDispatcher();
 
-    eventDispatcher->addEventListenerWithFixedPriority(EventListenerCustom::create("share_screen", [=](EventCustom* event) {
+    eventDispatcher->addEventListenerWithFixedPriority(EventListenerCustom::create("shareScreen", [=](EventCustom* event) {
 
         cocos2d::utils::captureScreen(CC_CALLBACK_2(AppDelegate::shareScreenCallback, this), "epilogue.png");
 
     }), 9001);
     
-    eventDispatcher->addEventListenerWithFixedPriority(EventListenerCustom::create("showRewardVideo", [=](EventCustom* event) {
+    eventDispatcher->addEventListenerWithFixedPriority(EventListenerCustom::create("requestRewardVideo", [=](EventCustom* event) {
         
         CampaignManager::showRewardVideo();
         

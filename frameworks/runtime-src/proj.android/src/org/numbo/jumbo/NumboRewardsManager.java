@@ -36,6 +36,7 @@ public class NumboRewardsManager implements RewardedVideoListener {
 
 
     // Java to C++
+    public static native void alertVideoAvailability(boolean available);
     public static native void rewardForVideoAd(String rewardName, int rewardAmount);
 
 
@@ -65,6 +66,9 @@ public class NumboRewardsManager implements RewardedVideoListener {
     // Value will change to false when no videos are available.
     @Override
     public void onVideoAvailabilityChanged(boolean available) {
+        // tell the game about video availability
+        alertVideoAvailability(available);
+
         isVideoAvailable = available;
     }
 
