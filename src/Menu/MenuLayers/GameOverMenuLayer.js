@@ -7,11 +7,8 @@ var GameOverMenuLayer = (function () {
     var highscoreMessages = [
         "You really did it.",
         "Are we there yet?",
-        "Nice job!",
-        "Climbing to the top!",
         "Shine on!",
-        "Admirable.",
-        "Another feather in the cap",
+        "Another feather in the cap.",
         "What a performance!"
     ];
 
