@@ -127,6 +127,7 @@ public class AppActivity extends Cocos2dxActivity {
 
         mContext = this;
 
+/*
         // init rewarded videos
         mMediationAgent = SupersonicFactory.getInstance();
         mMediationAgent.setLogListener (new LogListener() {
@@ -156,6 +157,7 @@ public class AppActivity extends Cocos2dxActivity {
         });
 
         idThread.start();
+        */
     }
 
     @Override

@@ -51,8 +51,8 @@ static AppDelegate s_sharedApplication;
     [BatchUnlock setupUnlockWithDelegate:self];
     
     // TODO : switch to live api key before store release
-    [Batch startWithAPIKey:@"DEV5785D6C955E3F23704EC13FFA8D"]; // dev
-    // [Batch startWithAPIKey:@"5785D6C953F94F7CAB01B829DE8C71"]; // live
+    //[Batch startWithAPIKey:@"DEV5785D6C955E3F23704EC13FFA8D"]; // dev
+    [Batch startWithAPIKey:@"5785D6C953F94F7CAB01B829DE8C71"]; // live
     
     // Register for push notifications
     //[BatchPush registerForRemoteNotifications];

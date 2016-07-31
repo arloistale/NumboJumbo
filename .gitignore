@@ -26,6 +26,8 @@ fabric.properties
 
 #iOS and Android build stuff
 
+bin/
+
 .DS_Store
 Published
 
