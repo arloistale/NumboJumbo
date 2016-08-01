@@ -46,8 +46,6 @@ import com.batch.android.Offer;
 import com.batch.android.Feature;
 import com.batch.android.Resource;
 
-import com.supersonic.mediationsdk.sdk.IntegrationHelper;
-
 import com.supersonic.mediationsdk.sdk.Supersonic;
 import com.supersonic.mediationsdk.sdk.SupersonicFactory;
 
@@ -119,7 +117,6 @@ public class AppActivity extends Cocos2dxActivity {
             return;
         }
 
-        Log.i(SUPERSONIC_TAG, "Showing reward video for placement: " + SUPERSONIC_PLACEMENT_NAME);
         mMediationAgent.showRewardedVideo(SUPERSONIC_PLACEMENT_NAME);
     }
 
@@ -279,8 +276,6 @@ public class AppActivity extends Cocos2dxActivity {
                     mMediationAgent.initRewardedVideo(AppActivity.this, SUPERSONIC_APP_KEY, adInfo.getId());
 
                     Log.i(SUPERSONIC_TAG, "Init reward video with user id: " + adInfo.getId());
-
-                    IntegrationHelper.validateIntegration(AppActivity.this);
                 }
             });
         }

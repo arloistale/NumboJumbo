@@ -48,7 +48,7 @@ public:
     static void alertVideoAvailability(const bool available);
     
     // To be used to call back to the game once a reward video ad has finished playing
-    static void rewardForVideoAd(const std::string& rewardName, const int rewardAmount);
+    static void rewardForVideoAd();
 };
 
 

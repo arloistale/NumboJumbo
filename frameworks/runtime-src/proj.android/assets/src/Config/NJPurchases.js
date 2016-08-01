@@ -81,12 +81,13 @@ NJ.purchases = (function() {
             if (cc.sys.isNative) {
                 sdkbox.IAP.init();
 
+                this._initEvents();
                 this._initListener();
             }
         },
 
         // listens for events related to purchases
-        initEvents: function() {
+        _initEvents: function() {
             var that = this;
 
             cc.eventManager.addListener(cc.EventListener.create({

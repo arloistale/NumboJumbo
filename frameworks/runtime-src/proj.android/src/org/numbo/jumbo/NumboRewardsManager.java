@@ -37,7 +37,7 @@ public class NumboRewardsManager implements RewardedVideoListener {
 
     // Java to C++
     public static native void alertVideoAvailability(boolean available);
-    public static native void rewardForVideoAd(String rewardName, int rewardAmount);
+    public static native void rewardForVideoAd();
 
 
     // endregion
@@ -112,11 +112,7 @@ public class NumboRewardsManager implements RewardedVideoListener {
     //@param - placement - the Placement the user completed a video from.
     @Override
     public void onRewardedVideoAdRewarded(Placement placement) {
-
-        String rewardName = placement.getRewardName();
-        int rewardAmount = placement.getRewardAmount();
-
-        rewardForVideoAd(rewardName, rewardAmount);
+        rewardForVideoAd();
     }
 
 

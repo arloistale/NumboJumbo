@@ -17,7 +17,7 @@ extern "C" {
 
     // reward video functions
     JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_alertVideoAvailability(JNIEnv* env, jobject thiz, jboolean available);
-    JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_rewardForVideoAd(JNIEnv* env, jobject thiz, jstring rewardName, jint rewardAmount);
+    JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_rewardForVideoAd(JNIEnv* env, jobject thiz);
 }
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_javascript_AppActivity_prepareCampaignDetails(JNIEnv* env, jobject thiz, jstring campaignName, jstring campaignMessage) {
@@ -94,16 +94,6 @@ JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_alertVideoAvaila
     CampaignManager::alertVideoAvailability(available);
 }
 
-JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_rewardForVideoAd(JNIEnv* env, jobject thiz, jstring rewardName, jint rewardAmount) {
-    const char* rewardNameUTF = env->GetStringUTFChars(rewardName, NULL);
-
-    if(rewardNameUTF) {
-        const std::string rewardNameStr = std::string(rewardNameUTF);
-
-        CampaignManager::rewardForVideoAd(rewardNameStr, rewardAmount);
-
-        env->ReleaseStringUTFChars(rewardName, rewardNameUTF);
-    } else {
-        CCLOG("Invalid reward name for reward video!");
-    }
+JNIEXPORT void JNICALL Java_org_numbo_jumbo_NumboRewardsManager_rewardForVideoAd(JNIEnv* env, jobject thiz) {
+    CampaignManager::rewardForVideoAd();
 }

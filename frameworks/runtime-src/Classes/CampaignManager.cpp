@@ -102,6 +102,6 @@ void CampaignManager::alertVideoAvailability(const bool available) {
         eventDispatcher->dispatchCustomEvent("alertVideoUnavailable");
 }
 
-void CampaignManager::rewardForVideoAd(const std::string &rewardName, const int rewardAmount) {
+void CampaignManager::rewardForVideoAd() {
     Director::getInstance()->getEventDispatcher()->dispatchCustomEvent("rewardForVideoAd");
 }
