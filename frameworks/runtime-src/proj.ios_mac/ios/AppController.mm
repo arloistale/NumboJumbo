@@ -25,6 +25,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import <Supersonic/Supersonic.h>
+
 #import "cocos2d.h"
 
 #import "AppController.h"
@@ -46,6 +48,9 @@ static AppDelegate s_sharedApplication;
 {
 
     // Override point for customization after application launch.
+    
+    // Start Supersonic
+    [Supersonic sharedInstance];
     
     // Start Batch.
     [BatchUnlock setupUnlockWithDelegate:self];
