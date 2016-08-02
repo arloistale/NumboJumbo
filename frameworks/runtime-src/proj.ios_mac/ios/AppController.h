@@ -23,11 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#import <Supersonic/Supersonic.h>
 #import <Batch/Batch.h>
 
 @class RootViewController;
 
-@interface AppController : NSObject <UIApplicationDelegate, BatchUnlockDelegate>
+@interface AppController : NSObject <UIApplicationDelegate, BatchUnlockDelegate, SupersonicRVDelegate>
 {
     UIWindow *window;
     RootViewController    *viewController;
