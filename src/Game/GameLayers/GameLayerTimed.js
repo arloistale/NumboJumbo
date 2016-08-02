@@ -1,7 +1,7 @@
 /**
  * Created by jonathanlu on 1/18/16.
  */
-const BASE_TIME = 5;
+const BASE_TIME = 60;
 const BONUS_TIME = 15;
 
 var TimedGameLayer = BaseGameLayer.extend({
@@ -42,12 +42,6 @@ var TimedGameLayer = BaseGameLayer.extend({
 		this._numboController.initDistribution(this._numberList);
 
 		this._elapsedTimeLimit = BASE_TIME;
-		if (NJ.settings.needsBonusMM) {
-			this._elapsedTimeLimit += BONUS_TIME;
-
-			NJ.settings.needsBonusMM = false;
-			NJ.saveSettings();
-		}
 
 		// here is our schedule
 		that._numboHeaderLayer.setConditionValue(this._elapsedTimeLimit);
@@ -88,6 +82,13 @@ var TimedGameLayer = BaseGameLayer.extend({
 		}
 	},
 
+	_resetWithVideoAdReward: function(){
+		this._reset();
+
+		this._elapsedTimeLimit = BASE_TIME + BONUS_TIME;
+		this._numboHeaderLayer.setConditionValue(Math.floor(this._elapsedTimeLimit));
+	},
+
 	_initUI: function() {
 		this._super();
 
@@ -112,11 +113,9 @@ var TimedGameLayer = BaseGameLayer.extend({
 		cc.director.runScene(scene);
 	},
 
-	onRequestAd: function(){
-		this._super();
-		cc.log("requesting ad in timed mode");
-		NJ.settings.needsBonusMM = true;
 
+	getAdMessage: function(){
+		return "Watch a video for +" + BONUS_TIME +" seconds next time!";
 	},
 
 	checkGameOver: function() {

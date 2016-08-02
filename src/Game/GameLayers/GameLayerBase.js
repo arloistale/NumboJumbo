@@ -168,6 +168,12 @@ var BaseGameLayer = (function () {
             NJ.audio.playMusic(this._backgroundTrack);
         },
 
+        // should be overridden by subclasses for their specific video rewards
+        _resetWithVideoAdReward: function(){
+            cc.log ("default video ad reward: reset.");
+            this._reset();
+        },
+
         // init particle systems in the game
         _initParticles: function () {
             for (var col = 0; col < NJ.NUM_COLS; ++col) {
@@ -454,11 +460,10 @@ var BaseGameLayer = (function () {
             var score = NJ.gameState.getScore();
             var highscoreAccepted = NJ.stats.offerHighscore(modeKey, score);
 
-            var scoreDiff = NJ.gameState.getScore();
+            var currencyGain = NJ.gameState.getScore();
             if (NJ.stats.isDoubleEnabled())
-                scoreDiff *= 2;
-
-            NJ.stats.addCurrency(scoreDiff);
+                currencyGain *= 2;
+            NJ.stats.addCurrency(currencyGain);
 
             this._backgroundLayer.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
                 // now clear the level once all that is dealt with
@@ -475,13 +480,22 @@ var BaseGameLayer = (function () {
             }), cc.delayTime(0.5), cc.callFunc(function () {
                 that.pauseGame();
 
-                that._gameOverMenuLayer = new GameOverMenuLayer(modeKey, highscoreAccepted);
+                var watchAdMessage = that.getAdMessage();
+                that._gameOverMenuLayer = new GameOverMenuLayer(modeKey, highscoreAccepted, watchAdMessage);
                 that._gameOverMenuLayer.setOnRetryCallback(function () {
                     that.onRetry();
                 });
                 that._gameOverMenuLayer.setOnMenuCallback(function () {
                     that.onMenu();
                 });
+                that._gameOverMenuLayer.setOnRewardForVideoAdCallback( function(){
+                    that.onRewardForVideoAd();
+                });
+                //that._gameOverMenuLayer.setWatchAdMessage(that.getAdMessage());
+                //that._gameOverMenuLayer.setWatchAdMessageCallback( function() {
+                //    return that.getAdMessage();
+                //});
+
                 that.addChild(that._gameOverMenuLayer, 999);
 
                 that._gameOverMenuLayer.enter();
@@ -806,6 +820,18 @@ var BaseGameLayer = (function () {
                 this.removeChild(this._gameOverMenuLayer);
 
             //this._reset();
+        },
+
+        onRewardForVideoAd: function(){
+            if (this._gameOverMenuLayer){
+                this.removeChild(this._gameOverMenuLayer);
+            }
+            this._resetWithVideoAdReward();
+        },
+
+        // should be overridden in subclasses to describe the ad bonus
+        getAdMessage: function(){
+            return "default message";
         },
 
         // On game over when player chooses to go to menu we return to menu.

@@ -37,12 +37,6 @@ var MovesGameLayer = BaseGameLayer.extend({
 		this.pauseGame();
 
 		this._movesLimit = BASE_MOVES;
-		if (NJ.settings.needsBonusMOV) {
-			this._movesLimit += BONUS_MOVES;
-
-			NJ.settings.needsBonusMOV = false;
-			NJ.saveSettings();
-		}
 
 		this._numboController.initDistribution(this._numberList);
 		this._numboHeaderLayer.setConditionValue(this._movesLimit);
@@ -76,6 +70,13 @@ var MovesGameLayer = BaseGameLayer.extend({
 		}
 	},
 
+	_resetWithVideoAdReward: function(){
+		this._reset();
+
+		this._movesLimit = BASE_MOVES + BONUS_MOVES
+		this._numboHeaderLayer.setConditionValue(Math.floor(this._movesLimit));
+	},
+
 	_initUI: function() {
 		this._super();
 
@@ -100,11 +101,8 @@ var MovesGameLayer = BaseGameLayer.extend({
 		cc.director.runScene(scene);
 	},
 
-	onRequestAd: function(){
-		this._super();
-		cc.log("requesting ad in moves mode");
-		NJ.settings.needsBonusMOV = true;
-
+	getAdMessage: function(){
+		return "Watch a video for +" + BONUS_MOVES +" moves next time!";
 	},
 
 	// whether the game is over or not
