@@ -46,6 +46,8 @@ import com.batch.android.Offer;
 import com.batch.android.Feature;
 import com.batch.android.Resource;
 
+import com.supersonic.mediationsdk.integration.IntegrationHelper;
+
 import com.supersonic.mediationsdk.sdk.Supersonic;
 import com.supersonic.mediationsdk.sdk.SupersonicFactory;
 
@@ -274,6 +276,8 @@ public class AppActivity extends Cocos2dxActivity {
 
                     //Init Rewarded Video
                     mMediationAgent.initRewardedVideo(AppActivity.this, SUPERSONIC_APP_KEY, adInfo.getId());
+
+                    IntegrationHelper.validateIntegration(AppActivity.this);
 
                     Log.i(SUPERSONIC_TAG, "Init reward video with user id: " + adInfo.getId());
                 }
