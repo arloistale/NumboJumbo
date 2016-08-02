@@ -157,7 +157,7 @@ NJ.stats = (function() {
             if (numGamesCompleted > numGamesForNextAd){
                 this.setNumGamesForNextAd();
             }
-            cc.log("numGames: ", numGamesCompleted, ";, num for ad:", numGamesForNextAd);
+            cc.log("numGames: ", numGamesCompleted, ", num for ad:", numGamesForNextAd);
             return numGamesCompleted >= numGamesForNextAd;
         },
 

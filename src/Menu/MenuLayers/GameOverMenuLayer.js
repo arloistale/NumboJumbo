@@ -141,7 +141,6 @@ var GameOverMenuLayer = (function () {
                 event: cc.EventListener.CUSTOM,
                 eventName: "rewardForVideoAd",
                 callback: function (event) {
-                    cc.log("YAYY");
                     that.leave(function () {
                         if (that.onRewardForVideoAdCallback)
                             that.onRewardForVideoAdCallback();
@@ -445,16 +444,6 @@ var GameOverMenuLayer = (function () {
 
         setOnRewardForVideoAdCallback: function(callback){
             this.onRewardForVideoAdCallback = callback;
-        },
-
-        setWatchAdMessageCallback: function(callback){
-            cc.log("setting watchAdMessage!");
-            this.watchAdMessageCallback = callback;
-        },
-
-        setWatchAdMessage: function(messageStr){
-            cc.log("setting watchAdMessage to [", messageStr, "].");
-            this._watchAdMessage = messageStr;
         },
 
         ///////////////
