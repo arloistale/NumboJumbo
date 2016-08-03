@@ -17,6 +17,7 @@ NJ.gameState = (function() {
 
     // meta data
     var startTime = 0;
+    var gameModeKey = null;
 
     // in game metric tracking
     var prevBlocksNeededForLevelup = 0;
@@ -58,8 +59,9 @@ NJ.gameState = (function() {
         },
 
         // reset game state
-        // DOES NOT reset the chosen jumbo!
         reset: function () {
+            gameModeKey = null;
+
             movesMade = 0;
             currentScore = 0;
             currentLevel = 1;
@@ -71,6 +73,16 @@ NJ.gameState = (function() {
             convertersRemaining = NUM_CONVERTS_PER_ROUND;
             scramblesRemaining = NUM_SCRAMBLES_PER_ROUND;
             hintsRemaining = NUM_HINTS_PER_ROUND;
+        },
+
+        // get the current game session mode key
+        getModeKey: function() {
+            return gameModeKey;
+        },
+
+        // sets the mode key for this game session
+        setModeKey: function(modeKey) {
+            gameModeKey = modeKey;
         },
 
         ///////////////////////

@@ -10,12 +10,14 @@ var NJ = NJ || {};
 NJ.gameState = (function() {
 
     // constants
+    const NUM_STOPPERS_PER_ROUND = 1;
     const NUM_HINTS_PER_ROUND = 10;
     const NUM_CONVERTS_PER_ROUND = 5;
     const NUM_SCRAMBLES_PER_ROUND = 3;
 
     // meta data
     var startTime = 0;
+    var gameModeKey = null;
 
     // in game metric tracking
     var prevBlocksNeededForLevelup = 0;
@@ -25,6 +27,7 @@ NJ.gameState = (function() {
     var currentLevel = 1;
     var currentScore = 0;
 
+    var stoppersRemaining = -1;
     var convertersRemaining = -1;
     var scramblesRemaining = -1;
     var hintsRemaining = -1;
@@ -56,8 +59,9 @@ NJ.gameState = (function() {
         },
 
         // reset game state
-        // DOES NOT reset the chosen jumbo!
         reset: function () {
+            gameModeKey = null;
+
             movesMade = 0;
             currentScore = 0;
             currentLevel = 1;
@@ -65,14 +69,38 @@ NJ.gameState = (function() {
             blocksNeededForLevelup = calculateBlocksNeededForLevelup(currentLevel);
             blocksCleared = 0;
 
+            stoppersRemaining = NUM_STOPPERS_PER_ROUND;
             convertersRemaining = NUM_CONVERTS_PER_ROUND;
             scramblesRemaining = NUM_SCRAMBLES_PER_ROUND;
             hintsRemaining = NUM_HINTS_PER_ROUND;
         },
 
+        // get the current game session mode key
+        getModeKey: function() {
+            return gameModeKey;
+        },
+
+        // sets the mode key for this game session
+        setModeKey: function(modeKey) {
+            gameModeKey = modeKey;
+        },
+
         ///////////////////////
         // Consumables Logic //
         ///////////////////////
+
+        getStoppersRemaining: function(){
+            return stoppersRemaining;
+        },
+
+        decrementStoppersRemaining: function(){
+            cc.assert(stoppersRemaining > 0, "ERROR: attempted to stopper too many times!");
+            stoppersRemaining--;
+        },
+
+        incrementStoppersRemaining: function(){
+            stoppersRemaining++;
+        },
 
         getConvertersRemaining: function() {
             return convertersRemaining;

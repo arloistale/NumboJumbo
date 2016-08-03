@@ -48,7 +48,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
     _reset: function() {
         this._super();
 
-        this._modeKey = NJ.modekeys.infinite;
+        NJ.gameState.setModeKey(NJ.modekeys.infinite);
 
         var that = this;
 
@@ -127,6 +127,12 @@ var InfiniteGameLayer = BaseGameLayer.extend({
     /////////////////////////
     // Game State Handling //
     /////////////////////////
+
+    stopperBonus: function(){
+        cc.log("using a stopper in infinite!");
+        this._numboController.removeAllBlocks();
+        this.spawnInitialBlocks();
+    },
 
     onRetry: function() {
         this._super();

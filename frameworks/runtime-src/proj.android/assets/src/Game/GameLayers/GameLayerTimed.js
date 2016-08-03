@@ -33,7 +33,7 @@ var TimedGameLayer = BaseGameLayer.extend({
 	_reset: function() {
 		this._super();
 
-		this._modeKey = NJ.modekeys.minuteMadness;
+		NJ.gameState.setModeKey(NJ.modekeys.minuteMadness);
 
 		var that = this;
 
@@ -104,6 +104,11 @@ var TimedGameLayer = BaseGameLayer.extend({
 	/////////////////////////
 	// Game State Handling //
 	/////////////////////////
+
+	stopperBonus: function(){
+		cc.log("using a stopper in timed!");
+		this._elapsedTimeLimit += BONUS_TIME;
+	},
 
 	onRetry: function() {
 		this._super();

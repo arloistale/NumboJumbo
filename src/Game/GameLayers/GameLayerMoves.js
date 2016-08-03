@@ -30,7 +30,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 	_reset: function() {
 		this._super();
 
-		this._modeKey = NJ.modekeys.moves;
+		NJ.gameState.setModeKey(NJ.modekeys.moves);
 
 		var that = this;
 

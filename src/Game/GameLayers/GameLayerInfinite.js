@@ -48,7 +48,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
     _reset: function() {
         this._super();
 
-        this._modeKey = NJ.modekeys.infinite;
+        NJ.gameState.setModeKey(NJ.modekeys.infinite);
 
         var that = this;
 

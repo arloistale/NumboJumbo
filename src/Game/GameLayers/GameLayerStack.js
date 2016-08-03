@@ -29,7 +29,7 @@ var StackGameLayer = BaseGameLayer.extend({
     _reset: function() {
         this._super();
 
-        this._modeKey = NJ.modekeys.react;
+        NJ.gameState.setModeKey(NJ.modekeys.react);
 
         var that = this;
 

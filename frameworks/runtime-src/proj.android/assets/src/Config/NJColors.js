@@ -28,6 +28,7 @@ NJ.themes = (function() {
             defaultButtonColor: cc.color("#9e9e9e"),
             defaultButtonForegroundColor: cc.color("#ffffff"),
 
+            stoppersColor: cc.color("#50aa91"),
             convertersColor: cc.color("#50aa91"),
             hintsColor: cc.color("#50aa91"),
             scramblersColor: cc.color("#50aa91"),
@@ -79,6 +80,7 @@ NJ.themes = (function() {
             defaultButtonColor: cc.color("#6C6760"),
             defaultButtonForegroundColor: cc.color("#ffffff"),
 
+            stoppersColor: cc.color("#33a5ba"),
             convertersColor: cc.color("#33a5ba"),
             hintsColor: cc.color("#33a5ba"),
             scramblersColor: cc.color("#33a5ba"),
@@ -130,6 +132,7 @@ NJ.themes = (function() {
             defaultButtonColor: cc.color("#6C6760"),
             defaultButtonForegroundColor: cc.color("#ffffff"),
 
+            stoppersColor: cc.color("#00a896"),
             convertersColor: cc.color("#00A896"),
             hintsColor: cc.color("#00A896"),
             scramblersColor: cc.color("#00A896"),
@@ -185,6 +188,7 @@ NJ.themes = (function() {
             defaultButtonColor: cc.color("#6C6760"),
             defaultButtonForegroundColor: cc.color("#ffffff"),
 
+            stoppersColor: cc.color("#33a5ba"),
             convertersColor: cc.color("#33a5ba"),
             hintsColor: cc.color("#33a5ba"),
             scramblersColor: cc.color("#33a5ba"),
@@ -350,6 +354,7 @@ NJ.themes = (function() {
         defaultButtonColor: main.defaultButtonColor,
         defaultButtonForegroundColor: main.defaultButtonForegroundColor,
 
+        stoppersColor: main.stoppersColor,
         convertersColor: main.convertersColor,
         hintsColor: main.hintsColor,
         scramblersColor: main.scramblersColor,

@@ -57,9 +57,6 @@ var BaseGameLayer = (function () {
 
     return cc.Layer.extend({
 
-        // Meta Data
-        _modeKey: null,
-
         // Level Data
         _levelBounds: null,
         _levelCellSize: null,
@@ -147,8 +144,6 @@ var BaseGameLayer = (function () {
         _reset: function () {
             NJ.gameState.init();
 
-            this._touchID = -1;
-
             this.unscheduleAllCallbacks();
             this.stopAllActions();
 
@@ -169,7 +164,7 @@ var BaseGameLayer = (function () {
         },
 
         // should be overridden by subclasses for their specific video rewards
-        _resetWithVideoAdReward: function(){
+        _resetWithVideoAdReward: function() {
             cc.log ("default video ad reward: reset.");
             this._reset();
         },
@@ -301,10 +296,10 @@ var BaseGameLayer = (function () {
             this._toolbarLayer.setOnConvertCallback(function () {
                 if (NJ.gameState.getConvertersRemaining() > 0) {
                     if (NJ.stats.getNumConverters() > 0) {
-                        if (!that._isShowingReduceInterface)
-                            that.enterReduceInfoInterface();
+                        if (!that._isShowingPowerupInterface)
+                            that.enterPowerupInterface(NJ.purchases.ingameItemKeys.converter);
                         else
-                            that.leaveReduceInfoInterface();
+                            that.leavePowerupInterface();
                     } else {
                         that.showShoplet(NJ.purchases.ingameItemKeys.converter);
                     }
@@ -314,7 +309,8 @@ var BaseGameLayer = (function () {
             this._toolbarLayer.setOnStopperCallback(function(){
                 if (NJ.gameState.getStoppersRemaining() > 0) {
                     if (NJ.stats.getNumStoppers() > 0){
-                        cc.log("using a stopper, yay!");
+                        that.enterPowerupInterface(NJ.purchases.ingameItemKeys.stopper);
+
                         that.stopperBonus();
 
                         NJ.stats.depleteStoppers();
@@ -338,21 +334,6 @@ var BaseGameLayer = (function () {
                         that._toolbarLayer.updatePowerups();
                     } else {
                         that.showShoplet(NJ.purchases.ingameItemKeys.scrambler);
-                    }
-                }
-            });
-
-            this._toolbarLayer.setOnHintCallback(function () {
-                if (NJ.gameState.getHintsRemaining() > 0) {
-                    if (NJ.stats.getNumHints() > 0) {
-                        if (that.jiggleHintBlocksAndReset()) {
-                            NJ.stats.depleteHints();
-                            NJ.stats.save();
-                            NJ.gameState.decrementHintsRemaining();
-                            that._toolbarLayer.updatePowerups();
-                        }
-                    } else {
-                        that.showShoplet(NJ.purchases.ingameItemKeys.hint);
                     }
                 }
             });
@@ -471,8 +452,10 @@ var BaseGameLayer = (function () {
 
         // ends the session and goes to the game over screen
         // for the appropriate mode
-        endToEpilogue: function (modeKey) {
+        endToEpilogue: function () {
             var that = this;
+
+            var modeKey = NJ.gameState.getModeKey();
 
             var score = NJ.gameState.getScore();
             var highscoreAccepted = NJ.stats.offerHighscore(modeKey, score);
@@ -765,7 +748,7 @@ var BaseGameLayer = (function () {
 
 
             this.leave(function () {
-                that.endToEpilogue(that._modeKey);
+                that.endToEpilogue();
             })
         },
 
@@ -785,8 +768,8 @@ var BaseGameLayer = (function () {
 
             this.leaveBoard();
 
-            if (this._isShowingReduceInterface)
-                this.leaveReduceInfoInterface();
+            if (this._isShowingPowerupInterface)
+                this.leavePowerupInterface();
 
             var callback = function () {
                 that._settingsMenuLayer = new SettingsMenuLayer(true);
@@ -901,8 +884,8 @@ var BaseGameLayer = (function () {
                         if (selectedBlock.val != 1) {
 
                             // we should not try to reduce if we're in the tutorial
-                            if (this._modeKey != NJ.modekeys.tutorial) {
-                                if ((this._isShowingReduceInterface || selectedBlock.isSelected) && NJ.gameState.getConvertersRemaining() > 0) {
+                            if (NJ.gameState.getModeKey() != NJ.modekeys.tutorial) {
+                                if ((this._isShowingPowerupInterface || selectedBlock.isSelected) && NJ.gameState.getConvertersRemaining() > 0) {
                                     if (NJ.stats.getNumConverters() > 0) {
                                         //selectAudio = res.Sound;
 
@@ -913,8 +896,8 @@ var BaseGameLayer = (function () {
 
                                         this._toolbarLayer.updatePowerups();
 
-                                        if (this._isShowingReduceInterface) {
-                                            this.leaveReduceInfoInterface();
+                                        if (this._isShowingPowerupInterface) {
+                                            this.leavePowerupInterface();
                                         }
 
                                         this._numboController.resetKnownPath();
@@ -1137,8 +1120,8 @@ var BaseGameLayer = (function () {
 
 		// enters the interface to show players
 		// how to use the reduce power up
-		enterReduceInfoInterface: function() {
-			this._isShowingReduceInterface = true;
+		enterPowerupInterface: function(itemKey) {
+			this._isShowingPowerupInterface = true;
 
 			/*
 			var blocks = this._numboController.getBlocksList();
@@ -1147,8 +1130,7 @@ var BaseGameLayer = (function () {
 			}*/
 
 			this._infoInterfaceLayer.reset();
-			this._infoInterfaceLayer.setPrimaryInfo("Tap a number to reduce it to 1.");
-			this._infoInterfaceLayer.setSecondaryInfo("Double tap any number to quickly reduce.");
+			this._infoInterfaceLayer.setInfoByItemKey(itemKey);
 			this._infoInterfaceLayer.enter();
 		},
 
@@ -1156,9 +1138,9 @@ var BaseGameLayer = (function () {
 // Drawing //
 /////////////
 
-		// leave the interface for showing players how to reduce
-		leaveReduceInfoInterface: function() {
-			this._isShowingReduceInterface = false;
+		// leave the interface for showing players how to power up
+		leavePowerupInterface: function() {
+			this._isShowingPowerupInterface = false;
 
 			/*
 			var blocks = this._numboController.getBlocksList();

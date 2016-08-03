@@ -12,12 +12,13 @@ NJ.purchases = (function() {
         // here we define data for each non in app purchase
         stopper: {
             name: "Stoppers",
-            description: "Add extra moves / add extra time / clear board",
-            iconRes: res.handImage,
+            description: "Use stoppers to play for longer.",
+            iconRes: res.timedImage,
             amount: 3,
-            price: 3000
+            price: 0
         },
         converter: {
+
             name: "Reducers",
             description: "Use reducers to change any number into 1.",
             iconRes: res.convertImage,

@@ -10,7 +10,15 @@ NJ.purchases = (function() {
     // data of non in-app purchase items
     var inGameItems = {
         // here we define data for each non in app purchase
+        stopper: {
+            name: "Stoppers",
+            description: "Use stoppers to play for longer.",
+            iconRes: res.timedImage,
+            amount: 3,
+            price: 0
+        },
         converter: {
+
             name: "Reducers",
             description: "Use reducers to change any number into 1.",
             iconRes: res.convertImage,
@@ -63,6 +71,7 @@ NJ.purchases = (function() {
 
         // expose keys for in game purchases
         ingameItemKeys: {
+            stopper: "stopper",
             converter: "converter",
             hint: "hint",
             scrambler: "scrambler"
@@ -75,7 +84,7 @@ NJ.purchases = (function() {
         // whether ad videos are available
         // TODO: this is intended to be set to false here. temporarily changed for web dev.
         //areVideosAvailable: false,
-        areVideosAvailable: true,
+        areVideosAvailable: ! cc.sys.isNative,
 
         // Initialization //
 

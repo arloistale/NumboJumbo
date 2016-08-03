@@ -30,7 +30,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 	_reset: function() {
 		this._super();
 
-		this._modeKey = NJ.modekeys.moves;
+		NJ.gameState.setModeKey(NJ.modekeys.moves);
 
 		var that = this;
 
@@ -73,7 +73,7 @@ var MovesGameLayer = BaseGameLayer.extend({
 	_resetWithVideoAdReward: function(){
 		this._reset();
 
-		this._movesLimit = BASE_MOVES + BONUS_MOVES
+		this._movesLimit = BASE_MOVES + BONUS_MOVES;
 		this._numboHeaderLayer.setConditionValue(Math.floor(this._movesLimit));
 	},
 
@@ -92,6 +92,12 @@ var MovesGameLayer = BaseGameLayer.extend({
 	/////////////////////////
 	// Game State Handling //
 	/////////////////////////
+
+	stopperBonus: function(){
+		cc.log("using a stopper in moves!");
+		this._movesLimit += BONUS_MOVES;
+		this._numboHeaderLayer.setConditionValue(this._movesLimit - NJ.gameState.getMovesMade());
+	},
 
 	onRetry: function() {
 		this._super();
