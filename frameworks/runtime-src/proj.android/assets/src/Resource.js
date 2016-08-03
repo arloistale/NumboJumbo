@@ -56,6 +56,7 @@ var res = {
     convertImage: resRoot + "Images/ic_convert/ic_convert.png",
     scrambleImage: resRoot + "Images/ic_scramble/ic_scramble.png",
     shareImage: resRoot + "Images/ic_share/ic_share_2x.png",
+    videoImage: resRoot + "Images/ic_video/ic_video_2x.png",
 
     playImage: resRoot + "Images/ic_play/ic_play_2x.png",
     timedImage: resRoot + "Images/ic_timed.png",

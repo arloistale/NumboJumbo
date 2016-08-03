@@ -18,6 +18,7 @@ var StackGameLayer = BaseGameLayer.extend({
     ],
 
     // initial # of blocks dropped every turn (increases at each level)
+    //_blocksToDrop: 8,
     _blocksToDrop: 4,
     _initialSpawnAmount: null,
 
@@ -66,6 +67,28 @@ var StackGameLayer = BaseGameLayer.extend({
         }
     },
 
+
+    _resetWithVideoAdReward: function(){
+        var score = NJ.gameState.getScore();
+        var numBlocksCleared = NJ.gameState.getBlocksCleared();
+
+        this._reset();
+
+        NJ.gameState.addScore(score);
+        this._numboHeaderLayer.setScoreValue(score);
+
+        NJ.gameState.addBlocksCleared(numBlocksCleared);
+        var levelUpCount = NJ.gameState.levelUpIfNeeded();
+        if(levelUpCount) {
+            for (var i = 0; i < levelUpCount; ++i) {
+                this._blocksToDrop++;
+            }
+            this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
+        }
+
+
+    },
+
     _initUI: function() {
         this._super();
 
@@ -89,6 +112,11 @@ var StackGameLayer = BaseGameLayer.extend({
         scene.addChild(new StackGameLayer());
         cc.director.runScene(scene);
     },
+
+    getAdMessage: function(){
+        return "Watch a video to keep playing!";
+    },
+
 
     // whether the game is over or not
     isGameOver: function() {

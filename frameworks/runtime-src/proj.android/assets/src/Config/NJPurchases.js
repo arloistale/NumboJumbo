@@ -73,7 +73,9 @@ NJ.purchases = (function() {
         campaignMessage: null,
 
         // whether ad videos are available
-        areVideosAvailable: false,
+        // TODO: this is intended to be set to false here. temporarily changed for web dev.
+        //areVideosAvailable: false,
+        areVideosAvailable: true,
 
         // Initialization //
 

@@ -84,6 +84,23 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         }
     },
 
+    _resetWithVideoAdReward: function(){
+        var score = NJ.gameState.getScore();
+        var numBlocksCleared = NJ.gameState.getBlocksCleared();
+
+        this._reset();
+
+        NJ.gameState.addScore(score);
+        this._numboHeaderLayer.setScoreValue(score);
+
+        NJ.gameState.addBlocksCleared(numBlocksCleared);
+        if (NJ.gameState.levelUpIfNeeded()) {
+            this._numboController.updateProgression();
+            this._numboHeaderLayer.setConditionValue(NJ.gameState.getLevel());
+        }
+
+    },
+
     _getSpawnTime: function() {
         // nonlinear level-based variable
         var L = NJ.gameState.getLevel();
@@ -91,6 +108,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         var LFactor = 1 / Math.pow(L, exponent);
 
         var spawnTime = 1.5 * LFactor;
+
         return spawnTime;
     },
 
@@ -116,6 +134,10 @@ var InfiniteGameLayer = BaseGameLayer.extend({
         var scene = new cc.Scene();
         scene.addChild(new InfiniteGameLayer());
         cc.director.runScene(scene);
+    },
+
+    getAdMessage: function(){
+        return "Watch a video to keep playing!";
     },
 
     // whether the game is over or not
@@ -225,7 +247,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
 
         this._playActivationSounds(selectedBlocks.length);
 
-        if(this._numboController.getNumBlocks() <= 3) {
+        if(this._numboController.getNumBlocks() <= 4) {
             this.spawnRandomBlocks(Math.floor(NJ.NUM_COLS * NJ.NUM_ROWS / 3));
         }
     }

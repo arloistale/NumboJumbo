@@ -135,8 +135,10 @@ NJ.stats = (function() {
 
         // returns the new number of games completed
         incrementNumGamesCompleted: function() {
-            cc.log("Completed: " + (numGamesCompleted + 1) + " games");
-            return ++numGamesCompleted;
+            numGamesCompleted += 1;
+            cc.log("Completed: " + numGamesCompleted + " games");
+
+            return numGamesCompleted;
         },
 
         getNumGamesCompleted: function() {
@@ -148,11 +150,14 @@ NJ.stats = (function() {
         },
 
         setNumGamesForNextAd: function(){
-            numGamesForNextAd = numGamesCompleted + 2; // every other game gets an ad (for now)
+            numGamesForNextAd = numGamesCompleted + 1; // every other game gets an ad (for now)
         },
 
         isEnoughGamesForAd: function(){
-            cc.log("numGames: ", numGamesCompleted, ";, num for ad:", numGamesForNextAd);
+            if (numGamesCompleted > numGamesForNextAd){
+                this.setNumGamesForNextAd();
+            }
+            cc.log("numGames: ", numGamesCompleted, ", num for ad:", numGamesForNextAd);
             return numGamesCompleted >= numGamesForNextAd;
         },
 

@@ -150,7 +150,7 @@ NJ.stats = (function() {
         },
 
         setNumGamesForNextAd: function(){
-            numGamesForNextAd = numGamesCompleted + 2; // every other game gets an ad (for now)
+            numGamesForNextAd = numGamesCompleted + 1; // every other game gets an ad (for now)
         },
 
         isEnoughGamesForAd: function(){

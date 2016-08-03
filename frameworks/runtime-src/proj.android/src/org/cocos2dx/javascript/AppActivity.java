@@ -137,16 +137,6 @@ public class AppActivity extends Cocos2dxActivity {
         // init rewarded videos
         mMediationAgent = SupersonicFactory.getInstance();
 
-        /*
-        mMediationAgent.setLogListener (new LogListener() {
-            @Override
-            public void onLog (SupersonicLogger.SupersonicTag tag, String message, int logLevel) {
-                Log.i(SUPERSONIC_TAG, String.format(Locale.US,
-                    "%d/%s: %s", logLevel, tag, message));
-            }
-        });
-        */
-
         mRewardsManager = new NumboRewardsManager();
 
         // start the background thread that will get the goog advertising id

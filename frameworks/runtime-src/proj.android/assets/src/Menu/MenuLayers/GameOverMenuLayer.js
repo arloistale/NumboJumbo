@@ -9,8 +9,11 @@ var GameOverMenuLayer = (function () {
         "Are we there yet?",
         "Shine on!",
         "Another feather in the cap.",
-        "What a performance!"
+        "What a performance!",
+        "This is just wonderful!",
+        "Holy cow, new high score!!"
     ];
+
 
     ///////////////
     // UI Events //
@@ -33,6 +36,11 @@ var GameOverMenuLayer = (function () {
         NJ.stats.setNumGamesForNextAd();
 
         NJ.requestAd();
+
+        if (cc.sys.isNative == false) {
+            cc.eventManager.dispatchCustomEvent("rewardForVideoAd");
+        }
+
     };
 
     var onShare = function () {
@@ -93,7 +101,9 @@ var GameOverMenuLayer = (function () {
         // Callbacks Data
         onRetryCallback: null,
         onMenuCallback: null,
-        onRequestAdCallback: null,
+        onRewardForVideoAdCallback: null,
+        watchAdMessageCallback: null,
+        _watchAdMessage: null,
 
         // Data
         _isHighscore: false,
@@ -103,10 +113,11 @@ var GameOverMenuLayer = (function () {
 // Initialization //
 ////////////////////
 
-        ctor: function (modeKey, isHighscore) {
+        ctor: function (modeKey, isHighscore, watchAdMessage) {
             // mode key is used to retrieve high score data
             this._modeKey = modeKey;
             this._isHighscore = isHighscore;
+            this._watchAdMessage = watchAdMessage;
 
             this._super();
 
@@ -124,12 +135,16 @@ var GameOverMenuLayer = (function () {
 
         _initInput: function() {
             this._super();
+            var that = this;
 
             cc.eventManager.addListener(cc.EventListener.create({
                 event: cc.EventListener.CUSTOM,
                 eventName: "rewardForVideoAd",
                 callback: function (event) {
-                    cc.log("YAYY");
+                    that.leave(function () {
+                        if (that.onRewardForVideoAdCallback)
+                            that.onRewardForVideoAdCallback();
+                    });
                 }
             }), 1);
         },
@@ -279,6 +294,8 @@ var GameOverMenuLayer = (function () {
             var that = this;
 
             var promoUseCase = null;
+            cc.log("Enough? : " + NJ.stats.isEnoughGamesForAd());
+            cc.log("Available? : " + NJ.purchases.areVideosAvailable);
             if (NJ.stats.isEnoughGamesForAd() && NJ.purchases.areVideosAvailable) {
                 promoUseCase = "ad";
             } else if (NJ.settings.hasInteractedReview == false) {
@@ -317,13 +334,14 @@ var GameOverMenuLayer = (function () {
                 }
 
                 else if (promoUseCase == "ad") {
-                    promoStr = "Watch a video for FREE Bubbles!";
+                    promoStr = this._watchAdMessage;
 
                     this._promoButton = new NumboMenuButton(buttonSize, function () {
-                        (onRequestAd.bind(this))();
+                        onRequestAd();
                     }, this);
+
                     this._promoButton.setBackgroundColor(NJ.themes.blockColors[1]);
-                    this._promoButton.setImageRes(res.handImage);
+                    this._promoButton.setImageRes(res.videoImage);
                     this._promoButton.runActionOnChildren(cc.sequence(cc.scaleBy(0.5, 1.25, 1.25).easing(cc.easeQuadraticActionInOut()), cc.scaleBy(0.5, 0.8, 0.8).easing(cc.easeQuadraticActionInOut())).repeatForever());
                     this._promoButton.attr({
                         anchorX: 0.5,
@@ -426,8 +444,8 @@ var GameOverMenuLayer = (function () {
             this.onMenuCallback = callback;
         },
 
-        setOnRequestAdCallback: function(callback){
-            this.onRequestAdCallback = callback;
+        setOnRewardForVideoAdCallback: function(callback){
+            this.onRewardForVideoAdCallback = callback;
         },
 
         ///////////////

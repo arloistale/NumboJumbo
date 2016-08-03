@@ -294,6 +294,8 @@ var GameOverMenuLayer = (function () {
             var that = this;
 
             var promoUseCase = null;
+            cc.log("Enough? : " + NJ.stats.isEnoughGamesForAd());
+            cc.log("Available? : " + NJ.purchases.areVideosAvailable);
             if (NJ.stats.isEnoughGamesForAd() && NJ.purchases.areVideosAvailable) {
                 promoUseCase = "ad";
             } else if (NJ.settings.hasInteractedReview == false) {
