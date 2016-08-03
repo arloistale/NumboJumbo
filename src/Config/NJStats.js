@@ -158,12 +158,16 @@ NJ.stats = (function() {
             numGamesForNextAd = numGamesCompleted + 1; // every other game gets an ad (for now)
         },
 
-        isEnoughGamesForAd: function(){
+        isEnoughGamesForAd: function() {
+            /*
             if (numGamesCompleted > numGamesForNextAd){
                 this.setNumGamesForNextAd();
             }
             cc.log("numGames: ", numGamesCompleted, ", num for ad:", numGamesForNextAd);
             return numGamesCompleted >= numGamesForNextAd;
+            */
+
+            return true;
         },
 
         enableDoubler: function() {

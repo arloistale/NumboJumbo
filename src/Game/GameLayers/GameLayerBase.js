@@ -451,12 +451,14 @@ var BaseGameLayer = (function () {
         /////////////////////////
 
         // ends the session and goes to the game over screen
+        // also awards score and handles all that jazz
         // for the appropriate mode
         endToEpilogue: function () {
             var that = this;
 
             var modeKey = NJ.gameState.getModeKey();
 
+            // stats
             var score = NJ.gameState.getScore();
             var highscoreAccepted = NJ.stats.offerHighscore(modeKey, score);
 
@@ -464,6 +466,36 @@ var BaseGameLayer = (function () {
             if (NJ.stats.isDoubleEnabled())
                 currencyGain *= 2;
             NJ.stats.addCurrency(currencyGain);
+
+            // achievements
+            var numGames = NJ.stats.incrementNumGamesCompleted();
+
+            if (numGames >= 5) {
+                NJ.social.unlockAchievement(NJ.social.achievements.played1);
+            }
+            if (numGames >= 10) {
+                NJ.social.unlockAchievement(NJ.social.achievements.played2);
+            }
+            if (numGames >= 25) {
+                NJ.social.unlockAchievement(NJ.social.achievements.played3);
+            }
+            if (numGames >= 50) {
+                NJ.social.unlockAchievement(NJ.social.achievements.played4);
+            }
+            if (numGames >= 100) {
+                NJ.social.unlockAchievement(NJ.social.achievements.played5);
+            }
+
+            var modeAchievements = NJ.social.achievements[modeKey];
+            if(!modeAchievements) {
+                cc.log("Could not load mode achievements!");
+            }
+
+            for(var i = 0; i < modeAchievements.scoreThresholds.length; ++i) {
+                if(score >= modeAchievements.scoreThresholds[i]) {
+                    NJ.social.unlockAchievement(modeKey + (i + 1));
+                }
+            }
 
             this._backgroundLayer.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function () {
                 // now clear the level once all that is dealt with
@@ -722,34 +754,13 @@ var BaseGameLayer = (function () {
             this.pauseInput();
             this.unscheduleAllCallbacks();
 
+            // give a little audio feedback that the game is over
             NJ.audio.playSound(res.overSound);
-
             NJ.audio.stopMusic();
-
-            // achievements
-
-            var numGames = NJ.stats.incrementNumGamesCompleted();
-
-            if (numGames >= 5) {
-                NJ.social.unlockAchievement(NJ.social.achievements.played1);
-            }
-            if (numGames >= 10) {
-                NJ.social.unlockAchievement(NJ.social.achievements.played2);
-            }
-            if (numGames >= 25) {
-                NJ.social.unlockAchievement(NJ.social.achievements.played3);
-            }
-            if (numGames >= 50) {
-                NJ.social.unlockAchievement(NJ.social.achievements.played4);
-            }
-            if (numGames >= 100) {
-                NJ.social.unlockAchievement(NJ.social.achievements.played5);
-            }
-
 
             this.leave(function () {
                 that.endToEpilogue();
-            })
+            });
         },
 
         ///////////////
