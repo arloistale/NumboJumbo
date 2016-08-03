@@ -39,6 +39,26 @@ var ShopMenuLayer = (function() {
         }
     };
 
+    var onBuyStoppers = function() {
+        NJ.audio.playSound(res.coinSound);
+
+        var that = this;
+
+        const stopperPurchaseData = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.stopper);
+
+        if(NJ.stats.getNumStoppers() + stopperPurchaseData.amount <= NJ.stats.MAX_NUM_STOPPERS) {
+            if (NJ.stats.getCurrency() >= stopperPurchaseData.price) {
+                NJ.stats.addCurrency(-stopperPurchaseData.price);
+                NJ.stats.addStoppers(stopperPurchaseData.amount);
+                that.updateCurrencyLabel();
+                that.updateItems();
+                NJ.stats.save();
+            } else {
+                that.devModeLog("Log " + _logCount + ": Insufficient funds for purchase");
+            }
+        }
+    };
+
     var onBuyConverters = function() {
         NJ.audio.playSound(res.coinSound);
 
@@ -145,6 +165,7 @@ var ShopMenuLayer = (function() {
         _buyHintsButton: null,
         _buyScramblersButton: null,
         _buyConvertersButton: null,
+        _buyStoppersButton: null,
 
         _currencyLabel: null,
         _currencyInfoLabel: null,
@@ -296,6 +317,7 @@ var ShopMenuLayer = (function() {
                 anchorY: 0.5
             });
 
+            var stopperItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.stopper);
             var converterItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.converter);
             var hintItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.hint);
             var scramblerItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.scrambler);
@@ -305,7 +327,7 @@ var ShopMenuLayer = (function() {
             this._buyHintsButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width / 5,
+                x: cc.visibleRect.width / 8,
                 y: buttonContainer.getContentSize().height / 2 + this._buyHintsButton.getContentSize().height / 2
             });
             this._buyHintsButton.setLabelTitle(NJ.stats.getNumHints() + "");
@@ -317,7 +339,7 @@ var ShopMenuLayer = (function() {
             buyHintsLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width / 5,
+                x: cc.visibleRect.width / 8,
                 y: buttonContainer.getContentSize().height / 2 - buyHintsLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
             });
 
@@ -326,7 +348,7 @@ var ShopMenuLayer = (function() {
             this._buyConvertersButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width / 2,
+                x: cc.visibleRect.width * 3 / 8,
                 y: buttonContainer.getContentSize().height / 2 + this._buyConvertersButton.getContentSize().height / 2
             });
             this._buyConvertersButton.setLabelTitle(NJ.stats.getNumConverters() + "");
@@ -338,7 +360,28 @@ var ShopMenuLayer = (function() {
             buyConvertersLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width / 2,
+                x: cc.visibleRect.width * 3 / 8,
+                y: buttonContainer.getContentSize().height / 2 - buyConvertersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
+            });
+
+            this._buyStoppersButton = new NumboMenuButton(cc.size(coinSize.height, coinSize.height), onBuyStoppers.bind(this), this);
+            this._buyStoppersButton.setBackgroundColor(NJ.themes.stoppersColor);
+            this._buyStoppersButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: cc.visibleRect.width * 5 / 8,
+                y: buttonContainer.getContentSize().height / 2 + this._buyStoppersButton.getContentSize().height / 2
+            });
+            this._buyStoppersButton.setLabelTitle(NJ.stats.getNumStoppers() + "");
+            this._buyStoppersButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            this._buyStoppersButton.offsetLabel(cc.p(this._buyStoppersButton.getContentSize().width / 1.1, 0));
+            this._buyStoppersButton.setImageRes(res.convertImage);
+
+            var buyStoppersLabel = this.generateLabel(stopperItem.amount + " " + stopperItem.name + "\n" + stopperItem.price, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            buyStoppersLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: cc.visibleRect.width * 5 / 8,
                 y: buttonContainer.getContentSize().height / 2 - buyConvertersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
             });
 
@@ -347,7 +390,7 @@ var ShopMenuLayer = (function() {
             this._buyScramblersButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width * 4 / 5,
+                x: cc.visibleRect.width * 7 / 8,
                 y: buttonContainer.getContentSize().height / 2 + this._buyScramblersButton.getContentSize().height / 2
             });
             this._buyScramblersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
@@ -359,9 +402,12 @@ var ShopMenuLayer = (function() {
             buyScramblersLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width * 4 / 5,
+                x: cc.visibleRect.width * 7 / 8,
                 y: buttonContainer.getContentSize().height / 2 - buyScramblersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
             });
+
+            buttonContainer.addChild(this._buyStoppersButton);
+            buttonContainer.addChild(buyStoppersLabel);
 
             buttonContainer.addChild(this._buyHintsButton);
             buttonContainer.addChild(buyHintsLabel);

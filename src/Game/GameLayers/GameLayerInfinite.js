@@ -128,6 +128,12 @@ var InfiniteGameLayer = BaseGameLayer.extend({
     // Game State Handling //
     /////////////////////////
 
+    stopperBonus: function(){
+        cc.log("using a stopper in infinite!");
+        this._numboController.removeAllBlocks();
+        this.spawnInitialBlocks();
+    },
+
     onRetry: function() {
         this._super();
 

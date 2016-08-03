@@ -1,6 +1,16 @@
 var ToolbarLayer = (function() {
 
     // Touch Events
+    var onStopper = function() {
+        NJ.audio.playSound(res.clickSound);
+
+        if (this._onStopperCallback) {
+            this._onStopperCallback();
+        } else {
+            cc.log("*** toolbar layer: stopper callback not set!");
+        }
+    };
+
     var onConvert = function() {
         NJ.audio.playSound(res.clickSound);
 
@@ -36,11 +46,13 @@ var ToolbarLayer = (function() {
         // UI Data
         buttonsMenu: null,
 
+        _stopperButton: null,
         _converterButton: null,
         _scrambleButton: null,
         _hintButton: null,
 
         // callbacks
+        _onStopperCallback: null,
         _onConvertCallback: null,
         _onScrambleCallback: null,
         _onHintCallback:null,
@@ -75,6 +87,14 @@ var ToolbarLayer = (function() {
             var buttonSize = cc.size(contentSize.height * NJ.uiSizes.barButton,
                 contentSize.height * NJ.uiSizes.barButton);
 
+            this._stopperButton = new NumboMenuButton(buttonSize, onStopper.bind(this), this);
+            this._stopperButton.setBackgroundColor(NJ.themes.stoppersColor);
+            this._stopperButton.setLabelColor(NJ.themes.defaultLabelColor);
+            this._stopperButton.setLabelTitle(NJ.stats.getNumStoppers() + "");
+            this._stopperButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            this._stopperButton.offsetLabel(cc.p(0, -buttonSize.height / 2 - NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2));
+            this._stopperButton.setImageRes(res.handImage);
+
             this._converterButton = new NumboMenuButton(buttonSize, onConvert.bind(this), this);
             this._converterButton.setBackgroundColor(NJ.themes.convertersColor);
             this._converterButton.setLabelColor(NJ.themes.defaultLabelColor);
@@ -99,12 +119,14 @@ var ToolbarLayer = (function() {
             this._hintButton.offsetLabel(cc.p(0, -buttonSize.height / 2 - NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2));
             this._hintButton.setImageRes(res.searchImage);
 
+            this._buttonsMenu.addChild(this._stopperButton);
             this._buttonsMenu.addChild(this._hintButton);
             this._buttonsMenu.addChild(this._converterButton);
             this._buttonsMenu.addChild(this._scrambleButton);
 
             this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
 
+            this._stopperButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
             this._converterButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
             this._scrambleButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
             this._hintButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
@@ -122,6 +144,7 @@ var ToolbarLayer = (function() {
             this._hintButton.setChildrenOpacity(0);
             this._scrambleButton.setChildrenOpacity(0);
             this._converterButton.setChildrenOpacity(0);
+            this._stopperButton.setChildrenOpacity(0);
         },
 
         reset: function() {
@@ -153,6 +176,10 @@ var ToolbarLayer = (function() {
 
         // UI callbacks //
 
+        setOnStopperCallback: function(callback){
+            this._onStopperCallback = callback;
+        },
+
         setOnConvertCallback: function(callback) {
             this._onConvertCallback = callback;
         },
@@ -171,6 +198,12 @@ var ToolbarLayer = (function() {
             this._converterButton.setLabelTitle(NJ.stats.getNumConverters());
             this._hintButton.setLabelTitle(NJ.stats.getNumHints());
             this._scrambleButton.setLabelTitle(NJ.stats.getNumScramblers());
+            this._stopperButton.setLabelTitle(NJ.stats.getNumStoppers());
+
+            if(NJ.gameState.getStoppersRemaining() <= 0) {
+                this._stopperButton.setEnabled(false);
+                this._stopperButton.setChildrenOpacity(128);
+            }
 
             if(NJ.gameState.getConvertersRemaining() <= 0) {
                 this._converterButton.setEnabled(false);
