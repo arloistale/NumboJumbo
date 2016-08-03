@@ -896,10 +896,6 @@ var BaseGameLayer = (function () {
 
                                         this._toolbarLayer.updatePowerups();
 
-                                        if (this._isShowingPowerupInterface) {
-                                            this.leavePowerupInterface();
-                                        }
-
                                         this._numboController.resetKnownPath();
 
                                         // it's possible to have converted the board to no solutions
@@ -927,6 +923,11 @@ var BaseGameLayer = (function () {
                         this._numboHeaderLayer.setEquation(selectedNums);
 
                         NJ.audio.playSound(selectAudio);
+
+                        // we need to hide the power up interface whenever we tap a block
+                        if (this._isShowingPowerupInterface) {
+                            this.leavePowerupInterface();
+                        }
                     }
 
                     this.redrawSelectedLines(selectedBlocks);

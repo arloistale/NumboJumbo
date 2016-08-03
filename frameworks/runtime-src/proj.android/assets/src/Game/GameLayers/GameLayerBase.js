@@ -885,7 +885,7 @@ var BaseGameLayer = (function () {
 
                             // we should not try to reduce if we're in the tutorial
                             if (NJ.gameState.getModeKey() != NJ.modekeys.tutorial) {
-                                if ((this._isShowingPowerupInterface || selectedBlock.isSelected) && NJ.gameState.getConvertersRemaining() > 0) {
+                                if (selectedBlock.isSelected && NJ.gameState.getConvertersRemaining() > 0) {
                                     if (NJ.stats.getNumConverters() > 0) {
                                         //selectAudio = res.Sound;
 
@@ -895,10 +895,6 @@ var BaseGameLayer = (function () {
                                         NJ.gameState.decrementConvertersRemaining();
 
                                         this._toolbarLayer.updatePowerups();
-
-                                        if (this._isShowingPowerupInterface) {
-                                            this.leavePowerupInterface();
-                                        }
 
                                         this._numboController.resetKnownPath();
 
@@ -910,7 +906,8 @@ var BaseGameLayer = (function () {
                                         this.showShoplet(NJ.purchases.ingameItemKeys.converter);
                                     }
                                 } else {
-                                    selectedBlock.select();
+                                    selectedBlock.select(true);
+                                    selectedBlock.highlight();
                                 }
                             } else {
                                 selectedBlock.highlight();
@@ -926,6 +923,11 @@ var BaseGameLayer = (function () {
                         this._numboHeaderLayer.setEquation(selectedNums);
 
                         NJ.audio.playSound(selectAudio);
+
+                        // we need to hide the power up interface whenever we tap a block
+                        if (this._isShowingPowerupInterface) {
+                            this.leavePowerupInterface();
+                        }
                     }
 
                     this.redrawSelectedLines(selectedBlocks);
@@ -1123,11 +1125,12 @@ var BaseGameLayer = (function () {
 		enterPowerupInterface: function(itemKey) {
 			this._isShowingPowerupInterface = true;
 
-			/*
-			var blocks = this._numboController.getBlocksList();
-			for(var i = 0; i < blocks.length; ++i) {
-				blocks[i].highlight(true);
-			}*/
+            if(itemKey == NJ.purchases.ingameItemKeys.converter) {
+                 var blocks = this._numboController.getBlocksList();
+                 for(var i = 0; i < blocks.length; ++i) {
+                     blocks[i].select();
+                 }
+            }
 
 			this._infoInterfaceLayer.reset();
 			this._infoInterfaceLayer.setInfoByItemKey(itemKey);
@@ -1142,11 +1145,12 @@ var BaseGameLayer = (function () {
 		leavePowerupInterface: function() {
 			this._isShowingPowerupInterface = false;
 
-			/*
+            // this is pretty ugly, but we don't have a way to determine if we are trying to reduce
+            // so we just always deselect everything
 			var blocks = this._numboController.getBlocksList();
 			for(var i = 0; i < blocks.length; ++i) {
-				blocks[i].clearHighlight(true);
-			}*/
+				blocks[i].deselect();
+			}
 
 			this._infoInterfaceLayer.leave();
 		},

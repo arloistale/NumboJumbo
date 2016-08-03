@@ -15,7 +15,7 @@ NJ.purchases = (function() {
             description: "Use stoppers to play for longer.",
             iconRes: res.timedImage,
             amount: 3,
-            price: 0
+            price: 3000
         },
         converter: {
 
