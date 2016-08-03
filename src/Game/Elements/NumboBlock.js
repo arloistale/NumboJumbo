@@ -180,15 +180,21 @@ var NumboBlock = cc.Sprite.extend({
 
     // select is a special case for when we want
     // to see if a certain block is being double tapped by the player
-    select: function() {
+    select: function(shouldAutoDeselect) {
         var that = this;
 
         this.isSelected = true;
-        this.highlight();
 
-        this.runAction(cc.sequence(cc.delayTime(0.25), cc.callFunc(function() {
-            that.isSelected = false;
-        })));
+        if(shouldAutoDeselect) {
+            this.runAction(cc.sequence(cc.delayTime(0.25), cc.callFunc(function () {
+                that.deselect();
+            })));
+        }
+    },
+
+    // deselect the block, indicating that we are no longer double tapping.
+    deselect: function() {
+        this.isSelected = false;
     },
 
     // highlight the sprite indicating selection
