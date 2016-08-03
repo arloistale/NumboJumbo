@@ -26,6 +26,24 @@ var ShopletLayer = (function() {
         }
     };
 
+    var onBuyStoppers = function() {
+        NJ.audio.playSound(res.coinSound);
+
+        var that = this;
+
+        const stopperPurchaseData = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.stopper);
+
+        if(NJ.stats.getNumStoppers() + stopperPurchaseData.amount <= NJ.stats.MAX_NUM_STOPPERS) {
+            if (NJ.stats.getCurrency() >= stopperPurchaseData.price) {
+                NJ.stats.addCurrency(-stopperPurchaseData.price);
+                NJ.stats.addStoppers(stopperPurchaseData.amount);
+                that.updateCurrencyLabel();
+                that.updatePowerups();
+                NJ.stats.save();
+            }
+        }
+    };
+
     var onBuyHints = function() {
         NJ.audio.playSound(res.coinSound);
 
@@ -151,6 +169,9 @@ var ShopletLayer = (function() {
                     case NJ.purchases.ingameItemKeys.scrambler:
                         (onBuyScramblers.bind(that))();
                         break;
+                    case NJ.purchases.ingameItemKeys.stopper:
+                        (onBuyStoppers.bind(that))();
+                        break;
                 }
             }, this);
             this._buyItemButton.setBackgroundColor(NJ.themes.hintsColor);
@@ -264,6 +285,9 @@ var ShopletLayer = (function() {
                     break;
                 case NJ.purchases.ingameItemKeys.scrambler:
                     this._buyItemButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
+                    break;
+                case NJ.purchases.ingameItemKeys.stopper:
+                    this._buyItemButton.setLabelTitle(NJ.stats.getNumStoppers() + "");
                     break;
             }
 

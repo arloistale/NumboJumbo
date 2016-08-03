@@ -311,6 +311,23 @@ var BaseGameLayer = (function () {
                 }
             });
 
+            this._toolbarLayer.setOnStopperCallback(function(){
+                if (NJ.gameState.getStoppersRemaining() > 0) {
+                    if (NJ.stats.getNumStoppers() > 0){
+                        cc.log("using a stopper, yay!");
+                        that.stopperBonus();
+
+                        NJ.stats.depleteStoppers();
+                        NJ.stats.save();
+                        NJ.gameState.decrementStoppersRemaining();
+                        that._toolbarLayer.updatePowerups();
+
+                    } else {
+                        that.showShoplet(NJ.purchases.ingameItemKeys.stopper);
+                    }
+            }
+            });
+
             this._toolbarLayer.setOnScrambleCallback(function () {
                 if (NJ.gameState.getScramblesRemaining() > 0) {
                     if (NJ.stats.getNumScramblers() > 0) {
@@ -625,6 +642,11 @@ var BaseGameLayer = (function () {
             this._numboController.spawnDropRandomBlock(spawnBlock);
             this._instantiateBlock(spawnBlock);
             this.moveBlockIntoPlace(spawnBlock);
+        },
+
+        // should be overridden in subclasses
+        stopperBonus: function(){
+            cc.log("using a stopper!")
         },
 
         // Scrambles the board until there is a valid move

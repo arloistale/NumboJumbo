@@ -18,7 +18,6 @@ var StackGameLayer = BaseGameLayer.extend({
     ],
 
     // initial # of blocks dropped every turn (increases at each level)
-    //_blocksToDrop: 8,
     _blocksToDrop: 4,
     _initialSpawnAmount: null,
 
@@ -59,8 +58,7 @@ var StackGameLayer = BaseGameLayer.extend({
                         that._isInGame = true;
 
                         // fill the board with blocks initially
-                        that.spawnDropRandomBlocks(Math.floor(NJ.NUM_ROWS * NJ.NUM_COLS / 3));
-                        NJ.audio.playSound(res.plipSound);
+                        that.spawnInitialBlocks();
                     })));
                 });
             })));
@@ -104,6 +102,17 @@ var StackGameLayer = BaseGameLayer.extend({
     /////////////////////////
     // Game State Handling //
     /////////////////////////
+
+    spawnInitialBlocks: function() {
+        this.spawnDropRandomBlocks(NJ.NUM_COLS * NJ.NUM_ROWS / 3);
+        NJ.audio.playSound(res.plipSound);
+    },
+
+    stopperBonus: function(){
+        cc.log("using a stopper in stack!");
+        this._numboController.removeAllBlocks();
+        this.spawnInitialBlocks();
+    },
 
     onRetry: function() {
         this._super();

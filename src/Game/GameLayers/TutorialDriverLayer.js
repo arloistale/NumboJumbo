@@ -286,6 +286,7 @@ var TutorialDriverLayer = BaseGameLayer.extend({
 						if(!NJ.settings.hasLoadedTUT) {
 							NJ.settings.hasLoadedTUT = true;
 							NJ.stats.addHints(10);
+							NJ.stats.addStoppers(5);
 							NJ.stats.addConverters(5);
 							NJ.stats.addScramblers(3);
 							NJ.stats.save();
