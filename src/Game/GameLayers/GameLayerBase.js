@@ -451,14 +451,44 @@ var BaseGameLayer = (function() {
 		endToEpilogue: function(modeKey) {
 			var that = this;
 
+			// stats
 			var score = NJ.gameState.getScore();
 			var highscoreAccepted = NJ.stats.offerHighscore(modeKey, score);
 
-			var scoreDiff = NJ.gameState.getScore();
-			if(NJ.stats.isDoubleEnabled())
-				scoreDiff *= 2;
+			var currencyGain = NJ.gameState.getScore();
+			if (NJ.stats.isDoubleEnabled())
+				currencyGain *= 2;
+			NJ.stats.addCurrency(currencyGain);
 
-			NJ.stats.addCurrency(scoreDiff);
+			// achievements
+			var numGames = NJ.stats.incrementNumGamesCompleted();
+
+			if (numGames >= 5) {
+				NJ.social.unlockAchievement(NJ.social.achievements.played1);
+			}
+			if (numGames >= 10) {
+				NJ.social.unlockAchievement(NJ.social.achievements.played2);
+			}
+			if (numGames >= 25) {
+				NJ.social.unlockAchievement(NJ.social.achievements.played3);
+			}
+			if (numGames >= 50) {
+				NJ.social.unlockAchievement(NJ.social.achievements.played4);
+			}
+			if (numGames >= 100) {
+				NJ.social.unlockAchievement(NJ.social.achievements.played5);
+			}
+
+			var modeAchievements = NJ.social.achievements[modeKey];
+			if(!modeAchievements) {
+				cc.log("Could not load mode achievements!");
+			}
+
+			for(var i = 0; i < modeAchievements.scoreThresholds.length; ++i) {
+				if(score >= modeAchievements.scoreThresholds[i]) {
+					NJ.social.unlockAchievement(modeKey + (i + 1));
+				}
+			}
 
 			this._backgroundLayer.runAction(cc.sequence(cc.delayTime(0.5), cc.callFunc(function() {
 				// now clear the level once all that is dealt with
@@ -706,30 +736,6 @@ var BaseGameLayer = (function() {
 			NJ.audio.playSound(res.overSound);
 
 			NJ.audio.stopMusic();
-
-			// achievements
-
-			var numGames = NJ.stats.incrementNumGamesCompleted();
-
-			if(numGames >= 5) {
-				NJ.social.unlockAchievement(NJ.social.achievements.played1);
-
-				if(numGames >= 10) {
-					NJ.social.unlockAchievement(NJ.social.achievements.played2);
-
-					if (numGames >= 25) {
-						NJ.social.unlockAchievement(NJ.social.achievements.played3);
-
-						if (numGames >= 50) {
-							NJ.social.unlockAchievement(NJ.social.achievements.played4);
-
-							if (numGames >= 100) {
-								NJ.social.unlockAchievement(NJ.social.achievements.played5);
-							}
-						}
-					}
-				}
-			}
 
 			this.leave(function() {
 				that.endToEpilogue(that._modeKey);
