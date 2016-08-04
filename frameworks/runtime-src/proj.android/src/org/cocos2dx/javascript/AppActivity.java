@@ -138,6 +138,7 @@ public class AppActivity extends Cocos2dxActivity {
         mMediationAgent = SupersonicFactory.getInstance();
 
         mRewardsManager = new NumboRewardsManager();
+        mRewardsManager.initWithContext(this);
 
         // start the background thread that will get the goog advertising id
         Thread idThread = new Thread(new Runnable() {

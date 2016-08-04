@@ -8,6 +8,7 @@ This is where the monetization happens.
 package org.numbo.jumbo;
 
 import android.util.Log;
+import android.app.Activity;
 
 import com.supersonic.mediationsdk.logger.SupersonicError;
 
@@ -27,6 +28,7 @@ public class NumboRewardsManager implements RewardedVideoListener {
     // region Data
 
 
+    private Activity mContext;
     private boolean isVideoAvailable;
 
 
@@ -44,6 +46,10 @@ public class NumboRewardsManager implements RewardedVideoListener {
 
     // region Initialization
 
+
+    public void initWithContext(Activity context) {
+        mContext = context;
+    }
 
     // Successful rewards initialization callback.
     @Override
@@ -65,9 +71,20 @@ public class NumboRewardsManager implements RewardedVideoListener {
     // You can then show the video by calling showRewardedVideo().
     // Value will change to false when no videos are available.
     @Override
-    public void onVideoAvailabilityChanged(boolean available) {
-        // tell the game about video availability
-        alertVideoAvailability(available);
+    public void onVideoAvailabilityChanged(final boolean available) {
+        if(mContext == null) {
+            Log.e(TAG, "Need to initialize rewards with a context so we can do callbacks on main thread");
+            return;
+        }
+
+        // Need to call back to game on main thread
+        mContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // tell the game about video availability
+                alertVideoAvailability(available);
+            }
+        });
 
         isVideoAvailable = available;
     }
@@ -112,7 +129,19 @@ public class NumboRewardsManager implements RewardedVideoListener {
     //@param - placement - the Placement the user completed a video from.
     @Override
     public void onRewardedVideoAdRewarded(Placement placement) {
-        rewardForVideoAd();
+        if(mContext == null) {
+            Log.e(TAG, "Need to initialize rewards with a context so we can do callbacks on main thread");
+            return;
+        }
+
+        // Need to call back to game on main thread
+        mContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // reward for video ad
+                rewardForVideoAd();
+            }
+        });
     }
 
 
