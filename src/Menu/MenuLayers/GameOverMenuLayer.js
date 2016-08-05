@@ -297,7 +297,11 @@ var GameOverMenuLayer = (function () {
 
             if (NJ.stats.isEnoughGamesForAd() && NJ.purchases.areVideosAvailable) {
                 promoUseCase = "ad";
-            } else if (NJ.settings.hasInteractedReview == false) {
+            }
+
+            // even if we are about to show ad if we haven't reviewed yet
+            // with 20% chance we should be prompted for a review
+            if (!NJ.settings.hasInteractedReview && (!promoUseCase || Math.random() > 0.8)) {
                 promoUseCase = "review";
             }
 

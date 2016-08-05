@@ -105,7 +105,6 @@ NJ.purchases = (function() {
                 event: cc.EventListener.CUSTOM,
                 eventName: "alertVideoAvailable",
                 callback: function (event) {
-                    cc.log("gogo");
                     that.areVideosAvailable = true;
                 }
             }), 1337);

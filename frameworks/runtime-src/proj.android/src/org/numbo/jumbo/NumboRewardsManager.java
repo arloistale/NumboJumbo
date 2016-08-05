@@ -73,7 +73,7 @@ public class NumboRewardsManager implements RewardedVideoListener {
     @Override
     public void onVideoAvailabilityChanged(final boolean available) {
         if(mContext == null) {
-            Log.e(TAG, "Need to initialize rewards with a context so we can do callbacks on main thread");
+            Log.w(TAG, "Need to initialize rewards with a context so we can do callbacks on main thread");
             return;
         }
 
@@ -130,7 +130,7 @@ public class NumboRewardsManager implements RewardedVideoListener {
     @Override
     public void onRewardedVideoAdRewarded(Placement placement) {
         if(mContext == null) {
-            Log.e(TAG, "Need to initialize rewards with a context so we can do callbacks on main thread");
+            Log.w(TAG, "Need to initialize rewards with a context so we can do callbacks on main thread");
             return;
         }
 
