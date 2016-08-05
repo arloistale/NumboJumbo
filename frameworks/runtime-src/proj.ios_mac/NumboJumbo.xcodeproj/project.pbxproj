@@ -17,7 +17,6 @@
 		1AE159EC18C9DF3600FCA372 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A081B18C9DF05005C6854 /* project.json */; };
 		209E4950B0AC9BB39D6AE0AB /* PluginSdkboxPlayJSHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67C4447D945516142162E66B /* PluginSdkboxPlayJSHelper.cpp */; };
 		221D94841D2F2B9C007D72D5 /* SharingBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 221D94831D2F2B9C007D72D5 /* SharingBridge.mm */; };
-		22216FA61D4F0AA8007CBD44 /* Supersonic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22216FA51D4F0AA8007CBD44 /* Supersonic.framework */; };
 		22216FA81D4F0AE9007CBD44 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22216FA71D4F0AE9007CBD44 /* CoreVideo.framework */; };
 		22216FAA1D4F0B0E007CBD44 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22216FA91D4F0B0E007CBD44 /* CFNetwork.framework */; };
 		22216FAE1D4F0B39007CBD44 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22216FAD1D4F0B39007CBD44 /* MobileCoreServices.framework */; };
@@ -29,6 +28,8 @@
 		2255AE9E1D2EDB6F00DC989E /* SharingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2255AE9D1D2EDB6F00DC989E /* SharingController.m */; };
 		2262FD5F1D4909A6008F7A8C /* CampaignBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2262FD5E1D4909A6008F7A8C /* CampaignBridge.mm */; };
 		227FCFAA1D4943CF001682F2 /* Batch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227FCFA91D4943CE001682F2 /* Batch.framework */; };
+		22A930311D553DF1000D74E2 /* Supersonic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22A930301D553DF1000D74E2 /* Supersonic.framework */; };
+		22A930341D555022000D74E2 /* RewardBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 22A930331D555022000D74E2 /* RewardBridge.mm */; };
 		22C4092E1D0A241C00FB0601 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22C4092D1D0A241C00FB0601 /* Images.xcassets */; };
 		22C409331D0A264B00FB0601 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */; };
 		22C409341D0A264B00FB0601 /* Default-667h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C409301D0A264B00FB0601 /* Default-667h@2x.png */; };
@@ -191,7 +192,6 @@
 		221D947E1D2F0BE6007D72D5 /* SharingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharingController.h; path = ios/SharingController.h; sourceTree = "<group>"; };
 		221D94821D2F27AA007D72D5 /* SharingBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharingBridge.h; path = ios/SharingBridge.h; sourceTree = "<group>"; };
 		221D94831D2F2B9C007D72D5 /* SharingBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SharingBridge.mm; path = ios/SharingBridge.mm; sourceTree = "<group>"; };
-		22216FA51D4F0AA8007CBD44 /* Supersonic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Supersonic.framework; sourceTree = "<group>"; };
 		22216FA71D4F0AE9007CBD44 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
 		22216FA91D4F0B0E007CBD44 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
 		22216FAB1D4F0B17007CBD44 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
@@ -206,6 +206,9 @@
 		2262FD5D1D4909A6008F7A8C /* CampaignBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CampaignBridge.h; path = ios/CampaignBridge.h; sourceTree = "<group>"; };
 		2262FD5E1D4909A6008F7A8C /* CampaignBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CampaignBridge.mm; path = ios/CampaignBridge.mm; sourceTree = "<group>"; };
 		227FCFA91D4943CE001682F2 /* Batch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Batch.framework; sourceTree = "<group>"; };
+		22A930301D553DF1000D74E2 /* Supersonic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Supersonic.framework; sourceTree = "<group>"; };
+		22A930321D555022000D74E2 /* RewardBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RewardBridge.h; path = ios/RewardBridge.h; sourceTree = "<group>"; };
+		22A930331D555022000D74E2 /* RewardBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RewardBridge.mm; path = ios/RewardBridge.mm; sourceTree = "<group>"; };
 		22C4092D1D0A241C00FB0601 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "NumboJumbo-mobile/Images.xcassets"; sourceTree = "<group>"; };
 		22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		22C409301D0A264B00FB0601 /* Default-667h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667h@2x.png"; sourceTree = "<group>"; };
@@ -345,7 +348,6 @@
 				227FCFAA1D4943CF001682F2 /* Batch.framework in Frameworks */,
 				9FA3AE461BE9BBCA00FC9645 /* GameController.framework in Frameworks */,
 				ED545A821B68A21500C3958E /* libiconv.dylib in Frameworks */,
-				22216FA61D4F0AA8007CBD44 /* Supersonic.framework in Frameworks */,
 				BA3A85EC1A724AE900924D24 /* Security.framework in Frameworks */,
 				BA4E718119EB6E3F00932425 /* MediaPlayer.framework in Frameworks */,
 				C037820C18BF77C500FE4F13 /* libjscocos2d iOS.a in Frameworks */,
@@ -358,6 +360,7 @@
 				A92275461517C094001B78AA /* OpenAL.framework in Frameworks */,
 				A92275481517C094001B78AA /* AudioToolbox.framework in Frameworks */,
 				A922754A1517C094001B78AA /* AVFoundation.framework in Frameworks */,
+				22A930311D553DF1000D74E2 /* Supersonic.framework in Frameworks */,
 				A922754C1517C094001B78AA /* UIKit.framework in Frameworks */,
 				A922754E1517C094001B78AA /* Foundation.framework in Frameworks */,
 				A92275501517C094001B78AA /* CoreGraphics.framework in Frameworks */,
@@ -452,6 +455,7 @@
 		A92275401517C094001B78AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22A930301D553DF1000D74E2 /* Supersonic.framework */,
 				22216FB51D4F0BD6007CBD44 /* Security.framework */,
 				22216FB31D4F0B88007CBD44 /* CoreLocation.framework */,
 				22216FB11D4F0B65007CBD44 /* libxml2.tbd */,
@@ -460,7 +464,6 @@
 				22216FAB1D4F0B17007CBD44 /* CoreGraphics.framework */,
 				22216FA91D4F0B0E007CBD44 /* CFNetwork.framework */,
 				22216FA71D4F0AE9007CBD44 /* CoreVideo.framework */,
-				22216FA51D4F0AA8007CBD44 /* Supersonic.framework */,
 				227FCFA91D4943CE001682F2 /* Batch.framework */,
 				9FA3AE451BE9BBCA00FC9645 /* GameController.framework */,
 				ED545A831B68A21C00C3958E /* libiconv.dylib */,
@@ -516,6 +519,8 @@
 		D45446CC156DE73F00887EB5 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				22A930321D555022000D74E2 /* RewardBridge.h */,
+				22A930331D555022000D74E2 /* RewardBridge.mm */,
 				2262FD5D1D4909A6008F7A8C /* CampaignBridge.h */,
 				2262FD5E1D4909A6008F7A8C /* CampaignBridge.mm */,
 				22C4092F1D0A264B00FB0601 /* Default-568h@2x.png */,
@@ -754,6 +759,7 @@
 				209E4950B0AC9BB39D6AE0AB /* PluginSdkboxPlayJSHelper.cpp in Sources */,
 				DF2D48ADA3D046C386B73543 /* PluginIAPJS.cpp in Sources */,
 				2255AE9E1D2EDB6F00DC989E /* SharingController.m in Sources */,
+				22A930341D555022000D74E2 /* RewardBridge.mm in Sources */,
 				EC59406A95D73BF5228CB967 /* PluginIAPJSHelper.cpp in Sources */,
 				2243F5541D3558DB00ADB82E /* CampaignManager.cpp in Sources */,
 			);

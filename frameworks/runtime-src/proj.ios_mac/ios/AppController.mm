@@ -54,17 +54,18 @@ static AppDelegate s_sharedApplication;
     // Override point for customization after application launch.
     
     // Start Supersonic
+    NSString *idfv = [[[UIDevice currentDevice] identifierForVendor]UUIDString];
+    
     [[Supersonic sharedInstance] setRVDelegate:self];
+    [[Supersonic sharedInstance] initRVWithAppKey:SUPERSONIC_APP_KEY withUserId:idfv];
+    
+    [SupersonicIntegrationHelper validateIntegration];
     
     // Start Batch.
     [BatchUnlock setupUnlockWithDelegate:self];
     
-    // TODO : switch to live api key before store release
     //[Batch startWithAPIKey:@"DEV5785D6C955E3F23704EC13FFA8D"]; // dev
     [Batch startWithAPIKey:@"5785D6C953F94F7CAB01B829DE8C71"]; // live
-    
-    // Register for push notifications
-    //[BatchPush registerForRemoteNotifications];
 
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
@@ -167,6 +168,10 @@ static AppDelegate s_sharedApplication;
  * @param - hasAvailableAds - value will change to YES when rewarded videos are available. * You can then show the video by calling showRV(). Value will change to NO when no videos are available.
  */
 - (void)supersonicRVAdAvailabilityChanged:(BOOL)hasAvailableAds {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [CampaignBridge alertVideoAvailability:hasAvailableAds];
+    });
 }
 
 /**
@@ -176,6 +181,9 @@ static AppDelegate s_sharedApplication;
  * @param - placementInfo - SupersonicPlacementInfo - an object contains the placement's reward name and amount
  */
 - (void)supersonicRVAdRewarded:(SupersonicPlacementInfo*)placementInfo {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [CampaignBridge rewardForVideoAd];
+    });
 }
 
 /**

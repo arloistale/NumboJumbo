@@ -36,7 +36,7 @@ var ToolbarLayer = (function() {
         // UI Data
         buttonsMenu: null,
 
-        _stopperButton: null,
+        //_stopperButton: null,
         _converterButton: null,
         _scrambleButton: null,
 
@@ -76,7 +76,7 @@ var ToolbarLayer = (function() {
                 contentSize.height * NJ.uiSizes.barButton);
 
             var stopperItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.stopper);
-
+/*
             this._stopperButton = new NumboMenuButton(buttonSize, onStopper.bind(this), this);
             this._stopperButton.setBackgroundColor(NJ.themes.stoppersColor);
             this._stopperButton.setLabelColor(NJ.themes.defaultLabelColor);
@@ -84,7 +84,7 @@ var ToolbarLayer = (function() {
             this._stopperButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
             this._stopperButton.offsetLabel(cc.p(0, -buttonSize.height / 2 - NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2));
             this._stopperButton.setImageRes(stopperItem.iconRes);
-
+*/
             this._converterButton = new NumboMenuButton(buttonSize, onConvert.bind(this), this);
             this._converterButton.setBackgroundColor(NJ.themes.convertersColor);
             this._converterButton.setLabelColor(NJ.themes.defaultLabelColor);
@@ -107,7 +107,7 @@ var ToolbarLayer = (function() {
 
             this._buttonsMenu.alignItemsHorizontallyWithPadding(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.barSpacing));
 
-            this._stopperButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
+            //this._stopperButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
             this._converterButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
             this._scrambleButton.setPositionY(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2);
 
@@ -124,7 +124,7 @@ var ToolbarLayer = (function() {
 
             this._scrambleButton.setChildrenOpacity(0);
             this._converterButton.setChildrenOpacity(0);
-            this._stopperButton.setChildrenOpacity(0);
+            //this._stopperButton.setChildrenOpacity(0);
         },
 
         reset: function() {
@@ -173,12 +173,13 @@ var ToolbarLayer = (function() {
         updatePowerups: function() {
             this._converterButton.setLabelTitle(NJ.stats.getNumConverters());
             this._scrambleButton.setLabelTitle(NJ.stats.getNumScramblers());
-            this._stopperButton.setLabelTitle(NJ.stats.getNumStoppers());
+            //this._stopperButton.setLabelTitle(NJ.stats.getNumStoppers());
 
+            /*
             if(NJ.gameState.getStoppersRemaining() <= 0) {
                 this._stopperButton.setEnabled(false);
                 this._stopperButton.setChildrenOpacity(128);
-            }
+            }*/
 
             if(NJ.gameState.getConvertersRemaining() <= 0) {
                 this._converterButton.setEnabled(false);

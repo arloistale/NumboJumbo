@@ -832,15 +832,18 @@ var BaseGameLayer = (function () {
 
         // On game over when player chooses to retry
         onRetry: function () {
-            if (this._gameOverMenuLayer)
+            if (this._gameOverMenuLayer) {
                 this.removeChild(this._gameOverMenuLayer);
+                this._gameOverMenuLayer = null;
+            }
 
             //this._reset();
         },
 
         onRewardForVideoAd: function(){
-            if (this._gameOverMenuLayer){
+            if (this._gameOverMenuLayer) {
                 this.removeChild(this._gameOverMenuLayer);
+                this._gameOverMenuLayer = null;
             }
             this._resetWithVideoAdReward();
         },

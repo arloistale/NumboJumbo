@@ -11,6 +11,8 @@
 #include "storage/local-storage/LocalStorage.h"
 #include "cocos2d.h"
 
+#include "RewardBridge.h"
+
 USING_NS_CC;
 
 const std::string CampaignManager::KEY_DOUBLER = "DOUBLER";
@@ -89,7 +91,7 @@ void CampaignManager::showRewardVideo() {
     methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID);
     methodInfo.env->DeleteLocalRef(methodInfo.classID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    //shareImageWithMessage(outputFileChars, message);
+    requestRewardVideo();
 #endif
 }
 

@@ -144,7 +144,7 @@ var ShopMenuLayer = (function() {
 
         _buyScramblersButton: null,
         _buyConvertersButton: null,
-        _buyStoppersButton: null,
+        //_buyStoppersButton: null,
 
         _currencyLabel: null,
         _currencyInfoLabel: null,
@@ -299,7 +299,7 @@ var ShopMenuLayer = (function() {
             var stopperItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.stopper);
             var converterItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.converter);
             var scramblerItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.scrambler);
-
+/*
             this._buyStoppersButton = new NumboMenuButton(cc.size(coinSize.height, coinSize.height), onBuyStoppers.bind(this), this);
             this._buyStoppersButton.setBackgroundColor(NJ.themes.stoppersColor);
             this._buyStoppersButton.attr({
@@ -320,7 +320,7 @@ var ShopMenuLayer = (function() {
                 x: cc.visibleRect.width / 2,
                 y: buttonContainer.getContentSize().height / 2 - buyStoppersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
             });
-
+*/
             this._buyConvertersButton = new NumboMenuButton(cc.size(coinSize.height, coinSize.height), onBuyConverters.bind(this), this);
             this._buyConvertersButton.setBackgroundColor(NJ.themes.convertersColor);
             this._buyConvertersButton.attr({
@@ -587,7 +587,9 @@ var ShopMenuLayer = (function() {
         },
 
         updateItems: function() {
+            /*
             this._buyStoppersButton.setLabelTitle(NJ.stats.getNumStoppers() + "");
+            */
             this._buyScramblersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
             this._buyConvertersButton.setLabelTitle(NJ.stats.getNumConverters() + "");
 
@@ -597,11 +599,12 @@ var ShopMenuLayer = (function() {
             var convertersItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.converter);
             var scramblersItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.scrambler);
 
+            /*
             if(currency < stoppersItem.price) {
                 this._buyStoppersButton.setEnabled(false);
                 this._buyStoppersButton.setChildrenOpacity(128);
             }
-
+*/
             if(currency < convertersItem.price) {
                 this._buyConvertersButton.setEnabled(false);
                 this._buyConvertersButton.setChildrenOpacity(128);
@@ -634,8 +637,11 @@ var ShopMenuLayer = (function() {
             if(this._currencyLabel)
                 this._currencyLabel.setLabelColor(NJ.themes.specialLabelColor);
 
+            /*
             if(this._buyStoppersButton)
                 this._buyStoppersButton.setBackgroundColor(NJ.themes.stoppersColor);
+
+*/
 
             if(this._buyScramblersButton)
                 this._buyScramblersButton.setBackgroundColor(NJ.themes.scramblersColor);

@@ -1,7 +1,7 @@
 /**
  * Created by jonathanlu on 1/18/16.
  */
-const BASE_TIME = 60;
+const BASE_TIME = 5;
 const BONUS_TIME = 15;
 
 var TimedGameLayer = BaseGameLayer.extend({

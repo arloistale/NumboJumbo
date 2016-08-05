@@ -6,18 +6,24 @@
 //
 //
 
-#ifndef SharingBridge_h
-#define SharingBridge_h
+#ifndef CBridge_h
+#define CBridge_h
 
-@interface CampaignBridge : NSObject {
-    
-}
+@interface CampaignBridge : NSObject
 
-+ (void)prepareCampaignDetails: (const char *) campaignName withMessage: (const char *) campaignMessage;
+// promo
 
-+ (void)unlockFeatureBatch: (const char *) reference withValue: (const char *) value;
++ (void)prepareCampaignDetails:(const char *)campaignName withMessage:(const char *)campaignMessage;
 
-+ (void)unlockResourceBatch: (const char *) reference withQuantity: (const int) quantity;
++ (void)unlockFeatureBatch:(const char *)reference withValue:(const char *)value;
+
++ (void)unlockResourceBatch:(const char *)reference withQuantity:(const int)quantity;
+
+// rewards
+
+// iOS to C++
++ (void)alertVideoAvailability: (const BOOL)available;
++ (void)rewardForVideoAd;
 
 @end
 

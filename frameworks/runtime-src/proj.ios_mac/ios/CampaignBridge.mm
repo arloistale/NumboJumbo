@@ -1,5 +1,6 @@
 #import "CampaignBridge.h"
 
+#import <Supersonic/Supersonic.h>
 #import "CampaignManager.h"
 
 @implementation CampaignBridge
@@ -55,6 +56,14 @@
     else if(referenceStr == "SCRAMBLERS") {
         CampaignManager::unlockResource(CampaignManager::KEY_SCRAMBLERS, quantity);
     }
+}
+
++(void)alertVideoAvailability:(const BOOL)available {
+    CampaignManager::alertVideoAvailability(available);
+}
+
++(void)rewardForVideoAd {
+    CampaignManager::rewardForVideoAd();
 }
 
 @end
