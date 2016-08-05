@@ -101,7 +101,7 @@ var ToolbarLayer = (function() {
             this._scrambleButton.offsetLabel(cc.p(0, -buttonSize.height / 2 - NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub) / 2));
             this._scrambleButton.setImageRes(res.scrambleImage);
 
-            this._buttonsMenu.addChild(this._stopperButton);
+            //this._buttonsMenu.addChild(this._stopperButton);
             this._buttonsMenu.addChild(this._converterButton);
             this._buttonsMenu.addChild(this._scrambleButton);
 

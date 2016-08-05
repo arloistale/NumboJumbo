@@ -300,27 +300,6 @@ var ShopMenuLayer = (function() {
             var converterItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.converter);
             var scramblerItem = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.scrambler);
 
-            this._buyConvertersButton = new NumboMenuButton(cc.size(coinSize.height, coinSize.height), onBuyConverters.bind(this), this);
-            this._buyConvertersButton.setBackgroundColor(NJ.themes.convertersColor);
-            this._buyConvertersButton.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: cc.visibleRect.width / 4,
-                y: buttonContainer.getContentSize().height / 2 + this._buyConvertersButton.getContentSize().height / 2
-            });
-            this._buyConvertersButton.setLabelTitle(NJ.stats.getNumConverters() + "");
-            this._buyConvertersButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
-            this._buyConvertersButton.offsetLabel(cc.p(this._buyConvertersButton.getContentSize().width / 1.1, 0));
-            this._buyConvertersButton.setImageRes(res.convertImage);
-
-            var buyConvertersLabel = this.generateLabel(converterItem.amount + " " + converterItem.name + "\n" + converterItem.price, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
-            buyConvertersLabel.attr({
-                anchorX: 0.5,
-                anchorY: 0.5,
-                x: cc.visibleRect.width / 4,
-                y: buttonContainer.getContentSize().height / 2 - buyConvertersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
-            });
-
             this._buyStoppersButton = new NumboMenuButton(cc.size(coinSize.height, coinSize.height), onBuyStoppers.bind(this), this);
             this._buyStoppersButton.setBackgroundColor(NJ.themes.stoppersColor);
             this._buyStoppersButton.attr({
@@ -339,6 +318,27 @@ var ShopMenuLayer = (function() {
                 anchorX: 0.5,
                 anchorY: 0.5,
                 x: cc.visibleRect.width / 2,
+                y: buttonContainer.getContentSize().height / 2 - buyStoppersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
+            });
+
+            this._buyConvertersButton = new NumboMenuButton(cc.size(coinSize.height, coinSize.height), onBuyConverters.bind(this), this);
+            this._buyConvertersButton.setBackgroundColor(NJ.themes.convertersColor);
+            this._buyConvertersButton.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: cc.visibleRect.width / 3,
+                y: buttonContainer.getContentSize().height / 2 + this._buyConvertersButton.getContentSize().height / 2
+            });
+            this._buyConvertersButton.setLabelTitle(NJ.stats.getNumConverters() + "");
+            this._buyConvertersButton.setLabelSize(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2));
+            this._buyConvertersButton.offsetLabel(cc.p(this._buyConvertersButton.getContentSize().width / 1.1, 0));
+            this._buyConvertersButton.setImageRes(res.convertImage);
+
+            var buyConvertersLabel = this.generateLabel(converterItem.amount + " " + converterItem.name + "\n" + converterItem.price, NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.sub));
+            buyConvertersLabel.attr({
+                anchorX: 0.5,
+                anchorY: 0.5,
+                x: cc.visibleRect.width / 3,
                 y: buttonContainer.getContentSize().height / 2 - buyConvertersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
             });
 
@@ -347,7 +347,7 @@ var ShopMenuLayer = (function() {
             this._buyScramblersButton.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width * 0.75,
+                x: cc.visibleRect.width * 2 / 3,
                 y: buttonContainer.getContentSize().height / 2 + this._buyScramblersButton.getContentSize().height / 2
             });
             this._buyScramblersButton.setLabelTitle(NJ.stats.getNumScramblers() + "");
@@ -359,12 +359,12 @@ var ShopMenuLayer = (function() {
             buyScramblersLabel.attr({
                 anchorX: 0.5,
                 anchorY: 0.5,
-                x: cc.visibleRect.width * 0.75,
+                x: cc.visibleRect.width * 2 / 3,
                 y: buttonContainer.getContentSize().height / 2 - buyScramblersLabel.getContentSize().height / 2 - NJ.calculateScreenDimensionFromRatio(0.025)
             });
 
-            buttonContainer.addChild(this._buyStoppersButton);
-            buttonContainer.addChild(buyStoppersLabel);
+            //buttonContainer.addChild(this._buyStoppersButton);
+            //buttonContainer.addChild(buyStoppersLabel);
 
             buttonContainer.addChild(this._buyConvertersButton);
             buttonContainer.addChild(buyConvertersLabel);

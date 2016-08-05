@@ -67,6 +67,18 @@
                 android:name="com.jirbo.adcolony.AdColonyBrowser"
                 android:configChanges="keyboardHidden|orientation|screenSize"
                 android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
+        <activity
+                android:name="com.applovin.adview.AppLovinInterstitialActivity"/>
+        <activity
+                android:name="com.applovin.adview.AppLovinConfirmationActivity"/>
+
+        <activity
+                android:name="com.chartboost.sdk.CBImpressionActivity"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:excludeFromRecents="true"
+                android:hardwareAccelerated="true"/>
             
         <meta-data android:name="store" android:value="googleplay" />
     </application>
