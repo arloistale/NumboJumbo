@@ -20,6 +20,37 @@ NumboLoaderScene = cc.Scene.extend({
         var bgLayer = self._bgLayer = new cc.LayerColor(cc.color("#000000"));
         self.addChild(bgLayer, 0);
 
+		cc.log("fuck you world");
+		
+		var request = cc.loader.getXMLHttpRequest();
+		//request.withCredentials = true;
+		
+		request.open("POST", "http://api.timezonedb.com/v2/list-time-zone", true);
+		request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		//var arguments = "dataOne=55";
+		//request.send(arguments);
+		request.send();
+		
+		cc.log("HERE I AM");
+		request.onreadystatechange = function()
+		{
+			if(request.readyState == 4)
+			{
+				if(request.status >= 200 || request.status <= 207)
+				{
+					cc.log(request.responseText);
+					cc.log(request.statusText);
+				}
+				//if(callback != null)
+				//{
+				//	callback.perform(request.responseText);
+				//}
+			}
+		};
+
+
+
+
         if(res.logoImage) {
             //loading logo
             cc.loader.load([res.logoImage], function() {}, function() {

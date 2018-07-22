@@ -39,6 +39,8 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     },
 
     _settingsMenuLayer: null,
+    
+    _token: null,
 
     ////////////////////
     // Initialization //
@@ -58,6 +60,8 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         // a long buffer for loading
         // not a very elegant solution but necessary
         NJ.purchases.initCampaigns();
+        
+        this._checkLogin();
 
 /*
         NJ.settings.hasLoadedMM = false;
@@ -80,6 +84,114 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         this._statsButton.release();
 
         this._super();
+    },
+    
+    
+    
+    sendValidateRequest: function(options) {
+    	var http = new XMLHttpRequest();
+    	var request_url = "https://memtechlabs.com/";
+    	
+    	var params = '';
+    	if(options.params) {
+    		for(var key in options.params) {
+    			params += '&' + key + '=' + options.params[key];
+    			cc.log(params);
+    		}
+    	}
+    	
+    	http.open("POST", request_url+options.url, true);
+    	//http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	http.setRequestHeader("Authorization", "Bearer "+this._token);
+    	
+    	http.onreadystatechange = function() {
+    		var httpStatus = http.statusText;
+    		//cc.log("A");
+    		//cc.log(httpStatus);
+    		if(http.responseText) {
+    			var responseJSON = eval('('+http.responseText+')');
+    			//cc.log("B");
+    			cc.log(http.responseText);
+    			cc.log(responseJSON);
+    			
+    			this.sendPostRequest({"url":"wp-json/jwt-auth/v1/token/validate"});
+    			
+    		} else {
+    			var responseJSON = {};
+    			//cc.log("No response");
+    		}
+    		
+    			//cc.log("readyState");
+    			//cc.log(http);
+    		switch(http.readyState) {
+    			case 4:
+    				if(options.success) {
+    					cc.log("C");
+    					//cc.log(responseJSON);
+    					options.success(responseJSON);
+    				}
+    		}
+    	};
+    	//params = {"username":"sampleuser@memtechlabs.com", "password":"@8Wj(ngHJO0ST0NfJ*tei5MK"};
+    	//cc.log(params);
+    	http.send()
+    	//http.send(params);
+    },
+    
+    sendPostRequest: function(options) {
+    	var http = new XMLHttpRequest();
+    	var request_url = "https://memtechlabs.com/";
+    	
+    	var params = '';
+    	if(options.params) {
+    		for(var key in options.params) {
+    			params += '&' + key + '=' + options.params[key];
+    			cc.log(params);
+    		}
+    	}
+    	
+    	http.open("POST", request_url+options.url, true);
+    	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	//http.setRequestHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbWVtdGVjaGxhYnMuY29tIiwiaWF0IjoxNTMxODM0MjM1LCJuYmYiOjE1MzE4MzQyMzUsImV4cCI6MTUzMjQzOTAzNSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiNSJ9fX0.OOYDF2K8i2xSIjg6Orc1kkf2smqsyEsB-gOm9bYq8DM");
+    	
+    	http.onreadystatechange = function() {
+    		var httpStatus = http.statusText;
+    		//cc.log("A");
+    		//cc.log(httpStatus);
+    		if(http.responseText) {
+    			var responseJSON = eval('('+http.responseText+')');
+    			//cc.log("B");
+    			cc.log(http.responseText);
+    			//this._token = responseJSON.token;
+    			//cc.log(this._token);
+    			cc.log(responseJSON);
+    			NJ.validateToken({"url":"wp-json/jwt-auth/v1/token/validate"}, responseJSON.token);
+    			
+    		} else {
+    			var responseJSON = {};
+    			//cc.log("No response");
+    		}
+    		
+    			//cc.log("readyState");
+    			//cc.log(http);
+    		switch(http.readyState) {
+    			case 4:
+    				if(options.success) {
+    					cc.log("C");
+    					//cc.log(responseJSON);
+    					options.success(responseJSON);
+    				}
+    		}
+    	};
+    	//params = {"username":"sampleuser@memtechlabs.com", "password":"@8Wj(ngHJO0ST0NfJ*tei5MK"};
+    	//cc.log(params);
+    	http.send(params.substr(1))
+    	//http.send(params);
+    },
+    
+    _checkLogin: function() {
+    	this.sendPostRequest({"url":"wp-json/jwt-auth/v1/token/", "params":{"username":"sampleuser@memtechlabs.com", "password":"@8Wj(ngHJO0ST0NfJ*tei5MK"}});
+		//this.sendPostRequest({"url":"wp-json/jwt-auth/v1/token/validate"});
     },
 
     _initPromoListeners: function() {
@@ -133,7 +245,8 @@ var NumboMenuLayer = BaseMenuLayer.extend({
             that._onChooseGameMode(NJ.modekeys.minuteMadness);
         }, this);
         this._modeData.mm.button.setBackgroundColor(NJ.themes.blockColors[0]);
-        this._modeData.mm.button.setLabelTitle(NJ.modeNames[NJ.modekeys.minuteMadness]);
+        //this._modeData.mm.button.setLabelTitle(NJ.modeNames[NJ.modekeys.minuteMadness]);
+        this._modeData.mm.button.setLabelTitle("BARF");
         this._modeData.mm.button.setLabelSize(titleSize);
         this._modeData.mm.button.setImageRes(res.timedImage);
         this._modeData.mm.button.attr({

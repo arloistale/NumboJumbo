@@ -57,3 +57,60 @@ NJ.saveSettings = function() {
             cc.sys.localStorage.setItem(key, JSON.stringify(NJ.settings[key]));
     }
 };
+
+
+
+NJ.token = null;
+
+NJ.validateToken = function(options, token) {
+	NJ.token = token
+	
+	var http = new XMLHttpRequest();
+    	var request_url = "https://memtechlabs.com/";
+    	
+    	var params = '';
+    	if(options.params) {
+    		for(var key in options.params) {
+    			params += '&' + key + '=' + options.params[key];
+    			cc.log(params);
+    		}
+    	}
+    	
+    	http.open("POST", request_url+options.url, true);
+    	//http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	cc.log("Validating");
+    	cc.log(NJ.token);
+    	http.setRequestHeader("Authorization", "Bearer "+NJ.token);
+    	
+    	http.onreadystatechange = function() {
+    		var httpStatus = http.statusText;
+    		//cc.log("A");
+    		//cc.log(httpStatus);
+    		if(http.responseText) {
+    			var responseJSON = eval('('+http.responseText+')');
+    			//cc.log("B");
+    			cc.log(http.responseText);
+    			cc.log(responseJSON);
+    			
+    			//this.sendPostRequest({"url":"wp-json/jwt-auth/v1/token/validate"});
+    			
+    		} else {
+    			var responseJSON = {};
+    			//cc.log("No response");
+    		}
+    		
+    			//cc.log("readyState");
+    			//cc.log(http);
+    		switch(http.readyState) {
+    			case 4:
+    				if(options.success) {
+    					cc.log("C");
+    					//cc.log(responseJSON);
+    					options.success(responseJSON);
+    				}
+    		}
+    	};
+    	//params = {"username":"sampleuser@memtechlabs.com", "password":"@8Wj(ngHJO0ST0NfJ*tei5MK"};
+    	//cc.log(params);
+    	http.send();
+};

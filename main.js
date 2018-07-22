@@ -4,6 +4,24 @@ cc.game.onStart = function() {
     var mediumResolutionSize = cc.size(768, 1024);
     var largeResolutionSize = cc.size(1536, 2048);
     
+    cc.log("fuck you world");
+		
+		var request = cc.loader.getXMLHttpRequest();
+		//request.withCredentials = true;
+		
+		request.open("POST", "http://api.timezonedb.com/v2/list-time-zone", true);
+		request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		//var arguments = "dataOne=55";
+		//request.send(arguments);
+		
+		request.onreadystatechange = function()
+		{
+			cc.log("ONREADYSTATECHANGE");
+			cc.log(request.statusText);
+		}
+
+		request.send();
+    
     // resize based on platform
     
     if(cc.sys.isNative) {
