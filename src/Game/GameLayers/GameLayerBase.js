@@ -223,23 +223,23 @@ var BaseGameLayer = (function() {
 					event: cc.EventListener.TOUCH_ONE_BY_ONE,
 					swallowTouches: true,
 					onTouchBegan: function(touch, event) {
-                        if(touch.getID() == 0) {
+                        //if(touch.getID() == 0) {
                             event.getCurrentTarget().onTouchBegan(touch.getLocation());
-                        }
+                        //}
 
                         return true;
 					},
 					onTouchMoved: function(touch, event) {
-                        if(touch.getID() == 0) {
+                        //if(touch.getID() == 0) {
                             event.getCurrentTarget().onTouchMoved(touch.getLocation());
-                        }
+                        //}
 
 						return true;
 					},
 					onTouchEnded: function(touch, event) {
-                        if(touch.getID() == 0) {
+                        //if(touch.getID() == 0) {
                             event.getCurrentTarget().onTouchEnded(touch.getLocation());
-                        }
+                        //}
 
 						return true;
 					}
