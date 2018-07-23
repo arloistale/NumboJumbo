@@ -16,6 +16,7 @@
         "src/Resource.js",
 
         "src/Menu/MenuLayers/BaseMenuLayer.js",
+        "src/Menu/MenuLayers/AuthenticationMenuLayer.js",
         "src/Menu/MenuLayers/NumboMenuLayer.js",
         "src/Menu/MenuLayers/GameOverMenuLayer.js",
         "src/Menu/MenuLayers/SettingsMenuLayer.js",

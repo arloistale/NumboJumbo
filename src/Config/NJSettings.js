@@ -18,6 +18,7 @@ NJ.settings = {
     hasLoadedINF: false,
     hasInteractedReview: false,
     hasAttemptedAutoSignin: false,
+    hasAuthentication: false,
 
     music: true,
     sounds: true,
@@ -58,8 +59,9 @@ NJ.saveSettings = function () {
 
 NJ.token = null;
 
-NJ.validateToken = function (options, token) {
-    NJ.token = token
+NJ.validateToken = function (options, token, callback) {
+    NJ.token = token;
+    cc.log("NJ.validateToken() called");
 
     var http = new XMLHttpRequest();
     var request_url = "https://memtechlabs.com/";
@@ -68,7 +70,7 @@ NJ.validateToken = function (options, token) {
     if (options.params) {
         for (var key in options.params) {
             params += '&' + key + '=' + options.params[key];
-            cc.log(params);
+            // cc.log(params);
         }
     }
 
@@ -81,18 +83,19 @@ NJ.validateToken = function (options, token) {
         var httpStatus = http.statusText;
         if (http.responseText) {
             var responseJSON = eval('(' + http.responseText + ')');
-            cc.log(http.responseText);
-            cc.log(responseJSON);
-
         } else {
             var responseJSON = {};
         }
         switch (http.readyState) {
-            case 4:
-                if (options.success) {
-                    cc.log("C");
-                    options.success(responseJSON);
-                }
+            case 4: {
+                cc.log("responseJson:");
+                cc.log(responseJSON);
+                var status = responseJSON.data.status;
+                /* HTTP error codes between 200 and 299 are different flavors of 'success'
+                 see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes */
+                NJ.hasAuthentication = (status >= 200 && status < 300);
+                callback();
+            }
         }
     };
     http.send();

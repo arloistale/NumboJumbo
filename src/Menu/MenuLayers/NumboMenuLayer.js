@@ -1,4 +1,3 @@
-
 var NumboMenuLayer = BaseMenuLayer.extend({
 
     // Menu Data
@@ -39,7 +38,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     },
 
     _settingsMenuLayer: null,
-    
+
     _token: null,
 
     ////////////////////
@@ -60,21 +59,19 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         // a long buffer for loading
         // not a very elegant solution but necessary
         NJ.purchases.initCampaigns();
-        
-        this._checkLogin();
 
-/*
-        NJ.settings.hasLoadedMM = false;
-        NJ.settings.hasLoadedMOV = false;
-        NJ.settings.hasLoadedRE = false;
-        NJ.settings.hasLoadedINF = false;
-        NJ.saveSettings();
-*/
+        /*
+                NJ.settings.hasLoadedMM = false;
+                NJ.settings.hasLoadedMOV = false;
+                NJ.settings.hasLoadedRE = false;
+                NJ.settings.hasLoadedINF = false;
+                NJ.saveSettings();
+        */
         this.enter();
     },
 
-    onExit: function() {
-        if(this._shopMenuLayer)
+    onExit: function () {
+        if (this._shopMenuLayer)
             this._shopMenuLayer.release();
 
         this._shopButton.release();
@@ -86,72 +83,17 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         this._super();
     },
 
-    sendPostRequest: function(options) {
-    	var http = new XMLHttpRequest();
-    	var request_url = "https://memtechlabs.com/";
-    	
-    	var params = '';
-    	if(options.params) {
-    		for(var key in options.params) {
-    			params += '&' + key + '=' + options.params[key];
-    			cc.log(params);
-    		}
-    	}
-    	
-    	http.open("POST", request_url+options.url, true);
-    	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    	//http.setRequestHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbWVtdGVjaGxhYnMuY29tIiwiaWF0IjoxNTMxODM0MjM1LCJuYmYiOjE1MzE4MzQyMzUsImV4cCI6MTUzMjQzOTAzNSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiNSJ9fX0.OOYDF2K8i2xSIjg6Orc1kkf2smqsyEsB-gOm9bYq8DM");
-    	
-    	http.onreadystatechange = function() {
-    		var httpStatus = http.statusText;
-    		//cc.log("A");
-    		//cc.log(httpStatus);
-    		if(http.responseText) {
-    			var responseJSON = eval('('+http.responseText+')');
-    			//cc.log("B");
-    			cc.log(http.responseText);
-    			//this._token = responseJSON.token;
-    			//cc.log(this._token);
-    			cc.log(responseJSON);
-    			NJ.validateToken({"url":"wp-json/jwt-auth/v1/token/validate"}, responseJSON.token);
-    			
-    		} else {
-    			var responseJSON = {};
-    			//cc.log("No response");
-    		}
-    		
-    			//cc.log("readyState");
-    			//cc.log(http);
-    		switch(http.readyState) {
-    			case 4:
-    				if(options.success) {
-    					cc.log("C");
-    					//cc.log(responseJSON);
-    					options.success(responseJSON);
-    				}
-    		}
-    	};
-    	//params = {"username":"sampleuser@memtechlabs.com", "password":"@8Wj(ngHJO0ST0NfJ*tei5MK"};
-    	//cc.log(params);
-    	http.send(params.substr(1))
-    	//http.send(params);
-    },
-    
-    _checkLogin: function() {
-    	this.sendPostRequest({"url":"wp-json/jwt-auth/v1/token/", "params":{"username":"sampleuser@memtechlabs.com", "password":"@8Wj(ngHJO0ST0NfJ*tei5MK"}});
-    },
-
-    _initPromoListeners: function() {
+    _initPromoListeners: function () {
         cc.eventManager.addListener(cc.EventListener.create({
             event: cc.EventListener.CUSTOM,
             eventName: "batch_unlock_feature",
-            callback: function(event) {
+            callback: function (event) {
 
             }
         }), 1001);
     },
 
-    _initHeaderUI: function() {
+    _initHeaderUI: function () {
         this._super();
 
         var logo = new NumboMenuItem(cc.size(cc.visibleRect.width, cc.visibleRect.height * NJ.uiSizes.headerBar));
@@ -170,7 +112,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     },
 
     // init game modes buttons
-    _initModesUI: function() {
+    _initModesUI: function () {
         var that = this;
 
         this._jumboMenu = new cc.Menu();
@@ -188,7 +130,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         var buttonSize = cc.size(NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton), NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.playButton));
         var titleSize = NJ.calculateScreenDimensionFromRatio(NJ.uiSizes.header2);
 
-        this._modeData.mm.button = new NumboMenuButton(buttonSize, function() {
+        this._modeData.mm.button = new NumboMenuButton(buttonSize, function () {
             that._onChooseGameMode(NJ.modekeys.minuteMadness);
         }, this);
         this._modeData.mm.button.setBackgroundColor(NJ.themes.blockColors[0]);
@@ -201,7 +143,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
             anchorY: 0.5
         });
 
-        this._modeData.mov.button = new NumboMenuButton(buttonSize, function() {
+        this._modeData.mov.button = new NumboMenuButton(buttonSize, function () {
             that._onChooseGameMode(NJ.modekeys.moves);
         }, this);
         this._modeData.mov.button.setBackgroundColor(NJ.themes.blockColors[1]);
@@ -213,7 +155,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
             anchorY: 0.5
         });
 
-        this._modeData.re.button = new NumboMenuButton(buttonSize, function() {
+        this._modeData.re.button = new NumboMenuButton(buttonSize, function () {
             that._onChooseGameMode(NJ.modekeys.react);
         }, this);
         this._modeData.re.button.setBackgroundColor(NJ.themes.blockColors[2]);
@@ -225,7 +167,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
             anchorY: 0.5
         });
 
-        this._modeData.inf.button = new NumboMenuButton(buttonSize, function() {
+        this._modeData.inf.button = new NumboMenuButton(buttonSize, function () {
             that._onChooseGameMode(NJ.modekeys.infinite);
         }, this);
         this._modeData.inf.button.setBackgroundColor(NJ.themes.blockColors[3]);
@@ -266,7 +208,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     },
 
     // initialize menu elements
-    _initToolUI: function() {
+    _initToolUI: function () {
         this._super();
 
         var toolSize = this._toolMenu.getContentSize();
@@ -300,7 +242,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
 
         this._toolMenu.addChild(helpButton);
 
-        if(cc.sys.isNative) {
+        if (cc.sys.isNative) {
             this._toolMenu.addChild(this._achievementsButton);
             this._toolMenu.addChild(this._statsButton);
         }
@@ -313,25 +255,25 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     },
 
     // initialize game audio
-    _initAudio: function() {
-        if(!NJ.settings.music)
+    _initAudio: function () {
+        if (!NJ.settings.music)
             return;
 
         NJ.audio.playMusic(res.trackChill2);
     },
 
     // makes menu elements transition in
-    enter: function() {
+    enter: function () {
         this._super();
 
         var that = this;
 
         var easing = cc.easeBackOut();
 
-        this.runAction(cc.sequence(cc.delayTime(0.7), cc.callFunc(function() {
-            if(cc.sys.isNative) {
-                if(NJ.purchases.campaignName) {
-                    that._displayCampaignPopOver(function() {
+        this.runAction(cc.sequence(cc.delayTime(0.7), cc.callFunc(function () {
+            if (cc.sys.isNative) {
+                if (NJ.purchases.campaignName) {
+                    that._displayCampaignPopOver(function () {
                         // now try to login
                         if (!NJ.social.isLoggedIn() && !NJ.settings.hasAttemptedAutoSignin) {
                             NJ.settings.hasAttemptedAutoSignin = true;
@@ -350,8 +292,8 @@ var NumboMenuLayer = BaseMenuLayer.extend({
 
         var data;
         var delay = 0.4;
-        for(var key in this._modeData) {
-            if(!this._modeData.hasOwnProperty(key))
+        for (var key in this._modeData) {
+            if (!this._modeData.hasOwnProperty(key))
                 continue;
 
             data = this._modeData[key];
@@ -363,14 +305,14 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     },
 
     // transition out
-    leave: function(callback) {
+    leave: function (callback) {
         this._super(callback);
 
         var easing = cc.easeBackOut();
 
         var data;
-        for(var key in this._modeData) {
-            if(!this._modeData.hasOwnProperty(key))
+        for (var key in this._modeData) {
+            if (!this._modeData.hasOwnProperty(key))
                 continue;
 
             data = this._modeData[key];
@@ -383,7 +325,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     // UI Events //
     ///////////////
 
-    _onBack: function() {
+    _onBack: function () {
         this._super();
 
         cc.director.end();
@@ -391,15 +333,15 @@ var NumboMenuLayer = BaseMenuLayer.extend({
 
     // game modes
 
-    _onChooseGameMode: function(key) {
+    _onChooseGameMode: function (key) {
         NJ.audio.playSound(res.clickSound);
 
         NJ.audio.stopMusic();
 
-        this.leave(function() {
+        this.leave(function () {
             var scene = new cc.Scene();
             var gameLayer = null;
-            switch(key) {
+            switch (key) {
                 case NJ.modekeys.minuteMadness:
                     gameLayer = new TimedGameLayer();
                     break;
@@ -421,48 +363,48 @@ var NumboMenuLayer = BaseMenuLayer.extend({
 
     // tools
 
-    _onHelp: function() {
+    _onHelp: function () {
         NJ.audio.playSound(res.clickSound);
         NJ.audio.stopMusic();
 
-        this.leave(function() {
+        this.leave(function () {
             var scene = new cc.Scene();
             scene.addChild(new TutorialDriverLayer(true));
             cc.director.runScene(scene);
         });
     },
 
-    _onLogin: function() {
+    _onLogin: function () {
         NJ.audio.playSound(res.clickSound);
 
-        if(!NJ.social.isLoggedIn()) {
+        if (!NJ.social.isLoggedIn()) {
             NJ.social.login();
         } else {
             cc.log("Warning: tried to login when already login!");
         }
     },
 
-    _onLeaderboard: function() {
-         NJ.audio.playSound(res.clickSound);
+    _onLeaderboard: function () {
+        NJ.audio.playSound(res.clickSound);
 
-         NJ.social.showLeaderboard();
+        NJ.social.showLeaderboard();
     },
 
-    _onAchievements: function() {
+    _onAchievements: function () {
         NJ.audio.playSound(res.clickSound);
 
         NJ.social.showAchievements();
     },
 
-    _onShop: function() {
+    _onShop: function () {
         NJ.audio.playSound(res.clickSound);
 
         this.pause();
 
         var that = this;
 
-        this.leave(function() {
-            if(!that._shopMenuLayer) {
+        this.leave(function () {
+            if (!that._shopMenuLayer) {
                 that._shopMenuLayer = new ShopMenuLayer();
                 that._shopMenuLayer.setOnCloseCallback(function () {
                     that.removeChild(that._shopMenuLayer);
@@ -483,16 +425,16 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         });
     },
 
-    _onSettings: function() {
+    _onSettings: function () {
         NJ.audio.playSound(res.clickSound);
 
         this.pause();
 
         var that = this;
 
-        this.leave(function() {
+        this.leave(function () {
             that._settingsMenuLayer = new SettingsMenuLayer();
-            that._settingsMenuLayer.setOnCloseCallback(function() {
+            that._settingsMenuLayer.setOnCloseCallback(function () {
                 that.removeChild(that._settingsMenuLayer);
 
                 that.resume();
@@ -514,7 +456,7 @@ var NumboMenuLayer = BaseMenuLayer.extend({
     // as soon as the app is opened
     //
     // Must define a callback for when the popover is closed
-    _displayCampaignPopOver: function(callback) {
+    _displayCampaignPopOver: function (callback) {
         var that = this;
 
         this.pauseMenu();
@@ -522,17 +464,17 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         var campaignPopOver = new PopOverLayer();
         campaignPopOver.setHeaderLabel(NJ.purchases.campaignName.toUpperCase());
 
-        if(NJ.purchases.campaignMessage)
+        if (NJ.purchases.campaignMessage)
             campaignPopOver.setContentLabel(NJ.purchases.campaignMessage);
 
         NJ.purchases.discardCampaignDetails();
-        campaignPopOver.setOnCloseCallback(function() {
+        campaignPopOver.setOnCloseCallback(function () {
 
             that.removeChild(campaignPopOver);
 
             that.resumeMenu();
 
-            if(callback)
+            if (callback)
                 callback();
         });
         this.addChild(campaignPopOver, 500);
@@ -540,13 +482,13 @@ var NumboMenuLayer = BaseMenuLayer.extend({
         campaignPopOver.enter();
     },
 
-    _updateTheme: function() {
+    _updateTheme: function () {
         this._super();
 
         var index = 0;
 
-        for(var key in this._modeData) {
-            if(!this._modeData.hasOwnProperty(key))
+        for (var key in this._modeData) {
+            if (!this._modeData.hasOwnProperty(key))
                 continue;
 
             this._modeData[key].button.setBackgroundColor(NJ.themes.blockColors[index]);

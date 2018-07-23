@@ -47,14 +47,17 @@ cc.game.onStart = function () {
     NumboLoaderScene.preload(g_all, function () {
         var scene = new cc.Scene();
 
-        if (NJ.settings.hasLoadedTUT) {
+        if (NJ.settings.hasAuthentication === false) {
+            scene.addChild(new AuthenticationMenuLayer(scene));
+        }
+        else if (NJ.settings.hasLoadedTUT) {
             scene.addChild(new NumboMenuLayer());
         } else {
-
             scene.addChild(new TutorialDriverLayer());
         }
 
         cc.director.runScene(scene);
+
     }, that);
 };
 
