@@ -13,47 +13,17 @@ NumboLoaderScene = cc.Scene.extend({
      * Extra initialization
      * @returns {boolean}
      */
-    init: function() {
+    init: function () {
         var self = this;
 
         // bg
         var bgLayer = self._bgLayer = new cc.LayerColor(cc.color("#000000"));
         self.addChild(bgLayer, 0);
 
-		cc.log("fuck you world");
-		
-		var request = cc.loader.getXMLHttpRequest();
-		//request.withCredentials = true;
-		
-		request.open("POST", "http://api.timezonedb.com/v2/list-time-zone", true);
-		request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-		//var arguments = "dataOne=55";
-		//request.send(arguments);
-		request.send();
-		
-		cc.log("HERE I AM");
-		request.onreadystatechange = function()
-		{
-			if(request.readyState == 4)
-			{
-				if(request.status >= 200 || request.status <= 207)
-				{
-					cc.log(request.responseText);
-					cc.log(request.statusText);
-				}
-				//if(callback != null)
-				//{
-				//	callback.perform(request.responseText);
-				//}
-			}
-		};
-
-
-
-
-        if(res.logoImage) {
+        if (res.logoImage) {
             //loading logo
-            cc.loader.load([res.logoImage], function() {}, function() {
+            cc.loader.load([res.logoImage], function () {
+            }, function () {
                 var logo = self._logo = new cc.Sprite(res.logoImage);
                 var logoSize = logo.getContentSize();
                 var refDim = Math.min(cc.visibleRect.width, cc.visibleRect.height);
@@ -95,7 +65,7 @@ NumboLoaderScene = cc.Scene.extend({
      * @param {Object} target
      */
     initWithResources: function (resources, cb, target) {
-        if(cc.isString(resources))
+        if (cc.isString(resources))
             resources = [resources];
         this.resources = resources || [];
         this.cb = cb;
@@ -111,7 +81,8 @@ NumboLoaderScene = cc.Scene.extend({
         var shouldPreload = false;//(cc.sys.os == cc.sys.OS_IOS);
 
         // load resources first
-        cc.loader.load(res, function() {}, function () {
+        cc.loader.load(res, function () {
+        }, function () {
             var i;
 
             // load modules
@@ -126,12 +97,12 @@ NumboLoaderScene = cc.Scene.extend({
             NJ.purchases.init();
 
             // preload numbo blocks
-            for(i = 0; i < NJ.NUM_COLS * NJ.NUM_ROWS; ++i) {
+            for (i = 0; i < NJ.NUM_COLS * NJ.NUM_ROWS; ++i) {
                 NumboBlock.createAndPool();
             }
 
             // preload audio
-            if(!shouldPreload) {
+            if (!shouldPreload) {
                 if (self.cb)
                     self.cb.call(self.target);
             } else {
@@ -156,8 +127,8 @@ NumboLoaderScene = cc.Scene.extend({
     }
 });
 
-NumboLoaderScene.preload = function(resources, cb, target){
-    if(!NJ.loaderScene) {
+NumboLoaderScene.preload = function (resources, cb, target) {
+    if (!NJ.loaderScene) {
         NJ.loaderScene = new NumboLoaderScene();
         NJ.loaderScene.init();
     }
