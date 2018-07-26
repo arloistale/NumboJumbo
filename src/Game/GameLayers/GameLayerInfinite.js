@@ -87,7 +87,7 @@ var InfiniteGameLayer = BaseGameLayer.extend({
     _getSpawnTime: function() {
         // nonlinear level-based variable
         var L = NJ.gameState.getLevel();
-        var exponent = 3;
+        var exponent = 0.3;
         var LFactor = 1 / Math.pow(L, exponent);
 
         var spawnTime = 1.5 * LFactor;
