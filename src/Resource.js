@@ -113,7 +113,17 @@ var res = {
     bloopSound7: resRoot + "Sounds/boops/boop7.wav",
     bloopSound8: resRoot + "Sounds/boops/boop8.wav",
     bloopSound9: resRoot + "Sounds/boops/boop9.wav",
-    bloopSound10: resRoot + "Sounds/boops/boop10.wav"
+    bloopSound10: resRoot + "Sounds/boops/boop10.wav",
+
+    comboLengthSound3: resRoot + "Sounds/ComboLength/ComboLength3.wav",
+    comboLengthSound4: resRoot + "Sounds/ComboLength/ComboLength4.wav",
+    comboLengthSound5: resRoot + "Sounds/ComboLength/ComboLength5.wav",
+    comboLengthSound6: resRoot + "Sounds/ComboLength/ComboLength6.wav",
+    comboLengthSound7: resRoot + "Sounds/ComboLength/ComboLength7.wav",
+    comboLengthSound8: resRoot + "Sounds/ComboLength/ComboLength8.wav",
+    comboLengthSound9: resRoot + "Sounds/ComboLength/ComboLength9.wav",
+    comboLengthSound10: resRoot + "Sounds/ComboLength/ComboLength10.wav"
+
 };
 
 var plops = [
@@ -141,6 +151,20 @@ var bloops = [
     res.bloopSound9,
     res.bloopSound10
 ];
+
+var comboLengthToSound = function(comboLength){
+    switch(comboLength) {
+        case 3: return res.comboLengthSound3;
+        case 4: return res.comboLengthSound4;
+        case 5: return res.comboLengthSound5;
+        case 6: return res.comboLengthSound6;
+        case 7: return res.comboLengthSound7;
+        case 8: return res.comboLengthSound8;
+        case 9: return res.comboLengthSound9;
+        case 10: return res.comboLengthSound10;
+        default: return res.comboLengthSound10;
+    }
+};
 
 // these resources are preloaded by the AudioEngine
 var sounds = (function() {

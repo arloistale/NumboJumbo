@@ -1191,40 +1191,12 @@ var BaseGameLayer = (function() {
 		// Audio Helpers //
 		///////////////////
 
-		// plays correct activations sounds based on original combo length
+		// plays correct activations SFX based on original combo length
 		_playActivationSounds: function(selectedLength) {
 			if(NJ.settings.sounds) {
-
-				// cache the data from the correct activation sounds set
-				var activationSound = activationSounds[Math.min(activationSounds.length - 1, selectedLength - 3)];
-				var startingDelay = activationSound.startingDelay;
-				var midDelay = activationSound.midDelay;
-				var data = activationSound.data;
-
-				// start a sequence of Actions
-				var actionList = [];
-
-				// we always start with at least the first "boop" sound after a starting delay
-				actionList.push(cc.delayTime(startingDelay));
-				actionList.push(cc.callFunc(function() {
-					NJ.audio.playSound(bloops[data[0]]);
-				}));
-
-				// now push in the rest of the activation sounds
-				for(var i = 1; i < data.length; ++i) {
-					(function() {
-						var soundData = data[i];
-
-						actionList.push(cc.delayTime(midDelay));
-						actionList.push(cc.callFunc(function() {
-							NJ.audio.playSound(bloops[soundData]);
-						}));
-					})();
-				}
-
-				// finally play the sequence in order
-				this._backgroundLayer.runAction(cc.sequence(actionList));
-			}
+                var comboSound = comboLengthToSound(selectedLength);
+                NJ.audio.playSound(comboSound);
+            }
 		},
 
 		/////////////
