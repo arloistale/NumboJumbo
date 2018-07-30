@@ -100,7 +100,6 @@ var ShopMenuLayer = (function() {
     };
 
     var onActivateTheme = function(index) {
-        cc.log("go");
         NJ.audio.playSound(res.coinSound);
 
         if(NJ.themes.getActiveThemeIndex() == index)

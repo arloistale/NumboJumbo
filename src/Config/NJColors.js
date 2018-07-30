@@ -69,7 +69,7 @@ NJ.themes = (function() {
         {
             themeName: "Dark",
             themeCost: 15000,
-            isPurchased: false,
+            isPurchased: true, // TODO: making this theme free
 
             backgroundColor: cc.color("#332F2A"),
 
@@ -120,7 +120,7 @@ NJ.themes = (function() {
         {
             themeName: "Fall",
             themeCost: 50000,
-            isPurchased: false,
+            isPurchased: true, // TODO: making this theme free,
 
             backgroundColor: cc.color("#d7d7b8"),
 
@@ -171,7 +171,7 @@ NJ.themes = (function() {
         {
             themeName: "Prince",
             themeCost: 100000,
-            isPurchased: false,
+            isPurchased: true, // TODO: making this theme free,
 
             // greyish light purple
             //backgroundColor: cc.color("#635063"),
@@ -226,7 +226,7 @@ NJ.themes = (function() {
         {
             themeName: "Sandy",
             themeCost: 15000,
-            isPurchased: true,
+            isPurchased: true, // TODO: making this theme free,
 
             backgroundColor: cc.color("#F0EBD0"),
 
@@ -276,7 +276,7 @@ NJ.themes = (function() {
         {
             themeName: "Sweet Lolita",
             themeCost: 30000,
-            isPurchased: true,
+            isPurchased: true, // TODO: making this theme free,
 
             // princess
             backgroundColor: cc.color("F8BAC6"),
@@ -373,11 +373,12 @@ NJ.themes = (function() {
 
             this.activateThemeByIndex(parseInt(rawIndex));
 
-            for(var i = 0; i < data.length; ++i) {
-                data[i].isPurchased = cc.sys.localStorage.getItem("themesPurchased_" + i) == 'true';
-            }
-
-            data[0].isPurchased = true;
+            // TODO: removing this check to make themes always free
+            // for(var i = 0; i < data.length; ++i) {
+            //     data[i].isPurchased = cc.sys.localStorage.getItem("themesPurchased_" + i) == 'true';
+            // }
+            //
+            // datata[0].isPurchased = true;
         },
 
         // save settings to local store
