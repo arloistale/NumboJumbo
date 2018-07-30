@@ -147,7 +147,6 @@ var sounds = (function() {
     var g = [
         res.tickSound,
         res.plipSound,
-        res.nopeSound,
         res.swooshSound,
         res.overSound,
         res.coinSound,
