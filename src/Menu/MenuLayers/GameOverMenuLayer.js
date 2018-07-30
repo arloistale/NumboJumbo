@@ -288,7 +288,8 @@ var GameOverMenuLayer = (function() {
             divider.setPositionY(this._promoMenu.getContentSize().height / 2);
             this._promoMenu.addChild(divider);
 
-            this.addChild(this._promoMenu, 100);
+            // TODO: Removing the promo menu, since all it does is link to FB / App Store, which isn't relevant
+            // this.addChild(this._promoMenu, 100);
         },
 
         _initToolUI: function() {
