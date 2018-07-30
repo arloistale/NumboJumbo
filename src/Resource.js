@@ -104,17 +104,6 @@ var res = {
     plopSound9: resRoot + "Sounds/plops/Plop9.wav",
     plopSound10: resRoot + "Sounds/plops/Plop10.wav",
 
-    bloopSound1: resRoot + "Sounds/boops/boop1.wav",
-    bloopSound2: resRoot + "Sounds/boops/boop2.wav",
-    bloopSound3: resRoot + "Sounds/boops/boop3.wav",
-    bloopSound4: resRoot + "Sounds/boops/boop4.wav",
-    bloopSound5: resRoot + "Sounds/boops/boop5.wav",
-    bloopSound6: resRoot + "Sounds/boops/boop6.wav",
-    bloopSound7: resRoot + "Sounds/boops/boop7.wav",
-    bloopSound8: resRoot + "Sounds/boops/boop8.wav",
-    bloopSound9: resRoot + "Sounds/boops/boop9.wav",
-    bloopSound10: resRoot + "Sounds/boops/boop10.wav",
-
     comboLengthSound3: resRoot + "Sounds/ComboLength/ComboLength3.wav",
     comboLengthSound4: resRoot + "Sounds/ComboLength/ComboLength4.wav",
     comboLengthSound5: resRoot + "Sounds/ComboLength/ComboLength5.wav",
@@ -137,19 +126,6 @@ var plops = [
     res.plopSound8,
     res.plopSound9,
     res.plopSound10
-];
-
-var bloops = [
-    res.bloopSound1,
-    res.bloopSound2,
-    res.bloopSound3,
-    res.bloopSound4,
-    res.bloopSound5,
-    res.bloopSound6,
-    res.bloopSound7,
-    res.bloopSound8,
-    res.bloopSound9,
-    res.bloopSound10
 ];
 
 var comboLengthToSound = function(comboLength){
@@ -181,7 +157,7 @@ var sounds = (function() {
 
     ];
 
-    return g.concat(plops).concat(bloops);
+    return g.concat(plops);
 }());
 
 // resources for the game
