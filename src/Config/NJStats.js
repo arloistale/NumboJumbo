@@ -7,9 +7,9 @@ var NJ = NJ || {};
 NJ.stats = (function() {
 
     // constants
-    const MAX_NUM_HINTS = 99;
-    const MAX_NUM_SCRAMBLERS = 99;
-    const MAX_NUM_CONVERTERS = 99;
+    var MAX_NUM_HINTS = 99;
+    var MAX_NUM_SCRAMBLERS = 99;
+    var MAX_NUM_CONVERTERS = 99;
 
     // data
     var currency = 0;
