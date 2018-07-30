@@ -16,7 +16,6 @@ var AuthenticationMenuLayer = (function (scene) {
 
         ctor: function () {
             this._super();
-            NJ.settings.hasLoadedTUT=false;
             this._checkLogin();
         },
 

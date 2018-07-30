@@ -1034,7 +1034,8 @@ var BaseGameLayer = (function() {
 				color = NJ.getColor(block.val - 1) || cc.color("#ffffff");
 				if (block) {
 					var coords = this._convertPointToLevelCoords({x: block.x, y: block.y});
-					if (coords && !NJ.settings.battery) {
+					// TODO: particles are responsible for the weird highlighting effect... disabling for now
+					if (false && coords && !NJ.settings.battery) {
 						this._effectsLayer.launchExplosion(coords.col, coords.row, color, shouldLaunchShadow);
 					}
 				}
