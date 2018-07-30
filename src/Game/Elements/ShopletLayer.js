@@ -13,7 +13,7 @@ var ShopletLayer = (function() {
 
         var that = this;
 
-        const converterPurchaseData = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.converter);
+        var converterPurchaseData = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.converter);
 
         if(NJ.stats.getNumConverters() + converterPurchaseData.amount <= NJ.stats.MAX_NUM_CONVERTERS) {
             if (NJ.stats.getCurrency() >= converterPurchaseData.price) {
@@ -31,7 +31,7 @@ var ShopletLayer = (function() {
 
         var that = this;
 
-        const hintsPurchaseData = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.hint);
+        var hintsPurchaseData = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.hint);
 
         if(NJ.stats.getNumHints() + hintsPurchaseData.amount <= NJ.stats.MAX_NUM_HINTS) {
             if (NJ.stats.getCurrency() >= hintsPurchaseData.price) {
@@ -49,7 +49,7 @@ var ShopletLayer = (function() {
 
         var that = this;
 
-        const scramblersPurchaseData = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.scrambler);
+        var scramblersPurchaseData = NJ.purchases.getInGameItemByKey(NJ.purchases.ingameItemKeys.scrambler);
 
         if(NJ.stats.getNumScramblers() + scramblersPurchaseData.amount <= NJ.stats.MAX_NUM_SCRAMBLERS) {
             if (NJ.stats.getCurrency() >= scramblersPurchaseData.price) {
