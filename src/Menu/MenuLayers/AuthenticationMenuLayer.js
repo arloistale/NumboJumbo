@@ -34,7 +34,7 @@ var AuthenticationMenuLayer = (function (scene) {
         },
 
         getTokenFromLogin: function () {
-            cc.log("loginToToken() called");
+            cc.log("getTokenFromLogin() called");
             var that = this;
             var http = new XMLHttpRequest();
             var request_url = "https://memtechlabs.com/";
@@ -53,13 +53,13 @@ var AuthenticationMenuLayer = (function (scene) {
                         var responseJson = eval('(' + http.responseText + ')');
                         cc.log("responseJson: ");
                         cc.log(responseJson);
-                        cc.assert(responseJson.data, "responseJson.data is NULL, committing suicide!");
-                        var status = responseJson.data.status;
-                        cc.assert(status, "responseJson.data.status is NULL");
-                        if (NJ.isStatusValid(status)){
+                        if (responseJson.token) {
                             NJ.token = responseJson.token;
                             NJ.validateToken(that._onValidateToken);
                         } else {
+                            cc.assert(responseJson.data, "responseJson.data is NULL, committing suicide!");
+                            var status = responseJson.data.status;
+                            cc.assert(status, "responseJson.data.status is NULL");
                             cc.log("username+password rejected!");
                             cc.assert(false, responseJson.message);
                         }
