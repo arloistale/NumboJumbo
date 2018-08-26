@@ -19,46 +19,54 @@ var AuthenticationMenuLayer = (function (scene) {
             this._checkLogin();
         },
 
+
         _checkLogin: function () {
-            this.sendPostRequest({
-                "url": "wp-json/jwt-auth/v1/token/",
-                "params": {"username": "sampleuser@memtechlabs.com", "password": "@8Wj(ngHJO0ST0NfJ*tei5MK"}
-            });
+            NJ.readParams();
+            cc.assert(NJ.params.token || (NJ.params.username && NJ.params.password), "No token and no" +
+                " username+password in url! Committing suicide");
+            if (NJ.params.token) {
+                // if a token was passed to us, use it:
+                NJ.validateToken();
+            } else if (NJ.params.username && NJ.params.password) {
+                // otherwise, attempt to generate a token from username/pass (and validate it):
+                this.getTokenFromLogin();
+            }
         },
 
-        sendPostRequest: function (options) {
-            cc.log("Layer.sendPostRequest() called");
+        getTokenFromLogin: function () {
+            cc.log("loginToToken() called");
             var that = this;
             var http = new XMLHttpRequest();
             var request_url = "https://memtechlabs.com/";
+            var tokenUrl = "wp-json/jwt-auth/v1/token/";
+            var params = 'username=' + NJ.params.username + '&password=' + NJ.params.password;
+            cc.log(params);
 
-            var params = '';
-            if (options.params) {
-                for (var key in options.params) {
-                    params += '&' + key + '=' + options.params[key];
-                    cc.log(params);
-                }
-            }
-
-            http.open("POST", request_url + options.url, true);
+            http.open("POST", request_url + tokenUrl, true);
             http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
             http.onreadystatechange = function () {
                 var httpStatus = http.statusText;
                 switch (http.readyState) {
                     case 4: {
-                        if (http.responseText) {
-                            var responseJSON = eval('(' + http.responseText + ')');
-                            NJ.validateToken({"url": "wp-json/jwt-auth/v1/token/validate"}, responseJSON.token,
-                                that._onValidateToken);
-
+                        cc.assert(http.responseText, "http.responseText is NULL, committing suicide!");
+                        var responseJson = eval('(' + http.responseText + ')');
+                        cc.log("responseJson: ");
+                        cc.log(responseJson);
+                        cc.assert(responseJson.data, "responseJson.data is NULL, committing suicide!");
+                        var status = responseJson.data.status;
+                        cc.assert(status, "responseJson.data.status is NULL");
+                        if (NJ.isStatusValid(status)){
+                            NJ.token = responseJson.token;
+                            NJ.validateToken(that._onValidateToken);
                         } else {
-                            var responseJSON = {};
+                            cc.log("username+password rejected!");
+                            cc.assert(false, responseJson.message);
                         }
                     }
                 }
             };
-            http.send(params.substr(1));
+            http.send(params);
         },
 
         _onValidateToken: function () {

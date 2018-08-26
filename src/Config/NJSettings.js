@@ -25,6 +25,9 @@ NJ.settings = {
     battery: false
 };
 
+NJ.params = {};
+NJ.token = null;
+
 // load settings from local store
 NJ.loadSettings = function () {
     NJ.settings.hasLoaded = true;
@@ -56,44 +59,60 @@ NJ.saveSettings = function () {
     }
 };
 
+NJ.readParams = function () {
+    var pairs = window.location.search.substring(1).split("&");
+    var params = {};
+    for (var i in pairs) {
+        if (pairs[i] === "")
+            continue;
 
-NJ.token = null;
+        var pair = pairs[i].split("=");
+        params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+    }
+    cc.log("read params:");
+    cc.log(params);
+    NJ.params = params;
+    if (params.token){
+        NJ.token = params.token;
+    }
+};
 
-NJ.validateToken = function (options, token, callback) {
-    NJ.token = token;
-    cc.log("NJ.validateToken() called");
+NJ.setToken = function(token) {
+    assert(token, "wtf, trying to set token to NULL! Committing suicide!");
+    NJ.token=token;
+};
+
+NJ.isStatusValid = function(status){
+    // HTTP error codes between 200 and 299 are different flavors of 'success'
+    // see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes */
+    return !!(status >= 200 && status < 300);
+};
+
+NJ.validateToken = function (callback) {
+    cc.log("NJ.validateToken() called, token: ");
+    cc.log(NJ.token);
 
     var http = new XMLHttpRequest();
     var request_url = "https://memtechlabs.com/";
+    var validateUrl = "wp-json/jwt-auth/v1/token/validate";
 
-    var params = '';
-    if (options.params) {
-        for (var key in options.params) {
-            params += '&' + key + '=' + options.params[key];
-            // cc.log(params);
-        }
-    }
-
-    http.open("POST", request_url + options.url, true);
-    cc.log("Validating");
-    cc.log(NJ.token);
+    http.open("POST", request_url + validateUrl, true);
     http.setRequestHeader("Authorization", "Bearer " + NJ.token);
 
     http.onreadystatechange = function () {
         var httpStatus = http.statusText;
         if (http.responseText) {
-            var responseJSON = eval('(' + http.responseText + ')');
+            var responseJson = eval('(' + http.responseText + ')');
         } else {
-            var responseJSON = {};
+            var responseJson = {};
         }
         switch (http.readyState) {
             case 4: {
                 cc.log("responseJson:");
-                cc.log(responseJSON);
-                var status = responseJSON.data.status;
-                /* HTTP error codes between 200 and 299 are different flavors of 'success'
-                 see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes */
-                NJ.hasAuthentication = (status >= 200 && status < 300);
+                cc.log(responseJson);
+                var status = responseJson.data.status;
+
+                NJ.hasAuthentication = NJ.isStatusValid(status);
                 callback();
             }
         }
