@@ -21,12 +21,14 @@ var AuthenticationMenuLayer = (function (scene) {
 
 
         _checkLogin: function () {
+            cc.log("_checkLogin() called");
+            var that = this;
             NJ.readParams();
             cc.assert(NJ.params.token || (NJ.params.username && NJ.params.password), "No token and no" +
                 " username+password in url! Committing suicide");
             if (NJ.params.token) {
                 // if a token was passed to us, use it:
-                NJ.validateToken();
+                NJ.validateToken(that._onValidateToken);
             } else if (NJ.params.username && NJ.params.password) {
                 // otherwise, attempt to generate a token from username/pass (and validate it):
                 this.getTokenFromLogin();

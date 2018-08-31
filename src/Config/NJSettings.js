@@ -108,7 +108,7 @@ NJ.validateToken = function (callback) {
         }
         switch (http.readyState) {
             case 4: {
-                cc.log("responseJson:");
+                cc.log("readyState=4, responseJson:");
                 cc.log(responseJson);
                 var status = responseJson.data.status;
 
