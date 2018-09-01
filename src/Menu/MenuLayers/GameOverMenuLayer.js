@@ -24,12 +24,6 @@ var GameOverMenuLayer = (function() {
         });
     };
 
-    var onShare = function() {
-        NJ.audio.playSound(res.clickSound);
-
-        NJ.shareScreen();
-    };
-
     var onShop = function() {
         NJ.audio.playSound(res.clickSound);
 
@@ -313,16 +307,12 @@ var GameOverMenuLayer = (function() {
             var shopButton = new NumboMenuButton(buttonSize, onShop.bind(this), this);
             shopButton.setImageRes(res.shopImage);
 
-            var shareButton = new NumboMenuButton(buttonSize, onShare.bind(this), this);
-            shareButton.setImageRes(res.shareImage);
-
             var leaderboardButton = new NumboMenuButton(buttonSize, _onLeaderboard.bind(this), this);
             leaderboardButton.setImageRes(res.statsImage);
 
             var achievementsButton = new NumboMenuButton(buttonSize, _onAchievements.bind(this), this);
             achievementsButton.setImageRes(res.trophyImage);
 
-            this._toolMenu.addChild(shareButton);
             this._toolMenu.addChild(retryButton);
             this._toolMenu.addChild(menuButton);
 

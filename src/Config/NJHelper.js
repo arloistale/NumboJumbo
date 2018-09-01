@@ -67,7 +67,3 @@ NJ.openAppDetails = function() {
 
     NJ.sendAnalyticsHit("Promo", "hit", "Summer", 43)
 };
-
-NJ.shareScreen = function() {
-    cc.eventManager.dispatchCustomEvent("share_screen");
-};
